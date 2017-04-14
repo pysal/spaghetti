@@ -5,10 +5,10 @@ import cPickle
 import copy
 
 import numpy as np
-import pysal as ps
-from pysal.weights.util import get_ids
+import libpysal as ps
+from libpysal.weights.util import get_ids
 
-from analysis import NetworkG, NetworkK, NetworkF
+from .analysis import NetworkG, NetworkK, NetworkF
 import util
 
 __all__ = ["Network", "PointPattern", "NetworkG", "NetworkK", "NetworkF"]
@@ -26,15 +26,15 @@ class Network:
                     The input shapefile. This must be in .shp format.
 
     node_sig:       int
-                    Round the x and y coordinates of all nodes to node_sig significant 
+                    Round the x and y coordinates of all nodes to node_sig significant
                     digits (combined significant digits on the left and right
-                    of the decimal place) 
+                    of the decimal place)
                     -- Default is 11
                     -- Set to None for no rounding
 
     unique_segs:    bool
-                    If True (default), keep only unique segments (i.e., prune out any 
-                    duplicated segments). 
+                    If True (default), keep only unique segments (i.e., prune out any
+                    duplicated segments).
                     If False keep all segments.
 
     Attributes
@@ -53,11 +53,11 @@ class Network:
                     the length.
 
     pointpatterns:  dict
-                    Keys are a string name of the pattern and values are point pattern 
+                    Keys are a string name of the pattern and values are point pattern
                     class instances.
 
     node_coords:    dict
-                    Keys are the node ID and values are the (x,y) coordinates inverse 
+                    Keys are the node ID and values are the (x,y) coordinates inverse
                     to nodes.
 
     edges:          list
@@ -68,9 +68,9 @@ class Network:
 
     alldistances:   dict
                     Keys are the node IDs.
-                    Values are tuples with two elements: 
+                    Values are tuples with two elements:
                         1. A list of the shortest path distances
-                        2. A dict with the key being the id of the destination node and 
+                        2. A dict with the key being the id of the destination node and
                            the value being a list of the shortest path.
 
     Examples
@@ -115,8 +115,8 @@ class Network:
 
     def _round_sig(self, v):
         """
-        Used internally to round the vertex to a set number of significant digits. If sig 
-        is set to 4, then the following are some possible results for a coordinate: 
+        Used internally to round the vertex to a set number of significant digits. If sig
+        is set to 4, then the following are some possible results for a coordinate:
         0.0xxxx, 0.xxxx, x.xxx, xx.xx, xxx.x, xxxx.0, xxxx0.0
         """
         sig = self.node_sig
@@ -167,7 +167,7 @@ class Network:
 
     def extractgraph(self):
         """
-        Using the existing network representation, create a graph based representation by 
+        Using the existing network representation, create a graph based representation by
         removing all nodes with a neighbor incidence of two.  That is, we assume these
         nodes are bridges between nodes with higher incidence.
         """
@@ -184,7 +184,7 @@ class Network:
             if len(v) == 2:
                 segment_nodes.append(k)
 
-        # Start with a copy of the spatial representation and iteratively remove edges 
+        # Start with a copy of the spatial representation and iteratively remove edges
         # deemed to be segments.
         self.graphedges = copy.deepcopy(self.edges)
         self.graph_lengths = copy.deepcopy(self.edge_lengths)
@@ -249,7 +249,7 @@ class Network:
 
     def _yieldneighbor(self, node, segment_nodes, bridge):
         """
-        Used internally, this method traverses a bridge segement to find the source and 
+        Used internally, this method traverses a bridge segement to find the source and
         destination nodes.
         """
         n = []
@@ -324,7 +324,7 @@ class Network:
                     neighbors[key].append(neigh)
                     if weightings:
                         weights[key].append(weightings[neigh])
-                # TODO: Add a break condition - everything is sorted, so we know when we 
+                # TODO: Add a break condition - everything is sorted, so we know when we
                 #       have stepped beyond a possible neighbor.
                 #if key[1] > neigh[1]:  #NOT THIS
                     #break
@@ -339,7 +339,7 @@ class Network:
         ----------
         threshold:      float
                         Distance threshold value.
-        
+
         n_processes:    int, str
                         (Optional) Specify the number of cores to utilize.
                         Default is 1 core. Use (int) to specify an exact number or cores.
@@ -361,7 +361,7 @@ class Network:
 
     def snapobservations(self, shapefile, name, idvariable=None, attribute=None):
         """
-        Snap a point pattern shapefile to this network object.  The point pattern is 
+        Snap a point pattern shapefile to this network object.  The point pattern is
         stored in the network.pointpattern['key'] attribute of the network object.
 
         Parameters
@@ -389,7 +389,7 @@ class Network:
 
     def compute_distance_to_nodes(self, x, y, edge):
         """
-        Given an observation on a network edge, return the distance to the two nodes that 
+        Given an observation on a network edge, return the distance to the two nodes that
         bound that end.
 
         Parameters
@@ -451,11 +451,11 @@ class Network:
             tail = self.node_coords[edge[1]]
             segments.append(ps.cg.Chain([head,tail]))
             s2e[(head,tail)] = edge
-            
+
 
         points = {}
         p2id = {}
-        for pointIdx, point in pointpattern.points.iteritems(): 
+        for pointIdx, point in pointpattern.points.iteritems():
             points[pointIdx] = point['coordinates']
 
         snapped = util.snapPointsOnSegments(points, segments)
@@ -492,13 +492,13 @@ class Network:
                         {(edge):{pt_id:(coords)}} or {edge:[(coord),(coord),(coord)]}
         Returns
         -------
-        counts:         dict 
+        counts:         dict
                         {(edge):count}
 
         Example
         -------
 
-        Note that this passes the obs_to_edge attribute of a point pattern snapped to the 
+        Note that this passes the obs_to_edge attribute of a point pattern snapped to the
         network.
 
         >>> ntw = ps.Network(ps.examples.get_path('streets.shp'))
@@ -539,7 +539,7 @@ class Network:
                 y0 = y2 + distance
             else:    # Zero length edge
                 y0 = y1
-            return x0, y0        
+            return x0, y0
         m = (y2 - y1) / (x2 - x1)
         if x1 > x2:
             x0 = x1 - distance / math.sqrt(1 + m**2)
@@ -555,7 +555,7 @@ class Network:
         Parameters
         ----------
         count:          int
-                        The number of points to create or mean of the distribution if not 
+                        The number of points to create or mean of the distribution if not
                         'uniform'.
 
         distribution:   str
@@ -659,8 +659,8 @@ class Network:
             else:
                 cores = n_processes
             p = mp.Pool(processes=cores)
-            distance_pred = p.map(util.dijkstra_multi, zip(repeat(self), 
-                                                       repeat(self.edge_time), 
+            distance_pred = p.map(util.dijkstra_multi, zip(repeat(self),
+                                                       repeat(self.edge_time),
                                                        self.node_list))
             distance = [distance_pred[iteration][0] for iteration in range(len(distance_pred))]
             pred = [distance_pred[iteration][1] for iteration in range(len(distance_pred))]
@@ -668,12 +668,12 @@ class Network:
             #tree = util.generatetree(pred[node])
             for node in self.node_list:
                 self.distancematrix[node] = distance[node]
-    
-    
+
+
     def allneighbordistances(self, sourcepattern, destpattern=None, fill_diagonal=None,
                              n_processes=None):
         """
-        Compute either all distances between i and j in a single point pattern or all 
+        Compute either all distances between i and j in a single point pattern or all
         distances between each i from a source pattern and all j from a destination pattern.
 
         Parameters
@@ -688,7 +688,7 @@ class Network:
                         (Optional) Fill the diagonal of the cost matrix.
                         Default in None and will populate the diagonal with numpy.nan
                         Do not declare a destpattern for a custom fill_diagonal.
-        
+
         n_processes:    int, str
                         (Optional) Specify the number of cores to utilize.
                         Default is 1 core. Use (int) to specify an exact number or cores.
@@ -701,7 +701,7 @@ class Network:
 
         if not hasattr(self,'alldistances'):
             self.node_distance_matrix(n_processes)
-            
+
         # Source setup
         src_indices = sourcepattern.points.keys()
         nsource_pts = len(src_indices)
@@ -724,7 +724,7 @@ class Network:
         for s in dest_indices:
             e1, e2 = dest_dist_to_node[s].keys()
             dest_nodes[s] = (e1, e2)
-        
+
         # Output setup
         nearest = np.empty((nsource_pts, ndest_pts))
         nearest[:] = np.inf
@@ -755,7 +755,7 @@ class Network:
                     d12 = self.alldistances[source1][0][dest2]
                     d22 = self.alldistances[source2][0][dest2]
 
-                    # Find the shortest distance from the path passing through each of the 
+                    # Find the shortest distance from the path passing through each of the
                     # two origin nodes to the first destination node.
                     sd_1 = d11 + sdist1
                     sd_21 = d21 + sdist2
@@ -764,7 +764,7 @@ class Network:
                     # Now add the point to node one distance on the destination edge.
                     len_1 = sd_1 + ddist1
 
-                    # Repeat the prior but now for the paths entering at the second node 
+                    # Repeat the prior but now for the paths entering at the second node
                     # of the second edge.
                     sd_2 = d12 + sdist1
                     sd_22 = d22 + sdist2
@@ -782,14 +782,14 @@ class Network:
                     nearest[p1, p2] = sp_12
                 if symmetric:
                     # Mirror the upper and lower triangle when symmetric.
-                    nearest[p2,p1] = nearest[p1,p2]                    
+                    nearest[p2,p1] = nearest[p1,p2]
         # Populate the main diagonal when symmetric.
         if symmetric:
             if fill_diagonal == None:
                 np.fill_diagonal(nearest, np.nan)
             else:
                 np.fill_diagonal(nearest, fill_diagonal)
-            
+
         return nearest
 
     def nearestneighbordistances(self, sourcepattern, destpattern=None, n_processes=None):
@@ -799,21 +799,21 @@ class Network:
 
         Parameters
         ----------
-        sourcepattern:  str 
+        sourcepattern:  str
                         The key of a point pattern snapped to the network.
 
-        destpattern:    str 
+        destpattern:    str
                         (Optional) The key of a point pattern snapped to the network.
 
         n_processes:    int, str
                         (Optional) Specify the number of cores to utilize.
                         Default is 1 core. Use (int) to specify an exact number or cores.
                         Use ("all") to request all available cores.
-                        
+
         Returns
         -------
-        nearest:        ndarray (n,2) 
-                        With column[:,0] containing the id of the nearest neighbor and 
+        nearest:        ndarray (n,2)
+                        With column[:,0] containing the id of the nearest neighbor and
                         column [:,1] containing the distance.
         """
 
@@ -894,18 +894,18 @@ class Network:
                         A PySAL point pattern object.
 
         nsteps:         int
-                        The number of steps at which the count of the nearest neighbors 
+                        The number of steps at which the count of the nearest neighbors
                         is computed.
 
         permutations:   int
                         The number of permutations to perform (default 99).
 
         threshold:      float
-                        The level at which significance is computed.  
+                        The level at which significance is computed.
                             -- 0.5 would be 97.5% and 2.5%
 
         distribution:   str
-                        The distribution from which random points are sampled: 
+                        The distribution from which random points are sampled:
                             -- uniform or poisson
 
         lowerbound:     float
@@ -937,18 +937,18 @@ class Network:
                         A PySAL point pattern object.
 
         nsteps:         int
-                        The number of steps at which the count of the nearest neighbors 
+                        The number of steps at which the count of the nearest neighbors
                         is computed.
 
         permutations:   int
                         The number of permutations to perform (default 99).
 
         threshold:      float
-                        The level at which significance is computed.  
+                        The level at which significance is computed.
                             -- 0.5 would be 97.5% and 2.5%
 
         distribution:   str
-                        The distribution from which random points are sampled: 
+                        The distribution from which random points are sampled:
                             -- uniform or poisson
 
         lowerbound:     float
@@ -981,18 +981,18 @@ class Network:
                         A PySAL point pattern object.
 
         nsteps:         int
-                        The number of steps at which the count of the nearest neighbors 
+                        The number of steps at which the count of the nearest neighbors
                         is computed.
 
         permutations:   int
                         The number of permutations to perform (default 99).
 
         threshold:      float
-                        The level at which significance is computed.  
+                        The level at which significance is computed.
                             -- 0.5 would be 97.5% and 2.5%
 
         distribution:   str
-                        The distribution from which random points are sampled: 
+                        The distribution from which random points are sampled:
                             -- uniform or poisson
 
         lowerbound:     float
@@ -1014,7 +1014,7 @@ class Network:
 
     def segment_edges(self, distance):
         """
-        Segment all of the edges in the network at either a fixed distance or a fixed 
+        Segment all of the edges in the network at either a fixed distance or a fixed
         number of segments.
 
         Parameters
@@ -1120,7 +1120,7 @@ class Network:
         Parameters
         ----------
         filename:   str
-                    The filename where the network should be saved. This should be a full 
+                    The filename where the network should be saved. This should be a full
                     path or the file is saved whereever this method is called from.
 
         Example
@@ -1156,7 +1156,7 @@ class PointPattern():
                 Field in the shapefile to use as an id variable.
 
     attribute:  bool
-                {False, True} 
+                {False, True}
                 A flag to indicate whether all attributes are tagged to this class.
 
     Attributes
