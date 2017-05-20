@@ -28,21 +28,16 @@ before_install:
 install:
   - conda install --yes pip
   - conda install --yes --file requirements.txt;
-  - cd ../ && git clone https://github.com/pysal/libpysal.git
-  - if [[ $TRAVIS_PYTHON_VERSION == 3* ]]; then 2to3 -nw libpysal/ > /dev/null; fi
-  - pip install -e ./libpysal
   - pip install -r requirements_dev.txt
 
 script:
   - python setup.py sdist >/dev/null
-  - echo "check_stable=False" >spaghetti/config.py
   - nosetests --with-coverage --cover-package=spaghetti;
 
 notifications:
     email:
         recipients:
-                - jgaboardi@gmail.com
-                - sjsrey@gmail.com
+		- sjsrey@gmail.com
         on_change: always
         on_failure: always
 
