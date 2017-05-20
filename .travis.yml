@@ -38,6 +38,7 @@ notifications:
     email:
         recipients:
           - sjsrey@gmail.com
+          - jgabaordi@gmail.com
         on_change: always
         on_failure: always
 
