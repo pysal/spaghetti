@@ -12,7 +12,7 @@ REQUIREMENTS = [i.strip() for i in open(pth).readlines()]
 
 setup(name='spaghetti', #name of package
       version='1.0.0',
-      description='Methods and Functions for the analysis of dynamics of longitudinal spatial data (GIDDY = GeospatIal Distribution DYnamics)', #short <80chr description
+      description='Spatial Network Analysis (SPAtial GrapHs: nETworks, Topology, & Inference)', #short <80chr description
       url='https://github.com/pysal/spaghetti', #github repo
       maintainer='James Gaboardi',
       maintainer_email='jgabaordi@gmail.com',
@@ -31,7 +31,8 @@ setup(name='spaghetti', #name of package
         'Programming Language :: Python :: 2.5',
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.4'
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5'
         ],
       license='3-Clause BSD',
       packages=['spaghetti'],
