@@ -1,7 +1,7 @@
 from collections import OrderedDict
 import math
 import operator
-import pysal as ps
+import libpysal as ps
 import numpy as np
 
 
@@ -12,7 +12,7 @@ def compute_length(v0, v1):
     Parameters
     ----------
     v0:         sequence in the form x, y
-    
+
     vq:         sequence in the form x, y
 
     Returns
@@ -55,29 +55,29 @@ def generatetree(pred):
 def dijkstra(ntw, cost, node, n=float('inf')):
     """
     Compute the shortest path between a start node and all other nodes in the web.
-    
+
     Parameters
     ----------
     ntw:        object
                 PySAL network object
-                
+
     cost:       dict
                 key:    tuple
                         (start node, end node)
                 value:  float
                         Cost per edge to travel, e.g. distance
-    
+
     node:       int
                 Start node ID
-    
+
     n:          float('inf')
                 integer break point to stop iteration and return n neighbors
-    
+
     Returns
     -------
     distance:   list
                 List of distances from node to all other nodes.
-                
+
     pred:       list
                 List of preceeding nodes for traversal route.
     """
@@ -111,48 +111,48 @@ def dijkstra(ntw, cost, node, n=float('inf')):
 
 def dijkstra_mp((ntw, cost, node)):
     """
-    Compute the shortest path between a start node and all other nodes in the web 
+    Compute the shortest path between a start node and all other nodes in the web
     utilizing multiple cores upon request.
-    
+
     Parameters
     ----------
     ntw:        object
                 PySAL network object
-                
+
     cost:       dict
                 key:    tuple
                         (start node, end node)
                 value:  float
                         Cost per edge to travel, e.g. distance
-    
+
     node:       int
                 Start node ID
-    
+
     n:          float('inf')
                 integer break point to stop iteration and return n neighbors
-    
+
     Returns
     -------
     distance:   list
                 List of distances from node to all other nodes.
-    
+
     pred:       list
                 List of preceeding nodes for traversal route.
     """
     return dijkstra(ntw, cost, node)
-       
-    
+
+
 def squaredDistancePointSegment(point, segment):
     """Find the squared distance between a point and a segment
-    
+
     Parameters
     ---------
-    point:      tuple 
+    point:      tuple
                 (x,y)
-    
-    segment:    list 
+
+    segment:    list
                 List of 2 tuples [(x0,y0), (x1,y1)]
-    
+
     Returns
     -------
     tuple:      2 elements:
@@ -172,44 +172,44 @@ def squaredDistancePointSegment(point, segment):
         dp1 = p - p1
         # Print 'after p1'
         return np.dot(dp1.T,dp1), p1
-    
+
     b = c1 / c2
     bv = np.dot(b,v)
     pb = p0 + bv
     d2 = p - pb
-    
+
     return np.dot(d2,d2), pb
 
-    
+
 def snapPointsOnSegments(points, segments):
     """Place points onto closet segment in a set of segments
-    
+
     Arguments
     ---------
     points:     dict
                 Point id as key and (x,y) coordinate as value
-    
+
     segments:   list
-                Elements are of type pysal.cg.shapes.Chain 
+                Elements are of type pysal.cg.shapes.Chain
                 ** Note **
-                        each element is a segment represented as a chain with 
+                        each element is a segment represented as a chain with
                         *one head and one tail node*, in other words one link only.
-              
+
     Returns
-    ------- 
+    -------
     p2s:        dict
                 key:    point id (see points in arguments)
-         
+
                 value:  a 2-tuple: ((head, tail), point)
                         where (head, tail) is the target segment, and point is the snapped
                         location on the segment
     """
-    
+
     # Put segments in an Rtree.
     rt = ps.cg.Rtree()
     SMALL = 0.01
     node2segs = {}
-    
+
     for segment in segments:
         head,tail = segment.vertices
         x0,y0 = head
@@ -227,7 +227,7 @@ def snapPointsOnSegments(points, segments):
         y1 += SMALL
         r = ps.cg.Rect(x0,y0,x1,y1)
         rt.insert(segment, r)
-         
+
     # Build a KDtree on segment nodes.
     kt = ps.cg.KDTree(node2segs.keys())
     p2s = {}
@@ -237,7 +237,7 @@ def snapPointsOnSegments(points, segments):
         dmin, node = kt.query(point, k=1)
         node = tuple(kt.data[node])
         closest = node2segs[node][0].vertices
-        
+
         # Use this segment as the candidate closest segment:  closest
         # Use the distance as the distance to beat:           dmin
         p2s[ptIdx] = (closest, node) # sna
@@ -245,13 +245,13 @@ def snapPointsOnSegments(points, segments):
         y0 = point[1] - dmin
         x1 = point[0] + dmin
         y1 = point[1] + dmin
-        
+
         # Find all segments with bounding boxes that intersect
         # a query rectangle centered on the point with sides of length 2*dmin.
         candidates = [ cand for cand in rt.intersection([x0,y0,x1,y1])]
         dmin += SMALL
         dmin2 = dmin * dmin
-        
+
         # Of the candidate segments, find the nearest to the query point.
         for candidate in candidates:
             dnc, p2b = squaredDistancePointSegment(point, candidate.vertices)
@@ -259,5 +259,5 @@ def snapPointsOnSegments(points, segments):
                 closest = candidate.vertices
                 dmin2 = dnc
                 p2s[ptIdx] = (closest, p2b)
-        
+
     return p2s
