@@ -12,7 +12,7 @@ Examples
 Installation
 ------------
 
-Install giddy by running:
+Install spaghetti by running:
 
 ```
 $ pip install spaghetti
