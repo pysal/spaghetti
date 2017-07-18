@@ -1,13 +1,10 @@
 from collections import defaultdict, OrderedDict
-import math
 import os
 import cPickle
 import copy
-
 import numpy as np
 import libpysal as ps
 from libpysal.weights.util import get_ids
-
 from .analysis import NetworkG, NetworkK, NetworkF
 import util
 
@@ -123,7 +120,7 @@ class Network:
         if sig is None:
             return v
         out_v = [val if 0 \
-                     else round(val, -int(math.floor(math.log10(math.fabs(val)))) +\
+                     else round(val, -int(np.floor(np.log10(np.fabs(val)))) +\
                           (sig-1)) \
                  for val in v]
         return tuple(out_v)
@@ -542,9 +539,9 @@ class Network:
             return x0, y0
         m = (y2 - y1) / (x2 - x1)
         if x1 > x2:
-            x0 = x1 - distance / math.sqrt(1 + m**2)
+            x0 = x1 - distance / np.sqrt(1 + m**2)
         elif x1 < x2:
-            x0 = x1 + distance / math.sqrt(1 + m**2)
+            x0 = x1 + distance / np.sqrt(1 + m**2)
         y0 = m * (x0 - x1) + y1
         return x0, y0
 

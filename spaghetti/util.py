@@ -1,5 +1,4 @@
 from collections import OrderedDict
-import math
 import operator
 import libpysal as ps
 import numpy as np
@@ -20,7 +19,7 @@ def compute_length(v0, v1):
     Euclidean distance
     """
 
-    return math.sqrt((v0[0] - v1[0])**2 + (v0[1] - v1[1])**2)
+    return np.sqrt((v0[0] - v1[0])**2 + (v0[1] - v1[1])**2)
 
 
 def get_neighbor_distances(ntw, v0, l):
