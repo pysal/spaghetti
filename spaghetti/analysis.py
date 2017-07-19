@@ -47,6 +47,7 @@ class NetworkBase(object):
         if self.upperbound == None:
             self.upperbound = np.nanmax(nearest)
 
+
 class NetworkG(NetworkBase):
     """
     Compute a network constrained G statistic.
@@ -102,6 +103,7 @@ class NetworkK(NetworkBase):
                                    nsteps=self.nsteps)
             self.sim[p] = simy
 
+
 class NetworkF(NetworkBase):
      """
      Compute a network constrained F statistic.
@@ -131,29 +133,6 @@ class NetworkF(NetworkBase):
                                     self.npts, nsteps=self.nsteps)
              self.sim[p] = simy
 
-def kfunction(nearest, upperbound, intensity, nsteps=10):
-    nobs = len(nearest)
-    x = np.linspace(0, upperbound, nsteps)
-    y = np.empty(len(x))
-
-    for i, s in enumerate(x):
-        y[i] = len(nearest[nearest <= s])
-    y *= (intensity ** -1)
-    return x, y
-
-def ffunction(nearest, lowerbound, upperbound, npts, nsteps = 10):
-    nobs = len(nearest)
-    x = np.linspace(lowerbound, upperbound, nsteps)
-    nearest = np.sort(nearest)
-    y = np.empty(len(x))
-    for i,r in enumerate(x):
-        cnt = len(nearest[nearest <= r])
-        if cnt > 0:
-            g = cnt / float(npts)
-        else:
-            g = 0
-        y[i] = g
-    return x, y
 
 def gfunction(nearest, lowerbound, upperbound, nsteps = 10):
     """
@@ -188,6 +167,32 @@ def gfunction(nearest, lowerbound, upperbound, nsteps = 10):
         cnt = len(nearest[nearest <= r])
         if cnt > 0:
             g = cnt / float(nobs)
+        else:
+            g = 0
+        y[i] = g
+    return x, y
+
+
+def kfunction(nearest, upperbound, intensity, nsteps=10):
+    nobs = len(nearest)
+    x = np.linspace(0, upperbound, nsteps)
+    y = np.empty(len(x))
+
+    for i, s in enumerate(x):
+        y[i] = len(nearest[nearest <= s])
+    y *= (intensity ** -1)
+    return x, y
+
+
+def ffunction(nearest, lowerbound, upperbound, npts, nsteps = 10):
+    nobs = len(nearest)
+    x = np.linspace(lowerbound, upperbound, nsteps)
+    nearest = np.sort(nearest)
+    y = np.empty(len(x))
+    for i,r in enumerate(x):
+        cnt = len(nearest[nearest <= r])
+        if cnt > 0:
+            g = cnt / float(npts)
         else:
             g = 0
         y[i] = g
