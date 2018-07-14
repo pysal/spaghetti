@@ -1,13 +1,19 @@
 from collections import defaultdict, OrderedDict
 import os
-import cPickle
+try:
+    try:
+        import cPickle as pickle
+    except:
+        import _pickle as pickle
+except:
+    import pickle
 import copy
 import numpy as np
 import libpysal as ps
 from libpysal.weights.util import get_ids
-from libpysal.weights._contW_list import _get_verts
+#from libpysal.weights._contW_list import _get_verts
 from .analysis import NetworkG, NetworkK, NetworkF
-import util
+from . import util
 
 __all__ = ["Network", "PointPattern", "NetworkG", "NetworkK", "NetworkF"]
 
@@ -1130,12 +1136,12 @@ class Network:
         >>> ntw.savenetwork('mynetwork.pkl')
         """
         with open(filename, 'wb') as networkout:
-            cPickle.dump(self, networkout, protocol=2)
+            pickle.dump(self, networkout, protocol=2)
 
     @staticmethod
     def loadnetwork(filename):
         with open(filename, 'rb') as networkin:
-            self = cPickle.load(networkin)
+            self = pickle.load(networkin)
 
         return self
 
