@@ -5,6 +5,7 @@ import copy
 import numpy as np
 import libpysal as ps
 from libpysal.weights.util import get_ids
+from libpysal.weights._contW_list import _get_verts
 from .analysis import NetworkG, NetworkK, NetworkF
 import util
 
@@ -130,9 +131,12 @@ class Network:
         Used internally, to extract a network from a polyline shapefile.
         """
         nodecount = 0
-        shps = ps.open(self.in_shp)
+        if isinstance(self.in_shp, str):
+            shps = ps.open(self.in_shp)
+        else:
+            shps = self.in_shp
         for shp in shps:
-            vertices = shp.vertices
+            vertices = _get_verts(shp.vertices)
             for i, v in enumerate(vertices[:-1]):
                 v = self._round_sig(v)
                 try:
