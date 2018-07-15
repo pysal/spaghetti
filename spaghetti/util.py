@@ -100,7 +100,7 @@ def dijkstra(ntw, cost, node, n=float('inf')):
         last = v
         #4. Get the neighbors to the current node.
         neighbors = get_neighbor_distances(ntw, v, cost)
-        for v1, indiv_cost in neighbors.iteritems():
+        for v1, indiv_cost in neighbors.items():
             if distance[v1] > distance[v] + indiv_cost:
                 distance[v1] = distance[v] + indiv_cost
                 pred[v1] = v
@@ -108,36 +108,32 @@ def dijkstra(ntw, cost, node, n=float('inf')):
     return distance, np.array(pred, dtype=np.int)
 
 
-def dijkstra_mp((ntw, cost, node)):
+def dijkstra_mp(ntw_cost_node):
     """
     Compute the shortest path between a start node and all other nodes in the web
     utilizing multiple cores upon request.
 
     Parameters
     ----------
-    ntw:        object
-                PySAL network object
-
-    cost:       dict
-                key:    tuple
-                        (start node, end node)
-                value:  float
-                        Cost per edge to travel, e.g. distance
-
-    node:       int
-                Start node ID
-
-    n:          float('inf')
-                integer break point to stop iteration and return n neighbors
-
+    ntw_cost_node   tuple
+                    tuple of arguments to pass into dijkstra
+                        ntw:    object
+                                PySAL network object
+                        cost:   dict
+                                key:    tuple
+                                        (start node, end node)
+                                value:  float
+                                        Cost per edge to travel, e.g. distance
+                        node:   int
+                                Start node ID
     Returns
     -------
     distance:   list
                 List of distances from node to all other nodes.
-
     pred:       list
                 List of preceeding nodes for traversal route.
     """
+    ntw, cost, node = ntw_cost_node
     return dijkstra(ntw, cost, node)
 
 
@@ -228,10 +224,10 @@ def snapPointsOnSegments(points, segments):
         rt.insert(segment, r)
 
     # Build a KDtree on segment nodes.
-    kt = ps.cg.KDTree(node2segs.keys())
+    kt = ps.cg.KDTree(list(node2segs.keys()))
     p2s = {}
 
-    for ptIdx, point in points.iteritems():
+    for ptIdx, point in points.items():
         # First, find nearest neighbor segment node for the point.
         dmin, node = kt.query(point, k=1)
         node = tuple(kt.data[node])

@@ -12,7 +12,7 @@ from .. import network
 class TestNetwork(unittest.TestCase):
 
     def setUp(self):
-        self.ntw = network.Network(ps.examples.get_path('streets.shp'))
+        self.ntw = network.Network(in_shp=ps.examples.get_path('streets.shp'))
 
     def tearDown(self):
         pass
@@ -63,7 +63,7 @@ class TestNetwork(unittest.TestCase):
 class TestNetworkPointPattern(unittest.TestCase):
 
     def setUp(self):
-        self.ntw = network.Network(ps.examples.get_path('streets.shp'))
+        self.ntw = network.Network(in_shp=ps.examples.get_path('streets.shp'))
         for obs in ['schools', 'crimes']:
             self.ntw.snapobservations(ps.examples.get_path('{}.shp'.format(obs)), obs, attribute=True)
             setattr(self, obs, self.ntw.pointpatterns[obs])
@@ -100,12 +100,12 @@ class TestNetworkPointPattern(unittest.TestCase):
         distancematrix_1 = self.ntw.allneighbordistances(self.schools)
         self.assertAlmostEqual(np.nansum(distancematrix_1[0]), 17682.436988, places=4)
 
-        for k, (distances, predlist) in self.ntw.alldistances.iteritems():
+        for k, (distances, predlist) in self.ntw.alldistances.items():
             self.assertEqual(distances[k], 0)
 
             #  turning off the tests associated with util.generatetree() for now,
             #  these can be restarted if that functionality is used in the future
-            #for p, plists in predlist.iteritems():
+            #for p, plists in predlist.items():
             #    self.assertEqual(plists[-1], k)
 
             #self.assertEqual(self.ntw.node_list, predlist.keys())
@@ -132,7 +132,7 @@ class TestNetworkPointPattern(unittest.TestCase):
 class TestNetworkUtils(unittest.TestCase):
 
     def setUp(self):
-        self.ntw = network.Network(ps.examples.get_path('streets.shp'))
+        self.ntw = network.Network(in_shp=ps.examples.get_path('streets.shp'))
 
     def test_dijkstra(self):
         self.distance, self.pred = util.dijkstra(self.ntw, self.ntw.edge_lengths, 0)

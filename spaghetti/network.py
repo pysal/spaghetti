@@ -1,12 +1,19 @@
 from collections import defaultdict, OrderedDict
 import os
-import cPickle
+try:
+    try:
+        import cPickle as pickle
+    except:
+        import _pickle as pickle
+except:
+    import pickle
 import copy
 import numpy as np
 import libpysal as ps
 from libpysal.weights.util import get_ids
+from libpysal.weights._contW_lists import _get_verts
 from .analysis import NetworkG, NetworkK, NetworkF
-import util
+from . import util
 
 __all__ = ["Network", "PointPattern", "NetworkG", "NetworkK", "NetworkF"]
 
@@ -19,8 +26,9 @@ class Network:
 
     Parameters
     -----------
-    in_shp:         str
-                    The input shapefile. This must be in .shp format.
+    in_shp:         geopandas.GeoDataFrame or str
+                    geopandas.GeoDataFrame:
+                    str: The input shapefile. This must be in .shp format.
 
     node_sig:       int
                     Round the x and y coordinates of all nodes to node_sig significant
@@ -75,7 +83,7 @@ class Network:
 
     Instantiate an instance of a network.
 
-    >>> ntw = ps.Network(ps.examples.get_path('streets.shp'))
+    >>> ntw = ps.Network(in_shp=ps.examples.get_path('streets.shp'))
 
     Snap point observations to the network with attribute information.
 
@@ -87,7 +95,7 @@ class Network:
     """
 
     def __init__(self, in_shp=None, node_sig=11, unique_segs=True):
-        if in_shp:
+        if in_shp != None: 
             self.in_shp = in_shp
             self.node_sig = node_sig
             self.unique_segs = unique_segs
@@ -100,7 +108,7 @@ class Network:
             self.pointpatterns = {}
 
             self._extractnetwork()
-            self.node_coords = dict((value, key) for key, value in self.nodes.iteritems())
+            self.node_coords = dict((value, key) for key, value in self.nodes.items())
 
             # This is a spatial representation of the network.
             self.edges = sorted(self.edges)
@@ -130,9 +138,12 @@ class Network:
         Used internally, to extract a network from a polyline shapefile.
         """
         nodecount = 0
-        shps = ps.open(self.in_shp)
+        if isinstance(self.in_shp, str):
+            shps = ps.open(self.in_shp)
+        else:
+            shps = self.in_shp.geometry
         for shp in shps:
-            vertices = shp.vertices
+            vertices = _get_verts(shp)
             for i, v in enumerate(vertices[:-1]):
                 v = self._round_sig(v)
                 try:
@@ -159,7 +170,7 @@ class Network:
         if self.unique_segs == True:
             # Remove duplicate edges and duplicate adjacent nodes.
             self.edges = list(set(self.edges))
-            for k, v in self.adjacencylist.iteritems():
+            for k, v in self.adjacencylist.items():
                 self.adjacencylist[k] = list(set(v))
 
     def extractgraph(self):
@@ -174,7 +185,7 @@ class Network:
 
         # Find all nodes with cardinality 2.
         segment_nodes = []
-        for k, v in self.adjacencylist.iteritems():
+        for k, v in self.adjacencylist.items():
             #len(v) == 1 #cul-de-sac
             #len(v) == 2 #bridge segment
             #len(v) > 2 #intersection
@@ -231,7 +242,7 @@ class Network:
                             redundant.add(tuple(sorted([b,n])))
 
                 newedge = tuple(sorted(startend.values()))
-                for k, v in startend.iteritems():
+                for k, v in startend.items():
                     redundant.add(tuple(sorted([k,v])))
 
                 for r in redundant:
@@ -452,12 +463,12 @@ class Network:
 
         points = {}
         p2id = {}
-        for pointIdx, point in pointpattern.points.iteritems():
+        for pointIdx, point in pointpattern.points.items():
             points[pointIdx] = point['coordinates']
 
         snapped = util.snapPointsOnSegments(points, segments)
 
-        for pointIdx, snapInfo in snapped.iteritems():
+        for pointIdx, snapInfo in snapped.items():
             x,y = snapInfo[1].tolist()
             edge = s2e[tuple(snapInfo[0])]
             if edge not in obs_to_edge:
@@ -468,7 +479,7 @@ class Network:
             dist_to_node[pointIdx] = {edge[0]:d1, edge[1]:d2}
 
         obs_to_node = defaultdict(list)
-        for k, v in obs_to_edge.iteritems():
+        for k, v in obs_to_edge.items():
             keys = v.keys()
             obs_to_node[k[0]] = keys
             obs_to_node[k[1]] = keys
@@ -507,7 +518,7 @@ class Network:
         """
         counts = {}
         if graph:
-            for key, observations in obs_on_network.iteritems():
+            for key, observations in obs_on_network.items():
                 cnt = len(observations)
                 if key in self.graph_to_edges.keys():
                     key = self.graph_to_edges[key]
@@ -516,7 +527,7 @@ class Network:
                 except:
                     counts[key] = cnt
         else:
-            for key in obs_on_network.iterkeys():
+            for key in obs_on_network.keys():
                 counts[key] = len(obs_on_network[key])
         return counts
 
@@ -579,7 +590,7 @@ class Network:
         #   Cumulative Network Length.
         edges = []
         lengths = np.zeros(len(self.edge_lengths))
-        for i, key in enumerate(self.edge_lengths.iterkeys()):
+        for i, key in enumerate(self.edge_lengths.keys()):
             edges.append(key)
             lengths[i] = self.edge_lengths[key]
         stops = np.cumsum(lengths)
@@ -700,7 +711,7 @@ class Network:
             self.node_distance_matrix(n_processes)
 
         # Source setup
-        src_indices = sourcepattern.points.keys()
+        src_indices = list(sourcepattern.points.keys())
         nsource_pts = len(src_indices)
         src_dist_to_node = sourcepattern.dist_to_node
         src_nodes = {}
@@ -713,7 +724,7 @@ class Network:
         if destpattern is None:
             symmetric = True
             destpattern = sourcepattern
-        dest_indices = destpattern.points.keys()
+        dest_indices = list(destpattern.points.keys())
         ndest_pts = len(dest_indices)
         dest_dist_to_node = destpattern.dist_to_node
         dest_searchpts = copy.deepcopy(dest_indices)
@@ -820,7 +831,7 @@ class Network:
         if not hasattr(self,'alldistances'):
             self.node_distance_matrix(n_processes)
 
-        pt_indices = self.pointpatterns[sourcepattern].points.keys()
+        pt_indices = list(self.pointpatterns[sourcepattern].points.keys())
         dist_to_node = self.pointpatterns[sourcepattern].dist_to_node
         nearest = np.zeros((len(pt_indices), 2), dtype=np.float32)
         nearest[:,1] = np.inf
@@ -1105,7 +1116,7 @@ class Network:
         sn.edges.difference_update(removeedges)
         sn.edges = list(sn.edges)
         # Update the point pattern snapping.
-        for instance in sn.pointpatterns.itervalues():
+        for instance in sn.pointpatterns.values():
             sn._snap_to_edge(instance)
 
         return sn
@@ -1126,12 +1137,12 @@ class Network:
         >>> ntw.savenetwork('mynetwork.pkl')
         """
         with open(filename, 'wb') as networkout:
-            cPickle.dump(self, networkout, protocol=2)
+            pickle.dump(self, networkout, protocol=2)
 
     @staticmethod
     def loadnetwork(filename):
         with open(filename, 'rb') as networkin:
-            self = cPickle.load(networkin)
+            self = pickle.load(networkin)
 
         return self
 

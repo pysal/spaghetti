@@ -4,7 +4,6 @@ branches:
 only:
   - master
 python:
-  - "2.7"
   - "3.5"
   - "3.6"
 
@@ -21,15 +20,11 @@ before_install:
   - conda config --add channels conda-forge
   - conda create -y -q -n test-env python=$TRAVIS_PYTHON_VERSION
   - source activate test-env
-  - if [[ $TRAVIS_PYTHON_VERSION == 3* ]]; 
-        then 2to3 -nw spaghetti > /dev/null; 
-    fi
 
 install:
   - conda install --yes pip
   - conda install --yes --file requirements.txt;
   - cd ../ && git clone https://github.com/pysal/libpysal.git
-  - if [[ $TRAVIS_PYTHON_VERSION == 3* ]]; then 2to3 -nw libpysal/ > /dev/null; fi
   - pip install -e ./libpysal
   - cd ./spaghetti
   - pip install -r requirements_dev.txt
@@ -42,7 +37,8 @@ notifications:
     email:
         recipients:
           - sjsrey@gmail.com
-          - jgabaordi@gmail.com
+          - levi.john.wolf@gmail.com
+          - jgaboardi@gmail.com
         on_change: always
         on_failure: always
 
