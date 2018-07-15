@@ -139,7 +139,7 @@ class Network:
         if isinstance(self.in_shp, str):
             shps = ps.open(self.in_shp)
         else:
-            shps = self.in_shp["geometry"]
+            shps = self.in_shp.geometry
         for shp in shps:
             vertices = _get_verts(shp)
             for i, v in enumerate(vertices[:-1]):
