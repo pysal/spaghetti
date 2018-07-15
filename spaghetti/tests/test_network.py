@@ -12,7 +12,7 @@ from .. import network
 class TestNetwork(unittest.TestCase):
 
     def setUp(self):
-        self.ntw = network.Network(ps.examples.get_path('streets.shp'))
+        self.ntw = network.Network(in_shp=ps.examples.get_path('streets.shp'))
 
     def tearDown(self):
         pass
@@ -63,7 +63,7 @@ class TestNetwork(unittest.TestCase):
 class TestNetworkPointPattern(unittest.TestCase):
 
     def setUp(self):
-        self.ntw = network.Network(ps.examples.get_path('streets.shp'))
+        self.ntw = network.Network(in_shp=ps.examples.get_path('streets.shp'))
         for obs in ['schools', 'crimes']:
             self.ntw.snapobservations(ps.examples.get_path('{}.shp'.format(obs)), obs, attribute=True)
             setattr(self, obs, self.ntw.pointpatterns[obs])

@@ -461,12 +461,12 @@ class Network:
 
         points = {}
         p2id = {}
-        for pointIdx, point in pointpattern.points.iteritems():
+        for pointIdx, point in pointpattern.points.items():
             points[pointIdx] = point['coordinates']
 
         snapped = util.snapPointsOnSegments(points, segments)
 
-        for pointIdx, snapInfo in snapped.iteritems():
+        for pointIdx, snapInfo in snapped.items():
             x,y = snapInfo[1].tolist()
             edge = s2e[tuple(snapInfo[0])]
             if edge not in obs_to_edge:
@@ -477,7 +477,7 @@ class Network:
             dist_to_node[pointIdx] = {edge[0]:d1, edge[1]:d2}
 
         obs_to_node = defaultdict(list)
-        for k, v in obs_to_edge.iteritems():
+        for k, v in obs_to_edge.items():
             keys = v.keys()
             obs_to_node[k[0]] = keys
             obs_to_node[k[1]] = keys
@@ -516,7 +516,7 @@ class Network:
         """
         counts = {}
         if graph:
-            for key, observations in obs_on_network.iteritems():
+            for key, observations in obs_on_network.items():
                 cnt = len(observations)
                 if key in self.graph_to_edges.keys():
                     key = self.graph_to_edges[key]

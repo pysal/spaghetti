@@ -100,7 +100,7 @@ def dijkstra(ntw, cost, node, n=float('inf')):
         last = v
         #4. Get the neighbors to the current node.
         neighbors = get_neighbor_distances(ntw, v, cost)
-        for v1, indiv_cost in neighbors.iteritems():
+        for v1, indiv_cost in neighbors.items():
             if distance[v1] > distance[v] + indiv_cost:
                 distance[v1] = distance[v] + indiv_cost
                 pred[v1] = v
@@ -227,7 +227,7 @@ def snapPointsOnSegments(points, segments):
     kt = ps.cg.KDTree(node2segs.keys())
     p2s = {}
 
-    for ptIdx, point in points.iteritems():
+    for ptIdx, point in points.items():
         # First, find nearest neighbor segment node for the point.
         dmin, node = kt.query(point, k=1)
         node = tuple(kt.data[node])
