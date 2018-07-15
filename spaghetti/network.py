@@ -26,8 +26,9 @@ class Network:
 
     Parameters
     -----------
-    in_shp:         str
-                    The input shapefile. This must be in .shp format.
+    in_shp:         geopandas.GeoDataFrame or str
+                    geopandas.GeoDataFrame:
+                    str: The input shapefile. This must be in .shp format.
 
     node_sig:       int
                     Round the x and y coordinates of all nodes to node_sig significant
@@ -82,7 +83,7 @@ class Network:
 
     Instantiate an instance of a network.
 
-    >>> ntw = ps.Network(ps.examples.get_path('streets.shp'))
+    >>> ntw = ps.Network(in_shp=ps.examples.get_path('streets.shp'))
 
     Snap point observations to the network with attribute information.
 
@@ -94,27 +95,28 @@ class Network:
     """
 
     def __init__(self, in_shp=None, node_sig=11, unique_segs=True):
-        self.in_shp = in_shp
-        self.node_sig = node_sig
-        self.unique_segs = unique_segs
+        if in_shp != None: 
+            self.in_shp = in_shp
+            self.node_sig = node_sig
+            self.unique_segs = unique_segs
 
-        self.adjacencylist = defaultdict(list)
-        self.nodes = {}
-        self.edge_lengths = {}
-        self.edges = []
+            self.adjacencylist = defaultdict(list)
+            self.nodes = {}
+            self.edge_lengths = {}
+            self.edges = []
 
-        self.pointpatterns = {}
+            self.pointpatterns = {}
 
-        self._extractnetwork()
-        self.node_coords = dict((value, key) for key, value in self.nodes.items())
+            self._extractnetwork()
+            self.node_coords = dict((value, key) for key, value in self.nodes.items())
 
-        # This is a spatial representation of the network.
-        self.edges = sorted(self.edges)
+            # This is a spatial representation of the network.
+            self.edges = sorted(self.edges)
 
-        # Extract the graph.
-        self.extractgraph()
+            # Extract the graph.
+            self.extractgraph()
 
-        self.node_list = sorted(self.nodes.values())
+            self.node_list = sorted(self.nodes.values())
 
     def _round_sig(self, v):
         """
@@ -139,7 +141,7 @@ class Network:
         if isinstance(self.in_shp, str):
             shps = ps.open(self.in_shp)
         else:
-            shps = self.in_shp["geometry"]
+            shps = self.in_shp.geometry
         for shp in shps:
             vertices = _get_verts(shp)
             for i, v in enumerate(vertices[:-1]):
@@ -1114,7 +1116,7 @@ class Network:
         sn.edges.difference_update(removeedges)
         sn.edges = list(sn.edges)
         # Update the point pattern snapping.
-        for instance in sn.pointpatterns.itervalues():
+        for instance in sn.pointpatterns.values():
             sn._snap_to_edge(instance)
 
         return sn

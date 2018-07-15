@@ -132,7 +132,7 @@ class TestNetworkPointPattern(unittest.TestCase):
 class TestNetworkUtils(unittest.TestCase):
 
     def setUp(self):
-        self.ntw = network.Network(ps.examples.get_path('streets.shp'))
+        self.ntw = network.Network(in_shp=ps.examples.get_path('streets.shp'))
 
     def test_dijkstra(self):
         self.distance, self.pred = util.dijkstra(self.ntw, self.ntw.edge_lengths, 0)
