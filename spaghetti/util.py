@@ -224,7 +224,7 @@ def snapPointsOnSegments(points, segments):
         rt.insert(segment, r)
 
     # Build a KDtree on segment nodes.
-    kt = ps.cg.KDTree(node2segs.keys())
+    kt = ps.cg.KDTree(list(node2segs.keys()))
     p2s = {}
 
     for ptIdx, point in points.items():
