@@ -11,7 +11,7 @@ import copy
 import numpy as np
 import libpysal as ps
 from libpysal.weights.util import get_ids
-#from libpysal.weights._contW_list import _get_verts
+from libpysal.weights._contW_lists import _get_verts
 from .analysis import NetworkG, NetworkK, NetworkF
 from . import util
 
@@ -94,28 +94,27 @@ class Network:
     """
 
     def __init__(self, in_shp=None, node_sig=11, unique_segs=True):
-        if in_shp:
-            self.in_shp = in_shp
-            self.node_sig = node_sig
-            self.unique_segs = unique_segs
+        self.in_shp = in_shp
+        self.node_sig = node_sig
+        self.unique_segs = unique_segs
 
-            self.adjacencylist = defaultdict(list)
-            self.nodes = {}
-            self.edge_lengths = {}
-            self.edges = []
+        self.adjacencylist = defaultdict(list)
+        self.nodes = {}
+        self.edge_lengths = {}
+        self.edges = []
 
-            self.pointpatterns = {}
+        self.pointpatterns = {}
 
-            self._extractnetwork()
-            self.node_coords = dict((value, key) for key, value in self.nodes.iteritems())
+        self._extractnetwork()
+        self.node_coords = dict((value, key) for key, value in self.nodes.items())
 
-            # This is a spatial representation of the network.
-            self.edges = sorted(self.edges)
+        # This is a spatial representation of the network.
+        self.edges = sorted(self.edges)
 
-            # Extract the graph.
-            self.extractgraph()
+        # Extract the graph.
+        self.extractgraph()
 
-            self.node_list = sorted(self.nodes.values())
+        self.node_list = sorted(self.nodes.values())
 
     def _round_sig(self, v):
         """
@@ -140,9 +139,9 @@ class Network:
         if isinstance(self.in_shp, str):
             shps = ps.open(self.in_shp)
         else:
-            shps = self.in_shp
+            shps = self.in_shp["geometry"]
         for shp in shps:
-            vertices = _get_verts(shp.vertices)
+            vertices = _get_verts(shp)
             for i, v in enumerate(vertices[:-1]):
                 v = self._round_sig(v)
                 try:
@@ -169,7 +168,7 @@ class Network:
         if self.unique_segs == True:
             # Remove duplicate edges and duplicate adjacent nodes.
             self.edges = list(set(self.edges))
-            for k, v in self.adjacencylist.iteritems():
+            for k, v in self.adjacencylist.items():
                 self.adjacencylist[k] = list(set(v))
 
     def extractgraph(self):
@@ -184,7 +183,7 @@ class Network:
 
         # Find all nodes with cardinality 2.
         segment_nodes = []
-        for k, v in self.adjacencylist.iteritems():
+        for k, v in self.adjacencylist.items():
             #len(v) == 1 #cul-de-sac
             #len(v) == 2 #bridge segment
             #len(v) > 2 #intersection
@@ -241,7 +240,7 @@ class Network:
                             redundant.add(tuple(sorted([b,n])))
 
                 newedge = tuple(sorted(startend.values()))
-                for k, v in startend.iteritems():
+                for k, v in startend.items():
                     redundant.add(tuple(sorted([k,v])))
 
                 for r in redundant:
