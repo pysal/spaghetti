@@ -527,7 +527,7 @@ class Network:
                 except:
                     counts[key] = cnt
         else:
-            for key in obs_on_network.iterkeys():
+            for key in obs_on_network.keys():
                 counts[key] = len(obs_on_network[key])
         return counts
 
@@ -590,7 +590,7 @@ class Network:
         #   Cumulative Network Length.
         edges = []
         lengths = np.zeros(len(self.edge_lengths))
-        for i, key in enumerate(self.edge_lengths.iterkeys()):
+        for i, key in enumerate(self.edge_lengths.keys()):
             edges.append(key)
             lengths[i] = self.edge_lengths[key]
         stops = np.cumsum(lengths)
@@ -711,7 +711,7 @@ class Network:
             self.node_distance_matrix(n_processes)
 
         # Source setup
-        src_indices = sourcepattern.points.keys()
+        src_indices = list(sourcepattern.points.keys())
         nsource_pts = len(src_indices)
         src_dist_to_node = sourcepattern.dist_to_node
         src_nodes = {}
@@ -724,7 +724,7 @@ class Network:
         if destpattern is None:
             symmetric = True
             destpattern = sourcepattern
-        dest_indices = destpattern.points.keys()
+        dest_indices = list(destpattern.points.keys())
         ndest_pts = len(dest_indices)
         dest_dist_to_node = destpattern.dist_to_node
         dest_searchpts = copy.deepcopy(dest_indices)
@@ -831,7 +831,7 @@ class Network:
         if not hasattr(self,'alldistances'):
             self.node_distance_matrix(n_processes)
 
-        pt_indices = self.pointpatterns[sourcepattern].points.keys()
+        pt_indices = list(self.pointpatterns[sourcepattern].points.keys())
         dist_to_node = self.pointpatterns[sourcepattern].dist_to_node
         nearest = np.zeros((len(pt_indices), 2), dtype=np.float32)
         nearest[:,1] = np.inf
