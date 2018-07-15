@@ -4,7 +4,6 @@ branches:
 only:
   - master
 python:
-  - "2.7"
   - "3.5"
   - "3.6"
 
@@ -42,7 +41,7 @@ notifications:
     email:
         recipients:
           - sjsrey@gmail.com
-          - jgabaordi@gmail.com
+          - jgaboardi@gmail.com
         on_change: always
         on_failure: always
 
