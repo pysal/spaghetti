@@ -16,7 +16,7 @@ Installation
 Install the most current version of spaghetti by running:
 
 ```
-$ pip install git+https://github.com/pysal/spaghetti
+$ pip install spaghetti
 ```
 
 Requirements
