@@ -9,16 +9,18 @@ Features
 Examples
 --------
 
+
 Installation
 ------------
 
-Install spaghetti by running:
+Install the most current version of spaghetti by running:
 
 ```
-$ pip install spaghetti
+$ pip install git+https://github.com/pysal/spaghetti
 ```
 
-#### Requirements
+Requirements
+------------
 
 - scipy
 - numpy
