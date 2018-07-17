@@ -1,13 +1,8 @@
-from __future__ import division
 import unittest
-
 import numpy as np
 import libpysal as ps
-
 from .. import util
-
 from .. import network
-
 
 class TestNetwork(unittest.TestCase):
 
@@ -23,22 +18,18 @@ class TestNetwork(unittest.TestCase):
 
         edgelengths = self.ntw.edge_lengths.values()
         self.assertAlmostEqual(sum(edgelengths), 104414.0920159, places=5)
-
-
         self.assertIn(0,self.ntw.adjacencylist[1])
         self.assertIn(0, self.ntw.adjacencylist[2])
         self.assertNotIn(0, self.ntw.adjacencylist[3])
 
     def test_contiguity_weights(self):
         w = self.ntw.contiguityweights(graph=False)
-
         self.assertEqual(w.n, 303)
         self.assertEqual(w.histogram,
                          [(2, 35), (3, 89), (4, 105), (5, 61), (6, 13)])
 
     def test_contiguity_weights_graph(self):
         w = self.ntw.contiguityweights(graph=True)
-
         self.assertEqual(w.n, 179)
         self.assertEqual(w.histogram,
                          [(2, 2), (3, 2), (4, 45), (5, 82), (6, 48)])
@@ -99,35 +90,27 @@ class TestNetworkPointPattern(unittest.TestCase):
     def test_all_neighbor_distances(self):
         distancematrix_1 = self.ntw.allneighbordistances(self.schools)
         self.assertAlmostEqual(np.nansum(distancematrix_1[0]), 17682.436988, places=4)
-
         for k, (distances, predlist) in self.ntw.alldistances.items():
             self.assertEqual(distances[k], 0)
-
             #  turning off the tests associated with util.generatetree() for now,
             #  these can be restarted if that functionality is used in the future
             #for p, plists in predlist.items():
             #    self.assertEqual(plists[-1], k)
-
             #self.assertEqual(self.ntw.node_list, predlist.keys())
-
         distancematrix_2 = self.ntw.allneighbordistances(self.schools, fill_diagonal=0.)
         observed = distancematrix_2.diagonal()
         known = np.zeros(distancematrix_2.shape[0])
         np.testing.assert_equal(observed, known)
 
     def test_nearest_neighbor_distances(self):
-
         with self.assertRaises(KeyError):
             self.ntw.nearestneighbordistances('i_should_not_exist')
-
         nnd = self.ntw.nearestneighbordistances('schools')
         nnd2 = self.ntw.nearestneighbordistances('schools',
                                                  'schools')
         np.testing.assert_array_equal(nnd, nnd2)
-
     def test_nearest_neighbor_search(self):
         pass
-
 
 class TestNetworkUtils(unittest.TestCase):
 
