@@ -634,9 +634,8 @@ class Network:
 
     def node_distance_matrix(self, n_processes):
         """
-        Called from: allneighbordistances()
-                     nearestneighbordistances()
-                     distancebandweights()
+        Called from within `allneighbordistances()`,
+        `nearestneighbordistances()`, and `distancebandweights()`.
         """
         self.alldistances = {}
         nnodes = len(self.node_list)
