@@ -11,7 +11,7 @@ pth = os.path.dirname(os.path.abspath(__file__))+ '/requirements.txt'
 REQUIREMENTS = [i.strip() for i in open(pth).readlines()]
 
 setup(name='spaghetti', #name of package
-      version='1.0.0',
+      version='1.0.1',
       description='Spatial Network Analysis (SPAtial GrapHs: nETworks, Topology, & Inference)', #short <80chr description
       url='https://github.com/pysal/spaghetti', #github repo
       maintainer='James Gaboardi',
