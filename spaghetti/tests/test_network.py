@@ -15,7 +15,6 @@ class TestNetwork(unittest.TestCase):
     def test_extract_network(self):
         self.assertEqual(len(self.ntw.edges), 303)
         self.assertEqual(len(self.ntw.nodes), 230)
-
         edgelengths = self.ntw.edge_lengths.values()
         self.assertAlmostEqual(sum(edgelengths), 104414.0920159, places=5)
         self.assertIn(0,self.ntw.adjacencylist[1])
