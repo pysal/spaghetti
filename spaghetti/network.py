@@ -1,12 +1,6 @@
 from collections import defaultdict, OrderedDict
 import os
-try:
-    try:
-        import cPickle as pickle
-    except:
-        import _pickle as pickle
-except:
-    import pickle
+import pickle
 import copy
 import numpy as np
 import libpysal as ps
