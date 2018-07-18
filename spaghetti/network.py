@@ -4,8 +4,6 @@ import pickle
 import copy
 import numpy as np
 import libpysal as ps
-from libpysal.weights.util import get_ids
-from libpysal.weights._contW_lists import _get_verts
 from .analysis import NetworkG, NetworkK, NetworkF
 from . import util
 
@@ -137,7 +135,7 @@ class Network:
         else:
             shps = self.in_shp.geometry
         for shp in shps:
-            vertices = _get_verts(shp)
+            vertices = ps.weights._contW_lists._get_verts(shp)
             for i, v in enumerate(vertices[:-1]):
                 v = self._round_sig(v)
                 try:
@@ -1177,7 +1175,7 @@ class PointPattern():
         self.npoints = 0
 
         if idvariable:
-            ids = get_ids(shapefile, idvariable)
+            ids = ps.weights.util.get_ids(shapefile, idvariable)
         else:
             ids = None
 
