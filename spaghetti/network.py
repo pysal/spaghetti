@@ -87,7 +87,7 @@ class Network:
     """
 
     def __init__(self, in_shp=None, node_sig=11, unique_segs=True):
-        if in_shp != None: 
+        if in_shp is not None: 
             self.in_shp = in_shp
             self.node_sig = node_sig
             self.unique_segs = unique_segs
