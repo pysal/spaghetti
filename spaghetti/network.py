@@ -33,7 +33,11 @@ class Network:
                     If True (default), keep only unique segments (i.e., prune out any
                     duplicated segments).
                     If False keep all segments.
-
+    
+    extractgraph:   bool
+                    If True, extract a graph-theoretic object with no
+                    degree 2 nodes. Defalt is True.
+    
     Attributes
     ----------
     in_shp:         str
@@ -86,7 +90,8 @@ class Network:
     >>> ntw.snapobservations(ps.examples.get_path('schools.shp'), 'schools', attribute=False)
     """
 
-    def __init__(self, in_shp=None, node_sig=11, unique_segs=True):
+    def __init__(self, in_shp=None, node_sig=11, unique_segs=True,
+                 extractgraph=True):
         if in_shp is not None: 
             self.in_shp = in_shp
             self.node_sig = node_sig
@@ -106,7 +111,8 @@ class Network:
             self.edges = sorted(self.edges)
 
             # Extract the graph.
-            self.extractgraph()
+            if extractgraph:
+                self.extractgraph()
 
             self.node_list = sorted(self.nodes.values())
 
