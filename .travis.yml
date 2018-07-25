@@ -25,7 +25,6 @@ install:
   - conda install --yes pip
   - conda install --yes --file requirements.txt;
   - pip install libpysal
-  - cd ./spaghetti
   - pip install -r requirements_dev.txt
 
 script:
