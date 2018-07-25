@@ -37,8 +37,8 @@ notifications:
           - sjsrey@gmail.com
           - levi.john.wolf@gmail.com
           - jgaboardi@gmail.com
-        on_change: always
-        on_failure: always
+        on_success: change
+        on_failure: change
 
 after_success:
   - coveralls
