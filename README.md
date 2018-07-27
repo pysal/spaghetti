@@ -16,11 +16,18 @@ Examples
 Installation
 ------------
 
-Install the most current version of spaghetti by running:
+Install the latest stable of spaghetti by running:
 
 ```
 $ pip install spaghetti
 ```
+
+Install the most current version of spaghetti by running:
+
+```
+$ pip install git+https://github.com/pysal/spaghetti
+```
+
 
 Requirements
 ------------
