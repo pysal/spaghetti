@@ -1,13 +1,13 @@
 import unittest
 import numpy as np
-import libpysal as ps
-from .. import util
-from .. import network
+import libpysal
+import libpysal.api as ps
+import spaghetti.api as spgh
 
 class TestNetwork(unittest.TestCase):
 
     def setUp(self):
-        self.ntw = network.Network(in_shp=ps.examples.get_path('streets.shp'))
+        self.ntw = spgh.Network(in_shp=libpysal.examples.get_path('streets.shp'))
         
     def tearDown(self):
         pass
@@ -53,9 +53,9 @@ class TestNetwork(unittest.TestCase):
 class TestNetworkPointPattern(unittest.TestCase):
 
     def setUp(self):
-        self.ntw = network.Network(in_shp=ps.examples.get_path('streets.shp'))
+        self.ntw = spgh.Network(in_shp=libpysal.examples.get_path('streets.shp'))
         for obs in ['schools', 'crimes']:
-            self.ntw.snapobservations(ps.examples.get_path('{}.shp'.format(obs)), obs, attribute=True)
+            self.ntw.snapobservations(libpysal.examples.get_path('{}.shp'.format(obs)), obs, attribute=True)
             setattr(self, obs, self.ntw.pointpatterns[obs])
 
     def tearDown(self):
@@ -114,15 +114,15 @@ class TestNetworkPointPattern(unittest.TestCase):
 class TestNetworkUtils(unittest.TestCase):
 
     def setUp(self):
-        self.ntw = network.Network(in_shp=ps.examples.get_path('streets.shp'))
+        self.ntw = spgh.Network(in_shp=libpysal.examples.get_path('streets.shp'))
 
     def test_dijkstra(self):
-        self.distance, self.pred = util.dijkstra(self.ntw, self.ntw.edge_lengths, 0)
+        self.distance, self.pred = spgh.dijkstra(self.ntw, self.ntw.edge_lengths, 0)
         self.assertAlmostEqual(self.distance[196], 5505.668247, places=4)
         self.assertEqual(self.pred[196], 133)
 
     def test_dijkstra_mp(self):
-        self.distance, self.pred = util.dijkstra_mp((self.ntw, self.ntw.edge_lengths, 0))
+        self.distance, self.pred = spgh.dijkstra_mp((self.ntw, self.ntw.edge_lengths, 0))
         self.assertAlmostEqual(self.distance[196], 5505.668247, places=4)
         self.assertEqual(self.pred[196], 133)
 

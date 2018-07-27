@@ -1,17 +1,9 @@
 from collections import defaultdict, OrderedDict
 import os
-try:
-    try:
-        import cPickle as pickle
-    except:
-        import _pickle as pickle
-except:
-    import pickle
+import pickle
 import copy
 import numpy as np
 import libpysal as ps
-from libpysal.weights.util import get_ids
-from libpysal.weights._contW_lists import _get_verts
 from .analysis import NetworkG, NetworkK, NetworkF
 from . import util
 
@@ -41,7 +33,11 @@ class Network:
                     If True (default), keep only unique segments (i.e., prune out any
                     duplicated segments).
                     If False keep all segments.
-
+    
+    extractgraph:   bool
+                    If True, extract a graph-theoretic object with no
+                    degree 2 nodes. Defalt is True.
+    
     Attributes
     ----------
     in_shp:         str
@@ -94,8 +90,9 @@ class Network:
     >>> ntw.snapobservations(ps.examples.get_path('schools.shp'), 'schools', attribute=False)
     """
 
-    def __init__(self, in_shp=None, node_sig=11, unique_segs=True):
-        if in_shp != None: 
+    def __init__(self, in_shp=None, node_sig=11, unique_segs=True,
+                 extractgraph=True):
+        if in_shp is not None: 
             self.in_shp = in_shp
             self.node_sig = node_sig
             self.unique_segs = unique_segs
@@ -114,7 +111,8 @@ class Network:
             self.edges = sorted(self.edges)
 
             # Extract the graph.
-            self.extractgraph()
+            if extractgraph:
+                self.extractgraph()
 
             self.node_list = sorted(self.nodes.values())
 
@@ -143,7 +141,7 @@ class Network:
         else:
             shps = self.in_shp.geometry
         for shp in shps:
-            vertices = _get_verts(shp)
+            vertices = ps.weights._contW_lists._get_verts(shp)
             for i, v in enumerate(vertices[:-1]):
                 v = self._round_sig(v)
                 try:
@@ -642,9 +640,8 @@ class Network:
 
     def node_distance_matrix(self, n_processes):
         """
-        Called from: allneighbordistances()
-                     nearestneighbordistances()
-                     distancebandweights()
+        Called from within `allneighbordistances()`,
+        `nearestneighbordistances()`, and `distancebandweights()`.
         """
         self.alldistances = {}
         nnodes = len(self.node_list)
@@ -1183,7 +1180,7 @@ class PointPattern():
         self.npoints = 0
 
         if idvariable:
-            ids = get_ids(shapefile, idvariable)
+            ids = ps.weights.util.get_ids(shapefile, idvariable)
         else:
             ids = None
 

@@ -1,6 +1,9 @@
 SPAtial GrapHs: nETworks, Topology, & Inference (spaghetti) in PySAL
 =================================================
 
+[![Gitter](https://badges.gitter.im/pysal/Spaghetti.svg)](https://gitter.im/pysal/Spaghetti?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Build Status](https://travis-ci.org/pysal/spaghetti.svg?branch=master)](https://travis-ci.org/pysal/spaghetti)
+
 
 Features
 --------
@@ -9,16 +12,18 @@ Features
 Examples
 --------
 
+
 Installation
 ------------
 
-Install spaghetti by running:
+Install the most current version of spaghetti by running:
 
 ```
 $ pip install spaghetti
 ```
 
-#### Requirements
+Requirements
+------------
 
 - scipy
 - numpy
