@@ -3,7 +3,7 @@ SPAtial GrapHs: nETworks, Topology, & Inference (spaghetti) in PySAL
 
 [![Gitter](https://badges.gitter.im/pysal/Spaghetti.svg)](https://gitter.im/pysal/Spaghetti?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Build Status](https://travis-ci.org/pysal/spaghetti.svg?branch=master)](https://travis-ci.org/pysal/spaghetti)
-[![Coverage](https://coveralls.io/repos/pysal/spaghetti/badge.svg?branch=master)](https://coveralls.io/r/pysal/spaghetti?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/pysal/spaghetti/badge.svg)](https://coveralls.io/github/pysal/spaghetti)
 
 
 Features
