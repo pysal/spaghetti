@@ -13,6 +13,7 @@ SPAtial GrapHs: nETworks, Topology, & Inference
 | **Coverage** | [![Coverage Status](https://coveralls.io/repos/github/pysal/spaghetti/badge.svg)](https://coveralls.io/github/pysal/spaghetti) |
 | **Documentation Status** | [![Documentation Status](https://readthedocs.org/projects/pysalspaghetti/badge/?version=latest)](https://pysalspaghetti.readthedocs.io/en/latest/?badge=latest) |
 
+This package is part of a [refactoring of PySAL](https://github.com/pysal/pysal/wiki/PEP-13:-Refactor-PySAL-Using-Submodules).
 --------------------------------------
 
 Spaghetti is an open-source python library for the analysis of network-based spatial data. Originating from the `network` module in [PySAL (Python Spatial Analysis Library)](http://pysal.org), it is under active development for the inclusion of newly proposed methods for building graph-theortic networks and the analysis of network events.
