@@ -12,6 +12,8 @@ SPAtial GrapHs: nETworks, Topology, & Inference
 | **Chat** | [![Gitter](https://badges.gitter.im/pysal/Spaghetti.svg)](https://gitter.im/pysal/Spaghetti?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) |
 | **Coverage** | [![Coverage Status](https://coveralls.io/repos/github/pysal/spaghetti/badge.svg)](https://coveralls.io/github/pysal/spaghetti) |
 | **Documentation Status** | [![Documentation Status](https://readthedocs.org/projects/pysalspaghetti/badge/?version=latest)](https://pysalspaghetti.readthedocs.io/en/latest/?badge=latest) |
+| **Code Health** | [![Code Health](https://landscape.io/github/pysal/spaghetti/master/landscape.svg?style=flat)](https://landscape.io/github/pysal/spaghetti/master) |
+
 
 This package is part of a [refactoring of PySAL](https://github.com/pysal/pysal/wiki/PEP-13:-Refactor-PySAL-Using-Submodules).
 
