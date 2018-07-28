@@ -1,5 +1,9 @@
-SPAtial GrapHs: nETworks, Topology, & Inference (spaghetti) in PySAL
-=================================================
+
+pysal/spaghetti
+===============
+
+SPAtial GrapHs: nETworks, Topology, & Inference
+===============================================
 
 | | |
 | --- | --- |
@@ -58,5 +62,3 @@ License
 
 The project is licensed under the [BSD license](https://github.com/pysal/spaghetti/blob/master/LICENSE.txt).
 
-Funding
--------
