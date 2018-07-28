@@ -61,7 +61,7 @@ If you have any suggestion, feature request, or bug report, please open a new [i
 Support
 -------
 
-If you are having issues, please talk to us in the [gitter room](https://gitter.im/pysal/spaghetti).
+If you are having issues, please [create an issue](https://github.com/pysal/spaghetti/issues) or talk to us in the [gitter room](https://gitter.im/pysal/spaghetti).
 
 License
 -------
