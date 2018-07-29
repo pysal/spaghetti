@@ -484,7 +484,7 @@ class Network:
 
         pointpattern.obs_to_edge = obs_to_edge
         pointpattern.dist_to_node = dist_to_node
-        pointpattern.obs_to_node = obs_to_node
+        pointpattern.obs_to_node = list(obs_to_node)
 
 
     def count_per_edge(self, obs_on_network, graph=True):
