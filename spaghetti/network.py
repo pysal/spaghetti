@@ -1187,8 +1187,9 @@ class Network:
         Parameters
         ----------
         filename:   str
-                    The filename where the network should be saved. This should be a full
-                    path or the file is saved whereever this method is called from.
+                    The filename where the network should be saved.
+                    This should be a full path or the file is saved
+                    whereever this method is called from.
 
         Example
         --------
@@ -1208,8 +1209,9 @@ class Network:
 
 class PointPattern():
     """
-    A stub point pattern class used to store a point pattern. This class is monkey patched
-    with network specific attributes when the points are snapped to a network.
+    A stub point pattern class used to store a point pattern. This
+    class is monkey patched  with network specific attributes when
+    the points are snapped to a network.
 
     In the future this class may be replaced with a generic point
     pattern class.
@@ -1224,7 +1226,8 @@ class PointPattern():
 
     attribute:  bool
                 {False, True}
-                A flag to indicate whether all attributes are tagged to this class.
+                A flag to indicate whether all attributes are
+                tagged to this class.
 
     Attributes
     ----------
@@ -1234,8 +1237,6 @@ class PointPattern():
 
     npoints:    int
                 The number of points.
-
-
     """
     def __init__(self, shapefile, idvariable=None, attribute=False):
         self.points = {}
