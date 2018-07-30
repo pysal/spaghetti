@@ -361,9 +361,11 @@ class Network:
                         Distance threshold value.
 
         n_processes:    int, str
-                        (Optional) Specify the number of cores to utilize.
-                        Default is 1 core. Use (int) to specify an exact number or cores.
-                        Use ("all") to request all available cores.
+                        (Optional) Specify the number of cores
+                        to utilize.
+                        Default is 1 core. Use (int) to specify an
+                        exact number or cores. Use ("all") to request
+                        all available cores.
         """
         try:
             hasattr(self.alldistances)
