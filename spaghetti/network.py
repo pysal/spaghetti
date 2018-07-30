@@ -108,7 +108,7 @@ class Network:
             self.pointpatterns = {}
 
             self._extractnetwork()
-            self.node_coords = dict((value, key) for key, value in self.nodes.items())
+            self.node_coords = dict((v, k) for k, v in self.nodes.items())
 
             # This is a spatial representation of the network.
             self.edges = sorted(self.edges)
