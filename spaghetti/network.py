@@ -1044,26 +1044,29 @@ class Network:
                         A PySAL point pattern object.
 
         nsteps:         int
-                        The number of steps at which the count of the nearest neighbors
-                        is computed.
+                        The number of steps at which the count of the
+                        nearest neighbors is computed.
 
         permutations:   int
-                        The number of permutations to perform (default 99).
+                        The number of permutations to perform
+                        (default 99).
 
         threshold:      float
                         The level at which significance is computed.
-                            -- 0.5 would be 97.5% and 2.5%
+                        -- 0.5 would be 97.5% and 2.5%
 
         distribution:   str
-                        The distribution from which random points are sampled:
-                            -- uniform or poisson
+                        The distribution from which random points are
+                        sampled -- uniform or poisson
 
         lowerbound:     float
-                        The lower bound at which the K-function is computed. (Default 0)
+                        The lower bound at which the K-function is
+                        computed. (Default 0)
 
         upperbound:     float
-                        The upper bound at which the K-function is computed.
-                        Defaults to the maximum observed nearest neighbor distance.
+                        The upper bound at which the K-function is
+                        computed. Defaults to the maximum observed
+                        nearest neighbor distance.
 
         Returns
         -------
@@ -1077,8 +1080,8 @@ class Network:
 
     def segment_edges(self, distance):
         """
-        Segment all of the edges in the network at either a fixed distance or a fixed
-        number of segments.
+        Segment all of the edges in the network at either a
+        fixed distance or a fixed number of segments.
 
         Parameters
         -----------
@@ -1121,7 +1124,8 @@ class Network:
             currentstart = startnode = e[0]
             endnode = e[1]
 
-            # If the edge will be segmented remove the current edge from the adjacency list.
+            # If the edge will be segmented remove the current
+            # edge from the adjacency list.
             if interval < length:
                 sn.adjacencylist[e[0]].remove(e[1])
                 sn.adjacencylist[e[1]].remove(e[0])
