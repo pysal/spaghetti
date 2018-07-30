@@ -857,7 +857,8 @@ class Network:
 
         return nearest
 
-    def nearestneighbordistances(self, sourcepattern, destpattern=None, n_processes=None):
+    def nearestneighbordistances(self, sourcepattern,
+                                 destpattern=None, n_processes=None):
         """
         Compute the interpattern nearest neighbor distances or the
         intrapattern nearest neighbor distances between a source
@@ -888,7 +889,8 @@ class Network:
         """
 
         if not sourcepattern in self.pointpatterns.keys():
-            raise KeyError("Available point patterns are {}".format(self.pointpatterns.keys()))
+            err_msg = "Available point patterns are {}"
+            raise KeyError(err_msg.format(self.pointpatterns.keys()))
 
         if not hasattr(self,'alldistances'):
             self.node_distance_matrix(n_processes)
@@ -909,46 +911,47 @@ class Network:
             searchnodes[s] = (e1, e2)
 
         for p1 in pt_indices:
-            # Get the source nodes and dist to source nodes.
-            source1, source2 = searchnodes[p1]
+            # Get the source nodes and distance to source nodes.
+            # source1 and source2 nodes
+            s1, s2 = searchnodes[p1]
             sdist1, sdist2 = dist_to_node[p1].values()
 
             searchpts.remove(p1)
             for p2 in searchpts:
-                dest1, dest2 = searchnodes[p2]
+                d1, d2 = searchnodes[p2]
                 ddist1, ddist2 = dist_to_node[p2].values()
-                source1_to_dest1 = sdist1 + self.alldistances[source1][0][dest1] + ddist1
-                source1_to_dest2 = sdist1 + self.alldistances[source1][0][dest2] + ddist2
-                source2_to_dest1 = sdist2 + self.alldistances[source2][0][dest1] + ddist1
-                source2_to_dest2 = sdist2 + self.alldistances[source2][0][dest2] + ddist2
-
-                if source1_to_dest1 < nearest[p1, 1]:
+                s1_to_d1 = sdist1 + self.alldistances[s1][0][d1] + ddist1
+                s1_to_d2 = sdist1 + self.alldistances[s1][0][d2] + ddist2
+                s2_to_d1 = sdist2 + self.alldistances[s2][0][d1] + ddist1
+                s2_to_d2 = sdist2 + self.alldistances[s2][0][d2] + ddist2
+                # source1 to dest1
+                if s1_to_d1 < nearest[p1, 1]:
                     nearest[p1, 0] = p2
-                    nearest[p1, 1] = source1_to_dest1
-                if source1_to_dest1 < nearest[p2, 1]:
+                    nearest[p1, 1] = s1_to_d1
+                if s1_to_d1 < nearest[p2, 1]:
                     nearest[p2, 0] = p1
-                    nearest[p2, 1] = source1_to_dest1
-
-                if source1_to_dest2 < nearest[p1, 1]:
+                    nearest[p2, 1] = s1_to_d1
+                # source1 to dest2
+                if s1_to_d2 < nearest[p1, 1]:
                     nearest[p1, 0] = p2
-                    nearest[p1, 1] = source1_to_dest2
-                if source1_to_dest1 < nearest[p2, 1]:
+                    nearest[p1, 1] = s1_to_d2
+                if s1_to_d2 < nearest[p2, 1]:
                     nearest[p2, 0] = p1
-                    nearest[p2, 1] = source1_to_dest2
-
-                if source2_to_dest1 < nearest[p1, 1]:
+                    nearest[p2, 1] = s1_to_d2
+                # source2 to dest1
+                if s2_to_d1 < nearest[p1, 1]:
                     nearest[p1, 0] = p2
-                    nearest[p1, 1] = source2_to_dest1
-                if source2_to_dest1 < nearest[p2, 1]:
+                    nearest[p1, 1] = s2_to_d1
+                if s2_to_d1 < nearest[p2, 1]:
                     nearest[p2, 0] = p1
-                    nearest[p2, 1] = source2_to_dest1
-
-                if source2_to_dest2 < nearest[p1, 1]:
+                    nearest[p2, 1] = s2_to_d1
+                # source2 to dest2
+                if s2_to_d2 < nearest[p1, 1]:
                     nearest[p1, 0] = p2
-                    nearest[p1, 1] = source2_to_dest2
-                if source2_to_dest2 < nearest[p2, 1]:
+                    nearest[p1, 1] = s2_to_d2
+                if s2_to_d2 < nearest[p2, 1]:
                     nearest[p2, 0] = p1
-                    nearest[p2, 1] = source2_to_dest2
+                    nearest[p2, 1] = s2_to_d2
 
         return nearest
 
