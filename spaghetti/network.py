@@ -604,7 +604,9 @@ class Network:
         -------
 
         >>> ntw = ps.Network(ps.examples.get_path('streets.shp'))
-        >>> ntw.snapobservations(ps.examples.get_path('crimes.shp'), 'crimes', attribute=True)
+        >>> ntw.snapobservations(ps.examples.get_path('crimes.shp'),
+        ...                                           'crimes',
+        ...                                           attribute=True)
         >>> npts = ntw.pointpatterns['crimes'].npoints
         >>> sim = ntw.simulate_observations(npts)
         >>> isinstance(sim, ps.network.network.SimulatedPointPattern)
@@ -669,6 +671,15 @@ class Network:
         """
         Called from within `allneighbordistances()`,
         `nearestneighbordistances()`, and `distancebandweights()`.
+        
+        Parameters
+        -----------
+        n_processes     int
+                        cpu cores for multiprocessing
+        
+        Returns
+        -------
+        None; set the `alldistances` and `distancematrix` attributes
         """
         self.alldistances = {}
         nnodes = len(self.node_list)
@@ -705,30 +716,36 @@ class Network:
     def allneighbordistances(self, sourcepattern, destpattern=None, fill_diagonal=None,
                              n_processes=None):
         """
-        Compute either all distances between i and j in a single point pattern or all
-        distances between each i from a source pattern and all j from a destination pattern.
+        Compute either all distances between i and j in a single
+        point pattern or all distances between each i from a source
+        pattern and all j from a destination pattern.
 
         Parameters
         ----------
         sourcepattern:  str
-                        The key of a point pattern snapped to the network.
+                        The key of a point pattern snapped
+                        to the network.
 
         destpattern:    str
-                        (Optional) The key of a point pattern snapped to the network.
+                        (Optional) The key of a point pattern
+                        snapped to the network.
 
         fill_diagonal:  float, int
-                        (Optional) Fill the diagonal of the cost matrix.
-                        Default in None and will populate the diagonal with numpy.nan
-                        Do not declare a destpattern for a custom fill_diagonal.
+                        (Optional) Fill the diagonal of the cost
+                        matrix. Default in None and will populate the
+                        diagonal with numpy.nan Do not declare a
+                        destpattern for a custom fill_diagonal.
 
         n_processes:    int, str
-                        (Optional) Specify the number of cores to utilize.
-                        Default is 1 core. Use (int) to specify an exact number or cores.
-                        Use ("all") to request all available cores.
+                        (Optional) Specify the number of cores to
+                        utilize. Default is 1 core. Use (int) to
+                        specify an exact number or cores.  Use ("all")
+                        to request all available cores.
         Returns
         -------
         nearest:        array (n,n)
-                        An array of shape (n,n) storing distances between all points.
+                        An array of shape (n,n) storing distances
+                        between all points.
         """
 
         if not hasattr(self,'alldistances'):
