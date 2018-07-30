@@ -11,16 +11,15 @@ __all__ = ["Network", "PointPattern", "NetworkG", "NetworkK", "NetworkF"]
 
 
 class Network:
-
     """
-    Spatially constrained network representation and analytical functionality.
-
+    Spatially-constrained network representation
+    and analytical functionality.
 
     Parameters
     -----------
     in_shp:         geopandas.GeoDataFrame or str
-                    geopandas.GeoDataFrame:
-                    str: The input shapefile. This must be in .shp format.
+                    The input geographic data. Either (1) a path to a
+                    shapefile (str); or (2) a geopandas.GeoDataFrame.
 
     node_sig:       int
                     Round the x and y coordinates of all nodes to node_sig significant
