@@ -181,9 +181,10 @@ class Network:
 
     def extractgraph(self):
         """
-        Using the existing network representation, create a graph based representation by
-        removing all nodes with a neighbor incidence of two.  That is, we assume these
-        nodes are bridges between nodes with higher incidence.
+        Using the existing network representation, create a graph based
+        representation by removing all nodes with a neighbor incidence
+        of two.  That is, we assume these nodes are bridges between
+        nodes with higher incidence.
         """
         self.graphedges = []
         self.edge_to_graph = {}
