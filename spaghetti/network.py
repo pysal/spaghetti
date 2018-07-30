@@ -212,7 +212,9 @@ class Network:
                 cnode = neighbors.pop()
                 segment_nodes.remove(cnode)
                 bridge.append(cnode)
-                newneighbors = self._yieldneighbor(cnode, segment_nodes, bridge)
+                newneighbors = self._yieldneighbor(cnode,
+                                                   segment_nodes,
+                                                   bridge)
                 neighbors += newneighbors
             bridges.append(bridge)
 
