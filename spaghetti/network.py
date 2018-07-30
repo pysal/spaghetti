@@ -726,8 +726,8 @@ class Network:
                 self.distancematrix[node] = distance[node]
 
 
-    def allneighbordistances(self, sourcepattern, destpattern=None, fill_diagonal=None,
-                             n_processes=None):
+    def allneighbordistances(self, sourcepattern, destpattern=None,
+                             fill_diagonal=None, n_processes=None):
         """
         Compute either all distances between i and j in a single
         point pattern or all distances between each i from a source
