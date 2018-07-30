@@ -383,7 +383,8 @@ class Network:
 
         return ps.weights.W(neighbors)
 
-    def snapobservations(self, shapefile, name, idvariable=None, attribute=None):
+    def snapobservations(self, shapefile, name,
+                         idvariable=None, attribute=None):
         """
         Snap a point pattern shapefile to this network object. The
         point pattern is stored in the network.pointpattern['key']
@@ -410,7 +411,9 @@ class Network:
         None; add a PointPattern and snap PointPattern to edges.
         """
 
-        self.pointpatterns[name] = PointPattern(shapefile, idvariable=idvariable, attribute=attribute)
+        self.pointpatterns[name] = PointPattern(shapefile,
+                                                idvariable=idvariable,
+                                                attribute=attribute)
         self._snap_to_edge(self.pointpatterns[name])
 
     def compute_distance_to_nodes(self, x, y, edge):
