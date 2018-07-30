@@ -383,8 +383,9 @@ class Network:
 
     def snapobservations(self, shapefile, name, idvariable=None, attribute=None):
         """
-        Snap a point pattern shapefile to this network object.  The point pattern is
-        stored in the network.pointpattern['key'] attribute of the network object.
+        Snap a point pattern shapefile to this network object. The
+        point pattern is stored in the network.pointpattern['key']
+        attribute of the network object.
 
         Parameters
         ----------
@@ -399,11 +400,12 @@ class Network:
 
         attribute:  bool
                     Defines whether attributes should be extracted.
-                        True for attribute extraction.
-                        False for no attribute extraaction.
+                    True for attribute extraction. False for no
+                    attribute extraaction.
 
         Returns
         -------
+        None; add a PointPattern and snap PointPattern to edges.
         """
 
         self.pointpatterns[name] = PointPattern(shapefile, idvariable=idvariable, attribute=attribute)
@@ -411,8 +413,8 @@ class Network:
 
     def compute_distance_to_nodes(self, x, y, edge):
         """
-        Given an observation on a network edge, return the distance to the two nodes that
-        bound that end.
+        Given an observation on a network edge, return the distance to
+        the two nodes that bound that end.
 
         Parameters
         ----------
@@ -452,14 +454,17 @@ class Network:
         Returns
         -------
         obs_to_edge:    dict
-                        Dict with edges as keys and lists of points as values.
+                        Dict with edges as keys and lists of
+                        points as values.
 
         edge_to_obs:    dict
-                        Dict with point ids as keys and edge tuples as values.
+                        Dict with point ids as keys and edge
+                        tuples as values.
 
         dist_to_node:   dict
-                        Dict with point ids as keys and values as dicts with keys for
-                        node ids and values as distances from point to node.
+                        Dict with point ids as keys and values
+                        as dicts with keys for node ids and values
+                        as distances from point to node.
         """
 
         obs_to_edge = {}
@@ -511,7 +516,8 @@ class Network:
         ----------
         obs_on_network: dict
                         Dict of observations on the network.
-                        {(edge):{pt_id:(coords)}} or {edge:[(coord),(coord),(coord)]}
+                        {(edge):{pt_id:(coords)}} or
+                        {edge:[(coord),(coord),(coord)]}
         Returns
         -------
         counts:         dict
@@ -520,12 +526,15 @@ class Network:
         Example
         -------
 
-        Note that this passes the obs_to_edge attribute of a point pattern snapped to the
-        network.
+        Note that this passes the obs_to_edge attribute of a
+        point pattern snapped to the network.
 
         >>> ntw = ps.Network(ps.examples.get_path('streets.shp'))
-        >>> ntw.snapobservations(ps.examples.get_path('crimes.shp'), 'crimes', attribute=True)
-        >>> counts = ntw.count_per_edge(ntw.pointpatterns['crimes'].obs_to_edge,graph=False)
+        >>> ntw.snapobservations(ps.examples.get_path('crimes.shp'),
+        ...                                           'crimes',
+        ...                                           attribute=True)
+        >>> counts = ntw.count_per_edge(ntw.pointpatterns['crimes']\
+        ...                             .obs_to_edge, graph=False)
         >>> s = sum([v for v in counts.itervalues()])
         >>> s
         287
@@ -547,7 +556,8 @@ class Network:
 
     def _newpoint_coords(self, edge, distance):
         """
-        Used internally to compute new point coordinates during snapping.
+        Used internally to compute new point
+        coordinates during snapping.
         """
         x1 = self.node_coords[edge[0]][0]
         y1 = self.node_coords[edge[0]][1]
