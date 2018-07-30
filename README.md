@@ -32,7 +32,7 @@ Features
 
 Examples
 --------
-* [Network_Usage](https://github.com/jGaboardi/spaghetti/blob/master/notebooks/Network_Usage.ipynb)
+* [Network_Usage](https://github.com/pysal/spaghetti/blob/master/notebooks/Network_Usage.ipynb)
 
 Installation
 ------------
