@@ -340,8 +340,8 @@ class Network:
             for neigh in edges:
                 if key == neigh:
                     continue
-                if key[0] == neigh[0] or key[0] == neigh[1] or key[1] == neigh[0]\
-                                                            or key[1] == neigh[1]:
+                if key[0] == neigh[0] or key[0] == neigh[1]\
+                or key[1] == neigh[0] or key[1] == neigh[1]:
                     neighbors[key].append(neigh)
                     if weightings:
                         weights[key].append(weightings[neigh])
