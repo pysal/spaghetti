@@ -79,15 +79,21 @@ class Network:
 
     Instantiate an instance of a network.
 
-    >>> ntw = ps.Network(in_shp=ps.examples.get_path('streets.shp'))
+    >>> streets_file = ps.examples.get_path('streets.shp')
+
+    >>> ntw = ps.Network(in_shp=streets_file)
 
     Snap point observations to the network with attribute information.
 
-    >>> ntw.snapobservations(ps.examples.get_path('crimes.shp'), 'crimes', attribute=True)
+    >>> crimes_file = ps.examples.get_path('crimes.shp')
+
+    >>> ntw.snapobservations(crimes_file, 'crimes', attribute=True)
 
     And without attribute information.
 
-    >>> ntw.snapobservations(ps.examples.get_path('schools.shp'), 'schools', attribute=False)
+    >>> schools_file = ps.examples.get_path('schools.shp')
+
+    >>> ntw.snapobservations(schools_file, 'schools', attribute=False)
     """
 
     def __init__(self, in_shp=None, node_sig=11, unique_segs=True,
