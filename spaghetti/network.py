@@ -124,9 +124,11 @@ class Network:
 
     def _round_sig(self, v):
         """
-        Used internally to round the vertex to a set number of significant digits. If sig
-        is set to 4, then the following are some possible results for a coordinate:
-        0.0xxxx, 0.xxxx, x.xxx, xx.xx, xxx.x, xxxx.0, xxxx0.0
+        Used internally to round the vertex to a set number of
+        significant digits. If sig is set to 4, then the following are
+        some possible results for a coordinate are as follows
+        (1) 0.0xxxx, (2) 0.xxxx, (3) x.xxx, (4) xx.xx,
+        (5) xxx.x, (6) xxxx.0, (7) xxxx0.0
         """
         sig = self.node_sig
         if sig is None:
@@ -139,7 +141,7 @@ class Network:
 
     def _extractnetwork(self):
         """
-        Used internally, to extract a network from a polyline shapefile.
+        Used internally to extract a network from a polyline shapefile.
         """
         nodecount = 0
         if isinstance(self.in_shp, str):
