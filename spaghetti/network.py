@@ -295,11 +295,14 @@ class Network:
         --------
         >>> ntw = ps.Network(ps.examples.get_path('streets.shp'))
         >>> w = ntw.contiguityweights(graph=False)
-        >>> ntw.snapobservations(ps.examples.get_path('crimes.shp'), 'crimes', attribute=True)
-        >>> counts = ntw.count_per_edge(ntw.pointpatterns['crimes'].obs_to_edge, graph=False)
+        >>> ntw.snapobservations(ps.examples.get_path('crimes.shp'),
+        ...                      'crimes', attribute=True)
+        >>> counts = ntw.count_per_edge(ntw.pointpatterns['crimes']\
+        ...                             .obs_to_edge, graph=False)
 
-        Using the W object, access to ESDA functionality is provided.  First,
-        a vector of attributes is created for all edges with observations.
+        Using the W object, access to ESDA functionality is provided.
+        First, a vector of attributes is created for all edges
+        with observations.
 
         >>> w = ntw.contiguityweights(graph=False)
         >>> edges = w.neighbors.keys()
@@ -308,7 +311,8 @@ class Network:
         ...     if e in counts.keys():
         ...         y[i] = counts[e]
 
-        Next, a standard call ot Moran is made and the result placed into `res`
+        Next, a standard call ot Moran is made and the
+        result placed into `res`
 
         >>> res = ps.esda.moran.Moran(y, w, permutations=99)
         """
@@ -339,8 +343,9 @@ class Network:
                     neighbors[key].append(neigh)
                     if weightings:
                         weights[key].append(weightings[neigh])
-                # TODO: Add a break condition - everything is sorted, so we know when we
-                #       have stepped beyond a possible neighbor.
+                # TODO: Add a break condition - everything is sorted,
+                #       so we know when we have stepped beyond
+                #       a possible neighbor.
                 #if key[1] > neigh[1]:  #NOT THIS
                     #break
 
