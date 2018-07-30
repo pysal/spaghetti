@@ -696,9 +696,11 @@ class Network:
         # Single-core processing
         if not n_processes:
             for node in self.node_list:
-                distance, pred = util.dijkstra(self, self.edge_lengths, node, n=float('inf'))
+                distance, pred = util.dijkstra(self, self.edge_lengths,
+                                               node, n=float('inf'))
                 pred = np.array(pred)
-                #tree = util.generatetree(pred)     <---- something to look at in the future
+                # something to look at in the future
+                #tree = util.generatetree(pred)
                 tree = None
                 self.alldistances[node] = (distance, tree)
                 self.distancematrix[node] = distance
@@ -711,11 +713,13 @@ class Network:
             else:
                 cores = n_processes
             p = mp.Pool(processes=cores)
-            distance_pred = p.map(util.dijkstra_multi, zip(repeat(self),
-                                                       repeat(self.edge_time),
-                                                       self.node_list))
-            distance = [distance_pred[iteration][0] for iteration in range(len(distance_pred))]
-            pred = [distance_pred[iteration][1] for iteration in range(len(distance_pred))]
+            distance_pred = p.map(util.dijkstra_multi,
+                                  zip(repeat(self),
+                                      repeat(self.edge_time),
+                                  self.node_list))
+            iterations = range(len(distance_pred))
+            distance = [distance_pred[itr][0] for itr in iterations]
+            pred = [distance_pred[itr][1] for itr in iterations]
             pred = np.array(pred)
             #tree = util.generatetree(pred[node])
             for node in self.node_list:
