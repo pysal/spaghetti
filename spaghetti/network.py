@@ -22,16 +22,15 @@ class Network:
                     shapefile (str); or (2) a geopandas.GeoDataFrame.
 
     node_sig:       int
-                    Round the x and y coordinates of all nodes to node_sig significant
-                    digits (combined significant digits on the left and right
-                    of the decimal place)
-                    -- Default is 11
-                    -- Set to None for no rounding
+                    Round the x and y coordinates of all nodes to
+                    node_sig significant digits (combined significant
+                    digits on the left and right of the decimal place).
+                    Default is 11. Set to None for no rounding
 
     unique_segs:    bool
-                    If True (default), keep only unique segments (i.e., prune out any
-                    duplicated segments).
-                    If False keep all segments.
+                    If True (default), keep only unique segments (i.e.,
+                    prune out any duplicated segments). If False keep
+                    all segments.
     
     extractgraph:   bool
                     If True, extract a graph-theoretic object with no
@@ -46,32 +45,34 @@ class Network:
                     List of lists storing node adjacency.
 
     nodes:          dict
-                    Keys are tuples of node coords and values are the node ID.
+                    Keys are tuples of node coords and values are
+                    the node ID.
 
     edge_lengths:   dict
-                    Keys are tuples of sorted node IDs representing an edge and values are
-                    the length.
+                    Keys are tuples of sorted node IDs representing an
+                    edge and values are the length.
 
     pointpatterns:  dict
-                    Keys are a string name of the pattern and values are point pattern
-                    class instances.
+                    Keys are a string name of the pattern and values
+                    are point pattern class instances.
 
     node_coords:    dict
-                    Keys are the node ID and values are the (x,y) coordinates inverse
-                    to nodes.
+                    Keys are the node ID and values are the (x,y)
+                    coordinates inverse to nodes.
 
     edges:          list
-                    List of edges, where each edge is a sorted tuple of node IDs.
+                    List of edges, where each edge is a sorted
+                    tuple of node IDs.
 
     node_list:      list
                     List of node IDs.
 
     alldistances:   dict
-                    Keys are the node IDs.
-                    Values are tuples with two elements:
-                        1. A list of the shortest path distances
-                        2. A dict with the key being the id of the destination node and
-                           the value being a list of the shortest path.
+                    Keys are the node IDs. Values are tuples with
+                    two elements as follows (1) a list of the shortest
+                    path distances; (2) a dict with the key being the
+                    id of the destination node and the value being a
+                    list of the shortest path.
 
     Examples
     --------
