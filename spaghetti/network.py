@@ -587,11 +587,12 @@ class Network:
         Parameters
         ----------
         count:          int
-                        The number of points to create or mean of the distribution if not
-                        'uniform'.
+                        The number of points to create or mean of
+                        the distribution if not 'uniform'.
 
         distribution:   str
-                        {'uniform', 'poisson'} distribution of random points.
+                        {'uniform', 'poisson'} distribution of
+                        random points.
 
         Returns
         -------
