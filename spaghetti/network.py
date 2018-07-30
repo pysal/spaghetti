@@ -1182,7 +1182,8 @@ class Network:
                 newedges.add(tuple(sorted([currentstart, currentstop])))
 
                 # Modify edge_lengths.
-                sn.edge_lengths[tuple(sorted([currentstart, currentstop]))] = interval
+                current_start_stop = tuple(sorted([currentstart, currentstop]))
+                sn.edge_lengths[current_start_stop] = interval
 
                 # Increment the start to the stop.
                 currentstart = currentstop
