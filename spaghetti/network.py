@@ -804,17 +804,19 @@ class Network:
                     d12 = self.alldistances[source1][0][dest2]
                     d22 = self.alldistances[source2][0][dest2]
 
-                    # Find the shortest distance from the path passing through each of the
-                    # two origin nodes to the first destination node.
+                    # Find the shortest distance from the path passing
+                    # through each of the two origin nodes to the first
+                    # destination node.
                     sd_1 = d11 + sdist1
                     sd_21 = d21 + sdist2
                     if sd_1 > sd_21:
                         sd_1 = sd_21
-                    # Now add the point to node one distance on the destination edge.
+                    # Now add the point to node one distance on
+                    # the destination edge.
                     len_1 = sd_1 + ddist1
 
-                    # Repeat the prior but now for the paths entering at the second node
-                    # of the second edge.
+                    # Repeat the prior but now for the paths entering
+                    # at the second node of the second edge.
                     sd_2 = d12 + sdist1
                     sd_22 = d22 + sdist2
                     b = 0
@@ -823,14 +825,15 @@ class Network:
                         b = 1
                     len_2 = sd_2 + ddist2
 
-                    # Now find the shortest distance path between point 1 on edge 1 and
-                    # point 2 on edge 2, and assign.
+                    # Now find the shortest distance path between point
+                    # 1 on edge 1 and point 2 on edge 2, and assign.
                     sp_12 = len_1
                     if len_1 > len_2:
                         sp_12 = len_2
                     nearest[p1, p2] = sp_12
                 if symmetric:
-                    # Mirror the upper and lower triangle when symmetric.
+                    # Mirror the upper and lower triangle
+                    # when symmetric.
                     nearest[p2,p1] = nearest[p1,p2]
         # Populate the main diagonal when symmetric.
         if symmetric:
@@ -843,27 +846,32 @@ class Network:
 
     def nearestneighbordistances(self, sourcepattern, destpattern=None, n_processes=None):
         """
-        Compute the interpattern nearest neighbor distances or the intrapattern
-        nearest neighbor distances between a source pattern and a destination pattern.
+        Compute the interpattern nearest neighbor distances or the
+        intrapattern nearest neighbor distances between a source
+        pattern and a destination pattern.
 
         Parameters
         ----------
         sourcepattern:  str
-                        The key of a point pattern snapped to the network.
+                        The key of a point pattern snapped
+                        to the network.
 
         destpattern:    str
-                        (Optional) The key of a point pattern snapped to the network.
+                        (Optional) The key of a point pattern snapped
+                        to the network.
 
         n_processes:    int, str
-                        (Optional) Specify the number of cores to utilize.
-                        Default is 1 core. Use (int) to specify an exact number or cores.
-                        Use ("all") to request all available cores.
+                        (Optional) Specify the number of cores to
+                        utilize. Default is 1 core. Use (int) to
+                        specify an exact number or cores. Use ("all")
+                        to request all available cores.
 
         Returns
         -------
         nearest:        ndarray (n,2)
-                        With column[:,0] containing the id of the nearest neighbor and
-                        column [:,1] containing the distance.
+                        With column[:,0] containing the id of the
+                        nearest neighbor and column [:,1] containing
+                        the distance.
         """
 
         if not sourcepattern in self.pointpatterns.keys():
