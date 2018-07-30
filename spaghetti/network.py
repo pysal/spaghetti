@@ -80,19 +80,16 @@ class Network:
     Instantiate an instance of a network.
 
     >>> streets_file = ps.examples.get_path('streets.shp')
-
     >>> ntw = ps.Network(in_shp=streets_file)
 
     Snap point observations to the network with attribute information.
 
     >>> crimes_file = ps.examples.get_path('crimes.shp')
-
     >>> ntw.snapobservations(crimes_file, 'crimes', attribute=True)
 
     And without attribute information.
 
     >>> schools_file = ps.examples.get_path('schools.shp')
-
     >>> ntw.snapobservations(schools_file, 'schools', attribute=False)
     """
 
@@ -199,11 +196,12 @@ class Network:
             if len(v) == 2:
                 segment_nodes.append(k)
 
-        # Start with a copy of the spatial representation and iteratively remove edges
-        # deemed to be segments.
+        # Start with a copy of the spatial representation and
+        # iteratively remove edges deemed to be segments.
         self.graphedges = copy.deepcopy(self.edges)
         self.graph_lengths = copy.deepcopy(self.edge_lengths)
-        # Mapping all the edges contained within a single graph represented edge.
+        # Mapping all the 'network edges' contained within a single
+        # 'graph represented' edge.
         self.graph_to_edges = {}
 
         bridges = []
@@ -264,8 +262,8 @@ class Network:
 
     def _yieldneighbor(self, node, segment_nodes, bridge):
         """
-        Used internally, this method traverses a bridge segement to find the source and
-        destination nodes.
+        Used internally, this method traverses a bridge segement
+        to find the source and destination nodes.
         """
         n = []
         for i in self.adjacencylist[node]:
@@ -280,8 +278,9 @@ class Network:
         Parameters
         ----------
         graph:      bool
-                    {True, False} controls whether the W is generated using the spatial
-                    representation or the graph representation.
+                    {True, False} controls whether the W is generated
+                    using the spatial  representation or the graph
+                    representation.
 
         weightings: dict
                     Dict of lists of weightings for each edge.
@@ -289,7 +288,8 @@ class Network:
         Returns
         -------
          W:         object
-                    A PySAL W Object representing the binary adjacency of the network.
+                    A PySAL W Object representing the binary
+                    adjacency of the network.
 
         Examples
         --------
