@@ -33,6 +33,7 @@ Features
 Examples
 --------
 * [Network_Usage](https://github.com/pysal/spaghetti/blob/master/notebooks/Network_Usage.ipynb)
+* [spaghetti_pointpatterns_empirical](https://github.com/pysal/spaghetti/blob/master/notebooks/spaghetti_pointpatterns_empirical.ipynb)
 
 Installation
 ------------
