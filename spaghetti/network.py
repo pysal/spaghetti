@@ -3,7 +3,7 @@ import os
 import pickle
 import copy
 import numpy as np
-import libpysal as ps
+from libpysal import cg, examples, io, weights
 from .analysis import NetworkG, NetworkK, NetworkF
 from . import util
 
@@ -142,11 +142,11 @@ class Network:
         """
         nodecount = 0
         if isinstance(self.in_shp, str):
-            shps = ps.open(self.in_shp)
+            shps = io.open(self.in_shp)
         else:
             shps = self.in_shp.geometry
         for shp in shps:
-            vertices = ps.weights._contW_lists._get_verts(shp)
+            vertices = weights._contW_lists._get_verts(shp)
             for i, v in enumerate(vertices[:-1]):
                 v = self._round_sig(v)
                 try:
@@ -351,7 +351,7 @@ class Network:
                 #if key[1] > neigh[1]:  #NOT THIS
                     #break
 
-        return ps.weights.W(neighbors, weights=weights)
+        return weights.W(neighbors, weights=weights)
 
     def distancebandweights(self, threshold, n_proccess=None):
         """
@@ -381,7 +381,7 @@ class Network:
             if n != neigh:
                 neighbors[n].append(neighbor_query[1][i])
 
-        return ps.weights.W(neighbors)
+        return weights.W(neighbors)
 
     def snapobservations(self, shapefile, name,
                          idvariable=None, attribute=None):
@@ -481,7 +481,7 @@ class Network:
         for edge in self.edges:
             head = self.node_coords[edge[0]]
             tail = self.node_coords[edge[1]]
-            segments.append(ps.cg.Chain([head,tail]))
+            segments.append(cg.Chain([head,tail]))
             s2e[(head,tail)] = edge
 
 
@@ -1260,16 +1260,16 @@ class PointPattern():
         self.npoints = 0
 
         if idvariable:
-            ids = ps.weights.util.get_ids(shapefile, idvariable)
+            ids = weights.util.get_ids(shapefile, idvariable)
         else:
             ids = None
 
-        pts = ps.open(shapefile)
+        pts = io.open(shapefile)
 
         # Get attributes if requested
         if attribute == True:
             dbname = os.path.splitext(shapefile)[0] + '.dbf'
-            db = ps.open(dbname)
+            db = io.open(dbname)
         else:
             db = None
 
