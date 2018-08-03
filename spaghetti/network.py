@@ -9,7 +9,8 @@ from libpysal import cg, examples, weights
 try:
     from libpysal import open
 except:
-    import libpysal.io.open as open
+    import libpysal
+    open = libpysal.io.open
 
 __all__ = ["Network", "PointPattern", "NetworkG", "NetworkK", "NetworkF"]
 
