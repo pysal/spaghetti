@@ -328,14 +328,14 @@ class Network:
             edges = self.edges
 
         if weightings:
-            weights = {}
+            _weights = {}
         else:
-            weights = None
+            _weights = None
 
         for key in edges:
             neighbors[key] = []
             if weightings:
-                weights[key] = []
+                _weights[key] = []
 
             for neigh in edges:
                 if key == neigh:
@@ -344,14 +344,14 @@ class Network:
                 or key[1] == neigh[0] or key[1] == neigh[1]:
                     neighbors[key].append(neigh)
                     if weightings:
-                        weights[key].append(weightings[neigh])
+                        _weights[key].append(weightings[neigh])
                 # TODO: Add a break condition - everything is sorted,
                 #       so we know when we have stepped beyond
                 #       a possible neighbor.
                 #if key[1] > neigh[1]:  #NOT THIS
                     #break
-
-        return weights.W(neighbors, weights=weights)
+        
+        return weights.W(neighbors, weights=_weights)
 
     def distancebandweights(self, threshold, n_proccess=None):
         """
