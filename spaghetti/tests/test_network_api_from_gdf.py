@@ -1,7 +1,6 @@
 import unittest
 import numpy as np
-import libpysal
-import libpysal.api as ps
+from libpysal import examples
 import spaghetti.api as spgh
 try:
     import geopandas
@@ -13,7 +12,7 @@ except ImportError:
 class TestNetwork(unittest.TestCase):
 
     def setUp(self):
-        path_to_shp = libpysal.examples.get_path('streets.shp')
+        path_to_shp = examples.get_path('streets.shp')
         gdf = geopandas.read_file(path_to_shp)
         self.ntw = spgh.Network(in_shp=gdf)
         
@@ -62,9 +61,9 @@ class TestNetwork(unittest.TestCase):
 class TestNetworkPointPattern(unittest.TestCase):
 
     def setUp(self):
-        self.ntw = spgh.Network(in_shp=libpysal.examples.get_path('streets.shp'))
+        self.ntw = spgh.Network(in_shp=examples.get_path('streets.shp'))
         for obs in ['schools', 'crimes']:
-            self.ntw.snapobservations(libpysal.examples.get_path('{}.shp'.format(obs)), obs, attribute=True)
+            self.ntw.snapobservations(examples.get_path('{}.shp'.format(obs)), obs, attribute=True)
             setattr(self, obs, self.ntw.pointpatterns[obs])
 
     def tearDown(self):
@@ -124,7 +123,7 @@ class TestNetworkPointPattern(unittest.TestCase):
 class TestNetworkUtils(unittest.TestCase):
 
     def setUp(self):
-        self.ntw = spgh.Network(in_shp=libpysal.examples.get_path('streets.shp'))
+        self.ntw = spgh.Network(in_shp=examples.get_path('streets.shp'))
 
     def test_dijkstra(self):
         self.distance, self.pred = spgh.dijkstra(self.ntw, self.ntw.edge_lengths, 0)
