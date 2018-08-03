@@ -3,9 +3,13 @@ import os
 import pickle
 import copy
 import numpy as np
-from libpysal import cg, examples, open, weights
 from .analysis import NetworkG, NetworkK, NetworkF
 from . import util
+from libpysal import cg, examples, weights
+try:
+    from libpysal import open
+except:
+    import libpysal.io.open as open
 
 __all__ = ["Network", "PointPattern", "NetworkG", "NetworkK", "NetworkF"]
 
