@@ -3,7 +3,7 @@ import os
 import pickle
 import copy
 import numpy as np
-from libpysal import cg, examples, io, weights
+from libpysal import cg, examples, open, weights
 from .analysis import NetworkG, NetworkK, NetworkF
 from . import util
 
@@ -142,7 +142,7 @@ class Network:
         """
         nodecount = 0
         if isinstance(self.in_shp, str):
-            shps = io.open(self.in_shp)
+            shps = open(self.in_shp)
         else:
             shps = self.in_shp.geometry
         for shp in shps:
@@ -1264,12 +1264,12 @@ class PointPattern():
         else:
             ids = None
 
-        pts = io.open(shapefile)
+        pts = open(shapefile)
 
         # Get attributes if requested
         if attribute == True:
             dbname = os.path.splitext(shapefile)[0] + '.dbf'
-            db = io.open(dbname)
+            db = open(dbname)
         else:
             db = None
 
