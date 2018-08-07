@@ -62,7 +62,7 @@ class NetworkG(NetworkBase):
         self.xaxis = observedx
 
     def computepermutations(self):
-        for p in xrange(self.permutations):
+        for p in range(self.permutations):
             sim = self.ntw.simulate_observations(self.npts,
                                                  distribution=self.distribution)
             nearest = np.nanmin(self.ntw.allneighbordistances(sim), axis=1)
@@ -83,7 +83,7 @@ class NetworkK(NetworkBase):
         nearest = self.ntw.allneighbordistances(self.pointpattern)
         self.setbounds(nearest)
 
-        self.lam = self.npts / np.sum(np.array(self.ntw.edge_lengths.values()))
+        self.lam = self.npts / sum(self.ntw.edge_lengths.values())
         observedx, observedy = kfunction(nearest,
                                          self.upperbound,
                                          self.lam,
@@ -92,7 +92,7 @@ class NetworkK(NetworkBase):
         self.xaxis = observedx
 
     def computepermutations(self):
-        for p in xrange(self.permutations):
+        for p in range(self.permutations):
             sim = self.ntw.simulate_observations(self.npts,
                                                  distribution=self.distribution)
             nearest = self.ntw.allneighbordistances(sim)
@@ -125,7 +125,7 @@ class NetworkF(NetworkBase):
          self.xaxis = observedx
 
      def computepermutations(self):
-         for p in xrange(self.permutations):
+         for p in range(self.permutations):
              sim = self.ntw.simulate_observations(self.npts,
                                                   distribution=self.distribution)
              nearest = np.nanmin(self.ntw.allneighbordistances(sim, self.fsim), axis=1)

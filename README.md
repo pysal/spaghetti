@@ -1,8 +1,29 @@
-SPAtial GrapHs: nETworks, Topology, & Inference (spaghetti) in PySAL
-=================================================
 
-[![Gitter](https://badges.gitter.im/pysal/Spaghetti.svg)](https://gitter.im/pysal/Spaghetti?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-[![Build Status](https://travis-ci.org/pysal/spaghetti.svg?branch=master)](https://travis-ci.org/pysal/spaghetti)
+pysal/spaghetti
+===============
+
+SPAtial GrapHs: nETworks, Topology, & Inference
+===============================================
+
+| | |
+| :---: | :---: |
+| **Stable Release** | [![PyPI version](https://badge.fury.io/py/spaghetti.svg)](https://badge.fury.io/py/spaghetti) |
+| **Build Status** | [![Build Status](https://travis-ci.org/pysal/spaghetti.svg?branch=master)](https://travis-ci.org/pysal/spaghetti) |
+| **Chat** | [![Gitter](https://badges.gitter.im/pysal/Spaghetti.svg)](https://gitter.im/pysal/Spaghetti?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) |
+| **Coverage** | [![Coverage Status](https://coveralls.io/repos/github/pysal/spaghetti/badge.svg)](https://coveralls.io/github/pysal/spaghetti) |
+| **Documentation Status** | [![Documentation Status](https://readthedocs.org/projects/pysalspaghetti/badge/?version=latest)](https://pysalspaghetti.readthedocs.io/en/latest/?badge=latest) |
+| **Code Health** | [![Code Health](https://landscape.io/github/pysal/spaghetti/master/landscape.svg?style=flat)](https://landscape.io/github/pysal/spaghetti/master) |
+| **License** | [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause) |
+
+
+
+This package is part of a [refactoring of PySAL](https://github.com/pysal/pysal/wiki/PEP-13:-Refactor-PySAL-Using-Submodules).
+
+--------------------------------------
+
+Spaghetti is an open-source python library for the analysis of network-based spatial data. Originating from the `network` module in [PySAL (Python Spatial Analysis Library)](http://pysal.org), it is under active development for the inclusion of newly proposed methods for building graph-theoretic networks and the analysis of network events.
+
+-------------------------------
 
 
 Features
@@ -11,16 +32,24 @@ Features
 
 Examples
 --------
-
+* [Network_Usage](https://github.com/pysal/spaghetti/blob/master/notebooks/Network_Usage.ipynb)
+* [spaghetti_pointpatterns_empirical](https://github.com/pysal/spaghetti/blob/master/notebooks/spaghetti_pointpatterns_empirical.ipynb)
 
 Installation
 ------------
 
-Install the most current version of spaghetti by running:
+(Recommended) Install the latest stable of spaghetti by running:
 
 ```
 $ pip install spaghetti
 ```
+
+Install the most current development version of spaghetti by running:
+
+```
+$ pip install git+https://github.com/pysal/spaghetti
+```
+
 
 Requirements
 ------------
@@ -40,12 +69,10 @@ If you have any suggestion, feature request, or bug report, please open a new [i
 Support
 -------
 
-If you are having issues, please talk to us in the [gitter room](https://gitter.im/pysal/spaghetti).
+If you are having issues, please [create an issue](https://github.com/pysal/spaghetti/issues) or talk to us in the [gitter room](https://gitter.im/pysal/spaghetti).
 
 License
 -------
 
 The project is licensed under the [BSD license](https://github.com/pysal/spaghetti/blob/master/LICENSE.txt).
 
-Funding
--------

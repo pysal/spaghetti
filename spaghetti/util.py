@@ -1,6 +1,6 @@
 from collections import OrderedDict
 import operator
-import libpysal as ps
+from libpysal import cg
 import numpy as np
 
 
@@ -201,7 +201,7 @@ def snapPointsOnSegments(points, segments):
     """
 
     # Put segments in an Rtree.
-    rt = ps.cg.Rtree()
+    rt = cg.Rtree()
     SMALL = 0.01
     node2segs = {}
 
@@ -220,11 +220,11 @@ def snapPointsOnSegments(points, segments):
         y0 -= SMALL
         x1 += SMALL
         y1 += SMALL
-        r = ps.cg.Rect(x0,y0,x1,y1)
+        r = cg.Rect(x0,y0,x1,y1)
         rt.insert(segment, r)
 
     # Build a KDtree on segment nodes.
-    kt = ps.cg.KDTree(list(node2segs.keys()))
+    kt = cg.KDTree(list(node2segs.keys()))
     p2s = {}
 
     for ptIdx, point in points.items():

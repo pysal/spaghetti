@@ -1,13 +1,21 @@
 import unittest
 import numpy as np
-import libpysal
-import libpysal.api as ps
-import spaghetti.api as spgh
+from libpysal import examples
+from .. import util
+from .. import network
+try:
+    import geopandas
+    GEOPANDAS_EXTINCT = False
+except ImportError:
+    GEOPANDAS_EXTINCT = True
 
+@unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
 class TestNetwork(unittest.TestCase):
 
     def setUp(self):
-        self.ntw = spgh.Network(in_shp=libpysal.examples.get_path('streets.shp'))
+        path_to_shp = examples.get_path('streets.shp')
+        gdf = geopandas.read_file(path_to_shp)
+        self.ntw = network.Network(in_shp=gdf)
         
     def tearDown(self):
         pass
@@ -50,12 +58,13 @@ class TestNetwork(unittest.TestCase):
         coincident = self.ntw.enum_links_node(24)
         self.assertIn((24,48), coincident)
 
+@unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
 class TestNetworkPointPattern(unittest.TestCase):
 
     def setUp(self):
-        self.ntw = spgh.Network(in_shp=libpysal.examples.get_path('streets.shp'))
+        self.ntw = network.Network(in_shp=examples.get_path('streets.shp'))
         for obs in ['schools', 'crimes']:
-            self.ntw.snapobservations(libpysal.examples.get_path('{}.shp'.format(obs)), obs, attribute=True)
+            self.ntw.snapobservations(examples.get_path('{}.shp'.format(obs)), obs, attribute=True)
             setattr(self, obs, self.ntw.pointpatterns[obs])
 
     def tearDown(self):
@@ -110,19 +119,20 @@ class TestNetworkPointPattern(unittest.TestCase):
         np.testing.assert_array_equal(nnd, nnd2)
     def test_nearest_neighbor_search(self):
         pass
-        
+
+@unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
 class TestNetworkUtils(unittest.TestCase):
 
     def setUp(self):
-        self.ntw = spgh.Network(in_shp=libpysal.examples.get_path('streets.shp'))
+        self.ntw = network.Network(in_shp=examples.get_path('streets.shp'))
 
     def test_dijkstra(self):
-        self.distance, self.pred = spgh.dijkstra(self.ntw, self.ntw.edge_lengths, 0)
+        self.distance, self.pred = util.dijkstra(self.ntw, self.ntw.edge_lengths, 0)
         self.assertAlmostEqual(self.distance[196], 5505.668247, places=4)
         self.assertEqual(self.pred[196], 133)
 
     def test_dijkstra_mp(self):
-        self.distance, self.pred = spgh.dijkstra_mp((self.ntw, self.ntw.edge_lengths, 0))
+        self.distance, self.pred = util.dijkstra_mp((self.ntw, self.ntw.edge_lengths, 0))
         self.assertAlmostEqual(self.distance[196], 5505.668247, places=4)
         self.assertEqual(self.pred[196], 133)
 
