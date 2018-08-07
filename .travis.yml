@@ -1,11 +1,11 @@
 language: python
 sudo: false
 branches:
-only:
-  - master
+  only:
+    - master
 python:
-  - "3.5"
-  - "3.6"
+  - 3.5
+  - 3.6
 
 env: 
     - PYSAL_PYPI=true PYSAL_PLUS=true
