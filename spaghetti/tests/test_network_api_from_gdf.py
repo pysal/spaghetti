@@ -8,6 +8,7 @@ try:
 except ImportError:
     GEOPANDAS_EXTINCT = True
 
+
 @unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
 class TestNetwork(unittest.TestCase):
 
@@ -15,7 +16,7 @@ class TestNetwork(unittest.TestCase):
         path_to_shp = examples.get_path('streets.shp')
         gdf = geopandas.read_file(path_to_shp)
         self.ntw = spgh.Network(in_shp=gdf)
-        
+
     def tearDown(self):
         pass
 
@@ -24,7 +25,7 @@ class TestNetwork(unittest.TestCase):
         self.assertEqual(len(self.ntw.nodes), 230)
         edgelengths = self.ntw.edge_lengths.values()
         self.assertAlmostEqual(sum(edgelengths), 104414.0920159, places=5)
-        self.assertIn(0,self.ntw.adjacencylist[1])
+        self.assertIn(0, self.ntw.adjacencylist[1])
         self.assertIn(0, self.ntw.adjacencylist[2])
         self.assertNotIn(0, self.ntw.adjacencylist[3])
 
@@ -41,7 +42,7 @@ class TestNetwork(unittest.TestCase):
                          [(2, 2), (3, 2), (4, 45), (5, 82), (6, 48)])
 
     def test_distance_band_weights(self):
-        #I do not trust this result, test should be manually checked.
+        # I do not trust this result, test should be manually checked.
         w = self.ntw.distancebandweights(threshold=500)
         self.assertEqual(w.n, 230)
         self.assertEqual(w.histogram,
@@ -55,7 +56,8 @@ class TestNetwork(unittest.TestCase):
 
     def test_enum_links_node(self):
         coincident = self.ntw.enum_links_node(24)
-        self.assertIn((24,48), coincident)
+        self.assertIn((24, 48), coincident)
+
 
 @unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
 class TestNetworkPointPattern(unittest.TestCase):
@@ -63,7 +65,11 @@ class TestNetworkPointPattern(unittest.TestCase):
     def setUp(self):
         self.ntw = spgh.Network(in_shp=examples.get_path('streets.shp'))
         for obs in ['schools', 'crimes']:
-            self.ntw.snapobservations(examples.get_path('{}.shp'.format(obs)), obs, attribute=True)
+            self.ntw.snapobservations(
+                examples.get_path(
+                    '{}.shp'.format(obs)),
+                obs,
+                attribute=True)
             setattr(self, obs, self.ntw.pointpatterns[obs])
 
     def tearDown(self):
@@ -72,17 +78,17 @@ class TestNetworkPointPattern(unittest.TestCase):
     def test_add_point_pattern(self):
         self.assertEqual(self.crimes.npoints, 287)
         self.assertIn('properties', self.crimes.points[0])
-        self.assertIn([1,1],self.crimes.points[0]['properties'])
+        self.assertIn([1, 1], self.crimes.points[0]['properties'])
 
     def test_count_per_edge(self):
-        counts = self.ntw.count_per_edge(self.ntw.pointpatterns['crimes'].obs_to_edge,
-                                         graph=False)
+        counts = self.ntw.count_per_edge(
+            self.ntw.pointpatterns['crimes'].obs_to_edge, graph=False)
         meancounts = sum(counts.values()) / float(len(counts.keys()))
         self.assertAlmostEqual(meancounts, 2.682242, places=5)
 
     def test_count_per_graph_edge(self):
-        counts = self.ntw.count_per_edge(self.ntw.pointpatterns['crimes'].obs_to_edge,
-                                         graph=True)
+        counts = self.ntw.count_per_edge(
+            self.ntw.pointpatterns['crimes'].obs_to_edge, graph=True)
         meancounts = sum(counts.values()) / float(len(counts.keys()))
         self.assertAlmostEqual(meancounts, 3.29885, places=5)
 
@@ -96,15 +102,20 @@ class TestNetworkPointPattern(unittest.TestCase):
 
     def test_all_neighbor_distances(self):
         distancematrix_1 = self.ntw.allneighbordistances(self.schools)
-        self.assertAlmostEqual(np.nansum(distancematrix_1[0]), 17682.436988, places=4)
+        self.assertAlmostEqual(
+            np.nansum(
+                distancematrix_1[0]),
+            17682.436988,
+            places=4)
         for k, (distances, predlist) in self.ntw.alldistances.items():
             self.assertEqual(distances[k], 0)
-            #  turning off the tests associated with util.generatetree() for now,
-            #  these can be restarted if that functionality is used in the future
-            #for p, plists in predlist.items():
+            #  turning off the tests associated with util.generatetree() for
+            #  now, these can be restarted if that functionality is used in the
+            #  future for p, plists in predlist.items():
             #    self.assertEqual(plists[-1], k)
-            #self.assertEqual(self.ntw.node_list, predlist.keys())
-        distancematrix_2 = self.ntw.allneighbordistances(self.schools, fill_diagonal=0.)
+            #    self.assertEqual(self.ntw.node_list, predlist.keys())
+        distancematrix_2 = self.ntw.allneighbordistances(
+            self.schools, fill_diagonal=0.)
         observed = distancematrix_2.diagonal()
         known = np.zeros(distancematrix_2.shape[0])
         np.testing.assert_equal(observed, known)
@@ -116,8 +127,10 @@ class TestNetworkPointPattern(unittest.TestCase):
         nnd2 = self.ntw.nearestneighbordistances('schools',
                                                  'schools')
         np.testing.assert_array_equal(nnd, nnd2)
+
     def test_nearest_neighbor_search(self):
         pass
+
 
 @unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
 class TestNetworkUtils(unittest.TestCase):
@@ -126,14 +139,17 @@ class TestNetworkUtils(unittest.TestCase):
         self.ntw = spgh.Network(in_shp=examples.get_path('streets.shp'))
 
     def test_dijkstra(self):
-        self.distance, self.pred = spgh.dijkstra(self.ntw, self.ntw.edge_lengths, 0)
+        self.distance, self.pred = spgh.dijkstra(
+            self.ntw, self.ntw.edge_lengths, 0)
         self.assertAlmostEqual(self.distance[196], 5505.668247, places=4)
         self.assertEqual(self.pred[196], 133)
 
     def test_dijkstra_mp(self):
-        self.distance, self.pred = spgh.dijkstra_mp((self.ntw, self.ntw.edge_lengths, 0))
+        self.distance, self.pred = spgh.dijkstra_mp(
+            (self.ntw, self.ntw.edge_lengths, 0))
         self.assertAlmostEqual(self.distance[196], 5505.668247, places=4)
         self.assertEqual(self.pred[196], 133)
+
 
 if __name__ == '__main__':
     unittest.main()
