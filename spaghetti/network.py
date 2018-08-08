@@ -84,17 +84,17 @@ class Network:
 
     Instantiate an instance of a network.
 
-    >>> streets_file = ps.examples.get_path('streets.shp')
-    >>> ntw = ps.Network(in_shp=streets_file)
+    >>> streets_file = examples.get_path('streets.shp')
+    >>> ntw = spgh.Network(in_shp=streets_file)
 
     Snap point observations to the network with attribute information.
 
-    >>> crimes_file = ps.examples.get_path('crimes.shp')
+    >>> crimes_file = examples.get_path('crimes.shp')
     >>> ntw.snapobservations(crimes_file, 'crimes', attribute=True)
 
     And without attribute information.
 
-    >>> schools_file = ps.examples.get_path('schools.shp')
+    >>> schools_file = examples.get_path('schools.shp')
     >>> ntw.snapobservations(schools_file, 'schools', attribute=False)
     """
 
@@ -300,9 +300,10 @@ class Network:
 
         Examples
         --------
-        >>> ntw = ps.Network(ps.examples.get_path('streets.shp'))
+        >>> import esda
+        >>> ntw = spgh.Network(examples.get_path('streets.shp'))
         >>> w = ntw.contiguityweights(graph=False)
-        >>> ntw.snapobservations(ps.examples.get_path('crimes.shp'),
+        >>> ntw.snapobservations(examples.get_path('crimes.shp'),
         ...                      'crimes', attribute=True)
         >>> counts = ntw.count_per_edge(ntw.pointpatterns['crimes']\
         ...                             .obs_to_edge, graph=False)
@@ -321,7 +322,7 @@ class Network:
         Next, a standard call ot Moran is made and the
         result placed into `res`
 
-        >>> res = ps.esda.moran.Moran(y, w, permutations=99)
+        >>> res = esda.moran.Moran(y, w, permutations=99)
         """
 
         neighbors = {}
@@ -539,13 +540,13 @@ class Network:
         Note that this passes the obs_to_edge attribute of a
         point pattern snapped to the network.
 
-        >>> ntw = ps.Network(ps.examples.get_path('streets.shp'))
-        >>> ntw.snapobservations(ps.examples.get_path('crimes.shp'),
+        >>> ntw = spgh.Network(examples.get_path('streets.shp'))
+        >>> ntw.snapobservations(examples.get_path('crimes.shp'),
         ...                                           'crimes',
         ...                                           attribute=True)
         >>> counts = ntw.count_per_edge(ntw.pointpatterns['crimes']\
         ...                             .obs_to_edge, graph=False)
-        >>> s = sum([v for v in counts.itervalues()])
+        >>> s = sum([v for v in list(counts.values())])
         >>> s
         287
         """
@@ -613,13 +614,13 @@ class Network:
         Example
         -------
 
-        >>> ntw = ps.Network(ps.examples.get_path('streets.shp'))
-        >>> ntw.snapobservations(ps.examples.get_path('crimes.shp'),
+        >>> ntw = spgh.Network(examples.get_path('streets.shp'))
+        >>> ntw.snapobservations(examples.get_path('crimes.shp'),
         ...                                           'crimes',
         ...                                           attribute=True)
         >>> npts = ntw.pointpatterns['crimes'].npoints
         >>> sim = ntw.simulate_observations(npts)
-        >>> isinstance(sim, ps.network.network.SimulatedPointPattern)
+        >>> isinstance(sim, spgh.network.SimulatedPointPattern)
         True
         """
         simpts = SimulatedPointPattern()
@@ -1117,7 +1118,7 @@ class Network:
         Example
         -------
 
-        >>> ntw = ps.Network(ps.examples.get_path('streets.shp'))
+        >>> ntw = spgh.Network(examples.get_path('streets.shp'))
         >>> n200 = ntw.segment_edges(200.0)
         >>> len(n200.edges)
         688
@@ -1215,7 +1216,7 @@ class Network:
 
         Example
         --------
-        >>> ntw = ps.Network(ps.examples.get_path('streets.shp'))
+        >>> ntw = spgh.Network(examples.get_path('streets.shp'))
         >>> ntw.savenetwork('mynetwork.pkl')
         """
         with open(filename, 'wb') as networkout:
