@@ -8,7 +8,7 @@ from . import util
 from libpysal import cg, examples, weights
 try:
     from libpysal import open
-except:
+except ImportError:
     import libpysal
     open = libpysal.io.open
 
@@ -36,11 +36,11 @@ class Network:
                     If True (default), keep only unique segments (i.e.,
                     prune out any duplicated segments). If False keep
                     all segments.
-    
+
     extractgraph:   bool
                     If True, extract a graph-theoretic object with no
                     degree 2 nodes. Defalt is True.
-    
+
     Attributes
     ----------
     in_shp:         str
@@ -84,23 +84,25 @@ class Network:
 
     Instantiate an instance of a network.
 
-    >>> streets_file = ps.examples.get_path('streets.shp')
-    >>> ntw = ps.Network(in_shp=streets_file)
+    >>> streets_file = examples.get_path('streets.shp')
+    >>> ntw = spgh.Network(in_shp=streets_file)
 
     Snap point observations to the network with attribute information.
 
-    >>> crimes_file = ps.examples.get_path('crimes.shp')
+    >>> crimes_file = examples.get_path('crimes.shp')
     >>> ntw.snapobservations(crimes_file, 'crimes', attribute=True)
 
     And without attribute information.
 
-    >>> schools_file = ps.examples.get_path('schools.shp')
+    >>> schools_file = examples.get_path('schools.shp')
     >>> ntw.snapobservations(schools_file, 'schools', attribute=False)
     """
 
-    def __init__(self, in_shp=None, node_sig=11, unique_segs=True,
-                 extractgraph=True):
-        if in_shp is not None: 
+    def __init__(self, in_shp=None, node_sig=11,
+                 unique_segs=True, extractgraph=True):
+        """
+        """
+        if in_shp is not None:
             self.in_shp = in_shp
             self.node_sig = node_sig
             self.unique_segs = unique_segs
@@ -135,9 +137,9 @@ class Network:
         sig = self.node_sig
         if sig is None:
             return v
-        out_v = [val if 0 \
-                     else round(val, -int(np.floor(np.log10(np.fabs(val)))) +\
-                          (sig-1)) \
+        out_v = [val if 0
+                 else round(val, -int(np.floor(np.log10(np.fabs(val)))) +
+                            (sig - 1))
                  for val in v]
         return tuple(out_v)
 
@@ -156,13 +158,13 @@ class Network:
                 v = self._round_sig(v)
                 try:
                     vid = self.nodes[v]
-                except:
+                except KeyError:
                     self.nodes[v] = vid = nodecount
                     nodecount += 1
-                v2 = self._round_sig(vertices[i+1])
+                v2 = self._round_sig(vertices[i + 1])
                 try:
                     nvid = self.nodes[v2]
-                except:
+                except KeyError:
                     self.nodes[v2] = nvid = nodecount
                     nodecount += 1
 
@@ -173,9 +175,9 @@ class Network:
                 edgenodes = sorted([vid, nvid])
                 edge = tuple(edgenodes)
                 self.edges.append(edge)
-                length = util.compute_length(v, vertices[i+1])
+                length = util.compute_length(v, vertices[i + 1])
                 self.edge_lengths[edge] = length
-        if self.unique_segs == True:
+        if self.unique_segs:
             # Remove duplicate edges and duplicate adjacent nodes.
             self.edges = list(set(self.edges))
             for k, v in self.adjacencylist.items():
@@ -195,9 +197,9 @@ class Network:
         # Find all nodes with cardinality 2.
         segment_nodes = []
         for k, v in self.adjacencylist.items():
-            #len(v) == 1 #cul-de-sac
-            #len(v) == 2 #bridge segment
-            #len(v) > 2 #intersection
+            # len(v) == 1 #cul-de-sac
+            # len(v) == 2 #bridge segment
+            # len(v) > 2 #intersection
             if len(v) == 2:
                 segment_nodes.append(k)
 
@@ -251,11 +253,11 @@ class Network:
                         if n not in bridge:
                             startend[b] = n
                         else:
-                            redundant.add(tuple(sorted([b,n])))
+                            redundant.add(tuple(sorted([b, n])))
 
                 newedge = tuple(sorted(startend.values()))
                 for k, v in startend.items():
-                    redundant.add(tuple(sorted([k,v])))
+                    redundant.add(tuple(sorted([k, v])))
 
                 for r in redundant:
                     self.graphedges.remove(r)
@@ -300,9 +302,10 @@ class Network:
 
         Examples
         --------
-        >>> ntw = ps.Network(ps.examples.get_path('streets.shp'))
+        >>> import esda
+        >>> ntw = spgh.Network(examples.get_path('streets.shp'))
         >>> w = ntw.contiguityweights(graph=False)
-        >>> ntw.snapobservations(ps.examples.get_path('crimes.shp'),
+        >>> ntw.snapobservations(examples.get_path('crimes.shp'),
         ...                      'crimes', attribute=True)
         >>> counts = ntw.count_per_edge(ntw.pointpatterns['crimes']\
         ...                             .obs_to_edge, graph=False)
@@ -321,7 +324,7 @@ class Network:
         Next, a standard call ot Moran is made and the
         result placed into `res`
 
-        >>> res = ps.esda.moran.Moran(y, w, permutations=99)
+        >>> res = esda.moran.Moran(y, w, permutations=99)
         """
 
         neighbors = {}
@@ -346,16 +349,16 @@ class Network:
                 if key == neigh:
                     continue
                 if key[0] == neigh[0] or key[0] == neigh[1]\
-                or key[1] == neigh[0] or key[1] == neigh[1]:
+                        or key[1] == neigh[0] or key[1] == neigh[1]:
                     neighbors[key].append(neigh)
                     if weightings:
                         _weights[key].append(weightings[neigh])
                 # TODO: Add a break condition - everything is sorted,
                 #       so we know when we have stepped beyond
                 #       a possible neighbor.
-                #if key[1] > neigh[1]:  #NOT THIS
-                    #break
-        
+                # if key[1] > neigh[1]:  #NOT THIS
+                    # break
+
         return weights.W(neighbors, weights=_weights)
 
     def distancebandweights(self, threshold, n_proccess=None):
@@ -376,7 +379,7 @@ class Network:
         """
         try:
             hasattr(self.alldistances)
-        except:
+        except AttributeError:
             self.node_distance_matrix(n_proccess)
 
         neighbor_query = np.where(self.distancematrix < threshold)
@@ -448,8 +451,8 @@ class Network:
                     - always the node with the greater id
         """
 
-        d1 = util.compute_length((x,y), self.node_coords[edge[0]])
-        d2 = util.compute_length((x,y), self.node_coords[edge[1]])
+        d1 = util.compute_length((x, y), self.node_coords[edge[0]])
+        d2 = util.compute_length((x, y), self.node_coords[edge[1]])
         return d1, d2
 
     def _snap_to_edge(self, pointpattern):
@@ -486,9 +489,8 @@ class Network:
         for edge in self.edges:
             head = self.node_coords[edge[0]]
             tail = self.node_coords[edge[1]]
-            segments.append(cg.Chain([head,tail]))
-            s2e[(head,tail)] = edge
-
+            segments.append(cg.Chain([head, tail]))
+            s2e[(head, tail)] = edge
 
         points = {}
         p2id = {}
@@ -498,14 +500,14 @@ class Network:
         snapped = util.snapPointsOnSegments(points, segments)
 
         for pointIdx, snapInfo in snapped.items():
-            x,y = snapInfo[1].tolist()
+            x, y = snapInfo[1].tolist()
             edge = s2e[tuple(snapInfo[0])]
             if edge not in obs_to_edge:
                 obs_to_edge[edge] = {}
-            obs_to_edge[edge][pointIdx] = (x,y)
-            pointpattern.snapped_coordinates[pointIdx] = (x,y)
-            d1,d2 = self.compute_distance_to_nodes(x, y, edge)
-            dist_to_node[pointIdx] = {edge[0]:d1, edge[1]:d2}
+            obs_to_edge[edge][pointIdx] = (x, y)
+            pointpattern.snapped_coordinates[pointIdx] = (x, y)
+            d1, d2 = self.compute_distance_to_nodes(x, y, edge)
+            dist_to_node[pointIdx] = {edge[0]: d1, edge[1]: d2}
 
         obs_to_node = defaultdict(list)
         for k, v in obs_to_edge.items():
@@ -516,7 +518,6 @@ class Network:
         pointpattern.obs_to_edge = obs_to_edge
         pointpattern.dist_to_node = dist_to_node
         pointpattern.obs_to_node = list(obs_to_node)
-
 
     def count_per_edge(self, obs_on_network, graph=True):
         """
@@ -539,13 +540,13 @@ class Network:
         Note that this passes the obs_to_edge attribute of a
         point pattern snapped to the network.
 
-        >>> ntw = ps.Network(ps.examples.get_path('streets.shp'))
-        >>> ntw.snapobservations(ps.examples.get_path('crimes.shp'),
+        >>> ntw = spgh.Network(examples.get_path('streets.shp'))
+        >>> ntw.snapobservations(examples.get_path('crimes.shp'),
         ...                                           'crimes',
         ...                                           attribute=True)
         >>> counts = ntw.count_per_edge(ntw.pointpatterns['crimes']\
         ...                             .obs_to_edge, graph=False)
-        >>> s = sum([v for v in counts.itervalues()])
+        >>> s = sum([v for v in list(counts.values())])
         >>> s
         287
         """
@@ -557,7 +558,7 @@ class Network:
                     key = self.graph_to_edges[key]
                 try:
                     counts[key] += cnt
-                except:
+                except KeyError:
                     counts[key] = cnt
         else:
             for key in obs_on_network.keys():
@@ -613,13 +614,13 @@ class Network:
         Example
         -------
 
-        >>> ntw = ps.Network(ps.examples.get_path('streets.shp'))
-        >>> ntw.snapobservations(ps.examples.get_path('crimes.shp'),
+        >>> ntw = spgh.Network(examples.get_path('streets.shp'))
+        >>> ntw.snapobservations(examples.get_path('crimes.shp'),
         ...                                           'crimes',
         ...                                           attribute=True)
         >>> npts = ntw.pointpatterns['crimes'].npoints
         >>> sim = ntw.simulate_observations(npts)
-        >>> isinstance(sim, ps.network.network.SimulatedPointPattern)
+        >>> isinstance(sim, spgh.network.SimulatedPointPattern)
         True
         """
         simpts = SimulatedPointPattern()
@@ -652,7 +653,7 @@ class Network:
 
             # Populate the distance to node.
             distance_from_end = self.edge_lengths[edges[idx]]\
-                                - distance_from_start
+                - distance_from_start
             simpts.dist_to_node[i] = {assignment_edge[0]: distance_from_start,
                                       assignment_edge[1]: distance_from_end}
 
@@ -676,7 +677,7 @@ class Network:
                 List of tuple edges adjacent to the node.
         """
         links = []
-        neighbornodes =  self.adjacencylist[v0]
+        neighbornodes = self.adjacencylist[v0]
         for n in neighbornodes:
             links.append(tuple(sorted([n, v0])))
         return links
@@ -685,12 +686,12 @@ class Network:
         """
         Called from within `allneighbordistances()`,
         `nearestneighbordistances()`, and `distancebandweights()`.
-        
+
         Parameters
         -----------
         n_processes     int
                         cpu cores for multiprocessing
-        
+
         Returns
         -------
         None; set the `alldistances` and `distancematrix` attributes
@@ -721,7 +722,7 @@ class Network:
             distance_pred = p.map(util.dijkstra_multi,
                                   zip(repeat(self),
                                       repeat(self.edge_time),
-                                  self.node_list))
+                                      self.node_list))
             iterations = range(len(distance_pred))
             distance = [distance_pred[itr][0] for itr in iterations]
             pred = [distance_pred[itr][1] for itr in iterations]
@@ -729,7 +730,6 @@ class Network:
             #tree = util.generatetree(pred[node])
             for node in self.node_list:
                 self.distancematrix[node] = distance[node]
-
 
     def allneighbordistances(self, sourcepattern, destpattern=None,
                              fill_diagonal=None, n_processes=None):
@@ -766,7 +766,7 @@ class Network:
                         between all points.
         """
 
-        if not hasattr(self,'alldistances'):
+        if not hasattr(self, 'alldistances'):
             self.node_distance_matrix(n_processes)
 
         # Source setup
@@ -809,11 +809,11 @@ class Network:
             for p2 in dest_searchpts:
                 dest1, dest2 = dest_nodes[p2]
                 set2 = set(dest_nodes[p2])
-                if set1 == set2: # same edge
-                    x1,y1 = sourcepattern.snapped_coordinates[p1]
-                    x2,y2 = destpattern.snapped_coordinates[p2]
-                    computed_length = util.compute_length((x1,y1),(x2,y2))
-                    nearest[p1,p2] = computed_length
+                if set1 == set2:  # same edge
+                    x1, y1 = sourcepattern.snapped_coordinates[p1]
+                    x2, y2 = destpattern.snapped_coordinates[p2]
+                    computed_length = util.compute_length((x1, y1), (x2, y2))
+                    nearest[p1, p2] = computed_length
 
                 else:
                     ddist1, ddist2 = dest_dist_to_node[p2].values()
@@ -852,10 +852,10 @@ class Network:
                 if symmetric:
                     # Mirror the upper and lower triangle
                     # when symmetric.
-                    nearest[p2,p1] = nearest[p1,p2]
+                    nearest[p2, p1] = nearest[p1, p2]
         # Populate the main diagonal when symmetric.
         if symmetric:
-            if fill_diagonal == None:
+            if fill_diagonal is None:
                 np.fill_diagonal(nearest, np.nan)
             else:
                 np.fill_diagonal(nearest, fill_diagonal)
@@ -893,19 +893,19 @@ class Network:
                         the distance.
         """
 
-        if not sourcepattern in self.pointpatterns.keys():
+        if sourcepattern not in self.pointpatterns.keys():
             err_msg = "Available point patterns are {}"
             raise KeyError(err_msg.format(self.pointpatterns.keys()))
 
-        if not hasattr(self,'alldistances'):
+        if not hasattr(self, 'alldistances'):
             self.node_distance_matrix(n_processes)
 
         pt_indices = list(self.pointpatterns[sourcepattern].points.keys())
         dist_to_node = self.pointpatterns[sourcepattern].dist_to_node
         nearest = np.zeros((len(pt_indices), 2), dtype=np.float32)
-        nearest[:,1] = np.inf
+        nearest[:, 1] = np.inf
 
-        if destpattern == None:
+        if destpattern is None:
             destpattern = sourcepattern
 
         searchpts = copy.deepcopy(pt_indices)
@@ -1002,8 +1002,8 @@ class Network:
                         A network F class instance.
         """
         return NetworkF(self, pointpattern, nsteps=nsteps,
-                        permutations=permutations,threshold=threshold,
-                        distribution=distribution,lowerbound=lowerbound,
+                        permutations=permutations, threshold=threshold,
+                        distribution=distribution, lowerbound=lowerbound,
                         upperbound=upperbound)
 
     def NetworkG(self, pointpattern, nsteps=10, permutations=99,
@@ -1049,8 +1049,8 @@ class Network:
         """
 
         return NetworkG(self, pointpattern, nsteps=nsteps,
-                        permutations=permutations,threshold=threshold,
-                        distribution=distribution,lowerbound=lowerbound,
+                        permutations=permutations, threshold=threshold,
+                        distribution=distribution, lowerbound=lowerbound,
                         upperbound=upperbound)
 
     def NetworkK(self, pointpattern, nsteps=10, permutations=99,
@@ -1095,8 +1095,8 @@ class Network:
                         A network K class instance.
         """
         return NetworkK(self, pointpattern, nsteps=nsteps,
-                        permutations=permutations,threshold=threshold,
-                        distribution=distribution,lowerbound=lowerbound,
+                        permutations=permutations, threshold=threshold,
+                        distribution=distribution, lowerbound=lowerbound,
                         upperbound=upperbound)
 
     def segment_edges(self, distance):
@@ -1117,7 +1117,7 @@ class Network:
         Example
         -------
 
-        >>> ntw = ps.Network(ps.examples.get_path('streets.shp'))
+        >>> ntw = spgh.Network(examples.get_path('streets.shp'))
         >>> n200 = ntw.segment_edges(200.0)
         >>> len(n200.edges)
         688
@@ -1181,7 +1181,6 @@ class Network:
                 sn.adjacencylist[currentstart].append(currentstop)
                 sn.adjacencylist[currentstop].append(currentstart)
 
-
                 # Add the new edge to the edge dict.
                 # Iterating over this so we need to add after iterating.
                 newedges.add(tuple(sorted([currentstart, currentstop])))
@@ -1215,7 +1214,7 @@ class Network:
 
         Example
         --------
-        >>> ntw = ps.Network(ps.examples.get_path('streets.shp'))
+        >>> ntw = spgh.Network(examples.get_path('streets.shp'))
         >>> ntw.savenetwork('mynetwork.pkl')
         """
         with open(filename, 'wb') as networkout:
@@ -1260,7 +1259,10 @@ class PointPattern():
     npoints:    int
                 The number of points.
     """
+
     def __init__(self, shapefile, idvariable=None, attribute=False):
+        """
+        """
         self.points = {}
         self.npoints = 0
 
@@ -1272,7 +1274,7 @@ class PointPattern():
         pts = open(shapefile)
 
         # Get attributes if requested
-        if attribute == True:
+        if attribute:
             dbname = os.path.splitext(shapefile)[0] + '.dbf'
             db = open(dbname)
         else:
@@ -1280,13 +1282,13 @@ class PointPattern():
 
         for i, pt in enumerate(pts):
             if ids and db:
-                self.points[ids[i]] = {'coordinates':pt, 'properties':db[i]}
+                self.points[ids[i]] = {'coordinates': pt, 'properties': db[i]}
             elif ids and not db:
-                self.points[ids[i]] = {'coordinates':pt, 'properties':None}
+                self.points[ids[i]] = {'coordinates': pt, 'properties': None}
             elif not ids and db:
-                self.points[i] = {'coordinates':pt, 'properties':db[i]}
+                self.points[i] = {'coordinates': pt, 'properties': db[i]}
             else:
-                self.points[i] = {'coordinates':pt, 'properties':None}
+                self.points[i] = {'coordinates': pt, 'properties': None}
 
         pts.close()
         if db:
@@ -1304,6 +1306,8 @@ class SimulatedPointPattern():
     This class is not intended to be used by the external user.
     """
     def __init__(self):
+        """
+        """
         self.npoints = 0
         self.obs_to_edge = {}
         self.obs_to_node = defaultdict(list)
@@ -1312,12 +1316,19 @@ class SimulatedPointPattern():
 
 
 class SortedEdges(OrderedDict):
+    """
+    """
     def next_key(self, key):
+        """
+        """
         next = self._OrderedDict__map[key][1]
         if next is self._OrderedDict__root:
             raise ValueError("{!r} is the last key.".format(key))
         return next[2]
-    def first_key(self):
-        for key in self: return key
-        raise ValueError("No sorted edges remain.")
 
+    def first_key(self):
+        """
+        """
+        for key in self:
+            return key
+        raise ValueError("No sorted edges remain.")

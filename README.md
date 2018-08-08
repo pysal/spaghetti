@@ -31,8 +31,10 @@ Features
 
 Examples
 --------
-* [Network_Usage](https://github.com/pysal/spaghetti/blob/master/notebooks/Network_Usage.ipynb)
-* [spaghetti_pointpatterns_empirical](https://github.com/pysal/spaghetti/blob/master/notebooks/spaghetti_pointpatterns_empirical.ipynb)
+* [Network Usage](https://github.com/pysal/spaghetti/blob/master/notebooks/Network_Usage.ipynb)
+* [Spaghetti Pointpatterns Empirical](https://github.com/pysal/spaghetti/blob/master/notebooks/Spaghetti_Pointpatterns_Empirical.ipynb)
+* [Snapping Demonstration](https://github.com/pysal/spaghetti/blob/master/notebooks/Snapping_Demonstration.ipynb)
+
 
 Installation
 ------------
