@@ -8,7 +8,7 @@ from . import util
 from libpysal import cg, examples, weights
 try:
     from libpysal import open
-except BaseException:
+except ImportError:
     import libpysal
     open = libpysal.io.open
 
@@ -158,13 +158,13 @@ class Network:
                 v = self._round_sig(v)
                 try:
                     vid = self.nodes[v]
-                except BaseException:
+                except KeyError:
                     self.nodes[v] = vid = nodecount
                     nodecount += 1
                 v2 = self._round_sig(vertices[i + 1])
                 try:
                     nvid = self.nodes[v2]
-                except BaseException:
+                except KeyError:
                     self.nodes[v2] = nvid = nodecount
                     nodecount += 1
 
@@ -379,7 +379,7 @@ class Network:
         """
         try:
             hasattr(self.alldistances)
-        except BaseException:
+        except AttributeError:
             self.node_distance_matrix(n_proccess)
 
         neighbor_query = np.where(self.distancematrix < threshold)
@@ -558,7 +558,7 @@ class Network:
                     key = self.graph_to_edges[key]
                 try:
                     counts[key] += cnt
-                except BaseException:
+                except KeyError:
                     counts[key] = cnt
         else:
             for key in obs_on_network.keys():
