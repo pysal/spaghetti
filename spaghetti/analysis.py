@@ -1,9 +1,10 @@
 import numpy as np
 
+
 class NetworkBase(object):
     """
     """
-        
+
     def __init__(self, ntw, pointpattern, nsteps=10,
                  permutations=99, threshold=0.5,
                  distribution='poisson',
@@ -37,7 +38,7 @@ class NetworkBase(object):
         """
         valid_distributions = ['uniform', 'poisson']
         assert(self.distribution in valid_distributions),
-              "Disstribution not in {}".format(valid_distributions)
+            "Disstribution not in {}".format(valid_distributions)
 
     def computeenvelope(self):
         """
@@ -56,11 +57,12 @@ class NetworkBase(object):
         if self.upperbound is None:
             self.upperbound = np.nanmax(nearest)
 
+
 class NetworkG(NetworkBase):
     """
     Compute a network constrained G statistic.
     """
-    
+
     def computeobserved(self):
         """
         """
@@ -87,11 +89,12 @@ class NetworkG(NetworkBase):
                                    nsteps=self.nsteps)
             self.sim[p] = simy
 
+
 class NetworkK(NetworkBase):
     """
     Compute a network constrained K statistic.
     """
-    
+
     def computeobserved(self):
         """
         """
@@ -120,6 +123,7 @@ class NetworkK(NetworkBase):
                                    nsteps=self.nsteps)
             self.sim[p] = simy
 
+
 class NetworkF(NetworkBase):
     """
     Compute a network constrained F statistic.
@@ -127,7 +131,7 @@ class NetworkF(NetworkBase):
     This requires the capability to compute a distance matrix between two
     point patterns. In this case one will be observed and one will be simulated
     """
-    
+
     def computeobserved(self):
         """
         """
@@ -156,6 +160,7 @@ class NetworkF(NetworkBase):
             simx, simy = ffunction(nearest, self.lowerbound, self.upperbound,
                                    self.npts, nsteps=self.nsteps)
             self.sim[p] = simy
+
 
 def gfunction(nearest, lowerbound, upperbound, nsteps=10):
     """
@@ -196,6 +201,7 @@ def gfunction(nearest, lowerbound, upperbound, nsteps=10):
         y[i] = g
     return x, y
 
+
 def kfunction(nearest, upperbound, intensity, nsteps=10):
     """
     """
@@ -207,6 +213,7 @@ def kfunction(nearest, upperbound, intensity, nsteps=10):
         y[i] = len(nearest[nearest <= s])
     y *= (intensity ** -1)
     return x, y
+
 
 def ffunction(nearest, lowerbound, upperbound, npts, nsteps=10):
     """
