@@ -18,11 +18,12 @@ def compute_length(v0, v1):
     --------
     Euclidean distance
     """
-
     return np.sqrt((v0[0] - v1[0])**2 + (v0[1] - v1[1])**2)
 
 
 def get_neighbor_distances(ntw, v0, l):
+    """
+    """
     edges = ntw.enum_links_node(v0)
     neighbors = {}
     for e in edges:
@@ -34,10 +35,12 @@ def get_neighbor_distances(ntw, v0, l):
 
 
 def generatetree(pred):
+    """
+    """
     tree = {}
     for i, p in enumerate(pred):
         if p == -1:
-            #root node
+            # root node
             tree[i] = [i]
             continue
         idx = p
@@ -53,7 +56,8 @@ def generatetree(pred):
 
 def dijkstra(ntw, cost, node, n=float('inf')):
     """
-    Compute the shortest path between a start node and all other nodes in the web.
+    Compute the shortest path between a start
+    node and all other nodes in the web.
 
     Parameters
     ----------
@@ -98,7 +102,7 @@ def dijkstra(ntw, cost, node, n=float('inf')):
         # Remove that node from the set.
         a.remove(v)
         last = v
-        #4. Get the neighbors to the current node.
+        # 4. Get the neighbors to the current node.
         neighbors = get_neighbor_distances(ntw, v, cost)
         for v1, indiv_cost in neighbors.items():
             if distance[v1] > distance[v] + indiv_cost:
@@ -110,8 +114,8 @@ def dijkstra(ntw, cost, node, n=float('inf')):
 
 def dijkstra_mp(ntw_cost_node):
     """
-    Compute the shortest path between a start node and all other nodes in the web
-    utilizing multiple cores upon request.
+    Compute the shortest path between a start node and all other
+    nodes in the web utilizing multiple cores upon request.
 
     Parameters
     ----------
@@ -154,26 +158,26 @@ def squaredDistancePointSegment(point, segment):
                     1. distance squared between point and segment
                     2. array(xb, yb): the nearest point on the segment
     """
-    p0,p1 = [np.array(p) for p in segment]
+    p0, p1 = [np.array(p) for p in segment]
     v = p1 - p0
     p = np.array(point)
     w = p - p0
-    c1 = np.dot(w,v)
+    c1 = np.dot(w, v)
     if c1 <= 0.:
         # Print 'before p0'
-        return np.dot(w.T,w), p0
-    c2 = np.dot(v,v)
+        return np.dot(w.T, w), p0
+    c2 = np.dot(v, v)
     if c2 <= c1:
         dp1 = p - p1
         # Print 'after p1'
-        return np.dot(dp1.T,dp1), p1
+        return np.dot(dp1.T, dp1), p1
 
     b = c1 / c2
-    bv = np.dot(b,v)
+    bv = np.dot(b, v)
     pb = p0 + bv
     d2 = p - pb
 
-    return np.dot(d2,d2), pb
+    return np.dot(d2, d2), pb
 
 
 def snapPointsOnSegments(points, segments):
@@ -188,7 +192,8 @@ def snapPointsOnSegments(points, segments):
                 Elements are of type pysal.cg.shapes.Chain
                 ** Note **
                         each element is a segment represented as a chain with
-                        *one head and one tail node*, in other words one link only.
+                        *one head and one tail node*
+                        in other words one link only.
 
     Returns
     -------
@@ -196,8 +201,8 @@ def snapPointsOnSegments(points, segments):
                 key:    point id (see points in arguments)
 
                 value:  a 2-tuple: ((head, tail), point)
-                        where (head, tail) is the target segment, and point is the snapped
-                        location on the segment
+                        where (head, tail) is the target segment,
+                        and point is the snapped location on the segment
     """
 
     # Put segments in an Rtree.
@@ -206,21 +211,21 @@ def snapPointsOnSegments(points, segments):
     node2segs = {}
 
     for segment in segments:
-        head,tail = segment.vertices
-        x0,y0 = head
-        x1,y1 = tail
-        if (x0,y0) not in node2segs:
-            node2segs[(x0,y0)] = []
-        if (x1,y1) not in node2segs:
-            node2segs[(x1,y1)] = []
-        node2segs[(x0,y0)].append(segment)
-        node2segs[(x1,y1)].append(segment)
-        x0,y0,x1,y1 =  segment.bounding_box
+        head, tail = segment.vertices
+        x0, y0 = head
+        x1, y1 = tail
+        if (x0, y0) not in node2segs:
+            node2segs[(x0, y0)] = []
+        if (x1, y1) not in node2segs:
+            node2segs[(x1, y1)] = []
+        node2segs[(x0, y0)].append(segment)
+        node2segs[(x1, y1)].append(segment)
+        x0, y0, x1, y1 = segment.bounding_box
         x0 -= SMALL
         y0 -= SMALL
         x1 += SMALL
         y1 += SMALL
-        r = cg.Rect(x0,y0,x1,y1)
+        r = cg.Rect(x0, y0, x1, y1)
         rt.insert(segment, r)
 
     # Build a KDtree on segment nodes.
@@ -235,7 +240,7 @@ def snapPointsOnSegments(points, segments):
 
         # Use this segment as the candidate closest segment:  closest
         # Use the distance as the distance to beat:           dmin
-        p2s[ptIdx] = (closest, node) # sna
+        p2s[ptIdx] = (closest, node)  # sna
         x0 = point[0] - dmin
         y0 = point[1] - dmin
         x1 = point[0] + dmin
@@ -243,7 +248,7 @@ def snapPointsOnSegments(points, segments):
 
         # Find all segments with bounding boxes that intersect
         # a query rectangle centered on the point with sides of length 2*dmin.
-        candidates = [ cand for cand in rt.intersection([x0,y0,x1,y1])]
+        candidates = [cand for cand in rt.intersection([x0, y0, x1, y1])]
         dmin += SMALL
         dmin2 = dmin * dmin
 
