@@ -1,5 +1,6 @@
-"""pysal/Spaghetti
-https://github.com/pysal/spaghetti
+__version__ = "1.0.2"
+"""
+:mod:`spaghetti` --- Spatial Graphs: Networks, Topology, & Inference
+====================================================================
 
-SPAtial GrapHs: nETworks, Topology, & Inference
 """
