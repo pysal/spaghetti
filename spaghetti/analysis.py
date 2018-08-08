@@ -37,8 +37,8 @@ class NetworkBase(object):
         """
         """
         valid_distributions = ['uniform', 'poisson']
-        assert(self.distribution in valid_distributions),
-            "Disstribution not in {}".format(valid_distributions)
+        assert(self.distribution in valid_distributions),\
+               "Disstribution not in {}".format(valid_distributions)
 
     def computeenvelope(self):
         """
