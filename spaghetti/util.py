@@ -207,7 +207,7 @@ def snapPointsOnSegments(points, segments):
 
     # Put segments in an Rtree.
     rt = cg.Rtree()
-    SMALL = 0.01
+    SMALL = np.finfo(float).eps
     node2segs = {}
 
     for segment in segments:
