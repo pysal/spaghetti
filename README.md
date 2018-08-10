@@ -77,7 +77,7 @@ License
 
 The project is licensed under the [BSD license](https://github.com/pysal/spaghetti/blob/master/LICENSE.txt).
 
-BibTex Citation
+BibTeX Citation
 ---------------
 
 ```
