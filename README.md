@@ -77,3 +77,17 @@ License
 
 The project is licensed under the [BSD license](https://github.com/pysal/spaghetti/blob/master/LICENSE.txt).
 
+BibTex Citation
+---------------
+
+```
+@misc{Gaboardi2018,
+author = {Gaboardi, James D. and Laura, Jay and Rey, Sergio and Wolf, Levi John and Folch, David C. and Kang, Wei and Stephens, Philip and Schmidt, Charles},
+doi = {10.5281/ZENODO.1343651},
+keywords = {graph-theory,network-analysis,python,spatial-networks,topology},
+month = {aug},
+title = {{pysal/spaghetti: Initial Release}},
+url = {https://github.com/pysal/spaghetti},
+year = {2018}
+}
+```
