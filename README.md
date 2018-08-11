@@ -18,10 +18,6 @@ Spaghetti is an open-source python library for the analysis of network-based spa
 -------------------------------
 
 
-Features
---------
-
-
 Examples
 --------
 * [Network Usage](https://github.com/pysal/spaghetti/blob/master/notebooks/Network_Usage.ipynb)
