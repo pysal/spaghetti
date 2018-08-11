@@ -5,15 +5,8 @@ pysal/spaghetti
 SPAtial GrapHs: nETworks, Topology, & Inference
 ===============================================
 
-| | |
-| :---: | :---: |
-| **Stable Release** | [![PyPI version](https://badge.fury.io/py/spaghetti.svg)](https://badge.fury.io/py/spaghetti) |
-| **Build Status** | [![Build Status](https://travis-ci.org/pysal/spaghetti.svg?branch=master)](https://travis-ci.org/pysal/spaghetti) |
-| **Chat** | [![Gitter](https://badges.gitter.im/pysal/Spaghetti.svg)](https://gitter.im/pysal/Spaghetti?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) |
-| **Coverage** | [![Coverage Status](https://coveralls.io/repos/github/pysal/spaghetti/badge.svg)](https://coveralls.io/github/pysal/spaghetti) |
-| **Documentation Status** | [![Documentation Status](https://readthedocs.org/projects/pysalspaghetti/badge/?version=latest)](https://pysalspaghetti.readthedocs.io/en/latest/?badge=latest) |
-| **License** | [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause) |
-| **DOI** | [![DOI](https://zenodo.org/badge/88305306.svg)](https://zenodo.org/badge/latestdoi/88305306) |
+[![PyPI version](https://badge.fury.io/py/spaghetti.svg)](https://badge.fury.io/py/spaghetti) [![Build Status](https://travis-ci.org/pysal/spaghetti.svg?branch=master)](https://travis-ci.org/pysal/spaghetti) [![Gitter](https://badges.gitter.im/pysal/Spaghetti.svg)](https://gitter.im/pysal/Spaghetti?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![Coverage Status](https://coveralls.io/repos/github/pysal/spaghetti/badge.svg)](https://coveralls.io/github/pysal/spaghetti)
+[![Documentation Status](https://readthedocs.org/projects/pysalspaghetti/badge/?version=latest)](https://pysalspaghetti.readthedocs.io/en/latest/?badge=latest) [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause) [![DOI](https://zenodo.org/badge/88305306.svg)](https://zenodo.org/badge/latestdoi/88305306)
 
 
 This package is part of a [refactoring of PySAL](https://github.com/pysal/pysal/wiki/PEP-13:-Refactor-PySAL-Using-Submodules).
