@@ -4,11 +4,12 @@ pysal/spaghetti
 SPAtial GrapHs: nETworks, Topology, & Inference
 ===============================================
 
+
 .. image:: https://badge.fury.io/py/spaghetti.svg
    :target: https://badge.fury.io/py/spaghetti
 
 .. image:: https://travis-ci.org/pysal/spaghetti.svg?branch=master
-   :target:https://travis-ci.org/pysal/spaghetti
+   :target: https://travis-ci.org/pysal/spaghetti
 
 .. image:: https://badges.gitter.im/pysal/Spaghetti.svg
    :target: https://gitter.im/pysal/Spaghetti?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
