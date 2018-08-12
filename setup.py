@@ -1,3 +1,6 @@
+"""Spatial Network Analysis (SPAtial GrapHs: nETworks, Topology, & Inference
+"""
+
 from setuptools import setup
 import os.path
 from distutils.command.build_py import build_py
@@ -16,6 +19,8 @@ def _get_requirements_from_files(groups_files):
     return groups_reqlist
 
 def setup_package():
+    package = 'spaghetti'
+    
     _groups_files = {
         'base': 'requirements.txt', #basic requirements
         'tests': 'requirements_tests.txt', #requirements for tests
@@ -25,9 +30,9 @@ def setup_package():
     install_reqs = reqs.pop('base')
     extras_reqs = reqs
 
-    setup(name='spaghetti', #name of package
+    setup(name=package, #name of package
           version=__version__,
-          description='Spatial Network Analysis (SPAtial GrapHs: nETworks, Topology, & Inference', #short <80chr description
+          description=__doc__, #short <80chr description
           url='https://github.com/pysal/spaghetti', #github repo
           maintainer='James Gaboardi',
           maintainer_email='jgaboardi@gmail.com',
@@ -47,7 +52,7 @@ def setup_package():
             'Programming Language :: Python :: 3.6'
             ],
           license='3-Clause BSD',
-          packages=['spaghetti'], #add your package name here as a string
+          packages=[package], #add your package name here as a string
           install_requires=install_reqs,
           extras_require=extras_reqs,
           zip_safe=False,
