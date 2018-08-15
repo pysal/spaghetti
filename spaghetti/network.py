@@ -22,7 +22,7 @@ class Network:
 
     Parameters
     -----------
-    in_shp:         geopandas.GeoDataFrame or str
+    in_data:        geopandas.GeoDataFrame or str
                     The input geographic data. Either (1) a path to a
                     shapefile (str); or (2) a geopandas.GeoDataFrame.
 
@@ -43,7 +43,7 @@ class Network:
 
     Attributes
     ----------
-    in_shp:         str
+    in_data:         str
                     The input shapefile. This must be in .shp format.
 
     adjacencylist:  list
@@ -85,7 +85,7 @@ class Network:
     Instantiate an instance of a network.
 
     >>> streets_file = examples.get_path('streets.shp')
-    >>> ntw = spgh.Network(in_shp=streets_file)
+    >>> ntw = spgh.Network(in_data=streets_file)
 
     Snap point observations to the network with attribute information.
 
@@ -98,12 +98,12 @@ class Network:
     >>> ntw.snapobservations(schools_file, 'schools', attribute=False)
     """
 
-    def __init__(self, in_shp=None, node_sig=11,
+    def __init__(self, in_data=None, node_sig=11,
                  unique_segs=True, extractgraph=True):
         """
         """
-        if in_shp is not None:
-            self.in_shp = in_shp
+        if in_data is not None:
+            self.in_data = in_data
             self.node_sig = node_sig
             self.unique_segs = unique_segs
 
@@ -148,10 +148,10 @@ class Network:
         Used internally to extract a network from a polyline shapefile.
         """
         nodecount = 0
-        if isinstance(self.in_shp, str):
-            shps = open(self.in_shp)
+        if isinstance(self.in_data, str):
+            shps = open(self.in_data)
         else:
-            shps = self.in_shp.geometry
+            shps = self.in_data.geometry
         for shp in shps:
             vertices = weights._contW_lists._get_verts(shp)
             for i, v in enumerate(vertices[:-1]):
@@ -1131,7 +1131,7 @@ class Network:
         sn.node_list = copy.deepcopy(self.node_list)
         sn.nodes = copy.deepcopy(self.nodes)
         sn.pointpatterns = copy.deepcopy(self.pointpatterns)
-        sn.in_shp = self.in_shp
+        sn.in_data = self.in_data
 
         current_node_id = max(self.nodes.values())
 
