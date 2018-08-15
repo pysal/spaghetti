@@ -497,7 +497,9 @@ class Network:
         p2id = {}
         for pointIdx, point in pointpattern.points.items():
             points[pointIdx] = point['coordinates']
-
+        
+        
+        print(points, segments)
         snapped = util.snapPointsOnSegments(points, segments)
 
         for pointIdx, snapInfo in snapped.items():
@@ -1267,34 +1269,55 @@ class PointPattern():
         """
         self.points = {}
         self.npoints = 0
-
-        if idvariable:
+        
+        if isinstance(in_data, str):
+            from_shp = True
+        else:
+            from_shp = False
+        
+        if idvariable and from_shp:
             ids = weights.util.get_ids(in_data, idvariable)
+        elif idvariable and not from_shp:
+            ids = list(in_data[idvariable])
         else:
             ids = None
-
-        pts = open(in_data)
-
+        
+        if from_shp:
+            pts = open(in_data)
+        else:
+            pts_objs = list(in_data.geometry)
+            pts = [cg.shapes.Point((p.x, p.y)) for p in pts_objs]
+        
         # Get attributes if requested
         if attribute:
-            dbname = os.path.splitext(in_data)[0] + '.dbf'
-            db = open(dbname)
+            if from_shp:
+                dbname = os.path.splitext(in_data)[0] + '.dbf'
+                db = open(dbname)
+            else:
+                db = in_data.drop(in_data.geometry.name,
+                                   axis=1).values.tolist()
+                db = [[d] for d in db]
         else:
             db = None
 
         for i, pt in enumerate(pts):
-            if ids and db:
+            # ids, attributes
+            if ids and db is not None:
                 self.points[ids[i]] = {'coordinates': pt, 'properties': db[i]}
-            elif ids and not db:
+            # ids, no attributes
+            elif ids and db is None:
                 self.points[ids[i]] = {'coordinates': pt, 'properties': None}
-            elif not ids and db:
+            # no ids, attributes
+            elif not ids and db is not None:
                 self.points[i] = {'coordinates': pt, 'properties': db[i]}
+            # no ids, no attributes
             else:
                 self.points[i] = {'coordinates': pt, 'properties': None}
-
-        pts.close()
-        if db:
-            db.close()
+        if from_shp:
+            pts.close()
+            if db:
+                db.close()
+        
         self.npoints = len(self.points.keys())
 
 
