@@ -63,7 +63,9 @@ class TestNetwork(unittest.TestCase):
 class TestNetworkPointPattern(unittest.TestCase):
 
     def setUp(self):
-        self.ntw = spgh.Network(in_data=examples.get_path('streets.shp'))
+        path_to_shp = examples.get_path('streets.shp')
+        gdf = geopandas.read_file(path_to_shp)
+        self.ntw = spgh.Network(in_data=gdf)
         for obs in ['schools', 'crimes']:
             in_data = examples.get_path('{}.shp'.format(obs))
             self.ntw.snapobservations(in_data, obs, attribute=True)
@@ -130,8 +132,10 @@ class TestNetworkPointPattern(unittest.TestCase):
 class TestNetworkUtils(unittest.TestCase):
 
     def setUp(self):
-        self.ntw = spgh.Network(in_data=examples.get_path('streets.shp'))
-
+        path_to_shp = examples.get_path('streets.shp')
+        gdf = geopandas.read_file(path_to_shp)
+        self.ntw = spgh.Network(in_data=gdf)
+        
     def test_dijkstra(self):
         self.distance, self.pred = spgh.dijkstra(self.ntw,
                                                  self.ntw.edge_lengths, 0)
