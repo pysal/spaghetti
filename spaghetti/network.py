@@ -391,7 +391,7 @@ class Network:
 
         return weights.W(neighbors)
 
-    def snapobservations(self, shapefile, name,
+    def snapobservations(self, in_data, name,
                          idvariable=None, attribute=None):
         """
         Snap a point pattern shapefile to this network object. The
@@ -400,8 +400,9 @@ class Network:
 
         Parameters
         ----------
-        shapefile:  str
-                    The path to the shapefile.
+        in_data :   geopandas.GeoDataFrame or str
+                    The input geographic data. Either (1) a path to a
+                    shapefile (str); or (2) a geopandas.GeoDataFrame.
 
         name:       str
                     Name to be assigned to the point dataset.
@@ -419,7 +420,7 @@ class Network:
         None; add a PointPattern and snap PointPattern to edges.
         """
 
-        self.pointpatterns[name] = PointPattern(shapefile,
+        self.pointpatterns[name] = PointPattern(in_data=in_data,
                                                 idvariable=idvariable,
                                                 attribute=attribute)
         self._snap_to_edge(self.pointpatterns[name])
@@ -1239,8 +1240,9 @@ class PointPattern():
 
     Parameters
     ----------
-    shapefile:  str
-                The input shapefile.
+    in_data:  geopandas.GeoDataFrame or str
+              The input geographic data. Either (1) a path to a
+              shapefile (str); or (2) a geopandas.GeoDataFrame.
 
     idvariable: str
                 Field in the shapefile to use as an id variable.
@@ -1260,22 +1262,22 @@ class PointPattern():
                 The number of points.
     """
 
-    def __init__(self, shapefile, idvariable=None, attribute=False):
+    def __init__(self, in_data=None, idvariable=None, attribute=False):
         """
         """
         self.points = {}
         self.npoints = 0
 
         if idvariable:
-            ids = weights.util.get_ids(shapefile, idvariable)
+            ids = weights.util.get_ids(in_data, idvariable)
         else:
             ids = None
 
-        pts = open(shapefile)
+        pts = open(in_data)
 
         # Get attributes if requested
         if attribute:
-            dbname = os.path.splitext(shapefile)[0] + '.dbf'
+            dbname = os.path.splitext(in_data)[0] + '.dbf'
             db = open(dbname)
         else:
             db = None
