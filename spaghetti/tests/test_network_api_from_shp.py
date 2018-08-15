@@ -7,7 +7,7 @@ import spaghetti as spgh
 class TestNetwork(unittest.TestCase):
 
     def setUp(self):
-        self.ntw = spgh.Network(in_shp=examples.get_path('streets.shp'))
+        self.ntw = spgh.Network(in_data=examples.get_path('streets.shp'))
 
     def tearDown(self):
         pass
@@ -54,13 +54,10 @@ class TestNetwork(unittest.TestCase):
 class TestNetworkPointPattern(unittest.TestCase):
 
     def setUp(self):
-        self.ntw = spgh.Network(in_shp=examples.get_path('streets.shp'))
+        self.ntw = spgh.Network(in_data=examples.get_path('streets.shp'))
         for obs in ['schools', 'crimes']:
-            self.ntw.snapobservations(
-                examples.get_path(
-                    '{}.shp'.format(obs)),
-                obs,
-                attribute=True)
+            in_data = examples.get_path('{}.shp'.format(obs))
+            self.ntw.snapobservations(in_data, obs, attribute=True)
             setattr(self, obs, self.ntw.pointpatterns[obs])
 
     def tearDown(self):
@@ -93,11 +90,8 @@ class TestNetworkPointPattern(unittest.TestCase):
 
     def test_all_neighbor_distances(self):
         distancematrix_1 = self.ntw.allneighbordistances(self.schools)
-        self.assertAlmostEqual(
-            np.nansum(
-                distancematrix_1[0]),
-            17682.436988,
-            places=4)
+        self.assertAlmostEqual(np.nansum(distancematrix_1[0]),
+                               17682.436988, places=4)
         for k, (distances, predlist) in self.ntw.alldistances.items():
             self.assertEqual(distances[k], 0)
             #  turning off the tests associated with util.generatetree() for
@@ -105,8 +99,8 @@ class TestNetworkPointPattern(unittest.TestCase):
             #  future for p, plists in predlist.items():
             #    self.assertEqual(plists[-1], k)
             #    self.assertEqual(self.ntw.node_list, predlist.keys())
-        distancematrix_2 = self.ntw.allneighbordistances(
-            self.schools, fill_diagonal=0.)
+        distancematrix_2 = self.ntw.allneighbordistances(self.schools,
+                                                         fill_diagonal=0.)
         observed = distancematrix_2.diagonal()
         known = np.zeros(distancematrix_2.shape[0])
         np.testing.assert_equal(observed, known)
@@ -126,17 +120,17 @@ class TestNetworkPointPattern(unittest.TestCase):
 class TestNetworkUtils(unittest.TestCase):
 
     def setUp(self):
-        self.ntw = spgh.Network(in_shp=examples.get_path('streets.shp'))
+        self.ntw = spgh.Network(in_data=examples.get_path('streets.shp'))
 
     def test_dijkstra(self):
-        self.distance, self.pred = spgh.dijkstra(
-            self.ntw, self.ntw.edge_lengths, 0)
+        self.distance, self.pred = spgh.dijkstra(self.ntw,
+                                                 self.ntw.edge_lengths, 0)
         self.assertAlmostEqual(self.distance[196], 5505.668247, places=4)
         self.assertEqual(self.pred[196], 133)
 
     def test_dijkstra_mp(self):
-        self.distance, self.pred = spgh.dijkstra_mp(
-            (self.ntw, self.ntw.edge_lengths, 0))
+        self.distance, self.pred = spgh.dijkstra_mp((self.ntw,
+                                                     self.ntw.edge_lengths, 0))
         self.assertAlmostEqual(self.distance[196], 5505.668247, places=4)
         self.assertEqual(self.pred[196], 133)
 

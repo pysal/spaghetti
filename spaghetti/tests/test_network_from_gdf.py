@@ -16,7 +16,7 @@ class TestNetwork(unittest.TestCase):
     def setUp(self):
         path_to_shp = examples.get_path('streets.shp')
         gdf = geopandas.read_file(path_to_shp)
-        self.ntw = network.Network(in_shp=gdf)
+        self.ntw = network.Network(in_data=gdf)
 
     def tearDown(self):
         pass
@@ -64,13 +64,13 @@ class TestNetwork(unittest.TestCase):
 class TestNetworkPointPattern(unittest.TestCase):
 
     def setUp(self):
-        self.ntw = network.Network(in_shp=examples.get_path('streets.shp'))
+        path_to_shp = examples.get_path('streets.shp')
+        gdf = geopandas.read_file(path_to_shp)
+        self.ntw = network.Network(in_data=gdf)
         for obs in ['schools', 'crimes']:
-            self.ntw.snapobservations(
-                examples.get_path(
-                    '{}.shp'.format(obs)),
-                obs,
-                attribute=True)
+            path_to_shp = examples.get_path('{}.shp'.format(obs))
+            in_data = geopandas.read_file(path_to_shp)
+            self.ntw.snapobservations(in_data, obs, attribute=True)
             setattr(self, obs, self.ntw.pointpatterns[obs])
 
     def tearDown(self):
@@ -103,11 +103,8 @@ class TestNetworkPointPattern(unittest.TestCase):
 
     def test_all_neighbor_distances(self):
         distancematrix_1 = self.ntw.allneighbordistances(self.schools)
-        self.assertAlmostEqual(
-            np.nansum(
-                distancematrix_1[0]),
-            17682.436988,
-            places=4)
+        self.assertAlmostEqual(np.nansum(distancematrix_1[0]),
+                               17682.436988, places=4)
         for k, (distances, predlist) in self.ntw.alldistances.items():
             self.assertEqual(distances[k], 0)
             #  turning off the tests associated with util.generatetree() for
@@ -115,8 +112,8 @@ class TestNetworkPointPattern(unittest.TestCase):
             #  future for p, plists in predlist.items():
             #    self.assertEqual(plists[-1], k)
             #    self.assertEqual(self.ntw.node_list, predlist.keys())
-        distancematrix_2 = self.ntw.allneighbordistances(
-            self.schools, fill_diagonal=0.)
+        distancematrix_2 = self.ntw.allneighbordistances(self.schools,
+                                                         fill_diagonal=0.)
         observed = distancematrix_2.diagonal()
         known = np.zeros(distancematrix_2.shape[0])
         np.testing.assert_equal(observed, known)
@@ -137,17 +134,19 @@ class TestNetworkPointPattern(unittest.TestCase):
 class TestNetworkUtils(unittest.TestCase):
 
     def setUp(self):
-        self.ntw = network.Network(in_shp=examples.get_path('streets.shp'))
-
+        path_to_shp = examples.get_path('streets.shp')
+        gdf = geopandas.read_file(path_to_shp)
+        self.ntw = network.Network(in_data=gdf)
+        
     def test_dijkstra(self):
-        self.distance, self.pred = util.dijkstra(
-            self.ntw, self.ntw.edge_lengths, 0)
+        self.distance, self.pred = util.dijkstra(self.ntw,
+                                                 self.ntw.edge_lengths, 0)
         self.assertAlmostEqual(self.distance[196], 5505.668247, places=4)
         self.assertEqual(self.pred[196], 133)
 
     def test_dijkstra_mp(self):
-        self.distance, self.pred = util.dijkstra_mp(
-            (self.ntw, self.ntw.edge_lengths, 0))
+        self.distance, self.pred = util.dijkstra_mp((self.ntw,
+                                                     self.ntw.edge_lengths, 0))
         self.assertAlmostEqual(self.distance[196], 5505.668247, places=4)
         self.assertEqual(self.pred[196], 133)
 

@@ -22,7 +22,7 @@ class Network:
 
     Parameters
     -----------
-    in_shp:         geopandas.GeoDataFrame or str
+    in_data:        geopandas.GeoDataFrame or str
                     The input geographic data. Either (1) a path to a
                     shapefile (str); or (2) a geopandas.GeoDataFrame.
 
@@ -43,7 +43,7 @@ class Network:
 
     Attributes
     ----------
-    in_shp:         str
+    in_data:         str
                     The input shapefile. This must be in .shp format.
 
     adjacencylist:  list
@@ -85,7 +85,7 @@ class Network:
     Instantiate an instance of a network.
 
     >>> streets_file = examples.get_path('streets.shp')
-    >>> ntw = spgh.Network(in_shp=streets_file)
+    >>> ntw = spgh.Network(in_data=streets_file)
 
     Snap point observations to the network with attribute information.
 
@@ -98,12 +98,12 @@ class Network:
     >>> ntw.snapobservations(schools_file, 'schools', attribute=False)
     """
 
-    def __init__(self, in_shp=None, node_sig=11,
+    def __init__(self, in_data=None, node_sig=11,
                  unique_segs=True, extractgraph=True):
         """
         """
-        if in_shp is not None:
-            self.in_shp = in_shp
+        if in_data is not None:
+            self.in_data = in_data
             self.node_sig = node_sig
             self.unique_segs = unique_segs
 
@@ -148,10 +148,10 @@ class Network:
         Used internally to extract a network from a polyline shapefile.
         """
         nodecount = 0
-        if isinstance(self.in_shp, str):
-            shps = open(self.in_shp)
+        if isinstance(self.in_data, str):
+            shps = open(self.in_data)
         else:
-            shps = self.in_shp.geometry
+            shps = self.in_data.geometry
         for shp in shps:
             vertices = weights._contW_lists._get_verts(shp)
             for i, v in enumerate(vertices[:-1]):
@@ -391,7 +391,7 @@ class Network:
 
         return weights.W(neighbors)
 
-    def snapobservations(self, shapefile, name,
+    def snapobservations(self, in_data, name,
                          idvariable=None, attribute=None):
         """
         Snap a point pattern shapefile to this network object. The
@@ -400,8 +400,9 @@ class Network:
 
         Parameters
         ----------
-        shapefile:  str
-                    The path to the shapefile.
+        in_data :   geopandas.GeoDataFrame or str
+                    The input geographic data. Either (1) a path to a
+                    shapefile (str); or (2) a geopandas.GeoDataFrame.
 
         name:       str
                     Name to be assigned to the point dataset.
@@ -419,7 +420,7 @@ class Network:
         None; add a PointPattern and snap PointPattern to edges.
         """
 
-        self.pointpatterns[name] = PointPattern(shapefile,
+        self.pointpatterns[name] = PointPattern(in_data=in_data,
                                                 idvariable=idvariable,
                                                 attribute=attribute)
         self._snap_to_edge(self.pointpatterns[name])
@@ -496,7 +497,6 @@ class Network:
         p2id = {}
         for pointIdx, point in pointpattern.points.items():
             points[pointIdx] = point['coordinates']
-
         snapped = util.snapPointsOnSegments(points, segments)
 
         for pointIdx, snapInfo in snapped.items():
@@ -1131,7 +1131,7 @@ class Network:
         sn.node_list = copy.deepcopy(self.node_list)
         sn.nodes = copy.deepcopy(self.nodes)
         sn.pointpatterns = copy.deepcopy(self.pointpatterns)
-        sn.in_shp = self.in_shp
+        sn.in_data = self.in_data
 
         current_node_id = max(self.nodes.values())
 
@@ -1239,8 +1239,9 @@ class PointPattern():
 
     Parameters
     ----------
-    shapefile:  str
-                The input shapefile.
+    in_data:  geopandas.GeoDataFrame or str
+              The input geographic data. Either (1) a path to a
+              shapefile (str); or (2) a geopandas.GeoDataFrame.
 
     idvariable: str
                 Field in the shapefile to use as an id variable.
@@ -1260,39 +1261,60 @@ class PointPattern():
                 The number of points.
     """
 
-    def __init__(self, shapefile, idvariable=None, attribute=False):
+    def __init__(self, in_data=None, idvariable=None, attribute=False):
         """
         """
         self.points = {}
         self.npoints = 0
-
-        if idvariable:
-            ids = weights.util.get_ids(shapefile, idvariable)
+        
+        if isinstance(in_data, str):
+            from_shp = True
+        else:
+            from_shp = False
+        
+        if idvariable and from_shp:
+            ids = weights.util.get_ids(in_data, idvariable)
+        elif idvariable and not from_shp:
+            ids = list(in_data[idvariable])
         else:
             ids = None
-
-        pts = open(shapefile)
-
+        
+        if from_shp:
+            pts = open(in_data)
+        else:
+            pts_objs = list(in_data.geometry)
+            pts = [cg.shapes.Point((p.x, p.y)) for p in pts_objs]
+        
         # Get attributes if requested
         if attribute:
-            dbname = os.path.splitext(shapefile)[0] + '.dbf'
-            db = open(dbname)
+            if from_shp:
+                dbname = os.path.splitext(in_data)[0] + '.dbf'
+                db = open(dbname)
+            else:
+                db = in_data.drop(in_data.geometry.name,
+                                   axis=1).values.tolist()
+                db = [[d] for d in db]
         else:
             db = None
 
         for i, pt in enumerate(pts):
-            if ids and db:
+            # ids, attributes
+            if ids and db is not None:
                 self.points[ids[i]] = {'coordinates': pt, 'properties': db[i]}
-            elif ids and not db:
+            # ids, no attributes
+            elif ids and db is None:
                 self.points[ids[i]] = {'coordinates': pt, 'properties': None}
-            elif not ids and db:
+            # no ids, attributes
+            elif not ids and db is not None:
                 self.points[i] = {'coordinates': pt, 'properties': db[i]}
+            # no ids, no attributes
             else:
                 self.points[i] = {'coordinates': pt, 'properties': None}
-
-        pts.close()
-        if db:
-            db.close()
+        if from_shp:
+            pts.close()
+            if db:
+                db.close()
+        
         self.npoints = len(self.points.keys())
 
 
