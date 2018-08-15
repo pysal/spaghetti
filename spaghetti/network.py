@@ -497,9 +497,6 @@ class Network:
         p2id = {}
         for pointIdx, point in pointpattern.points.items():
             points[pointIdx] = point['coordinates']
-        
-        
-        print(points, segments)
         snapped = util.snapPointsOnSegments(points, segments)
 
         for pointIdx, snapInfo in snapped.items():
