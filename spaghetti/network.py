@@ -498,7 +498,7 @@ class Network:
         for pointIdx, point in pointpattern.points.items():
             points[pointIdx] = point['coordinates']
         snapped = util.snapPointsOnSegments(points, segments)
-
+        
         for pointIdx, snapInfo in snapped.items():
             x, y = snapInfo[1].tolist()
             edge = s2e[tuple(snapInfo[0])]
