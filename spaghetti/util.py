@@ -260,5 +260,4 @@ def snapPointsOnSegments(points, segments):
                 dmin2 = dnc
                 p2s[ptIdx] = (closest, p2b)
     
-    print(p2s[0])
     return p2s
