@@ -240,7 +240,7 @@ def snapPointsOnSegments(points, segments):
 
         # Use this segment as the candidate closest segment:  closest
         # Use the distance as the distance to beat:           dmin
-        p2s[ptIdx] = (closest, node)  # sna
+        p2s[ptIdx] = (closest, np.array(node))
         x0 = point[0] - dmin
         y0 = point[1] - dmin
         x1 = point[0] + dmin
@@ -259,5 +259,5 @@ def snapPointsOnSegments(points, segments):
                 closest = candidate.vertices
                 dmin2 = dnc
                 p2s[ptIdx] = (closest, p2b)
-
+    
     return p2s
