@@ -7,30 +7,25 @@ SPAtial GrapHs: nETworks, Topology, & Inference
 
 .. image:: https://badge.fury.io/py/spaghetti.svg
    :target: https://badge.fury.io/py/spaghetti
-
+.. image:: https://img.shields.io/github/tag/pysal/spaghetti.svg?maxAge=3600&label=Github
+   :target: https://github.com/pysal/spaghetti
 .. image:: https://travis-ci.org/pysal/spaghetti.svg?branch=master
    :target: https://travis-ci.org/pysal/spaghetti
-
+.. image:: https://readthedocs.org/projects/pysalspaghetti/badge/?version=latest
+   :target: https://pysalspaghetti.readthedocs.io/en/latest/?badge=latest
 .. image:: https://badges.gitter.im/pysal/Spaghetti.svg
    :target: https://gitter.im/pysal/Spaghetti?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
 
+
+
 .. image:: https://coveralls.io/repos/github/pysal/spaghetti/badge.svg
    :target: https://coveralls.io/github/pysal/spaghetti
-
-.. image:: https://readthedocs.org/projects/pysalspaghetti/badge/?version=latest
-   :target: https://pysalspaghetti.readthedocs.io/en/latest/?badge=latest
-
-.. image:: https://img.shields.io/badge/License-BSD%203--Clause-blue.svg
-   :target: https://opensource.org/licenses/BSD-3-Clause
-
-.. image:: https://zenodo.org/badge/88305306.svg
-   :target: https://zenodo.org/badge/latestdoi/88305306
-
 .. image:: https://img.shields.io/github/issues/pysal/spaghetti.svg?maxAge=3600
    :target: https://github.com/pysal/spaghetti/issues
-
-.. image:: https://img.shields.io/github/tag/pysal/spaghetti.svg?maxAge=3600&label=Github
-   :target: https://github.com/pysal/spaghetti
+.. image:: https://img.shields.io/badge/License-BSD%203--Clause-blue.svg
+   :target: https://opensource.org/licenses/BSD-3-Clause
+.. image:: https://zenodo.org/badge/88305306.svg
+   :target: https://zenodo.org/badge/latestdoi/88305306
 
 
 This package is part of a `refactoring of PySAL
@@ -100,6 +95,5 @@ BibTeX Citation
     url = {https://github.com/pysal/spaghetti},
     year = {2018}
     }
-
 
 
