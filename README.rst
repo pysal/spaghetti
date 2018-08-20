@@ -15,9 +15,7 @@ SPAtial GrapHs: nETworks, Topology, & Inference
    :target: https://pysalspaghetti.readthedocs.io/en/latest/?badge=latest
 .. image:: https://badges.gitter.im/pysal/Spaghetti.svg
    :target: https://gitter.im/pysal/Spaghetti?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
-
-
-
+ 
 .. image:: https://coveralls.io/repos/github/pysal/spaghetti/badge.svg
    :target: https://coveralls.io/github/pysal/spaghetti
 .. image:: https://img.shields.io/github/issues/pysal/spaghetti.svg?maxAge=3600
