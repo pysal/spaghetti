@@ -29,6 +29,8 @@ SPAtial GrapHs: nETworks, Topology, & Inference
 .. image:: https://img.shields.io/github/issues/pysal/spaghetti.svg?maxAge=3600
    :target: https://github.com/pysal/spaghetti/issues
 
+.. image:: https://img.shields.io/github/tag/pysal/spaghetti.svg?maxAge=3600&label=Github
+   :target: https://github.com/pysal/spaghetti
 
 
 This package is part of a `refactoring of PySAL
