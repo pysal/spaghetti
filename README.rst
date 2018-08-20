@@ -56,9 +56,9 @@ Install the most current development version of spaghetti by running:
 Requirements
 ------------
 
-- scipy
-- numpy
-- libpysal
+- `scipy`
+- `numpy`
+- `libpysal`
 
 
 ontribute

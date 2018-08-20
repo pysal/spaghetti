@@ -47,9 +47,9 @@ $ pip install git+https://github.com/pysal/spaghetti
 Requirements
 ------------
 
-- scipy
-- numpy
-- libpysal
+- `scipy`
+- `numpy`
+- `libpysal`
 
 
 Contribute
