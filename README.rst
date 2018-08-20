@@ -26,6 +26,10 @@ SPAtial GrapHs: nETworks, Topology, & Inference
 .. image:: https://zenodo.org/badge/88305306.svg
    :target: https://zenodo.org/badge/latestdoi/88305306
 
+.. image:: https://img.shields.io/github/issues/pysal/spaghetti.svg?maxAge=3600
+   :target: https://github.com/pysal/spaghetti/issues
+
+
 
 This package is part of a `refactoring of PySAL
 <https://github.com/pysal/pysal/wiki/PEP-13:-Refactor-PySAL-Using-Submodules>`_.
