@@ -42,7 +42,7 @@ Examples
 * `Network Usage <https://github.com/pysal/spaghetti/blob/master/notebooks/Network_Usage.ipynb>`_
 * `Spaghetti Pointpatterns Empirical <https://github.com/pysal/spaghetti/blob/master/notebooks/Spaghetti_Pointpatterns_Empirical.ipynb>`_
 * `Snapping Demonstration <https://github.com/pysal/spaghetti/blob/master/notebooks/Snapping_Demonstration.ipynb>`_
-
+* `Facility Location` <https://github.com/pysal/spaghetti/blob/master/notebooks/Facility_Location.ipynb>`_
 
 Installation
 ------------
