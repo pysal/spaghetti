@@ -47,9 +47,7 @@ install:
         echo 'plus testing'; conda install --yes --file requirements_plus.txt;
         else conda install --yes --file requirements.txt;
     fi;
-  - pip install -r requirements_dev.txt  
-  #- conda install --yes --file requirements.txt;
-  #- if "$PYSAL_PLUS"; then conda install --yes numba; fi
+  - pip install -r requirements_dev.txt
 
 script:
   - python setup.py sdist >/dev/null
