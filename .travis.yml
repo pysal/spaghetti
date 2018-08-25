@@ -30,19 +30,25 @@ before_install:
   - ./miniconda.sh -b -p ./miniconda
   - export PATH=`pwd`/miniconda/bin:$PATH
   - conda update --yes conda
-  - conda config --append channels conda-forge
+  - conda config --add channels conda-forge
   - conda create -y -q -n test-env python=$TRAVIS_PYTHON_VERSION
   - source activate test-env
 
 install:
   - conda install --yes pip
-  - conda install --yes -c conda-forge geopandas
+  #- conda install --yes -c conda-forge geopandas
   - if "$PYSAL_PYPI"; then
         echo 'testing pypi libpysal' && pip install libpysal;
-        else echo 'testing git libpysal'; git clone https://github.com/pysal/libpysal.git; cd libpysal; pip install .; cd ../;
+        else echo 'testing git libpysal';
+        git clone https://github.com/pysal/libpysal.git;
+        cd libpysal; pip install .; cd ../;
     fi;
-  - conda install --yes --file requirements.txt;
-  - if "$PYSAL_PLUS"; then conda install --yes numba; fi
+  - if [ "$PYSAL_PLUS" == true ]; then
+        echo 'plus testing'; conda install --yes --file requirements_plus.txt;
+        else conda install --yes --file requirements.txt;
+    fi;
+  #- conda install --yes --file requirements.txt;
+  #- if "$PYSAL_PLUS"; then conda install --yes numba; fi
   - pip install -r requirements_dev.txt
 
 script:
