@@ -1,2 +1,1 @@
-numba
 geopandas>=0.2
