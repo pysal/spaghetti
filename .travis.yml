@@ -36,7 +36,7 @@ before_install:
 
 install:
   - conda install --yes pip
-  #- conda install --yes -c conda-forge geopandas
+  - conda install --yes -c conda-forge geopandas
   - if "$PYSAL_PYPI"; then
         echo 'testing pypi libpysal' && pip install libpysal;
         else echo 'testing git libpysal';
@@ -47,9 +47,9 @@ install:
         echo 'plus testing'; conda install --yes --file requirements_plus.txt;
         else conda install --yes --file requirements.txt;
     fi;
+  - pip install -r requirements_dev.txt  
   #- conda install --yes --file requirements.txt;
   #- if "$PYSAL_PLUS"; then conda install --yes numba; fi
-  - pip install -r requirements_dev.txt
 
 script:
   - python setup.py sdist >/dev/null
