@@ -47,7 +47,8 @@ def setup_package(package, version):
           version=__version__,
           description=__doc__,
           url='https://github.com/pysal/'+package,
-          maintainer='James Gaboardi',
+          download_url='https://pypi.org/project/'+package,,
+          maintainer='James D. Gaboardi',
           maintainer_email='jgaboardi@gmail.com',
           test_suite = 'nose.collector',
           tests_require=['nose'],
@@ -65,7 +66,7 @@ def setup_package(package, version):
             'Programming Language :: Python :: 3.6'
             ],
           license='3-Clause BSD',
-          packages=[package], #add your package name here as a string
+          packages=[package],
           py_modules=[package],
           install_requires=install_reqs,
           extras_require=extras_reqs,
