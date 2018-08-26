@@ -5,11 +5,14 @@ class NetworkBase(object):
     """
     """
 
-    def __init__(self, ntw, pointpattern, nsteps=10,
-                 permutations=99, threshold=0.5,
-                 distribution='poisson',
+
+    def __init__(self, ntw, pointpattern, nsteps=10, permutations=99,
+                 threshold=0.5, distribution='poisson',
                  lowerbound=None, upperbound=None):
         """
+        
+        
+        
         """
         self.ntw = ntw
         self.pointpattern = pointpattern
@@ -33,12 +36,14 @@ class NetworkBase(object):
         # Compute the envelope vectors.
         self.computeenvelope()
 
+
     def validatedistribution(self):
         """
         """
         valid_distributions = ['uniform', 'poisson']
         assert(self.distribution in valid_distributions),\
                "Disstribution not in {}".format(valid_distributions)
+
 
     def computeenvelope(self):
         """
@@ -48,6 +53,7 @@ class NetworkBase(object):
 
         self.upperenvelope = np.nanmax(self.sim, axis=0) * upper
         self.lowerenvelope = np.nanmin(self.sim, axis=0) * lower
+
 
     def setbounds(self, nearest):
         """
@@ -59,9 +65,9 @@ class NetworkBase(object):
 
 
 class NetworkG(NetworkBase):
+    """Compute a network constrained G statistic.
     """
-    Compute a network constrained G statistic.
-    """
+
 
     def computeobserved(self):
         """
@@ -74,6 +80,7 @@ class NetworkG(NetworkBase):
             nearest, self.lowerbound, self.upperbound, nsteps=self.nsteps)
         self.observed = observedy
         self.xaxis = observedx
+
 
     def computepermutations(self):
         """
@@ -91,9 +98,9 @@ class NetworkG(NetworkBase):
 
 
 class NetworkK(NetworkBase):
+    """Compute a network constrained K statistic.
     """
-    Compute a network constrained K statistic.
-    """
+
 
     def computeobserved(self):
         """
@@ -108,6 +115,7 @@ class NetworkK(NetworkBase):
                                          nsteps=self.nsteps)
         self.observed = observedy
         self.xaxis = observedx
+
 
     def computepermutations(self):
         ""
@@ -125,12 +133,12 @@ class NetworkK(NetworkBase):
 
 
 class NetworkF(NetworkBase):
-    """
-    Compute a network constrained F statistic.
+    """Compute a network constrained F statistic.
 
     This requires the capability to compute a distance matrix between two
     point patterns. In this case one will be observed and one will be simulated
     """
+
 
     def computeobserved(self):
         """
@@ -148,6 +156,7 @@ class NetworkF(NetworkBase):
         self.observed = observedy
         self.xaxis = observedx
 
+
     def computepermutations(self):
         """
         """
@@ -163,29 +172,18 @@ class NetworkF(NetworkBase):
 
 
 def gfunction(nearest, lowerbound, upperbound, nsteps=10):
-    """
-    Compute a G-Function
+    """Compute a G-Function
 
     Parameters
     ----------
-    nearest:         ndarray
-                     A vector of nearest neighbor distances.
-
-    nsteps:          int
-                     The number of distance bands.
-
-    permutations:    int
-                     The number of permutations to perform.
-
-    threshold:       int
-                     Upper and lower significance threshold.
-
-    envelope:        bool
-                     Return results of all permutations.
-
-    poisson:         bool
-                     Use a poisson distribution to determine
-                     the number of points.
+    nearest : numpy.ndarray
+        A vector of nearest neighbor distances.
+    nsteps : int
+        The number of distance bands. Default is 10. Must be non-negative.
+    lowerbound : int or float
+        The starting value of the sequence.
+    upperbound : int or float
+        The end value of the sequence.
     """
     nobs = len(nearest)
     x = np.linspace(lowerbound, upperbound, nsteps)
