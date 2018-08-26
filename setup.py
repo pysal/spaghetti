@@ -66,7 +66,7 @@ def setup_package(package, version):
             ],
           license='3-Clause BSD',
           packages=[package], #add your package name here as a string
-          py_modules=[package]
+          py_modules=[package],
           install_requires=install_reqs,
           extras_require=extras_reqs,
           zip_safe=False,
