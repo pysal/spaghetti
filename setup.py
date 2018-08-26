@@ -47,7 +47,7 @@ def setup_package(package, version):
           version=__version__,
           description=__doc__,
           url='https://github.com/pysal/'+package,
-          download_url='https://pypi.org/project/'+package,,
+          download_url='https://pypi.org/project/'+package,
           maintainer='James D. Gaboardi',
           maintainer_email='jgaboardi@gmail.com',
           test_suite = 'nose.collector',
