@@ -1,16 +1,20 @@
 """Spatial Network Analysis (SPAtial GrapHs: nETworks, Topology, & Inference
 """
-
 from setuptools import setup
-import os.path
 from distutils.command.build_py import build_py
 
-# Get __version__ from PACKAGE_NAME/__init__.py without importing the package
-# __version__ has to be defined in the first line
-with open('spaghetti/__init__.py', 'r') as f:
-    exec(f.readline())
 
 def _get_requirements_from_files(groups_files):
+    """returns a dictionary of all requirements keyed by type of requirement.
+    Parameters
+    ----------
+    groups_files : dict
+        k - descriptive name, v - file name (including extension)
+    Returns
+    -------
+    groups_reqlist : dict
+        k - descriptive name, v - list of required packages
+    """
     groups_reqlist = {}
     for k,v in groups_files.items():
         with open(v, 'r') as f:
@@ -18,23 +22,33 @@ def _get_requirements_from_files(groups_files):
         groups_reqlist[k] = pkg_list
     return groups_reqlist
 
-def setup_package():
-    package = 'spaghetti'
+
+def setup_package(package, version):
+    """sets up the python package
+    Parameters
+    ----------
+    package : str
+        package name
+    version : str
+        package version info read in from package/__init__.py
+    """
     
     _groups_files = {
         'base': 'requirements.txt', #basic requirements
         'tests': 'requirements_tests.txt', #requirements for tests
-        'docs': 'requirements_docs.txt' #requirements for building docs
+        'docs': 'requirements_docs.txt', #requirements for building docs
+        'plus': 'requirements_plus.txt' #requirements for plus builds
     }
     reqs = _get_requirements_from_files(_groups_files)
     install_reqs = reqs.pop('base')
     extras_reqs = reqs
 
-    setup(name=package, #name of package
+    setup(name=package,
           version=__version__,
-          description=__doc__, #short <80chr description
-          url='https://github.com/pysal/spaghetti', #github repo
-          maintainer='James Gaboardi',
+          description=__doc__,
+          url='https://github.com/pysal/'+package,
+          download_url='https://pypi.org/project/'+package,
+          maintainer='James D. Gaboardi',
           maintainer_email='jgaboardi@gmail.com',
           test_suite = 'nose.collector',
           tests_require=['nose'],
@@ -52,11 +66,19 @@ def setup_package():
             'Programming Language :: Python :: 3.6'
             ],
           license='3-Clause BSD',
-          packages=[package], #add your package name here as a string
+          packages=[package],
+          py_modules=[package],
           install_requires=install_reqs,
           extras_require=extras_reqs,
           zip_safe=False,
-          cmdclass = {'build.py':build_py})
+          cmdclass = {'build.py':build_py},
+          python_requires='>3.4')
 
 if __name__ == '__main__':
-    setup_package()
+    package = 'spaghetti'
+
+    # Get __version__ from package/__init__.py
+    with open(package+'/__init__.py', 'r') as f:
+        exec(f.readline())
+
+    setup_package(package, __version__)
