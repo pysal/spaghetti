@@ -2,7 +2,6 @@
 """
 
 from setuptools import setup
-import os.path
 from distutils.command.build_py import build_py
 
 # Get __version__ from PACKAGE_NAME/__init__.py without importing the package
