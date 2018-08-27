@@ -185,7 +185,7 @@ def squaredDistancePointSegment(point, segment):
         c2 = np.dot(v, v)
         if c2 <= c1:
             dp1 = p - p1
-            sqd = p.dot(dp1.T, dp1)
+            sqd = np.dot(dp1.T, dp1)
             nearp = p1
             searching_nearest = False
             #return np.dot(dp1.T, dp1), p1
