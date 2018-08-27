@@ -135,7 +135,12 @@ class TestNetworkUtils(unittest.TestCase):
         path_to_shp = examples.get_path('streets.shp')
         gdf = geopandas.read_file(path_to_shp)
         self.ntw = spgh.Network(in_data=gdf)
-        
+    
+    def test_compute_length(self):
+        self.point1, self.point2 = (0,0), (1,1)
+        self.length = spgh.util.compute_length( self.point1, self.point2)
+        self.assertAlmostEqual(self.length, 1.4142135623730951, places=4)
+    
     def test_dijkstra(self):
         self.distance, self.pred = spgh.dijkstra(self.ntw,
                                                  self.ntw.edge_lengths, 0)
@@ -147,6 +152,13 @@ class TestNetworkUtils(unittest.TestCase):
                                                      self.ntw.edge_lengths, 0))
         self.assertAlmostEqual(self.distance[196], 5505.668247, places=4)
         self.assertEqual(self.pred[196], 133)
+    
+    def test_squaredDistancePointSegment(self):
+        self.point, self.segment = (1,1), ((0,0), (2,0))
+        self.sqrd_nearp = spgh.util.squaredDistancePointSegment(self.point,
+                                                                self.segment)
+        self.assertEqual(self.sqrd_nearp[0], 1.0)
+        self.assertEqual(self.sqrd_nearp[1].all(), np.array([1., 0.]).all())
 
 
 if __name__ == '__main__':

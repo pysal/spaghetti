@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from libpysal import examples
+from libpysal import cg, examples
 from .. import util
 from .. import network
 
@@ -109,31 +109,43 @@ class TestNetworkPointPattern(unittest.TestCase):
     def test_nearest_neighbor_distances(self):
         with self.assertRaises(KeyError):
             self.ntw.nearestneighbordistances('i_should_not_exist')
-        nnd = self.ntw.nearestneighbordistances('schools')
+        nnd1 = self.ntw.nearestneighbordistances('schools')
         nnd2 = self.ntw.nearestneighbordistances('schools',
                                                  'schools')
-        np.testing.assert_array_equal(nnd, nnd2)
+        np.testing.assert_array_equal(nnd1, nnd2)
 
     def test_nearest_neighbor_search(self):
         pass
 
 
 class TestNetworkUtils(unittest.TestCase):
-
+    
     def setUp(self):
         self.ntw = network.Network(in_data=examples.get_path('streets.shp'))
-
+    
+    def test_compute_length(self):
+        self.point1, self.point2 = (0,0), (1,1)
+        self.length = util.compute_length( self.point1, self.point2)
+        self.assertAlmostEqual(self.length, 1.4142135623730951, places=4)
+    
     def test_dijkstra(self):
         self.distance, self.pred = util.dijkstra(self.ntw,
                                                  self.ntw.edge_lengths, 0)
         self.assertAlmostEqual(self.distance[196], 5505.668247, places=4)
         self.assertEqual(self.pred[196], 133)
-
+    
     def test_dijkstra_mp(self):
         self.distance, self.pred = util.dijkstra_mp((self.ntw,
                                                      self.ntw.edge_lengths, 0))
         self.assertAlmostEqual(self.distance[196], 5505.668247, places=4)
         self.assertEqual(self.pred[196], 133)
+    
+    def test_squaredDistancePointSegment(self):
+        self.point, self.segment = (1,1), ((0,0), (2,0))
+        self.sqrd_nearp = util.squaredDistancePointSegment(self.point,
+                                                           self.segment)
+        self.assertEqual(self.sqrd_nearp[0], 1.0)
+        self.assertEqual(self.sqrd_nearp[1].all(), np.array([1., 0.]).all())
 
 
 if __name__ == '__main__':
