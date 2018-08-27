@@ -57,22 +57,17 @@ class Network:
     node_list : list
         List of node IDs.
     alldistances : dict
-        Keys are the node IDs. Values are tuples with two elements as follows
-        (1) a list of the shortest path distances; (2) a dict with the key
-        being the id of the destination node and the value being a list of
+        Keys are the node IDs (int). Values are tuples with two elements as
+        follows (1) a list of the shortest path distances; (2) a dict with the
+        key being the id of the destination node and the value being a list of
         the shortest path.
     distancematrix : numpy.ndarray
-        
-    
+        all network nodes (non-observations) distance matrix.
     graphedges : list
-        
-    edge_to_graph : dict
-        
+        tuples of graph edge ids.
     graph_lengths : dict
-        
-    
-    
-    
+        Keys are the graph edge ids (tuple). Values are the graph edge lenght
+        (float).
     
     Examples
     --------
@@ -181,7 +176,6 @@ class Network:
         between nodes with higher incidence.
         """
         self.graphedges = []
-        self.edge_to_graph = {}
         self.graph_lengths = {}
         
         # Find all nodes with cardinality 2.
@@ -1221,22 +1215,27 @@ class PointPattern():
         Field in the shapefile to use as an id variable.
     attribute :  bool
         {False, True} A flag to indicate whether all attributes are tagged
-        to this class.s
+        to this class.
     
     Attributes
     ----------
     points : dict
-        Keys are the point ids. Values are the coordinates.
+        Keys are the point ids (int). Values are the x,y coordinates (tuple).
     npoints : int
         The number of points.
-    obs_to_edge : 
-        
-    obs_to_node : 
-        
-    dist_to_node : 
-        
-    snapped_coordinates : 
-        
+    obs_to_edge : dict
+        Keys are edge ids (tuple). Values are snapped point information (dict).
+        Withing the snapped point information (dict) keys are observation id
+        (int), and values are snapped coordinates.
+    obs_to_node : list
+        Keys are observations ids (int). Values are distance lookup (dict).
+        Within distance lookup (dict) keys are the two incident nodes of the
+        edge and values are distance to each of those edges.
+    dist_to_node : dict
+        ####################################################################### NEEDS ATTENTION
+    snapped_coordinates : dict
+        Keys are the point ids (int). Values are the snapped x,y
+        coordinates (tuple).
     """
     def __init__(self, in_data=None, idvariable=None, attribute=False):
         self.points = {}
