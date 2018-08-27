@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from libpysal import examples
+from libpysal import cg, examples
 import spaghetti as spgh
 try:
     import geopandas
@@ -159,6 +159,16 @@ class TestNetworkUtils(unittest.TestCase):
                                                                 self.segment)
         self.assertEqual(self.sqrd_nearp[0], 1.0)
         self.assertEqual(self.sqrd_nearp[1].all(), np.array([1., 0.]).all())
+    
+    def test_snapPointsOnSegments(self):
+        self.points = {0: cg.shapes.Point((1,1))}
+        self.segments = [cg.shapes.Chain([cg.shapes.Point((0,0)),
+                                          cg.shapes.Point((2,0))])]
+        self.snapped = spgh.util.snapPointsOnSegments(self.points,
+                                                      self.segments)
+        self.known_coords = [xy._Point__loc for xy in self.snapped[0][0]]
+        self.assertEqual(self.known_coords, [(0.0, 0.0), (2.0, 0.0)])
+        self.assertEqual(self.snapped[0][1].all(), np.array([1., 0.]).all())
 
 
 if __name__ == '__main__':
