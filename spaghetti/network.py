@@ -415,6 +415,10 @@ class Network:
         attribute : bool
             Defines whether attributes should be extracted. True for attribute
             extraction. False for no attribute extraaction.
+        
+        Example
+        -------
+        
         """
         
         self.pointpatterns[name] = PointPattern(in_data=in_data,
@@ -956,8 +960,8 @@ class Network:
         
         Parameters
         ----------
-        pointpattern : object
-                        A PySAL point pattern object.
+        pointpattern : spaghetti.network.PointPattern
+            A spaghetti point pattern object.
         nsteps : int
             The number of steps at which the count of the nearest neighbors
             is computed.
@@ -993,8 +997,8 @@ class Network:
         
         Parameters
         ----------
-        pointpattern : object
-                        A PySAL point pattern object.
+        pointpattern : spaghetti.network.PointPattern
+            A spaghetti point pattern object.
         nsteps : int
             The number of steps at which the count of the nearest neighbors
             is computed.
@@ -1032,8 +1036,8 @@ class Network:
         
         Parameters
         ----------
-        pointpattern : object
-                        A PySAL point pattern object.
+        pointpattern : spaghetti.network.PointPattern
+            A spaghetti point pattern object.
         nsteps : int
             The number of steps at which the count of the nearest neighbors
             is computed.
@@ -1225,6 +1229,14 @@ class PointPattern():
         Keys are the point ids. Values are the coordinates.
     npoints : int
         The number of points.
+    obs_to_edge : 
+        
+    obs_to_node : 
+        
+    dist_to_node : 
+        
+    snapped_coordinates : 
+        
     """
     def __init__(self, in_data=None, idvariable=None, attribute=False):
         self.points = {}

@@ -15,6 +15,13 @@ def compute_length(v0, v1):
     --------
     euc_dist : float
         Euclidean distance
+    
+    Example
+    -------
+    >>> import spaghetti.util as util
+    >>> point1, point2 = (0,0), (1,1)
+    >>> util.compute_length(point1, point2)
+    1.4142135623730951
     """
     euc_dist = np.sqrt((v0[0] - v1[0])**2 + (v0[1] - v1[1])**2)
     return euc_dist
