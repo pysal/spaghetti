@@ -166,6 +166,7 @@ def squaredDistancePointSegment(point, segment):
         point coordinates (x,y)
     segment : list
         List of 2 point coordinate tuples [(x0,y0), (x1,y1)].
+    
     Returns
     -------
     sqd : float
@@ -209,31 +210,26 @@ def snapPointsOnSegments(points, segments):
 
     Arguments
     ---------
-    points:     dict
-                Point id as key and (x,y) coordinate as value
-
-    segments:   list
-                Elements are of type pysal.cg.shapes.Chain
-                ** Note **
-                        each element is a segment represented as a chain with
-                        *one head and one tail node*
-                        in other words one link only.
-
+    points : dict
+        Point id as key and (x,y) coordinate as value
+    segments : list
+        Elements are of type pysal.cg.shapes.Chain
+        ** Note ** each element is a segment represented as a chain with
+        *one head and one tail node* in other words one link only.
+    
     Returns
     -------
-    p2s:        dict
-                key:    point id (see points in arguments)
-
-                value:  a 2-tuple: ((head, tail), point)
-                        where (head, tail) is the target segment,
-                        and point is the snapped location on the segment
+    p2s : dict
+        key [point id (see points in arguments)]; value [a 2-tuple 
+        ((head, tail), point) where (head, tail) is the target segment,
+        and point is the snapped location on the segment.
     """
 
     # Put segments in an Rtree.
     rt = cg.Rtree()
     SMALL = np.finfo(float).eps
     node2segs = {}
-
+    
     for segment in segments:
         head, tail = segment.vertices
         x0, y0 = head
@@ -251,17 +247,17 @@ def snapPointsOnSegments(points, segments):
         y1 += SMALL
         r = cg.Rect(x0, y0, x1, y1)
         rt.insert(segment, r)
-    
+        
     # Build a KDtree on segment nodes.
     kt = cg.KDTree(list(node2segs.keys()))
     p2s = {}
-
+    
     for ptIdx, point in points.items():
         # First, find nearest neighbor segment node for the point.
         dmin, node = kt.query(point, k=1)
         node = tuple(kt.data[node])
         closest = node2segs[node][0].vertices
-
+        
         # Use this segment as the candidate closest segment:  closest
         # Use the distance as the distance to beat:           dmin
         p2s[ptIdx] = (closest, np.array(node))
@@ -269,13 +265,13 @@ def snapPointsOnSegments(points, segments):
         y0 = point[1] - dmin
         x1 = point[0] + dmin
         y1 = point[1] + dmin
-
+        
         # Find all segments with bounding boxes that intersect
         # a query rectangle centered on the point with sides of length 2*dmin.
         candidates = [cand for cand in rt.intersection([x0, y0, x1, y1])]
         dmin += SMALL
         dmin2 = dmin * dmin
-
+        
         # Of the candidate segments, find the nearest to the query point.
         for candidate in candidates:
             dnc, p2b = squaredDistancePointSegment(point, candidate.vertices)
@@ -283,5 +279,5 @@ def snapPointsOnSegments(points, segments):
                 closest = candidate.vertices
                 dmin2 = dnc
                 p2s[ptIdx] = (closest, p2b)
-    
+                
     return p2s
