@@ -21,21 +21,22 @@ def compute_length(v0, v1):
 
 
 def get_neighbor_distances(ntw, v0, l):
-    """
+    """Get distances to the nearest node neighbors along connecting edges.
     
     Parameters
     ----------
-    ntw : 
-        
-    v0 : 
-        
-    l : 
-        
+    ntw : spaghetti.Network
+        spaghetti Network object.
+    v0 : int
+        Node id
+    l : dict
+        key is tuple (start node, end node); value is float.
+        Cost per edge to travel, e.g. distance.
     
     Returns
     -------
     neighbors : dict
-        
+        key is int (node id); value is float (distance)
     """
     edges = ntw.enum_links_node(v0)
     neighbors = {}
@@ -83,26 +84,21 @@ def dijkstra(ntw, cost, node, n=float('inf')):
     ----------
     ntw :  spaghetti.Network
         spaghetti Network object.
-
-    cost :       dict
-                key:    tuple
-                        (start node, end node)
-                value:  float
-                        Cost per edge to travel, e.g. distance
-
-    node:       int
-                Start node ID
-
-    n:          float('inf')
-                integer break point to stop iteration and return n neighbors
+    cost : dict
+        key is tuple (start node, end node); value is float.
+        Cost per edge to travel, e.g. distance.
+    node : int
+        Start node ID
+    n : float
+        integer break point to stop iteration and return n neighbors.
+        Default is ('inf').
 
     Returns
     -------
-    distance:   list
-                List of distances from node to all other nodes.
-
-    pred:       list
-                List of preceeding nodes for traversal route.
+    distance : list
+        List of distances from node to all other nodes.
+    pred : list
+        List of preceeding nodes for traversal route.
     """
 
     v0 = node
@@ -207,7 +203,7 @@ def squaredDistancePointSegment(point, segment):
 
 def snapPointsOnSegments(points, segments):
     """Place points onto closet segment in a set of segments
-
+    
     Arguments
     ---------
     points : dict
