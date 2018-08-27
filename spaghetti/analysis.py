@@ -2,18 +2,43 @@ import numpy as np
 
 
 class NetworkBase(object):
-    """
+    """Base object for performing network analysis on a spaghetti.Network
+    object.
+    
+    Parameters
+    ----------
+    ntw : 
+    pointpattern : 
+    nsteps : 
+        =10 
+    permutations : 
+        =99
+    threshold : 
+        =0.5
+    distribution : 
+        ='poisson'
+    lowerbound : 
+        =None
+    upperbound
+        =None
+    Attributes
+    ----------
+    sim
+    npts
+    
+    
+    Methods
+    -------
+    validatedistribution
+    computeenvelope
+    setbounds
+    
     """
 
 
     def __init__(self, ntw, pointpattern, nsteps=10, permutations=99,
                  threshold=0.5, distribution='poisson',
                  lowerbound=None, upperbound=None):
-        """
-        
-        
-        
-        """
         self.ntw = ntw
         self.pointpattern = pointpattern
         self.nsteps = nsteps
@@ -65,7 +90,9 @@ class NetworkBase(object):
 
 
 class NetworkG(NetworkBase):
-    """Compute a network constrained G statistic.
+    """Compute a network constrained G statistic. This requires the capability
+    to compute a distance matrix between two point patterns. In this case one
+    will be observed and one will be simulated.
     """
 
 
@@ -98,16 +125,18 @@ class NetworkG(NetworkBase):
 
 
 class NetworkK(NetworkBase):
-    """Compute a network constrained K statistic.
+    """Compute a network constrained K statistic. This requires the capability
+    to compute a distance matrix between two point patterns. In this case one
+    will be observed and one will be simulated.
     """
-
-
+    
+    
     def computeobserved(self):
         """
         """
         nearest = self.ntw.allneighbordistances(self.pointpattern)
         self.setbounds(nearest)
-
+        
         self.lam = self.npts / sum(self.ntw.edge_lengths.values())
         observedx, observedy = kfunction(nearest,
                                          self.upperbound,
@@ -124,7 +153,7 @@ class NetworkK(NetworkBase):
             sim = self.ntw.simulate_observations(
                 self.npts, distribution=self.distribution)
             nearest = self.ntw.allneighbordistances(sim)
-
+            
             simx, simy = kfunction(nearest,
                                    self.upperbound,
                                    self.lam,
@@ -133,13 +162,12 @@ class NetworkK(NetworkBase):
 
 
 class NetworkF(NetworkBase):
-    """Compute a network constrained F statistic.
-
-    This requires the capability to compute a distance matrix between two
-    point patterns. In this case one will be observed and one will be simulated
+    """Compute a network constrained F statistic. This requires the capability
+    to compute a distance matrix between two point patterns. In this case one
+    will be observed and one will be simulated.
     """
-
-
+    
+    
     def computeobserved(self):
         """
         """
@@ -178,17 +206,22 @@ def gfunction(nearest, lowerbound, upperbound, nsteps=10):
     ----------
     nearest : numpy.ndarray
         A vector of nearest neighbor distances.
-    nsteps : int
-        The number of distance bands. Default is 10. Must be non-negative.
     lowerbound : int or float
         The starting value of the sequence.
     upperbound : int or float
         The end value of the sequence.
+    nsteps : int
+        The number of distance bands. Default is 10. Must be non-negative.
+    Returns
+    -------
+    x, y : tuple
+        
+    
     """
     nobs = len(nearest)
     x = np.linspace(lowerbound, upperbound, nsteps)
     nearest = np.sort(nearest)
-
+    
     y = np.empty(len(x))
     for i, r in enumerate(x):
         cnt = len(nearest[nearest <= r])
@@ -201,12 +234,23 @@ def gfunction(nearest, lowerbound, upperbound, nsteps=10):
 
 
 def kfunction(nearest, upperbound, intensity, nsteps=10):
-    """
+    """Compute a K-Function
+
+    Parameters
+    ----------
+    nearest : numpy.ndarray
+        A vector of nearest neighbor distances.
+    upperbound : int or float
+        The end value of the sequence.
+    intensity : 
+        
+    nsteps : int
+        The number of distance bands. Default is 10. Must be non-negative.
     """
     nobs = len(nearest)
     x = np.linspace(0, upperbound, nsteps)
     y = np.empty(len(x))
-
+    
     for i, s in enumerate(x):
         y[i] = len(nearest[nearest <= s])
     y *= (intensity ** -1)
@@ -214,7 +258,20 @@ def kfunction(nearest, upperbound, intensity, nsteps=10):
 
 
 def ffunction(nearest, lowerbound, upperbound, npts, nsteps=10):
-    """
+    """Compute an F-Function
+
+    Parameters
+    ----------
+    nearest : numpy.ndarray
+        A vector of nearest neighbor distances.
+    lowerbound : int or float
+        The starting value of the sequence.
+    upperbound : int or float
+        The end value of the sequence.
+    npts : 
+        
+    nsteps : int
+        The number of distance bands. Default is 10. Must be non-negative.
     """
     nobs = len(nearest)
     x = np.linspace(lowerbound, upperbound, nsteps)

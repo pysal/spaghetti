@@ -60,6 +60,10 @@ class Network:
         (1) a list of the shortest path distances; (2) a dict with the key
         being the id of the destination node and the value being a list of
         the shortest path.
+    Methods
+    -------
+    
+    
     Examples
     --------
     Instantiate an instance of a network.
@@ -249,12 +253,26 @@ class Network:
     def _yieldneighbor(self, node, segment_nodes, bridge):
         """Used internally, this method traverses a bridge segement to find
         the source and destination nodes.
+        
+        Parameters
+        ----------
+        node
+        segment_nodes
+        bridge
+        
+        
+        Returns
+        -------
+        n : list
+            
+        
+        
         """
         n = []
         for i in self.adjacencylist[node]:
             if i in segment_nodes and i not in bridge:
                 n.append(i)
-        
+                
         return n
 
 
@@ -1245,9 +1263,6 @@ class SortedEdges(OrderedDict):
     OrderedDict : collections.OrderedDict
         
         
-    Returns
-    -------
-    
     """
     def next_key(self, key):
         """
