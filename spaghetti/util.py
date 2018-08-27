@@ -49,16 +49,16 @@ def get_neighbor_distances(ntw, v0, l):
 
 
 def generatetree(pred):
-    """Rebuild the shortest path from 
+    """Rebuild the shortest path from root origin to destination
     
     Parameters
     ----------
     pred : list
-        
+        List of preceeding nodes for traversal route.
     Returns
     --------
     tree : dict
-        
+        key is root origin; value is root origin to destination.
     """
     tree = {}
     for i, p in enumerate(pred):
@@ -101,7 +101,6 @@ def dijkstra(ntw, cost, v0, n=float('inf')):
     pred : list
         List of preceeding nodes for traversal route.
     """
-
     distance = [n for x in ntw.node_list]
     idx = ntw.node_list.index(v0)
     distance[ntw.node_list.index(v0)] = 0
@@ -218,7 +217,7 @@ def snapPointsOnSegments(points, segments):
         ((head, tail), point) where (head, tail) is the target segment,
         and point is the snapped location on the segment.
     """
-
+    
     # Put segments in an Rtree.
     rt = cg.Rtree()
     SMALL = np.finfo(float).eps
