@@ -34,6 +34,7 @@ class Network:
     extractgraph : bool
         If True, extract a graph-theoretic object with no degree 2 nodes.
         Defalt is True.
+    
     Attributes
     ----------
     in_data : str
@@ -60,9 +61,6 @@ class Network:
         (1) a list of the shortest path distances; (2) a dict with the key
         being the id of the destination node and the value being a list of
         the shortest path.
-    Methods
-    -------
-    
     
     Examples
     --------
@@ -70,9 +68,11 @@ class Network:
     >>> import spaghetti as spgh
     >>> streets_file = examples.get_path('streets.shp')
     >>> ntw = spgh.Network(in_data=streets_file)
+    
     Snap point observations to the network with attribute information.
     >>> crimes_file = examples.get_path('crimes.shp')
     >>> ntw.snapobservations(crimes_file, 'crimes', attribute=True)
+   
     And without attribute information.
     >>> schools_file = examples.get_path('schools.shp')
     >>> ntw.snapobservations(schools_file, 'schools', attribute=False)
@@ -286,10 +286,12 @@ class Network:
             representation or the graph representation.
         weightings : dict
             Dict of lists of weightings for each edge.
+        
         Returns
         -------
          W : libpysal.weights.weights.W
             A PySAL W Object representing the binary adjacency of the network.
+        
         Examples
         --------
         >>> import spaghetti as spgh
@@ -363,6 +365,7 @@ class Network:
             (Optional) Specify the number of cores to utilize. Default is 1
             core. Use (int) to specify an exact number or cores. Use ("all")
             to request all available cores.
+        
         Returns
         -------
         w : libpysal.weights.weights.W
@@ -422,6 +425,7 @@ class Network:
             y-coordiante of the snapped point.
         edge : tuple
             (node0, node1) representation of the network edge.
+        
         Returns
         -------
         d1 : float
@@ -443,6 +447,7 @@ class Network:
         -----------
         pointpattern : spaghetti.network.PointPattern
             point pattern object
+        
         Returns
         -------
         obs_to_edge : dict
@@ -501,10 +506,12 @@ class Network:
         obs_on_network : dict
             Dict of observations on the network. {(edge):{pt_id:(coords)}} or
             {edge:[(coord),(coord),(coord)]}
+        
         Returns
         -------
         counts : dict
             {(edge):count}
+        
         Example
         -------
         Note that this passes the obs_to_edge attribute of a
@@ -572,10 +579,12 @@ class Network:
             if not 'uniform'.
         distribution : str
             {'uniform', 'poisson'} distribution of random points.
+        
         Returns
         -------
         random_pts : dict
             Keys are the edge tuple. Values are lists of new point coordinates.
+        
         Example
         -------
         >>> import spaghetti as spgh
@@ -635,6 +644,7 @@ class Network:
         -----------
         v0 : int
             Node id
+        
         Returns
         -------
         links : list
@@ -713,6 +723,7 @@ class Network:
             (Optional) Specify the number of cores to utilize. Default is 1
             core. Use (int) to specify an exact number or cores.  Use ("all")
             to request all available cores.
+        
         Returns
         -------
         nearest : numpy.ndarray
@@ -832,6 +843,7 @@ class Network:
             (Optional) Specify the number of cores to utilize. Default is 1
             core. Use (int) to specify an exact number or cores. Use ("all")
             to request all available cores.
+        
         Returns
         -------
         nearest : numpy.ndarray
@@ -932,6 +944,7 @@ class Network:
         upperbound : float
             The upper bound at which the F-function is computed. Defaults to
             the maximum observed nearest neighbor distance.
+        
         Returns
         -------
         NetworkF : spaghetti.analysis.NetworkF
@@ -968,6 +981,7 @@ class Network:
         upperbound : float
             The upper bound at which the F-function is computed. Defaults to
             the maximum observed nearest neighbor distance.
+        
         Returns
         -------
         NetworkG : spaghetti.analysis.NetworkG
@@ -1006,6 +1020,7 @@ class Network:
         upperbound : float
             The upper bound at which the F-function is computed. Defaults to
             the maximum observed nearest neighbor distance.
+        
         Returns
         -------
         NetworkK : spaghetti.analysis.NetworkK
@@ -1025,10 +1040,12 @@ class Network:
         -----------
         distance : float
             The distance at which edges are split.
+        
         Returns
         -------
         sn : spaghetti.Network
             spaghetti Network object.
+        
         Example
         -------
         >>> import spaghetti as spgh
@@ -1069,7 +1086,7 @@ class Network:
                 removeedges.add(e)
             else:
                 continue
-            
+                
             while totallength < length:
                 currentstop = current_node_id
                 if totallength + interval > length:
@@ -1113,7 +1130,7 @@ class Network:
         # Update the point pattern snapping.
         for instance in sn.pointpatterns.values():
             sn._snap_to_edge(instance)
-        
+            
         return sn
 
 
@@ -1125,6 +1142,7 @@ class Network:
         filename : str
             The filename where the network should be saved. This should be a
             full path or it will be save in the current directory.
+        
         Example
         --------
         >>> import spaghetti as spgh
@@ -1137,10 +1155,12 @@ class Network:
     @staticmethod
     def loadnetwork(filename):
         """Load a network from a binary file saved on disk.
+        
         Parameters
         ----------
         filename : str
             The filename where the network should be saved.
+        
         Returns
         -------
         self : spaghetti.Network
@@ -1168,6 +1188,7 @@ class PointPattern():
     attribute :  bool
         {False, True} A flag to indicate whether all attributes are tagged
         to this class.s
+    
     Attributes
     ----------
     points : dict
@@ -1261,23 +1282,23 @@ class SortedEdges(OrderedDict):
     Parameters
     ----------
     OrderedDict : collections.OrderedDict
-        
-        
     """
     def next_key(self, key):
         """
         Parameters
         ----------
-        
+        key : 
+            
         Returns
         -------
         n : 
+            
         """
         next = self._OrderedDict__map[key][1]
         if next is self._OrderedDict__root:
             raise ValueError("{!r} is the last key.".format(key))
         n = next[2]
-        return ns
+        return n
 
     def first_key(self):
         """
