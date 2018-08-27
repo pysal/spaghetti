@@ -213,7 +213,7 @@ def snapPointsOnSegments(points, segments):
     points : dict
         Point id as key and (x,y) coordinate as value
     segments : list
-        Elements are of type pysal.cg.shapes.Chain
+        Elements are of type libpysal.cg.shapes.Chain
         ** Note ** each element is a segment represented as a chain with
         *one head and one tail node* in other words one link only.
     
@@ -223,6 +223,15 @@ def snapPointsOnSegments(points, segments):
         key [point id (see points in arguments)]; value [a 2-tuple 
         ((head, tail), point) where (head, tail) is the target segment,
         and point is the snapped location on the segment.
+    
+    Example
+    -------
+    >>> import spaghetti.util as util
+    >>> from libpysal.cg.shapes import Point, Chain
+    >>> points = {0: Point((1,1))}
+    >>> segments = [Chain([Point((0,0)), Point((2,0))])]
+    >>> util.snapPointsOnSegments(points, segments)
+    {0: ([(0.0, 0.0), (2.0, 0.0)], array([1., 0.]))}
     """
     
     # Put segments in an Rtree.
