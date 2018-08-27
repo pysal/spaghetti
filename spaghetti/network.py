@@ -63,6 +63,7 @@ class Network:
     Examples
     --------
     Instantiate an instance of a network.
+    >>> import spaghetti as spgh
     >>> streets_file = examples.get_path('streets.shp')
     >>> ntw = spgh.Network(in_data=streets_file)
     Snap point observations to the network with attribute information.
@@ -80,24 +81,24 @@ class Network:
             self.in_data = in_data
             self.node_sig = node_sig
             self.unique_segs = unique_segs
-
+            
             self.adjacencylist = defaultdict(list)
             self.nodes = {}
             self.edge_lengths = {}
             self.edges = []
-
+            
             self.pointpatterns = {}
-
+            
             self._extractnetwork()
             self.node_coords = dict((v, k) for k, v in self.nodes.items())
-
+            
             # This is a spatial representation of the network.
             self.edges = sorted(self.edges)
-
+            
             # Extract the graph.
             if extractgraph:
                 self.extractgraph()
-
+                
             self.node_list = sorted(self.nodes.values())
 
 
@@ -115,6 +116,7 @@ class Network:
                  else round(val, -int(np.floor(np.log10(np.fabs(val)))) +
                             (sig - 1))
                  for val in v]
+        
         return tuple(out_v)
 
 
@@ -141,10 +143,10 @@ class Network:
                 except KeyError:
                     self.nodes[v2] = nvid = nodecount
                     nodecount += 1
-
+                    
                 self.adjacencylist[vid].append(nvid)
                 self.adjacencylist[nvid].append(vid)
-
+                
                 # Sort the edges so that mono-directional keys can be stored.
                 edgenodes = sorted([vid, nvid])
                 edge = tuple(edgenodes)
@@ -167,7 +169,7 @@ class Network:
         self.graphedges = []
         self.edge_to_graph = {}
         self.graph_lengths = {}
-
+        
         # Find all nodes with cardinality 2.
         segment_nodes = []
         for k, v in self.adjacencylist.items():
@@ -176,7 +178,7 @@ class Network:
             # len(v) > 2 #intersection
             if len(v) == 2:
                 segment_nodes.append(k)
-
+                
         # Start with a copy of the spatial representation and
         # iteratively remove edges deemed to be segments.
         self.graphedges = copy.deepcopy(self.edges)
@@ -184,7 +186,7 @@ class Network:
         # Mapping all the 'network edges' contained within a single
         # 'graph represented' edge.
         self.graph_to_edges = {}
-
+        
         bridges = []
         for s in segment_nodes:
             bridge = [s]
@@ -198,7 +200,7 @@ class Network:
                                                    bridge)
                 neighbors += newneighbors
             bridges.append(bridge)
-
+            
         for bridge in bridges:
             if len(bridge) == 1:
                 n = self.adjacencylist[bridge[0]]
@@ -228,18 +230,18 @@ class Network:
                             startend[b] = n
                         else:
                             redundant.add(tuple(sorted([b, n])))
-
+                            
                 newedge = tuple(sorted(startend.values()))
                 for k, v in startend.items():
                     redundant.add(tuple(sorted([k, v])))
-
+                    
                 for r in redundant:
                     self.graphedges.remove(r)
                     cumulative_length += self.edge_lengths[r]
                     self.graph_lengths.pop(r, None)
                     self.graph_to_edges[r] = newedge
                 self.graph_lengths[newedge] = cumulative_length
-
+                
             self.graphedges.append(newedge)
         self.graphedges = sorted(self.graphedges)
 
@@ -252,6 +254,7 @@ class Network:
         for i in self.adjacencylist[node]:
             if i in segment_nodes and i not in bridge:
                 n.append(i)
+        
         return n
 
 
@@ -271,6 +274,7 @@ class Network:
             A PySAL W Object representing the binary adjacency of the network.
         Examples
         --------
+        >>> import spaghetti as spgh
         >>> import esda
         >>> ntw = spgh.Network(examples.get_path('streets.shp'))
         >>> w = ntw.contiguityweights(graph=False)
@@ -288,30 +292,30 @@ class Network:
         >>> for i, e in enumerate(edges):
         ...     if e in counts.keys():
         ...         y[i] = counts[e]
-
+        
         Next, a standard call ot Moran is made and the
         result placed into `res`
         >>> res = esda.moran.Moran(y, w, permutations=99)
         """
-
+        
         neighbors = {}
         neighbors = OrderedDict()
-
+        
         if graph:
             edges = self.graphedges
         else:
             edges = self.edges
-
+            
         if weightings:
             _weights = {}
         else:
             _weights = None
-
+            
         for key in edges:
             neighbors[key] = []
             if weightings:
                 _weights[key] = []
-
+                
             for neigh in edges:
                 if key == neigh:
                     continue
@@ -326,6 +330,7 @@ class Network:
                 # if key[1] > neigh[1]:  #NOT THIS
                     # break
         w = weights.W(neighbors, weights=_weights)
+        
         return w
 
 
@@ -349,7 +354,7 @@ class Network:
             hasattr(self.alldistances)
         except AttributeError:
             self.node_distance_matrix(n_proccess)
-
+            
         neighbor_query = np.where(self.distancematrix < threshold)
         neighbors = defaultdict(list)
         for i, n in enumerate(neighbor_query[0]):
@@ -357,6 +362,7 @@ class Network:
             if n != neigh:
                 neighbors[n].append(neighbor_query[1][i])
         w = weights.W(neighbors)
+        
         return w
 
 
@@ -379,7 +385,7 @@ class Network:
             Defines whether attributes should be extracted. True for attribute
             extraction. False for no attribute extraaction.
         """
-
+        
         self.pointpatterns[name] = PointPattern(in_data=in_data,
                                                 idvariable=idvariable,
                                                 attribute=attribute)
@@ -405,9 +411,10 @@ class Network:
         d2 : float
             The distance to node1. Always the node with the greater id.
         """
-
+        
         d1 = util.compute_length((x, y), self.node_coords[edge[0]])
         d2 = util.compute_length((x, y), self.node_coords[edge[1]])
+        
         return d1, d2
 
 
@@ -431,7 +438,7 @@ class Network:
         
         obs_to_edge = {}
         dist_to_node = {}
-
+        
         pointpattern.snapped_coordinates = {}
         segments = []
         s2e = {}
@@ -440,7 +447,7 @@ class Network:
             tail = self.node_coords[edge[1]]
             segments.append(cg.Chain([head, tail]))
             s2e[(head, tail)] = edge
-
+            
         points = {}
         p2id = {}
         for pointIdx, point in pointpattern.points.items():
@@ -456,13 +463,13 @@ class Network:
             pointpattern.snapped_coordinates[pointIdx] = (x, y)
             d1, d2 = self.compute_distance_to_nodes(x, y, edge)
             dist_to_node[pointIdx] = {edge[0]: d1, edge[1]: d2}
-
+            
         obs_to_node = defaultdict(list)
         for k, v in obs_to_edge.items():
             keys = v.keys()
             obs_to_node[k[0]] = keys
             obs_to_node[k[1]] = keys
-
+            
         pointpattern.obs_to_edge = obs_to_edge
         pointpattern.dist_to_node = dist_to_node
         pointpattern.obs_to_node = list(obs_to_node)
@@ -470,7 +477,7 @@ class Network:
 
     def count_per_edge(self, obs_on_network, graph=True):
         """Compute the counts per edge.
-
+        
         Parameters
         ----------
         obs_on_network : dict
@@ -484,6 +491,7 @@ class Network:
         -------
         Note that this passes the obs_to_edge attribute of a
         point pattern snapped to the network.
+        >>> import spaghetti as spgh
         >>> ntw = spgh.Network(examples.get_path('streets.shp'))
         >>> ntw.snapobservations(examples.get_path('crimes.shp'),
         ...                                           'crimes',
@@ -532,6 +540,7 @@ class Network:
         elif x1 < x2:
             x0 = x1 + distance / np.sqrt(1 + m**2)
         y0 = m * (x0 - x1) + y1
+        
         return x0, y0
 
 
@@ -551,17 +560,18 @@ class Network:
             Keys are the edge tuple. Values are lists of new point coordinates.
         Example
         -------
+        >>> import spaghetti as spgh
         >>> ntw = spgh.Network(examples.get_path('streets.shp'))
         >>> ntw.snapobservations(examples.get_path('crimes.shp'),
-        ...                                           'crimes',
-        ...                                           attribute=True)
+        ...                                        'crimes',
+        ...                                         attribute=True)
         >>> npts = ntw.pointpatterns['crimes'].npoints
         >>> sim = ntw.simulate_observations(npts)
         >>> isinstance(sim, spgh.network.SimulatedPointPattern)
         True
         """
         simpts = SimulatedPointPattern()
-
+        
         #   Cumulative Network Length.
         edges = []
         lengths = np.zeros(len(self.edge_lengths))
@@ -570,13 +580,13 @@ class Network:
             lengths[i] = self.edge_lengths[key]
         stops = np.cumsum(lengths)
         totallength = stops[-1]
-
+        
         if distribution is 'uniform':
             nrandompts = np.random.uniform(0, totallength, size=(count,))
         elif distribution is 'poisson':
             nrandompts = np.random.uniform(0, totallength,
                                            size=(np.random.poisson(count),))
-
+            
         for i, r in enumerate(nrandompts):
             idx = np.where(r < stops)[0][0]
             assignment_edge = edges[idx]
@@ -587,16 +597,16 @@ class Network:
             simpts.snapped_coordinates[i] = (x0, y0)
             simpts.obs_to_node[assignment_edge[0]].append(i)
             simpts.obs_to_node[assignment_edge[1]].append(i)
-
+            
             # Populate the distance to node.
             distance_from_end = self.edge_lengths[edges[idx]]\
                 - distance_from_start
             simpts.dist_to_node[i] = {assignment_edge[0]: distance_from_start,
                                       assignment_edge[1]: distance_from_end}
-
+            
             simpts.points = simpts.snapped_coordinates
             simpts.npoints = len(simpts.points)
-
+            
         return simpts
 
 
@@ -616,12 +626,13 @@ class Network:
         neighbornodes = self.adjacencylist[v0]
         for n in neighbornodes:
             links.append(tuple(sorted([n, v0])))
+        
         return links
 
 
     def node_distance_matrix(self, n_processes):
-        """ Called from within `allneighbordistances()`,
-        `nearestneighbordistances()`, and `distancebandweights()`.
+        """ Called from within allneighbordistances(),
+        nearestneighbordistances(), and distancebandweights().
         
         Parameters
         -----------
@@ -689,10 +700,10 @@ class Network:
         nearest : numpy.ndarray
             An array of shape (n,n) storing distances between all points.
         """
-
+        
         if not hasattr(self, 'alldistances'):
             self.node_distance_matrix(n_processes)
-
+            
         # Source setup
         src_indices = list(sourcepattern.points.keys())
         nsource_pts = len(src_indices)
@@ -701,7 +712,7 @@ class Network:
         for s in src_indices:
             e1, e2 = src_dist_to_node[s].keys()
             src_nodes[s] = (e1, e2)
-
+            
         # Destination setup
         symmetric = False
         if destpattern is None:
@@ -715,18 +726,18 @@ class Network:
         for s in dest_indices:
             e1, e2 = dest_dist_to_node[s].keys()
             dest_nodes[s] = (e1, e2)
-
+            
         # Output setup
         nearest = np.empty((nsource_pts, ndest_pts))
         nearest[:] = np.inf
-
+        
         for p1 in src_indices:
             # Get the source nodes and dist to source nodes.
             source1, source2 = src_nodes[p1]
             set1 = set(src_nodes[p1])
             # Distance from node1 to p, distance from node2 to p.
             sdist1, sdist2 = src_dist_to_node[p1].values()
-
+            
             if symmetric:
                 # Only compute the upper triangle if symmetric.
                 dest_searchpts.remove(p1)
@@ -738,14 +749,14 @@ class Network:
                     x2, y2 = destpattern.snapped_coordinates[p2]
                     computed_length = util.compute_length((x1, y1), (x2, y2))
                     nearest[p1, p2] = computed_length
-
+                    
                 else:
                     ddist1, ddist2 = dest_dist_to_node[p2].values()
                     d11 = self.alldistances[source1][0][dest1]
                     d21 = self.alldistances[source2][0][dest1]
                     d12 = self.alldistances[source1][0][dest2]
                     d22 = self.alldistances[source2][0][dest2]
-
+                    
                     # Find the shortest distance from the path passing
                     # through each of the two origin nodes to the first
                     # destination node.
@@ -756,7 +767,7 @@ class Network:
                     # Now add the point to node one distance on
                     # the destination edge.
                     len_1 = sd_1 + ddist1
-
+                    
                     # Repeat the prior but now for the paths entering
                     # at the second node of the second edge.
                     sd_2 = d12 + sdist1
@@ -766,7 +777,7 @@ class Network:
                         sd_2 = sd_22
                         b = 1
                     len_2 = sd_2 + ddist2
-
+                    
                     # Now find the shortest distance path between point
                     # 1 on edge 1 and point 2 on edge 2, and assign.
                     sp_12 = len_1
@@ -783,7 +794,7 @@ class Network:
                 np.fill_diagonal(nearest, np.nan)
             else:
                 np.fill_diagonal(nearest, fill_diagonal)
-
+                
         return nearest
 
 
@@ -809,35 +820,35 @@ class Network:
             An (n,2) shaped array with column[:,0] containing the id of the
             nearest neighbor and column [:,1] containing the distance.
         """
-
+        
         if sourcepattern not in self.pointpatterns.keys():
             err_msg = "Available point patterns are {}"
             raise KeyError(err_msg.format(self.pointpatterns.keys()))
-
+            
         if not hasattr(self, 'alldistances'):
             self.node_distance_matrix(n_processes)
-
+            
         pt_indices = list(self.pointpatterns[sourcepattern].points.keys())
         dist_to_node = self.pointpatterns[sourcepattern].dist_to_node
         nearest = np.zeros((len(pt_indices), 2), dtype=np.float32)
         nearest[:, 1] = np.inf
-
+        
         if destpattern is None:
             destpattern = sourcepattern
-
+            
         searchpts = copy.deepcopy(pt_indices)
-
+        
         searchnodes = {}
         for s in searchpts:
             e1, e2 = dist_to_node[s].keys()
             searchnodes[s] = (e1, e2)
-
+            
         for p1 in pt_indices:
             # Get the source nodes and distance to source nodes.
             # source1 and source2 nodes
             s1, s2 = searchnodes[p1]
             sdist1, sdist2 = dist_to_node[p1].values()
-
+            
             searchpts.remove(p1)
             for p2 in searchpts:
                 d1, d2 = searchnodes[p2]
@@ -874,7 +885,7 @@ class Network:
                 if s2_to_d2 < nearest[p2, 1]:
                     nearest[p2, 0] = p1
                     nearest[p2, 1] = s2_to_d2
-
+                    
         return nearest
 
 
@@ -888,39 +899,31 @@ class Network:
         pointpattern : object
                         A PySAL point pattern object.
         nsteps : int
-                        The number of steps at which the count of
-                        the nearest neighbors is computed.
-
-        permutations :   int
-                        The number of permutations to perform
-                        (default 99).
-
-        threshold :      float
-                        The level at which significance is computed.
-                        -- 0.5 would be 97.5% and 2.5%
-
-        distribution :   str
-                        The distribution from which random points
-                        are sampled -- uniform or poisson
-
-        lowerbound :     float
-                        The lower bound at which the F-function is
-                        computed. (Default 0)
-
-        upperbound :     float
-                        The upper bound at which the F-function is
-                        computed. Defaults to the maximum observed
-                        nearest neighbor distance.
-
+            The number of steps at which the count of the nearest neighbors
+            is computed.
+        permutations : int
+            The number of permutations to perform (default 99).
+        threshold : float
+            The level at which significance is computed.
+            -- 0.5 would be 97.5% and 2.5%
+        distribution : str
+            The distribution from which random points are sampled
+            -- uniform or poisson
+        lowerbound : float
+            The lower bound at which the F-function is computed. (Default 0).
+        upperbound : float
+            The upper bound at which the F-function is computed. Defaults to
+            the maximum observed nearest neighbor distance.
         Returns
         -------
-        NetworkF:       object
-                        A network F class instance.
+        NetworkF : spaghetti.analysis.NetworkF
+            A network F class instance.
         """
         return NetworkF(self, pointpattern, nsteps=nsteps,
                         permutations=permutations, threshold=threshold,
                         distribution=distribution, lowerbound=lowerbound,
                         upperbound=upperbound)
+
 
     def NetworkG(self, pointpattern, nsteps=10, permutations=99,
                  threshold=0.5, distribution='uniform',
@@ -929,8 +932,8 @@ class Network:
         
         Parameters
         ----------
-        pointpattern : spaghetti.network.PointPattern
-            point pattern object
+        pointpattern : object
+                        A PySAL point pattern object.
         nsteps : int
             The number of steps at which the count of the nearest neighbors
             is computed.
@@ -938,96 +941,85 @@ class Network:
             The number of permutations to perform (default 99).
         threshold : float
             The level at which significance is computed.
-             -- 0.5 would be 97.5% and 2.5%
+            -- 0.5 would be 97.5% and 2.5%
         distribution : str
             The distribution from which random points are sampled
             -- uniform or poisson
         lowerbound : float
-            The lower bound at which the G-function is computed. (Default 0).
+            The lower bound at which the F-function is computed. (Default 0).
         upperbound : float
-            The upper bound at which the G-function is computed. Defaults to
+            The upper bound at which the F-function is computed. Defaults to
             the maximum observed nearest neighbor distance.
         Returns
         -------
-        NetworkG :       object
-                        A network G class instance.
+        NetworkG : spaghetti.analysis.NetworkG
+            A network G class instance.
         """
-
+        
         return NetworkG(self, pointpattern, nsteps=nsteps,
                         permutations=permutations, threshold=threshold,
                         distribution=distribution, lowerbound=lowerbound,
                         upperbound=upperbound)
+
 
     def NetworkK(self, pointpattern, nsteps=10, permutations=99,
                  threshold=0.5, distribution='uniform',
                  lowerbound=None, upperbound=None):
         """
         Computes a network constrained K-Function
-
+        
         Parameters
         ----------
-        pointpattern:   object
+        pointpattern : object
                         A PySAL point pattern object.
-
-        nsteps:         int
-                        The number of steps at which the count of the
-                        nearest neighbors is computed.
-
-        permutations:   int
-                        The number of permutations to perform
-                        (default 99).
-
-        threshold:      float
-                        The level at which significance is computed.
-                        -- 0.5 would be 97.5% and 2.5%
-
-        distribution:   str
-                        The distribution from which random points are
-                        sampled -- uniform or poisson
-
-        lowerbound:     float
-                        The lower bound at which the K-function is
-                        computed. (Default 0)
-
-        upperbound:     float
-                        The upper bound at which the K-function is
-                        computed. Defaults to the maximum observed
-                        nearest neighbor distance.
-
+        nsteps : int
+            The number of steps at which the count of the nearest neighbors
+            is computed.
+        permutations : int
+            The number of permutations to perform (default 99).
+        threshold : float
+            The level at which significance is computed.
+            -- 0.5 would be 97.5% and 2.5%
+        distribution : str
+            The distribution from which random points are sampled
+            -- uniform or poisson
+        lowerbound : float
+            The lower bound at which the F-function is computed. (Default 0).
+        upperbound : float
+            The upper bound at which the F-function is computed. Defaults to
+            the maximum observed nearest neighbor distance.
         Returns
         -------
-        NetworkK:       object
-                        A network K class instance.
+        NetworkK : spaghetti.analysis.NetworkK
+            A network K class instance.
         """
         return NetworkK(self, pointpattern, nsteps=nsteps,
                         permutations=permutations, threshold=threshold,
                         distribution=distribution, lowerbound=lowerbound,
                         upperbound=upperbound)
 
-    def segment_edges(self, distance):
-        """
-        Segment all of the edges in the network at either a
-        fixed distance or a fixed number of segments.
 
+    def segment_edges(self, distance):
+        """Segment all of the edges in the network at either a
+        fixed distance or a fixed number of segments.
+        
         Parameters
         -----------
-        distance:   float
-                    The distance at which edges are split.
-
+        distance : float
+            The distance at which edges are split.
         Returns
         -------
-        sn:         object
-                    PySAL Network Object.
-
+        sn : spaghetti.Network
+            spaghetti Network object.
         Example
         -------
-
+        >>> import spaghetti as spgh
         >>> ntw = spgh.Network(examples.get_path('streets.shp'))
         >>> n200 = ntw.segment_edges(200.0)
         >>> len(n200.edges)
         688
         """
-
+        
         sn = Network()
         sn.adjacencylist = copy.deepcopy(self.adjacencylist)
         sn.edge_lengths = copy.deepcopy(self.edge_lengths)
@@ -1037,19 +1029,19 @@ class Network:
         sn.nodes = copy.deepcopy(self.nodes)
         sn.pointpatterns = copy.deepcopy(self.pointpatterns)
         sn.in_data = self.in_data
-
+        
         current_node_id = max(self.nodes.values())
-
+        
         newedges = set()
         removeedges = set()
         for e in sn.edges:
             length = sn.edge_lengths[e]
             interval = distance
-
+            
             totallength = 0
             currentstart = startnode = e[0]
             endnode = e[1]
-
+            
             # If the edge will be segmented remove the current
             # edge from the adjacency list.
             if interval < length:
@@ -1059,7 +1051,7 @@ class Network:
                 removeedges.add(e)
             else:
                 continue
-
+            
             while totallength < length:
                 currentstop = current_node_id
                 if totallength + interval > length:
@@ -1070,55 +1062,54 @@ class Network:
                     current_node_id += 1
                     currentstop = current_node_id
                     totallength += interval
-
+                    
                     # Compute the new node coordinate.
                     newx, newy = self._newpoint_coords(e, totallength)
-
+                    
                     # Update node_list.
                     if currentstop not in sn.node_list:
                         sn.node_list.append(currentstop)
-
+                    
                     # Update nodes and node_coords.
                     sn.node_coords[currentstop] = newx, newy
                     sn.nodes[(newx, newy)] = currentstop
-
+                
                 # Update the adjacency list.
                 sn.adjacencylist[currentstart].append(currentstop)
                 sn.adjacencylist[currentstop].append(currentstart)
-
+                
                 # Add the new edge to the edge dict.
                 # Iterating over this so we need to add after iterating.
                 newedges.add(tuple(sorted([currentstart, currentstop])))
-
+                
                 # Modify edge_lengths.
                 current_start_stop = tuple(sorted([currentstart, currentstop]))
                 sn.edge_lengths[current_start_stop] = interval
-
+                
                 # Increment the start to the stop.
                 currentstart = currentstop
-
+        
         sn.edges.update(newedges)
         sn.edges.difference_update(removeedges)
         sn.edges = list(sn.edges)
         # Update the point pattern snapping.
         for instance in sn.pointpatterns.values():
             sn._snap_to_edge(instance)
-
+        
         return sn
 
-    def savenetwork(self, filename):
-        """
-        Save a network to disk as a binary file
 
+    def savenetwork(self, filename):
+        """Save a network to disk as a binary file.
+        
         Parameters
         ----------
-        filename:   str
-                    The filename where the network should be saved.
-                    This should be a full path or the file is saved
-                    whereever this method is called from.
-
+        filename : str
+            The filename where the network should be saved. This should be a
+            full path or it will be save in the current directory.
         Example
         --------
+        >>> import spaghetti as spgh
         >>> ntw = spgh.Network(examples.get_path('streets.shp'))
         >>> ntw.savenetwork('mynetwork.pkl')
         """
@@ -1127,48 +1118,48 @@ class Network:
 
     @staticmethod
     def loadnetwork(filename):
+        """Load a network from a binary file saved on disk.
+        Parameters
+        ----------
+        filename : str
+            The filename where the network should be saved.
+        Returns
+        -------
+        self : spaghetti.Network
+            spaghetti Network object
+        """
         with open(filename, 'rb') as networkin:
             self = pickle.load(networkin)
-
+            
         return self
 
 
 class PointPattern():
-    """
-    A stub point pattern class used to store a point pattern. This
-    class is monkey patched  with network specific attributes when
-    the points are snapped to a network.
-
-    In the future this class may be replaced with a generic point
+    """A stub point pattern class used to store a point pattern. This class is
+    monkey patched with network specific attributes when the points are snapped
+    to a network. In the future this class may be replaced with a generic point
     pattern class.
-
+    
     Parameters
     ----------
-    in_data:  geopandas.GeoDataFrame or str
-              The input geographic data. Either (1) a path to a
-              shapefile (str); or (2) a geopandas.GeoDataFrame.
-
-    idvariable: str
-                Field in the shapefile to use as an id variable.
-
-    attribute:  bool
-                {False, True}
-                A flag to indicate whether all attributes are
-                tagged to this class.
-
+    in_data : geopandas.GeoDataFrame or str
+        The input geographic data. Either (1) a path to a shapefile (str);
+        or (2) a geopandas.GeoDataFrame.
+    idvariable : str
+        Field in the shapefile to use as an id variable.
+    attribute :  bool
+        {False, True} A flag to indicate whether all attributes are tagged
+        to this class.s
     Attributes
     ----------
-    points:     dict
-                Keys are the point ids.
-                Values are the coordinates.
-
-    npoints:    int
-                The number of points.
+    points : dict
+        Keys are the point ids. Values are the coordinates.
+    npoints : int
+        The number of points.
     """
-
+    
+    
     def __init__(self, in_data=None, idvariable=None, attribute=False):
-        """
-        """
         self.points = {}
         self.npoints = 0
         
@@ -1176,20 +1167,20 @@ class PointPattern():
             from_shp = True
         else:
             from_shp = False
-        
+            
         if idvariable and from_shp:
             ids = weights.util.get_ids(in_data, idvariable)
         elif idvariable and not from_shp:
             ids = list(in_data[idvariable])
         else:
             ids = None
-        
+            
         if from_shp:
             pts = open(in_data)
         else:
             pts_objs = list(in_data.geometry)
             pts = [cg.shapes.Point((p.x, p.y)) for p in pts_objs]
-        
+            
         # Get attributes if requested
         if attribute:
             if from_shp:
@@ -1201,7 +1192,7 @@ class PointPattern():
                 db = [[d] for d in db]
         else:
             db = None
-
+            
         for i, pt in enumerate(pts):
             # ids, attributes
             if ids and db is not None:
@@ -1219,22 +1210,27 @@ class PointPattern():
             pts.close()
             if db:
                 db.close()
-        
+                
         self.npoints = len(self.points.keys())
 
 
 class SimulatedPointPattern():
+    """Struct style class to mirror the Point Pattern Class. If the
+    PointPattern class has methods, it might make sense to make this a child of
+    that class. This class is not intended to be used by the external user.
+    
+    Attributes
+    ----------
+    npoints
+    obs_to_edge
+    obs_to_node
+    dist_to_node
+    snapped_coordinates
+    
     """
-    Struct style class to mirror the Point Pattern Class.
-
-    If the PointPattern class has methods, it might make sense to
-    make this a child of that class.
-
-    This class is not intended to be used by the external user.
-    """
+    
+    
     def __init__(self):
-        """
-        """
         self.npoints = 0
         self.obs_to_edge = {}
         self.obs_to_node = defaultdict(list)
@@ -1244,17 +1240,36 @@ class SimulatedPointPattern():
 
 class SortedEdges(OrderedDict):
     """
+    Parameters
+    ----------
+    OrderedDict : collections.OrderedDict
+        
+        
+    Returns
+    -------
+    
     """
     def next_key(self, key):
         """
+        Parameters
+        ----------
+        
+        Returns
+        -------
+        n : 
         """
         next = self._OrderedDict__map[key][1]
         if next is self._OrderedDict__root:
             raise ValueError("{!r} is the last key.".format(key))
-        return next[2]
+        n = next[2]
+        return ns
 
     def first_key(self):
         """
+        Returns
+        -------
+        key : 
+            
         """
         for key in self:
             return key
