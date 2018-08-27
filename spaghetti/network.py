@@ -671,8 +671,7 @@ class Network:
         # Single-core processing
         if not n_processes:
             for node in self.node_list:
-                distance, pred = util.dijkstra(self, self.edge_lengths,
-                                               node, n=float('inf'))
+                distance, pred = util.dijkstra(self, self.edge_lengths, node)
                 pred = np.array(pred)
                 # something to look at in the future
                 #tree = util.generatetree(pred)

@@ -49,14 +49,15 @@ def get_neighbor_distances(ntw, v0, l):
 
 
 def generatetree(pred):
-    """
+    """Rebuild the shortest path from 
+    
     Parameters
     ----------
-    pred : 
+    pred : list
         
     Returns
     --------
-    tree : 
+    tree : dict
         
     """
     tree = {}
@@ -76,7 +77,7 @@ def generatetree(pred):
     return tree
 
 
-def dijkstra(ntw, cost, node, n=float('inf')):
+def dijkstra(ntw, cost, v0, n=float('inf')):
     """Compute the shortest path between a start node and all other nodes in
     an origin-destination matrix.
 
@@ -87,12 +88,12 @@ def dijkstra(ntw, cost, node, n=float('inf')):
     cost : dict
         key is tuple (start node, end node); value is float.
         Cost per edge to travel, e.g. distance.
-    node : int
+    v0 : int
         Start node ID
     n : float
         integer break point to stop iteration and return n neighbors.
         Default is ('inf').
-
+    
     Returns
     -------
     distance : list
@@ -101,8 +102,7 @@ def dijkstra(ntw, cost, node, n=float('inf')):
         List of preceeding nodes for traversal route.
     """
 
-    v0 = node
-    distance = [float('inf') for x in ntw.node_list]
+    distance = [n for x in ntw.node_list]
     idx = ntw.node_list.index(v0)
     distance[ntw.node_list.index(v0)] = 0
     pred = [-1 for x in ntw.node_list]
@@ -110,7 +110,7 @@ def dijkstra(ntw, cost, node, n=float('inf')):
     a.add(v0)
     while len(a) > 0:
         # Get node with the lowest value from distance.
-        dist = float('inf')
+        dist = n
         for node in a:
             if distance[node] < dist:
                 dist = distance[node]
@@ -125,14 +125,15 @@ def dijkstra(ntw, cost, node, n=float('inf')):
                 distance[v1] = distance[v] + indiv_cost
                 pred[v1] = v
                 a.add(v1)
-    return distance, np.array(pred, dtype=np.int)
+    pred = np.array(pred, dtype=np.int)
+    return distance, pred
 
 
 def dijkstra_mp(ntw_cost_node):
     """
     Compute the shortest path between a start node and all other
     nodes in the web utilizing multiple cores upon request.
-
+    
     Parameters
     ----------
     ntw_cost_node : tuple
@@ -150,7 +151,8 @@ def dijkstra_mp(ntw_cost_node):
         List of preceeding nodes for traversal route.
     """
     ntw, cost, node = ntw_cost_node
-    return dijkstra(ntw, cost, node)
+    distance, pred = dijkstra(ntw, cost, node)
+    return distance, pred
 
 
 def squaredDistancePointSegment(point, segment):
