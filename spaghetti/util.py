@@ -172,6 +172,37 @@ def squaredDistancePointSegment(point, segment):
     nearp : numpy.ndarray
         array of (xb, yb); the nearest point on the segment
     """
+    
+    
+    p0, p1 = [np.array(p) for p in segment]
+    v = p1 - p0
+    p = np.array(point)
+    w = p - p0
+    c1 = np.dot(w, v)
+    if c1 <= 0.:
+        sqd = np.dot(w.T, w)
+        nearp = p0
+        return sqd, nearp
+        #return np.dot(w.T, w), p0
+    c2 = np.dot(v, v)
+    if c2 <= c1:
+        dp1 = p - p1
+        sqd = np.dot(dp1.T, dp1)
+        nearp = p1
+        return sqd, nearp
+        #return np.dot(dp1.T, dp1), p1
+    b = c1 / c2
+    bv = np.dot(b, v)
+    pb = p0 + bv
+    d2 = p - pb
+    sqd = np.dot(d2, d2)
+    nearp = pb
+    return sqd, nearp
+    
+
+    #return np.dot(d2, d2), pb
+    
+    '''
     p0, p1 = [np.array(p) for p in segment]
     v = p1 - p0
     p = np.array(point)
@@ -198,10 +229,10 @@ def squaredDistancePointSegment(point, segment):
         sqd = np.dot(d2, d2)
         nearp = pb
         searching_nearest = False
-        
+    
     return sqd, nearp
     #return np.dot(d2, d2), pb
-
+    '''
 
 def snapPointsOnSegments(points, segments):
     """Place points onto closet segment in a set of segments
