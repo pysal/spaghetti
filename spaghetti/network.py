@@ -77,8 +77,6 @@ class Network:
     >>> schools_file = examples.get_path('schools.shp')
     >>> ntw.snapobservations(schools_file, 'schools', attribute=False)
     """
-
-
     def __init__(self, in_data=None, node_sig=11,
                  unique_segs=True, extractgraph=True):
         if in_data is not None:
@@ -1196,8 +1194,6 @@ class PointPattern():
     npoints : int
         The number of points.
     """
-    
-    
     def __init__(self, in_data=None, idvariable=None, attribute=False):
         self.points = {}
         self.npoints = 0
@@ -1267,8 +1263,6 @@ class SimulatedPointPattern():
     snapped_coordinates
     
     """
-    
-    
     def __init__(self):
         self.npoints = 0
         self.obs_to_edge = {}

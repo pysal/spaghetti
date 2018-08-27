@@ -34,8 +34,6 @@ class NetworkBase(object):
     setbounds
     
     """
-
-
     def __init__(self, ntw, pointpattern, nsteps=10, permutations=99,
                  threshold=0.5, distribution='poisson',
                  lowerbound=None, upperbound=None):
@@ -94,8 +92,6 @@ class NetworkG(NetworkBase):
     to compute a distance matrix between two point patterns. In this case one
     will be observed and one will be simulated.
     """
-
-
     def computeobserved(self):
         """
         """
@@ -129,8 +125,6 @@ class NetworkK(NetworkBase):
     to compute a distance matrix between two point patterns. In this case one
     will be observed and one will be simulated.
     """
-    
-    
     def computeobserved(self):
         """
         """

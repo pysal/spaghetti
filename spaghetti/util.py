@@ -1,28 +1,41 @@
-from collections import OrderedDict
-import operator
 from libpysal import cg
 import numpy as np
 
 
 def compute_length(v0, v1):
-    """
-    Compute the euclidean distance between two points.
-
+    """Compute the euclidean distance between two points.
+    
     Parameters
     ----------
-    v0:         sequence in the form x, y
-
-    vq:         sequence in the form x, y
-
+    v0 : tuple
+        sequence in the form x, y
+    vq : tuple
+        sequence in the form x, y
     Returns
     --------
-    Euclidean distance
+    euc_dist : float
+        Euclidean distance
     """
-    return np.sqrt((v0[0] - v1[0])**2 + (v0[1] - v1[1])**2)
+    euc_dist = np.sqrt((v0[0] - v1[0])**2 + (v0[1] - v1[1])**2)
+    return euc_dist
 
 
 def get_neighbor_distances(ntw, v0, l):
     """
+    
+    Parameters
+    ----------
+    ntw : 
+        
+    v0 : 
+        
+    l : 
+        
+    
+    Returns
+    -------
+    neighbors : dict
+        
     """
     edges = ntw.enum_links_node(v0)
     neighbors = {}
@@ -36,6 +49,14 @@ def get_neighbor_distances(ntw, v0, l):
 
 def generatetree(pred):
     """
+    Parameters
+    ----------
+    pred : 
+        
+    Returns
+    --------
+    tree : 
+        
     """
     tree = {}
     for i, p in enumerate(pred):
@@ -55,16 +76,15 @@ def generatetree(pred):
 
 
 def dijkstra(ntw, cost, node, n=float('inf')):
-    """
-    Compute the shortest path between a start
-    node and all other nodes in the web.
+    """Compute the shortest path between a start node and all other nodes in
+    an origin-destination matrix.
 
     Parameters
     ----------
-    ntw:        object
-                PySAL network object
+    ntw :  spaghetti.Network
+        spaghetti Network object.
 
-    cost:       dict
+    cost :       dict
                 key:    tuple
                         (start node, end node)
                 value:  float
@@ -119,65 +139,69 @@ def dijkstra_mp(ntw_cost_node):
 
     Parameters
     ----------
-    ntw_cost_node   tuple
-                    tuple of arguments to pass into dijkstra
-                        ntw:    object
-                                PySAL network object
-                        cost:   dict
-                                key:    tuple
-                                        (start node, end node)
-                                value:  float
-                                        Cost per edge to travel, e.g. distance
-                        node:   int
-                                Start node ID
+    ntw_cost_node : tuple
+        tuple of arguments to pass into dijkstra
+        (1) ntw - spaghetti.Network; spaghetti Network object.
+        (2) cost - dict; key is tuple (start node, end node); value is float
+                   Cost per edge to travel, e.g. distance
+        (3) node - int; Start node ID
+    
     Returns
     -------
-    distance:   list
-                List of distances from node to all other nodes.
-    pred:       list
-                List of preceeding nodes for traversal route.
+    distance : list
+        List of distances from node to all other nodes.
+    pred : list
+        List of preceeding nodes for traversal route.
     """
     ntw, cost, node = ntw_cost_node
     return dijkstra(ntw, cost, node)
 
 
 def squaredDistancePointSegment(point, segment):
-    """Find the squared distance between a point and a segment
-
+    """Find the squared distance between a point and a segment.
+    
     Parameters
     ---------
-    point:      tuple
-                (x,y)
-
-    segment:    list
-                List of 2 tuples [(x0,y0), (x1,y1)]
-
+    point : tuple
+        point coordinates (x,y)
+    segment : list
+        List of 2 point coordinate tuples [(x0,y0), (x1,y1)].
     Returns
     -------
-    tuple:      2 elements:
-                    1. distance squared between point and segment
-                    2. array(xb, yb): the nearest point on the segment
+    sqd : float
+        distance squared between point and segment
+    nearp : numpy.ndarray
+        array of (xb, yb); the nearest point on the segment
     """
     p0, p1 = [np.array(p) for p in segment]
     v = p1 - p0
     p = np.array(point)
     w = p - p0
     c1 = np.dot(w, v)
-    if c1 <= 0.:
-        # Print 'before p0'
-        return np.dot(w.T, w), p0
-    c2 = np.dot(v, v)
-    if c2 <= c1:
-        dp1 = p - p1
-        # Print 'after p1'
-        return np.dot(dp1.T, dp1), p1
-
-    b = c1 / c2
-    bv = np.dot(b, v)
-    pb = p0 + bv
-    d2 = p - pb
-
-    return np.dot(d2, d2), pb
+    searching_nearest = True
+    while searching_nearest:
+        if c1 <= 0.:
+            sqd = np.dot(w.T, w)
+            nearp = p0
+            searching_nearest = False
+            #return np.dot(w.T, w), p0
+        c2 = np.dot(v, v)
+        if c2 <= c1:
+            dp1 = p - p1
+            sqd = p.dot(dp1.T, dp1)
+            nearp = p1
+            searching_nearest = False
+            #return np.dot(dp1.T, dp1), p1
+        b = c1 / c2
+        bv = np.dot(b, v)
+        pb = p0 + bv
+        d2 = p - pb
+        sqd = np.dot(d2, d2)
+        nearp = pb
+        searching_nearest = False
+        
+    return sqd, nearp
+    #return np.dot(d2, d2), pb
 
 
 def snapPointsOnSegments(points, segments):
