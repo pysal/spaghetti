@@ -20,7 +20,7 @@ class Network:
     and analytical functionality.
     
     Parameters
-    -----------
+    ----------
     in_data : geopandas.GeoDataFrame or str
         The input geographic data. Either (1) a path to a shapefile (str);
         or (2) a geopandas.GeoDataFrame.
@@ -46,7 +46,7 @@ class Network:
     edge_lengths : dict
         Keys are tuples of sorted node IDs representing an edge and values
         are the length.
-    pointpatterns :  dict
+    pointpatterns : dict
         Keys are a string name of the pattern and values are point pattern
         class instances.
     node_coords : dict
@@ -178,7 +178,7 @@ class Network:
         self.graphedges = []
         self.graph_lengths = {}
         
-        # Find all nodes with cardinality 2.
+        # Find all nodes with cardinality 2. (non-articulation points)
         segment_nodes = []
         for k, v in self.adjacencylist.items():
             # len(v) == 1 #cul-de-sac
@@ -195,6 +195,7 @@ class Network:
         # 'graph represented' edge.
         self.graph_to_edges = {}
         
+        # build up bridges "rooted" on the initial non-articulation points
         bridges = []
         for s in segment_nodes:
             bridge = [s]
@@ -260,19 +261,20 @@ class Network:
         
         Parameters
         ----------
-        node : 
-        segment_nodes : 
-        bridge : 
-        
+        node : int
+            node id
+        segment_nodes : list
+            all non-articulation points in the network (degree-2 nodes).
+        bridge : list
+            inital bridge list containing only `node`
         
         Returns
         -------
         n : list
-            
-        
-        
+            nodes to keep (articulation points)
         """
         n = []
+        # get all nodes adjacent to `node`
         for i in self.adjacencylist[node]:
             if i in segment_nodes and i not in bridge:
                 n.append(i)
@@ -1005,9 +1007,9 @@ class Network:
             The distribution from which random points are sampled
             -- uniform or poisson
         lowerbound : float
-            The lower bound at which the F-function is computed. (Default 0).
+            The lower bound at which the G-function is computed. (Default 0).
         upperbound : float
-            The upper bound at which the F-function is computed. Defaults to
+            The upper bound at which the G-function is computed. Defaults to
             the maximum observed nearest neighbor distance.
         
         Returns
@@ -1044,9 +1046,9 @@ class Network:
             The distribution from which random points are sampled
             -- uniform or poisson
         lowerbound : float
-            The lower bound at which the F-function is computed. (Default 0).
+            The lower bound at which the K-function is computed. (Default 0).
         upperbound : float
-            The upper bound at which the F-function is computed. Defaults to
+            The upper bound at which the K-function is computed. Defaults to
             the maximum observed nearest neighbor distance.
         
         Returns

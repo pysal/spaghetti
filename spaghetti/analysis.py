@@ -7,32 +7,36 @@ class NetworkBase(object):
     
     Parameters
     ----------
-    ntw : 
-    pointpattern : 
-    nsteps : 
-        =10 
-    permutations : 
-        =99
-    threshold : 
-        =0.5
-    distribution : 
-        ='poisson'
-    lowerbound : 
-        =None
-    upperbound
-        =None
+    ntw : spaghetti.Network
+        spaghetti Network object.
+    pointpattern : spaghetti.network.PointPattern
+        A spaghetti point pattern object.
+    nsteps : int
+        The number of steps at which the count of the nearest neighbors
+        is computed.
+    permutations : int
+        The number of permutations to perform (default 99).
+    threshold : float
+        The level at which significance is computed.
+        -- 0.5 would be 97.5% and 2.5%
+    distribution : str
+        The distribution from which random points are sampled
+        -- uniform or poisson
+    lowerbound : float
+        The lower bound at which the function is computed. (Default 0).
+    upperbound : float
+        The upper bound at which the function is computed. Defaults to
+        the maximum observed nearest neighbor distance.
     Attributes
     ----------
-    sim
-    npts
-    
-    
-    Methods
-    -------
-    validatedistribution
-    computeenvelope
-    setbounds
-    
+    sim : numpy.ndarray
+        simulated distance matrix
+    npts : int
+        pointpattern.npoints
+    xaxis : numpy.ndarray
+        observed x-axis of values
+    observed : numpy.ndarray
+        observed y-axis of values
     """
     def __init__(self, ntw, pointpattern, nsteps=10, permutations=99,
                  threshold=0.5, distribution='poisson',
@@ -61,15 +65,15 @@ class NetworkBase(object):
 
 
     def validatedistribution(self):
-        """
+        """enusure statistical distribution is supported
         """
         valid_distributions = ['uniform', 'poisson']
         assert(self.distribution in valid_distributions),\
-               "Disstribution not in {}".format(valid_distributions)
+               "Distribution not in {}".format(valid_distributions)
 
 
     def computeenvelope(self):
-        """
+        """compute upper and lower bounds of envelope
         """
         upper = 1.0 - self.threshold / 2.0
         lower = self.threshold / 2.0
@@ -79,7 +83,7 @@ class NetworkBase(object):
 
 
     def setbounds(self, nearest):
-        """
+        """set upper and lower bounds
         """
         if self.lowerbound is None:
             self.lowerbound = 0
@@ -93,24 +97,23 @@ class NetworkG(NetworkBase):
     will be observed and one will be simulated.
     """
     def computeobserved(self):
+        """compute the observed nearest
         """
-        """
-        nearest = np.nanmin(
-            self.ntw.allneighbordistances(
-                self.pointpattern), axis=1)
+        nearest = np.nanmin(self.ntw.allneighbordistances(self.pointpattern),
+                            axis=1)
         self.setbounds(nearest)
-        observedx, observedy = gfunction(
-            nearest, self.lowerbound, self.upperbound, nsteps=self.nsteps)
+        observedx, observedy = gfunction(nearest, self.lowerbound,
+                                         self.upperbound, nsteps=self.nsteps)
         self.observed = observedy
         self.xaxis = observedx
 
 
     def computepermutations(self):
-        """
+        """compute permutations of the nearest
         """
         for p in range(self.permutations):
-            sim = self.ntw.simulate_observations(
-                self.npts, distribution=self.distribution)
+            sim = self.ntw.simulate_observations(self.npts,
+                                                distribution=self.distribution)
             nearest = np.nanmin(self.ntw.allneighbordistances(sim), axis=1)
 
             simx, simy = gfunction(nearest,
@@ -124,9 +127,14 @@ class NetworkK(NetworkBase):
     """Compute a network constrained K statistic. This requires the capability
     to compute a distance matrix between two point patterns. In this case one
     will be observed and one will be simulated.
+    
+    Attributes
+    ----------
+    lam : float
+        lambda value
     """
     def computeobserved(self):
-        """
+        """compute the observed nearest
         """
         nearest = self.ntw.allneighbordistances(self.pointpattern)
         self.setbounds(nearest)
@@ -141,11 +149,11 @@ class NetworkK(NetworkBase):
 
 
     def computepermutations(self):
-        ""
-        ""
+        """compute permutations of the nearest
+        """
         for p in range(self.permutations):
-            sim = self.ntw.simulate_observations(
-                self.npts, distribution=self.distribution)
+            sim = self.ntw.simulate_observations(self.npts,
+                                                distribution=self.distribution)
             nearest = self.ntw.allneighbordistances(sim)
             
             simx, simy = kfunction(nearest,
@@ -159,35 +167,40 @@ class NetworkF(NetworkBase):
     """Compute a network constrained F statistic. This requires the capability
     to compute a distance matrix between two point patterns. In this case one
     will be observed and one will be simulated.
+    
+    Attributes
+    ----------
+    fsim : spaghetti.network.SimulatedPointPattern
+        simulated point pattern of `self.npts` points
     """
     
     
     def computeobserved(self):
-        """
+        """compute the observed nearest and simulated nearest
         """
         self.fsim = self.ntw.simulate_observations(self.npts)
         # Compute nearest neighbor distances from the simulated to the
         # observed.
-        nearest = np.nanmin(
-            self.ntw.allneighbordistances(
-                self.fsim, self.pointpattern), axis=1)
+        nearest = np.nanmin(self.ntw.allneighbordistances(self.fsim,
+                                                          self.pointpattern),
+                                                          axis=1)
         self.setbounds(nearest)
         # Generate a random distribution of points.
-        observedx, observedy = ffunction(
-            nearest, self.lowerbound, self.upperbound, nsteps=self.nsteps, npts=self.npts)
+        observedx, observedy = ffunction(nearest, self.lowerbound,
+                                         self.upperbound, nsteps=self.nsteps,
+                                         npts=self.npts)
         self.observed = observedy
         self.xaxis = observedx
 
 
     def computepermutations(self):
-        """
+        """compute permutations of the nearest
         """
         for p in range(self.permutations):
-            sim = self.ntw.simulate_observations(
-                self.npts, distribution=self.distribution)
-            nearest = np.nanmin(
-                self.ntw.allneighbordistances(
-                    sim, self.fsim), axis=1)
+            sim = self.ntw.simulate_observations(self.npts,
+                                                distribution=self.distribution)
+            nearest = np.nanmin(self.ntw.allneighbordistances(sim, self.fsim),
+                                axis=1)
             simx, simy = ffunction(nearest, self.lowerbound, self.upperbound,
                                    self.npts, nsteps=self.nsteps)
             self.sim[p] = simy
@@ -206,11 +219,13 @@ def gfunction(nearest, lowerbound, upperbound, nsteps=10):
         The end value of the sequence.
     nsteps : int
         The number of distance bands. Default is 10. Must be non-negative.
+    
     Returns
     -------
-    x, y : tuple
-        
-    
+    x : numpy.ndarray
+        x-axis of values
+    y : numpy.ndarray
+        y-axis of values
     """
     nobs = len(nearest)
     x = np.linspace(lowerbound, upperbound, nsteps)
@@ -236,10 +251,17 @@ def kfunction(nearest, upperbound, intensity, nsteps=10):
         A vector of nearest neighbor distances.
     upperbound : int or float
         The end value of the sequence.
-    intensity : 
-        
+    intensity : float
+        lambda value
     nsteps : int
         The number of distance bands. Default is 10. Must be non-negative.
+    
+    Returns
+    -------
+    x : numpy.ndarray
+        x-axis of values
+    y : numpy.ndarray
+        y-axis of values
     """
     nobs = len(nearest)
     x = np.linspace(0, upperbound, nsteps)
@@ -262,10 +284,17 @@ def ffunction(nearest, lowerbound, upperbound, npts, nsteps=10):
         The starting value of the sequence.
     upperbound : int or float
         The end value of the sequence.
-    npts : 
-        
+    npts : int
+        pointpattern.npoints
     nsteps : int
         The number of distance bands. Default is 10. Must be non-negative.
+    
+    Returns
+    -------
+    x : numpy.ndarray
+        x-axis of values
+    y : numpy.ndarray
+        y-axis of values
     """
     nobs = len(nearest)
     x = np.linspace(lowerbound, upperbound, nsteps)
