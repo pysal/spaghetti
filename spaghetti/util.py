@@ -170,6 +170,13 @@ def squaredDistancePointSegment(point, segment):
         distance squared between point and segment
     nearp : numpy.ndarray
         array of (xb, yb); the nearest point on the segment
+    
+    Example
+    -------
+    >>> import spaghetti.util as util
+    >>> point, segment = (1,1), ((0,0), (2,0))
+    >>> util.squaredDistancePointSegment(point, segment)
+     1.0, array([1., 0.]))
     """
     #
     p0, p1 = [np.array(p) for p in segment]

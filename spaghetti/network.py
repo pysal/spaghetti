@@ -714,7 +714,7 @@ class Network:
 
     def allneighbordistances(self, sourcepattern, destpattern=None,
                              fill_diagonal=None, n_processes=None):
-        """ Compute either all distances between i and j in a single  point
+        """ Compute either all distances between i and j in a single point
         pattern or all distances between each i from a source pattern and all
         j from a destination pattern.
         
