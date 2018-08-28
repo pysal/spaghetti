@@ -107,6 +107,16 @@ def dijkstra(ntw, cost, v0, n=float('inf')):
         List of distances from node to all other nodes.
     pred : list
         List of preceeding nodes for traversal route.
+    
+    Example
+    -------
+    >>> import spaghetti as spgh
+    >>> ntw = spgh.Network(examples.get_path('streets.shp'))
+    >>> distance, pred = spgh.util.dijkstra(ntw, ntw.edge_lengths, 0)
+    >>> distance[196]
+    5505.668247
+    >>> pred[196]
+    133
     """
     distance = [n for x in ntw.node_list]
     idx = ntw.node_list.index(v0)
