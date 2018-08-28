@@ -74,6 +74,15 @@ def generatetree(pred):
     --------
     tree : dict
         key is root origin; value is root origin to destination.
+    
+    Example
+    -------
+    >>> import spaghetti as spgh
+    >>> ntw = spgh.Network(examples.get_path('streets.shp'))
+    >>> distance, pred = spgh.util.dijkstra(ntw, ntw.edge_lengths, 0)
+    >>> tree = spgh.util.generatetree(pred)
+    >>> tree[3]
+    [23, 22, 20, 19, 170, 2, 0]
     """
     tree = {}
     for i, p in enumerate(pred):
