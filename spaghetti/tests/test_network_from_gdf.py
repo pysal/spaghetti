@@ -150,6 +150,13 @@ class TestNetworkUtils(unittest.TestCase):
         self.assertAlmostEqual(self.neighs[1], 102.62353453439829, places=4)
         self.assertAlmostEqual(self.neighs[2], 660.000001049743, places=4)
     
+    def test_generate_tree(self):
+        self.known_path = [23, 22, 20, 19, 170, 2, 0]
+        self.distance, self.pred = util.dijkstra(self.ntw,
+                                                 self.ntw.edge_lengths, 0)
+        self.tree = util.generatetree(self.pred)
+        self.assertEqual(self.tree[3], self.known_path)
+    
     def test_dijkstra(self):
         self.distance, self.pred = util.dijkstra(self.ntw,
                                                  self.ntw.edge_lengths, 0)
