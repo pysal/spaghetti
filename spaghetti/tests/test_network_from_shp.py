@@ -128,6 +128,13 @@ class TestNetworkUtils(unittest.TestCase):
         self.length = util.compute_length( self.point1, self.point2)
         self.assertAlmostEqual(self.length, 1.4142135623730951, places=4)
     
+    def test_get_neighbor_distances(self):
+        self.known_neighs = {1: 102.62353453439829, 2: 660.000001049743}
+        self.neighs = util.get_neighbor_distances(self.ntw, 0,
+                                                  self.ntw.edge_lengths)
+        self.assertAlmostEqual(self.neighs[1], 102.62353453439829, places=4)
+        self.assertAlmostEqual(self.neighs[2], 660.000001049743, places=4)
+        
     def test_dijkstra(self):
         self.distance, self.pred = util.dijkstra(self.ntw,
                                                  self.ntw.edge_lengths, 0)
