@@ -18,9 +18,9 @@ def compute_length(v0, v1):
     
     Example
     -------
-    >>> import spaghetti.util as util
+    >>> import spaghetti as spgh
     >>> point1, point2 = (0,0), (1,1)
-    >>> util.compute_length(point1, point2)
+    >>> spgh.util.compute_length(point1, point2)
     1.4142135623730951
     """
     euc_dist = np.sqrt((v0[0] - v1[0])**2 + (v0[1] - v1[1])**2)
@@ -44,6 +44,14 @@ def get_neighbor_distances(ntw, v0, l):
     -------
     neighbors : dict
         key is int (node id); value is float (distance)
+    
+    Example
+    -------
+    >>> import spaghetti as spgh
+    >>> ntw = spgh.Network(examples.get_path('streets.shp'))
+    >>> neighs = spgh.util.get_neighbor_distances(ntw, 0, ntw.edge_lengths)
+    >>> neighs[1]
+    102.62353453439829
     """
     edges = ntw.enum_links_node(v0)
     neighbors = {}
@@ -200,10 +208,10 @@ def squaredDistancePointSegment(point, segment):
     
     Example
     -------
-    >>> import spaghetti.util as util
+    >>> import spaghetti as spgh
     >>> point, segment = (1,1), ((0,0), (2,0))
-    >>> util.squaredDistancePointSegment(point, segment)
-     1.0, array([1., 0.]))
+    >>> spgh.util.squaredDistancePointSegment(point, segment)
+    1.0, array([1., 0.]))
     """
     #
     p0, p1 = [np.array(p) for p in segment]
@@ -253,11 +261,11 @@ def snapPointsOnSegments(points, segments):
     
     Example
     -------
-    >>> import spaghetti.util as util
+    >>> import spaghetti as spgh
     >>> from libpysal.cg.shapes import Point, Chain
     >>> points = {0: Point((1,1))}
     >>> segments = [Chain([Point((0,0)), Point((2,0))])]
-    >>> util.snapPointsOnSegments(points, segments)
+    >>> spgh.util.snapPointsOnSegments(points, segments)
     {0: ([(0.0, 0.0), (2.0, 0.0)], array([1., 0.]))}
     """
     
