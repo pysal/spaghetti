@@ -71,18 +71,23 @@ class Network:
     
     Examples
     --------
+    
     Instantiate an instance of a network.
+    
     >>> import spaghetti as spgh
     >>> streets_file = examples.get_path('streets.shp')
     >>> ntw = spgh.Network(in_data=streets_file)
     
     Snap point observations to the network with attribute information.
+    
     >>> crimes_file = examples.get_path('crimes.shp')
     >>> ntw.snapobservations(crimes_file, 'crimes', attribute=True)
    
     And without attribute information.
+   
     >>> schools_file = examples.get_path('schools.shp')
     >>> ntw.snapobservations(schools_file, 'schools', attribute=False)
+    
     """
     def __init__(self, in_data=None, node_sig=11,
                  unique_segs=True, extractgraph=True):
@@ -316,6 +321,7 @@ class Network:
         Using the W object, access to ESDA functionality is provided.
         First, a vector of attributes is created for all edges
         with observations.
+        
         >>> w = ntw.contiguityweights(graph=False)
         >>> edges = w.neighbors.keys()
         >>> y = np.zeros(len(edges))
