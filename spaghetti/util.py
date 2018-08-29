@@ -48,6 +48,7 @@ def get_neighbor_distances(ntw, v0, l):
     Example
     -------
     >>> import spaghetti as spgh
+    >>> from libpysal import examples
     >>> ntw = spgh.Network(examples.get_path('streets.shp'))
     >>> neighs = spgh.util.get_neighbor_distances(ntw, 0, ntw.edge_lengths)
     >>> neighs[1]
@@ -78,6 +79,7 @@ def generatetree(pred):
     Example
     -------
     >>> import spaghetti as spgh
+    >>> from libpysal import examples
     >>> ntw = spgh.Network(examples.get_path('streets.shp'))
     >>> distance, pred = spgh.util.dijkstra(ntw, ntw.edge_lengths, 0)
     >>> tree = spgh.util.generatetree(pred)
@@ -128,10 +130,11 @@ def dijkstra(ntw, cost, v0, n=float('inf')):
     Example
     -------
     >>> import spaghetti as spgh
+    >>> from libpysal import examples
     >>> ntw = spgh.Network(examples.get_path('streets.shp'))
     >>> distance, pred = spgh.util.dijkstra(ntw, ntw.edge_lengths, 0)
-    >>> distance[196]
-    5505.668247
+    >>> round(distance[196], 4)
+    5505.6682
     >>> pred[196]
     133
     """
@@ -186,10 +189,11 @@ def dijkstra_mp(ntw_cost_node):
     Example
     -------
     >>> import spaghetti as spgh
+    >>> from libpysal import examples
     >>> ntw = spgh.Network(examples.get_path('streets.shp'))
     >>> distance, pred = spgh.util.dijkstra(ntw, ntw.edge_lengths, 0)
-    >>> distance[196]
-    5505.668247
+    >>> round(distance[196], 4)
+    5505.6682
     >>> pred[196]
     133
     """
@@ -220,7 +224,7 @@ def squaredDistancePointSegment(point, segment):
     >>> import spaghetti as spgh
     >>> point, segment = (1,1), ((0,0), (2,0))
     >>> spgh.util.squaredDistancePointSegment(point, segment)
-    1.0, array([1., 0.]))
+    (1.0, array([1., 0.]))
     """
     #
     p0, p1 = [np.array(p) for p in segment]

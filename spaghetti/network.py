@@ -301,13 +301,17 @@ class Network:
         Examples
         --------
         >>> import spaghetti as spgh
+        >>> from libpysal import examples
         >>> import esda
+        >>> import numpy as np
         >>> ntw = spgh.Network(examples.get_path('streets.shp'))
         >>> w = ntw.contiguityweights(graph=False)
         >>> ntw.snapobservations(examples.get_path('crimes.shp'),
         ...                      'crimes', attribute=True)
-        >>> counts = ntw.count_per_edge(ntw.pointpatterns['crimes']\
+        >>> counts = ntw.count_per_edge(ntw.pointpatterns['crimes']
         ...                             .obs_to_edge, graph=False)
+        >>> counts[(50, 165)]
+        4
         
         Using the W object, access to ESDA functionality is provided.
         First, a vector of attributes is created for all edges
@@ -318,10 +322,14 @@ class Network:
         >>> for i, e in enumerate(edges):
         ...     if e in counts.keys():
         ...         y[i] = counts[e]
+        >>> y[3]
+        3.0
         
         Next, a standard call ot Moran is made and the
         result placed into `res`
         >>> res = esda.moran.Moran(y, w, permutations=99)
+        >>> type(res)
+        <class 'esda.moran.Moran'>
         """
         
         neighbors = {}
@@ -533,7 +541,7 @@ class Network:
         >>> ntw.snapobservations(examples.get_path('crimes.shp'),
         ...                                           'crimes',
         ...                                           attribute=True)
-        >>> counts = ntw.count_per_edge(ntw.pointpatterns['crimes']\
+        >>> counts = ntw.count_per_edge(ntw.pointpatterns['crimes']
         ...                             .obs_to_edge, graph=False)
         >>> s = sum([v for v in list(counts.values())])
         >>> s

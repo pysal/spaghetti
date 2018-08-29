@@ -1,18 +1,19 @@
 .. _api_ref:
 
-.. currentmodule:: PACKAGE_NAME
+.. currentmodule:: spaghetti
 
 API reference
 =============
 
-.. _markov_api:
+.. _network_api:
 
-Markov Methods
---------------
+Network
+-------
 
 .. autosummary::
    :toctree: generated/
 
-    giddy.markov.Markov
-    giddy.markov.Spatial_Markov
+    spaghetti.network.Network
+    spaghetti.network.PointPatterns
+    spaghetti.network.SimulatedPointPatterns
 
