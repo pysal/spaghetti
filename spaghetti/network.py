@@ -1157,13 +1157,11 @@ class Network:
         >>> pt_str = 'crimes'
         >>> in_data = examples.get_path('{}.shp'.format(pt_str))
         >>> ntw.snapobservations(in_data, pt_str, attribute=True)
-        >>> npts = ntw.pointpatterns['crimes'].npoints
-        >>> np.random.seed(1)
-        >>> sim = ntw.simulate_observations(npts)
-        >>> np.random.seed(1)
-        >>> fres = ntw.NetworkF(ntw.pointpatterns['crimes'], permutations=5)
-        >>> fres.lowerenvelope[1]
-        0.04878048780487805
+        >>> crimes = ntw.pointpatterns['crimes']
+        >>> sim = ntw.simulate_observations(crimes.npoints)
+        >>> fres = ntw.NetworkF(crimes, permutations=5, nsteps=10)
+        >>> fres.lowerenvelope.shape[0]
+        10
         """
         return NetworkF(self, pointpattern, nsteps=nsteps,
                         permutations=permutations, threshold=threshold,
@@ -1218,13 +1216,11 @@ class Network:
         >>> pt_str = 'crimes'
         >>> in_data = examples.get_path('{}.shp'.format(pt_str))
         >>> ntw.snapobservations(in_data, pt_str, attribute=True)
-        >>> npts = ntw.pointpatterns['crimes'].npoints
-        >>> np.random.seed(1)
-        >>> sim = ntw.simulate_observations(npts)
-        >>> np.random.seed(1)
-        >>> gres = ntw.NetworkG(ntw.pointpatterns['crimes'], permutations=5)
-        >>> gres.lowerenvelope[1]
-        0.11149825783972125
+        >>> crimes = ntw.pointpatterns['crimes']
+        >>> sim = ntw.simulate_observations(crimes.npoints)
+        >>> gres = ntw.NetworkG(crimes, permutations=5, nsteps=10)
+        >>> gres.lowerenvelope.shape[0]
+        10
         """
         
         return NetworkG(self, pointpattern, nsteps=nsteps,
@@ -1281,13 +1277,11 @@ class Network:
         >>> pt_str = 'crimes'
         >>> in_data = examples.get_path('{}.shp'.format(pt_str))
         >>> ntw.snapobservations(in_data, pt_str, attribute=True)
-        >>> npts = ntw.pointpatterns['crimes'].npoints
-        >>> np.random.seed(1)
-        >>> sim = ntw.simulate_observations(npts)
-        >>> np.random.seed(1)
-        >>> kres = ntw.NetworkK(ntw.pointpatterns['crimes'], permutations=5)
-        >>> kres.lowerenvelope[1]
-        462950.982883102
+        >>> crimes = ntw.pointpatterns['crimes']
+        >>> sim = ntw.simulate_observations(crimes.npoints)
+        >>> kres = ntw.NetworkK(crimes, permutations=5, nsteps=10)
+        >>> kres.lowerenvelope.shape[0]
+        10
         """
         return NetworkK(self, pointpattern, nsteps=nsteps,
                         permutations=permutations, threshold=threshold,
