@@ -31,7 +31,7 @@ the analysis of network events.
             <a href="http://nbviewer.jupyter.org/gist/jGaboardi/2697ff11933bb0ea8b94c4326a540453" class="thumbnail">
                 <img src="_static/images/network_k.png" class="img-responsive center-block">
                 <div class="caption text-center">
-                <h6>Network Analysis: Network K Function</h6>
+                <h6>Spaghetti Network Functionality</h6>
                 </div>
             </a>
         </div>
