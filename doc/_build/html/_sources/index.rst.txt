@@ -21,15 +21,15 @@ the analysis of network events.
         </div>
         <div class="col-md-4 col-xs-15">
             <a href="http://nbviewer.jupyter.org/gist/jGaboardi/0d9ea5c966a4ad57123bef35b87c4607" class="thumbnail">
-                <img src="_static/images/empir.png" class="img-responsive center-block">
+                <img src="_static/images/snapped.png" class="img-responsive center-block">
                 <div class="caption text-center">
-                <h6>Empirical Network and Points</h6>
+                <h6>Snapping Points to Segments</h6>
                 </div>
             </a>
         </div>
         <div class="col-sm-4 col-xs-15">
             <a href="http://nbviewer.jupyter.org/gist/jGaboardi/2697ff11933bb0ea8b94c4326a540453" class="thumbnail">
-                <img src="_static/images/networkk.png" class="img-responsive center-block">
+                <img src="_static/images/network_k.png" class="img-responsive center-block">
                 <div class="caption text-center">
                 <h6>Network Analysis: Network K Function</h6>
                 </div>
