@@ -97,7 +97,9 @@ class TestNetworkPointPattern(unittest.TestCase):
         self.assertEqual(npoints, sim.npoints)
     
     def test_simulate_poisson_observations(self):
-        pass
+        npoints = self.ntw.pointpatterns['crimes'].npoints
+        sim = self.ntw.simulate_observations(npoints, distribution='poisson')
+        self.assertEqual(npoints, sim.npoints)
     
     def test_all_neighbor_distances(self):
         distancematrix_1 = self.ntw.allneighbordistances(self.schools,
@@ -122,10 +124,39 @@ class TestNetworkPointPattern(unittest.TestCase):
         nnd2 = self.ntw.nearestneighbordistances('schools',
                                                  'schools')
         np.testing.assert_array_equal(nnd, nnd2)
-    
-    def test_nearest_neighbor_search(self):
-        pass
 
+
+@unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
+class TestNetworkAnalysis(unittest.TestCase):
+    
+    def setUp(self):
+        path_to_shp = examples.get_path('streets.shp')
+        gdf = geopandas.read_file(path_to_shp)
+        self.ntw = spgh.Network(in_data=gdf)
+        pt_str = 'crimes'
+        path_to_shp = examples.get_path('{}.shp'.format(pt_str))
+        in_data = geopandas.read_file(path_to_shp)
+        self.ntw.snapobservations(in_data, pt_str, attribute=True)
+        npts = self.ntw.pointpatterns['crimes'].npoints
+        self.ntw.simulate_observations(npts)
+    
+    def tearDown(self):
+        pass
+    
+    def test_network_f(self):
+        obtained = self.ntw.NetworkF(self.ntw.pointpatterns['crimes'],
+                                     permutations=5, nsteps=20)
+        self.assertEqual(obtained.lowerenvelope.shape[0], 20)
+    
+    def test_network_g(self):
+        obtained = self.ntw.NetworkG(self.ntw.pointpatterns['crimes'],
+                                     permutations=5, nsteps=20)
+        self.assertEqual(obtained.lowerenvelope.shape[0], 20)
+    
+    def test_network_k(self):
+        obtained = self.ntw.NetworkK(self.ntw.pointpatterns['crimes'],
+                                     permutations=5, nsteps=20)
+        self.assertEqual(obtained.lowerenvelope.shape[0], 20)
 
 @unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
 class TestNetworkUtils(unittest.TestCase):
@@ -170,19 +201,19 @@ class TestNetworkUtils(unittest.TestCase):
         self.assertAlmostEqual(self.distance[196], 5505.668247, places=4)
         self.assertEqual(self.pred[196], 133)
     
-    def test_squaredDistancePointSegment(self):
+    def test_square_distance_point_segment(self):
         self.point, self.segment = (1,1), ((0,0), (2,0))
-        self.sqrd_nearp = spgh.util.squaredDistancePointSegment(self.point,
-                                                                self.segment)
+        self.sqrd_nearp = spgh.util.squared_distance_point_segment(self.point,
+                                                                  self.segment)
         self.assertEqual(self.sqrd_nearp[0], 1.0)
         self.assertEqual(self.sqrd_nearp[1].all(), np.array([1., 0.]).all())
     
-    def test_snapPointsOnSegments(self):
+    def test_snap_points_on_segments(self):
         self.points = {0: cg.shapes.Point((1,1))}
         self.segments = [cg.shapes.Chain([cg.shapes.Point((0,0)),
                                           cg.shapes.Point((2,0))])]
-        self.snapped = spgh.util.snapPointsOnSegments(self.points,
-                                                      self.segments)
+        self.snapped = spgh.util.snap_points_on_segments(self.points,
+                                                         self.segments)
         self.known_coords = [xy._Point__loc for xy in self.snapped[0][0]]
         self.assertEqual(self.known_coords, [(0.0, 0.0), (2.0, 0.0)])
         self.assertEqual(self.snapped[0][1].all(), np.array([1., 0.]).all())

@@ -7,36 +7,50 @@ class NetworkBase(object):
     
     Parameters
     ----------
+    
     ntw : spaghetti.Network
         spaghetti Network object.
+    
     pointpattern : spaghetti.network.PointPattern
         A spaghetti point pattern object.
+    
     nsteps : int
         The number of steps at which the count of the nearest neighbors
         is computed.
+    
     permutations : int
         The number of permutations to perform (default 99).
+    
     threshold : float
         The level at which significance is computed.
         -- 0.5 would be 97.5% and 2.5%
+    
     distribution : str
         The distribution from which random points are sampled
         -- uniform or poisson
+    
     lowerbound : float
         The lower bound at which the function is computed. (Default 0).
+    
     upperbound : float
         The upper bound at which the function is computed. Defaults to
         the maximum observed nearest neighbor distance.
+    
     Attributes
     ----------
+    
     sim : numpy.ndarray
         simulated distance matrix
+    
     npts : int
         pointpattern.npoints
+    
     xaxis : numpy.ndarray
         observed x-axis of values
+    
     observed : numpy.ndarray
         observed y-axis of values
+    
     """
     def __init__(self, ntw, pointpattern, nsteps=10, permutations=99,
                  threshold=0.5, distribution='poisson',
@@ -130,8 +144,15 @@ class NetworkK(NetworkBase):
     
     Attributes
     ----------
+    
     lam : float
         lambda value
+    
+    Notes
+    -----
+    
+    Based on :cite:`Okabe2001`.
+    
     """
     def computeobserved(self):
         """compute the observed nearest
@@ -170,8 +191,10 @@ class NetworkF(NetworkBase):
     
     Attributes
     ----------
+    
     fsim : spaghetti.network.SimulatedPointPattern
         simulated point pattern of `self.npts` points
+    
     """
     
     
@@ -211,21 +234,28 @@ def gfunction(nearest, lowerbound, upperbound, nsteps=10):
 
     Parameters
     ----------
+    
     nearest : numpy.ndarray
         A vector of nearest neighbor distances.
+    
     lowerbound : int or float
         The starting value of the sequence.
+    
     upperbound : int or float
         The end value of the sequence.
+    
     nsteps : int
         The number of distance bands. Default is 10. Must be non-negative.
     
     Returns
     -------
+    
     x : numpy.ndarray
         x-axis of values
+    
     y : numpy.ndarray
         y-axis of values
+    
     """
     nobs = len(nearest)
     x = np.linspace(lowerbound, upperbound, nsteps)
@@ -247,21 +277,28 @@ def kfunction(nearest, upperbound, intensity, nsteps=10):
 
     Parameters
     ----------
+    
     nearest : numpy.ndarray
         A vector of nearest neighbor distances.
+    
     upperbound : int or float
         The end value of the sequence.
+    
     intensity : float
         lambda value
+    
     nsteps : int
         The number of distance bands. Default is 10. Must be non-negative.
     
     Returns
     -------
+    
     x : numpy.ndarray
         x-axis of values
+    
     y : numpy.ndarray
         y-axis of values
+    
     """
     nobs = len(nearest)
     x = np.linspace(0, upperbound, nsteps)
@@ -278,23 +315,31 @@ def ffunction(nearest, lowerbound, upperbound, npts, nsteps=10):
 
     Parameters
     ----------
+    
     nearest : numpy.ndarray
         A vector of nearest neighbor distances.
+    
     lowerbound : int or float
         The starting value of the sequence.
+    
     upperbound : int or float
         The end value of the sequence.
+    
     npts : int
         pointpattern.npoints
+    
     nsteps : int
         The number of distance bands. Default is 10. Must be non-negative.
     
     Returns
     -------
+    
     x : numpy.ndarray
         x-axis of values
+    
     y : numpy.ndarray
         y-axis of values
+    
     """
     nobs = len(nearest)
     x = np.linspace(lowerbound, upperbound, nsteps)

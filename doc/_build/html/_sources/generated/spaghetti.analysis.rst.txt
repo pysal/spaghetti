@@ -1,0 +1,33 @@
+spaghetti.analysis
+==================
+
+.. automodule:: spaghetti.analysis
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      ffunction
+      gfunction
+      kfunction
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      NetworkBase
+      NetworkF
+      NetworkG
+      NetworkK
+   
+   
+
+   
+   
+   

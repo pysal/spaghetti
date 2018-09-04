@@ -9,4 +9,4 @@ from .analysis import NetworkBase, NetworkG, NetworkK, NetworkF
 from .analysis import gfunction, kfunction, ffunction
 from .util import compute_length, get_neighbor_distances, generatetree
 from .util import dijkstra, dijkstra_mp
-from .util import squaredDistancePointSegment, snapPointsOnSegments
+from .util import squared_distance_point_segment, snap_points_on_segments

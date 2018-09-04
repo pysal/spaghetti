@@ -7,17 +7,22 @@ def compute_length(v0, v1):
     
     Parameters
     ----------
+    
     v0 : tuple
         sequence in the form x, y
+    
     vq : tuple
         sequence in the form x, y
+    
     Returns
     --------
+    
     euc_dist : float
         Euclidean distance
     
-    Example
-    -------
+    Examples
+    --------
+    
     >>> import spaghetti as spgh
     >>> point1, point2 = (0,0), (1,1)
     >>> spgh.util.compute_length(point1, point2)
@@ -45,9 +50,10 @@ def get_neighbor_distances(ntw, v0, l):
     neighbors : dict
         key is int (node id); value is float (distance)
     
-    Example
-    -------
+    Examples
+    --------
     >>> import spaghetti as spgh
+    >>> from libpysal import examples
     >>> ntw = spgh.Network(examples.get_path('streets.shp'))
     >>> neighs = spgh.util.get_neighbor_distances(ntw, 0, ntw.edge_lengths)
     >>> neighs[1]
@@ -68,16 +74,21 @@ def generatetree(pred):
     
     Parameters
     ----------
+    
     pred : list
         List of preceeding nodes for traversal route.
+    
     Returns
     --------
+    
     tree : dict
         key is root origin; value is root origin to destination.
     
-    Example
-    -------
+    Examples
+    --------
+    
     >>> import spaghetti as spgh
+    >>> from libpysal import examples
     >>> ntw = spgh.Network(examples.get_path('streets.shp'))
     >>> distance, pred = spgh.util.dijkstra(ntw, ntw.edge_lengths, 0)
     >>> tree = spgh.util.generatetree(pred)
@@ -107,31 +118,44 @@ def dijkstra(ntw, cost, v0, n=float('inf')):
 
     Parameters
     ----------
+    
     ntw :  spaghetti.Network
         spaghetti Network object.
+    
     cost : dict
         key is tuple (start node, end node); value is float.
         Cost per edge to travel, e.g. distance.
+    
     v0 : int
         Start node ID
+    
     n : float
         integer break point to stop iteration and return n neighbors.
         Default is ('inf').
     
     Returns
     -------
+    
     distance : list
         List of distances from node to all other nodes.
+    
     pred : list
         List of preceeding nodes for traversal route.
     
-    Example
-    -------
+    Notes
+    -----
+    
+    Based on :cite:`Dijkstra1959a`.
+    
+    Examples
+    --------
+    
     >>> import spaghetti as spgh
+    >>> from libpysal import examples
     >>> ntw = spgh.Network(examples.get_path('streets.shp'))
     >>> distance, pred = spgh.util.dijkstra(ntw, ntw.edge_lengths, 0)
-    >>> distance[196]
-    5505.668247
+    >>> round(distance[196], 4)
+    5505.6682
     >>> pred[196]
     133
     """
@@ -169,27 +193,36 @@ def dijkstra_mp(ntw_cost_node):
     
     Parameters
     ----------
+    
     ntw_cost_node : tuple
         tuple of arguments to pass into dijkstra
-        (1) ntw - spaghetti.Network; spaghetti Network object.
-        (2) cost - dict; key is tuple (start node, end node); value is float
-                   Cost per edge to travel, e.g. distance
-        (3) node - int; Start node ID
+        (1) ntw - spaghetti.Network; spaghetti Network object; (2) cost - dict;
+        key is tuple (start node, end node); value is float - Cost per edge to
+        travel, e.g. distance; (3) node - int; Start node ID
     
     Returns
     -------
+    
     distance : list
         List of distances from node to all other nodes.
+    
     pred : list
         List of preceeding nodes for traversal route.
     
-    Example
-    -------
+    Notes
+    -----
+    
+    Based on :cite:`Dijkstra1959a`.
+    
+    Examples
+    --------
+    
     >>> import spaghetti as spgh
+    >>> from libpysal import examples
     >>> ntw = spgh.Network(examples.get_path('streets.shp'))
     >>> distance, pred = spgh.util.dijkstra(ntw, ntw.edge_lengths, 0)
-    >>> distance[196]
-    5505.668247
+    >>> round(distance[196], 4)
+    5505.6682
     >>> pred[196]
     133
     """
@@ -198,13 +231,15 @@ def dijkstra_mp(ntw_cost_node):
     return distance, pred
 
 
-def squaredDistancePointSegment(point, segment):
+def squared_distance_point_segment(point, segment):
     """Find the squared distance between a point and a segment.
     
     Parameters
-    ---------
+    ----------
+    
     point : tuple
         point coordinates (x,y)
+    
     segment : list
         List of 2 point coordinate tuples [(x0,y0), (x1,y1)].
     
@@ -212,15 +247,17 @@ def squaredDistancePointSegment(point, segment):
     -------
     sqd : float
         distance squared between point and segment
+    
     nearp : numpy.ndarray
         array of (xb, yb); the nearest point on the segment
     
-    Example
-    -------
+    Examples
+    --------
+    
     >>> import spaghetti as spgh
     >>> point, segment = (1,1), ((0,0), (2,0))
-    >>> spgh.util.squaredDistancePointSegment(point, segment)
-    1.0, array([1., 0.]))
+    >>> spgh.util.squared_distance_point_segment(point, segment)
+    (1.0, array([1., 0.]))
     """
     #
     p0, p1 = [np.array(p) for p in segment]
@@ -249,13 +286,15 @@ def squaredDistancePointSegment(point, segment):
     return sqd, nearp
 
 
-def snapPointsOnSegments(points, segments):
+def snap_points_on_segments(points, segments):
     """Place points onto closet segment in a set of segments
     
-    Arguments
-    ---------
+    Parameters
+    ----------
+    
     points : dict
         Point id as key and (x,y) coordinate as value
+    
     segments : list
         Elements are of type libpysal.cg.shapes.Chain
         ** Note ** each element is a segment represented as a chain with
@@ -263,18 +302,20 @@ def snapPointsOnSegments(points, segments):
     
     Returns
     -------
+    
     p2s : dict
         key [point id (see points in arguments)]; value [a 2-tuple 
         ((head, tail), point) where (head, tail) is the target segment,
         and point is the snapped location on the segment.
     
-    Example
-    -------
+    Examples
+    --------
+    
     >>> import spaghetti as spgh
     >>> from libpysal.cg.shapes import Point, Chain
     >>> points = {0: Point((1,1))}
     >>> segments = [Chain([Point((0,0)), Point((2,0))])]
-    >>> spgh.util.snapPointsOnSegments(points, segments)
+    >>> spgh.util.snap_points_on_segments(points, segments)
     {0: ([(0.0, 0.0), (2.0, 0.0)], array([1., 0.]))}
     """
     
@@ -327,7 +368,8 @@ def snapPointsOnSegments(points, segments):
         
         # Of the candidate segments, find the nearest to the query point.
         for candidate in candidates:
-            dnc, p2b = squaredDistancePointSegment(point, candidate.vertices)
+            dnc, p2b = squared_distance_point_segment(point,
+                                                      candidate.vertices)
             if dnc <= dmin2:
                 closest = candidate.vertices
                 dmin2 = dnc
