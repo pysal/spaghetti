@@ -1,40 +1,51 @@
 .. documentation master file
 
-Introduction of your package
+spaghetti
+=========
+
+SPAtial GrapHs: nETworks, Topology, & Inference
+-----------------------------------------------
+
+Spaghetti is an open-source python library for the analysis of network-based
+spatial data. Originating from the ``network`` module in `PySAL (Python Spatial 
+Analysis Library) <http://pysal.org>`_, it is under active development for the 
+inclusion of newly proposed methods for building graph-theoretic networks and 
+the analysis of network events.
+
 
 .. raw:: html
 
     <div class="container-fluid">
-      <div class="row equal-height">
-        <div class="col-sm-1 col-xs-hidden">
+      <div class="row equal-width">
+        <div class="col-sm-.5 col-xs-hidden">
         </div>
-        <div class="col-md-3 col-xs-12">
-            <a href="http://nbviewer.jupyter.org/github/pysal/giddy/blob/master/notebooks/directional.ipynb" class="thumbnail">
-                <img src="_static/images/rose_conditional.png" class="img-responsive center-block">
+        <div class="col-md-4 col-xs-15">
+            <a href="http://nbviewer.jupyter.org/gist/jGaboardi/0d9ea5c966a4ad57123bef35b87c4607" class="thumbnail">
+                <img src="_static/images/empir.png" class="img-responsive center-block">
                 <div class="caption text-center">
-                <h6>Rose diagram (directional LISAs)</h6>
+                <h6>Empirical Network and Points</h6>
                 </div>
             </a>
         </div>
-        <div class="col-sm-3 col-xs-12">
-            <a href="http://nbviewer.jupyter.org/github/pysal/giddy/blob/master/notebooks/Markov%20Based%20Methods.ipynb" class="thumbnail">
-                <img src="_static/images/spatial_markov_us.png" class="img-responsive center-block">
+        <div class="col-sm-4 col-xs-15">
+            <a href="http://nbviewer.jupyter.org/gist/jGaboardi/2697ff11933bb0ea8b94c4326a540453" class="thumbnail">
+                <img src="_static/images/networkk.png" class="img-responsive center-block">
                 <div class="caption text-center">
-                <h6>Spatial Markov Chain</h6>
+                <h6>Network Analysis: Network K Function</h6>
                 </div>
             </a>
         </div>
-        <div class="col-sm-3 col-xs-12">
-            <a href="http://nbviewer.jupyter.org/github/pysal/giddy/blob/master/notebooks/Rank%20based%20Methods.ipynb" class="thumbnail">
-                <img src="_static/images/neighboorsetLIMA_US.png"
+        <div class="col-sm-4 col-xs-15">
+            <a href="http://nbviewer.jupyter.org/gist/jGaboardi/a671d31a796e06d9df669d018d5b66ba" class="thumbnail">
+                <img src="_static/images/pmedian.png"
                 class="img-responsive center-block">
                 <div class="caption text-center">
-                <h6>Neighbor Set Local Indicator of Mobility Association (LIMA)
+                <h6>Optimal Facility Location: Integration with ortools
                 </h6>
                 </div>
             </a>
         </div>
-        <div class="col-sm-2 col-xs-hidden">
+        <div class="col-sm-.5 col-xs-hidden">
         </div>
       </div>
     </div>

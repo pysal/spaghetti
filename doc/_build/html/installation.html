@@ -21,7 +21,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="API reference" href="api.html" />
-    <link rel="prev" title="&lt;no title&gt;" href="index.html" />
+    <link rel="prev" title="SPAtial GrapHs: nETworks, Topology, &amp; Inference (spaghetti)" href="index.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -61,9 +61,15 @@
       role="menu"
       aria-labelledby="dLabelGlobalToc"><p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#stable-version-recommended">Stable Version (Recommended)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#development-version">Development Version</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="api.html#network">Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#spaghetti-network">spaghetti.Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#spaghetti-pointpattern">spaghetti.PointPattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#spaghetti-simulatedpointpattern">spaghetti.SimulatedPointPattern</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
@@ -80,7 +86,11 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Installation</a></li>
+<li><a class="reference internal" href="#">Installation</a><ul>
+<li><a class="reference internal" href="#stable-version-recommended">Stable Version (Recommended)</a></li>
+<li><a class="reference internal" href="#development-version">Development Version</a></li>
+</ul>
+</li>
 </ul>
 </ul>
 </li>
@@ -110,8 +120,37 @@
   <div class="row">
     <div class="col-md-12 content">
       
-  <div class="section" id="installation">
+  <p>spaghetti supports python <a class="reference external" href="https://docs.python.org/3.5/">3.5</a> and <a class="reference external" href="https://docs.python.org/3.6/">3.6</a> only. Please make sure that you are
+operating in a python 3 environment.</p>
+<div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="stable-version-recommended">
+<h2>Stable Version (Recommended)<a class="headerlink" href="#stable-version-recommended" title="Permalink to this headline">¶</a></h2>
+<p>Install the latest stable of spaghetti from the <a class="reference external" href="https://pypi.org/project/spaghetti/">Python Package Index</a> with
+<code class="docutils literal notranslate"><span class="pre">pip</span></code> from the command line:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install spaghetti
+</pre></div>
+</div>
+<p>or download the source distribution (<code class="docutils literal notranslate"><span class="pre">.tar.gz</span></code>) and decompress it to your
+selected destination. Open a command shell and navigate to the decompressed
+folder:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install .
+</pre></div>
+</div>
+</div>
+<div class="section" id="development-version">
+<h2>Development Version<a class="headerlink" href="#development-version" title="Permalink to this headline">¶</a></h2>
+<p>Install the most current development version of spaghetti by running:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install git+https://github.com/pysal/spaghetti
+</pre></div>
+</div>
+<p>You can  also <a class="reference external" href="https://help.github.com/articles/fork-a-repo/">fork</a> the <a class="reference external" href="https://github.com/pysal/spaghetti">pysal/spaghetti</a> repo and create a local clone of
+your fork. By making changes to your local clone and submitting a pull request
+to <a class="reference external" href="https://github.com/pysal/spaghetti">pysal/spaghetti</a>, you can contribute to the giddy development.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
 </div>
 
 

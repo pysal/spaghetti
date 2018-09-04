@@ -1,0 +1,6 @@
+spaghetti.snapPointsOnSegments
+==============================
+
+.. currentmodule:: spaghetti
+
+.. autofunction:: snapPointsOnSegments

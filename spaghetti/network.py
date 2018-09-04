@@ -21,50 +21,66 @@ class Network:
     
     Parameters
     ----------
+    
     in_data : geopandas.GeoDataFrame or str
         The input geographic data. Either (1) a path to a shapefile (str);
         or (2) a geopandas.GeoDataFrame.
+    
     node_sig : int
         Round the x and y coordinates of all nodes to node_sig significant
         digits (combined significant digits on the left and right of the
         decimal place). Default is 11. Set to None for no rounding.
+    
     unique_segs : bool
         If True (default), keep only unique segments (i.e., prune out any
         duplicated segments). If False keep all segments.
+    
     extractgraph : bool
         If True, extract a graph-theoretic object with no degree 2 nodes.
-        Defalt is True.
+        Default is True.
     
     Attributes
     ----------
+    
     in_data : str
         The input shapefile. This must be in .shp format.
+    
     adjacencylist : list
         List of lists storing node adjacency.
+    
     nodes : dict
         Keys are tuples of node coords and values are the node ID.
+    
     edge_lengths : dict
         Keys are tuples of sorted node IDs representing an edge and values
         are the length.
+    
     pointpatterns : dict
         Keys are a string name of the pattern and values are point pattern
         class instances.
+    
     node_coords : dict
         Keys are the node ID and values are the (x,y) coordinates
         inverse to nodes.
+    
     edges : list
         List of edges, where each edge is a sorted tuple of node IDs.
+    
     node_list : list
         List of node IDs.
+    
     alldistances : dict
         Keys are the node IDs (int). Values are tuples with two elements as
         follows (1) a list of the shortest path distances; (2) a dict with the
         key being the id of the destination node and the value being a list of
         the shortest path.
+    
     distancematrix : numpy.ndarray
         all network nodes (non-observations) distance matrix.
+    
     graphedges : list
         tuples of graph edge ids.
+    
     graph_lengths : dict
         Keys are the graph edge ids (tuple). Values are the graph edge lenght
         (float).
@@ -89,8 +105,11 @@ class Network:
     >>> ntw.snapobservations(schools_file, 'schools', attribute=False)
     
     """
+    
     def __init__(self, in_data=None, node_sig=11,
                  unique_segs=True, extractgraph=True):
+        """
+        """
         if in_data is not None:
             self.in_data = in_data
             self.node_sig = node_sig
@@ -266,17 +285,22 @@ class Network:
         
         Parameters
         ----------
+        
         node : int
             node id
+        
         segment_nodes : list
             all non-articulation points in the network (degree-2 nodes).
+        
         bridge : list
             inital bridge list containing only `node`
         
         Returns
         -------
+        
         n : list
             nodes to keep (articulation points)
+        
         """
         n = []
         # get all nodes adjacent to `node`
@@ -288,35 +312,50 @@ class Network:
 
 
     def contiguityweights(self, graph=True, weightings=None):
-        """Create a contiguity based W object
+        """Create a contiguity based W object.
         
         Parameters
         ----------
+        
         graph : bool
             {True, False} controls whether the W is generated using the spatial
             representation or the graph representation.
+        
         weightings : dict
             Dict of lists of weightings for each edge.
         
         Returns
         -------
+        
          W : libpysal.weights.weights.W
             A PySAL W Object representing the binary adjacency of the network.
         
         Examples
         --------
+        
+        Instantiate an instance of a network.
+        
         >>> import spaghetti as spgh
         >>> from libpysal import examples
         >>> import esda
         >>> import numpy as np
         >>> ntw = spgh.Network(examples.get_path('streets.shp'))
-        >>> w = ntw.contiguityweights(graph=False)
+        
+        Snap point observations to the network with attribute information.
+        
         >>> ntw.snapobservations(examples.get_path('crimes.shp'),
         ...                      'crimes', attribute=True)
+        
+        Find counts per netowrk edge.
+        
         >>> counts = ntw.count_per_edge(ntw.pointpatterns['crimes']
         ...                             .obs_to_edge, graph=False)
         >>> counts[(50, 165)]
         4
+        
+        Create a contiguity based W object.
+        
+        >>> w = ntw.contiguityweights(graph=False)
         
         Using the W object, access to ESDA functionality is provided.
         First, a vector of attributes is created for all edges
@@ -332,10 +371,12 @@ class Network:
         3.0
         
         Next, a standard call ot Moran is made and the
-        result placed into `res`
+        result placed into `res`.
+        
         >>> res = esda.moran.Moran(y, w, permutations=99)
         >>> type(res)
         <class 'esda.moran.Moran'>
+        
         """
         
         neighbors = {}
@@ -379,19 +420,36 @@ class Network:
         
         Parameters
         ----------
+        
         threshold : float
             Distance threshold value.
+        
         n_processes : int, str
             (Optional) Specify the number of cores to utilize. Default is 1
             core. Use (int) to specify an exact number or cores. Use ("all")
             to request all available cores.
+        
         gen_tree : bool
             rebuild shortest path {True}, or skip {False}
         
         Returns
         -------
+        
         w : libpysal.weights.weights.W
             A PySAL W Object representing the binary adjacency of the network.
+        
+        Examples
+        --------
+        
+        >>> import spaghetti as spgh
+        >>> streets_file = examples.get_path('streets.shp')
+        >>> ntw = spgh.Network(in_data=streets_file)
+        >>> w = ntw.distancebandweights(threshold=500)
+        >>> w.n
+        230
+        >>> w.histogram
+        [(1, 22), (2, 58), (3, 63), (4, 40), (5, 36), (6, 3), (7, 5), (8, 3)]
+        
         """
         try:
             hasattr(self.alldistances)
@@ -417,19 +475,32 @@ class Network:
         
         Parameters
         ----------
+        
         in_data : geopandas.GeoDataFrame or str
             The input geographic data. Either (1) a path to a shapefile (str);
             or (2) a geopandas.GeoDataFrame.
+        
         name : str
             Name to be assigned to the point dataset.
+        
         idvariable : str
             Column name to be used as ID variable.
+        
         attribute : bool
             Defines whether attributes should be extracted. True for attribute
             extraction. False for no attribute extraaction.
         
-        Example
-        -------
+        Examples
+        --------
+        
+        >>> import spaghetti as spgh
+        >>> streets_file = examples.get_path('streets.shp')
+        >>> ntw = spgh.Network(in_data=streets_file)
+        >>> pt_str = 'crimes'
+        >>> in_data = examples.get_path('{}.shp'.format(pt_str))
+        >>> ntw.snapobservations(in_data, pt_str, attribute=True)
+        >>> ntw.pointpatterns[pt_str].npoints
+        287
         
         """
         
@@ -445,19 +516,25 @@ class Network:
         
         Parameters
         ----------
+        
         x : float
             x-coordinate of the snapped point.
+        
         y : float
             y-coordiante of the snapped point.
+        
         edge : tuple
             (node0, node1) representation of the network edge.
         
         Returns
         -------
+        
         d1 : float
             The distance to node0. Always the node with the lesser id.
+        
         d2 : float
             The distance to node1. Always the node with the greater id.
+        
         """
         
         d1 = util.compute_length((x, y), self.node_coords[edge[0]])
@@ -471,18 +548,23 @@ class Network:
         
         Parameters
         -----------
+        
         pointpattern : spaghetti.network.PointPattern
             point pattern object
         
         Returns
         -------
+        
         obs_to_edge : dict
             Dict with edges as keys and lists of points as values.
+        
         edge_to_obs : dict
             Dict with point ids as keys and edge tuples as values.
+        
         dist_to_node : dict
             Dict with point ids as keys and values as dicts with keys for node
             ids and values as distances from point to node.
+        
         """
         
         obs_to_edge = {}
@@ -501,7 +583,7 @@ class Network:
         p2id = {}
         for pointIdx, point in pointpattern.points.items():
             points[pointIdx] = point['coordinates']
-        snapped = util.snapPointsOnSegments(points, segments)
+        snapped = util.snap_points_on_segments(points, segments)
         
         for pointIdx, snapInfo in snapped.items():
             x, y = snapInfo[1].tolist()
@@ -529,6 +611,7 @@ class Network:
         
         Parameters
         ----------
+        
         obs_on_network : dict
             Dict of observations on the network. {(edge):{pt_id:(coords)}} or
             {edge:[(coord),(coord),(coord)]}
@@ -538,20 +621,26 @@ class Network:
         counts : dict
             {(edge):count}
         
-        Example
-        -------
+        Examples
+        --------
+        
         Note that this passes the obs_to_edge attribute of a
         point pattern snapped to the network.
+        
         >>> import spaghetti as spgh
         >>> ntw = spgh.Network(examples.get_path('streets.shp'))
         >>> ntw.snapobservations(examples.get_path('crimes.shp'),
         ...                                           'crimes',
         ...                                           attribute=True)
+        
         >>> counts = ntw.count_per_edge(ntw.pointpatterns['crimes']
         ...                             .obs_to_edge, graph=False)
+        >>> list(counts.values())[:3]
+        [1, 3, 2]
         >>> s = sum([v for v in list(counts.values())])
         >>> s
         287
+        
         """
         counts = {}
         if graph:
@@ -600,28 +689,36 @@ class Network:
         
         Parameters
         ----------
+        
         count : int
             The number of points to create or mean of the distribution
             if not 'uniform'.
+        
         distribution : str
-            {'uniform', 'poisson'} distribution of random points.
+            {'uniform', 'poisson'} distribution of random points. If poisson
+            if the distrubtion the poisson is calculated from half the total
+            network length
         
         Returns
         -------
+        
         random_pts : dict
             Keys are the edge tuple. Values are lists of new point coordinates.
         
-        Example
-        -------
+        Examples
+        --------
+       
         >>> import spaghetti as spgh
         >>> ntw = spgh.Network(examples.get_path('streets.shp'))
         >>> ntw.snapobservations(examples.get_path('crimes.shp'),
         ...                                        'crimes',
         ...                                         attribute=True)
+       
         >>> npts = ntw.pointpatterns['crimes'].npoints
         >>> sim = ntw.simulate_observations(npts)
         >>> isinstance(sim, spgh.network.SimulatedPointPattern)
         True
+        
         """
         simpts = SimulatedPointPattern()
         
@@ -637,8 +734,8 @@ class Network:
         if distribution is 'uniform':
             nrandompts = np.random.uniform(0, totallength, size=(count,))
         elif distribution is 'poisson':
-            nrandompts = np.random.uniform(0, totallength,
-                                           size=(np.random.poisson(count),))
+            mid_length = totallength / 2.
+            nrandompts = np.random.poisson(mid_length, size=(count,))
             
         for i, r in enumerate(nrandompts):
             idx = np.where(r < stops)[0][0]
@@ -653,7 +750,7 @@ class Network:
             
             # Populate the distance to node.
             distance_from_end = self.edge_lengths[edges[idx]]\
-                - distance_from_start
+                                                        - distance_from_start
             simpts.dist_to_node[i] = {assignment_edge[0]: distance_from_start,
                                       assignment_edge[1]: distance_from_end}
             
@@ -668,13 +765,24 @@ class Network:
         
         Parameters
         -----------
+        
         v0 : int
             Node id
         
         Returns
         -------
+        
         links : list
             List of tuple edges adjacent to the node.
+        
+        Examples
+        --------
+        
+        >>> import spaghetti as spgh
+        >>> ntw = spgh.Network(examples.get_path('streets.shp'))
+        >>> ntw.enum_links_node(24)
+        [(24, 48), (24, 25), (24, 26)]
+        
         """
         links = []
         neighbornodes = self.adjacencylist[v0]
@@ -690,10 +798,13 @@ class Network:
         
         Parameters
         -----------
+        
         n_processes : int
             cpu cores for multiprocessing.
+       
         gen_tree : bool
             rebuild shortest path {True}, or skip {False}
+        
         """
         self.alldistances = {}
         nnodes = len(self.node_list)
@@ -743,42 +854,54 @@ class Network:
         
         Parameters
         ----------
+        
         sourcepattern : str
             The key of a point pattern snapped to the network.
+        
         destpattern : str
             (Optional) The key of a point pattern snapped to the network.
+        
         fill_diagonal : float, int
             (Optional) Fill the diagonal of the cost matrix. Default in None
             and will populate the diagonal with numpy.nan Do not declare a
             destpattern for a custom fill_diagonal.
+        
         n_processes : int, str
             (Optional) Specify the number of cores to utilize. Default is 1
             core. Use (int) to specify an exact number or cores.  Use ("all")
             to request all available cores.
+        
         gen_tree : bool
             rebuild shortest path {True}, or skip {False}
         
         Returns
         -------
+        
         nearest : numpy.ndarray
             An array of shape (n,n) storing distances between all points.
         
-        Example
-        -------
+        Examples
+        --------
+        
         >>> import spaghetti as spgh
         >>> ntw = spgh.Network(examples.get_path('streets.shp'))
         >>> ntw.snapobservations(examples.get_path('crimes.shp'),
         ...                                        'crimes',
         ...                                         attribute=True)
         >>> crimes_pp = ntw.pointpatterns['crimes']
+        
+        
         >>> s2s_dist = ntw.allneighbordistances(crimes_pp)
         >>> s2s_dist[0,0], s2s_dist[1,0]
         (nan, 3105.189475447081)
+        
         
         >>> ntw.snapobservations(examples.get_path('schools.shp'),
         ...                                        'schools',
         ...                                        attribute=False)
         >>> schools_pp = ntw.pointpatterns['schools']
+        
+        
         >>> s2d_dist = ntw.allneighbordistances(crimes_pp,
         ...                                     destpattern=schools_pp)
         >>> s2d_dist[0,0], s2d_dist[1,0]
@@ -890,23 +1013,35 @@ class Network:
         
         Parameters
         ----------
+        
         sourcepattern : str
             The key of a point pattern snapped to the network.
+        
         destpattern : str
             (Optional) The key of a point pattern snapped to the network.
+        
         n_processes : int, str
             (Optional) Specify the number of cores to utilize. Default is 1
             core. Use (int) to specify an exact number or cores. Use ("all")
             to request all available cores.
+        
         gen_tree : bool
             rebuild shortest path {True}, or skip {False}
         
         Returns
         -------
+        
         nearest : numpy.ndarray
             An (n,2) shaped array with column[:,0] containing the id of the
             nearest neighbor and column [:,1] containing the distance.
+        
         """
+        
+        ###########################################
+        #
+        # MERGE WITH `allneighbordistances`
+        #
+        ###########################################
         
         if sourcepattern not in self.pointpatterns.keys():
             err_msg = "Available point patterns are {}"
@@ -920,8 +1055,8 @@ class Network:
         nearest = np.zeros((len(pt_indices), 2), dtype=np.float32)
         nearest[:, 1] = np.inf
         
-        if destpattern is None:
-            destpattern = sourcepattern
+        #if destpattern is None:
+        #    destpattern = sourcepattern
             
         searchpts = copy.deepcopy(pt_indices)
         
@@ -976,36 +1111,59 @@ class Network:
         return nearest
 
 
-    def NetworkF(self, pointpattern, nsteps=10, permutations=99,
-                 threshold=0.2, distribution='uniform',
-                 lowerbound=None, upperbound=None):
+    def NetworkF(self, pointpattern, nsteps=10, permutations=99, threshold=0.2,
+                 distribution='uniform',  lowerbound=None, upperbound=None):
         """Computes a network constrained F-Function
         
         Parameters
         ----------
+        
         pointpattern : spaghetti.network.PointPattern
             A spaghetti point pattern object.
+        
         nsteps : int
             The number of steps at which the count of the nearest neighbors
             is computed.
+        
         permutations : int
             The number of permutations to perform (default 99).
+        
         threshold : float
             The level at which significance is computed.
             -- 0.5 would be 97.5% and 2.5%
+        
         distribution : str
             The distribution from which random points are sampled
             -- uniform or poisson
+        
         lowerbound : float
             The lower bound at which the F-function is computed. (Default 0).
+        
         upperbound : float
             The upper bound at which the F-function is computed. Defaults to
             the maximum observed nearest neighbor distance.
         
         Returns
         -------
+        
         NetworkF : spaghetti.analysis.NetworkF
             A network F class instance.
+        
+        Examples
+        --------
+        
+        >>> import spaghetti as spgh
+        >>> ntw = spgh.Network(in_data=examples.get_path('streets.shp'))
+        >>> pt_str = 'crimes'
+        >>> in_data = examples.get_path('{}.shp'.format(pt_str))
+        >>> ntw.snapobservations(in_data, pt_str, attribute=True)
+        >>> npts = ntw.pointpatterns['crimes'].npoints
+        >>> np.random.seed(1)
+        >>> sim = ntw.simulate_observations(npts)
+        >>> np.random.seed(1)
+        >>> fres = ntw.NetworkF(ntw.pointpatterns['crimes'], permutations=5)
+        >>> fres.lowerenvelope[1]
+        0.04878048780487805
         """
         return NetworkF(self, pointpattern, nsteps=nsteps,
                         permutations=permutations, threshold=threshold,
@@ -1020,29 +1178,53 @@ class Network:
         
         Parameters
         ----------
+        
         pointpattern : spaghetti.network.PointPattern
             A spaghetti point pattern object.
+        
         nsteps : int
             The number of steps at which the count of the nearest neighbors
             is computed.
+        
         permutations : int
             The number of permutations to perform (default 99).
+        
         threshold : float
             The level at which significance is computed.
             -- 0.5 would be 97.5% and 2.5%
+        
         distribution : str
             The distribution from which random points are sampled
             -- uniform or poisson
+        
         lowerbound : float
             The lower bound at which the G-function is computed. (Default 0).
+        
         upperbound : float
             The upper bound at which the G-function is computed. Defaults to
             the maximum observed nearest neighbor distance.
         
         Returns
         -------
+        
         NetworkG : spaghetti.analysis.NetworkG
             A network G class instance.
+        
+        Examples
+        --------
+        
+        >>> import spaghetti as spgh
+        >>> ntw = spgh.Network(in_data=examples.get_path('streets.shp'))
+        >>> pt_str = 'crimes'
+        >>> in_data = examples.get_path('{}.shp'.format(pt_str))
+        >>> ntw.snapobservations(in_data, pt_str, attribute=True)
+        >>> npts = ntw.pointpatterns['crimes'].npoints
+        >>> np.random.seed(1)
+        >>> sim = ntw.simulate_observations(npts)
+        >>> np.random.seed(1)
+        >>> gres = ntw.NetworkG(ntw.pointpatterns['crimes'], permutations=5)
+        >>> gres.lowerenvelope[1]
+        0.11149825783972125
         """
         
         return NetworkG(self, pointpattern, nsteps=nsteps,
@@ -1059,29 +1241,53 @@ class Network:
         
         Parameters
         ----------
+        
         pointpattern : spaghetti.network.PointPattern
             A spaghetti point pattern object.
+        
         nsteps : int
             The number of steps at which the count of the nearest neighbors
             is computed.
+        
         permutations : int
             The number of permutations to perform (default 99).
+        
         threshold : float
             The level at which significance is computed.
             -- 0.5 would be 97.5% and 2.5%
+        
         distribution : str
             The distribution from which random points are sampled
             -- uniform or poisson
+        
         lowerbound : float
             The lower bound at which the K-function is computed. (Default 0).
+        
         upperbound : float
             The upper bound at which the K-function is computed. Defaults to
             the maximum observed nearest neighbor distance.
         
         Returns
         -------
+        
         NetworkK : spaghetti.analysis.NetworkK
             A network K class instance.
+        
+        Examples
+        --------
+        
+        >>> import spaghetti as spgh
+        >>> ntw = spgh.Network(in_data=examples.get_path('streets.shp'))
+        >>> pt_str = 'crimes'
+        >>> in_data = examples.get_path('{}.shp'.format(pt_str))
+        >>> ntw.snapobservations(in_data, pt_str, attribute=True)
+        >>> npts = ntw.pointpatterns['crimes'].npoints
+        >>> np.random.seed(1)
+        >>> sim = ntw.simulate_observations(npts)
+        >>> np.random.seed(1)
+        >>> kres = ntw.NetworkK(ntw.pointpatterns['crimes'], permutations=5)
+        >>> kres.lowerenvelope[1]
+        462950.982883102
         """
         return NetworkK(self, pointpattern, nsteps=nsteps,
                         permutations=permutations, threshold=threshold,
@@ -1095,21 +1301,25 @@ class Network:
         
         Parameters
         -----------
+        
         distance : float
             The distance at which edges are split.
         
         Returns
         -------
+        
         sn : spaghetti.Network
             spaghetti Network object.
         
-        Example
-        -------
+       Examples
+        --------
+       
         >>> import spaghetti as spgh
         >>> ntw = spgh.Network(examples.get_path('streets.shp'))
         >>> n200 = ntw.segment_edges(200.0)
         >>> len(n200.edges)
         688
+        
         """
         
         sn = Network()
@@ -1196,12 +1406,14 @@ class Network:
         
         Parameters
         ----------
+        
         filename : str
             The filename where the network should be saved. This should be a
             full path or it will be save in the current directory.
         
-        Example
+        Examples
         --------
+        
         >>> import spaghetti as spgh
         >>> ntw = spgh.Network(examples.get_path('streets.shp'))
         >>> ntw.savenetwork('mynetwork.pkl')
@@ -1215,13 +1427,16 @@ class Network:
         
         Parameters
         ----------
+        
         filename : str
             The filename where the network should be saved.
         
         Returns
         -------
+        
         self : spaghetti.Network
             spaghetti Network object
+            
         """
         with open(filename, 'rb') as networkin:
             self = pickle.load(networkin)
@@ -1237,34 +1452,44 @@ class PointPattern():
     
     Parameters
     ----------
+    
     in_data : geopandas.GeoDataFrame or str
         The input geographic data. Either (1) a path to a shapefile (str);
         or (2) a geopandas.GeoDataFrame.
+    
     idvariable : str
         Field in the shapefile to use as an id variable.
+    
     attribute :  bool
         {False, True} A flag to indicate whether all attributes are tagged
         to this class.
     
     Attributes
     ----------
+    
     points : dict
         Keys are the point ids (int). Values are the x,y coordinates (tuple).
+    
     npoints : int
         The number of points.
+    
     obs_to_edge : dict
         Keys are edge ids (tuple). Values are snapped point information (dict).
         Withing the snapped point information (dict) keys are observation id
         (int), and values are snapped coordinates.
+    
     obs_to_node : list
         Keys are observations ids (int). Values are distance lookup (dict).
         Within distance lookup (dict) keys are the two incident nodes of the
         edge and values are distance to each of those edges.
+    
     dist_to_node : dict
         ####################################################################### NEEDS ATTENTION
+    
     snapped_coordinates : dict
         Keys are the point ids (int). Values are the snapped x,y
         coordinates (tuple).
+    
     """
     def __init__(self, in_data=None, idvariable=None, attribute=False):
         self.points = {}
@@ -1328,12 +1553,27 @@ class SimulatedPointPattern():
     
     Attributes
     ----------
-    npoints
-    obs_to_edge
-    obs_to_node
-    dist_to_node
-    snapped_coordinates
     
+    npoints : int
+        The number of points.
+    
+    obs_to_edge : dict
+        Keys are edge ids (tuple). Values are snapped point information (dict).
+        Withing the snapped point information (dict) keys are observation id
+        (int), and values are snapped coordinates.
+    
+    obs_to_node : list
+        Keys are observations ids (int). Values are distance lookup (dict).
+        Within distance lookup (dict) keys are the two incident nodes of the
+        edge and values are distance to each of those edges.
+    
+    dist_to_node : dict
+        ####################################################################### NEEDS ATTENTION
+    
+    snapped_coordinates : dict
+        Keys are the point ids (int). Values are the snapped x,y
+        coordinates (tuple).
+
     """
     def __init__(self):
         self.npoints = 0
@@ -1348,15 +1588,18 @@ class SortedEdges(OrderedDict):
     Parameters
     ----------
     OrderedDict : collections.OrderedDict
+    
     """
     def next_key(self, key):
         """
         Parameters
         ----------
+        
         key : 
             
         Returns
         -------
+        
         n : 
             
         """
@@ -1368,8 +1611,10 @@ class SortedEdges(OrderedDict):
 
     def first_key(self):
         """
+        
         Returns
         -------
+        
         key : 
             
         """

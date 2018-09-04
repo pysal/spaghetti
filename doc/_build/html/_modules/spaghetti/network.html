@@ -59,9 +59,20 @@
       role="menu"
       aria-labelledby="dLabelGlobalToc"><p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#stable-version-recommended">Stable Version (Recommended)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#development-version">Development Version</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../api.html">API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../api.html#network">Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#spaghetti-network">spaghetti.Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#spaghetti-networkbase">spaghetti.NetworkBase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#spaghetti-networkf">spaghetti.NetworkF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#spaghetti-networkg">spaghetti.NetworkG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#spaghetti-networkk">spaghetti.NetworkK</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#spaghetti-pointpattern">spaghetti.PointPattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#spaghetti-simulatedpointpattern">spaghetti.SimulatedPointPattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#spaghetti">spaghetti</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a></li>
@@ -123,77 +134,101 @@
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Network&quot;</span><span class="p">,</span> <span class="s2">&quot;PointPattern&quot;</span><span class="p">,</span> <span class="s2">&quot;NetworkG&quot;</span><span class="p">,</span> <span class="s2">&quot;NetworkK&quot;</span><span class="p">,</span> <span class="s2">&quot;NetworkF&quot;</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="Network"><a class="viewcode-back" href="../../generated/spaghetti.network.Network.html#spaghetti.network.Network">[docs]</a><span class="k">class</span> <span class="nc">Network</span><span class="p">:</span>
+<div class="viewcode-block" id="Network"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network">[docs]</a><span class="k">class</span> <span class="nc">Network</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Spatially-constrained network representation</span>
 <span class="sd">    and analytical functionality.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
+<span class="sd">    </span>
 <span class="sd">    in_data : geopandas.GeoDataFrame or str</span>
 <span class="sd">        The input geographic data. Either (1) a path to a shapefile (str);</span>
 <span class="sd">        or (2) a geopandas.GeoDataFrame.</span>
+<span class="sd">    </span>
 <span class="sd">    node_sig : int</span>
 <span class="sd">        Round the x and y coordinates of all nodes to node_sig significant</span>
 <span class="sd">        digits (combined significant digits on the left and right of the</span>
 <span class="sd">        decimal place). Default is 11. Set to None for no rounding.</span>
+<span class="sd">    </span>
 <span class="sd">    unique_segs : bool</span>
 <span class="sd">        If True (default), keep only unique segments (i.e., prune out any</span>
 <span class="sd">        duplicated segments). If False keep all segments.</span>
+<span class="sd">    </span>
 <span class="sd">    extractgraph : bool</span>
 <span class="sd">        If True, extract a graph-theoretic object with no degree 2 nodes.</span>
-<span class="sd">        Defalt is True.</span>
+<span class="sd">        Default is True.</span>
 <span class="sd">    </span>
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
+<span class="sd">    </span>
 <span class="sd">    in_data : str</span>
 <span class="sd">        The input shapefile. This must be in .shp format.</span>
+<span class="sd">    </span>
 <span class="sd">    adjacencylist : list</span>
 <span class="sd">        List of lists storing node adjacency.</span>
+<span class="sd">    </span>
 <span class="sd">    nodes : dict</span>
 <span class="sd">        Keys are tuples of node coords and values are the node ID.</span>
+<span class="sd">    </span>
 <span class="sd">    edge_lengths : dict</span>
 <span class="sd">        Keys are tuples of sorted node IDs representing an edge and values</span>
 <span class="sd">        are the length.</span>
+<span class="sd">    </span>
 <span class="sd">    pointpatterns : dict</span>
 <span class="sd">        Keys are a string name of the pattern and values are point pattern</span>
 <span class="sd">        class instances.</span>
+<span class="sd">    </span>
 <span class="sd">    node_coords : dict</span>
 <span class="sd">        Keys are the node ID and values are the (x,y) coordinates</span>
 <span class="sd">        inverse to nodes.</span>
+<span class="sd">    </span>
 <span class="sd">    edges : list</span>
 <span class="sd">        List of edges, where each edge is a sorted tuple of node IDs.</span>
+<span class="sd">    </span>
 <span class="sd">    node_list : list</span>
 <span class="sd">        List of node IDs.</span>
+<span class="sd">    </span>
 <span class="sd">    alldistances : dict</span>
 <span class="sd">        Keys are the node IDs (int). Values are tuples with two elements as</span>
 <span class="sd">        follows (1) a list of the shortest path distances; (2) a dict with the</span>
 <span class="sd">        key being the id of the destination node and the value being a list of</span>
 <span class="sd">        the shortest path.</span>
+<span class="sd">    </span>
 <span class="sd">    distancematrix : numpy.ndarray</span>
 <span class="sd">        all network nodes (non-observations) distance matrix.</span>
+<span class="sd">    </span>
 <span class="sd">    graphedges : list</span>
 <span class="sd">        tuples of graph edge ids.</span>
+<span class="sd">    </span>
 <span class="sd">    graph_lengths : dict</span>
 <span class="sd">        Keys are the graph edge ids (tuple). Values are the graph edge lenght</span>
 <span class="sd">        (float).</span>
 <span class="sd">    </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
+<span class="sd">    </span>
 <span class="sd">    Instantiate an instance of a network.</span>
+<span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; import spaghetti as spgh</span>
 <span class="sd">    &gt;&gt;&gt; streets_file = examples.get_path(&#39;streets.shp&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; ntw = spgh.Network(in_data=streets_file)</span>
 <span class="sd">    </span>
 <span class="sd">    Snap point observations to the network with attribute information.</span>
+<span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; crimes_file = examples.get_path(&#39;crimes.shp&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; ntw.snapobservations(crimes_file, &#39;crimes&#39;, attribute=True)</span>
 <span class="sd">   </span>
 <span class="sd">    And without attribute information.</span>
+<span class="sd">   </span>
 <span class="sd">    &gt;&gt;&gt; schools_file = examples.get_path(&#39;schools.shp&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; ntw.snapobservations(schools_file, &#39;schools&#39;, attribute=False)</span>
+<span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="Network.__init__"><a class="viewcode-back" href="../../generated/spaghetti.network.Network.html#spaghetti.network.Network.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">node_sig</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span>
+    
+<div class="viewcode-block" id="Network.__init__"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">node_sig</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span>
                  <span class="n">unique_segs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">extractgraph</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">in_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">in_data</span> <span class="o">=</span> <span class="n">in_data</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">node_sig</span> <span class="o">=</span> <span class="n">node_sig</span>
@@ -277,7 +312,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">adjacencylist</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
 
 
-    <span class="k">def</span> <span class="nf">extractgraph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.extractgraph"><a class="viewcode-back" href="../../generated/spaghetti.Network.extractgraph.html#spaghetti.Network.extractgraph">[docs]</a>    <span class="k">def</span> <span class="nf">extractgraph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Using the existing network representation, create a graph-theoretic</span>
 <span class="sd">        representation by removing all nodes with a neighbor incidence of two </span>
 <span class="sd">        (non-articulation points). That is, we assume these nodes are bridges</span>
@@ -360,7 +395,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">graph_lengths</span><span class="p">[</span><span class="n">newedge</span><span class="p">]</span> <span class="o">=</span> <span class="n">cumulative_length</span>
                 
             <span class="bp">self</span><span class="o">.</span><span class="n">graphedges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">newedge</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">graphedges</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graphedges</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graphedges</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graphedges</span><span class="p">)</span></div>
 
 
     <span class="k">def</span> <span class="nf">_yieldneighbor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">segment_nodes</span><span class="p">,</span> <span class="n">bridge</span><span class="p">):</span>
@@ -369,17 +404,22 @@
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+<span class="sd">        </span>
 <span class="sd">        node : int</span>
 <span class="sd">            node id</span>
+<span class="sd">        </span>
 <span class="sd">        segment_nodes : list</span>
 <span class="sd">            all non-articulation points in the network (degree-2 nodes).</span>
+<span class="sd">        </span>
 <span class="sd">        bridge : list</span>
 <span class="sd">            inital bridge list containing only `node`</span>
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+<span class="sd">        </span>
 <span class="sd">        n : list</span>
 <span class="sd">            nodes to keep (articulation points)</span>
+<span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">n</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="c1"># get all nodes adjacent to `node`</span>
@@ -390,40 +430,56 @@
         <span class="k">return</span> <span class="n">n</span>
 
 
-    <span class="k">def</span> <span class="nf">contiguityweights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">weightings</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create a contiguity based W object</span>
+<div class="viewcode-block" id="Network.contiguityweights"><a class="viewcode-back" href="../../generated/spaghetti.Network.contiguityweights.html#spaghetti.Network.contiguityweights">[docs]</a>    <span class="k">def</span> <span class="nf">contiguityweights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">weightings</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a contiguity based W object.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+<span class="sd">        </span>
 <span class="sd">        graph : bool</span>
 <span class="sd">            {True, False} controls whether the W is generated using the spatial</span>
 <span class="sd">            representation or the graph representation.</span>
+<span class="sd">        </span>
 <span class="sd">        weightings : dict</span>
 <span class="sd">            Dict of lists of weightings for each edge.</span>
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+<span class="sd">        </span>
 <span class="sd">         W : libpysal.weights.weights.W</span>
 <span class="sd">            A PySAL W Object representing the binary adjacency of the network.</span>
 <span class="sd">        </span>
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
+<span class="sd">        </span>
+<span class="sd">        Instantiate an instance of a network.</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; import spaghetti as spgh</span>
 <span class="sd">        &gt;&gt;&gt; from libpysal import examples</span>
 <span class="sd">        &gt;&gt;&gt; import esda</span>
 <span class="sd">        &gt;&gt;&gt; import numpy as np</span>
 <span class="sd">        &gt;&gt;&gt; ntw = spgh.Network(examples.get_path(&#39;streets.shp&#39;))</span>
-<span class="sd">        &gt;&gt;&gt; w = ntw.contiguityweights(graph=False)</span>
+<span class="sd">        </span>
+<span class="sd">        Snap point observations to the network with attribute information.</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; ntw.snapobservations(examples.get_path(&#39;crimes.shp&#39;),</span>
 <span class="sd">        ...                      &#39;crimes&#39;, attribute=True)</span>
+<span class="sd">        </span>
+<span class="sd">        Find counts per netowrk edge.</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; counts = ntw.count_per_edge(ntw.pointpatterns[&#39;crimes&#39;]</span>
 <span class="sd">        ...                             .obs_to_edge, graph=False)</span>
 <span class="sd">        &gt;&gt;&gt; counts[(50, 165)]</span>
 <span class="sd">        4</span>
 <span class="sd">        </span>
+<span class="sd">        Create a contiguity based W object.</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; w = ntw.contiguityweights(graph=False)</span>
+<span class="sd">        </span>
 <span class="sd">        Using the W object, access to ESDA functionality is provided.</span>
 <span class="sd">        First, a vector of attributes is created for all edges</span>
 <span class="sd">        with observations.</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; w = ntw.contiguityweights(graph=False)</span>
 <span class="sd">        &gt;&gt;&gt; edges = w.neighbors.keys()</span>
 <span class="sd">        &gt;&gt;&gt; y = np.zeros(len(edges))</span>
@@ -434,10 +490,12 @@
 <span class="sd">        3.0</span>
 <span class="sd">        </span>
 <span class="sd">        Next, a standard call ot Moran is made and the</span>
-<span class="sd">        result placed into `res`</span>
+<span class="sd">        result placed into `res`.</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; res = esda.moran.Moran(y, w, permutations=99)</span>
 <span class="sd">        &gt;&gt;&gt; type(res)</span>
 <span class="sd">        &lt;class &#39;esda.moran.Moran&#39;&gt;</span>
+<span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         
         <span class="n">neighbors</span> <span class="o">=</span> <span class="p">{}</span>
@@ -473,27 +531,44 @@
                     <span class="c1"># break</span>
         <span class="n">w</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">W</span><span class="p">(</span><span class="n">neighbors</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">_weights</span><span class="p">)</span>
         
-        <span class="k">return</span> <span class="n">w</span>
+        <span class="k">return</span> <span class="n">w</span></div>
 
 
-    <span class="k">def</span> <span class="nf">distancebandweights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">n_proccess</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gen_tree</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.distancebandweights"><a class="viewcode-back" href="../../generated/spaghetti.Network.distancebandweights.html#spaghetti.Network.distancebandweights">[docs]</a>    <span class="k">def</span> <span class="nf">distancebandweights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">n_proccess</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gen_tree</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create distance based weights.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+<span class="sd">        </span>
 <span class="sd">        threshold : float</span>
 <span class="sd">            Distance threshold value.</span>
+<span class="sd">        </span>
 <span class="sd">        n_processes : int, str</span>
 <span class="sd">            (Optional) Specify the number of cores to utilize. Default is 1</span>
 <span class="sd">            core. Use (int) to specify an exact number or cores. Use (&quot;all&quot;)</span>
 <span class="sd">            to request all available cores.</span>
+<span class="sd">        </span>
 <span class="sd">        gen_tree : bool</span>
 <span class="sd">            rebuild shortest path {True}, or skip {False}</span>
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+<span class="sd">        </span>
 <span class="sd">        w : libpysal.weights.weights.W</span>
 <span class="sd">            A PySAL W Object representing the binary adjacency of the network.</span>
+<span class="sd">        </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; import spaghetti as spgh</span>
+<span class="sd">        &gt;&gt;&gt; streets_file = examples.get_path(&#39;streets.shp&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; ntw = spgh.Network(in_data=streets_file)</span>
+<span class="sd">        &gt;&gt;&gt; w = ntw.distancebandweights(threshold=500)</span>
+<span class="sd">        &gt;&gt;&gt; w.n</span>
+<span class="sd">        230</span>
+<span class="sd">        &gt;&gt;&gt; w.histogram</span>
+<span class="sd">        [(1, 22), (2, 58), (3, 63), (4, 40), (5, 36), (6, 3), (7, 5), (8, 3)]</span>
+<span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alldistances</span><span class="p">)</span>
@@ -508,10 +583,10 @@
                 <span class="n">neighbors</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">neighbor_query</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
         <span class="n">w</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">W</span><span class="p">(</span><span class="n">neighbors</span><span class="p">)</span>
         
-        <span class="k">return</span> <span class="n">w</span>
+        <span class="k">return</span> <span class="n">w</span></div>
 
 
-    <span class="k">def</span> <span class="nf">snapobservations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_data</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span>
+<div class="viewcode-block" id="Network.snapobservations"><a class="viewcode-back" href="../../generated/spaghetti.Network.snapobservations.html#spaghetti.Network.snapobservations">[docs]</a>    <span class="k">def</span> <span class="nf">snapobservations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_data</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span>
                          <span class="n">idvariable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Snap a point pattern shapefile to this network object. The point</span>
 <span class="sd">        pattern is stored in the network.pointpattern[&#39;key&#39;] attribute of</span>
@@ -519,53 +594,72 @@
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+<span class="sd">        </span>
 <span class="sd">        in_data : geopandas.GeoDataFrame or str</span>
 <span class="sd">            The input geographic data. Either (1) a path to a shapefile (str);</span>
 <span class="sd">            or (2) a geopandas.GeoDataFrame.</span>
+<span class="sd">        </span>
 <span class="sd">        name : str</span>
 <span class="sd">            Name to be assigned to the point dataset.</span>
+<span class="sd">        </span>
 <span class="sd">        idvariable : str</span>
 <span class="sd">            Column name to be used as ID variable.</span>
+<span class="sd">        </span>
 <span class="sd">        attribute : bool</span>
 <span class="sd">            Defines whether attributes should be extracted. True for attribute</span>
 <span class="sd">            extraction. False for no attribute extraaction.</span>
 <span class="sd">        </span>
-<span class="sd">        Example</span>
-<span class="sd">        -------</span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; import spaghetti as spgh</span>
+<span class="sd">        &gt;&gt;&gt; streets_file = examples.get_path(&#39;streets.shp&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; ntw = spgh.Network(in_data=streets_file)</span>
+<span class="sd">        &gt;&gt;&gt; pt_str = &#39;crimes&#39;</span>
+<span class="sd">        &gt;&gt;&gt; in_data = examples.get_path(&#39;{}.shp&#39;.format(pt_str))</span>
+<span class="sd">        &gt;&gt;&gt; ntw.snapobservations(in_data, pt_str, attribute=True)</span>
+<span class="sd">        &gt;&gt;&gt; ntw.pointpatterns[pt_str].npoints</span>
+<span class="sd">        287</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">PointPattern</span><span class="p">(</span><span class="n">in_data</span><span class="o">=</span><span class="n">in_data</span><span class="p">,</span>
                                                 <span class="n">idvariable</span><span class="o">=</span><span class="n">idvariable</span><span class="p">,</span>
                                                 <span class="n">attribute</span><span class="o">=</span><span class="n">attribute</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_snap_to_edge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_snap_to_edge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="n">name</span><span class="p">])</span></div>
 
 
-    <span class="k">def</span> <span class="nf">compute_distance_to_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">edge</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.compute_distance_to_nodes"><a class="viewcode-back" href="../../generated/spaghetti.Network.compute_distance_to_nodes.html#spaghetti.Network.compute_distance_to_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">compute_distance_to_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">edge</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Given an observation on a network edge, return the distance to</span>
 <span class="sd">        the two nodes that bound that end.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+<span class="sd">        </span>
 <span class="sd">        x : float</span>
 <span class="sd">            x-coordinate of the snapped point.</span>
+<span class="sd">        </span>
 <span class="sd">        y : float</span>
 <span class="sd">            y-coordiante of the snapped point.</span>
+<span class="sd">        </span>
 <span class="sd">        edge : tuple</span>
 <span class="sd">            (node0, node1) representation of the network edge.</span>
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+<span class="sd">        </span>
 <span class="sd">        d1 : float</span>
 <span class="sd">            The distance to node0. Always the node with the lesser id.</span>
+<span class="sd">        </span>
 <span class="sd">        d2 : float</span>
 <span class="sd">            The distance to node1. Always the node with the greater id.</span>
+<span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         
         <span class="n">d1</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">compute_length</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_coords</span><span class="p">[</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
         <span class="n">d2</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">compute_length</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_coords</span><span class="p">[</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
         
-        <span class="k">return</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span>
+        <span class="k">return</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span></div>
 
 
     <span class="k">def</span> <span class="nf">_snap_to_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pointpattern</span><span class="p">):</span>
@@ -573,18 +667,23 @@
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        -----------</span>
+<span class="sd">        </span>
 <span class="sd">        pointpattern : spaghetti.network.PointPattern</span>
 <span class="sd">            point pattern object</span>
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+<span class="sd">        </span>
 <span class="sd">        obs_to_edge : dict</span>
 <span class="sd">            Dict with edges as keys and lists of points as values.</span>
+<span class="sd">        </span>
 <span class="sd">        edge_to_obs : dict</span>
 <span class="sd">            Dict with point ids as keys and edge tuples as values.</span>
+<span class="sd">        </span>
 <span class="sd">        dist_to_node : dict</span>
 <span class="sd">            Dict with point ids as keys and values as dicts with keys for node</span>
 <span class="sd">            ids and values as distances from point to node.</span>
+<span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         
         <span class="n">obs_to_edge</span> <span class="o">=</span> <span class="p">{}</span>
@@ -603,7 +702,7 @@
         <span class="n">p2id</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">pointIdx</span><span class="p">,</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">pointpattern</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">points</span><span class="p">[</span><span class="n">pointIdx</span><span class="p">]</span> <span class="o">=</span> <span class="n">point</span><span class="p">[</span><span class="s1">&#39;coordinates&#39;</span><span class="p">]</span>
-        <span class="n">snapped</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">snapPointsOnSegments</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">segments</span><span class="p">)</span>
+        <span class="n">snapped</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">snap_points_on_segments</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">segments</span><span class="p">)</span>
         
         <span class="k">for</span> <span class="n">pointIdx</span><span class="p">,</span> <span class="n">snapInfo</span> <span class="ow">in</span> <span class="n">snapped</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">snapInfo</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
@@ -626,11 +725,12 @@
         <span class="n">pointpattern</span><span class="o">.</span><span class="n">obs_to_node</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">obs_to_node</span><span class="p">)</span>
 
 
-    <span class="k">def</span> <span class="nf">count_per_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs_on_network</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.count_per_edge"><a class="viewcode-back" href="../../generated/spaghetti.Network.count_per_edge.html#spaghetti.Network.count_per_edge">[docs]</a>    <span class="k">def</span> <span class="nf">count_per_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs_on_network</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Compute the counts per edge.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+<span class="sd">        </span>
 <span class="sd">        obs_on_network : dict</span>
 <span class="sd">            Dict of observations on the network. {(edge):{pt_id:(coords)}} or</span>
 <span class="sd">            {edge:[(coord),(coord),(coord)]}</span>
@@ -640,20 +740,26 @@
 <span class="sd">        counts : dict</span>
 <span class="sd">            {(edge):count}</span>
 <span class="sd">        </span>
-<span class="sd">        Example</span>
-<span class="sd">        -------</span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        </span>
 <span class="sd">        Note that this passes the obs_to_edge attribute of a</span>
 <span class="sd">        point pattern snapped to the network.</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; import spaghetti as spgh</span>
 <span class="sd">        &gt;&gt;&gt; ntw = spgh.Network(examples.get_path(&#39;streets.shp&#39;))</span>
 <span class="sd">        &gt;&gt;&gt; ntw.snapobservations(examples.get_path(&#39;crimes.shp&#39;),</span>
 <span class="sd">        ...                                           &#39;crimes&#39;,</span>
 <span class="sd">        ...                                           attribute=True)</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; counts = ntw.count_per_edge(ntw.pointpatterns[&#39;crimes&#39;]</span>
 <span class="sd">        ...                             .obs_to_edge, graph=False)</span>
+<span class="sd">        &gt;&gt;&gt; list(counts.values())[:3]</span>
+<span class="sd">        [1, 3, 2]</span>
 <span class="sd">        &gt;&gt;&gt; s = sum([v for v in list(counts.values())])</span>
 <span class="sd">        &gt;&gt;&gt; s</span>
 <span class="sd">        287</span>
+<span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">counts</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">if</span> <span class="n">graph</span><span class="p">:</span>
@@ -668,7 +774,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">obs_on_network</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="n">counts</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">obs_on_network</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
-        <span class="k">return</span> <span class="n">counts</span>
+        <span class="k">return</span> <span class="n">counts</span></div>
 
 
     <span class="k">def</span> <span class="nf">_newpoint_coords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">,</span> <span class="n">distance</span><span class="p">):</span>
@@ -697,33 +803,41 @@
         <span class="k">return</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span>
 
 
-    <span class="k">def</span> <span class="nf">simulate_observations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">distribution</span><span class="o">=</span><span class="s1">&#39;uniform&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.simulate_observations"><a class="viewcode-back" href="../../generated/spaghetti.Network.simulate_observations.html#spaghetti.Network.simulate_observations">[docs]</a>    <span class="k">def</span> <span class="nf">simulate_observations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">distribution</span><span class="o">=</span><span class="s1">&#39;uniform&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Generate a simulated point pattern on the network.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+<span class="sd">        </span>
 <span class="sd">        count : int</span>
 <span class="sd">            The number of points to create or mean of the distribution</span>
 <span class="sd">            if not &#39;uniform&#39;.</span>
+<span class="sd">        </span>
 <span class="sd">        distribution : str</span>
-<span class="sd">            {&#39;uniform&#39;, &#39;poisson&#39;} distribution of random points.</span>
+<span class="sd">            {&#39;uniform&#39;, &#39;poisson&#39;} distribution of random points. If poisson</span>
+<span class="sd">            if the distrubtion the poisson is calculated from half the total</span>
+<span class="sd">            network length</span>
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+<span class="sd">        </span>
 <span class="sd">        random_pts : dict</span>
 <span class="sd">            Keys are the edge tuple. Values are lists of new point coordinates.</span>
 <span class="sd">        </span>
-<span class="sd">        Example</span>
-<span class="sd">        -------</span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">       </span>
 <span class="sd">        &gt;&gt;&gt; import spaghetti as spgh</span>
 <span class="sd">        &gt;&gt;&gt; ntw = spgh.Network(examples.get_path(&#39;streets.shp&#39;))</span>
 <span class="sd">        &gt;&gt;&gt; ntw.snapobservations(examples.get_path(&#39;crimes.shp&#39;),</span>
 <span class="sd">        ...                                        &#39;crimes&#39;,</span>
 <span class="sd">        ...                                         attribute=True)</span>
+<span class="sd">       </span>
 <span class="sd">        &gt;&gt;&gt; npts = ntw.pointpatterns[&#39;crimes&#39;].npoints</span>
 <span class="sd">        &gt;&gt;&gt; sim = ntw.simulate_observations(npts)</span>
 <span class="sd">        &gt;&gt;&gt; isinstance(sim, spgh.network.SimulatedPointPattern)</span>
 <span class="sd">        True</span>
+<span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">simpts</span> <span class="o">=</span> <span class="n">SimulatedPointPattern</span><span class="p">()</span>
         
@@ -739,8 +853,8 @@
         <span class="k">if</span> <span class="n">distribution</span> <span class="ow">is</span> <span class="s1">&#39;uniform&#39;</span><span class="p">:</span>
             <span class="n">nrandompts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">totallength</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">count</span><span class="p">,))</span>
         <span class="k">elif</span> <span class="n">distribution</span> <span class="ow">is</span> <span class="s1">&#39;poisson&#39;</span><span class="p">:</span>
-            <span class="n">nrandompts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">totallength</span><span class="p">,</span>
-                                           <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">poisson</span><span class="p">(</span><span class="n">count</span><span class="p">),))</span>
+            <span class="n">mid_length</span> <span class="o">=</span> <span class="n">totallength</span> <span class="o">/</span> <span class="mf">2.</span>
+            <span class="n">nrandompts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">poisson</span><span class="p">(</span><span class="n">mid_length</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">count</span><span class="p">,))</span>
             
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nrandompts</span><span class="p">):</span>
             <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">r</span> <span class="o">&lt;</span> <span class="n">stops</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
@@ -755,47 +869,61 @@
             
             <span class="c1"># Populate the distance to node.</span>
             <span class="n">distance_from_end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge_lengths</span><span class="p">[</span><span class="n">edges</span><span class="p">[</span><span class="n">idx</span><span class="p">]]</span>\
-                <span class="o">-</span> <span class="n">distance_from_start</span>
+                                                        <span class="o">-</span> <span class="n">distance_from_start</span>
             <span class="n">simpts</span><span class="o">.</span><span class="n">dist_to_node</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">assignment_edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">distance_from_start</span><span class="p">,</span>
                                       <span class="n">assignment_edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">distance_from_end</span><span class="p">}</span>
             
             <span class="n">simpts</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="n">simpts</span><span class="o">.</span><span class="n">snapped_coordinates</span>
             <span class="n">simpts</span><span class="o">.</span><span class="n">npoints</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">simpts</span><span class="o">.</span><span class="n">points</span><span class="p">)</span>
             
-        <span class="k">return</span> <span class="n">simpts</span>
+        <span class="k">return</span> <span class="n">simpts</span></div>
 
 
-    <span class="k">def</span> <span class="nf">enum_links_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v0</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.enum_links_node"><a class="viewcode-back" href="../../generated/spaghetti.Network.enum_links_node.html#spaghetti.Network.enum_links_node">[docs]</a>    <span class="k">def</span> <span class="nf">enum_links_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns the edges (links) around node.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        -----------</span>
+<span class="sd">        </span>
 <span class="sd">        v0 : int</span>
 <span class="sd">            Node id</span>
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+<span class="sd">        </span>
 <span class="sd">        links : list</span>
 <span class="sd">            List of tuple edges adjacent to the node.</span>
+<span class="sd">        </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; import spaghetti as spgh</span>
+<span class="sd">        &gt;&gt;&gt; ntw = spgh.Network(examples.get_path(&#39;streets.shp&#39;))</span>
+<span class="sd">        &gt;&gt;&gt; ntw.enum_links_node(24)</span>
+<span class="sd">        [(24, 48), (24, 25), (24, 26)]</span>
+<span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">links</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">neighbornodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">adjacencylist</span><span class="p">[</span><span class="n">v0</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">neighbornodes</span><span class="p">:</span>
             <span class="n">links</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="nb">sorted</span><span class="p">([</span><span class="n">n</span><span class="p">,</span> <span class="n">v0</span><span class="p">])))</span>
         
-        <span class="k">return</span> <span class="n">links</span>
+        <span class="k">return</span> <span class="n">links</span></div>
 
 
-    <span class="k">def</span> <span class="nf">node_distance_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_processes</span><span class="p">,</span> <span class="n">gen_tree</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.node_distance_matrix"><a class="viewcode-back" href="../../generated/spaghetti.Network.node_distance_matrix.html#spaghetti.Network.node_distance_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">node_distance_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_processes</span><span class="p">,</span> <span class="n">gen_tree</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Called from within allneighbordistances(),</span>
 <span class="sd">        nearestneighbordistances(), and distancebandweights().</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        -----------</span>
+<span class="sd">        </span>
 <span class="sd">        n_processes : int</span>
 <span class="sd">            cpu cores for multiprocessing.</span>
+<span class="sd">       </span>
 <span class="sd">        gen_tree : bool</span>
 <span class="sd">            rebuild shortest path {True}, or skip {False}</span>
+<span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">alldistances</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">nnodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_list</span><span class="p">)</span>
@@ -833,10 +961,10 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">tree</span> <span class="o">=</span> <span class="kc">None</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">alldistances</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">distance</span><span class="p">[</span><span class="n">node</span><span class="p">],</span> <span class="n">tree</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">distancematrix</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">distance</span><span class="p">[</span><span class="n">node</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">distancematrix</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">distance</span><span class="p">[</span><span class="n">node</span><span class="p">]</span></div>
 
 
-    <span class="k">def</span> <span class="nf">allneighbordistances</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourcepattern</span><span class="p">,</span> <span class="n">destpattern</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="Network.allneighbordistances"><a class="viewcode-back" href="../../generated/spaghetti.Network.allneighbordistances.html#spaghetti.Network.allneighbordistances">[docs]</a>    <span class="k">def</span> <span class="nf">allneighbordistances</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourcepattern</span><span class="p">,</span> <span class="n">destpattern</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                              <span class="n">fill_diagonal</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_processes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                              <span class="n">gen_tree</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Compute either all distances between i and j in a single point</span>
@@ -845,42 +973,54 @@
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+<span class="sd">        </span>
 <span class="sd">        sourcepattern : str</span>
 <span class="sd">            The key of a point pattern snapped to the network.</span>
+<span class="sd">        </span>
 <span class="sd">        destpattern : str</span>
 <span class="sd">            (Optional) The key of a point pattern snapped to the network.</span>
+<span class="sd">        </span>
 <span class="sd">        fill_diagonal : float, int</span>
 <span class="sd">            (Optional) Fill the diagonal of the cost matrix. Default in None</span>
 <span class="sd">            and will populate the diagonal with numpy.nan Do not declare a</span>
 <span class="sd">            destpattern for a custom fill_diagonal.</span>
+<span class="sd">        </span>
 <span class="sd">        n_processes : int, str</span>
 <span class="sd">            (Optional) Specify the number of cores to utilize. Default is 1</span>
 <span class="sd">            core. Use (int) to specify an exact number or cores.  Use (&quot;all&quot;)</span>
 <span class="sd">            to request all available cores.</span>
+<span class="sd">        </span>
 <span class="sd">        gen_tree : bool</span>
 <span class="sd">            rebuild shortest path {True}, or skip {False}</span>
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+<span class="sd">        </span>
 <span class="sd">        nearest : numpy.ndarray</span>
 <span class="sd">            An array of shape (n,n) storing distances between all points.</span>
 <span class="sd">        </span>
-<span class="sd">        Example</span>
-<span class="sd">        -------</span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; import spaghetti as spgh</span>
 <span class="sd">        &gt;&gt;&gt; ntw = spgh.Network(examples.get_path(&#39;streets.shp&#39;))</span>
 <span class="sd">        &gt;&gt;&gt; ntw.snapobservations(examples.get_path(&#39;crimes.shp&#39;),</span>
 <span class="sd">        ...                                        &#39;crimes&#39;,</span>
 <span class="sd">        ...                                         attribute=True)</span>
 <span class="sd">        &gt;&gt;&gt; crimes_pp = ntw.pointpatterns[&#39;crimes&#39;]</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; s2s_dist = ntw.allneighbordistances(crimes_pp)</span>
 <span class="sd">        &gt;&gt;&gt; s2s_dist[0,0], s2s_dist[1,0]</span>
 <span class="sd">        (nan, 3105.189475447081)</span>
+<span class="sd">        </span>
 <span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; ntw.snapobservations(examples.get_path(&#39;schools.shp&#39;),</span>
 <span class="sd">        ...                                        &#39;schools&#39;,</span>
 <span class="sd">        ...                                        attribute=False)</span>
 <span class="sd">        &gt;&gt;&gt; schools_pp = ntw.pointpatterns[&#39;schools&#39;]</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; s2d_dist = ntw.allneighbordistances(crimes_pp,</span>
 <span class="sd">        ...                                     destpattern=schools_pp)</span>
 <span class="sd">        &gt;&gt;&gt; s2d_dist[0,0], s2d_dist[1,0]</span>
@@ -981,10 +1121,10 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">np</span><span class="o">.</span><span class="n">fill_diagonal</span><span class="p">(</span><span class="n">nearest</span><span class="p">,</span> <span class="n">fill_diagonal</span><span class="p">)</span>
                 
-        <span class="k">return</span> <span class="n">nearest</span>
+        <span class="k">return</span> <span class="n">nearest</span></div>
 
 
-    <span class="k">def</span> <span class="nf">nearestneighbordistances</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourcepattern</span><span class="p">,</span> <span class="n">destpattern</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="Network.nearestneighbordistances"><a class="viewcode-back" href="../../generated/spaghetti.Network.nearestneighbordistances.html#spaghetti.Network.nearestneighbordistances">[docs]</a>    <span class="k">def</span> <span class="nf">nearestneighbordistances</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourcepattern</span><span class="p">,</span> <span class="n">destpattern</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                  <span class="n">n_processes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gen_tree</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Compute the interpattern nearest neighbor distances or the</span>
 <span class="sd">        intrapattern nearest neighbor distances between a source</span>
@@ -992,23 +1132,35 @@
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+<span class="sd">        </span>
 <span class="sd">        sourcepattern : str</span>
 <span class="sd">            The key of a point pattern snapped to the network.</span>
+<span class="sd">        </span>
 <span class="sd">        destpattern : str</span>
 <span class="sd">            (Optional) The key of a point pattern snapped to the network.</span>
+<span class="sd">        </span>
 <span class="sd">        n_processes : int, str</span>
 <span class="sd">            (Optional) Specify the number of cores to utilize. Default is 1</span>
 <span class="sd">            core. Use (int) to specify an exact number or cores. Use (&quot;all&quot;)</span>
 <span class="sd">            to request all available cores.</span>
+<span class="sd">        </span>
 <span class="sd">        gen_tree : bool</span>
 <span class="sd">            rebuild shortest path {True}, or skip {False}</span>
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+<span class="sd">        </span>
 <span class="sd">        nearest : numpy.ndarray</span>
 <span class="sd">            An (n,2) shaped array with column[:,0] containing the id of the</span>
 <span class="sd">            nearest neighbor and column [:,1] containing the distance.</span>
+<span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1">###########################################</span>
+        <span class="c1">#</span>
+        <span class="c1"># MERGE WITH `allneighbordistances`</span>
+        <span class="c1">#</span>
+        <span class="c1">###########################################</span>
         
         <span class="k">if</span> <span class="n">sourcepattern</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointpatterns</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">err_msg</span> <span class="o">=</span> <span class="s2">&quot;Available point patterns are </span><span class="si">{}</span><span class="s2">&quot;</span>
@@ -1022,8 +1174,8 @@
         <span class="n">nearest</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">pt_indices</span><span class="p">),</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
         <span class="n">nearest</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
         
-        <span class="k">if</span> <span class="n">destpattern</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">destpattern</span> <span class="o">=</span> <span class="n">sourcepattern</span>
+        <span class="c1">#if destpattern is None:</span>
+        <span class="c1">#    destpattern = sourcepattern</span>
             
         <span class="n">searchpts</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">pt_indices</span><span class="p">)</span>
         
@@ -1075,85 +1227,132 @@
                     <span class="n">nearest</span><span class="p">[</span><span class="n">p2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">p1</span>
                     <span class="n">nearest</span><span class="p">[</span><span class="n">p2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">s2_to_d2</span>
                     
-        <span class="k">return</span> <span class="n">nearest</span>
+        <span class="k">return</span> <span class="n">nearest</span></div>
 
 
-    <span class="k">def</span> <span class="nf">NetworkF</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pointpattern</span><span class="p">,</span> <span class="n">nsteps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">99</span><span class="p">,</span>
-                 <span class="n">threshold</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">distribution</span><span class="o">=</span><span class="s1">&#39;uniform&#39;</span><span class="p">,</span>
-                 <span class="n">lowerbound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">upperbound</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.NetworkF"><a class="viewcode-back" href="../../generated/spaghetti.Network.NetworkF.html#spaghetti.Network.NetworkF">[docs]</a>    <span class="k">def</span> <span class="nf">NetworkF</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pointpattern</span><span class="p">,</span> <span class="n">nsteps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">99</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+                 <span class="n">distribution</span><span class="o">=</span><span class="s1">&#39;uniform&#39;</span><span class="p">,</span>  <span class="n">lowerbound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">upperbound</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Computes a network constrained F-Function</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+<span class="sd">        </span>
 <span class="sd">        pointpattern : spaghetti.network.PointPattern</span>
 <span class="sd">            A spaghetti point pattern object.</span>
+<span class="sd">        </span>
 <span class="sd">        nsteps : int</span>
 <span class="sd">            The number of steps at which the count of the nearest neighbors</span>
 <span class="sd">            is computed.</span>
+<span class="sd">        </span>
 <span class="sd">        permutations : int</span>
 <span class="sd">            The number of permutations to perform (default 99).</span>
+<span class="sd">        </span>
 <span class="sd">        threshold : float</span>
 <span class="sd">            The level at which significance is computed.</span>
 <span class="sd">            -- 0.5 would be 97.5% and 2.5%</span>
+<span class="sd">        </span>
 <span class="sd">        distribution : str</span>
 <span class="sd">            The distribution from which random points are sampled</span>
 <span class="sd">            -- uniform or poisson</span>
+<span class="sd">        </span>
 <span class="sd">        lowerbound : float</span>
 <span class="sd">            The lower bound at which the F-function is computed. (Default 0).</span>
+<span class="sd">        </span>
 <span class="sd">        upperbound : float</span>
 <span class="sd">            The upper bound at which the F-function is computed. Defaults to</span>
 <span class="sd">            the maximum observed nearest neighbor distance.</span>
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+<span class="sd">        </span>
 <span class="sd">        NetworkF : spaghetti.analysis.NetworkF</span>
 <span class="sd">            A network F class instance.</span>
+<span class="sd">        </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; import spaghetti as spgh</span>
+<span class="sd">        &gt;&gt;&gt; ntw = spgh.Network(in_data=examples.get_path(&#39;streets.shp&#39;))</span>
+<span class="sd">        &gt;&gt;&gt; pt_str = &#39;crimes&#39;</span>
+<span class="sd">        &gt;&gt;&gt; in_data = examples.get_path(&#39;{}.shp&#39;.format(pt_str))</span>
+<span class="sd">        &gt;&gt;&gt; ntw.snapobservations(in_data, pt_str, attribute=True)</span>
+<span class="sd">        &gt;&gt;&gt; npts = ntw.pointpatterns[&#39;crimes&#39;].npoints</span>
+<span class="sd">        &gt;&gt;&gt; np.random.seed(1)</span>
+<span class="sd">        &gt;&gt;&gt; sim = ntw.simulate_observations(npts)</span>
+<span class="sd">        &gt;&gt;&gt; np.random.seed(1)</span>
+<span class="sd">        &gt;&gt;&gt; fres = ntw.NetworkF(ntw.pointpatterns[&#39;crimes&#39;], permutations=5)</span>
+<span class="sd">        &gt;&gt;&gt; fres.lowerenvelope[1]</span>
+<span class="sd">        0.04878048780487805</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">NetworkF</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pointpattern</span><span class="p">,</span> <span class="n">nsteps</span><span class="o">=</span><span class="n">nsteps</span><span class="p">,</span>
                         <span class="n">permutations</span><span class="o">=</span><span class="n">permutations</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">,</span>
                         <span class="n">distribution</span><span class="o">=</span><span class="n">distribution</span><span class="p">,</span> <span class="n">lowerbound</span><span class="o">=</span><span class="n">lowerbound</span><span class="p">,</span>
-                        <span class="n">upperbound</span><span class="o">=</span><span class="n">upperbound</span><span class="p">)</span>
+                        <span class="n">upperbound</span><span class="o">=</span><span class="n">upperbound</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">NetworkG</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pointpattern</span><span class="p">,</span> <span class="n">nsteps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">99</span><span class="p">,</span>
+<div class="viewcode-block" id="Network.NetworkG"><a class="viewcode-back" href="../../generated/spaghetti.Network.NetworkG.html#spaghetti.Network.NetworkG">[docs]</a>    <span class="k">def</span> <span class="nf">NetworkG</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pointpattern</span><span class="p">,</span> <span class="n">nsteps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">99</span><span class="p">,</span>
                  <span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">distribution</span><span class="o">=</span><span class="s1">&#39;uniform&#39;</span><span class="p">,</span>
                  <span class="n">lowerbound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">upperbound</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Computes a network constrained G-Function</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+<span class="sd">        </span>
 <span class="sd">        pointpattern : spaghetti.network.PointPattern</span>
 <span class="sd">            A spaghetti point pattern object.</span>
+<span class="sd">        </span>
 <span class="sd">        nsteps : int</span>
 <span class="sd">            The number of steps at which the count of the nearest neighbors</span>
 <span class="sd">            is computed.</span>
+<span class="sd">        </span>
 <span class="sd">        permutations : int</span>
 <span class="sd">            The number of permutations to perform (default 99).</span>
+<span class="sd">        </span>
 <span class="sd">        threshold : float</span>
 <span class="sd">            The level at which significance is computed.</span>
 <span class="sd">            -- 0.5 would be 97.5% and 2.5%</span>
+<span class="sd">        </span>
 <span class="sd">        distribution : str</span>
 <span class="sd">            The distribution from which random points are sampled</span>
 <span class="sd">            -- uniform or poisson</span>
+<span class="sd">        </span>
 <span class="sd">        lowerbound : float</span>
 <span class="sd">            The lower bound at which the G-function is computed. (Default 0).</span>
+<span class="sd">        </span>
 <span class="sd">        upperbound : float</span>
 <span class="sd">            The upper bound at which the G-function is computed. Defaults to</span>
 <span class="sd">            the maximum observed nearest neighbor distance.</span>
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+<span class="sd">        </span>
 <span class="sd">        NetworkG : spaghetti.analysis.NetworkG</span>
 <span class="sd">            A network G class instance.</span>
+<span class="sd">        </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; import spaghetti as spgh</span>
+<span class="sd">        &gt;&gt;&gt; ntw = spgh.Network(in_data=examples.get_path(&#39;streets.shp&#39;))</span>
+<span class="sd">        &gt;&gt;&gt; pt_str = &#39;crimes&#39;</span>
+<span class="sd">        &gt;&gt;&gt; in_data = examples.get_path(&#39;{}.shp&#39;.format(pt_str))</span>
+<span class="sd">        &gt;&gt;&gt; ntw.snapobservations(in_data, pt_str, attribute=True)</span>
+<span class="sd">        &gt;&gt;&gt; npts = ntw.pointpatterns[&#39;crimes&#39;].npoints</span>
+<span class="sd">        &gt;&gt;&gt; np.random.seed(1)</span>
+<span class="sd">        &gt;&gt;&gt; sim = ntw.simulate_observations(npts)</span>
+<span class="sd">        &gt;&gt;&gt; np.random.seed(1)</span>
+<span class="sd">        &gt;&gt;&gt; gres = ntw.NetworkG(ntw.pointpatterns[&#39;crimes&#39;], permutations=5)</span>
+<span class="sd">        &gt;&gt;&gt; gres.lowerenvelope[1]</span>
+<span class="sd">        0.11149825783972125</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         
         <span class="k">return</span> <span class="n">NetworkG</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pointpattern</span><span class="p">,</span> <span class="n">nsteps</span><span class="o">=</span><span class="n">nsteps</span><span class="p">,</span>
                         <span class="n">permutations</span><span class="o">=</span><span class="n">permutations</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">,</span>
                         <span class="n">distribution</span><span class="o">=</span><span class="n">distribution</span><span class="p">,</span> <span class="n">lowerbound</span><span class="o">=</span><span class="n">lowerbound</span><span class="p">,</span>
-                        <span class="n">upperbound</span><span class="o">=</span><span class="n">upperbound</span><span class="p">)</span>
+                        <span class="n">upperbound</span><span class="o">=</span><span class="n">upperbound</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">NetworkK</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pointpattern</span><span class="p">,</span> <span class="n">nsteps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">99</span><span class="p">,</span>
+<div class="viewcode-block" id="Network.NetworkK"><a class="viewcode-back" href="../../generated/spaghetti.Network.NetworkK.html#spaghetti.Network.NetworkK">[docs]</a>    <span class="k">def</span> <span class="nf">NetworkK</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pointpattern</span><span class="p">,</span> <span class="n">nsteps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">99</span><span class="p">,</span>
                  <span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">distribution</span><span class="o">=</span><span class="s1">&#39;uniform&#39;</span><span class="p">,</span>
                  <span class="n">lowerbound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">upperbound</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1161,57 +1360,85 @@
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+<span class="sd">        </span>
 <span class="sd">        pointpattern : spaghetti.network.PointPattern</span>
 <span class="sd">            A spaghetti point pattern object.</span>
+<span class="sd">        </span>
 <span class="sd">        nsteps : int</span>
 <span class="sd">            The number of steps at which the count of the nearest neighbors</span>
 <span class="sd">            is computed.</span>
+<span class="sd">        </span>
 <span class="sd">        permutations : int</span>
 <span class="sd">            The number of permutations to perform (default 99).</span>
+<span class="sd">        </span>
 <span class="sd">        threshold : float</span>
 <span class="sd">            The level at which significance is computed.</span>
 <span class="sd">            -- 0.5 would be 97.5% and 2.5%</span>
+<span class="sd">        </span>
 <span class="sd">        distribution : str</span>
 <span class="sd">            The distribution from which random points are sampled</span>
 <span class="sd">            -- uniform or poisson</span>
+<span class="sd">        </span>
 <span class="sd">        lowerbound : float</span>
 <span class="sd">            The lower bound at which the K-function is computed. (Default 0).</span>
+<span class="sd">        </span>
 <span class="sd">        upperbound : float</span>
 <span class="sd">            The upper bound at which the K-function is computed. Defaults to</span>
 <span class="sd">            the maximum observed nearest neighbor distance.</span>
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+<span class="sd">        </span>
 <span class="sd">        NetworkK : spaghetti.analysis.NetworkK</span>
 <span class="sd">            A network K class instance.</span>
+<span class="sd">        </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; import spaghetti as spgh</span>
+<span class="sd">        &gt;&gt;&gt; ntw = spgh.Network(in_data=examples.get_path(&#39;streets.shp&#39;))</span>
+<span class="sd">        &gt;&gt;&gt; pt_str = &#39;crimes&#39;</span>
+<span class="sd">        &gt;&gt;&gt; in_data = examples.get_path(&#39;{}.shp&#39;.format(pt_str))</span>
+<span class="sd">        &gt;&gt;&gt; ntw.snapobservations(in_data, pt_str, attribute=True)</span>
+<span class="sd">        &gt;&gt;&gt; npts = ntw.pointpatterns[&#39;crimes&#39;].npoints</span>
+<span class="sd">        &gt;&gt;&gt; np.random.seed(1)</span>
+<span class="sd">        &gt;&gt;&gt; sim = ntw.simulate_observations(npts)</span>
+<span class="sd">        &gt;&gt;&gt; np.random.seed(1)</span>
+<span class="sd">        &gt;&gt;&gt; kres = ntw.NetworkK(ntw.pointpatterns[&#39;crimes&#39;], permutations=5)</span>
+<span class="sd">        &gt;&gt;&gt; kres.lowerenvelope[1]</span>
+<span class="sd">        462950.982883102</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">NetworkK</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pointpattern</span><span class="p">,</span> <span class="n">nsteps</span><span class="o">=</span><span class="n">nsteps</span><span class="p">,</span>
                         <span class="n">permutations</span><span class="o">=</span><span class="n">permutations</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">,</span>
                         <span class="n">distribution</span><span class="o">=</span><span class="n">distribution</span><span class="p">,</span> <span class="n">lowerbound</span><span class="o">=</span><span class="n">lowerbound</span><span class="p">,</span>
-                        <span class="n">upperbound</span><span class="o">=</span><span class="n">upperbound</span><span class="p">)</span>
+                        <span class="n">upperbound</span><span class="o">=</span><span class="n">upperbound</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">segment_edges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.segment_edges"><a class="viewcode-back" href="../../generated/spaghetti.Network.segment_edges.html#spaghetti.Network.segment_edges">[docs]</a>    <span class="k">def</span> <span class="nf">segment_edges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Segment all of the edges in the network at either a</span>
 <span class="sd">        fixed distance or a fixed number of segments.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        -----------</span>
+<span class="sd">        </span>
 <span class="sd">        distance : float</span>
 <span class="sd">            The distance at which edges are split.</span>
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+<span class="sd">        </span>
 <span class="sd">        sn : spaghetti.Network</span>
 <span class="sd">            spaghetti Network object.</span>
 <span class="sd">        </span>
-<span class="sd">        Example</span>
-<span class="sd">        -------</span>
+<span class="sd">       Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">       </span>
 <span class="sd">        &gt;&gt;&gt; import spaghetti as spgh</span>
 <span class="sd">        &gt;&gt;&gt; ntw = spgh.Network(examples.get_path(&#39;streets.shp&#39;))</span>
 <span class="sd">        &gt;&gt;&gt; n200 = ntw.segment_edges(200.0)</span>
 <span class="sd">        &gt;&gt;&gt; len(n200.edges)</span>
 <span class="sd">        688</span>
+<span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         
         <span class="n">sn</span> <span class="o">=</span> <span class="n">Network</span><span class="p">()</span>
@@ -1290,48 +1517,53 @@
         <span class="k">for</span> <span class="n">instance</span> <span class="ow">in</span> <span class="n">sn</span><span class="o">.</span><span class="n">pointpatterns</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="n">sn</span><span class="o">.</span><span class="n">_snap_to_edge</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
             
-        <span class="k">return</span> <span class="n">sn</span>
+        <span class="k">return</span> <span class="n">sn</span></div>
 
 
-    <span class="k">def</span> <span class="nf">savenetwork</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.savenetwork"><a class="viewcode-back" href="../../generated/spaghetti.Network.savenetwork.html#spaghetti.Network.savenetwork">[docs]</a>    <span class="k">def</span> <span class="nf">savenetwork</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Save a network to disk as a binary file.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+<span class="sd">        </span>
 <span class="sd">        filename : str</span>
 <span class="sd">            The filename where the network should be saved. This should be a</span>
 <span class="sd">            full path or it will be save in the current directory.</span>
 <span class="sd">        </span>
-<span class="sd">        Example</span>
+<span class="sd">        Examples</span>
 <span class="sd">        --------</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; import spaghetti as spgh</span>
 <span class="sd">        &gt;&gt;&gt; ntw = spgh.Network(examples.get_path(&#39;streets.shp&#39;))</span>
 <span class="sd">        &gt;&gt;&gt; ntw.savenetwork(&#39;mynetwork.pkl&#39;)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">networkout</span><span class="p">:</span>
-            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">networkout</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">networkout</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span></div>
 
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Network.loadnetwork"><a class="viewcode-back" href="../../generated/spaghetti.Network.loadnetwork.html#spaghetti.Network.loadnetwork">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">loadnetwork</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Load a network from a binary file saved on disk.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+<span class="sd">        </span>
 <span class="sd">        filename : str</span>
 <span class="sd">            The filename where the network should be saved.</span>
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+<span class="sd">        </span>
 <span class="sd">        self : spaghetti.Network</span>
 <span class="sd">            spaghetti Network object</span>
+<span class="sd">            </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">networkin</span><span class="p">:</span>
             <span class="bp">self</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">networkin</span><span class="p">)</span>
             
-        <span class="k">return</span> <span class="bp">self</span></div>
+        <span class="k">return</span> <span class="bp">self</span></div></div>
 
 
-<div class="viewcode-block" id="PointPattern"><a class="viewcode-back" href="../../generated/spaghetti.network.PointPattern.html#spaghetti.network.PointPattern">[docs]</a><span class="k">class</span> <span class="nc">PointPattern</span><span class="p">():</span>
+<div class="viewcode-block" id="PointPattern"><a class="viewcode-back" href="../../generated/spaghetti.PointPattern.html#spaghetti.PointPattern">[docs]</a><span class="k">class</span> <span class="nc">PointPattern</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;A stub point pattern class used to store a point pattern. This class is</span>
 <span class="sd">    monkey patched with network specific attributes when the points are snapped</span>
 <span class="sd">    to a network. In the future this class may be replaced with a generic point</span>
@@ -1339,36 +1571,46 @@
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
+<span class="sd">    </span>
 <span class="sd">    in_data : geopandas.GeoDataFrame or str</span>
 <span class="sd">        The input geographic data. Either (1) a path to a shapefile (str);</span>
 <span class="sd">        or (2) a geopandas.GeoDataFrame.</span>
+<span class="sd">    </span>
 <span class="sd">    idvariable : str</span>
 <span class="sd">        Field in the shapefile to use as an id variable.</span>
+<span class="sd">    </span>
 <span class="sd">    attribute :  bool</span>
 <span class="sd">        {False, True} A flag to indicate whether all attributes are tagged</span>
 <span class="sd">        to this class.</span>
 <span class="sd">    </span>
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
+<span class="sd">    </span>
 <span class="sd">    points : dict</span>
 <span class="sd">        Keys are the point ids (int). Values are the x,y coordinates (tuple).</span>
+<span class="sd">    </span>
 <span class="sd">    npoints : int</span>
 <span class="sd">        The number of points.</span>
+<span class="sd">    </span>
 <span class="sd">    obs_to_edge : dict</span>
 <span class="sd">        Keys are edge ids (tuple). Values are snapped point information (dict).</span>
 <span class="sd">        Withing the snapped point information (dict) keys are observation id</span>
 <span class="sd">        (int), and values are snapped coordinates.</span>
+<span class="sd">    </span>
 <span class="sd">    obs_to_node : list</span>
 <span class="sd">        Keys are observations ids (int). Values are distance lookup (dict).</span>
 <span class="sd">        Within distance lookup (dict) keys are the two incident nodes of the</span>
 <span class="sd">        edge and values are distance to each of those edges.</span>
+<span class="sd">    </span>
 <span class="sd">    dist_to_node : dict</span>
 <span class="sd">        ####################################################################### NEEDS ATTENTION</span>
+<span class="sd">    </span>
 <span class="sd">    snapped_coordinates : dict</span>
 <span class="sd">        Keys are the point ids (int). Values are the snapped x,y</span>
 <span class="sd">        coordinates (tuple).</span>
+<span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="PointPattern.__init__"><a class="viewcode-back" href="../../generated/spaghetti.network.PointPattern.html#spaghetti.network.PointPattern.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">idvariable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="PointPattern.__init__"><a class="viewcode-back" href="../../generated/spaghetti.PointPattern.html#spaghetti.PointPattern.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">idvariable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">npoints</span> <span class="o">=</span> <span class="mi">0</span>
         
@@ -1423,21 +1665,36 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">npoints</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div></div>
 
 
-<div class="viewcode-block" id="SimulatedPointPattern"><a class="viewcode-back" href="../../generated/spaghetti.network.SimulatedPointPattern.html#spaghetti.network.SimulatedPointPattern">[docs]</a><span class="k">class</span> <span class="nc">SimulatedPointPattern</span><span class="p">():</span>
+<div class="viewcode-block" id="SimulatedPointPattern"><a class="viewcode-back" href="../../generated/spaghetti.SimulatedPointPattern.html#spaghetti.SimulatedPointPattern">[docs]</a><span class="k">class</span> <span class="nc">SimulatedPointPattern</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Struct style class to mirror the Point Pattern Class. If the</span>
 <span class="sd">    PointPattern class has methods, it might make sense to make this a child of</span>
 <span class="sd">    that class. This class is not intended to be used by the external user.</span>
 <span class="sd">    </span>
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-<span class="sd">    npoints</span>
-<span class="sd">    obs_to_edge</span>
-<span class="sd">    obs_to_node</span>
-<span class="sd">    dist_to_node</span>
-<span class="sd">    snapped_coordinates</span>
 <span class="sd">    </span>
+<span class="sd">    npoints : int</span>
+<span class="sd">        The number of points.</span>
+<span class="sd">    </span>
+<span class="sd">    obs_to_edge : dict</span>
+<span class="sd">        Keys are edge ids (tuple). Values are snapped point information (dict).</span>
+<span class="sd">        Withing the snapped point information (dict) keys are observation id</span>
+<span class="sd">        (int), and values are snapped coordinates.</span>
+<span class="sd">    </span>
+<span class="sd">    obs_to_node : list</span>
+<span class="sd">        Keys are observations ids (int). Values are distance lookup (dict).</span>
+<span class="sd">        Within distance lookup (dict) keys are the two incident nodes of the</span>
+<span class="sd">        edge and values are distance to each of those edges.</span>
+<span class="sd">    </span>
+<span class="sd">    dist_to_node : dict</span>
+<span class="sd">        ####################################################################### NEEDS ATTENTION</span>
+<span class="sd">    </span>
+<span class="sd">    snapped_coordinates : dict</span>
+<span class="sd">        Keys are the point ids (int). Values are the snapped x,y</span>
+<span class="sd">        coordinates (tuple).</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="SimulatedPointPattern.__init__"><a class="viewcode-back" href="../../generated/spaghetti.network.SimulatedPointPattern.html#spaghetti.network.SimulatedPointPattern.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SimulatedPointPattern.__init__"><a class="viewcode-back" href="../../generated/spaghetti.SimulatedPointPattern.html#spaghetti.SimulatedPointPattern.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">npoints</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">obs_to_edge</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">obs_to_node</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
@@ -1450,15 +1707,18 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    OrderedDict : collections.OrderedDict</span>
+<span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">next_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+<span class="sd">        </span>
 <span class="sd">        key : </span>
 <span class="sd">            </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+<span class="sd">        </span>
 <span class="sd">        n : </span>
 <span class="sd">            </span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1470,8 +1730,10 @@
 
     <span class="k">def</span> <span class="nf">first_key</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+<span class="sd">        </span>
 <span class="sd">        key : </span>
 <span class="sd">            </span>
 <span class="sd">        &quot;&quot;&quot;</span>
