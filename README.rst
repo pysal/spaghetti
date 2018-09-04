@@ -11,8 +11,8 @@ SPAtial GrapHs: nETworks, Topology, & Inference
    :target: https://github.com/pysal/spaghetti
 .. image:: https://travis-ci.org/pysal/spaghetti.svg?branch=master
    :target: https://travis-ci.org/pysal/spaghetti
-.. image:: https://readthedocs.org/projects/pysalspaghetti/badge/?version=latest
-   :target: https://pysalspaghetti.readthedocs.io/en/latest/?badge=latest
+.. image:: https://readthedocs.org/projects/pysal-spaghetti/badge/?version=latest
+   :target: https://pysal-spaghetti.readthedocs.io/en/latest/?badge=latest
 .. image:: https://badges.gitter.im/pysal/Spaghetti.svg
    :target: https://gitter.im/pysal/Spaghetti?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
     
