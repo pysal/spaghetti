@@ -995,6 +995,7 @@ class Network:
                     # Mirror the upper and lower triangle
                     # when symmetric.
                     nearest[p2, p1] = nearest[p1, p2]
+        
         # Populate the main diagonal when symmetric.
         if symmetric:
             if fill_diagonal is None:
@@ -1006,7 +1007,8 @@ class Network:
 
 
     def nearestneighbordistances(self, sourcepattern, destpattern=None,
-                                 n_processes=None, gen_tree=False):
+                                 n_processes=None, gen_tree=False,
+                                 all_dists=None, keep_zero_dist=True):
         """Compute the interpattern nearest neighbor distances or the
         intrapattern nearest neighbor distances between a source
         pattern and a destination pattern.
@@ -1028,86 +1030,76 @@ class Network:
         gen_tree : bool
             rebuild shortest path {True}, or skip {False}
         
+        all_dists : numpy.ndarray
+            An array of shape (n,n) storing distances between all points.
+        
+        keep_zero_dist : bool
+            Include zero values in minimum distance (True) or exclude (False).
+            Default is True. If the source pattern is the same as the
+            destination pattern the diagonal is filled with nans
+        
         Returns
         -------
+        nearest : dict
+            key is source point id, value is tuple of list containing 
+            nearest destination point ids and distance.
         
-        nearest : numpy.ndarray
-            An (n,2) shaped array with column[:,0] containing the id of the
-            nearest neighbor and column [:,1] containing the distance.
+        Examples
+        --------
+        
+        >>> import spaghetti as spgh
+        >>> ntw = spgh.Network(examples.get_path('streets.shp'))
+        >>> ntw.snapobservations(examples.get_path('crimes.shp'), 'crimes')
+        >>> nn = ntw.nearestneighbordistances('crimes', keep_zero_dist=True)
+        >>> nn[11], nn[18]
+        (([18, 19], 165.33982412719126), ([19], 0.0))
+        
+        >>> nn = ntw.nearestneighbordistances('crimes', keep_zero_dist=False)
+        >>> nn[11], nn[18]
+        (([18, 19], 165.33982412719126), ([11], 165.33982412719126))
         
         """
-        
-        ###########################################
-        #
-        # MERGE WITH `allneighbordistances`
-        #
-        ###########################################
-        
         if sourcepattern not in self.pointpatterns.keys():
             err_msg = "Available point patterns are {}"
             raise KeyError(err_msg.format(self.pointpatterns.keys()))
             
         if not hasattr(self, 'alldistances'):
             self.node_distance_matrix(n_processes, gen_tree=gen_tree)
-            
-        pt_indices = list(self.pointpatterns[sourcepattern].points.keys())
-        dist_to_node = self.pointpatterns[sourcepattern].dist_to_node
-        nearest = np.zeros((len(pt_indices), 2), dtype=np.float32)
-        nearest[:, 1] = np.inf
         
-        #if destpattern is None:
-        #    destpattern = sourcepattern
-            
-        searchpts = copy.deepcopy(pt_indices)
+        symmetric = sourcepattern != destpattern
         
-        searchnodes = {}
-        for s in searchpts:
-            e1, e2 = dist_to_node[s].keys()
-            searchnodes[s] = (e1, e2)
+        # (for source-to-source patterns) if zero-distance neighbors are
+        # desired, keep the diagonal as NaN and take the minimum distance
+        # neighbor(s), which may include zero distance neighors.
+        fill_diagonal = None
+        if not keep_zero_dist and symmetric:
+            # (for source-to-source patterns) if zero-distance neighbors should
+            # be ignored, convert the diagonal to 0.0 and take the minimum
+            # distance neighbor(s) that is/are not 0.0 distance.
+            fill_diagonal = 0.
+        
+        sourcepattern = self.pointpatterns[sourcepattern]
+        if destpattern:
+            destpattern = self.pointpatterns[destpattern]
+        
+        if all_dists is None:
+            all_dists = self.allneighbordistances(sourcepattern,
+                                                  destpattern=destpattern,
+                                                  fill_diagonal=fill_diagonal,
+                                                  n_processes=n_processes,
+                                                  gen_tree=gen_tree)
+        nearest = {}
+        
+        for source_index in sourcepattern.points.keys():
+            if keep_zero_dist and symmetric:
+                val = np.nanmin(all_dists[source_index,:])
+            else:
+                val = np.min(all_dists[source_index,:]\
+                                      [np.nonzero(all_dists[source_index,:])])
+            # nearest destination (may be more than one if equal distance)
+            dest_idxs = np.where(all_dists[source_index,:] == val)[0].tolist()
+            nearest[source_index] = (dest_idxs, val)
             
-        for p1 in pt_indices:
-            # Get the source nodes and distance to source nodes.
-            # source1 and source2 nodes
-            s1, s2 = searchnodes[p1]
-            sdist1, sdist2 = dist_to_node[p1].values()
-            
-            searchpts.remove(p1)
-            for p2 in searchpts:
-                d1, d2 = searchnodes[p2]
-                ddist1, ddist2 = dist_to_node[p2].values()
-                s1_to_d1 = sdist1 + self.alldistances[s1][0][d1] + ddist1
-                s1_to_d2 = sdist1 + self.alldistances[s1][0][d2] + ddist2
-                s2_to_d1 = sdist2 + self.alldistances[s2][0][d1] + ddist1
-                s2_to_d2 = sdist2 + self.alldistances[s2][0][d2] + ddist2
-                # source1 to dest1
-                if s1_to_d1 < nearest[p1, 1]:
-                    nearest[p1, 0] = p2
-                    nearest[p1, 1] = s1_to_d1
-                if s1_to_d1 < nearest[p2, 1]:
-                    nearest[p2, 0] = p1
-                    nearest[p2, 1] = s1_to_d1
-                # source1 to dest2
-                if s1_to_d2 < nearest[p1, 1]:
-                    nearest[p1, 0] = p2
-                    nearest[p1, 1] = s1_to_d2
-                if s1_to_d2 < nearest[p2, 1]:
-                    nearest[p2, 0] = p1
-                    nearest[p2, 1] = s1_to_d2
-                # source2 to dest1
-                if s2_to_d1 < nearest[p1, 1]:
-                    nearest[p1, 0] = p2
-                    nearest[p1, 1] = s2_to_d1
-                if s2_to_d1 < nearest[p2, 1]:
-                    nearest[p2, 0] = p1
-                    nearest[p2, 1] = s2_to_d1
-                # source2 to dest2
-                if s2_to_d2 < nearest[p1, 1]:
-                    nearest[p1, 0] = p2
-                    nearest[p1, 1] = s2_to_d2
-                if s2_to_d2 < nearest[p2, 1]:
-                    nearest[p2, 0] = p1
-                    nearest[p2, 1] = s2_to_d2
-                    
         return nearest
 
 
