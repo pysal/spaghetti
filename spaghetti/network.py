@@ -888,10 +888,9 @@ class Network:
         >>> ntw.snapobservations(examples.get_path('crimes.shp'),
         ...                                        'crimes',
         ...                                         attribute=True)
-        >>> crimes_pp = ntw.pointpatterns['crimes']
         
         
-        >>> s2s_dist = ntw.allneighbordistances(crimes_pp)
+        >>> s2s_dist = ntw.allneighbordistances('crimes')
         >>> s2s_dist[0,0], s2s_dist[1,0]
         (nan, 3105.189475447081)
         
@@ -899,18 +898,22 @@ class Network:
         >>> ntw.snapobservations(examples.get_path('schools.shp'),
         ...                                        'schools',
         ...                                        attribute=False)
-        >>> schools_pp = ntw.pointpatterns['schools']
         
         
-        >>> s2d_dist = ntw.allneighbordistances(crimes_pp,
-        ...                                     destpattern=schools_pp)
+        >>> s2d_dist = ntw.allneighbordistances('crimes',
+        ...                                     destpattern='schools')
         >>> s2d_dist[0,0], s2d_dist[1,0]
         (4520.72353741989, 6340.422971967316)
         """
         
         if not hasattr(self, 'alldistances'):
             self.node_distance_matrix(n_processes, gen_tree=gen_tree)
-            
+        
+        if type(sourcepattern) is str:
+            sourcepattern = self.pointpatterns[sourcepattern]
+            if destpattern:
+                destpattern = self.pointpatterns[destpattern]
+        
         # Source setup
         src_indices = list(sourcepattern.points.keys())
         nsource_pts = len(src_indices)

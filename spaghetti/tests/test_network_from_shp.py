@@ -60,6 +60,89 @@ class TestNetworkPointPattern(unittest.TestCase):
         for obs in ['schools', 'crimes']:
             in_data = examples.get_path('{}.shp'.format(obs))
             self.ntw.snapobservations(in_data, obs, attribute=True)
+            #setattr(self, obs, obs)
+            setattr(self, obs, self.ntw.pointpatterns[obs])
+    
+    def tearDown(self):
+        pass
+    
+    def test_add_point_pattern(self):
+        self.assertEqual(self.crimes.npoints, 287)
+        self.assertIn('properties', self.crimes.points[0])
+        self.assertIn([1, 1], self.crimes.points[0]['properties'])
+    
+    def test_count_per_edge(self):
+        counts = self.ntw.count_per_edge(
+            self.ntw.pointpatterns['crimes'].obs_to_edge, graph=False)
+        meancounts = sum(counts.values()) / float(len(counts.keys()))
+        self.assertAlmostEqual(meancounts, 2.682242, places=5)
+    
+    def test_count_per_graph_edge(self):
+        counts = self.ntw.count_per_edge(
+            self.ntw.pointpatterns['crimes'].obs_to_edge, graph=True)
+        meancounts = sum(counts.values()) / float(len(counts.keys()))
+        self.assertAlmostEqual(meancounts, 3.29885, places=5)
+    
+    def test_simulate_normal_observations(self):
+        npoints = self.ntw.pointpatterns['crimes'].npoints
+        sim = self.ntw.simulate_observations(npoints)
+        self.assertEqual(npoints, sim.npoints)
+    
+    def test_simulate_poisson_observations(self):
+        npoints = self.ntw.pointpatterns['crimes'].npoints
+        sim = self.ntw.simulate_observations(npoints, distribution='poisson')
+        self.assertEqual(npoints, sim.npoints)
+    
+    def test_all_neighbor_distances(self):
+        distancematrix_1 = self.ntw.allneighbordistances('schools',
+                                                         gen_tree=True)
+        self.assertAlmostEqual(np.nansum(distancematrix_1[0]),
+                               17682.436988, places=4)
+        for k, (distances, predlist) in self.ntw.alldistances.items():
+            self.assertEqual(distances[k], 0)
+            for p, plists in predlist.items():
+                self.assertEqual(plists[-1], k)
+                self.assertEqual(self.ntw.node_list, list(predlist.keys()))
+                
+        distancematrix_2 = self.ntw.allneighbordistances('schools',
+                                                         fill_diagonal=0.)
+        observed = distancematrix_2.diagonal()
+        known = np.zeros(distancematrix_2.shape[0])
+        self.assertEqual(observed.all(), known.all())
+    
+    def test_nearest_neighbor_distances(self):
+        # general test
+        with self.assertRaises(KeyError):
+            self.ntw.nearestneighbordistances('i_should_not_exist')
+        nnd1 = self.ntw.nearestneighbordistances('schools')
+        nnd2 = self.ntw.nearestneighbordistances('schools',
+                                                 destpattern='schools')
+        nndv1 = np.array(list(nnd1.values()))[:,1].astype(float)
+        nndv2 = np.array(list(nnd2.values()))[:,1].astype(float)
+        np.testing.assert_array_almost_equal_nulp(nndv1, nndv2)
+        
+        # nearest neighbor keeping zero test
+        known_zero = ([19], 0.0)
+        nn_c = self.ntw.nearestneighbordistances('crimes',
+                                                 keep_zero_dist=True)
+        self.assertEqual(nn_c[18], known_zero)
+        
+        # nearest neighbor omitting zero test
+        known_nonzero = ([11], 165.33982412719126)
+        nn_c = self.ntw.nearestneighbordistances('crimes',
+                                                 keep_zero_dist=False)
+        self.assertEqual(nn_c[18], known_nonzero)
+
+
+
+'''
+class TestNetworkPointPattern(unittest.TestCase):
+    
+    def setUp(self):
+        self.ntw = network.Network(in_data=examples.get_path('streets.shp'))
+        for obs in ['schools', 'crimes']:
+            in_data = examples.get_path('{}.shp'.format(obs))
+            self.ntw.snapobservations(in_data, obs, attribute=True)
             setattr(self, obs, self.ntw.pointpatterns[obs])
     
     def tearDown(self):
@@ -130,7 +213,7 @@ class TestNetworkPointPattern(unittest.TestCase):
         nn_c = self.ntw.nearestneighbordistances('crimes',
                                                  keep_zero_dist=False)
         self.assertEqual(nn_c[18], known_nonzero)
-
+'''
 
 class TestNetworkAnalysis(unittest.TestCase):
     
