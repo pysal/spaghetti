@@ -855,11 +855,13 @@ class Network:
         Parameters
         ----------
         
-        sourcepattern : str
-            The key of a point pattern snapped to the network.
+        sourcepattern : str or spaghetti.network.PointPattern
+            The key of a point pattern snapped to the network OR
+            the full spaghetti.network.PointPattern object.
         
         destpattern : str
-            (Optional) The key of a point pattern snapped to the network.
+            (Optional) The key of a point pattern snapped to the network OR
+            the full spaghetti.network.PointPattern object.
         
         fill_diagonal : float, int
             (Optional) Fill the diagonal of the cost matrix. Default in None
