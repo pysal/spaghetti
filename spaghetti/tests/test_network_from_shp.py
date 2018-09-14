@@ -60,6 +60,7 @@ class TestNetworkPointPattern(unittest.TestCase):
         for obs in ['schools', 'crimes']:
             in_data = examples.get_path('{}.shp'.format(obs))
             self.ntw.snapobservations(in_data, obs, attribute=True)
+            #setattr(self, obs, obs)
             setattr(self, obs, self.ntw.pointpatterns[obs])
     
     def tearDown(self):
@@ -93,7 +94,7 @@ class TestNetworkPointPattern(unittest.TestCase):
         self.assertEqual(npoints, sim.npoints)
     
     def test_all_neighbor_distances(self):
-        distancematrix_1 = self.ntw.allneighbordistances(self.schools,
+        distancematrix_1 = self.ntw.allneighbordistances('schools',
                                                          gen_tree=True)
         self.assertAlmostEqual(np.nansum(distancematrix_1[0]),
                                17682.436988, places=4)
@@ -102,19 +103,35 @@ class TestNetworkPointPattern(unittest.TestCase):
             for p, plists in predlist.items():
                 self.assertEqual(plists[-1], k)
                 self.assertEqual(self.ntw.node_list, list(predlist.keys()))
-        distancematrix_2 = self.ntw.allneighbordistances(self.schools,
+                
+        distancematrix_2 = self.ntw.allneighbordistances('schools',
                                                          fill_diagonal=0.)
         observed = distancematrix_2.diagonal()
         known = np.zeros(distancematrix_2.shape[0])
         self.assertEqual(observed.all(), known.all())
     
     def test_nearest_neighbor_distances(self):
+        # general test
         with self.assertRaises(KeyError):
             self.ntw.nearestneighbordistances('i_should_not_exist')
         nnd1 = self.ntw.nearestneighbordistances('schools')
         nnd2 = self.ntw.nearestneighbordistances('schools',
-                                                 'schools')
-        np.testing.assert_array_equal(nnd1, nnd2)
+                                                 destpattern='schools')
+        nndv1 = np.array(list(nnd1.values()))[:,1].astype(float)
+        nndv2 = np.array(list(nnd2.values()))[:,1].astype(float)
+        np.testing.assert_array_almost_equal_nulp(nndv1, nndv2)
+        
+        # nearest neighbor keeping zero test
+        known_zero = ([19], 0.0)
+        nn_c = self.ntw.nearestneighbordistances('crimes',
+                                                 keep_zero_dist=True)
+        self.assertEqual(nn_c[18], known_zero)
+        
+        # nearest neighbor omitting zero test
+        known_nonzero = ([11], 165.33982412719126)
+        nn_c = self.ntw.nearestneighbordistances('crimes',
+                                                 keep_zero_dist=False)
+        self.assertEqual(nn_c[18], known_nonzero)
 
 
 class TestNetworkAnalysis(unittest.TestCase):
