@@ -4,3 +4,4 @@ nose-exclude
 coverage
 coveralls
 matplotlib
+boto3
