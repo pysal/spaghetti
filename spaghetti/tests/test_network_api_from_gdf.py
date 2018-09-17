@@ -102,19 +102,22 @@ class TestNetworkPointPattern(unittest.TestCase):
         self.assertEqual(npoints, sim.npoints)
     
     def test_all_neighbor_distances(self):
-        distancematrix_1 = self.ntw.allneighbordistances(self.schools,
-                                                         gen_tree=True)
-        self.assertAlmostEqual(np.nansum(distancematrix_1[0]),
-                               17682.436988, places=4)
+        matrix1, tree = self.ntw.allneighbordistances('schools', gen_tree=True)
+        known_mtx_val = 17682.436988
+        known_tree_val = (173, 64)
+        
+        self.assertAlmostEqual(np.nansum(matrix1[0]), known_mtx_val, places=4)
+        self.assertEqual(tree[(6, 7)], known_tree_val)
+        
         for k, (distances, predlist) in self.ntw.alldistances.items():
             self.assertEqual(distances[k], 0)
             for p, plists in predlist.items():
                 self.assertEqual(plists[-1], k)
                 self.assertEqual(self.ntw.node_list, list(predlist.keys()))
-        distancematrix_2 = self.ntw.allneighbordistances(self.schools,
-                                                         fill_diagonal=0.)
-        observed = distancematrix_2.diagonal()
-        known = np.zeros(distancematrix_2.shape[0])
+                
+        matrix2 = self.ntw.allneighbordistances('schools', fill_diagonal=0.)
+        observed = matrix2.diagonal()
+        known = np.zeros(matrix2.shape[0])
         self.assertEqual(observed.all(), known.all())
     
     def test_nearest_neighbor_distances(self):
