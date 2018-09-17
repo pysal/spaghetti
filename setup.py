@@ -41,6 +41,7 @@ def setup_package(package, version):
     }
     reqs = _get_requirements_from_files(_groups_files)
     install_reqs = reqs.pop('base')
+    test_reqs = reqs.pop('tests')
     extras_reqs = reqs
 
     setup(name=package,
@@ -70,6 +71,7 @@ def setup_package(package, version):
           py_modules=[package],
           install_requires=install_reqs,
           extras_require=extras_reqs,
+          tests_require=test_reqs,
           zip_safe=False,
           cmdclass = {'build.py':build_py},
           python_requires='>3.4')
