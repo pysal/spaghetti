@@ -974,11 +974,13 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        </span>
-<span class="sd">        sourcepattern : str</span>
-<span class="sd">            The key of a point pattern snapped to the network.</span>
+<span class="sd">        sourcepattern : str or spaghetti.network.PointPattern</span>
+<span class="sd">            The key of a point pattern snapped to the network OR</span>
+<span class="sd">            the full spaghetti.network.PointPattern object.</span>
 <span class="sd">        </span>
 <span class="sd">        destpattern : str</span>
-<span class="sd">            (Optional) The key of a point pattern snapped to the network.</span>
+<span class="sd">            (Optional) The key of a point pattern snapped to the network OR</span>
+<span class="sd">            the full spaghetti.network.PointPattern object.</span>
 <span class="sd">        </span>
 <span class="sd">        fill_diagonal : float, int</span>
 <span class="sd">            (Optional) Fill the diagonal of the cost matrix. Default in None</span>
@@ -999,6 +1001,9 @@
 <span class="sd">        nearest : numpy.ndarray</span>
 <span class="sd">            An array of shape (n,n) storing distances between all points.</span>
 <span class="sd">        </span>
+<span class="sd">        tree_nearest : dict</span>
+<span class="sd">            nearest network node to point pattern node shortest path lookup</span>
+<span class="sd">        </span>
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
 <span class="sd">        </span>
@@ -1007,10 +1012,9 @@
 <span class="sd">        &gt;&gt;&gt; ntw.snapobservations(examples.get_path(&#39;crimes.shp&#39;),</span>
 <span class="sd">        ...                                        &#39;crimes&#39;,</span>
 <span class="sd">        ...                                         attribute=True)</span>
-<span class="sd">        &gt;&gt;&gt; crimes_pp = ntw.pointpatterns[&#39;crimes&#39;]</span>
 <span class="sd">        </span>
 <span class="sd">        </span>
-<span class="sd">        &gt;&gt;&gt; s2s_dist = ntw.allneighbordistances(crimes_pp)</span>
+<span class="sd">        &gt;&gt;&gt; s2s_dist = ntw.allneighbordistances(&#39;crimes&#39;)</span>
 <span class="sd">        &gt;&gt;&gt; s2s_dist[0,0], s2s_dist[1,0]</span>
 <span class="sd">        (nan, 3105.189475447081)</span>
 <span class="sd">        </span>
@@ -1018,18 +1022,28 @@
 <span class="sd">        &gt;&gt;&gt; ntw.snapobservations(examples.get_path(&#39;schools.shp&#39;),</span>
 <span class="sd">        ...                                        &#39;schools&#39;,</span>
 <span class="sd">        ...                                        attribute=False)</span>
-<span class="sd">        &gt;&gt;&gt; schools_pp = ntw.pointpatterns[&#39;schools&#39;]</span>
 <span class="sd">        </span>
 <span class="sd">        </span>
-<span class="sd">        &gt;&gt;&gt; s2d_dist = ntw.allneighbordistances(crimes_pp,</span>
-<span class="sd">        ...                                     destpattern=schools_pp)</span>
+<span class="sd">        &gt;&gt;&gt; s2d_dist = ntw.allneighbordistances(&#39;crimes&#39;,</span>
+<span class="sd">        ...                                     destpattern=&#39;schools&#39;)</span>
 <span class="sd">        &gt;&gt;&gt; s2d_dist[0,0], s2d_dist[1,0]</span>
 <span class="sd">        (4520.72353741989, 6340.422971967316)</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; s2d_dist, tree = ntw.allneighbordistances(&#39;schools&#39;,</span>
+<span class="sd">        ...                                           gen_tree=True)</span>
+<span class="sd">        &gt;&gt;&gt; tree[(6, 7)]</span>
+<span class="sd">        (173, 64)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;alldistances&#39;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">node_distance_matrix</span><span class="p">(</span><span class="n">n_processes</span><span class="p">,</span> <span class="n">gen_tree</span><span class="o">=</span><span class="n">gen_tree</span><span class="p">)</span>
-            
+        
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">sourcepattern</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="n">sourcepattern</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="n">sourcepattern</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">destpattern</span><span class="p">:</span>
+                <span class="n">destpattern</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="n">destpattern</span><span class="p">]</span>
+        
         <span class="c1"># Source setup</span>
         <span class="n">src_indices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">sourcepattern</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="n">nsource_pts</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">src_indices</span><span class="p">)</span>
@@ -1056,6 +1070,7 @@
         <span class="c1"># Output setup</span>
         <span class="n">nearest</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">nsource_pts</span><span class="p">,</span> <span class="n">ndest_pts</span><span class="p">))</span>
         <span class="n">nearest</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+        <span class="n">tree_nearest</span> <span class="o">=</span> <span class="p">{}</span>
         
         <span class="k">for</span> <span class="n">p1</span> <span class="ow">in</span> <span class="n">src_indices</span><span class="p">:</span>
             <span class="c1"># Get the source nodes and dist to source nodes.</span>
@@ -1078,18 +1093,20 @@
                     
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">ddist1</span><span class="p">,</span> <span class="n">ddist2</span> <span class="o">=</span> <span class="n">dest_dist_to_node</span><span class="p">[</span><span class="n">p2</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
-                    <span class="n">d11</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alldistances</span><span class="p">[</span><span class="n">source1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="n">dest1</span><span class="p">]</span>
-                    <span class="n">d21</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alldistances</span><span class="p">[</span><span class="n">source2</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="n">dest1</span><span class="p">]</span>
-                    <span class="n">d12</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alldistances</span><span class="p">[</span><span class="n">source1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="n">dest2</span><span class="p">]</span>
-                    <span class="n">d22</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alldistances</span><span class="p">[</span><span class="n">source2</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="n">dest2</span><span class="p">]</span>
+                    <span class="n">d11</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distancematrix</span><span class="p">[</span><span class="n">source1</span><span class="p">][</span><span class="n">dest1</span><span class="p">]</span>
+                    <span class="n">d21</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distancematrix</span><span class="p">[</span><span class="n">source2</span><span class="p">][</span><span class="n">dest1</span><span class="p">]</span>
+                    <span class="n">d12</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distancematrix</span><span class="p">[</span><span class="n">source1</span><span class="p">][</span><span class="n">dest2</span><span class="p">]</span>
+                    <span class="n">d22</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distancematrix</span><span class="p">[</span><span class="n">source2</span><span class="p">][</span><span class="n">dest2</span><span class="p">]</span>
                     
                     <span class="c1"># Find the shortest distance from the path passing</span>
                     <span class="c1"># through each of the two origin nodes to the first</span>
                     <span class="c1"># destination node.</span>
                     <span class="n">sd_1</span> <span class="o">=</span> <span class="n">d11</span> <span class="o">+</span> <span class="n">sdist1</span>
                     <span class="n">sd_21</span> <span class="o">=</span> <span class="n">d21</span> <span class="o">+</span> <span class="n">sdist2</span>
+                    <span class="n">sp_combo1</span> <span class="o">=</span> <span class="n">source1</span><span class="p">,</span> <span class="n">dest1</span>
                     <span class="k">if</span> <span class="n">sd_1</span> <span class="o">&gt;</span> <span class="n">sd_21</span><span class="p">:</span>
                         <span class="n">sd_1</span> <span class="o">=</span> <span class="n">sd_21</span>
+                        <span class="n">sp_combo1</span> <span class="o">=</span> <span class="n">source2</span><span class="p">,</span> <span class="n">dest1</span>
                     <span class="c1"># Now add the point to node one distance on</span>
                     <span class="c1"># the destination edge.</span>
                     <span class="n">len_1</span> <span class="o">=</span> <span class="n">sd_1</span> <span class="o">+</span> <span class="n">ddist1</span>
@@ -1098,34 +1115,44 @@
                     <span class="c1"># at the second node of the second edge.</span>
                     <span class="n">sd_2</span> <span class="o">=</span> <span class="n">d12</span> <span class="o">+</span> <span class="n">sdist1</span>
                     <span class="n">sd_22</span> <span class="o">=</span> <span class="n">d22</span> <span class="o">+</span> <span class="n">sdist2</span>
-                    <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="n">sp_combo2</span> <span class="o">=</span> <span class="n">source1</span><span class="p">,</span> <span class="n">dest2</span>
                     <span class="k">if</span> <span class="n">sd_2</span> <span class="o">&gt;</span> <span class="n">sd_22</span><span class="p">:</span>
                         <span class="n">sd_2</span> <span class="o">=</span> <span class="n">sd_22</span>
-                        <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span>
+                        <span class="n">sp_combo2</span> <span class="o">=</span> <span class="n">source2</span><span class="p">,</span> <span class="n">dest2</span>
                     <span class="n">len_2</span> <span class="o">=</span> <span class="n">sd_2</span> <span class="o">+</span> <span class="n">ddist2</span>
                     
                     <span class="c1"># Now find the shortest distance path between point</span>
                     <span class="c1"># 1 on edge 1 and point 2 on edge 2, and assign.</span>
                     <span class="n">sp_12</span> <span class="o">=</span> <span class="n">len_1</span>
+                    <span class="n">s_node</span><span class="p">,</span> <span class="n">d_node</span> <span class="o">=</span> <span class="n">sp_combo1</span>
                     <span class="k">if</span> <span class="n">len_1</span> <span class="o">&gt;</span> <span class="n">len_2</span><span class="p">:</span>
                         <span class="n">sp_12</span> <span class="o">=</span> <span class="n">len_2</span>
+                        <span class="n">s_node</span><span class="p">,</span> <span class="n">d_node</span> <span class="o">=</span> <span class="n">sp_combo2</span>
+                    
                     <span class="n">nearest</span><span class="p">[</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">]</span> <span class="o">=</span> <span class="n">sp_12</span>
+                    <span class="n">tree_nearest</span><span class="p">[</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">s_node</span><span class="p">,</span> <span class="n">d_node</span><span class="p">)</span>
+                    
                 <span class="k">if</span> <span class="n">symmetric</span><span class="p">:</span>
                     <span class="c1"># Mirror the upper and lower triangle</span>
                     <span class="c1"># when symmetric.</span>
                     <span class="n">nearest</span><span class="p">[</span><span class="n">p2</span><span class="p">,</span> <span class="n">p1</span><span class="p">]</span> <span class="o">=</span> <span class="n">nearest</span><span class="p">[</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">]</span>
+                    
         <span class="c1"># Populate the main diagonal when symmetric.</span>
         <span class="k">if</span> <span class="n">symmetric</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">fill_diagonal</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">np</span><span class="o">.</span><span class="n">fill_diagonal</span><span class="p">(</span><span class="n">nearest</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">np</span><span class="o">.</span><span class="n">fill_diagonal</span><span class="p">(</span><span class="n">nearest</span><span class="p">,</span> <span class="n">fill_diagonal</span><span class="p">)</span>
-                
-        <span class="k">return</span> <span class="n">nearest</span></div>
+        
+        <span class="k">if</span> <span class="n">gen_tree</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">nearest</span><span class="p">,</span> <span class="n">tree_nearest</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">nearest</span></div>
 
 
 <div class="viewcode-block" id="Network.nearestneighbordistances"><a class="viewcode-back" href="../../generated/spaghetti.Network.nearestneighbordistances.html#spaghetti.Network.nearestneighbordistances">[docs]</a>    <span class="k">def</span> <span class="nf">nearestneighbordistances</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourcepattern</span><span class="p">,</span> <span class="n">destpattern</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                 <span class="n">n_processes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gen_tree</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                                 <span class="n">n_processes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gen_tree</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                 <span class="n">all_dists</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">keep_zero_dist</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Compute the interpattern nearest neighbor distances or the</span>
 <span class="sd">        intrapattern nearest neighbor distances between a source</span>
 <span class="sd">        pattern and a destination pattern.</span>
@@ -1147,86 +1174,76 @@
 <span class="sd">        gen_tree : bool</span>
 <span class="sd">            rebuild shortest path {True}, or skip {False}</span>
 <span class="sd">        </span>
+<span class="sd">        all_dists : numpy.ndarray</span>
+<span class="sd">            An array of shape (n,n) storing distances between all points.</span>
+<span class="sd">        </span>
+<span class="sd">        keep_zero_dist : bool</span>
+<span class="sd">            Include zero values in minimum distance (True) or exclude (False).</span>
+<span class="sd">            Default is True. If the source pattern is the same as the</span>
+<span class="sd">            destination pattern the diagonal is filled with nans</span>
+<span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+<span class="sd">        nearest : dict</span>
+<span class="sd">            key is source point id, value is tuple of list containing </span>
+<span class="sd">            nearest destination point ids and distance.</span>
 <span class="sd">        </span>
-<span class="sd">        nearest : numpy.ndarray</span>
-<span class="sd">            An (n,2) shaped array with column[:,0] containing the id of the</span>
-<span class="sd">            nearest neighbor and column [:,1] containing the distance.</span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; import spaghetti as spgh</span>
+<span class="sd">        &gt;&gt;&gt; ntw = spgh.Network(examples.get_path(&#39;streets.shp&#39;))</span>
+<span class="sd">        &gt;&gt;&gt; ntw.snapobservations(examples.get_path(&#39;crimes.shp&#39;), &#39;crimes&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; nn = ntw.nearestneighbordistances(&#39;crimes&#39;, keep_zero_dist=True)</span>
+<span class="sd">        &gt;&gt;&gt; nn[11], nn[18]</span>
+<span class="sd">        (([18, 19], 165.33982412719126), ([19], 0.0))</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; nn = ntw.nearestneighbordistances(&#39;crimes&#39;, keep_zero_dist=False)</span>
+<span class="sd">        &gt;&gt;&gt; nn[11], nn[18]</span>
+<span class="sd">        (([18, 19], 165.33982412719126), ([11], 165.33982412719126))</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        
-        <span class="c1">###########################################</span>
-        <span class="c1">#</span>
-        <span class="c1"># MERGE WITH `allneighbordistances`</span>
-        <span class="c1">#</span>
-        <span class="c1">###########################################</span>
-        
         <span class="k">if</span> <span class="n">sourcepattern</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointpatterns</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">err_msg</span> <span class="o">=</span> <span class="s2">&quot;Available point patterns are </span><span class="si">{}</span><span class="s2">&quot;</span>
             <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">err_msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pointpatterns</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
             
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;alldistances&#39;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">node_distance_matrix</span><span class="p">(</span><span class="n">n_processes</span><span class="p">,</span> <span class="n">gen_tree</span><span class="o">=</span><span class="n">gen_tree</span><span class="p">)</span>
-            
-        <span class="n">pt_indices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="n">sourcepattern</span><span class="p">]</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-        <span class="n">dist_to_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="n">sourcepattern</span><span class="p">]</span><span class="o">.</span><span class="n">dist_to_node</span>
-        <span class="n">nearest</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">pt_indices</span><span class="p">),</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-        <span class="n">nearest</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
         
-        <span class="c1">#if destpattern is None:</span>
-        <span class="c1">#    destpattern = sourcepattern</span>
-            
-        <span class="n">searchpts</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">pt_indices</span><span class="p">)</span>
+        <span class="n">symmetric</span> <span class="o">=</span> <span class="n">sourcepattern</span> <span class="o">!=</span> <span class="n">destpattern</span>
         
-        <span class="n">searchnodes</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">searchpts</span><span class="p">:</span>
-            <span class="n">e1</span><span class="p">,</span> <span class="n">e2</span> <span class="o">=</span> <span class="n">dist_to_node</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-            <span class="n">searchnodes</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">e1</span><span class="p">,</span> <span class="n">e2</span><span class="p">)</span>
+        <span class="c1"># (for source-to-source patterns) if zero-distance neighbors are</span>
+        <span class="c1"># desired, keep the diagonal as NaN and take the minimum distance</span>
+        <span class="c1"># neighbor(s), which may include zero distance neighors.</span>
+        <span class="n">fill_diagonal</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">keep_zero_dist</span> <span class="ow">and</span> <span class="n">symmetric</span><span class="p">:</span>
+            <span class="c1"># (for source-to-source patterns) if zero-distance neighbors should</span>
+            <span class="c1"># be ignored, convert the diagonal to 0.0 and take the minimum</span>
+            <span class="c1"># distance neighbor(s) that is/are not 0.0 distance.</span>
+            <span class="n">fill_diagonal</span> <span class="o">=</span> <span class="mf">0.</span>
+        
+        <span class="n">sourcepattern</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="n">sourcepattern</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">destpattern</span><span class="p">:</span>
+            <span class="n">destpattern</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="n">destpattern</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="n">all_dists</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">all_dists</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">allneighbordistances</span><span class="p">(</span><span class="n">sourcepattern</span><span class="p">,</span>
+                                                  <span class="n">destpattern</span><span class="o">=</span><span class="n">destpattern</span><span class="p">,</span>
+                                                  <span class="n">fill_diagonal</span><span class="o">=</span><span class="n">fill_diagonal</span><span class="p">,</span>
+                                                  <span class="n">n_processes</span><span class="o">=</span><span class="n">n_processes</span><span class="p">,</span>
+                                                  <span class="n">gen_tree</span><span class="o">=</span><span class="n">gen_tree</span><span class="p">)</span>
+        <span class="n">nearest</span> <span class="o">=</span> <span class="p">{}</span>
+        
+        <span class="k">for</span> <span class="n">source_index</span> <span class="ow">in</span> <span class="n">sourcepattern</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">keep_zero_dist</span> <span class="ow">and</span> <span class="n">symmetric</span><span class="p">:</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">all_dists</span><span class="p">[</span><span class="n">source_index</span><span class="p">,:])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">all_dists</span><span class="p">[</span><span class="n">source_index</span><span class="p">,:]</span>\
+                                      <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">all_dists</span><span class="p">[</span><span class="n">source_index</span><span class="p">,:])])</span>
+            <span class="c1"># nearest destination (may be more than one if equal distance)</span>
+            <span class="n">dest_idxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">all_dists</span><span class="p">[</span><span class="n">source_index</span><span class="p">,:]</span> <span class="o">==</span> <span class="n">val</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="n">nearest</span><span class="p">[</span><span class="n">source_index</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">dest_idxs</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
             
-        <span class="k">for</span> <span class="n">p1</span> <span class="ow">in</span> <span class="n">pt_indices</span><span class="p">:</span>
-            <span class="c1"># Get the source nodes and distance to source nodes.</span>
-            <span class="c1"># source1 and source2 nodes</span>
-            <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span> <span class="o">=</span> <span class="n">searchnodes</span><span class="p">[</span><span class="n">p1</span><span class="p">]</span>
-            <span class="n">sdist1</span><span class="p">,</span> <span class="n">sdist2</span> <span class="o">=</span> <span class="n">dist_to_node</span><span class="p">[</span><span class="n">p1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
-            
-            <span class="n">searchpts</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">p1</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">p2</span> <span class="ow">in</span> <span class="n">searchpts</span><span class="p">:</span>
-                <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span> <span class="o">=</span> <span class="n">searchnodes</span><span class="p">[</span><span class="n">p2</span><span class="p">]</span>
-                <span class="n">ddist1</span><span class="p">,</span> <span class="n">ddist2</span> <span class="o">=</span> <span class="n">dist_to_node</span><span class="p">[</span><span class="n">p2</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
-                <span class="n">s1_to_d1</span> <span class="o">=</span> <span class="n">sdist1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">alldistances</span><span class="p">[</span><span class="n">s1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="n">d1</span><span class="p">]</span> <span class="o">+</span> <span class="n">ddist1</span>
-                <span class="n">s1_to_d2</span> <span class="o">=</span> <span class="n">sdist1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">alldistances</span><span class="p">[</span><span class="n">s1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="n">d2</span><span class="p">]</span> <span class="o">+</span> <span class="n">ddist2</span>
-                <span class="n">s2_to_d1</span> <span class="o">=</span> <span class="n">sdist2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">alldistances</span><span class="p">[</span><span class="n">s2</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="n">d1</span><span class="p">]</span> <span class="o">+</span> <span class="n">ddist1</span>
-                <span class="n">s2_to_d2</span> <span class="o">=</span> <span class="n">sdist2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">alldistances</span><span class="p">[</span><span class="n">s2</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="n">d2</span><span class="p">]</span> <span class="o">+</span> <span class="n">ddist2</span>
-                <span class="c1"># source1 to dest1</span>
-                <span class="k">if</span> <span class="n">s1_to_d1</span> <span class="o">&lt;</span> <span class="n">nearest</span><span class="p">[</span><span class="n">p1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
-                    <span class="n">nearest</span><span class="p">[</span><span class="n">p1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">p2</span>
-                    <span class="n">nearest</span><span class="p">[</span><span class="n">p1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">s1_to_d1</span>
-                <span class="k">if</span> <span class="n">s1_to_d1</span> <span class="o">&lt;</span> <span class="n">nearest</span><span class="p">[</span><span class="n">p2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
-                    <span class="n">nearest</span><span class="p">[</span><span class="n">p2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">p1</span>
-                    <span class="n">nearest</span><span class="p">[</span><span class="n">p2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">s1_to_d1</span>
-                <span class="c1"># source1 to dest2</span>
-                <span class="k">if</span> <span class="n">s1_to_d2</span> <span class="o">&lt;</span> <span class="n">nearest</span><span class="p">[</span><span class="n">p1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
-                    <span class="n">nearest</span><span class="p">[</span><span class="n">p1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">p2</span>
-                    <span class="n">nearest</span><span class="p">[</span><span class="n">p1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">s1_to_d2</span>
-                <span class="k">if</span> <span class="n">s1_to_d2</span> <span class="o">&lt;</span> <span class="n">nearest</span><span class="p">[</span><span class="n">p2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
-                    <span class="n">nearest</span><span class="p">[</span><span class="n">p2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">p1</span>
-                    <span class="n">nearest</span><span class="p">[</span><span class="n">p2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">s1_to_d2</span>
-                <span class="c1"># source2 to dest1</span>
-                <span class="k">if</span> <span class="n">s2_to_d1</span> <span class="o">&lt;</span> <span class="n">nearest</span><span class="p">[</span><span class="n">p1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
-                    <span class="n">nearest</span><span class="p">[</span><span class="n">p1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">p2</span>
-                    <span class="n">nearest</span><span class="p">[</span><span class="n">p1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">s2_to_d1</span>
-                <span class="k">if</span> <span class="n">s2_to_d1</span> <span class="o">&lt;</span> <span class="n">nearest</span><span class="p">[</span><span class="n">p2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
-                    <span class="n">nearest</span><span class="p">[</span><span class="n">p2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">p1</span>
-                    <span class="n">nearest</span><span class="p">[</span><span class="n">p2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">s2_to_d1</span>
-                <span class="c1"># source2 to dest2</span>
-                <span class="k">if</span> <span class="n">s2_to_d2</span> <span class="o">&lt;</span> <span class="n">nearest</span><span class="p">[</span><span class="n">p1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
-                    <span class="n">nearest</span><span class="p">[</span><span class="n">p1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">p2</span>
-                    <span class="n">nearest</span><span class="p">[</span><span class="n">p1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">s2_to_d2</span>
-                <span class="k">if</span> <span class="n">s2_to_d2</span> <span class="o">&lt;</span> <span class="n">nearest</span><span class="p">[</span><span class="n">p2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
-                    <span class="n">nearest</span><span class="p">[</span><span class="n">p2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">p1</span>
-                    <span class="n">nearest</span><span class="p">[</span><span class="n">p2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">s2_to_d2</span>
-                    
         <span class="k">return</span> <span class="n">nearest</span></div>
 
 

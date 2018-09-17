@@ -134,11 +134,13 @@ j from a destination pattern.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>sourcepattern</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd><p class="first last">The key of a point pattern snapped to the network.</p>
+<dt><strong>sourcepattern</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or spaghetti.network.PointPattern</span></dt>
+<dd><p class="first last">The key of a point pattern snapped to the network OR
+the full spaghetti.network.PointPattern object.</p>
 </dd>
 <dt><strong>destpattern</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd><p class="first last">(Optional) The key of a point pattern snapped to the network.</p>
+<dd><p class="first last">(Optional) The key of a point pattern snapped to the network OR
+the full spaghetti.network.PointPattern object.</p>
 </dd>
 <dt><strong>fill_diagonal</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float, int</span></dt>
 <dd><p class="first last">(Optional) Fill the diagonal of the cost matrix. Default in None
@@ -160,6 +162,9 @@ to request all available cores.</p>
 <dt><strong>nearest</strong> <span class="classifier-delimiter">:</span> <span class="classifier">numpy.ndarray</span></dt>
 <dd><p class="first last">An array of shape (n,n) storing distances between all points.</p>
 </dd>
+<dt><strong>tree_nearest</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd><p class="first last">nearest network node to point pattern node shortest path lookup</p>
+</dd>
 </dl>
 </td>
 </tr>
@@ -171,10 +176,9 @@ to request all available cores.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;crimes.shp&#39;</span><span class="p">),</span>
 <span class="gp">... </span>                                       <span class="s1">&#39;crimes&#39;</span><span class="p">,</span>
 <span class="gp">... </span>                                        <span class="n">attribute</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">crimes_pp</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s1">&#39;crimes&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s2s_dist</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">allneighbordistances</span><span class="p">(</span><span class="n">crimes_pp</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s2s_dist</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">allneighbordistances</span><span class="p">(</span><span class="s1">&#39;crimes&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">s2s_dist</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">s2s_dist</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
 <span class="go">(nan, 3105.189475447081)</span>
 </pre></div>
@@ -182,13 +186,18 @@ to request all available cores.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;schools.shp&#39;</span><span class="p">),</span>
 <span class="gp">... </span>                                       <span class="s1">&#39;schools&#39;</span><span class="p">,</span>
 <span class="gp">... </span>                                       <span class="n">attribute</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">schools_pp</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s1">&#39;schools&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s2d_dist</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">allneighbordistances</span><span class="p">(</span><span class="n">crimes_pp</span><span class="p">,</span>
-<span class="gp">... </span>                                    <span class="n">destpattern</span><span class="o">=</span><span class="n">schools_pp</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s2d_dist</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">allneighbordistances</span><span class="p">(</span><span class="s1">&#39;crimes&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                                    <span class="n">destpattern</span><span class="o">=</span><span class="s1">&#39;schools&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">s2d_dist</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">s2d_dist</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
 <span class="go">(4520.72353741989, 6340.422971967316)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s2d_dist</span><span class="p">,</span> <span class="n">tree</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">allneighbordistances</span><span class="p">(</span><span class="s1">&#39;schools&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                                          <span class="n">gen_tree</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span><span class="p">[(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">)]</span>
+<span class="go">(173, 64)</span>
 </pre></div>
 </div>
 </dd></dl>
