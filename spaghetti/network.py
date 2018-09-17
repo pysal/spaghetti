@@ -882,6 +882,9 @@ class Network:
         nearest : numpy.ndarray
             An array of shape (n,n) storing distances between all points.
         
+        tree_nearest : dict
+            nearest network node to point pattern node shortest path lookup
+        
         Examples
         --------
         
@@ -906,6 +909,12 @@ class Network:
         ...                                     destpattern='schools')
         >>> s2d_dist[0,0], s2d_dist[1,0]
         (4520.72353741989, 6340.422971967316)
+        
+        
+        >>> s2d_dist, tree = ntw.allneighbordistances('schools',
+        ...                                           gen_tree=True)
+        >>> tree[(6, 7)]
+        (173, 64)
         """
         
         if not hasattr(self, 'alldistances'):
@@ -942,6 +951,7 @@ class Network:
         # Output setup
         nearest = np.empty((nsource_pts, ndest_pts))
         nearest[:] = np.inf
+        tree_nearest = {}
         
         for p1 in src_indices:
             # Get the source nodes and dist to source nodes.
@@ -964,18 +974,20 @@ class Network:
                     
                 else:
                     ddist1, ddist2 = dest_dist_to_node[p2].values()
-                    d11 = self.alldistances[source1][0][dest1]
-                    d21 = self.alldistances[source2][0][dest1]
-                    d12 = self.alldistances[source1][0][dest2]
-                    d22 = self.alldistances[source2][0][dest2]
+                    d11 = self.distancematrix[source1][dest1]
+                    d21 = self.distancematrix[source2][dest1]
+                    d12 = self.distancematrix[source1][dest2]
+                    d22 = self.distancematrix[source2][dest2]
                     
                     # Find the shortest distance from the path passing
                     # through each of the two origin nodes to the first
                     # destination node.
                     sd_1 = d11 + sdist1
                     sd_21 = d21 + sdist2
+                    sp_combo1 = source1, dest1
                     if sd_1 > sd_21:
                         sd_1 = sd_21
+                        sp_combo1 = source2, dest1
                     # Now add the point to node one distance on
                     # the destination edge.
                     len_1 = sd_1 + ddist1
@@ -984,31 +996,39 @@ class Network:
                     # at the second node of the second edge.
                     sd_2 = d12 + sdist1
                     sd_22 = d22 + sdist2
-                    b = 0
+                    sp_combo2 = source1, dest2
                     if sd_2 > sd_22:
                         sd_2 = sd_22
-                        b = 1
+                        sp_combo2 = source2, dest2
                     len_2 = sd_2 + ddist2
                     
                     # Now find the shortest distance path between point
                     # 1 on edge 1 and point 2 on edge 2, and assign.
                     sp_12 = len_1
+                    s_node, d_node = sp_combo1
                     if len_1 > len_2:
                         sp_12 = len_2
+                        s_node, d_node = sp_combo2
+                    
                     nearest[p1, p2] = sp_12
+                    tree_nearest[p1, p2] = (s_node, d_node)
+                    
                 if symmetric:
                     # Mirror the upper and lower triangle
                     # when symmetric.
                     nearest[p2, p1] = nearest[p1, p2]
-        
+                    
         # Populate the main diagonal when symmetric.
         if symmetric:
             if fill_diagonal is None:
                 np.fill_diagonal(nearest, np.nan)
             else:
                 np.fill_diagonal(nearest, fill_diagonal)
-                
-        return nearest
+        
+        if gen_tree:
+            return nearest, tree_nearest
+        else:
+            return nearest
 
 
     def nearestneighbordistances(self, sourcepattern, destpattern=None,
