@@ -1511,10 +1511,8 @@ class PointPattern():
         else:
             from_shp = False
             
-        if idvariable and from_shp:
+        if idvariable:
             ids = weights.util.get_ids(in_data, idvariable)
-        elif idvariable and not from_shp:
-            ids = list(in_data[idvariable])
         else:
             ids = None
             
