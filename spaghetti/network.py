@@ -635,8 +635,9 @@ class Network:
         
         >>> counts = ntw.count_per_edge(ntw.pointpatterns['crimes']
         ...                             .obs_to_edge, graph=False)
-        >>> list(counts.values())[:3]
-        [1, 3, 2]
+        >>> counts[(140, 142)]
+        10
+        
         >>> s = sum([v for v in list(counts.values())])
         >>> s
         287
