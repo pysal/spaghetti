@@ -32,7 +32,7 @@ before_install:
   - conda update --yes conda
   - conda config --append channels conda-forge
   - conda create -y -q -n test-env python=$TRAVIS_PYTHON_VERSION
-  - source activate test-env
+  - conda activate test-env
 
 install:
   - conda install --yes pip
