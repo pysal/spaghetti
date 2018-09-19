@@ -32,10 +32,11 @@ before_install:
   - conda update --yes conda
   - conda config --append channels conda-forge
   - conda create -y -q -n test-env python=$TRAVIS_PYTHON_VERSION
-  - source activate test-env
+  - conda activate test-env
 
 install:
   - conda install --yes pip
+  - conda install --yes geopandas
   - if "$PYSAL_PYPI"; then
         echo 'testing pypi libpysal' && pip install libpysal;
         else echo 'testing git libpysal';
@@ -46,7 +47,6 @@ install:
         echo 'plus testing'; conda install --yes --file requirements_plus.txt;
         else conda install --yes --file requirements.txt;
     fi;
-  - conda install --yes geopandas
   - pip install -r requirements_dev.txt
 
 script:
