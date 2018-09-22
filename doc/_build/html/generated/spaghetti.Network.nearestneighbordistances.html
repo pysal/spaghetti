@@ -125,7 +125,7 @@
 <h1>spaghetti.Network.nearestneighbordistances<a class="headerlink" href="#spaghetti-network-nearestneighbordistances" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="spaghetti.Network.nearestneighbordistances">
-<code class="descclassname">Network.</code><code class="descname">nearestneighbordistances</code><span class="sig-paren">(</span><em>sourcepattern</em>, <em>destpattern=None</em>, <em>n_processes=None</em>, <em>gen_tree=False</em>, <em>all_dists=None</em>, <em>keep_zero_dist=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.nearestneighbordistances"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.nearestneighbordistances" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Network.</code><code class="descname">nearestneighbordistances</code><span class="sig-paren">(</span><em>sourcepattern</em>, <em>destpattern=None</em>, <em>n_processes=None</em>, <em>gen_tree=False</em>, <em>all_dists=None</em>, <em>snap_dist=False</em>, <em>keep_zero_dist=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.nearestneighbordistances"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.nearestneighbordistances" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the interpattern nearest neighbor distances or the
 intrapattern nearest neighbor distances between a source
 pattern and a destination pattern.</p>
@@ -150,6 +150,10 @@ to request all available cores.</p>
 </dd>
 <dt><strong>all_dists</strong> <span class="classifier-delimiter">:</span> <span class="classifier">numpy.ndarray</span></dt>
 <dd><p class="first last">An array of shape (n,n) storing distances between all points.</p>
+</dd>
+<dt><strong>snap_dist</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">include the distance from the original location to the snapped
+location along the network. Default is False.</p>
 </dd>
 <dt><strong>keep_zero_dist</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
 <dd><p class="first last">Include zero values in minimum distance (True) or exclude (False).

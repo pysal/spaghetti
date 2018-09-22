@@ -143,12 +143,16 @@ Withing the snapped point information (dict) keys are observation id
 (int), and values are snapped coordinates.</p>
 </dd>
 <dt><strong>obs_to_node</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd><p class="first last">list of incident network nodes to snapped observation points converted
+from default_dict. Originally in the form of paired left/right nearest
+network nodes - {netnode1: obs_id1, netnode2: obs_id1,
+netnode1: obs_id2… netnode1: obs_idn}, then simplified to a list in
+the form - [netnode1, netnode2, netnode1, netnode2, …].</p>
+</dd>
+<dt><strong>dist_to_node</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
 <dd><p class="first last">Keys are observations ids (int). Values are distance lookup (dict).
 Within distance lookup (dict) keys are the two incident nodes of the
 edge and values are distance to each of those edges.</p>
-</dd>
-<dt><strong>dist_to_node</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
-<dd><p class="first last">####################################################################### NEEDS ATTENTION</p>
 </dd>
 <dt><strong>snapped_coordinates</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
 <dd><p class="first last">Keys are the point ids (int). Values are the snapped x,y
