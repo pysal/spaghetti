@@ -963,10 +963,8 @@ class Network:
         # Source setup
         src_indices = list(sourcepattern.points.keys())
         nsource_pts = len(src_indices)
-        #src_dist_to_node = sourcepattern.dist_to_node..............................
         src_nodes = {}
         for s in src_indices:
-            #e1, e2 = src_dist_to_node[s].keys()....................................
             e1, e2 = sourcepattern.dist_to_node[s].keys()
             src_nodes[s] = (e1, e2)
             
@@ -977,7 +975,6 @@ class Network:
             destpattern = sourcepattern
         dest_indices = list(destpattern.points.keys())
         ndest_pts = len(dest_indices)
-        dest_dist_to_node = destpattern.dist_to_node
         dest_searchpts = copy.deepcopy(dest_indices)
         dest_nodes = {}
         
@@ -989,7 +986,7 @@ class Network:
                         dists_dict[nidx] = ndist + pp.dist_snapped[pidx]
                         
         for s in dest_indices:
-            e1, e2 = dest_dist_to_node[s].keys()
+            e1, e2 = destpattern.dist_to_node[s].keys()
             dest_nodes[s] = (e1, e2)
             
         # Output setup
@@ -1002,7 +999,6 @@ class Network:
             source1, source2 = src_nodes[p1]
             set1 = set(src_nodes[p1])
             # Distance from node1 to p, distance from node2 to p.
-            #sdist1, sdist2 = src_dist_to_node[p1].values().........................
             sdist1, sdist2 = sourcepattern.dist_to_node[p1].values()
             
             
@@ -1019,7 +1015,7 @@ class Network:
                     nearest[p1, p2] = computed_length
                     
                 else:
-                    ddist1, ddist2 = dest_dist_to_node[p2].values()
+                    ddist1, ddist2 = destpattern.dist_to_node[p2].values()
                     
                     d11 = self.distancematrix[source1][dest1]
                     d21 = self.distancematrix[source2][dest1]
