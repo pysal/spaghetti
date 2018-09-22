@@ -962,10 +962,11 @@ class Network:
         
         # Source setup
         src_indices = list(sourcepattern.points.keys())
+        src_d2n = copy.deepcopy(sourcepattern.dist_to_node)
         nsource_pts = len(src_indices)
         src_nodes = {}
         for s in src_indices:
-            e1, e2 = sourcepattern.dist_to_node[s].keys()
+            e1, e2 = src_d2n[s].keys()
             src_nodes[s] = (e1, e2)
             
         # Destination setup
@@ -974,19 +975,22 @@ class Network:
             symmetric = True
             destpattern = sourcepattern
         dest_indices = list(destpattern.points.keys())
+        dst_d2n = copy.deepcopy(destpattern.dist_to_node)
         ndest_pts = len(dest_indices)
         dest_searchpts = copy.deepcopy(dest_indices)
         dest_nodes = {}
         
+        # add snapping distance to each pointpattern
         if snap_dist:
             patterns = [sourcepattern, destpattern]
-            for pp in patterns:
-                for pidx, dists_dict in pp.dist_to_node.items():
+            dist_copies = [src_d2n, dst_d2n]
+            for elm, pp in enumerate(patterns):
+                for pidx, dists_dict in dist_copies[elm].items():
                     for nidx, ndist in dists_dict.items():
                         dists_dict[nidx] = ndist + pp.dist_snapped[pidx]
-                        
+        
         for s in dest_indices:
-            e1, e2 = destpattern.dist_to_node[s].keys()
+            e1, e2 = dst_d2n[s].keys()
             dest_nodes[s] = (e1, e2)
             
         # Output setup
@@ -999,8 +1003,7 @@ class Network:
             source1, source2 = src_nodes[p1]
             set1 = set(src_nodes[p1])
             # Distance from node1 to p, distance from node2 to p.
-            sdist1, sdist2 = sourcepattern.dist_to_node[p1].values()
-            
+            sdist1, sdist2 = src_d2n[p1].values()
             
             if symmetric:
                 # Only compute the upper triangle if symmetric.
@@ -1015,7 +1018,7 @@ class Network:
                     nearest[p1, p2] = computed_length
                     
                 else:
-                    ddist1, ddist2 = destpattern.dist_to_node[p2].values()
+                    ddist1, ddist2 = dst_d2n[p2].values()
                     
                     d11 = self.distancematrix[source1][dest1]
                     d21 = self.distancematrix[source2][dest1]
@@ -1031,6 +1034,7 @@ class Network:
                     if sd_1 > sd_21:
                         sd_1 = sd_21
                         sp_combo1 = source2, dest1
+                    
                     # Now add the point to node one distance on
                     # the destination edge.
                     len_1 = sd_1 + ddist1

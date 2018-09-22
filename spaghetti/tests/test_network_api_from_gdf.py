@@ -119,6 +119,11 @@ class TestNetworkPointPattern(unittest.TestCase):
         observed = matrix2.diagonal()
         known = np.zeros(matrix2.shape[0])
         self.assertEqual(observed.all(), known.all())
+        
+        matrix3 = self.ntw.allneighbordistances('schools', snap_dist=True)
+        known_mtx_val = 3218.2597894
+        observed_mtx_val = matrix3
+        self.assertAlmostEqual(observed_mtx_val[0, 1], known_mtx_val, places=4)
     
     def test_nearest_neighbor_distances(self):
         # general test
