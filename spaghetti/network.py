@@ -1156,7 +1156,8 @@ class Network:
                                                   destpattern=destpattern,
                                                   fill_diagonal=fill_diagonal,
                                                   n_processes=n_processes,
-                                                  gen_tree=gen_tree)
+                                                  gen_tree=gen_tree,
+                                                  snap_dist=snap_dist)
         nearest = {}
         
         for source_index in sourcepattern.points.keys():
