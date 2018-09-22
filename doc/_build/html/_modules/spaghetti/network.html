@@ -661,6 +661,27 @@
         
         <span class="k">return</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span></div>
 
+<div class="viewcode-block" id="Network.compute_snap_dist"><a class="viewcode-back" href="../../generated/spaghetti.Network.compute_snap_dist.html#spaghetti.Network.compute_snap_dist">[docs]</a>    <span class="k">def</span> <span class="nf">compute_snap_dist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Given an observation snapped to a network edge, calculate the</span>
+<span class="sd">        distance from the original location to the snapped location.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        -----------</span>
+<span class="sd">        </span>
+<span class="sd">        pattern : spaghetti.network.PointPattern</span>
+<span class="sd">            point pattern object</span>
+<span class="sd">        idx : int</span>
+<span class="sd">            point id</span>
+<span class="sd">        </span>
+<span class="sd">        Return</span>
+<span class="sd">        ------</span>
+<span class="sd">        dist : float</span>
+<span class="sd">            euclidean distance from original location to snapped location.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">loc</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s1">&#39;coordinates&#39;</span><span class="p">]</span>
+        <span class="n">snp</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">snapped_coordinates</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="n">dist</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">compute_length</span><span class="p">(</span><span class="n">loc</span><span class="p">,</span> <span class="n">snp</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dist</span></div>
 
     <span class="k">def</span> <span class="nf">_snap_to_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pointpattern</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Used internally to snap point observations to network edges.</span>
@@ -688,6 +709,8 @@
         
         <span class="n">obs_to_edge</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">dist_to_node</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">dist_snapped</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">obs_to_node</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
         
         <span class="n">pointpattern</span><span class="o">.</span><span class="n">snapped_coordinates</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">segments</span> <span class="o">=</span> <span class="p">[]</span>
@@ -697,13 +720,15 @@
             <span class="n">tail</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_coords</span><span class="p">[</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
             <span class="n">segments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cg</span><span class="o">.</span><span class="n">Chain</span><span class="p">([</span><span class="n">head</span><span class="p">,</span> <span class="n">tail</span><span class="p">]))</span>
             <span class="n">s2e</span><span class="p">[(</span><span class="n">head</span><span class="p">,</span> <span class="n">tail</span><span class="p">)]</span> <span class="o">=</span> <span class="n">edge</span>
-            
+        
+        <span class="c1"># snap points</span>
         <span class="n">points</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">p2id</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">pointIdx</span><span class="p">,</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">pointpattern</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">points</span><span class="p">[</span><span class="n">pointIdx</span><span class="p">]</span> <span class="o">=</span> <span class="n">point</span><span class="p">[</span><span class="s1">&#39;coordinates&#39;</span><span class="p">]</span>
         <span class="n">snapped</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">snap_points_on_segments</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">segments</span><span class="p">)</span>
         
+        <span class="c1"># record obs_to_edge, dist_to_node, and dist_snapped</span>
         <span class="k">for</span> <span class="n">pointIdx</span><span class="p">,</span> <span class="n">snapInfo</span> <span class="ow">in</span> <span class="n">snapped</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">snapInfo</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
             <span class="n">edge</span> <span class="o">=</span> <span class="n">s2e</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">snapInfo</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
@@ -713,15 +738,19 @@
             <span class="n">pointpattern</span><span class="o">.</span><span class="n">snapped_coordinates</span><span class="p">[</span><span class="n">pointIdx</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
             <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_distance_to_nodes</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">edge</span><span class="p">)</span>
             <span class="n">dist_to_node</span><span class="p">[</span><span class="n">pointIdx</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">d1</span><span class="p">,</span> <span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">d2</span><span class="p">}</span>
-            
+            <span class="n">dist_snapped</span><span class="p">[</span><span class="n">pointIdx</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_snap_dist</span><span class="p">(</span><span class="n">pointpattern</span><span class="p">,</span>
+                                                            <span class="n">pointIdx</span><span class="p">)</span>
+        
+        <span class="c1"># record obs_to_node</span>
         <span class="n">obs_to_node</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">obs_to_edge</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">keys</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
             <span class="n">obs_to_node</span><span class="p">[</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">keys</span>
             <span class="n">obs_to_node</span><span class="p">[</span><span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">keys</span>
-            
+        
         <span class="n">pointpattern</span><span class="o">.</span><span class="n">obs_to_edge</span> <span class="o">=</span> <span class="n">obs_to_edge</span>
         <span class="n">pointpattern</span><span class="o">.</span><span class="n">dist_to_node</span> <span class="o">=</span> <span class="n">dist_to_node</span>
+        <span class="n">pointpattern</span><span class="o">.</span><span class="n">dist_snapped</span> <span class="o">=</span> <span class="n">dist_snapped</span>
         <span class="n">pointpattern</span><span class="o">.</span><span class="n">obs_to_node</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">obs_to_node</span><span class="p">)</span>
 
 
@@ -754,8 +783,9 @@
 <span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; counts = ntw.count_per_edge(ntw.pointpatterns[&#39;crimes&#39;]</span>
 <span class="sd">        ...                             .obs_to_edge, graph=False)</span>
-<span class="sd">        &gt;&gt;&gt; list(counts.values())[:3]</span>
-<span class="sd">        [1, 3, 2]</span>
+<span class="sd">        &gt;&gt;&gt; counts[(140, 142)]</span>
+<span class="sd">        10</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; s = sum([v for v in list(counts.values())])</span>
 <span class="sd">        &gt;&gt;&gt; s</span>
 <span class="sd">        287</span>
@@ -966,7 +996,7 @@
 
 <div class="viewcode-block" id="Network.allneighbordistances"><a class="viewcode-back" href="../../generated/spaghetti.Network.allneighbordistances.html#spaghetti.Network.allneighbordistances">[docs]</a>    <span class="k">def</span> <span class="nf">allneighbordistances</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourcepattern</span><span class="p">,</span> <span class="n">destpattern</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                              <span class="n">fill_diagonal</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_processes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                             <span class="n">gen_tree</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                             <span class="n">gen_tree</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">snap_dist</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Compute either all distances between i and j in a single point</span>
 <span class="sd">        pattern or all distances between each i from a source pattern and all</span>
 <span class="sd">        j from a destination pattern.</span>
@@ -994,6 +1024,10 @@
 <span class="sd">        </span>
 <span class="sd">        gen_tree : bool</span>
 <span class="sd">            rebuild shortest path {True}, or skip {False}</span>
+<span class="sd">        </span>
+<span class="sd">        snap_dist : bool</span>
+<span class="sd">            include the distance from the original location to the snapped</span>
+<span class="sd">            location along the network. Default is False.</span>
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1046,11 +1080,11 @@
         
         <span class="c1"># Source setup</span>
         <span class="n">src_indices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">sourcepattern</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">src_d2n</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">sourcepattern</span><span class="o">.</span><span class="n">dist_to_node</span><span class="p">)</span>
         <span class="n">nsource_pts</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">src_indices</span><span class="p">)</span>
-        <span class="n">src_dist_to_node</span> <span class="o">=</span> <span class="n">sourcepattern</span><span class="o">.</span><span class="n">dist_to_node</span>
         <span class="n">src_nodes</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">src_indices</span><span class="p">:</span>
-            <span class="n">e1</span><span class="p">,</span> <span class="n">e2</span> <span class="o">=</span> <span class="n">src_dist_to_node</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+            <span class="n">e1</span><span class="p">,</span> <span class="n">e2</span> <span class="o">=</span> <span class="n">src_d2n</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
             <span class="n">src_nodes</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">e1</span><span class="p">,</span> <span class="n">e2</span><span class="p">)</span>
             
         <span class="c1"># Destination setup</span>
@@ -1059,12 +1093,22 @@
             <span class="n">symmetric</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="n">destpattern</span> <span class="o">=</span> <span class="n">sourcepattern</span>
         <span class="n">dest_indices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">destpattern</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">dst_d2n</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">destpattern</span><span class="o">.</span><span class="n">dist_to_node</span><span class="p">)</span>
         <span class="n">ndest_pts</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dest_indices</span><span class="p">)</span>
-        <span class="n">dest_dist_to_node</span> <span class="o">=</span> <span class="n">destpattern</span><span class="o">.</span><span class="n">dist_to_node</span>
         <span class="n">dest_searchpts</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">dest_indices</span><span class="p">)</span>
         <span class="n">dest_nodes</span> <span class="o">=</span> <span class="p">{}</span>
+        
+        <span class="c1"># add snapping distance to each pointpattern</span>
+        <span class="k">if</span> <span class="n">snap_dist</span><span class="p">:</span>
+            <span class="n">patterns</span> <span class="o">=</span> <span class="p">[</span><span class="n">sourcepattern</span><span class="p">,</span> <span class="n">destpattern</span><span class="p">]</span>
+            <span class="n">dist_copies</span> <span class="o">=</span> <span class="p">[</span><span class="n">src_d2n</span><span class="p">,</span> <span class="n">dst_d2n</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">elm</span><span class="p">,</span> <span class="n">pp</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">patterns</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">pidx</span><span class="p">,</span> <span class="n">dists_dict</span> <span class="ow">in</span> <span class="n">dist_copies</span><span class="p">[</span><span class="n">elm</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">for</span> <span class="n">nidx</span><span class="p">,</span> <span class="n">ndist</span> <span class="ow">in</span> <span class="n">dists_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                        <span class="n">dists_dict</span><span class="p">[</span><span class="n">nidx</span><span class="p">]</span> <span class="o">=</span> <span class="n">ndist</span> <span class="o">+</span> <span class="n">pp</span><span class="o">.</span><span class="n">dist_snapped</span><span class="p">[</span><span class="n">pidx</span><span class="p">]</span>
+        
         <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">dest_indices</span><span class="p">:</span>
-            <span class="n">e1</span><span class="p">,</span> <span class="n">e2</span> <span class="o">=</span> <span class="n">dest_dist_to_node</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+            <span class="n">e1</span><span class="p">,</span> <span class="n">e2</span> <span class="o">=</span> <span class="n">dst_d2n</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
             <span class="n">dest_nodes</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">e1</span><span class="p">,</span> <span class="n">e2</span><span class="p">)</span>
             
         <span class="c1"># Output setup</span>
@@ -1077,7 +1121,7 @@
             <span class="n">source1</span><span class="p">,</span> <span class="n">source2</span> <span class="o">=</span> <span class="n">src_nodes</span><span class="p">[</span><span class="n">p1</span><span class="p">]</span>
             <span class="n">set1</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">src_nodes</span><span class="p">[</span><span class="n">p1</span><span class="p">])</span>
             <span class="c1"># Distance from node1 to p, distance from node2 to p.</span>
-            <span class="n">sdist1</span><span class="p">,</span> <span class="n">sdist2</span> <span class="o">=</span> <span class="n">src_dist_to_node</span><span class="p">[</span><span class="n">p1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+            <span class="n">sdist1</span><span class="p">,</span> <span class="n">sdist2</span> <span class="o">=</span> <span class="n">src_d2n</span><span class="p">[</span><span class="n">p1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
             
             <span class="k">if</span> <span class="n">symmetric</span><span class="p">:</span>
                 <span class="c1"># Only compute the upper triangle if symmetric.</span>
@@ -1092,7 +1136,8 @@
                     <span class="n">nearest</span><span class="p">[</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">]</span> <span class="o">=</span> <span class="n">computed_length</span>
                     
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">ddist1</span><span class="p">,</span> <span class="n">ddist2</span> <span class="o">=</span> <span class="n">dest_dist_to_node</span><span class="p">[</span><span class="n">p2</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+                    <span class="n">ddist1</span><span class="p">,</span> <span class="n">ddist2</span> <span class="o">=</span> <span class="n">dst_d2n</span><span class="p">[</span><span class="n">p2</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+                    
                     <span class="n">d11</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distancematrix</span><span class="p">[</span><span class="n">source1</span><span class="p">][</span><span class="n">dest1</span><span class="p">]</span>
                     <span class="n">d21</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distancematrix</span><span class="p">[</span><span class="n">source2</span><span class="p">][</span><span class="n">dest1</span><span class="p">]</span>
                     <span class="n">d12</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distancematrix</span><span class="p">[</span><span class="n">source1</span><span class="p">][</span><span class="n">dest2</span><span class="p">]</span>
@@ -1107,6 +1152,7 @@
                     <span class="k">if</span> <span class="n">sd_1</span> <span class="o">&gt;</span> <span class="n">sd_21</span><span class="p">:</span>
                         <span class="n">sd_1</span> <span class="o">=</span> <span class="n">sd_21</span>
                         <span class="n">sp_combo1</span> <span class="o">=</span> <span class="n">source2</span><span class="p">,</span> <span class="n">dest1</span>
+                    
                     <span class="c1"># Now add the point to node one distance on</span>
                     <span class="c1"># the destination edge.</span>
                     <span class="n">len_1</span> <span class="o">=</span> <span class="n">sd_1</span> <span class="o">+</span> <span class="n">ddist1</span>
@@ -1152,7 +1198,8 @@
 
 <div class="viewcode-block" id="Network.nearestneighbordistances"><a class="viewcode-back" href="../../generated/spaghetti.Network.nearestneighbordistances.html#spaghetti.Network.nearestneighbordistances">[docs]</a>    <span class="k">def</span> <span class="nf">nearestneighbordistances</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sourcepattern</span><span class="p">,</span> <span class="n">destpattern</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                  <span class="n">n_processes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gen_tree</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                                 <span class="n">all_dists</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">keep_zero_dist</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+                                 <span class="n">all_dists</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">snap_dist</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                 <span class="n">keep_zero_dist</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Compute the interpattern nearest neighbor distances or the</span>
 <span class="sd">        intrapattern nearest neighbor distances between a source</span>
 <span class="sd">        pattern and a destination pattern.</span>
@@ -1176,6 +1223,10 @@
 <span class="sd">        </span>
 <span class="sd">        all_dists : numpy.ndarray</span>
 <span class="sd">            An array of shape (n,n) storing distances between all points.</span>
+<span class="sd">        </span>
+<span class="sd">        snap_dist : bool</span>
+<span class="sd">            include the distance from the original location to the snapped</span>
+<span class="sd">            location along the network. Default is False.</span>
 <span class="sd">        </span>
 <span class="sd">        keep_zero_dist : bool</span>
 <span class="sd">            Include zero values in minimum distance (True) or exclude (False).</span>
@@ -1231,7 +1282,8 @@
                                                   <span class="n">destpattern</span><span class="o">=</span><span class="n">destpattern</span><span class="p">,</span>
                                                   <span class="n">fill_diagonal</span><span class="o">=</span><span class="n">fill_diagonal</span><span class="p">,</span>
                                                   <span class="n">n_processes</span><span class="o">=</span><span class="n">n_processes</span><span class="p">,</span>
-                                                  <span class="n">gen_tree</span><span class="o">=</span><span class="n">gen_tree</span><span class="p">)</span>
+                                                  <span class="n">gen_tree</span><span class="o">=</span><span class="n">gen_tree</span><span class="p">,</span>
+                                                  <span class="n">snap_dist</span><span class="o">=</span><span class="n">snap_dist</span><span class="p">)</span>
         <span class="n">nearest</span> <span class="o">=</span> <span class="p">{}</span>
         
         <span class="k">for</span> <span class="n">source_index</span> <span class="ow">in</span> <span class="n">sourcepattern</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -1609,16 +1661,24 @@
 <span class="sd">        (int), and values are snapped coordinates.</span>
 <span class="sd">    </span>
 <span class="sd">    obs_to_node : list</span>
+<span class="sd">       list of incident network nodes to snapped observation points converted</span>
+<span class="sd">       from default_dict. Originally in the form of paired left/right nearest</span>
+<span class="sd">       network nodes - {netnode1: obs_id1, netnode2: obs_id1,</span>
+<span class="sd">       netnode1: obs_id2... netnode1: obs_idn}, then simplified to a list in</span>
+<span class="sd">       the form - [netnode1, netnode2, netnode1, netnode2, ...].</span>
+<span class="sd">       </span>
+<span class="sd">    dist_to_node : dict</span>
 <span class="sd">        Keys are observations ids (int). Values are distance lookup (dict).</span>
 <span class="sd">        Within distance lookup (dict) keys are the two incident nodes of the</span>
 <span class="sd">        edge and values are distance to each of those edges.</span>
 <span class="sd">    </span>
-<span class="sd">    dist_to_node : dict</span>
-<span class="sd">        ####################################################################### NEEDS ATTENTION</span>
-<span class="sd">    </span>
 <span class="sd">    snapped_coordinates : dict</span>
 <span class="sd">        Keys are the point ids (int). Values are the snapped x,y</span>
 <span class="sd">        coordinates (tuple).</span>
+<span class="sd">    </span>
+<span class="sd">    snap_dist : bool</span>
+<span class="sd">        include the distance from the original location to the snapped</span>
+<span class="sd">        location along the network. Default is False.</span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="PointPattern.__init__"><a class="viewcode-back" href="../../generated/spaghetti.PointPattern.html#spaghetti.PointPattern.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">idvariable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -1630,10 +1690,8 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">from_shp</span> <span class="o">=</span> <span class="kc">False</span>
             
-        <span class="k">if</span> <span class="n">idvariable</span> <span class="ow">and</span> <span class="n">from_shp</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">idvariable</span><span class="p">:</span>
             <span class="n">ids</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">get_ids</span><span class="p">(</span><span class="n">in_data</span><span class="p">,</span> <span class="n">idvariable</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">idvariable</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">from_shp</span><span class="p">:</span>
-            <span class="n">ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">in_data</span><span class="p">[</span><span class="n">idvariable</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">ids</span> <span class="o">=</span> <span class="kc">None</span>
             
@@ -1693,17 +1751,20 @@
 <span class="sd">        (int), and values are snapped coordinates.</span>
 <span class="sd">    </span>
 <span class="sd">    obs_to_node : list</span>
+<span class="sd">       list of incident network nodes to snapped observation points converted</span>
+<span class="sd">       from default_dict. Originally in the form of paired left/right nearest</span>
+<span class="sd">       network nodes - {netnode1: obs_id1, netnode2: obs_id1,</span>
+<span class="sd">       netnode1: obs_id2... netnode1: obs_idn}, then simplified to a list in</span>
+<span class="sd">       the form - [netnode1, netnode2, netnode1, netnode2, ...].</span>
+<span class="sd">       </span>
+<span class="sd">    dist_to_node : dict</span>
 <span class="sd">        Keys are observations ids (int). Values are distance lookup (dict).</span>
 <span class="sd">        Within distance lookup (dict) keys are the two incident nodes of the</span>
 <span class="sd">        edge and values are distance to each of those edges.</span>
 <span class="sd">    </span>
-<span class="sd">    dist_to_node : dict</span>
-<span class="sd">        ####################################################################### NEEDS ATTENTION</span>
-<span class="sd">    </span>
 <span class="sd">    snapped_coordinates : dict</span>
 <span class="sd">        Keys are the point ids (int). Values are the snapped x,y</span>
 <span class="sd">        coordinates (tuple).</span>
-
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="SimulatedPointPattern.__init__"><a class="viewcode-back" href="../../generated/spaghetti.SimulatedPointPattern.html#spaghetti.SimulatedPointPattern.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">npoints</span> <span class="o">=</span> <span class="mi">0</span>

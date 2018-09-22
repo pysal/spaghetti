@@ -247,40 +247,43 @@ the shortest path.</p>
 <tr class="row-odd"><td><a class="reference internal" href="spaghetti.Network.compute_distance_to_nodes.html#spaghetti.Network.compute_distance_to_nodes" title="spaghetti.Network.compute_distance_to_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_distance_to_nodes</span></code></a>(x,&nbsp;y,&nbsp;edge)</td>
 <td>Given an observation on a network edge, return the distance to the two nodes that bound that end.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="spaghetti.Network.contiguityweights.html#spaghetti.Network.contiguityweights" title="spaghetti.Network.contiguityweights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">contiguityweights</span></code></a>([graph,&nbsp;weightings])</td>
+<tr class="row-even"><td><a class="reference internal" href="spaghetti.Network.compute_snap_dist.html#spaghetti.Network.compute_snap_dist" title="spaghetti.Network.compute_snap_dist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_snap_dist</span></code></a>(pattern,&nbsp;idx)</td>
+<td>Given an observation snapped to a network edge, calculate the distance from the original location to the snapped location.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="spaghetti.Network.contiguityweights.html#spaghetti.Network.contiguityweights" title="spaghetti.Network.contiguityweights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">contiguityweights</span></code></a>([graph,&nbsp;weightings])</td>
 <td>Create a contiguity based W object.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="spaghetti.Network.count_per_edge.html#spaghetti.Network.count_per_edge" title="spaghetti.Network.count_per_edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">count_per_edge</span></code></a>(obs_on_network[,&nbsp;graph])</td>
+<tr class="row-even"><td><a class="reference internal" href="spaghetti.Network.count_per_edge.html#spaghetti.Network.count_per_edge" title="spaghetti.Network.count_per_edge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">count_per_edge</span></code></a>(obs_on_network[,&nbsp;graph])</td>
 <td>Compute the counts per edge.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="spaghetti.Network.distancebandweights.html#spaghetti.Network.distancebandweights" title="spaghetti.Network.distancebandweights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">distancebandweights</span></code></a>(threshold[,&nbsp;n_proccess,&nbsp;…])</td>
+<tr class="row-odd"><td><a class="reference internal" href="spaghetti.Network.distancebandweights.html#spaghetti.Network.distancebandweights" title="spaghetti.Network.distancebandweights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">distancebandweights</span></code></a>(threshold[,&nbsp;n_proccess,&nbsp;…])</td>
 <td>Create distance based weights.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="spaghetti.Network.enum_links_node.html#spaghetti.Network.enum_links_node" title="spaghetti.Network.enum_links_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enum_links_node</span></code></a>(v0)</td>
+<tr class="row-even"><td><a class="reference internal" href="spaghetti.Network.enum_links_node.html#spaghetti.Network.enum_links_node" title="spaghetti.Network.enum_links_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enum_links_node</span></code></a>(v0)</td>
 <td>Returns the edges (links) around node.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="spaghetti.Network.extractgraph.html#spaghetti.Network.extractgraph" title="spaghetti.Network.extractgraph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extractgraph</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="spaghetti.Network.extractgraph.html#spaghetti.Network.extractgraph" title="spaghetti.Network.extractgraph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extractgraph</span></code></a>()</td>
 <td>Using the existing network representation, create a graph-theoretic representation by removing all nodes with a neighbor incidence of two  (non-articulation points).</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="spaghetti.Network.loadnetwork.html#spaghetti.Network.loadnetwork" title="spaghetti.Network.loadnetwork"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loadnetwork</span></code></a>(filename)</td>
+<tr class="row-even"><td><a class="reference internal" href="spaghetti.Network.loadnetwork.html#spaghetti.Network.loadnetwork" title="spaghetti.Network.loadnetwork"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loadnetwork</span></code></a>(filename)</td>
 <td>Load a network from a binary file saved on disk.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="spaghetti.Network.nearestneighbordistances.html#spaghetti.Network.nearestneighbordistances" title="spaghetti.Network.nearestneighbordistances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nearestneighbordistances</span></code></a>(sourcepattern[,&nbsp;…])</td>
+<tr class="row-odd"><td><a class="reference internal" href="spaghetti.Network.nearestneighbordistances.html#spaghetti.Network.nearestneighbordistances" title="spaghetti.Network.nearestneighbordistances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nearestneighbordistances</span></code></a>(sourcepattern[,&nbsp;…])</td>
 <td>Compute the interpattern nearest neighbor distances or the intrapattern nearest neighbor distances between a source pattern and a destination pattern.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="spaghetti.Network.node_distance_matrix.html#spaghetti.Network.node_distance_matrix" title="spaghetti.Network.node_distance_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node_distance_matrix</span></code></a>(n_processes[,&nbsp;gen_tree])</td>
+<tr class="row-even"><td><a class="reference internal" href="spaghetti.Network.node_distance_matrix.html#spaghetti.Network.node_distance_matrix" title="spaghetti.Network.node_distance_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">node_distance_matrix</span></code></a>(n_processes[,&nbsp;gen_tree])</td>
 <td>Called from within allneighbordistances(), nearestneighbordistances(), and distancebandweights().</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="spaghetti.Network.savenetwork.html#spaghetti.Network.savenetwork" title="spaghetti.Network.savenetwork"><code class="xref py py-obj docutils literal notranslate"><span class="pre">savenetwork</span></code></a>(filename)</td>
+<tr class="row-odd"><td><a class="reference internal" href="spaghetti.Network.savenetwork.html#spaghetti.Network.savenetwork" title="spaghetti.Network.savenetwork"><code class="xref py py-obj docutils literal notranslate"><span class="pre">savenetwork</span></code></a>(filename)</td>
 <td>Save a network to disk as a binary file.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="spaghetti.Network.segment_edges.html#spaghetti.Network.segment_edges" title="spaghetti.Network.segment_edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">segment_edges</span></code></a>(distance)</td>
+<tr class="row-even"><td><a class="reference internal" href="spaghetti.Network.segment_edges.html#spaghetti.Network.segment_edges" title="spaghetti.Network.segment_edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">segment_edges</span></code></a>(distance)</td>
 <td>Segment all of the edges in the network at either a</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="spaghetti.Network.simulate_observations.html#spaghetti.Network.simulate_observations" title="spaghetti.Network.simulate_observations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">simulate_observations</span></code></a>(count[,&nbsp;distribution])</td>
+<tr class="row-odd"><td><a class="reference internal" href="spaghetti.Network.simulate_observations.html#spaghetti.Network.simulate_observations" title="spaghetti.Network.simulate_observations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">simulate_observations</span></code></a>(count[,&nbsp;distribution])</td>
 <td>Generate a simulated point pattern on the network.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="spaghetti.Network.snapobservations.html#spaghetti.Network.snapobservations" title="spaghetti.Network.snapobservations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">snapobservations</span></code></a>(in_data,&nbsp;name[,&nbsp;…])</td>
+<tr class="row-even"><td><a class="reference internal" href="spaghetti.Network.snapobservations.html#spaghetti.Network.snapobservations" title="spaghetti.Network.snapobservations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">snapobservations</span></code></a>(in_data,&nbsp;name[,&nbsp;…])</td>
 <td>Snap a point pattern shapefile to this network object.</td>
 </tr>
 </tbody>

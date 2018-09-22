@@ -542,7 +542,6 @@ class Network:
         
         return d1, d2
 
-
     def compute_snap_dist(self, pattern, idx):
         """Given an observation snapped to a network edge, calculate the
         distance from the original location to the snapped location.
@@ -1558,6 +1557,10 @@ class PointPattern():
         Keys are the point ids (int). Values are the snapped x,y
         coordinates (tuple).
     
+    snap_dist : bool
+        include the distance from the original location to the snapped
+        location along the network. Default is False.
+    
     """
     def __init__(self, in_data=None, idvariable=None, attribute=False):
         self.points = {}
@@ -1643,7 +1646,6 @@ class SimulatedPointPattern():
     snapped_coordinates : dict
         Keys are the point ids (int). Values are the snapped x,y
         coordinates (tuple).
-
     """
     def __init__(self):
         self.npoints = 0
