@@ -661,8 +661,7 @@
         
         <span class="k">return</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span></div>
 
-
-    <span class="k">def</span> <span class="nf">compute_snap_dist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.compute_snap_dist"><a class="viewcode-back" href="../../generated/spaghetti.Network.compute_snap_dist.html#spaghetti.Network.compute_snap_dist">[docs]</a>    <span class="k">def</span> <span class="nf">compute_snap_dist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Given an observation snapped to a network edge, calculate the</span>
 <span class="sd">        distance from the original location to the snapped location.</span>
 <span class="sd">        </span>
@@ -682,7 +681,7 @@
         <span class="n">loc</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s1">&#39;coordinates&#39;</span><span class="p">]</span>
         <span class="n">snp</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">snapped_coordinates</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
         <span class="n">dist</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">compute_length</span><span class="p">(</span><span class="n">loc</span><span class="p">,</span> <span class="n">snp</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">dist</span>
+        <span class="k">return</span> <span class="n">dist</span></div>
 
     <span class="k">def</span> <span class="nf">_snap_to_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pointpattern</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Used internally to snap point observations to network edges.</span>

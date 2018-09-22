@@ -20,6 +20,7 @@ spaghetti.Network
     Network.distancebandweights
     Network.snapobservations
     Network.compute_distance_to_nodes
+    Network.compute_snap_dist
     Network.count_per_edge
     Network.simulate_observations
     Network.enum_links_node

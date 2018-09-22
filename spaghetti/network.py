@@ -542,7 +542,6 @@ class Network:
         
         return d1, d2
 
-
     def compute_snap_dist(self, pattern, idx):
         """Given an observation snapped to a network edge, calculate the
         distance from the original location to the snapped location.
