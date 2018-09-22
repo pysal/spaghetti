@@ -25,18 +25,18 @@ matrix:
         env: PYSAL_PYPI=false PYSAL_PLUS=true
 
 before_install:
-  - wget https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
+  - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
   - chmod +x miniconda.sh
   - ./miniconda.sh -b -p ./miniconda
   - export PATH=`pwd`/miniconda/bin:$PATH
   - conda update --yes conda
-  - conda config --add channels conda-forge
+  - conda config --append channels conda-forge
   - conda create -y -q -n test-env python=$TRAVIS_PYTHON_VERSION
   - source activate test-env
 
 install:
   - conda install --yes pip
-  - conda install --yes -c conda-forge geopandas
+  - conda install --yes geopandas
   - if "$PYSAL_PYPI"; then
         echo 'testing pypi libpysal' && pip install libpysal;
         else echo 'testing git libpysal';
@@ -47,11 +47,11 @@ install:
         echo 'plus testing'; conda install --yes --file requirements_plus.txt;
         else conda install --yes --file requirements.txt;
     fi;
-  - pip install -r requirements_dev.txt
+  - pip install -r requirements_dev.txt -r requirements_docs.txt
 
 script:
   - python setup.py sdist >/dev/null
-  - nosetests --with-coverage --cover-package=spaghetti;
+  - nosetests --with-doctest --with-coverage --cover-package=spaghetti;
 
 notifications:
     email:

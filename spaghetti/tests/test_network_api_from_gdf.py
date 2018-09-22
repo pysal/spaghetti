@@ -119,6 +119,11 @@ class TestNetworkPointPattern(unittest.TestCase):
         observed = matrix2.diagonal()
         known = np.zeros(matrix2.shape[0])
         self.assertEqual(observed.all(), known.all())
+        
+        matrix3 = self.ntw.allneighbordistances('schools', snap_dist=True)
+        known_mtx_val = 3218.2597894
+        observed_mtx_val = matrix3
+        self.assertAlmostEqual(observed_mtx_val[0, 1], known_mtx_val, places=4)
     
     def test_nearest_neighbor_distances(self):
         # general test
@@ -132,16 +137,23 @@ class TestNetworkPointPattern(unittest.TestCase):
         np.testing.assert_array_almost_equal_nulp(nndv1, nndv2)
         
         # nearest neighbor keeping zero test
-        known_zero = ([19], 0.0)
+        known_zero = ([19], 0.0)[0]
         nn_c = self.ntw.nearestneighbordistances('crimes',
                                                  keep_zero_dist=True)
-        self.assertEqual(nn_c[18], known_zero)
+        self.assertEqual(nn_c[18][0], known_zero)
         
         # nearest neighbor omitting zero test
-        known_nonzero = ([11], 165.33982412719126)
+        known_nonzero = ([11], 165.33982412719126)[1]
         nn_c = self.ntw.nearestneighbordistances('crimes',
                                                  keep_zero_dist=False)
-        self.assertEqual(nn_c[18], known_nonzero)
+        self.assertAlmostEqual(nn_c[18][1], known_nonzero, places=4)
+        
+        # nearest neighbor with snap distance
+        known_neigh = ([3], 402.5219673922477)[1]
+        nn_c = self.ntw.nearestneighbordistances('crimes',
+                                                 keep_zero_dist=True,
+                                                 snap_dist=True)
+        self.assertAlmostEqual(nn_c[0][1], known_neigh, places=4)
 
 @unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
 class TestNetworkAnalysis(unittest.TestCase):

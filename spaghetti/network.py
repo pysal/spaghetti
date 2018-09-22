@@ -543,6 +543,28 @@ class Network:
         return d1, d2
 
 
+    def compute_snap_dist(self, pattern, idx):
+        """Given an observation snapped to a network edge, calculate the
+        distance from the original location to the snapped location.
+        
+        Parameters
+        -----------
+        
+        pattern : spaghetti.network.PointPattern
+            point pattern object
+        idx : int
+            point id
+        
+        Return
+        ------
+        dist : float
+            euclidean distance from original location to snapped location.
+        """
+        loc = pattern.points[idx]['coordinates']
+        snp = pattern.snapped_coordinates[idx]
+        dist = util.compute_length(loc, snp)
+        return dist
+
     def _snap_to_edge(self, pointpattern):
         """ Used internally to snap point observations to network edges.
         
@@ -569,6 +591,8 @@ class Network:
         
         obs_to_edge = {}
         dist_to_node = {}
+        dist_snapped = {}
+        obs_to_node = defaultdict(list)
         
         pointpattern.snapped_coordinates = {}
         segments = []
@@ -578,13 +602,15 @@ class Network:
             tail = self.node_coords[edge[1]]
             segments.append(cg.Chain([head, tail]))
             s2e[(head, tail)] = edge
-            
+        
+        # snap points
         points = {}
         p2id = {}
         for pointIdx, point in pointpattern.points.items():
             points[pointIdx] = point['coordinates']
         snapped = util.snap_points_on_segments(points, segments)
         
+        # record obs_to_edge, dist_to_node, and dist_snapped
         for pointIdx, snapInfo in snapped.items():
             x, y = snapInfo[1].tolist()
             edge = s2e[tuple(snapInfo[0])]
@@ -594,15 +620,19 @@ class Network:
             pointpattern.snapped_coordinates[pointIdx] = (x, y)
             d1, d2 = self.compute_distance_to_nodes(x, y, edge)
             dist_to_node[pointIdx] = {edge[0]: d1, edge[1]: d2}
-            
+            dist_snapped[pointIdx] = self.compute_snap_dist(pointpattern,
+                                                            pointIdx)
+        
+        # record obs_to_node
         obs_to_node = defaultdict(list)
         for k, v in obs_to_edge.items():
             keys = v.keys()
             obs_to_node[k[0]] = keys
             obs_to_node[k[1]] = keys
-            
+        
         pointpattern.obs_to_edge = obs_to_edge
         pointpattern.dist_to_node = dist_to_node
+        pointpattern.dist_snapped = dist_snapped
         pointpattern.obs_to_node = list(obs_to_node)
 
 
@@ -635,8 +665,9 @@ class Network:
         
         >>> counts = ntw.count_per_edge(ntw.pointpatterns['crimes']
         ...                             .obs_to_edge, graph=False)
-        >>> list(counts.values())[:3]
-        [1, 3, 2]
+        >>> counts[(140, 142)]
+        10
+        
         >>> s = sum([v for v in list(counts.values())])
         >>> s
         287
@@ -847,7 +878,7 @@ class Network:
 
     def allneighbordistances(self, sourcepattern, destpattern=None,
                              fill_diagonal=None, n_processes=None,
-                             gen_tree=False):
+                             gen_tree=False, snap_dist=False):
         """ Compute either all distances between i and j in a single point
         pattern or all distances between each i from a source pattern and all
         j from a destination pattern.
@@ -875,6 +906,10 @@ class Network:
         
         gen_tree : bool
             rebuild shortest path {True}, or skip {False}
+        
+        snap_dist : bool
+            include the distance from the original location to the snapped
+            location along the network. Default is False.
         
         Returns
         -------
@@ -927,11 +962,11 @@ class Network:
         
         # Source setup
         src_indices = list(sourcepattern.points.keys())
+        src_d2n = copy.deepcopy(sourcepattern.dist_to_node)
         nsource_pts = len(src_indices)
-        src_dist_to_node = sourcepattern.dist_to_node
         src_nodes = {}
         for s in src_indices:
-            e1, e2 = src_dist_to_node[s].keys()
+            e1, e2 = src_d2n[s].keys()
             src_nodes[s] = (e1, e2)
             
         # Destination setup
@@ -940,12 +975,22 @@ class Network:
             symmetric = True
             destpattern = sourcepattern
         dest_indices = list(destpattern.points.keys())
+        dst_d2n = copy.deepcopy(destpattern.dist_to_node)
         ndest_pts = len(dest_indices)
-        dest_dist_to_node = destpattern.dist_to_node
         dest_searchpts = copy.deepcopy(dest_indices)
         dest_nodes = {}
+        
+        # add snapping distance to each pointpattern
+        if snap_dist:
+            patterns = [sourcepattern, destpattern]
+            dist_copies = [src_d2n, dst_d2n]
+            for elm, pp in enumerate(patterns):
+                for pidx, dists_dict in dist_copies[elm].items():
+                    for nidx, ndist in dists_dict.items():
+                        dists_dict[nidx] = ndist + pp.dist_snapped[pidx]
+        
         for s in dest_indices:
-            e1, e2 = dest_dist_to_node[s].keys()
+            e1, e2 = dst_d2n[s].keys()
             dest_nodes[s] = (e1, e2)
             
         # Output setup
@@ -958,7 +1003,7 @@ class Network:
             source1, source2 = src_nodes[p1]
             set1 = set(src_nodes[p1])
             # Distance from node1 to p, distance from node2 to p.
-            sdist1, sdist2 = src_dist_to_node[p1].values()
+            sdist1, sdist2 = src_d2n[p1].values()
             
             if symmetric:
                 # Only compute the upper triangle if symmetric.
@@ -973,7 +1018,8 @@ class Network:
                     nearest[p1, p2] = computed_length
                     
                 else:
-                    ddist1, ddist2 = dest_dist_to_node[p2].values()
+                    ddist1, ddist2 = dst_d2n[p2].values()
+                    
                     d11 = self.distancematrix[source1][dest1]
                     d21 = self.distancematrix[source2][dest1]
                     d12 = self.distancematrix[source1][dest2]
@@ -988,6 +1034,7 @@ class Network:
                     if sd_1 > sd_21:
                         sd_1 = sd_21
                         sp_combo1 = source2, dest1
+                    
                     # Now add the point to node one distance on
                     # the destination edge.
                     len_1 = sd_1 + ddist1
@@ -1033,7 +1080,8 @@ class Network:
 
     def nearestneighbordistances(self, sourcepattern, destpattern=None,
                                  n_processes=None, gen_tree=False,
-                                 all_dists=None, keep_zero_dist=True):
+                                 all_dists=None, snap_dist=False,
+                                 keep_zero_dist=True):
         """Compute the interpattern nearest neighbor distances or the
         intrapattern nearest neighbor distances between a source
         pattern and a destination pattern.
@@ -1057,6 +1105,10 @@ class Network:
         
         all_dists : numpy.ndarray
             An array of shape (n,n) storing distances between all points.
+        
+        snap_dist : bool
+            include the distance from the original location to the snapped
+            location along the network. Default is False.
         
         keep_zero_dist : bool
             Include zero values in minimum distance (True) or exclude (False).
@@ -1112,7 +1164,8 @@ class Network:
                                                   destpattern=destpattern,
                                                   fill_diagonal=fill_diagonal,
                                                   n_processes=n_processes,
-                                                  gen_tree=gen_tree)
+                                                  gen_tree=gen_tree,
+                                                  snap_dist=snap_dist)
         nearest = {}
         
         for source_index in sourcepattern.points.keys():
