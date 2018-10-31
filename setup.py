@@ -1,4 +1,4 @@
-"""Spatial Network Analysis (SPAtial GrapHs: nETworks, Topology, & Inference
+"""Spatial Network Analysis (SPAtial GrapHs: nETworks, Topology, & Inference)
 """
 from setuptools import setup
 from distutils.command.build_py import build_py
