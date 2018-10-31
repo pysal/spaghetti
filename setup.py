@@ -1,4 +1,4 @@
-"""Spatial Network Analysis (SPAtial GrapHs: nETworks, Topology, & Inference) This package is part of a `refactoring of PySAL <https://github.com/pysal/pysal/wiki/PEP-13:-Refactor-PySAL-Using-Submodules>`_. Spaghetti is an open-source python library for the analysis of network-based spatial data. Originating from the ``network`` module in `PySAL (Python Spatial Analysis Library) <http://pysal.org>`_, it is under active development for the inclusion of newly proposed methods for building graph-theoretic networks and the analysis of network events.
+"""Spatial Network Analysis (SPAtial GrapHs: nETworks, Topology, & Inference) This package is part of a refactoring of PySAL. Spaghetti is an open-source python library for the analysis of network-based spatial data. Originating from the network module in PySAL (Python Spatial Analysis Library), it is under active development for the inclusion of newly proposed methods for building graph-theoretic networks and the analysis of network events.
 """
 
 DOCLINES = __doc__.split("\n")
