@@ -1,6 +1,0 @@
-spaghetti.squaredDistancePointSegment
-=====================================
-
-.. currentmodule:: spaghetti
-
-.. autofunction:: squaredDistancePointSegment

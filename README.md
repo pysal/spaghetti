@@ -105,7 +105,7 @@ BibTeX Citation
 author = {Gaboardi, James D. and Laura, Jay and Rey, Sergio and Wolf, Levi John and Folch, David C. and Kang, Wei and Stephens, Philip and Schmidt, Charles},
 month = {oct},
 year = {2018},
-title = {pysal/spaghetti v1.1.0},
+title = {pysal/spaghetti},
 url = {https://github.com/pysal/spaghetti},
 keywords = {graph-theory,network-analysis,python,spatial-networks,topology}
 }
