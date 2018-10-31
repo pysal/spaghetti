@@ -1,5 +1,12 @@
 """Spatial Network Analysis (SPAtial GrapHs: nETworks, Topology, & Inference)
 """
+
+DOCLINES = __doc__.split("\n")
+
+with open('README.rst', 'r', encoding='utf8') as file:
+    long_description = file.read()
+
+
 from setuptools import setup
 from distutils.command.build_py import build_py
 
@@ -45,7 +52,7 @@ def setup_package(package, version):
 
     setup(name=package,
           version=__version__,
-          description=__doc__,
+          description=long_description,
           url='https://github.com/pysal/'+package,
           download_url='https://pypi.org/project/'+package,
           maintainer='James D. Gaboardi',
