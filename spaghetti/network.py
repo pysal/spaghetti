@@ -1510,7 +1510,7 @@ class Network:
         return self
 
 
-def element_as_gdf(net, nodes_dict=False, edges_dict=False, pp_name=None,
+def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
                    snapped=False, idx='id', geo='geometry'):
     """Return a GeoDataFrame of network elements. This can be (a) the
     nodes of a network; (b) the edges of a network; (c) both the nodes
@@ -1519,7 +1519,11 @@ def element_as_gdf(net, nodes_dict=False, edges_dict=False, pp_name=None,
     
     Parameters
     ----------
+    
     net : spaghetti.Network
+        network object
+    
+    
     
     
     Returns
@@ -1531,8 +1535,9 @@ def element_as_gdf(net, nodes_dict=False, edges_dict=False, pp_name=None,
     ------
     
     ModuleNotFoundError
-        The module 'shapely' is need to perform this operation. This
-        exception is raised when 'shapely' is not found.
+        The modules `geopandas` and `shapely` are needed to perform
+        this operation. This exception is raised when either or both
+        are not found.
     
     
     Examples
@@ -1541,19 +1546,33 @@ def element_as_gdf(net, nodes_dict=False, edges_dict=False, pp_name=None,
     
     """
     try:
+        import geopandas as gpd
+    except ModuleNotFoundError:
+        raise ModuleNotFoundError('`geopandas` needed for this operation.')
+    try:
         from shapely.geometry import Point, LineString
     except ModuleNotFoundError:
-        raise ModuleNotFoundError('"shapely" needed for this operation.')
+        raise ModuleNotFoundError('`shapely` needed for this operation.')
     
     
     # nodes
     if nodes:
-        points_dict = net.node_coords
+        pts_dict = net.node_coords
     
+    # raw point pattern
+    if pp_name and not snapped:
+        pp_pts = net.pointpatterns[pp_name].points
+        n_pp_pts = range(len(pp_pts))
+        pts_dict = {point:pp_pts[point]['coordinates'] for point in n_pp_pts}
     
+    # snapped point pattern
+    elif pp_name and snapped:
+        pts_dict = net.pointpatterns[pp_name].snapped_coordinates
     
-    points = gpd.GeoDataFrame(list(nodes_dict.items()), columns=[idx, geo])
-    points.geometry = nodes.geometry.apply(lambda p: Point(p))
+    # Instantiate geopandas.GeoDataFrame
+    points = gpd.GeoDataFrame(list(pts_dict.items()), columns=[idx, geo])
+    points.geometry = points.geometry.apply(lambda p: Point(p))
+    
     if not edges_dict:
         return nodes
     
