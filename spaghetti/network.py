@@ -1510,7 +1510,7 @@ class Network:
         return self
 
 
-def element_as_gdf(nodes_dict=None, edges_dict=None, pp_name=None,
+def element_as_gdf(net, nodes_dict=False, edges_dict=False, pp_name=None,
                    snapped=False, idx='id', geo='geometry'):
     """Return a GeoDataFrame of network elements. This can be (a) the
     nodes of a network; (b) the edges of a network; (c) both the nodes
@@ -1519,6 +1519,7 @@ def element_as_gdf(nodes_dict=None, edges_dict=None, pp_name=None,
     
     Parameters
     ----------
+    net : spaghetti.Network
     
     
     Returns
@@ -1526,14 +1527,33 @@ def element_as_gdf(nodes_dict=None, edges_dict=None, pp_name=None,
     
     
     
+    Raises
+    ------
+    
+    ModuleNotFoundError
+        The module 'shapely' is need to perform this operation. This
+        exception is raised when 'shapely' is not found.
+    
+    
     Examples
     --------
     
     
     """
+    try:
+        from shapely.geometry import Point, LineString
+    except ModuleNotFoundError:
+        raise ModuleNotFoundError('"shapely" needed for this operation.')
+    
+    
     # nodes
-    nodes = gpd.GeoDataFrame(list(nodes_dict.items()), columns=[idx, geo])
-    nodes.geometry = nodes.geometry.apply(lambda p: Point(p))
+    if nodes:
+        points_dict = net.node_coords
+    
+    
+    
+    points = gpd.GeoDataFrame(list(nodes_dict.items()), columns=[idx, geo])
+    points.geometry = nodes.geometry.apply(lambda p: Point(p))
     if not edges_dict:
         return nodes
     
