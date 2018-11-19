@@ -4,6 +4,11 @@ from libpysal import cg, examples
 from .. import network
 from .. import analysis
 from .. import util
+try:
+    import geopandas
+    GEOPANDAS_EXTINCT = False
+except ImportError:
+    GEOPANDAS_EXTINCT = True
 
 
 class TestNetwork(unittest.TestCase):
@@ -51,6 +56,20 @@ class TestNetwork(unittest.TestCase):
     def test_enum_links_node(self):
         coincident = self.ntw.enum_links_node(24)
         self.assertIn((24, 48), coincident)
+    
+    def test_element_as_gdf(self):
+        nodes, edges = network.element_as_gdf(self.ntw, nodes=True, edges=True)
+        
+        known_node_wkt = 'POINT (728368.04762 877125.89535)'
+        obs_node = nodes.loc[(nodes['id'] == 0), 'geometry'].squeeze()
+        obs_node_wkt = obs_node.wkt
+        self.assertEqual(obs_node_wkt, known_node_wkt)
+        
+        known_edge_wkt = 'LINESTRING (728368.04762 877125.89535, '\
+                         + '728368.13931 877023.27186)'
+        obs_edge = edges.loc[(edges['id'] == (0,1)), 'geometry'].squeeze()
+        obs_edge_wkt = obs_edge.wkt
+        self.assertEqual(obs_edge_wkt, known_edge_wkt)
 
 
 class TestNetworkPointPattern(unittest.TestCase):
