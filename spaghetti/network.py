@@ -1540,7 +1540,7 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
     id_col : str
         GeoDataFrame column name for IDs. Default is 'id'.
     
-    geom_col
+    geom_col : str
         GeoDataFrame column name for geometry. Default is 'geometry'.
     
     Raises
@@ -1582,7 +1582,6 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
     
     >>> print(edges.loc[(edges['id'] == (0,1)), 'geometry'].squeeze())
     LINESTRING (728368.04762 877125.89535, 728368.13931 877023.27186)
-    
     
     """
     # need nodes place holder to create network segment LineStrings
