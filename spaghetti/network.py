@@ -1623,7 +1623,7 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
             pp_pts = net.pointpatterns[pp_name].points
         except KeyError:
             err_msg = 'Available point patterns are {}'
-            raise KeyError(err_msg.format(net.pointpatterns.keys()))
+            raise KeyError(err_msg.format(list(net.pointpatterns.keys())))
             
         n_pp_pts = range(len(pp_pts))
         pts_dict = {point:pp_pts[point]['coordinates'] for point in n_pp_pts}
