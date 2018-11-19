@@ -1510,6 +1510,45 @@ class Network:
         return self
 
 
+def element_as_gdf(nodes_dict=None, edges_dict=None, pp_name=None,
+                   snapped=False, idx='id', geo='geometry'):
+    """Return a GeoDataFrame of network elements. This can be (a) the
+    nodes of a network; (b) the edges of a network; (c) both the nodes
+    and edges of the network; (d) raw point pattern associated with the
+    network; or (e) snapped point pattern of (d).
+    
+    Parameters
+    ----------
+    
+    
+    Returns
+    -------
+    
+    
+    
+    Examples
+    --------
+    
+    
+    """
+    # nodes
+    nodes = gpd.GeoDataFrame(list(nodes_dict.items()), columns=[idx, geo])
+    nodes.geometry = nodes.geometry.apply(lambda p: Point(p))
+    if not edges_dict:
+        return nodes
+    
+    # edges
+    edges = {}
+    for (node1_id, node2_id) in edges_dict:
+        node1 = nodes.loc[(nodes[idx] == node1_id), geo].squeeze()
+        node2 = nodes.loc[(nodes[idx] == node2_id), geo].squeeze()
+        edges[(node1_id, node2_id)] = LineString((node1, node2))
+    edges = gpd.GeoDataFrame(list(edges.items()), columns=[idx, geo])
+    
+    return nodes, edges
+
+
+
 class PointPattern():
     """A stub point pattern class used to store a point pattern. This class is
     monkey patched with network specific attributes when the points are snapped
