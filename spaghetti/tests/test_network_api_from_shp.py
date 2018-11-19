@@ -8,6 +8,7 @@ try:
 except ImportError:
     GEOPANDAS_EXTINCT = True
 
+
 class TestNetwork(unittest.TestCase):
     
     def setUp(self):
