@@ -166,6 +166,18 @@ class TestNetworkPointPattern(unittest.TestCase):
                                                  keep_zero_dist=True,
                                                  snap_dist=True)
         self.assertAlmostEqual(nn_c[0][1], known_neigh, places=4)
+    
+    def test_element_as_gdf(self):
+        pp = 'crimes'
+        obs = network.element_as_gdf(self.ntw, pp_name=pp)
+        snap_obs = network.element_as_gdf(self.ntw, pp_name=pp, snapped=True)
+        
+        known_dist = 221.5867616973843
+        observed_point = obs.loc[(obs['id']==0), 'geometry'].squeeze()
+        snap_point = snap_obs.loc[(snap_obs['id']==0), 'geometry'].squeeze()
+        observed_dist = observed_point.distance(snap_point)
+        self.assertAlmostEqual(observed_dist, known_dist, places=8)
+
 
 class TestNetworkAnalysis(unittest.TestCase):
     
