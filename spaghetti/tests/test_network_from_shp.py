@@ -11,6 +11,7 @@ except ImportError:
     GEOPANDAS_EXTINCT = True
 
 
+@unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
 class TestNetwork(unittest.TestCase):
 
     def setUp(self):
@@ -72,6 +73,7 @@ class TestNetwork(unittest.TestCase):
         self.assertEqual(obs_edge_wkt, known_edge_wkt)
 
 
+@unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
 class TestNetworkPointPattern(unittest.TestCase):
     
     def setUp(self):
