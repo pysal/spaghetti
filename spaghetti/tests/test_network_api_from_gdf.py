@@ -92,7 +92,7 @@ class TestNetworkFails(unittest.TestCase):
         pass
     
     def test_element_as_gdf(self):
-        with self.assertRaises(ModuleNotFoundError):
+        with self.assertRaises(ImportError):
             spgh.element_as_gdf(self.ntw, nodes=True)
 
 

@@ -1546,7 +1546,7 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
     Raises
     ------
     
-    ModuleNotFoundError
+    ImportError
         The modules `geopandas` and `shapely` are needed to perform
         this operation. This exception is raised when either or both
         are not found.
@@ -1606,12 +1606,12 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
     # check for availability of geopandas and shapely
     try:
         import geopandas as gpd
-    except ModuleNotFoundError:
-        raise ModuleNotFoundError('`geopandas` needed for this operation.')
+    except ImportError:
+        raise ImportError('`geopandas` needed for this operation.')
     try:
         from shapely.geometry import Point, LineString
-    except ModuleNotFoundError:
-        raise ModuleNotFoundError('`shapely` needed for this operation.')
+    except ImportError:
+        raise ImportError('`shapely` needed for this operation.')
     
     # nodes
     if nodes or nodes_for_edges:
