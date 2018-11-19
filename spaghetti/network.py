@@ -1588,7 +1588,7 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
     >>> in_data = examples.get_path('%s.shp' % obs_type)
     >>> ntw.snapobservations(in_data, obs_type)
     >>> obs = spgh.element_as_gdf(ntw, pp_name=obs_type)
-    >>> print(obs_gdf.loc[(obs_gdf['id'] == 0), 'geometry'].squeeze())
+    >>> print(obs.loc[(obs['id'] == 0), 'geometry'].squeeze())
     POINT (727913.0000000029 875720.9999999977)
     
     >>> snp_obs = spgh.element_as_gdf(ntw, pp_name=obs_type,
