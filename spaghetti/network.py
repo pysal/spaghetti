@@ -1138,7 +1138,7 @@ class Network:
         
         """
         if sourcepattern not in self.pointpatterns.keys():
-            err_msg = "Available point patterns are {}"
+            err_msg = 'Available point patterns are {}'
             raise KeyError(err_msg.format(self.pointpatterns.keys()))
             
         if not hasattr(self, 'alldistances'):
@@ -1543,6 +1543,20 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
     geom_col
         GeoDataFrame column name for geometry. Default is 'geometry'.
     
+    Raises
+    ------
+    
+    ModuleNotFoundError
+        The modules `geopandas` and `shapely` are needed to perform
+        this operation. This exception is raised when either or both
+        are not found.
+    
+    KeyError
+        In order to extract a `PointPattern` it must already be a part
+        of the `spaghetti.Network` object. This exception is raised
+        when a `PointPattern` is being extracted that does not exist
+        within the `spaghetti.Network` object.
+    
     Returns
     -------
     
@@ -1556,19 +1570,19 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
         as a simple `geopandas.GeoDataFrame` of `shapely.LineString`
         objects with an `id` column and `geometry` column.
     
-    Raises
-    ------
-    
-    ModuleNotFoundError
-        The modules `geopandas` and `shapely` are needed to perform
-        this operation. This exception is raised when either or both
-        are not found.
-    
     Examples
     --------
     
-    >>>
-    >>>
+    >>> import spaghetti as spgh
+    >>> ntw = spgh.Network(examples.get_path('streets.shp'))
+    >>> nodes, edges = spgh.element_as_gdf(ntw, nodes=True, edges=True)
+    
+    >>> print(nodes.loc[(nodes['id'] == 0), 'geometry'].squeeze())
+    POINT (728368.04762 877125.89535)
+    
+    >>> print(edges.loc[(edges['id'] == (0,1)), 'geometry'].squeeze())
+    LINESTRING (728368.04762 877125.89535, 728368.13931 877023.27186)
+    
     
     """
     # need nodes place holder to create network segment LineStrings
@@ -1593,7 +1607,12 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
     
     # raw point pattern
     if pp_name and not snapped:
-        pp_pts = net.pointpatterns[pp_name].points
+        try: 
+            pp_pts = net.pointpatterns[pp_name].points
+        except KeyError:
+            err_msg = 'Available point patterns are {}'
+            raise KeyError(err_msg.format(net.pointpatterns.keys()))
+            
         n_pp_pts = range(len(pp_pts))
         pts_dict = {point:pp_pts[point]['coordinates'] for point in n_pp_pts}
     
