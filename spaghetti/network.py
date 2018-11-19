@@ -1511,7 +1511,7 @@ class Network:
 
 
 def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
-                   snapped=False, idx='id', geo='geometry'):
+                   snapped=False, id_col='id', geom_col='geometry'):
     """Return a GeoDataFrame of network elements. This can be (a) the
     nodes of a network; (b) the edges of a network; (c) both the nodes
     and edges of the network; (d) raw point pattern associated with the
@@ -1523,13 +1523,38 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
     net : spaghetti.Network
         network object
     
+    nodes : bool
+        Extract the network nodes (vertices). Default is False.
     
+    edges : bool
+        Extract the network edges. Default is False.
     
+    pp_name : str
+        Name of the network `PointPattern` to extract.
+        Default is None.
+    
+    snapped : bool
+        If extracting a network `PointPattern`, set to [True] for
+        snapped point locations along the network. Default is False.
+    
+    id_col : str
+        GeoDataFrame column name for IDs. Default is 'id'.
+    
+    geom_col
+        GeoDataFrame column name for geometry. Default is 'geometry'.
     
     Returns
     -------
     
+    points : geopandas.GeoDataFrame
+        Network point elements (either nodes or `PointPattern` points)
+        as a simple `geopandas.GeoDataFrame` of `shapely.Point` objects
+        with an `id` column and `geometry` column.
     
+    lines : geopandas.GeoDataFrame
+        Network edge elements 
+        as a simple `geopandas.GeoDataFrame` of `shapely.LineString`
+        objects with an `id` column and `geometry` column.
     
     Raises
     ------
@@ -1556,7 +1581,7 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
     
     
     # nodes
-    if nodes:
+    if as_points:
         pts_dict = net.node_coords
     
     # raw point pattern
