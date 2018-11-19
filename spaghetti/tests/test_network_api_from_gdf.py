@@ -4,9 +4,9 @@ from libpysal import cg, examples
 import spaghetti as spgh
 try:
     import geopandas
-    GEOPANDAS_EXTINCT = False
+    GEOPANDAS_EXTINCT, NOT_GEOPANDAS_EXTINCT = False, True
 except ImportError:
-    GEOPANDAS_EXTINCT = True
+    GEOPANDAS_EXTINCT, NOT_GEOPANDAS_EXTINCT = True, False
 
 
 @unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
@@ -71,6 +71,29 @@ class TestNetwork(unittest.TestCase):
         obs_edge = edges.loc[(edges['id'] == (0,1)), 'geometry'].squeeze()
         obs_edge_wkt = obs_edge.wkt
         self.assertEqual(obs_edge_wkt, known_edge_wkt)
+        
+        edges = spgh.element_as_gdf(self.ntw, edges=True)
+        known_edge_wkt = 'LINESTRING (728368.04762 877125.89535, '\
+                         + '728368.13931 877023.27186)'
+        obs_edge = edges.loc[(edges['id'] == (0,1)), 'geometry'].squeeze()
+        obs_edge_wkt = obs_edge.wkt
+        self.assertEqual(obs_edge_wkt, known_edge_wkt)
+
+
+@unittest.skipIf(NOT_GEOPANDAS_EXTINCT, 'Geopandas/Shapely available')
+class TestNetworkFails(unittest.TestCase):
+    
+    def setUp(self):
+        path_to_shp = examples.get_path('streets.shp')
+        gdf = geopandas.read_file(path_to_shp)
+        self.ntw = spgh.Network(in_data=gdf)
+    
+    def tearDown(self):
+        pass
+    
+    def test_element_as_gdf(self):
+        self.assertRaises(ModuleNotFoundError,
+                          spgh.element_as_gdf(self.ntw, nodes=True))
 
 
 @unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
