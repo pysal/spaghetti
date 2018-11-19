@@ -133,8 +133,8 @@ class Network:
                 self.extractgraph()
                 
             self.node_list = sorted(self.nodes.values())
-
-
+    
+    
     def _round_sig(self, v):
         """Used internally to round the vertex to a set number of significant
         digits. If sig is set to 4, then the following are some possible
@@ -151,8 +151,8 @@ class Network:
                  for val in v]
         
         return tuple(out_v)
-
-
+    
+    
     def _extractnetwork(self):
         """Used internally to extract a network from a polyline shapefile.
         """
@@ -191,8 +191,8 @@ class Network:
             self.edges = list(set(self.edges))
             for k, v in self.adjacencylist.items():
                 self.adjacencylist[k] = list(set(v))
-
-
+    
+    
     def extractgraph(self):
         """Using the existing network representation, create a graph-theoretic
         representation by removing all nodes with a neighbor incidence of two 
@@ -277,8 +277,8 @@ class Network:
                 
             self.graphedges.append(newedge)
         self.graphedges = sorted(self.graphedges)
-
-
+    
+    
     def _yieldneighbor(self, node, segment_nodes, bridge):
         """Used internally, this method traverses a bridge segement to find
         the source and destination nodes.
@@ -309,8 +309,8 @@ class Network:
                 n.append(i)
                 
         return n
-
-
+    
+    
     def contiguityweights(self, graph=True, weightings=None):
         """Create a contiguity based W object.
         
@@ -413,8 +413,8 @@ class Network:
         w = weights.W(neighbors, weights=_weights)
         
         return w
-
-
+    
+    
     def distancebandweights(self, threshold, n_proccess=None, gen_tree=False):
         """Create distance based weights.
         
@@ -465,8 +465,8 @@ class Network:
         w = weights.W(neighbors)
         
         return w
-
-
+    
+    
     def snapobservations(self, in_data, name,
                          idvariable=None, attribute=None):
         """Snap a point pattern shapefile to this network object. The point
@@ -508,8 +508,8 @@ class Network:
                                                 idvariable=idvariable,
                                                 attribute=attribute)
         self._snap_to_edge(self.pointpatterns[name])
-
-
+    
+    
     def compute_distance_to_nodes(self, x, y, edge):
         """Given an observation on a network edge, return the distance to
         the two nodes that bound that end.
@@ -541,7 +541,8 @@ class Network:
         d2 = util.compute_length((x, y), self.node_coords[edge[1]])
         
         return d1, d2
-
+    
+    
     def compute_snap_dist(self, pattern, idx):
         """Given an observation snapped to a network edge, calculate the
         distance from the original location to the snapped location.
@@ -563,7 +564,8 @@ class Network:
         snp = pattern.snapped_coordinates[idx]
         dist = util.compute_length(loc, snp)
         return dist
-
+    
+    
     def _snap_to_edge(self, pointpattern):
         """ Used internally to snap point observations to network edges.
         
@@ -633,8 +635,8 @@ class Network:
         pointpattern.dist_to_node = dist_to_node
         pointpattern.dist_snapped = dist_snapped
         pointpattern.obs_to_node = list(obs_to_node)
-
-
+    
+    
     def count_per_edge(self, obs_on_network, graph=True):
         """Compute the counts per edge.
         
@@ -686,8 +688,8 @@ class Network:
             for key in obs_on_network.keys():
                 counts[key] = len(obs_on_network[key])
         return counts
-
-
+    
+    
     def _newpoint_coords(self, edge, distance):
         """ Used internally to compute new point coordinates during snapping.
         """
@@ -712,8 +714,8 @@ class Network:
         y0 = m * (x0 - x1) + y1
         
         return x0, y0
-
-
+    
+    
     def simulate_observations(self, count, distribution='uniform'):
         """ Generate a simulated point pattern on the network.
         
@@ -788,8 +790,8 @@ class Network:
             simpts.npoints = len(simpts.points)
             
         return simpts
-
-
+    
+    
     def enum_links_node(self, v0):
         """Returns the edges (links) around node.
         
@@ -820,8 +822,8 @@ class Network:
             links.append(tuple(sorted([n, v0])))
         
         return links
-
-
+    
+    
     def node_distance_matrix(self, n_processes, gen_tree=False):
         """ Called from within allneighbordistances(),
         nearestneighbordistances(), and distancebandweights().
@@ -873,8 +875,8 @@ class Network:
                     tree = None
                 self.alldistances[node] = (distance[node], tree)
                 self.distancematrix[node] = distance[node]
-
-
+    
+    
     def allneighbordistances(self, sourcepattern, destpattern=None,
                              fill_diagonal=None, n_processes=None,
                              gen_tree=False, snap_dist=False):
@@ -1075,8 +1077,8 @@ class Network:
             return nearest, tree_nearest
         else:
             return nearest
-
-
+    
+    
     def nearestneighbordistances(self, sourcepattern, destpattern=None,
                                  n_processes=None, gen_tree=False,
                                  all_dists=None, snap_dist=False,
@@ -1178,8 +1180,8 @@ class Network:
             nearest[source_index] = (dest_idxs, val)
             
         return nearest
-
-
+    
+    
     def NetworkF(self, pointpattern, nsteps=10, permutations=99, threshold=0.2,
                  distribution='uniform',  lowerbound=None, upperbound=None):
         """Computes a network constrained F-Function
@@ -1296,8 +1298,8 @@ class Network:
                         permutations=permutations, threshold=threshold,
                         distribution=distribution, lowerbound=lowerbound,
                         upperbound=upperbound)
-
-
+    
+    
     def NetworkK(self, pointpattern, nsteps=10, permutations=99,
                  threshold=0.5, distribution='uniform',
                  lowerbound=None, upperbound=None):
@@ -1356,8 +1358,8 @@ class Network:
                         permutations=permutations, threshold=threshold,
                         distribution=distribution, lowerbound=lowerbound,
                         upperbound=upperbound)
-
-
+    
+    
     def segment_edges(self, distance):
         """Segment all of the edges in the network at either a
         fixed distance or a fixed number of segments.
@@ -1462,8 +1464,8 @@ class Network:
             sn._snap_to_edge(instance)
             
         return sn
-
-
+    
+    
     def savenetwork(self, filename):
         """Save a network to disk as a binary file.
         
@@ -1483,7 +1485,8 @@ class Network:
         """
         with open(filename, 'wb') as networkout:
             pickle.dump(self, networkout, protocol=2)
-
+    
+    
     @staticmethod
     def loadnetwork(filename):
         """Load a network from a binary file saved on disk.
@@ -1680,7 +1683,7 @@ class SortedEdges(OrderedDict):
             raise ValueError("{!r} is the last key.".format(key))
         n = next[2]
         return n
-
+    
     def first_key(self):
         """
         
