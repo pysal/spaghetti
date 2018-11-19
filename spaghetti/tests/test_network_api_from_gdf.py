@@ -92,8 +92,8 @@ class TestNetworkFails(unittest.TestCase):
         pass
     
     def test_element_as_gdf(self):
-        self.assertRaises(ModuleNotFoundError,
-                          spgh.element_as_gdf(self.ntw, nodes=True))
+        with self.assertRaises(ModuleNotFoundError):
+            spgh.element_as_gdf(self.ntw, nodes=True)
 
 
 @unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
@@ -202,6 +202,10 @@ class TestNetworkPointPattern(unittest.TestCase):
         snap_point = snap_obs.loc[(snap_obs['id']==0), 'geometry'].squeeze()
         observed_dist = observed_point.distance(snap_point)
         self.assertAlmostEqual(observed_dist, known_dist, places=8)
+        
+        pp = 'FireStations'
+        with self.assertRaises(KeyError):
+            spgh.element_as_gdf(self.ntw, pp_name=pp)
 
 
 @unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
