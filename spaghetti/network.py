@@ -1571,6 +1571,11 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
     >>>
     
     """
+    # need nodes place holder to create network segment LineStrings
+    # even if only network edges are desired.
+    nodes_for_edges = False
+    if edges and not nodes:
+        nodes_for_edges = True
     
     # check for availability of geopandas and shapely
     try:
@@ -1583,7 +1588,7 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
         raise ModuleNotFoundError('`shapely` needed for this operation.')
     
     # nodes
-    if nodes:
+    if nodes or nodes_for_edges:
         pts_dict = net.node_coords
     
     # raw point pattern
@@ -1597,7 +1602,8 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
         pts_dict = net.pointpatterns[pp_name].snapped_coordinates
     
     # instantiate geopandas.GeoDataFrame
-    points = gpd.GeoDataFrame(list(pts_dict.items()), columns=[idx, geo])
+    pts_list = list(pts_dict.items())
+    points = gpd.GeoDataFrame(pts_list, columns=[id_col, geom_col])
     points.geometry = points.geometry.apply(lambda p: Point(p))
     
     # return points geodataframe if edges not specified or
@@ -1608,12 +1614,15 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
     # edges
     edges = {}
     for (node1_id, node2_id) in net.edges:
-        node1 = nodes.loc[(nodes[idx] == node1_id), geo].squeeze()
-        node2 = nodes.loc[(nodes[idx] == node2_id), geo].squeeze()
+        node1 = points.loc[(points[id_col] == node1_id), geom_col].squeeze()
+        node2 = points.loc[(points[id_col] == node2_id), geom_col].squeeze()
         edges[(node1_id, node2_id)] = LineString((node1, node2))
-    edges = gpd.GeoDataFrame(list(edges.items()), columns=[idx, geo])
+    edges = gpd.GeoDataFrame(list(edges.items()), columns=[id_col, geom_col])
     
-    return points, edges
+    if nodes_for_edges:
+        return edges
+    else:
+        return points, edges
 
 
 class PointPattern():
