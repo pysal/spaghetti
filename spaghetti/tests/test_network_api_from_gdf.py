@@ -168,17 +168,16 @@ class TestNetworkPointPattern(unittest.TestCase):
                                                  keep_zero_dist=True,
                                                  snap_dist=True)
         self.assertAlmostEqual(nn_c[0][1], known_neigh, places=4)
-
+    
     def test_element_as_gdf(self):
         pp = 'crimes'
         obs = spgh.element_as_gdf(self.ntw, pp_name=pp)
-        snapped_obs = spgh.element_as_gdf(self.ntw, pp_name=pp, snapped=True)
+        snap_obs = spgh.element_as_gdf(self.ntw, pp_name=pp, snapped=True)
         
         known_dist = 221.5867616973843
         observed_point = obs.loc[(obs['id']==0), 'geometry'].squeeze()
-        snapped_point = snapped_obs.loc[(snapped_obs['id']==0),
-                                        'geometry'].squeeze()
-        observed_dist = observed_point.distance(snapped_point)
+        snap_point = snap_obs.loc[(snap_obs['id']==0), 'geometry'].squeeze()
+        observed_dist = observed_point.distance(snap_point)
         self.assertAlmostEqual(observed_dist, known_dist, places=8)
 
 
