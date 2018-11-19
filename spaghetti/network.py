@@ -1606,12 +1606,11 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
     # check for availability of geopandas and shapely
     try:
         import geopandas as gpd
-    except ImportError:
-        raise ImportError('`geopandas` needed for this operation.')
-    try:
         from shapely.geometry import Point, LineString
     except ImportError:
-        raise ImportError('`shapely` needed for this operation.')
+        err_msg = '`geopandas` and `shapely` are '\
+                  + 'needed for this operation.'
+        raise ImportError(err_msg)
     
     # nodes
     if nodes or nodes_for_edges:
