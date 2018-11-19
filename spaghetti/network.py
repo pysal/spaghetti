@@ -1564,12 +1564,15 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
         this operation. This exception is raised when either or both
         are not found.
     
-    
     Examples
     --------
     
+    >>>
+    >>>
     
     """
+    
+    # check for availability of geopandas and shapely
     try:
         import geopandas as gpd
     except ModuleNotFoundError:
@@ -1579,9 +1582,8 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
     except ModuleNotFoundError:
         raise ModuleNotFoundError('`shapely` needed for this operation.')
     
-    
     # nodes
-    if as_points:
+    if nodes:
         pts_dict = net.node_coords
     
     # raw point pattern
@@ -1594,23 +1596,24 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
     elif pp_name and snapped:
         pts_dict = net.pointpatterns[pp_name].snapped_coordinates
     
-    # Instantiate geopandas.GeoDataFrame
+    # instantiate geopandas.GeoDataFrame
     points = gpd.GeoDataFrame(list(pts_dict.items()), columns=[idx, geo])
     points.geometry = points.geometry.apply(lambda p: Point(p))
     
-    if not edges_dict:
-        return nodes
+    # return points geodataframe if edges not specified or
+    # if extracting `PointPattern` points
+    if not edges or pp_name:
+        return points
     
     # edges
     edges = {}
-    for (node1_id, node2_id) in edges_dict:
+    for (node1_id, node2_id) in net.edges:
         node1 = nodes.loc[(nodes[idx] == node1_id), geo].squeeze()
         node2 = nodes.loc[(nodes[idx] == node2_id), geo].squeeze()
         edges[(node1_id, node2_id)] = LineString((node1, node2))
     edges = gpd.GeoDataFrame(list(edges.items()), columns=[idx, geo])
     
-    return nodes, edges
-
+    return points, edges
 
 
 class PointPattern():
