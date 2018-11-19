@@ -80,7 +80,7 @@ class TestNetwork(unittest.TestCase):
         self.assertEqual(obs_edge_wkt, known_edge_wkt)
 
 
-@unittest.skipIf(NOT_GEOPANDAS_EXTINCT, 'Geopandas/Shapely available')
+@unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
 class TestNetworkFails(unittest.TestCase):
     
     def setUp(self):
