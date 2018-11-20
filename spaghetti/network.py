@@ -1,16 +1,26 @@
 from collections import defaultdict, OrderedDict
-import os
-import pickle
-import copy
+import copy, os, pickle
+from warnings import warn
+
 import numpy as np
+try:
+    import geopandas as gpd
+    from shapely.geometry import Point, LineString
+except ImportError:
+    err_msg = 'geopandas/shapely not available. '\
+              + 'Some functionality will be disabled.'
+    warn(err_msg)
+
 from .analysis import NetworkG, NetworkK, NetworkF
 from . import util
 from libpysal import cg, examples, weights
+from libpysal.common import requires
 try:
     from libpysal import open
 except ImportError:
     import libpysal
     open = libpysal.io.open
+
 
 __all__ = ["Network", "PointPattern", "NetworkG", "NetworkK", "NetworkF"]
 
@@ -1509,7 +1519,7 @@ class Network:
             
         return self
 
-@requires('geopandas')
+@requires('geopandas', 'shapely')
 def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
                    snapped=False, id_col='id', geom_col='geometry'):
     """Return a GeoDataFrame of network elements. This can be (a) the
