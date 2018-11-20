@@ -175,6 +175,10 @@ class TestNetworkPointPattern(unittest.TestCase):
         snap_point = snap_obs.loc[(snap_obs['id']==0), 'geometry'].squeeze()
         observed_dist = observed_point.distance(snap_point)
         self.assertAlmostEqual(observed_dist, known_dist, places=8)
+        
+        pp = 'FireStations'
+            with self.assertRaises(KeyError):
+                spgh.element_as_gdf(self.ntw, pp_name=pp)
 
 
 class TestNetworkAnalysis(unittest.TestCase):
