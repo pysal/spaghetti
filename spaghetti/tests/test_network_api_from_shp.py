@@ -177,8 +177,8 @@ class TestNetworkPointPattern(unittest.TestCase):
         self.assertAlmostEqual(observed_dist, known_dist, places=8)
         
         pp = 'FireStations'
-            with self.assertRaises(KeyError):
-                spgh.element_as_gdf(self.ntw, pp_name=pp)
+        with self.assertRaises(KeyError):
+            spgh.element_as_gdf(self.ntw, pp_name=pp)
 
 
 class TestNetworkAnalysis(unittest.TestCase):
