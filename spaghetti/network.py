@@ -871,13 +871,14 @@ class Network:
             else:
                 cores = n_processes
             p = mp.Pool(processes=cores)
-            distance_pred = p.map(util.dijkstra_multi,
+            distance_pred = p.map(util.dijkstra_mp,
                                   zip(repeat(self),
                                       repeat(self.edge_lengths),
                                       self.node_list))
             iterations = range(len(distance_pred))
             distance = [distance_pred[itr][0] for itr in iterations]
             pred = np.array([distance_pred[itr][1] for itr in iterations])
+            
             for node in self.node_list:
                 if gen_tree:
                     tree = util.generatetree(pred[node])

@@ -122,6 +122,21 @@ class TestNetworkPointPattern(unittest.TestCase):
         sim = self.ntw.simulate_observations(npoints, distribution='poisson')
         self.assertEqual(npoints, sim.npoints)
     
+    def test_all_neighbor_distances_mp(self):
+        matrix1, tree = self.ntw.allneighbordistances('schools',
+                                                      fill_diagonal=0.,
+                                                      n_processes='all',
+                                                      gen_tree=True)
+        known_mtx_val = 17682.436988
+        known_tree_val = (173, 64)
+        
+        observed = matrix1.diagonal()
+        known = np.zeros(matrix1.shape[0])
+        self.assertEqual(observed.all(), known.all())
+        
+        self.assertAlmostEqual(np.nansum(matrix1[0]), known_mtx_val, places=4)
+        self.assertEqual(tree[(6, 7)], known_tree_val)
+        
     def test_all_neighbor_distances(self):
         matrix1, tree = self.ntw.allneighbordistances('schools', gen_tree=True)
         known_mtx_val = 17682.436988
@@ -151,7 +166,8 @@ class TestNetworkPointPattern(unittest.TestCase):
                                                 n_processes=2)
         observed = matrix4.diagonal()
         known = np.zeros(matrix4.shape[0])
-        self.assertEqual(observed.all(), known.all())    
+        self.assertEqual(observed.all(), known.all())
+    
     
     def test_nearest_neighbor_distances(self):
         # general test
