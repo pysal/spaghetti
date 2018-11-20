@@ -1509,7 +1509,7 @@ class Network:
             
         return self
 
-
+@requires('geopandas')
 def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
                    snapped=False, id_col='id', geom_col='geometry'):
     """Return a GeoDataFrame of network elements. This can be (a) the
@@ -1545,11 +1545,6 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
     
     Raises
     ------
-    
-    ImportError
-        The modules `geopandas` and `shapely` are needed to perform
-        this operation. This exception is raised when either or both
-        are not found.
     
     KeyError
         In order to extract a `PointPattern` it must already be a part
@@ -1602,15 +1597,6 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
     nodes_for_edges = False
     if edges and not nodes:
         nodes_for_edges = True
-    
-    # check for availability of geopandas and shapely
-    try:
-        import geopandas as gpd
-        from shapely.geometry import Point, LineString
-    except ImportError:
-        err_msg = '`geopandas` and `shapely` are '\
-                  + 'needed for this operation.'
-        raise ImportError(err_msg)
     
     # nodes
     if nodes or nodes_for_edges:

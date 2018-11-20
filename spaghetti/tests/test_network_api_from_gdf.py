@@ -4,9 +4,9 @@ from libpysal import cg, examples
 import spaghetti as spgh
 try:
     import geopandas
-    GEOPANDAS_EXTINCT, NOT_GEOPANDAS_EXTINCT = False, True
+    GEOPANDAS_EXTINCT = False
 except ImportError:
-    GEOPANDAS_EXTINCT, NOT_GEOPANDAS_EXTINCT = True, False
+    GEOPANDAS_EXTINCT = True
 
 
 @unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
@@ -78,22 +78,6 @@ class TestNetwork(unittest.TestCase):
         obs_edge = edges.loc[(edges['id'] == (0,1)), 'geometry'].squeeze()
         obs_edge_wkt = obs_edge.wkt
         self.assertEqual(obs_edge_wkt, known_edge_wkt)
-
-
-@unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
-class TestNetworkFails(unittest.TestCase):
-    
-    def setUp(self):
-        path_to_shp = examples.get_path('streets.shp')
-        gdf = geopandas.read_file(path_to_shp)
-        self.ntw = spgh.Network(in_data=gdf)
-    
-    def tearDown(self):
-        pass
-    
-    def test_element_as_gdf(self):
-        with self.assertRaises(ImportError):
-            spgh.element_as_gdf(self.ntw, nodes=True)
 
 
 @unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
