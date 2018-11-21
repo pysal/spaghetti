@@ -145,11 +145,10 @@ class Network:
         sig = self.node_sig
         if sig is None:
             return v
-        out_v = [val if 0
-                 else round(val, -int(np.floor(np.log10(np.fabs(val)))) +
-                            (sig - 1))
+        out_v = [val if val == 0 \
+                 else round(val, -int(np.floor(np.log10(np.fabs(val))))\
+                            + (sig - 1))\
                  for val in v]
-        
         return tuple(out_v)
 
 
