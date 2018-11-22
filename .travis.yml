@@ -36,7 +36,6 @@ before_install:
 
 install:
   - conda install --yes pip
-  - conda install --yes geopandas
   - if "$PYSAL_PYPI"; then
         echo 'testing pypi libpysal' && pip install libpysal;
         else echo 'testing git libpysal';

@@ -58,6 +58,20 @@ class TestNetwork(unittest.TestCase):
     def test_enum_links_node(self):
         coincident = self.ntw.enum_links_node(24)
         self.assertIn((24, 48), coincident)
+    
+    def test_element_as_gdf(self):
+        nodes, edges = network.element_as_gdf(self.ntw, nodes=True, edges=True)
+        
+        known_node_wkt = 'POINT (728368.04762 877125.89535)'
+        obs_node = nodes.loc[(nodes['id'] == 0), 'geometry'].squeeze()
+        obs_node_wkt = obs_node.wkt
+        self.assertEqual(obs_node_wkt, known_node_wkt)
+        
+        known_edge_wkt = 'LINESTRING (728368.04762 877125.89535, '\
+                         + '728368.13931 877023.27186)'
+        obs_edge = edges.loc[(edges['id'] == (0,1)), 'geometry'].squeeze()
+        obs_edge_wkt = obs_edge.wkt
+        self.assertEqual(obs_edge_wkt, known_edge_wkt)
 
 
 @unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
@@ -126,6 +140,13 @@ class TestNetworkPointPattern(unittest.TestCase):
         known_mtx_val = 3218.2597894
         observed_mtx_val = matrix3
         self.assertAlmostEqual(observed_mtx_val[0, 1], known_mtx_val, places=4)
+        
+        matrix4 = self.ntw.allneighbordistances('schools',
+                                                fill_diagonal=0.,
+                                                n_processes=2)
+        observed = matrix4.diagonal()
+        known = np.zeros(matrix4.shape[0])
+        self.assertEqual(observed.all(), known.all())
     
     def test_nearest_neighbor_distances(self):
         # general test
@@ -156,6 +177,22 @@ class TestNetworkPointPattern(unittest.TestCase):
                                                  keep_zero_dist=True,
                                                  snap_dist=True)
         self.assertAlmostEqual(nn_c[0][1], known_neigh, places=4)
+    
+    def test_element_as_gdf(self):
+        pp = 'crimes'
+        obs = network.element_as_gdf(self.ntw, pp_name=pp)
+        snap_obs = network.element_as_gdf(self.ntw, pp_name=pp, snapped=True)
+        
+        known_dist = 221.5867616973843
+        observed_point = obs.loc[(obs['id']==0), 'geometry'].squeeze()
+        snap_point = snap_obs.loc[(snap_obs['id']==0), 'geometry'].squeeze()
+        observed_dist = observed_point.distance(snap_point)
+        self.assertAlmostEqual(observed_dist, known_dist, places=8)
+        
+        pp = 'FireStations'
+        with self.assertRaises(KeyError):
+            network.element_as_gdf(self.ntw, pp_name=pp)
+
 
 @unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
 class TestNetworkAnalysis(unittest.TestCase):
