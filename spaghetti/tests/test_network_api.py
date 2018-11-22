@@ -272,8 +272,7 @@ class TestNetworkUtils(unittest.TestCase):
     
     def setUp(self):
         path_to_shp = examples.get_path('streets.shp')
-        gdf = geopandas.read_file(path_to_shp)
-        self.ntw = spgh.Network(in_data=gdf)
+        self.ntw = spgh.Network(in_data=path_to_shp)
     
     def tearDown(self):
         pass
