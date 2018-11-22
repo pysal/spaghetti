@@ -14,52 +14,72 @@ class TestNetwork(unittest.TestCase):
     
     def setUp(self):
         path_to_shp = examples.get_path('streets.shp')
+        
+        # network instantiated from shapefile
+        self.ntw_from_shp = spgh.Network(in_data=shp)
+        
+        # network instantiated from geodataframe
         gdf = geopandas.read_file(path_to_shp)
-        self.ntw = spgh.Network(in_data=gdf)
+        self.ntw_from_gdf = spgh.Network(in_data=gdf)
     
     def tearDown(self):
         pass
     
-    def test_extract_network(self):
-        self.assertEqual(len(self.ntw.edges), 303)
-        self.assertEqual(len(self.ntw.nodes), 230)
-        edgelengths = self.ntw.edge_lengths.values()
-        self.assertAlmostEqual(sum(edgelengths), 104414.0920159, places=5)
-        self.assertIn(0, self.ntw.adjacencylist[1])
-        self.assertIn(0, self.ntw.adjacencylist[2])
-        self.assertNotIn(0, self.ntw.adjacencylist[3])
+    def test_network_data_read(self):
+        n_known_edges,  n_known_nodes= 303, 203
+        
+        # shp test against known
+        assertEqual(len(self.ntw_from_shp.edges), n_known_edges)
+        assertEqual(len(self.ntw_from_shp.nodes), n_known_nodes)
+        # gdf test against known
+        assertEqual(len(self.ntw_from_gdf.edges), n_known_edges)
+        assertEqual(len(self.ntw_from_gdf.nodes), n_known_nodes)
+        # shp against gdf
+        assertEqual(len(self.ntw_from_shp.edges), self.ntw_from_gdf.edges)
+        assertEqual(len(self.ntw_from_shp.nodes), self.ntw_from_gdf.nodes)
     
-    def test_contiguity_weights(self):
-        w = self.ntw.contiguityweights(graph=False)
+    def test_extract_network(self):
+        self.assertEqual(len(self.ntw_from_shp.edges), 303)
+        self.assertEqual(len(self.ntw_from_shp.nodes), 230)
+        edgelengths = self.ntw_from_shp.edge_lengths.values()
+        self.assertAlmostEqual(sum(edgelengths), 104414.0920159, places=5)
+        self.assertIn(0, self.ntw_from_shp.adjacencylist[1])
+        self.assertIn(0, self.ntw_from_shp.adjacencylist[2])
+        self.assertNotIn(0, self.ntw_from_shp.adjacencylist[3])
+    
+    def test_contiguity_weights_network(self):
+        w = self.ntw_from_shp.contiguityweights(graph=False)
         self.assertEqual(w.n, 303)
         self.assertEqual(w.histogram,
                          [(2, 35), (3, 89), (4, 105), (5, 61), (6, 13)])
     
     def test_contiguity_weights_graph(self):
-        w = self.ntw.contiguityweights(graph=True)
+        w = self.ntw_from_shp.contiguityweights(graph=True)
         self.assertEqual(w.n, 179)
         self.assertEqual(w.histogram,
                          [(2, 2), (3, 2), (4, 45), (5, 82), (6, 48)])
     
     def test_distance_band_weights(self):
         # I do not trust this result, test should be manually checked.
-        w = self.ntw.distancebandweights(threshold=500)
+        w = self.ntw_from_shp.distancebandweights(threshold=500)
         self.assertEqual(w.n, 230)
         self.assertEqual(w.histogram,
                          [(1, 22), (2, 58), (3, 63), (4, 40),
                           (5, 36), (6, 3), (7, 5), (8, 3)])
     
     def test_edge_segmentation(self):
-        n200 = self.ntw.segment_edges(200.0)
+        n200 = self.ntw_from_shp.segment_edges(200.0)
         self.assertEqual(len(n200.edges), 688)
         n200 = None
     
     def test_enum_links_node(self):
-        coincident = self.ntw.enum_links_node(24)
+        coincident = self.ntw_from_shp.enum_links_node(24)
         self.assertIn((24, 48), coincident)
     
     def test_element_as_gdf(self):
-        nodes, edges = spgh.element_as_gdf(self.ntw, nodes=True, edges=True)
+        nodes, edges = spgh.element_as_gdf(self.ntw_from_shp,
+                                           nodes=True,
+                                           edges=True)
         
         known_node_wkt = 'POINT (728368.04762 877125.89535)'
         obs_node = nodes.loc[(nodes['id'] == 0), 'geometry'].squeeze()
@@ -72,7 +92,7 @@ class TestNetwork(unittest.TestCase):
         obs_edge_wkt = obs_edge.wkt
         self.assertEqual(obs_edge_wkt, known_edge_wkt)
         
-        edges = spgh.element_as_gdf(self.ntw, edges=True)
+        edges = spgh.element_as_gdf(self.ntw_from_shp, edges=True)
         known_edge_wkt = 'LINESTRING (728368.04762 877125.89535, '\
                          + '728368.13931 877023.27186)'
         obs_edge = edges.loc[(edges['id'] == (0,1)), 'geometry'].squeeze()
