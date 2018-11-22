@@ -29,14 +29,14 @@ class TestNetwork(unittest.TestCase):
         n_known_edges,  n_known_nodes= 303, 203
         
         # shp test against known
-        assertEqual(len(self.ntw_from_shp.edges), n_known_edges)
-        assertEqual(len(self.ntw_from_shp.nodes), n_known_nodes)
+        self.assertEqual(len(self.ntw_from_shp.edges), n_known_edges)
+        self.assertEqual(len(self.ntw_from_shp.nodes), n_known_nodes)
         # gdf test against known
-        assertEqual(len(self.ntw_from_gdf.edges), n_known_edges)
-        assertEqual(len(self.ntw_from_gdf.nodes), n_known_nodes)
+        self.assertEqual(len(self.ntw_from_gdf.edges), n_known_edges)
+        self.assertEqual(len(self.ntw_from_gdf.nodes), n_known_nodes)
         # shp against gdf
-        assertEqual(len(self.ntw_from_shp.edges), self.ntw_from_gdf.edges)
-        assertEqual(len(self.ntw_from_shp.nodes), self.ntw_from_gdf.nodes)
+        self.assertEqual(len(self.ntw_from_shp.edges), self.ntw_from_gdf.edges)
+        self.assertEqual(len(self.ntw_from_shp.nodes), self.ntw_from_gdf.nodes)
     
     def test_extract_network(self):
         self.assertEqual(len(self.ntw_from_shp.edges), 303)
