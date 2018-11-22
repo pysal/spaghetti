@@ -16,7 +16,7 @@ class TestNetwork(unittest.TestCase):
         path_to_shp = examples.get_path('streets.shp')
         
         # network instantiated from shapefile
-        self.ntw_from_shp = spgh.Network(in_data=shp)
+        self.ntw_from_shp = spgh.Network(in_data=path_to_shp)
         
         # network instantiated from geodataframe
         gdf = geopandas.read_file(path_to_shp)
@@ -105,8 +105,7 @@ class TestNetworkPointPattern(unittest.TestCase):
     
     def setUp(self):
         path_to_shp = examples.get_path('streets.shp')
-        gdf = geopandas.read_file(path_to_shp)
-        self.ntw = spgh.Network(in_data=gdf)
+        self.ntw = spgh.Network(in_data=path_to_shp)
         for obs in ['schools', 'crimes']:
             in_data = examples.get_path('{}.shp'.format(obs))
             self.ntw.snapobservations(in_data, obs, attribute=True)
