@@ -94,6 +94,13 @@ class TestNetwork(unittest.TestCase):
         obs_edge = edges.loc[(edges['id'] == (0,1)), 'geometry'].squeeze()
         obs_edge_wkt = obs_edge.wkt
         self.assertEqual(obs_edge_wkt, known_edge_wkt)
+        
+        edges = network.element_as_gdf(self.ntw_from_shp, edges=True)
+        known_edge_wkt = 'LINESTRING (728368.04762 877125.89535, '\
+                         + '728368.13931 877023.27186)'
+        obs_edge = edges.loc[(edges['id'] == (0,1)), 'geometry'].squeeze()
+        obs_edge_wkt = obs_edge.wkt
+        self.assertEqual(obs_edge_wkt, known_edge_wkt)
 
 
 @unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
