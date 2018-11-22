@@ -1,5 +1,5 @@
-spaghetti.element\_as\_gdf
-==========================
+spaghetti.element_as_gdf
+========================
 
 .. currentmodule:: spaghetti
 
