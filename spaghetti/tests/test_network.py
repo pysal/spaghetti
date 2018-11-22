@@ -99,8 +99,7 @@ class TestNetworkPointPattern(unittest.TestCase):
     
     def setUp(self):
         path_to_shp = examples.get_path('streets.shp')
-        gdf = geopandas.read_file(path_to_shp)
-        self.ntw = network.Network(in_data=gdf)
+        self.ntw = network.Network(in_data=path_to_shp)
         for obs in ['schools', 'crimes']:
             path_to_shp = examples.get_path('{}.shp'.format(obs))
             in_data = geopandas.read_file(path_to_shp)
