@@ -109,7 +109,6 @@ class TestNetwork(unittest.TestCase):
         obs_xy_round2 = self.ntw_from_shp._round_sig((1215, 1865))
         self.assertEqual(obs_xy_round2, (x_round2, y_round2))
         
-        
         # round to no significant digits test
         x_roundNone, y_roundNone = 1215, 1865
         self.ntw_from_shp.node_sig = None
