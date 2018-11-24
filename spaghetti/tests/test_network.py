@@ -101,7 +101,7 @@ class TestNetwork(unittest.TestCase):
         obs_edge = edges.loc[(edges['id'] == (0,1)), 'geometry'].squeeze()
         obs_edge_wkt = obs_edge.wkt
         self.assertEqual(obs_edge_wkt, known_edge_wkt)
-
+        
         def test_round_sig(self):
             # round to 2 significant digits test
             x_round2, y_round2 = 1200, 1900
