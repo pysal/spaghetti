@@ -106,7 +106,6 @@ class TestNetwork(unittest.TestCase):
         self.ntw_from_shp.node_sig = 2
         obs_xy_round2 = self.ntw_from_shp._round_sig((1215, 1865))
         self.assertEqual(obs_xy_round2, (x_round2, y_round2))
-        #(1200, 1900)
 
         #ntw.node_sig = None
         #print(ntw._round_sig((x, y)))
