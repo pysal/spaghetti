@@ -846,6 +846,11 @@ class Network:
         gen_tree : bool
             rebuild shortest path {True}, or skip {False}
         
+        Notes
+        -----
+        
+        Based on :cite:`Dijkstra1959a`.
+        
         """
         self.alldistances = {}
         nnodes = len(self.node_list)
@@ -930,6 +935,11 @@ class Network:
         
         tree_nearest : dict
             nearest network node to point pattern node shortest path lookup
+        
+        Notes
+        -----
+        
+        Based on :cite:`Dijkstra1959a`.
         
         Examples
         --------
