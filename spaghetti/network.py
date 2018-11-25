@@ -846,6 +846,11 @@ class Network:
         gen_tree : bool
             rebuild shortest path {True}, or skip {False}
         
+        Notes
+        -----
+        
+        Based on :cite:`Dijkstra1959a`.
+        
         """
         self.alldistances = {}
         nnodes = len(self.node_list)
@@ -1349,6 +1354,11 @@ class Network:
         
         NetworkK : spaghetti.analysis.NetworkK
             A network K class instance.
+        
+        Notes
+        -----
+        
+        Based on :cite:`Okabe2001`.
         
         Examples
         --------

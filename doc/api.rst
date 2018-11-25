@@ -8,6 +8,15 @@ API reference
 .. _network_api:
 
 
+spaghetti
+---------
+
+.. autosummary::
+   :toctree: generated/
+   
+    spaghetti.element_as_gdf
+
+
 spaghetti.Network
 -----------------
 
@@ -35,57 +44,6 @@ spaghetti.Network
     Network.loadnetwork
 
 
-spaghetti.NetworkBase
----------------------
-
-.. autosummary::
-   :toctree: generated/
-
-    NetworkBase
-    NetworkBase.computeenvelope
-    NetworkBase.setbounds
-    NetworkBase.validatedistribution
-
-
-spaghetti.NetworkF
----------------------
-
-.. autosummary::
-   :toctree: generated/
-
-    NetworkF
-    NetworkF.computeenvelope
-    NetworkF.setbounds
-    NetworkF.validatedistribution
-    NetworkF.computeobserved
-    NetworkF.computepermutations
-
-spaghetti.NetworkG
----------------------
-
-.. autosummary::
-   :toctree: generated/
-
-    NetworkG
-    NetworkG.computeenvelope
-    NetworkG.setbounds
-    NetworkG.validatedistribution
-    NetworkG.computeobserved
-    NetworkG.computepermutations
-
-spaghetti.NetworkK
----------------------
-
-.. autosummary::
-   :toctree: generated/
-
-    NetworkK
-    NetworkK.computeenvelope
-    NetworkK.setbounds
-    NetworkK.validatedistribution
-    NetworkK.computeobserved
-    NetworkK.computepermutations
-
 spaghetti.PointPattern
 ----------------------
 
@@ -102,22 +60,3 @@ spaghetti.SimulatedPointPattern
    :toctree: generated/
    
     SimulatedPointPattern
-
-spaghetti
--------------------------------
-
-.. autosummary::
-   :toctree: generated/
-   
-    spaghetti.compute_length
-    spaghetti.dijkstra
-    spaghetti.dijkstra_mp
-    spaghetti.generatetree
-    spaghetti.get_neighbor_distances
-    spaghetti.snap_points_on_segments
-    spaghetti.squared_distance_point_segment
-    spaghetti.ffunction
-    spaghetti.gfunction
-    spaghetti.kfunction
-    spaghetti.element_as_gdf
-
