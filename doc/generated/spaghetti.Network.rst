@@ -19,6 +19,7 @@ spaghetti.Network
       ~Network.__init__
       ~Network.allneighbordistances
       ~Network.compute_distance_to_nodes
+      ~Network.compute_snap_dist
       ~Network.contiguityweights
       ~Network.count_per_edge
       ~Network.distancebandweights
