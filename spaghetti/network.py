@@ -936,11 +936,6 @@ class Network:
         tree_nearest : dict
             nearest network node to point pattern node shortest path lookup
         
-        Notes
-        -----
-        
-        Based on :cite:`Dijkstra1959a`.
-        
         Examples
         --------
         
