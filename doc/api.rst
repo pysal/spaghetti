@@ -14,7 +14,7 @@ spaghetti
 .. autosummary::
    :toctree: generated/
    
-    spaghetti.element_as_gdf
+    element_as_gdf
 
 
 spaghetti.Network
