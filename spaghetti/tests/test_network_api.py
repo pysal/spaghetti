@@ -319,8 +319,8 @@ class TestNetworkUtils(unittest.TestCase):
         self.assertEqual(self.pred[196], 133)
 
     def test_dijkstra_mp(self):
-        self.distance, self.pred = spgh.dijkstra_mp((self.ntw,
-                                                     self.ntw.edge_lengths, 0))
+        self.distance,\
+        self.pred = spgh.util.dijkstra_mp((self.ntw, self.ntw.edge_lengths, 0))
         self.assertAlmostEqual(self.distance[196], 5505.668247, places=4)
         self.assertEqual(self.pred[196], 133)
     
