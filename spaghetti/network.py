@@ -1355,6 +1355,11 @@ class Network:
         NetworkK : spaghetti.analysis.NetworkK
             A network K class instance.
         
+        Notes
+        -----
+        
+        Based on :cite:`Okabe2001`.
+        
         Examples
         --------
         
