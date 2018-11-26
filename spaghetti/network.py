@@ -564,8 +564,8 @@ class Network:
         idx : int
             point id
         
-        Return
-        ------
+        Returns
+        -------
         dist : float
             euclidean distance from original location to snapped location.
         """
