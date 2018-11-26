@@ -1581,36 +1581,6 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
     
     This function requires `geopandas`.
     
-    Examples
-    --------
-    
-    >>> try:
-    ...     import geopandas
-    ... except ImportError:
-    ...     raise ImportError('`geopandas` not available')
-    >>> import spaghetti as spgh
-    >>> streets_file = examples.get_path('streets.shp')
-    >>> ntw = spgh.Network(streets_file)
-    >>> nodes, edges = spgh.element_as_gdf(ntw, nodes=True, edges=True)
-    
-    >>> print(nodes.loc[(nodes['id'] == 0), 'geometry'].squeeze())
-    POINT (728368.04762 877125.89535)
-    
-    >>> print(edges.loc[(edges['id'] == (0,1)), 'geometry'].squeeze())
-    LINESTRING (728368.04762 877125.89535, 728368.13931 877023.27186)
-    
-    >>> obs_type = 'crimes'
-    >>> in_data = examples.get_path('%s.shp' % obs_type)
-    >>> ntw.snapobservations(in_data, obs_type)
-    >>> obs = spgh.element_as_gdf(ntw, pp_name=obs_type)
-    >>> print(obs.loc[(obs['id'] == 0), 'geometry'].squeeze())
-    POINT (727913.0000000029 875720.9999999977)
-    
-    >>> snp_obs = spgh.element_as_gdf(ntw, pp_name=obs_type,
-    ...                               snapped=True)
-    >>> print(snp_obs.loc[(snp_obs['id'] == 0), 'geometry'].squeeze())
-    POINT (727919.2473619275 875942.4986759046)
-    
     """
     
     # need nodes place holder to create network segment LineStrings
