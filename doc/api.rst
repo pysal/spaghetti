@@ -35,8 +35,6 @@ spaghetti.Network
     spaghetti.network.Network.loadnetwork
 
 
-.. _network_api:
-
 spaghetti.PointPattern
 ----------------------
 
@@ -46,8 +44,6 @@ spaghetti.PointPattern
    spaghetti.network.PointPattern
 
 
-.. _network_api:
-
 spaghetti.SimulatedPointPattern
 -------------------------------
 
@@ -56,8 +52,6 @@ spaghetti.SimulatedPointPattern
    
     spaghetti.network.SimulatedPointPattern
 
-
-.. _network_api:
 
 spaghetti
 ---------

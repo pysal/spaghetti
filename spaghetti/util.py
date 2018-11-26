@@ -1,4 +1,16 @@
+from warnings import warn
+
 from libpysal import cg
+from libpysal.common import requires
+
+try:
+    import geopandas as gpd
+    from shapely.geometry import Point, LineString
+except ImportError:
+    err_msg = 'geopandas/shapely not available. '\
+              + 'Some functionality will be disabled.'
+    warn(err_msg)
+
 import numpy as np
 
 
@@ -376,3 +388,104 @@ def snap_points_on_segments(points, segments):
                 p2s[ptIdx] = (closest, p2b)
                 
     return p2s
+
+
+@requires('geopandas', 'shapely')
+def _points_as_gdf(net, nodes, nodes_for_edges, pp_name, snapped,
+                   id_col=None, geom_col=None):
+    """
+    Internal function for returning a point geopandas.GeoDataFrame
+    called from within `spaghetti.element_as_gdf()`.
+    
+    Parameters
+    ----------
+    
+    nodes_for_edges : bool
+        Flag for points being an object returned [False] or for merely
+        creating network edges [True]. Set from within the parent
+        function (`spaghetti.element_as_gdf()`).
+    
+    Raises
+    ------
+    
+    KeyError
+        In order to extract a `PointPattern` it must already be a part
+        of the `spaghetti.Network` object. This exception is raised
+        when a `PointPattern` is being extracted that does not exist
+        within the `spaghetti.Network` object.
+    
+    Returns
+    -------
+    
+    points : geopandas.GeoDataFrame
+        Network point elements (either nodes or `PointPattern` points)
+        as a simple `geopandas.GeoDataFrame` of `shapely.Point` objects
+        with an `id` column and `geometry` column.
+    
+    Notes
+    -----
+    
+    1. See `spaghetti.element_as_gdf()` for description of arguments
+    2. This function requires `geopandas`
+    
+    """
+    
+    # nodes
+    if nodes or nodes_for_edges:
+        pts_dict = net.node_coords
+    
+    # raw point pattern
+    if pp_name and not snapped:
+        try: 
+            pp_pts = net.pointpatterns[pp_name].points
+        except KeyError:
+            err_msg = 'Available point patterns are {}'
+            raise KeyError(err_msg.format(list(net.pointpatterns.keys())))
+            
+        n_pp_pts = range(len(pp_pts))
+        pts_dict = {point:pp_pts[point]['coordinates'] for point in n_pp_pts}
+    
+    # snapped point pattern
+    elif pp_name and snapped:
+        pts_dict = net.pointpatterns[pp_name].snapped_coordinates
+    
+    # instantiate geopandas.GeoDataFrame
+    pts_list = list(pts_dict.items())
+    points = gpd.GeoDataFrame(pts_list, columns=[id_col, geom_col])
+    points.geometry = points.geometry.apply(lambda p: Point(p))
+    
+    return points
+
+
+@requires('geopandas', 'shapely')
+def _edges_as_gdf(net, points, id_col=None, geom_col=None):
+    """
+    Internal function for returning a edges geopandas.GeoDataFrame
+    called from within `spaghetti.element_as_gdf()`.
+    
+    Returns
+    -------
+    
+    points : geopandas.GeoDataFrame
+        Network point elements (either nodes or `PointPattern` points)
+        as a simple `geopandas.GeoDataFrame` of `shapely.Point` objects
+        with an `id` column and `geometry` column.
+    
+    Notes
+    -----
+    
+    1. See `spaghetti.element_as_gdf()` for description of arguments
+    2. This function requires `geopandas`
+    
+    """
+    
+    # edges
+    edges = {}
+    for (node1_id, node2_id) in net.edges:
+        node1 = points.loc[(points[id_col] == node1_id), geom_col].squeeze()
+        node2 = points.loc[(points[id_col] == node2_id), geom_col].squeeze()
+        edges[(node1_id, node2_id)] = LineString((node1, node2))
+    edges = gpd.GeoDataFrame(list(edges.items()), columns=[id_col, geom_col])
+    
+    return edges
+

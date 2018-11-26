@@ -1,20 +1,11 @@
 from collections import defaultdict, OrderedDict
 import copy, os, pickle
-from warnings import warn
 
 import numpy as np
-try:
-    import geopandas as gpd
-    from shapely.geometry import Point, LineString
-except ImportError:
-    err_msg = 'geopandas/shapely not available. '\
-              + 'Some functionality will be disabled.'
-    warn(err_msg)
 
 from .analysis import NetworkG, NetworkK, NetworkF
 from . import util
 from libpysal import cg, examples, weights
-from libpysal.common import requires
 try:
     from libpysal import open
 except ImportError:
@@ -92,7 +83,7 @@ class Network:
         tuples of graph edge ids.
     
     graph_lengths : dict
-        Keys are the graph edge ids (tuple). Values are the graph edge lenght
+        Keys are the graph edge ids (tuple). Values are the graph edge length
         (float).
     
     Examples
@@ -1529,7 +1520,7 @@ class Network:
             
         return self
 
-@requires('geopandas', 'shapely')
+
 def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
                    snapped=False, id_col='id', geom_col='geometry'):
     """Return a GeoDataFrame of network elements. This can be (a) the
@@ -1585,75 +1576,31 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
         as a simple `geopandas.GeoDataFrame` of `shapely.LineString`
         objects with an `id` column and `geometry` column.
     
-    Examples
-    --------
+    Notes
+    -----
     
-    >>> import spaghetti as spgh
-    >>> streets_file = examples.get_path('streets.shp')
-    >>> ntw = spgh.Network(streets_file)
-    >>> nodes, edges = spgh.element_as_gdf(ntw, nodes=True, edges=True)
-    
-    >>> print(nodes.loc[(nodes['id'] == 0), 'geometry'].squeeze())
-    POINT (728368.04762 877125.89535)
-    
-    >>> print(edges.loc[(edges['id'] == (0,1)), 'geometry'].squeeze())
-    LINESTRING (728368.04762 877125.89535, 728368.13931 877023.27186)
-    
-    >>> obs_type = 'crimes'
-    >>> in_data = examples.get_path('%s.shp' % obs_type)
-    >>> ntw.snapobservations(in_data, obs_type)
-    >>> obs = spgh.element_as_gdf(ntw, pp_name=obs_type)
-    >>> print(obs.loc[(obs['id'] == 0), 'geometry'].squeeze())
-    POINT (727913.0000000029 875720.9999999977)
-    
-    >>> snp_obs = spgh.element_as_gdf(ntw, pp_name=obs_type,
-    ...                               snapped=True)
-    >>> print(snp_obs.loc[(snp_obs['id'] == 0), 'geometry'].squeeze())
-    POINT (727919.2473619275 875942.4986759046)
+    This function requires `geopandas`.
     
     """
+    
     # need nodes place holder to create network segment LineStrings
     # even if only network edges are desired.
     nodes_for_edges = False
     if edges and not nodes:
         nodes_for_edges = True
-    
-    # nodes
-    if nodes or nodes_for_edges:
-        pts_dict = net.node_coords
-    
-    # raw point pattern
-    if pp_name and not snapped:
-        try: 
-            pp_pts = net.pointpatterns[pp_name].points
-        except KeyError:
-            err_msg = 'Available point patterns are {}'
-            raise KeyError(err_msg.format(list(net.pointpatterns.keys())))
-            
-        n_pp_pts = range(len(pp_pts))
-        pts_dict = {point:pp_pts[point]['coordinates'] for point in n_pp_pts}
-    
-    # snapped point pattern
-    elif pp_name and snapped:
-        pts_dict = net.pointpatterns[pp_name].snapped_coordinates
-    
-    # instantiate geopandas.GeoDataFrame
-    pts_list = list(pts_dict.items())
-    points = gpd.GeoDataFrame(pts_list, columns=[id_col, geom_col])
-    points.geometry = points.geometry.apply(lambda p: Point(p))
-    
-    # return points geodataframe if edges not specified or
-    # if extracting `PointPattern` points
-    if not edges or pp_name:
-        return points
+
+    # nodes/points
+    if nodes or nodes_for_edges or pp_name:
+        points = util._points_as_gdf(net, nodes, nodes_for_edges, pp_name,
+                                     snapped, id_col=id_col, geom_col=geom_col)
+        
+        # return points geodataframe if edges not specified or
+        # if extracting `PointPattern` points
+        if not edges or pp_name:
+            return points
     
     # edges
-    edges = {}
-    for (node1_id, node2_id) in net.edges:
-        node1 = points.loc[(points[id_col] == node1_id), geom_col].squeeze()
-        node2 = points.loc[(points[id_col] == node2_id), geom_col].squeeze()
-        edges[(node1_id, node2_id)] = LineString((node1, node2))
-    edges = gpd.GeoDataFrame(list(edges.items()), columns=[id_col, geom_col])
+    edges = util._edges_as_gdf(net, points, id_col=id_col, geom_col=geom_col)
     
     if nodes_for_edges:
         return edges
