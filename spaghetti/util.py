@@ -398,13 +398,34 @@ def _points_as_gdf(net, nodes, nodes_for_edges, pp_name, snapped,
     Parameters
     ----------
     
+    nodes_for_edges : bool
+        Flag for points being an object returned [False] or for merely
+        creating network edges [True]. Set from within the parent
+        function (`spaghetti.element_as_gdf()`). 
     
+    Raises
+    ------
+    
+    KeyError
+        In order to extract a `PointPattern` it must already be a part
+        of the `spaghetti.Network` object. This exception is raised
+        when a `PointPattern` is being extracted that does not exist
+        within the `spaghetti.Network` object.
+    
+    Returns
+    -------
+    
+    points : geopandas.GeoDataFrame
+        Network point elements (either nodes or `PointPattern` points)
+        as a simple `geopandas.GeoDataFrame` of `shapely.Point` objects
+        with an `id` column and `geometry` column.
     
     Notes
     -----
     
     1. See `spaghetti.element_as_gdf()` for description of arguments
     2. This function requires `geopandas`
+    
     """
     
     # nodes
@@ -432,8 +453,4 @@ def _points_as_gdf(net, nodes, nodes_for_edges, pp_name, snapped,
     points.geometry = points.geometry.apply(lambda p: Point(p))
     
     return points
-    
-    
-    
-    
-    
+
