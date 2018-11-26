@@ -393,7 +393,7 @@ def _points_as_gdf(net, nodes, nodes_for_edges, pp_name, snapped,
                    id_col=None, geom_col=None):
     """
     Internal function for returning a point geopandas.GeoDataFrame
-    called from within `spaghetti.element_as_gdf()`. 
+    called from within `spaghetti.element_as_gdf()`.
     
     Parameters
     ----------
@@ -401,7 +401,7 @@ def _points_as_gdf(net, nodes, nodes_for_edges, pp_name, snapped,
     nodes_for_edges : bool
         Flag for points being an object returned [False] or for merely
         creating network edges [True]. Set from within the parent
-        function (`spaghetti.element_as_gdf()`). 
+        function (`spaghetti.element_as_gdf()`).
     
     Raises
     ------
@@ -459,7 +459,7 @@ def _points_as_gdf(net, nodes, nodes_for_edges, pp_name, snapped,
 def _edges_as_gdf(net, points, id_col=None, geom_col=None):
     """
     Internal function for returning a edges geopandas.GeoDataFrame
-    called from within `spaghetti.element_as_gdf()`. 
+    called from within `spaghetti.element_as_gdf()`.
     
     Returns
     -------
