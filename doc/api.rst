@@ -8,40 +8,31 @@ API reference
 .. _network_api:
 
 
-spaghetti
----------
-
-.. autosummary::
-   :toctree: generated/
-   
-    element_as_gdf
-
-
 spaghetti.Network
 -----------------
 
 .. autosummary::
    :toctree: generated/
 
-    Network
-    Network.extractgraph
-    Network.contiguityweights
-    Network.distancebandweights
-    Network.snapobservations
-    Network.compute_distance_to_nodes
-    Network.compute_snap_dist
-    Network.count_per_edge
-    Network.simulate_observations
-    Network.enum_links_node
-    Network.node_distance_matrix
-    Network.allneighbordistances
-    Network.nearestneighbordistances
-    Network.NetworkF
-    Network.NetworkG
-    Network.NetworkK
-    Network.segment_edges
-    Network.savenetwork
-    Network.loadnetwork
+    spaghetti.network.Network
+    spaghetti.network.Network.extractgraph
+    spaghetti.network.Network.contiguityweights
+    spaghetti.network.Network.distancebandweights
+    spaghetti.network.Network.snapobservations
+    spaghetti.network.Network.compute_distance_to_nodes
+    spaghetti.network.Network.compute_snap_dist
+    spaghetti.network.Network.count_per_edge
+    spaghetti.network.Network.simulate_observations
+    spaghetti.network.Network.enum_links_node
+    spaghetti.network.Network.node_distance_matrix
+    spaghetti.network.Network.allneighbordistances
+    spaghetti.network.Network.nearestneighbordistances
+    spaghetti.network.Network.NetworkF
+    spaghetti.network.Network.NetworkG
+    spaghetti.network.Network.NetworkK
+    spaghetti.network.Network.segment_edges
+    spaghetti.network.Network.savenetwork
+    spaghetti.network.Network.loadnetwork
 
 
 spaghetti.PointPattern
@@ -50,8 +41,8 @@ spaghetti.PointPattern
 .. autosummary::
    :toctree: generated/
    
-   PointPattern
-   
+   spaghetti.network.PointPattern
+
 
 spaghetti.SimulatedPointPattern
 -------------------------------
@@ -59,4 +50,13 @@ spaghetti.SimulatedPointPattern
 .. autosummary::
    :toctree: generated/
    
-    SimulatedPointPattern
+    spaghetti.network.SimulatedPointPattern
+
+
+spaghetti
+---------
+
+.. autosummary::
+   :toctree: generated/
+   
+    spaghetti.network.element_as_gdf
