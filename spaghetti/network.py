@@ -1679,8 +1679,12 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
             return points
     
     # edges
-
-
+    edges = util._edges_as_gdf(net, points, id_col=id_col, geom_col=geom_col)
+    
+    if nodes_for_edges:
+        return edges
+    else:
+        return points, edges
 
 
 class PointPattern():
