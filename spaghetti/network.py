@@ -1584,6 +1584,10 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
     Examples
     --------
     
+    >>> try:
+    ...     import geopandas
+    ... except ImportError:
+    ...     raise ImportError('`geopandas` not available')
     >>> import spaghetti as spgh
     >>> streets_file = examples.get_path('streets.shp')
     >>> ntw = spgh.Network(streets_file)
