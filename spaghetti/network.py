@@ -1580,7 +1580,7 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
     Notes
     -----
     
-    The function requires `geopandas`
+    This function requires `geopandas`
     
     Examples
     --------
