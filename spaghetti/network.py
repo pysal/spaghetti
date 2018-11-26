@@ -1577,6 +1577,11 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
         as a simple `geopandas.GeoDataFrame` of `shapely.LineString`
         objects with an `id` column and `geometry` column.
     
+    Notes
+    -----
+    
+    The function requires `geopandas`
+    
     Examples
     --------
     
@@ -1604,6 +1609,8 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
     POINT (727919.2473619275 875942.4986759046)
     
     """
+    
+    '''
     # need nodes place holder to create network segment LineStrings
     # even if only network edges are desired.
     nodes_for_edges = False
@@ -1651,6 +1658,29 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
         return edges
     else:
         return points, edges
+    '''
+
+
+
+    # need nodes place holder to create network segment LineStrings
+    # even if only network edges are desired.
+    nodes_for_edges = False
+    if edges and not nodes:
+        nodes_for_edges = True
+
+    # nodes/points
+    if nodes or nodes_for_edges or pp_name:
+        util._points_as_gdf(net, nodes, nodes_for_edges, pp_name,
+                            snapped, id_col=id_col, geom_col=geom_col)
+        
+        # return points geodataframe if edges not specified or
+        # if extracting `PointPattern` points
+        if not edges or pp_name:
+            return points
+    
+    # edges
+
+
 
 
 class PointPattern():
