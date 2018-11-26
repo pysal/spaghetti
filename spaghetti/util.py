@@ -1,3 +1,5 @@
+from warnings import warn
+
 from libpysal import cg
 from libpysal.common import requires
 
@@ -10,7 +12,6 @@ except ImportError:
     warn(err_msg)
 
 import numpy as np
-from warnings import warn
 
 
 def compute_length(v0, v1):
