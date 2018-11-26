@@ -1610,58 +1610,6 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
     
     """
     
-    '''
-    # need nodes place holder to create network segment LineStrings
-    # even if only network edges are desired.
-    nodes_for_edges = False
-    if edges and not nodes:
-        nodes_for_edges = True
-    
-    # nodes
-    if nodes or nodes_for_edges:
-        pts_dict = net.node_coords
-    
-    # raw point pattern
-    if pp_name and not snapped:
-        try: 
-            pp_pts = net.pointpatterns[pp_name].points
-        except KeyError:
-            err_msg = 'Available point patterns are {}'
-            raise KeyError(err_msg.format(list(net.pointpatterns.keys())))
-            
-        n_pp_pts = range(len(pp_pts))
-        pts_dict = {point:pp_pts[point]['coordinates'] for point in n_pp_pts}
-    
-    # snapped point pattern
-    elif pp_name and snapped:
-        pts_dict = net.pointpatterns[pp_name].snapped_coordinates
-    
-    # instantiate geopandas.GeoDataFrame
-    pts_list = list(pts_dict.items())
-    points = gpd.GeoDataFrame(pts_list, columns=[id_col, geom_col])
-    points.geometry = points.geometry.apply(lambda p: Point(p))
-    
-    # return points geodataframe if edges not specified or
-    # if extracting `PointPattern` points
-    if not edges or pp_name:
-        return points
-    
-    # edges
-    edges = {}
-    for (node1_id, node2_id) in net.edges:
-        node1 = points.loc[(points[id_col] == node1_id), geom_col].squeeze()
-        node2 = points.loc[(points[id_col] == node2_id), geom_col].squeeze()
-        edges[(node1_id, node2_id)] = LineString((node1, node2))
-    edges = gpd.GeoDataFrame(list(edges.items()), columns=[id_col, geom_col])
-    
-    if nodes_for_edges:
-        return edges
-    else:
-        return points, edges
-    '''
-
-
-
     # need nodes place holder to create network segment LineStrings
     # even if only network edges are desired.
     nodes_for_edges = False
