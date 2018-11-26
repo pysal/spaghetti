@@ -302,7 +302,7 @@ class TestNetworkAnalysis(unittest.TestCase):
                                      nsteps=self.test_steps)
         self.assertEqual(obtained.lowerenvelope.shape[0], self.test_steps)
 
-'''
+
 @unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
 class TestNetworkUtils(unittest.TestCase):
     
@@ -360,7 +360,7 @@ class TestNetworkUtils(unittest.TestCase):
         self.known_coords = [xy._Point__loc for xy in self.snapped[0][0]]
         self.assertEqual(self.known_coords, [(0.0, 0.0), (2.0, 0.0)])
         self.assertEqual(self.snapped[0][1].all(), np.array([1., 0.]).all())
-'''
+
 
 if __name__ == '__main__':
     unittest.main()
