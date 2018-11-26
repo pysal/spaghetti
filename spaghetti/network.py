@@ -1521,7 +1521,7 @@ class Network:
             
         return self
 
-@requires('geopandas', 'shapely')
+
 def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
                    snapped=False, id_col='id', geom_col='geometry'):
     """Return a GeoDataFrame of network elements. This can be (a) the
@@ -1670,8 +1670,8 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
 
     # nodes/points
     if nodes or nodes_for_edges or pp_name:
-        util._points_as_gdf(net, nodes, nodes_for_edges, pp_name,
-                            snapped, id_col=id_col, geom_col=geom_col)
+        points = util._points_as_gdf(net, nodes, nodes_for_edges, pp_name,
+                                     snapped, id_col=id_col, geom_col=geom_col)
         
         # return points geodataframe if edges not specified or
         # if extracting `PointPattern` points
