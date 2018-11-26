@@ -1,6 +1,5 @@
 from collections import defaultdict, OrderedDict
 import copy, os, pickle
-from warnings import warn
 
 import numpy as np
 
