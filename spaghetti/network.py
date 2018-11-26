@@ -3,18 +3,10 @@ import copy, os, pickle
 from warnings import warn
 
 import numpy as np
-try:
-    import geopandas as gpd
-    from shapely.geometry import Point, LineString
-except ImportError:
-    err_msg = 'geopandas/shapely not available. '\
-              + 'Some functionality will be disabled.'
-    warn(err_msg)
 
 from .analysis import NetworkG, NetworkK, NetworkF
 from . import util
 from libpysal import cg, examples, weights
-from libpysal.common import requires
 try:
     from libpysal import open
 except ImportError:
