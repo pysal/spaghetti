@@ -1,8 +1,11 @@
 import unittest
 import numpy as np
 from libpysal import cg, examples
+
+# dev import structure
+from .. import network as spgh
 from .. import util
-from .. import network
+
 try:
     import geopandas
     GEOPANDAS_EXTINCT = False
@@ -17,11 +20,11 @@ class TestNetwork(unittest.TestCase):
         path_to_shp = examples.get_path('streets.shp')
         
         # network instantiated from shapefile
-        self.ntw_from_shp = network.Network(in_data=path_to_shp)
+        self.ntw_from_shp = spgh.Network(in_data=path_to_shp)
         
         # network instantiated from geodataframe
         gdf = geopandas.read_file(path_to_shp)
-        self.ntw_from_gdf = network.Network(in_data=gdf)
+        self.ntw_from_gdf = spgh.Network(in_data=gdf)
     
     def tearDown(self):
         pass
@@ -80,7 +83,7 @@ class TestNetwork(unittest.TestCase):
         self.assertIn((24, 48), coincident)
     
     def test_element_as_gdf(self):
-        nodes, edges = network.element_as_gdf(self.ntw_from_shp,
+        nodes, edges = spgh.element_as_gdf(self.ntw_from_shp,
                                               nodes=True,
                                               edges=True)
         
@@ -95,7 +98,7 @@ class TestNetwork(unittest.TestCase):
         obs_edge_wkt = obs_edge.wkt
         self.assertEqual(obs_edge_wkt, known_edge_wkt)
         
-        edges = network.element_as_gdf(self.ntw_from_shp, edges=True)
+        edges = spgh.element_as_gdf(self.ntw_from_shp, edges=True)
         known_edge_wkt = 'LINESTRING (728368.04762 877125.89535, '\
                          + '728368.13931 877023.27186)'
         obs_edge = edges.loc[(edges['id'] == (0,1)), 'geometry'].squeeze()
@@ -121,7 +124,7 @@ class TestNetworkPointPattern(unittest.TestCase):
     
     def setUp(self):
         path_to_shp = examples.get_path('streets.shp')
-        self.ntw = network.Network(in_data=path_to_shp)
+        self.ntw = spgh.Network(in_data=path_to_shp)
         for obs in ['schools', 'crimes']:
             path_to_shp = examples.get_path('{}.shp'.format(obs))
             in_data = geopandas.read_file(path_to_shp)
@@ -221,8 +224,8 @@ class TestNetworkPointPattern(unittest.TestCase):
     
     def test_element_as_gdf(self):
         pp = 'crimes'
-        obs = network.element_as_gdf(self.ntw, pp_name=pp)
-        snap_obs = network.element_as_gdf(self.ntw, pp_name=pp, snapped=True)
+        obs = spgh.element_as_gdf(self.ntw, pp_name=pp)
+        snap_obs = spgh.element_as_gdf(self.ntw, pp_name=pp, snapped=True)
         
         known_dist = 221.5867616973843
         observed_point = obs.loc[(obs['id']==0), 'geometry'].squeeze()
@@ -232,7 +235,7 @@ class TestNetworkPointPattern(unittest.TestCase):
         
         pp = 'FireStations'
         with self.assertRaises(KeyError):
-            network.element_as_gdf(self.ntw, pp_name=pp)
+            spgh.element_as_gdf(self.ntw, pp_name=pp)
 
 
 @unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
@@ -241,7 +244,7 @@ class TestNetworkAnalysis(unittest.TestCase):
     def setUp(self):
         path_to_shp = examples.get_path('streets.shp')
         gdf = geopandas.read_file(path_to_shp)
-        self.ntw = network.Network(in_data=gdf)
+        self.ntw = spgh.Network(in_data=gdf)
         pt_str = 'crimes'
         path_to_shp = examples.get_path('{}.shp'.format(pt_str))
         in_data = geopandas.read_file(path_to_shp)
@@ -274,7 +277,7 @@ class TestNetworkUtils(unittest.TestCase):
     def setUp(self):
         path_to_shp = examples.get_path('streets.shp')
         gdf = geopandas.read_file(path_to_shp)
-        self.ntw = network.Network(in_data=gdf)
+        self.ntw = spgh.Network(in_data=gdf)
     
     def tearDown(self):
         pass
