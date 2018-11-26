@@ -1,7 +1,10 @@
 import unittest
 import numpy as np
 from libpysal import cg, examples
+
+# api import structure
 import spaghetti as spgh
+
 try:
     import geopandas
     GEOPANDAS_EXTINCT = False
@@ -280,66 +283,6 @@ class TestNetworkAnalysis(unittest.TestCase):
         obtained = self.ntw.NetworkK(self.ntw.pointpatterns['crimes'],
                                      permutations=5, nsteps=20)
         self.assertEqual(obtained.lowerenvelope.shape[0], 20)
-
-
-@unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
-class TestNetworkUtils(unittest.TestCase):
-    
-    def setUp(self):
-        path_to_shp = examples.get_path('streets.shp')
-        self.ntw = spgh.Network(in_data=path_to_shp)
-    
-    def tearDown(self):
-        pass
-    
-    def test_compute_length(self):
-        self.point1, self.point2 = (0,0), (1,1)
-        self.length = spgh.util.compute_length( self.point1, self.point2)
-        self.assertAlmostEqual(self.length, 1.4142135623730951, places=4)
-    
-    def test_get_neighbor_distances(self):
-        self.known_neighs = {1: 102.62353453439829, 2: 660.000001049743}
-        self.neighs = spgh.util.get_neighbor_distances(self.ntw, 0,
-                                                       self.ntw.edge_lengths)
-        self.assertAlmostEqual(self.neighs[1], 102.62353453439829, places=4)
-        self.assertAlmostEqual(self.neighs[2], 660.000001049743, places=4)
-    
-    def test_generate_tree(self):
-        self.known_path = [23, 22, 20, 19, 170, 2, 0]
-        self.distance, self.pred = spgh.util.dijkstra(self.ntw,
-                                                      self.ntw.edge_lengths,
-                                                      0)
-        self.tree = spgh.util.generatetree(self.pred)
-        self.assertEqual(self.tree[3], self.known_path)
-    
-    def test_dijkstra(self):
-        self.distance,\
-        self.pred = spgh.util.dijkstra(self.ntw, self.ntw.edge_lengths, 0)
-        self.assertAlmostEqual(self.distance[196], 5505.668247, places=4)
-        self.assertEqual(self.pred[196], 133)
-
-    def test_dijkstra_mp(self):
-        self.distance,\
-        self.pred = spgh.util.dijkstra_mp((self.ntw, self.ntw.edge_lengths, 0))
-        self.assertAlmostEqual(self.distance[196], 5505.668247, places=4)
-        self.assertEqual(self.pred[196], 133)
-    
-    def test_square_distance_point_segment(self):
-        self.point, self.segment = (1,1), ((0,0), (2,0))
-        self.sqrd_nearp = spgh.util.squared_distance_point_segment(self.point,
-                                                                  self.segment)
-        self.assertEqual(self.sqrd_nearp[0], 1.0)
-        self.assertEqual(self.sqrd_nearp[1].all(), np.array([1., 0.]).all())
-    
-    def test_snap_points_on_segments(self):
-        self.points = {0: cg.shapes.Point((1,1))}
-        self.segments = [cg.shapes.Chain([cg.shapes.Point((0,0)),
-                                          cg.shapes.Point((2,0))])]
-        self.snapped = spgh.util.snap_points_on_segments(self.points,
-                                                         self.segments)
-        self.known_coords = [xy._Point__loc for xy in self.snapped[0][0]]
-        self.assertEqual(self.known_coords, [(0.0, 0.0), (2.0, 0.0)])
-        self.assertEqual(self.snapped[0][1].all(), np.array([1., 0.]).all())
 
 
 if __name__ == '__main__':
