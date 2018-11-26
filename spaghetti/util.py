@@ -387,3 +387,41 @@ def snap_points_on_segments(points, segments):
                 
     return p2s
 
+
+@requires('geopandas', 'shapely')
+def _points_as_gdf(net, nodes, nodes_for_edges, pp_name, snapped,
+                   id_col=None, geom_col=None):
+    """
+    Internal function for `spaghetti.element_as_gdf()`
+    """
+    
+    # nodes
+    if nodes or nodes_for_edges:
+        pts_dict = net.node_coords
+    
+    # raw point pattern
+    if pp_name and not snapped:
+        try: 
+            pp_pts = net.pointpatterns[pp_name].points
+        except KeyError:
+            err_msg = 'Available point patterns are {}'
+            raise KeyError(err_msg.format(list(net.pointpatterns.keys())))
+            
+        n_pp_pts = range(len(pp_pts))
+        pts_dict = {point:pp_pts[point]['coordinates'] for point in n_pp_pts}
+    
+    # snapped point pattern
+    elif pp_name and snapped:
+        pts_dict = net.pointpatterns[pp_name].snapped_coordinates
+    
+    # instantiate geopandas.GeoDataFrame
+    pts_list = list(pts_dict.items())
+    points = gpd.GeoDataFrame(pts_list, columns=[id_col, geom_col])
+    points.geometry = points.geometry.apply(lambda p: Point(p))
+    
+    return points
+    
+    
+    
+    
+    
