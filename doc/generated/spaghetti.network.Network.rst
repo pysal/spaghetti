@@ -1,7 +1,7 @@
-spaghetti.Network
-=================
+spaghetti.network.Network
+=========================
 
-.. currentmodule:: spaghetti
+.. currentmodule:: spaghetti.network
 
 .. autoclass:: Network
 
