@@ -124,43 +124,44 @@ class TestNetworkPointPattern(unittest.TestCase):
     def setUp(self):
         path_to_shp = examples.get_path('streets.shp')
         self.ntw = spgh.Network(in_data=path_to_shp)
-        for obs in ['schools', 'crimes']:
-            in_data = examples.get_path('{}.shp'.format(obs))
+        self.pp1_str = 'schools'
+        self.pp2_str = 'crimes'
+        for (obs, idx) in [(self.pp1_str, 'pp1'), (self.pp2_str, 'pp2')]:
+            path_to_shp = examples.get_path('%s.shp' % obs)
+            in_data = geopandas.read_file(path_to_shp)
             self.ntw.snapobservations(in_data, obs, attribute=True)
-            setattr(self, obs, self.ntw.pointpatterns[obs])
+            setattr(self, idx, self.ntw.pointpatterns[obs])
+        self.known_pp1_npoints = 8
     
     def tearDown(self):
         pass
     
     def test_add_point_pattern(self):
-        self.assertEqual(self.crimes.npoints, 287)
-        self.assertIn('properties', self.crimes.points[0])
-        self.assertIn([1, 1], self.crimes.points[0]['properties'])
+        self.assertEqual(self.pp1.npoints, self.known_pp1_npoints)
+        self.assertIn('properties', self.pp1.points[0])
+        self.assertIn([1], self.pp1.points[0]['properties'])
     
     def test_count_per_edge(self):
-        counts = self.ntw.count_per_edge(
-            self.ntw.pointpatterns['crimes'].obs_to_edge, graph=False)
+        counts = self.ntw.count_per_edge(self.pp1.obs_to_edge, graph=False)
         meancounts = sum(counts.values()) / float(len(counts.keys()))
-        self.assertAlmostEqual(meancounts, 2.682242, places=5)
+        self.assertAlmostEqual(meancounts, 1.0, places=5)
     
     def test_count_per_graph_edge(self):
-        counts = self.ntw.count_per_edge(
-            self.ntw.pointpatterns['crimes'].obs_to_edge, graph=True)
+        counts = self.ntw.count_per_edge(self.pp1.obs_to_edge, graph=True)
         meancounts = sum(counts.values()) / float(len(counts.keys()))
-        self.assertAlmostEqual(meancounts, 3.29885, places=5)
+        self.assertAlmostEqual(meancounts, 1.0, places=5)
     
     def test_simulate_normal_observations(self):
-        npoints = self.ntw.pointpatterns['crimes'].npoints
-        sim = self.ntw.simulate_observations(npoints)
-        self.assertEqual(npoints, sim.npoints)
+        sim = self.ntw.simulate_observations(self.known_pp1_npoints)
+        self.assertEqual(self.known_pp1_npoints, sim.npoints)
     
     def test_simulate_poisson_observations(self):
-        npoints = self.ntw.pointpatterns['crimes'].npoints
-        sim = self.ntw.simulate_observations(npoints, distribution='poisson')
-        self.assertEqual(npoints, sim.npoints)
+        sim = self.ntw.simulate_observations(self.known_pp1_npoints,
+                                             distribution='poisson')
+        self.assertEqual(self.known_pp1_npoints, sim.npoints)
     
     def test_all_neighbor_distances_mp(self):
-        matrix1, tree = self.ntw.allneighbordistances('schools',
+        matrix1, tree = self.ntw.allneighbordistances(self.pp1_str,
                                                       fill_diagonal=0.,
                                                       n_processes='all',
                                                       gen_tree=True)
@@ -173,14 +174,16 @@ class TestNetworkPointPattern(unittest.TestCase):
         self.assertAlmostEqual(np.nansum(matrix1[0]), known_mtx1_val, places=4)
         self.assertEqual(tree[(6, 7)], known_tree_val)
         
-        matrix2 = self.ntw.allneighbordistances('schools', n_processes=2)
+        matrix2 = self.ntw.allneighbordistances(self.pp1_str, n_processes=2)
         known_mtx2_val = 17682.436988
         self.assertAlmostEqual(np.nansum(matrix2[0]), known_mtx2_val, places=4)
-        
+    
     def test_all_neighbor_distances(self):
-        matrix1, tree = self.ntw.allneighbordistances('schools', gen_tree=True)
+        matrix1, tree = self.ntw.allneighbordistances(self.pp1_str,
+                                                      gen_tree=True)
         known_mtx_val = 17682.436988
         known_tree_val = (173, 64)
+        
         self.assertAlmostEqual(np.nansum(matrix1[0]), known_mtx_val, places=4)
         self.assertEqual(tree[(6, 7)], known_tree_val)
         
@@ -190,17 +193,17 @@ class TestNetworkPointPattern(unittest.TestCase):
                 self.assertEqual(plists[-1], k)
                 self.assertEqual(self.ntw.node_list, list(predlist.keys()))
                 
-        matrix2 = self.ntw.allneighbordistances('schools', fill_diagonal=0.)
+        matrix2 = self.ntw.allneighbordistances(self.pp1_str, fill_diagonal=0.)
         observed = matrix2.diagonal()
         known = np.zeros(matrix2.shape[0])
         self.assertEqual(observed.all(), known.all())
         
-        matrix3 = self.ntw.allneighbordistances('schools', snap_dist=True)
+        matrix3 = self.ntw.allneighbordistances(self.pp1_str, snap_dist=True)
         known_mtx_val = 3218.2597894
         observed_mtx_val = matrix3
         self.assertAlmostEqual(observed_mtx_val[0, 1], known_mtx_val, places=4)
         
-        matrix4 = self.ntw.allneighbordistances('schools',
+        matrix4 = self.ntw.allneighbordistances(self.pp1_str,
                                                 fill_diagonal=0.,
                                                 n_processes=2)
         observed = matrix4.diagonal()
@@ -211,46 +214,45 @@ class TestNetworkPointPattern(unittest.TestCase):
         # general test
         with self.assertRaises(KeyError):
             self.ntw.nearestneighbordistances('i_should_not_exist')
-        nnd1 = self.ntw.nearestneighbordistances('schools')
-        nnd2 = self.ntw.nearestneighbordistances('schools',
-                                                 destpattern='schools')
+        nnd1 = self.ntw.nearestneighbordistances(self.pp1_str)
+        nnd2 = self.ntw.nearestneighbordistances(self.pp1_str,
+                                                 destpattern=self.pp1_str)
         nndv1 = np.array(list(nnd1.values()))[:,1].astype(float)
         nndv2 = np.array(list(nnd2.values()))[:,1].astype(float)
         np.testing.assert_array_almost_equal_nulp(nndv1, nndv2)
         
         # nearest neighbor keeping zero test
         known_zero = ([19], 0.0)[0]
-        nn_c = self.ntw.nearestneighbordistances('crimes',
+        nn_c = self.ntw.nearestneighbordistances(self.pp2_str,
                                                  keep_zero_dist=True)
         self.assertEqual(nn_c[18][0], known_zero)
         
         # nearest neighbor omitting zero test
         known_nonzero = ([11], 165.33982412719126)[1]
-        nn_c = self.ntw.nearestneighbordistances('crimes',
+        nn_c = self.ntw.nearestneighbordistances(self.pp2_str,
                                                  keep_zero_dist=False)
         self.assertAlmostEqual(nn_c[18][1], known_nonzero, places=4)
         
         # nearest neighbor with snap distance
         known_neigh = ([3], 402.5219673922477)[1]
-        nn_c = self.ntw.nearestneighbordistances('crimes',
+        nn_c = self.ntw.nearestneighbordistances(self.pp2_str,
                                                  keep_zero_dist=True,
                                                  snap_dist=True)
         self.assertAlmostEqual(nn_c[0][1], known_neigh, places=4)
     
     def test_element_as_gdf(self):
-        pp = 'crimes'
-        obs = spgh.element_as_gdf(self.ntw, pp_name=pp)
-        snap_obs = spgh.element_as_gdf(self.ntw, pp_name=pp, snapped=True)
+        obs = spgh.element_as_gdf(self.ntw, pp_name=self.pp1_str)
+        snap_obs = spgh.element_as_gdf(self.ntw, pp_name=self.pp1_str,
+                                       snapped=True)
         
-        known_dist = 221.5867616973843
+        known_dist = 205.65961300587043
         observed_point = obs.loc[(obs['id']==0), 'geometry'].squeeze()
         snap_point = snap_obs.loc[(snap_obs['id']==0), 'geometry'].squeeze()
         observed_dist = observed_point.distance(snap_point)
         self.assertAlmostEqual(observed_dist, known_dist, places=8)
         
-        pp = 'FireStations'
         with self.assertRaises(KeyError):
-            spgh.element_as_gdf(self.ntw, pp_name=pp)
+            spgh.element_as_gdf(self.ntw, pp_name='i_should_not_exist')
 
 
 @unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
@@ -258,29 +260,30 @@ class TestNetworkAnalysis(unittest.TestCase):
     
     def setUp(self):
         path_to_shp = examples.get_path('streets.shp')
-        self.ntw = spgh.Network(in_data=path_to_shp)
-        pt_str = 'crimes'
-        path_to_shp = examples.get_path('{}.shp'.format(pt_str))
+        gdf = geopandas.read_file(path_to_shp)
+        self.ntw = spgh.Network(in_data=gdf)
+        self.pt_str = 'schools'
+        path_to_shp = examples.get_path('%s.shp' % self.pt_str )
         in_data = geopandas.read_file(path_to_shp)
-        self.ntw.snapobservations(in_data, pt_str, attribute=True)
-        npts = self.ntw.pointpatterns['crimes'].npoints
+        self.ntw.snapobservations(in_data, self.pt_str , attribute=True)
+        npts = self.ntw.pointpatterns[self.pt_str].npoints
         self.ntw.simulate_observations(npts)
     
     def tearDown(self):
         pass
     
     def test_network_f(self):
-        obtained = self.ntw.NetworkF(self.ntw.pointpatterns['crimes'],
+        obtained = self.ntw.NetworkF(self.ntw.pointpatterns[self.pt_str],
                                      permutations=5, nsteps=20)
         self.assertEqual(obtained.lowerenvelope.shape[0], 20)
     
     def test_network_g(self):
-        obtained = self.ntw.NetworkG(self.ntw.pointpatterns['crimes'],
+        obtained = self.ntw.NetworkG(self.ntw.pointpatterns[self.pt_str],
                                      permutations=5, nsteps=20)
         self.assertEqual(obtained.lowerenvelope.shape[0], 20)
     
     def test_network_k(self):
-        obtained = self.ntw.NetworkK(self.ntw.pointpatterns['crimes'],
+        obtained = self.ntw.NetworkK(self.ntw.pointpatterns[self.pt_str],
                                      permutations=5, nsteps=20)
         self.assertEqual(obtained.lowerenvelope.shape[0], 20)
 
