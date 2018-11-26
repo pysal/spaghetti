@@ -454,3 +454,36 @@ def _points_as_gdf(net, nodes, nodes_for_edges, pp_name, snapped,
     
     return points
 
+
+@requires('geopandas', 'shapely')
+def _edges_as_gdf(net, points, id_col=None, geom_col=None):
+    """
+    Internal function for returning a edges geopandas.GeoDataFrame
+    called from within `spaghetti.element_as_gdf()`. 
+    
+    Returns
+    -------
+    
+    points : geopandas.GeoDataFrame
+        Network point elements (either nodes or `PointPattern` points)
+        as a simple `geopandas.GeoDataFrame` of `shapely.Point` objects
+        with an `id` column and `geometry` column.
+    
+    Notes
+    -----
+    
+    1. See `spaghetti.element_as_gdf()` for description of arguments
+    2. This function requires `geopandas`
+    
+    """
+    
+    # edges
+    edges = {}
+    for (node1_id, node2_id) in net.edges:
+        node1 = points.loc[(points[id_col] == node1_id), geom_col].squeeze()
+        node2 = points.loc[(points[id_col] == node2_id), geom_col].squeeze()
+        edges[(node1_id, node2_id)] = LineString((node1, node2))
+    edges = gpd.GeoDataFrame(list(edges.items()), columns=[id_col, geom_col])
+    
+    return edges
+
