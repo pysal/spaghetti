@@ -392,7 +392,19 @@ def snap_points_on_segments(points, segments):
 def _points_as_gdf(net, nodes, nodes_for_edges, pp_name, snapped,
                    id_col=None, geom_col=None):
     """
-    Internal function for `spaghetti.element_as_gdf()`
+    Internal function for returning a point geopandas.GeoDataFrame
+    called from within `spaghetti.element_as_gdf()`. 
+    
+    Parameters
+    ----------
+    
+    
+    
+    Notes
+    -----
+    
+    1. See `spaghetti.element_as_gdf()` for description of arguments
+    2. This function requires `geopandas`
     """
     
     # nodes
