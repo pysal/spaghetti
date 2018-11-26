@@ -1,4 +1,14 @@
 from libpysal import cg
+from libpysal.common import requires
+
+try:
+    import geopandas as gpd
+    from shapely.geometry import Point, LineString
+except ImportError:
+    err_msg = 'geopandas/shapely not available. '\
+              + 'Some functionality will be disabled.'
+    warn(err_msg)
+
 import numpy as np
 
 
@@ -376,3 +386,4 @@ def snap_points_on_segments(points, segments):
                 p2s[ptIdx] = (closest, p2b)
                 
     return p2s
+
