@@ -84,7 +84,7 @@ class Network:
         tuples of graph edge ids.
     
     graph_lengths : dict
-        Keys are the graph edge ids (tuple). Values are the graph edge lenght
+        Keys are the graph edge ids (tuple). Values are the graph edge length
         (float).
     
     Examples
