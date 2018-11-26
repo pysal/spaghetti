@@ -161,6 +161,24 @@ class TestNetworkPointPattern(unittest.TestCase):
                                              distribution='poisson')
         self.assertEqual(self.known_pp1_npoints, sim.npoints)
     
+    def test_all_neighbor_distances_mp(self):
+        matrix1, tree = self.ntw.allneighbordistances(self.pp1_str,
+                                                      fill_diagonal=0.,
+                                                      n_processes='all',
+                                                      gen_tree=True)
+        known_mtx1_val = 17682.436988
+        known_tree_val = (173, 64)
+        
+        observed = matrix1.diagonal()
+        known = np.zeros(matrix1.shape[0])
+        self.assertEqual(observed.all(), known.all())
+        self.assertAlmostEqual(np.nansum(matrix1[0]), known_mtx1_val, places=4)
+        self.assertEqual(tree[(6, 7)], known_tree_val)
+        
+        matrix2 = self.ntw.allneighbordistances(self.pp1_str, n_processes=2)
+        known_mtx2_val = 17682.436988
+        self.assertAlmostEqual(np.nansum(matrix2[0]), known_mtx2_val, places=4)
+    
     def test_all_neighbor_distances(self):
         matrix1, tree = self.ntw.allneighbordistances(self.pp1_str,
                                                       gen_tree=True)
@@ -245,28 +263,28 @@ class TestNetworkAnalysis(unittest.TestCase):
         path_to_shp = examples.get_path('streets.shp')
         gdf = geopandas.read_file(path_to_shp)
         self.ntw = spgh.Network(in_data=gdf)
-        pt_str = 'crimes'
-        path_to_shp = examples.get_path('{}.shp'.format(pt_str))
+        self.pt_str = 'schools'
+        path_to_shp = examples.get_path('%s.shp' % self.pt_str )
         in_data = geopandas.read_file(path_to_shp)
-        self.ntw.snapobservations(in_data, pt_str, attribute=True)
-        npts = self.ntw.pointpatterns['crimes'].npoints
+        self.ntw.snapobservations(in_data, self.pt_str , attribute=True)
+        npts = self.ntw.pointpatterns[self.pt_str].npoints
         self.ntw.simulate_observations(npts)
     
     def tearDown(self):
         pass
     
     def test_network_f(self):
-        obtained = self.ntw.NetworkF(self.ntw.pointpatterns['crimes'],
+        obtained = self.ntw.NetworkF(self.ntw.pointpatterns[self.pt_str],
                                      permutations=5, nsteps=20)
         self.assertEqual(obtained.lowerenvelope.shape[0], 20)
     
     def test_network_g(self):
-        obtained = self.ntw.NetworkG(self.ntw.pointpatterns['crimes'],
+        obtained = self.ntw.NetworkG(self.ntw.pointpatterns[self.pt_str],
                                      permutations=5, nsteps=20)
         self.assertEqual(obtained.lowerenvelope.shape[0], 20)
     
     def test_network_k(self):
-        obtained = self.ntw.NetworkK(self.ntw.pointpatterns['crimes'],
+        obtained = self.ntw.NetworkK(self.ntw.pointpatterns[self.pt_str],
                                      permutations=5, nsteps=20)
         self.assertEqual(obtained.lowerenvelope.shape[0], 20)
 
