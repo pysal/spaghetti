@@ -177,6 +177,16 @@ class TestNetworkPointPattern(unittest.TestCase):
         matrix2 = self.ntw.allneighbordistances(self.pp1_str, n_processes=2)
         known_mtx2_val = 17682.436988
         self.assertAlmostEqual(np.nansum(matrix2[0]), known_mtx2_val, places=4)
+        
+        matrix3, tree = self.ntw.allneighbordistances(self.pp1_str,
+                                                      fill_diagonal=0.,
+                                                      n_processes=2,
+                                                      gen_tree=True)
+        known_mtx3_val = 17682.436988
+        known_tree_val = (173, 64)
+        
+        self.assertAlmostEqual(np.nansum(matrix3[0]), known_mtx3_val, places=4)
+        self.assertEqual(tree[(6, 7)], known_tree_val)
     
     def test_all_neighbor_distances(self):
         matrix1, tree = self.ntw.allneighbordistances(self.pp1_str,
@@ -186,13 +196,13 @@ class TestNetworkPointPattern(unittest.TestCase):
         
         self.assertAlmostEqual(np.nansum(matrix1[0]), known_mtx_val, places=4)
         self.assertEqual(tree[(6, 7)], known_tree_val)
-        
+        '''
         for k, (distances, predlist) in self.ntw.alldistances.items():
             self.assertEqual(distances[k], 0)
             for p, plists in predlist.items():
                 self.assertEqual(plists[-1], k)
                 self.assertEqual(self.ntw.node_list, list(predlist.keys()))
-                
+        '''
         matrix2 = self.ntw.allneighbordistances(self.pp1_str, fill_diagonal=0.)
         observed = matrix2.diagonal()
         known = np.zeros(matrix2.shape[0])
@@ -204,8 +214,7 @@ class TestNetworkPointPattern(unittest.TestCase):
         self.assertAlmostEqual(observed_mtx_val[0, 1], known_mtx_val, places=4)
         
         matrix4 = self.ntw.allneighbordistances(self.pp1_str,
-                                                fill_diagonal=0.,
-                                                n_processes=2)
+                                                fill_diagonal=0.)
         observed = matrix4.diagonal()
         known = np.zeros(matrix4.shape[0])
         self.assertEqual(observed.all(), known.all())
