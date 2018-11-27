@@ -79,10 +79,6 @@ class TestNetwork(unittest.TestCase):
         n200 = self.ntw_from_shp.segment_edges(200.0)
         self.assertEqual(len(n200.edges), 688)
     
-    def test_edge_segmentation_1000(self):
-        n1000 = self.ntw_from_shp.segment_edges(1000.0)
-        self.assertEqual(len(n1000.edges), 303)
-    
     def test_enum_links_node(self):
         coincident = self.ntw_from_shp.enum_links_node(24)
         self.assertIn((24, 48), coincident)
@@ -157,6 +153,10 @@ class TestNetworkPointPattern(unittest.TestCase):
         
         self.assertEqual(self.pp1.npoints, self.gdf_pp1.npoints)
         self.assertEqual(self.pp2.npoints, self.gdf_pp2.npoints)
+    
+    def test_edge_segmentation_1000(self):
+        n1000 = self.ntw_from_shp.segment_edges(1000.0)
+        self.assertEqual(len(n1000.edges), 303)
     
     def test_add_point_pattern(self):
         self.assertEqual(self.pp1.npoints, self.known_pp1_npoints)
