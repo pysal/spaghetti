@@ -13,31 +13,34 @@ except ImportError:
     GEOPANDAS_EXTINCT = True
 
 
-@unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
 class TestNetwork(unittest.TestCase):
     
     def setUp(self):
-        path_to_shp = examples.get_path('streets.shp')
+        self.path_to_shp = examples.get_path('streets.shp')
         
         # network instantiated from shapefile
-        self.ntw_from_shp = spgh.Network(in_data=path_to_shp)
+        self.ntw_from_shp = spgh.Network(in_data=self.path_to_shp)
         
-        # network instantiated from geodataframe
-        gdf = geopandas.read_file(path_to_shp)
-        self.ntw_from_gdf = spgh.Network(in_data=gdf)
+        self.n_known_edges, self.n_known_nodes= 303, 230
     
     def tearDown(self):
         pass
     
     def test_network_data_read(self):
-        n_known_edges, n_known_nodes= 303, 230
-        
         # shp test against known
-        self.assertEqual(len(self.ntw_from_shp.edges), n_known_edges)
-        self.assertEqual(len(self.ntw_from_shp.nodes), n_known_nodes)
+        self.assertEqual(len(self.ntw_from_shp.edges), self.n_known_edges)
+        self.assertEqual(len(self.ntw_from_shp.nodes), self.n_known_nodes)
+    
+    @unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
+    def test_network_from_geopandas(self):
+        # network instantiated from geodataframe
+        gdf = geopandas.read_file(self.path_to_shp)
+        self.ntw_from_gdf = spgh.Network(in_data=gdf)
+        
         # gdf test against known
-        self.assertEqual(len(self.ntw_from_gdf.edges), n_known_edges)
-        self.assertEqual(len(self.ntw_from_gdf.nodes), n_known_nodes)
+        self.assertEqual(len(self.ntw_from_gdf.edges), self.n_known_edges)
+        self.assertEqual(len(self.ntw_from_gdf.nodes), self.n_known_nodes)
+        
         # shp against gdf
         self.assertEqual(len(self.ntw_from_shp.edges),
                          len(self.ntw_from_gdf.edges))
@@ -53,7 +56,7 @@ class TestNetwork(unittest.TestCase):
         self.assertIn(0, self.ntw_from_shp.adjacencylist[2])
         self.assertNotIn(0, self.ntw_from_shp.adjacencylist[3])
     
-    def test_contiguity_weights(self):
+    def test_contiguity_weights_network(self):
         w = self.ntw_from_shp.contiguityweights(graph=False)
         self.assertEqual(w.n, 303)
         self.assertEqual(w.histogram,
@@ -82,10 +85,11 @@ class TestNetwork(unittest.TestCase):
         coincident = self.ntw_from_shp.enum_links_node(24)
         self.assertIn((24, 48), coincident)
     
+    @unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
     def test_element_as_gdf(self):
         nodes, edges = spgh.element_as_gdf(self.ntw_from_shp,
-                                              nodes=True,
-                                              edges=True)
+                                           nodes=True,
+                                           edges=True)
         
         known_node_wkt = 'POINT (728368.04762 877125.89535)'
         obs_node = nodes.loc[(nodes['id'] == 0), 'geometry'].squeeze()
@@ -104,7 +108,7 @@ class TestNetwork(unittest.TestCase):
         obs_edge = edges.loc[(edges['id'] == (0,1)), 'geometry'].squeeze()
         obs_edge_wkt = obs_edge.wkt
         self.assertEqual(obs_edge_wkt, known_edge_wkt)
-        
+    
     def test_round_sig(self):
         # round to 2 significant digits test
         x_round2, y_round2 = 1200, 1900
