@@ -161,7 +161,40 @@ class TestNetworkPointPattern(unittest.TestCase):
                                              distribution='poisson')
         self.assertEqual(self.known_pp1_npoints, sim.npoints)
     
-    def test_all_neighbor_distances_mp(self):
+    def test_all_neighbor_distances(self):
+        matrix1, tree = self.ntw.allneighbordistances(self.pp1_str,
+                                                      gen_tree=True)
+        known_mtx_val = 17682.436988
+        known_tree_val = (173, 64)
+        
+        self.assertAlmostEqual(np.nansum(matrix1[0]), known_mtx_val, places=4)
+        self.assertEqual(tree[(6, 7)], known_tree_val)
+        del self.ntw.alldistances
+        del self.ntw.distancematrix
+        
+        matrix2 = self.ntw.allneighbordistances(self.pp1_str, fill_diagonal=0.)
+        observed = matrix2.diagonal()
+        known = np.zeros(matrix2.shape[0])
+        self.assertEqual(observed.all(), known.all())
+        del self.ntw.alldistances
+        del self.ntw.distancematrix
+        
+        matrix3 = self.ntw.allneighbordistances(self.pp1_str, snap_dist=True)
+        known_mtx_val = 3218.2597894
+        observed_mtx_val = matrix3
+        self.assertAlmostEqual(observed_mtx_val[0, 1], known_mtx_val, places=4)
+        del self.ntw.alldistances
+        del self.ntw.distancematrix
+        
+        matrix4 = self.ntw.allneighbordistances(self.pp1_str,
+                                                fill_diagonal=0.)
+        observed = matrix4.diagonal()
+        known = np.zeros(matrix4.shape[0])
+        self.assertEqual(observed.all(), known.all())
+        del self.ntw.alldistances
+        del self.ntw.distancematrix
+    
+    def test_all_neighbor_distances_multiproccessing(self):
         matrix1, tree = self.ntw.allneighbordistances(self.pp1_str,
                                                       fill_diagonal=0.,
                                                       n_processes='all',
@@ -174,10 +207,14 @@ class TestNetworkPointPattern(unittest.TestCase):
         self.assertEqual(observed.all(), known.all())
         self.assertAlmostEqual(np.nansum(matrix1[0]), known_mtx1_val, places=4)
         self.assertEqual(tree[(6, 7)], known_tree_val)
+        del self.ntw.alldistances
+        del self.ntw.distancematrix
         
         matrix2 = self.ntw.allneighbordistances(self.pp1_str, n_processes=2)
         known_mtx2_val = 17682.436988
         self.assertAlmostEqual(np.nansum(matrix2[0]), known_mtx2_val, places=4)
+        del self.ntw.alldistances
+        del self.ntw.distancematrix
         
         matrix3, tree = self.ntw.allneighbordistances(self.pp1_str,
                                                       fill_diagonal=0.,
@@ -188,31 +225,8 @@ class TestNetworkPointPattern(unittest.TestCase):
         
         self.assertAlmostEqual(np.nansum(matrix3[0]), known_mtx3_val, places=4)
         self.assertEqual(tree[(6, 7)], known_tree_val)
-    
-    def test_all_neighbor_distances(self):
-        matrix1, tree = self.ntw.allneighbordistances(self.pp1_str,
-                                                      gen_tree=True)
-        known_mtx_val = 17682.436988
-        known_tree_val = (173, 64)
-        
-        self.assertAlmostEqual(np.nansum(matrix1[0]), known_mtx_val, places=4)
-        self.assertEqual(tree[(6, 7)], known_tree_val)
-        
-        matrix2 = self.ntw.allneighbordistances(self.pp1_str, fill_diagonal=0.)
-        observed = matrix2.diagonal()
-        known = np.zeros(matrix2.shape[0])
-        self.assertEqual(observed.all(), known.all())
-        
-        matrix3 = self.ntw.allneighbordistances(self.pp1_str, snap_dist=True)
-        known_mtx_val = 3218.2597894
-        observed_mtx_val = matrix3
-        self.assertAlmostEqual(observed_mtx_val[0, 1], known_mtx_val, places=4)
-        
-        matrix4 = self.ntw.allneighbordistances(self.pp1_str,
-                                                fill_diagonal=0.)
-        observed = matrix4.diagonal()
-        known = np.zeros(matrix4.shape[0])
-        self.assertEqual(observed.all(), known.all())
+        del self.ntw.alldistances
+        del self.ntw.distancematrix
     
     def test_nearest_neighbor_distances(self):
         # general test
@@ -224,18 +238,24 @@ class TestNetworkPointPattern(unittest.TestCase):
         nndv1 = np.array(list(nnd1.values()))[:,1].astype(float)
         nndv2 = np.array(list(nnd2.values()))[:,1].astype(float)
         np.testing.assert_array_almost_equal_nulp(nndv1, nndv2)
+        del self.ntw.alldistances
+        del self.ntw.distancematrix
         
         # nearest neighbor keeping zero test
         known_zero = ([19], 0.0)[0]
         nn_c = self.ntw.nearestneighbordistances(self.pp2_str,
                                                  keep_zero_dist=True)
         self.assertEqual(nn_c[18][0], known_zero)
+        del self.ntw.alldistances
+        del self.ntw.distancematrix
         
         # nearest neighbor omitting zero test
         known_nonzero = ([11], 165.33982412719126)[1]
         nn_c = self.ntw.nearestneighbordistances(self.pp2_str,
                                                  keep_zero_dist=False)
         self.assertAlmostEqual(nn_c[18][1], known_nonzero, places=4)
+        del self.ntw.alldistances
+        del self.ntw.distancematrix
         
         # nearest neighbor with snap distance
         known_neigh = ([3], 402.5219673922477)[1]
@@ -243,7 +263,9 @@ class TestNetworkPointPattern(unittest.TestCase):
                                                  keep_zero_dist=True,
                                                  snap_dist=True)
         self.assertAlmostEqual(nn_c[0][1], known_neigh, places=4)
-    
+        del self.ntw.alldistances
+        del self.ntw.distancematrix
+        
     def test_element_as_gdf(self):
         obs = spgh.element_as_gdf(self.ntw, pp_name=self.pp1_str)
         snap_obs = spgh.element_as_gdf(self.ntw, pp_name=self.pp1_str,
