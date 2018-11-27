@@ -12,31 +12,35 @@ except ImportError:
     GEOPANDAS_EXTINCT = True
 
 
-@unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
+
 class TestNetwork(unittest.TestCase):
     
     def setUp(self):
-        path_to_shp = examples.get_path('streets.shp')
+        self.path_to_shp = examples.get_path('streets.shp')
         
         # network instantiated from shapefile
-        self.ntw_from_shp = spgh.Network(in_data=path_to_shp)
+        self.ntw_from_shp = spgh.Network(in_data=self.path_to_shp)
         
-        # network instantiated from geodataframe
-        gdf = geopandas.read_file(path_to_shp)
-        self.ntw_from_gdf = spgh.Network(in_data=gdf)
+        self.n_known_edges, self.n_known_nodes= 303, 230
     
     def tearDown(self):
         pass
     
     def test_network_data_read(self):
-        n_known_edges, n_known_nodes= 303, 230
-        
         # shp test against known
-        self.assertEqual(len(self.ntw_from_shp.edges), n_known_edges)
-        self.assertEqual(len(self.ntw_from_shp.nodes), n_known_nodes)
+        self.assertEqual(len(self.ntw_from_shp.edges), self.n_known_edges)
+        self.assertEqual(len(self.ntw_from_shp.nodes), self.n_known_nodes)
+    
+    @unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
+    def test_network_from_geopandas(self):
+        # network instantiated from geodataframe
+        gdf = geopandas.read_file(self.path_to_shp)
+        self.ntw_from_gdf = spgh.Network(in_data=gdf)
+        
         # gdf test against known
-        self.assertEqual(len(self.ntw_from_gdf.edges), n_known_edges)
-        self.assertEqual(len(self.ntw_from_gdf.nodes), n_known_nodes)
+        self.assertEqual(len(self.ntw_from_gdf.edges), self.n_known_edges)
+        self.assertEqual(len(self.ntw_from_gdf.nodes), self.n_known_nodes)
+        
         # shp against gdf
         self.assertEqual(len(self.ntw_from_shp.edges),
                          len(self.ntw_from_gdf.edges))
