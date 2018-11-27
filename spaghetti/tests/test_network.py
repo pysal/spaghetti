@@ -57,7 +57,8 @@ class TestNetwork(unittest.TestCase):
         self.assertNotIn(0, self.ntw_from_shp.adjacencylist[3])
     
     def test_contiguity_weights_network(self):
-        w = self.ntw_from_shp.contiguityweights(graph=False)
+        ws = self.ntw_from_shp.edge_lengths
+        w = self.ntw_from_shp.contiguityweights(graph=False, weightings=ws)
         self.assertEqual(w.n, 303)
         self.assertEqual(w.histogram,
                          [(2, 35), (3, 89), (4, 105), (5, 61), (6, 13)])
