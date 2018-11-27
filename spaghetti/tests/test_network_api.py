@@ -300,37 +300,39 @@ class TestNetworkPointPattern(unittest.TestCase):
             spgh.element_as_gdf(self.ntw, pp_name='i_should_not_exist')
 
 
-@unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
 class TestNetworkAnalysis(unittest.TestCase):
     
     def setUp(self):
         path_to_shp = examples.get_path('streets.shp')
-        gdf = geopandas.read_file(path_to_shp)
-        self.ntw = spgh.Network(in_data=gdf)
+        self.ntw = spgh.Network(in_data=path_to_shp)
         self.pt_str = 'schools'
         path_to_shp = examples.get_path('%s.shp' % self.pt_str )
-        in_data = geopandas.read_file(path_to_shp)
-        self.ntw.snapobservations(in_data, self.pt_str , attribute=True)
+        self.ntw.snapobservations(path_to_shp, self.pt_str , attribute=True)
         npts = self.ntw.pointpatterns[self.pt_str].npoints
         self.ntw.simulate_observations(npts)
+        self.test_permutations = 3
+        self.test_steps = 5
     
     def tearDown(self):
         pass
     
     def test_network_f(self):
         obtained = self.ntw.NetworkF(self.ntw.pointpatterns[self.pt_str],
-                                     permutations=5, nsteps=20)
-        self.assertEqual(obtained.lowerenvelope.shape[0], 20)
+                                     permutations= self.test_permutations,
+                                     nsteps=self.test_steps)
+        self.assertEqual(obtained.lowerenvelope.shape[0], self.test_steps)
     
     def test_network_g(self):
         obtained = self.ntw.NetworkG(self.ntw.pointpatterns[self.pt_str],
-                                     permutations=5, nsteps=20)
-        self.assertEqual(obtained.lowerenvelope.shape[0], 20)
+                                     permutations= self.test_permutations,
+                                     nsteps=self.test_steps)
+        self.assertEqual(obtained.lowerenvelope.shape[0], self.test_steps)
     
     def test_network_k(self):
         obtained = self.ntw.NetworkK(self.ntw.pointpatterns[self.pt_str],
-                                     permutations=5, nsteps=20)
-        self.assertEqual(obtained.lowerenvelope.shape[0], 20)
+                                     permutations= self.test_permutations,
+                                     nsteps=self.test_steps)
+        self.assertEqual(obtained.lowerenvelope.shape[0], self.test_steps)
 
 
 if __name__ == '__main__':
