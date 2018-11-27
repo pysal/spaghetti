@@ -346,7 +346,7 @@ class Network:
         >>> ntw.snapobservations(examples.get_path('crimes.shp'),
         ...                      'crimes', attribute=True)
         
-        Find counts per netowrk edge.
+        Find counts per network edge.
         
         >>> counts = ntw.count_per_edge(ntw.pointpatterns['crimes']
         ...                             .obs_to_edge, graph=False)
