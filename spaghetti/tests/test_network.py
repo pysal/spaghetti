@@ -156,7 +156,7 @@ class TestNetworkPointPattern(unittest.TestCase):
         self.assertEqual(self.pp2.npoints, self.gdf_pp2.npoints)
     
     def test_edge_segmentation_1000(self):
-        n1000 = self.ntw_from_shp.segment_edges(1000.0)
+        n1000 = self.ntw.segment_edges(1000.0)
         self.assertEqual(len(n1000.edges), 303)
     
     def test_add_point_pattern(self):
