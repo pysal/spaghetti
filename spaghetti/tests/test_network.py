@@ -123,7 +123,6 @@ class TestNetwork(unittest.TestCase):
         self.assertEqual(obs_xy_roundNone, (x_roundNone, y_roundNone))
 
 
-@unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
 class TestNetworkPointPattern(unittest.TestCase):
     
     def setUp(self):
@@ -131,15 +130,31 @@ class TestNetworkPointPattern(unittest.TestCase):
         self.ntw = spgh.Network(in_data=path_to_shp)
         self.pp1_str = 'schools'
         self.pp2_str = 'crimes'
-        for (obs, idx) in [(self.pp1_str, 'pp1'), (self.pp2_str, 'pp2')]:
+        iterator = [(self.pp1_str, 'pp1'),
+                    (self.pp2_str, 'pp2')]
+        for (obs, idx) in iterator:
             path_to_shp = examples.get_path('%s.shp' % obs)
-            in_data = geopandas.read_file(path_to_shp)
-            self.ntw.snapobservations(in_data, obs, attribute=True)
+            self.ntw.snapobservations(path_to_shp, obs, attribute=True)
             setattr(self, idx, self.ntw.pointpatterns[obs])
         self.known_pp1_npoints = 8
     
     def tearDown(self):
         pass
+    
+    @unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
+    def test_pp_from_geopandas(self):
+        self.gdf_pp1_str = 'schools'
+        self.gdf_pp2_str = 'crimes'
+        iterator = [(self.gdf_pp1_str, 'gdf_pp1'),
+                    (self.gdf_pp2_str, 'gdf_pp2')]
+        for (obs, idx) in iterator:
+            path_to_shp = examples.get_path('%s.shp' % obs)
+            in_data = geopandas.read_file(path_to_shp)
+            self.ntw.snapobservations(in_data, obs, attribute=True)
+            setattr(self, idx, self.ntw.pointpatterns[obs])
+        
+        self.assertEqual(self.pp1.npoints, self.gdf_pp1.npoints)
+        self.assertEqual(self.pp2.npoints, self.gdf_pp2.npoints)
     
     def test_add_point_pattern(self):
         self.assertEqual(self.pp1.npoints, self.known_pp1_npoints)
@@ -269,7 +284,8 @@ class TestNetworkPointPattern(unittest.TestCase):
         self.assertAlmostEqual(nn_c[0][1], known_neigh, places=4)
         del self.ntw.alldistances
         del self.ntw.distancematrix
-        
+    
+    @unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
     def test_element_as_gdf(self):
         obs = spgh.element_as_gdf(self.ntw, pp_name=self.pp1_str)
         snap_obs = spgh.element_as_gdf(self.ntw, pp_name=self.pp1_str,
