@@ -29,7 +29,7 @@ class TestNetwork(unittest.TestCase):
         pass
     
     def test_network_data_read(self):
-        n_known_edges,  n_known_nodes= 303, 230
+        n_known_edges, n_known_nodes= 303, 230
         
         # shp test against known
         self.assertEqual(len(self.ntw_from_shp.edges), n_known_edges)
