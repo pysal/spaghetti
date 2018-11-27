@@ -75,10 +75,13 @@ class TestNetwork(unittest.TestCase):
                          [(1, 22), (2, 58), (3, 63), (4, 40),
                           (5, 36), (6, 3), (7, 5), (8, 3)])
     
-    def test_edge_segmentation(self):
+    def test_edge_segmentation_200(self):
         n200 = self.ntw_from_shp.segment_edges(200.0)
         self.assertEqual(len(n200.edges), 688)
-        n200 = None
+    
+    def test_edge_segmentation_1000(self):
+        n1000 = self.ntw_from_shp.segment_edges(1000.0)
+        self.assertEqual(len(n1000.edges), 303)
     
     def test_enum_links_node(self):
         coincident = self.ntw_from_shp.enum_links_node(24)
