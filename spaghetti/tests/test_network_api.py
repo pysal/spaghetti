@@ -12,7 +12,6 @@ except ImportError:
     GEOPANDAS_EXTINCT = True
 
 
-
 class TestNetwork(unittest.TestCase):
     
     def setUp(self):
@@ -85,6 +84,7 @@ class TestNetwork(unittest.TestCase):
         coincident = self.ntw_from_shp.enum_links_node(24)
         self.assertIn((24, 48), coincident)
     
+    @unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
     def test_element_as_gdf(self):
         nodes, edges = spgh.element_as_gdf(self.ntw_from_shp,
                                            nodes=True,
