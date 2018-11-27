@@ -301,17 +301,14 @@ class TestNetworkPointPattern(unittest.TestCase):
             spgh.element_as_gdf(self.ntw, pp_name='i_should_not_exist')
 
 
-@unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
 class TestNetworkAnalysis(unittest.TestCase):
     
     def setUp(self):
         path_to_shp = examples.get_path('streets.shp')
-        gdf = geopandas.read_file(path_to_shp)
-        self.ntw = spgh.Network(in_data=gdf)
+        self.ntw = spgh.Network(in_data=path_to_shp)
         self.pt_str = 'schools'
         path_to_shp = examples.get_path('%s.shp' % self.pt_str )
-        in_data = geopandas.read_file(path_to_shp)
-        self.ntw.snapobservations(in_data, self.pt_str , attribute=True)
+        self.ntw.snapobservations(path_to_shp, self.pt_str , attribute=True)
         npts = self.ntw.pointpatterns[self.pt_str].npoints
         self.ntw.simulate_observations(npts)
         self.test_permutations = 3
@@ -339,13 +336,11 @@ class TestNetworkAnalysis(unittest.TestCase):
         self.assertEqual(obtained.lowerenvelope.shape[0], self.test_steps)
 
 
-@unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
 class TestNetworkUtils(unittest.TestCase):
     
     def setUp(self):
         path_to_shp = examples.get_path('streets.shp')
-        gdf = geopandas.read_file(path_to_shp)
-        self.ntw = spgh.Network(in_data=gdf)
+        self.ntw = spgh.Network(in_data=path_to_shp)
     
     def tearDown(self):
         pass
