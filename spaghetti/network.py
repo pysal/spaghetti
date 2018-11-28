@@ -443,23 +443,25 @@ class Network:
     
     
     def contiguityweights(self, graph=True, weightings=None):
-        """Create a contiguity based W object.
+        """Create a contiguity-based W object.
         
         Parameters
         ----------
         
         graph : bool
-            {True, False} controls whether the W is generated using the spatial
-            representation or the graph representation.
+            ``{True, False}`` controls whether the W is generated using
+            the spatial representation or the graph representation.
+            Default is ``True``.
         
         weightings : dict
-            Dict of lists of weightings for each edge.
+            dictionary of lists of weightings for each edge.
         
         Returns
         -------
         
          W : libpysal.weights.weights.W
-            A PySAL W Object representing the binary adjacency of the network.
+            A ``PySAL`` W Object representing the binary adjacency of
+            the network.
         
         Examples
         --------
@@ -472,7 +474,8 @@ class Network:
         >>> import numpy as np
         >>> ntw = spgh.Network(examples.get_path('streets.shp'))
         
-        Snap point observations to the network with attribute information.
+        Snap point observations to the network with
+        attribute information.
         
         >>> ntw.snapobservations(examples.get_path('crimes.shp'),
         ...                      'crimes', attribute=True)
