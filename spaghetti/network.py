@@ -1259,32 +1259,36 @@ class Network:
             The key of a point pattern snapped to the network.
         
         destpattern : str
-            (Optional) The key of a point pattern snapped to the network.
+            (Optional) The key of a point pattern snapped to the
+            network.
         
         n_processes : int, str
-            (Optional) Specify the number of cores to utilize. Default is 1
-            core. Use (int) to specify an exact number or cores. Use ("all")
-            to request all available cores.
+            (Optional) Specify the number of cores to utilize. Default
+            is 1 core. Use ``int`` to specify an exact number or cores.
+            Use ``"all"`` to request all available cores.
         
         gen_tree : bool
-            rebuild shortest path {True}, or skip {False}
+            Rebuild shortest path ``True``, or skip ``False``.
         
         all_dists : numpy.ndarray
-            An array of shape (n,n) storing distances between all points.
+            An array of shape (n,n) storing distances between all
+            points.
         
         snap_dist : bool
-            include the distance from the original location to the snapped
-            location along the network. Default is False.
+            Flag as ``True`` to include the distance from the original
+            location to the snapped location along the network. Default
+            is ``False``.
         
         keep_zero_dist : bool
-            Include zero values in minimum distance (True) or exclude (False).
-            Default is True. If the source pattern is the same as the
-            destination pattern the diagonal is filled with nans
+            Include zero values in minimum distance ``True`` or exclude
+            ``False``. Default is ``True``. If the source pattern is the
+            same as the destination pattern the diagonal is filled with
+            ``numpy.nan``.
         
         Returns
         -------
         nearest : dict
-            key is source point id, value is tuple of list containing 
+            key is source point id, value is tuple of list containing
             nearest destination point ids and distance.
         
         Examples
@@ -1292,12 +1296,15 @@ class Network:
         
         >>> import spaghetti as spgh
         >>> ntw = spgh.Network(examples.get_path('streets.shp'))
-        >>> ntw.snapobservations(examples.get_path('crimes.shp'), 'crimes')
-        >>> nn = ntw.nearestneighbordistances('crimes', keep_zero_dist=True)
+        >>> ntw.snapobservations(examples.get_path('crimes.shp'),
+        ...                      'crimes')
+        >>> nn = ntw.nearestneighbordistances('crimes',
+        ...                                   keep_zero_dist=True)
         >>> nn[11], nn[18]
         (([18, 19], 165.33982412719126), ([19], 0.0))
         
-        >>> nn = ntw.nearestneighbordistances('crimes', keep_zero_dist=False)
+        >>> nn = ntw.nearestneighbordistances('crimes',
+        ...                                   keep_zero_dist=False)
         >>> nn[11], nn[18]
         (([18, 19], 165.33982412719126), ([11], 165.33982412719126))
         
@@ -1312,13 +1319,15 @@ class Network:
         symmetric = sourcepattern != destpattern
         
         # (for source-to-source patterns) if zero-distance neighbors are
-        # desired, keep the diagonal as NaN and take the minimum distance
-        # neighbor(s), which may include zero distance neighors.
+        # desired, keep the diagonal as NaN and take the minimum
+        # distance neighbor(s), which may include zero distance
+        # neighors.
         fill_diagonal = None
         if not keep_zero_dist and symmetric:
-            # (for source-to-source patterns) if zero-distance neighbors should
-            # be ignored, convert the diagonal to 0.0 and take the minimum
-            # distance neighbor(s) that is/are not 0.0 distance.
+            # (for source-to-source patterns) if zero-distance neighbors
+            # should be ignored, convert the diagonal to 0.0 and take
+            # the minimum distance neighbor(s) that is/are not 0.0
+            # distance.
             fill_diagonal = 0.
         
         sourcepattern = self.pointpatterns[sourcepattern]
@@ -1340,7 +1349,8 @@ class Network:
             else:
                 val = np.min(all_dists[source_index,:]\
                                       [np.nonzero(all_dists[source_index,:])])
-            # nearest destination (may be more than one if equal distance)
+            # nearest destination (may be more than one if
+            # observations are equal distances away)
             dest_idxs = np.where(all_dists[source_index,:] == val)[0].tolist()
             nearest[source_index] = (dest_idxs, val)
             
