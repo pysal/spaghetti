@@ -41,9 +41,11 @@ class Network:
         Default is True.
     
     w_components : bool
+        Set to [True] to record connected components from a
+        `libpysal.weights.weights.W` object. Default is [False].
     
-    
-    weightings : 
+    weightings : dict
+        Dict of lists of weightings for each edge.
     
     Attributes
     ----------
@@ -90,6 +92,42 @@ class Network:
     graph_lengths : dict
         Keys are the graph edge ids (tuple). Values are the graph edge length
         (float).
+    
+    w_network : libpysal.weights.weights.W
+        Weights object created from the network segments
+    
+    network_n_components : n
+        Count of connected components in the network.
+    
+    network_component_labels : numpy.ndarray
+        Component labels for networks segment
+    
+    network_component2edge : dict
+        Lookup {int: list} for segments comprising network connected
+        components keyed by component labels with edges in a list
+        as values.
+    
+    network_component_is_ring : dict
+        Lookup {int: bool} keyed by component labels with values as
+        [True] if the component is a closed ring, otherwise [False].
+    
+    w_graph : libpysal.weights.weights.W
+        Weights object created from the network segments
+    
+    graph_n_components : n
+        Count of connected components in the network.
+    
+    graph_component_labels : numpy.ndarray
+        Component labels for networks segment
+    
+    graph_component2edge : dict
+        Lookup {int: list} for segments comprising network connected
+        components keyed by component labels with edges in a list
+        as values.
+    
+    graph_component_is_ring : dict
+        Lookup {int: bool} keyed by component labels with values as
+        [True] if the component is a closed ring, otherwise [False].
     
     Examples
     --------
@@ -143,6 +181,11 @@ class Network:
             # Extract the graph.
             if extractgraph:
                 self.extractgraph()
+                if w_components:
+                    as_graph = True
+                    self.w_graph = self.contiguityweights(graph=as_graph,
+                                                         weightings=weightings)
+                    self.extract_components(self.w_graph, graph=as_graph)
                 
             self.node_list = sorted(self.nodes.values())
     
@@ -179,11 +222,12 @@ class Network:
         ----------
         
         w : libpysal.weights.weights.W
-            weights object created from the network segments (either
+            Weights object created from the network segments (either
             raw or graph-theoretic)
         
         graph : bool
-        
+            Flag for raw network [False] or graph-theoretic network
+            [True]. Default is False.
         
         """
         if graph:
