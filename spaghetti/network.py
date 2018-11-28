@@ -790,8 +790,9 @@ class Network:
         ----------
         
         obs_on_network : dict
-            Dict of observations on the network. {(edge):{pt_id:(coords)}} or
-            {edge:[(coord),(coord),(coord)]}
+            Dictionary of observations on the network. 
+            Either {(edge):{pt_id:(coords)}} or 
+                   {edge:[(coord),(coord),(coord)]}
         
         Returns
         -------
@@ -837,7 +838,8 @@ class Network:
     
     
     def _newpoint_coords(self, edge, distance):
-        """ Used internally to compute new point coordinates during snapping.
+        """Used internally to compute new point
+        coordinates during snapping.
         """
         x1 = self.node_coords[edge[0]][0]
         y1 = self.node_coords[edge[0]][1]
@@ -863,7 +865,7 @@ class Network:
     
     
     def simulate_observations(self, count, distribution='uniform'):
-        """ Generate a simulated point pattern on the network.
+        """Generate a simulated point pattern on the network.
         
         Parameters
         ----------
@@ -873,15 +875,16 @@ class Network:
             if not 'uniform'.
         
         distribution : str
-            {'uniform', 'poisson'} distribution of random points. If poisson
-            if the distrubtion the poisson is calculated from half the total
-            network length
+            ``{'uniform', 'poisson'}`` distribution of random points.
+            If ``"poisson"``, the distribution is calculated from half
+            the total network length.
         
         Returns
         -------
         
         random_pts : dict
-            Keys are the edge tuple. Values are lists of new point coordinates.
+            Keys are the edge tuple. Values are lists of new
+            point coordinates.
         
         Examples
         --------
