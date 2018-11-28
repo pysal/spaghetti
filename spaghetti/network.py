@@ -99,7 +99,7 @@ class Network:
     w_network : libpysal.weights.weights.W
         Weights object created from the network segments
     
-    network_n_components : n
+    network_n_components : int
         Count of connected components in the network.
     
     network_component_labels : numpy.ndarray
@@ -117,7 +117,7 @@ class Network:
     w_graph : libpysal.weights.weights.W
         Weights object created from the network segments
     
-    graph_n_components : n
+    graph_n_components : int
         Count of connected components in the network.
     
     graph_component_labels : numpy.ndarray
