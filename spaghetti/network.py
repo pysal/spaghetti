@@ -379,7 +379,6 @@ class Network:
         
         """
         
-        neighbors = {}
         neighbors = OrderedDict()
         
         if graph:
@@ -391,7 +390,7 @@ class Network:
             _weights = {}
         else:
             _weights = None
-            
+        
         for key in edges:
             neighbors[key] = []
             if weightings:
