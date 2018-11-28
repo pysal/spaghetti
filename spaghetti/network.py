@@ -1786,38 +1786,40 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
 
 
 class PointPattern():
-    """A stub point pattern class used to store a point pattern. This class is
-    monkey patched with network specific attributes when the points are snapped
-    to a network. In the future this class may be replaced with a generic point
-    pattern class.
+    """A stub point pattern class used to store a point pattern. This
+    class is monkey patched with network specific attributes when the
+    points are snapped to a network. In the future this class may be
+    replaced with a generic point pattern class.
     
     Parameters
     ----------
     
     in_data : geopandas.GeoDataFrame or str
-        The input geographic data. Either (1) a path to a shapefile (str);
-        or (2) a ``geopandas.GeoDataFrame``.
+        The input geographic data. Either (1) a path to a shapefile
+        ``str``; or (2) a ``geopandas.GeoDataFrame``.
     
     idvariable : str
         Field in the shapefile to use as an id variable.
     
     attribute :  bool
-        {False, True} A flag to indicate whether all attributes are tagged
-        to this class.
+        A flag to indicate whether all attributes are tagged to this
+        class (``True``) or excluded (``False``). Default is ``False``.
     
     Attributes
     ----------
     
     points : dict
-        Keys are the point ids (int). Values are the x,y coordinates (tuple).
+        Keys are the point ids (int). Values are the x,y
+        coordinates (tuple).
     
     npoints : int
         The number of points.
     
     obs_to_edge : dict
-        Keys are edge ids (tuple). Values are snapped point information (dict).
-        Withing the snapped point information (dict) keys are observation id
-        (int), and values are snapped coordinates.
+        Keys are edge ids (tuple). Values are snapped point information
+        (``dict``).  Within the snapped point information (``dict``)
+        keys are observation ids (``int``), and values are snapped
+        coordinates.
     
     obs_to_node : list
        list of incident network nodes to snapped observation points converted
