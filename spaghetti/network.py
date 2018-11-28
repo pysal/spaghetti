@@ -592,9 +592,8 @@ class Network:
         >>> w = ntw.distancebandweights(threshold=500)
         >>> w.n
         230
-        >>> w.histogram
-        [(1, 22), (2, 58), (3, 63), (4, 40),
-         (5, 36), (6, 3), (7, 5), (8, 3)]
+        >>> w.histogram[-1]
+        (8, 3)
         
         """
         try:
