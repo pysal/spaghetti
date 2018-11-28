@@ -1880,16 +1880,20 @@ class PointPattern():
         for i, pt in enumerate(pts):
             # ids, attributes
             if ids and db is not None:
-                self.points[ids[i]] = {'coordinates': pt, 'properties': db[i]}
+                self.points[ids[i]] = {'coordinates': pt,
+                                       'properties': db[i]}
             # ids, no attributes
             elif ids and db is None:
-                self.points[ids[i]] = {'coordinates': pt, 'properties': None}
+                self.points[ids[i]] = {'coordinates': pt,
+                                       'properties': None}
             # no ids, attributes
             elif not ids and db is not None:
-                self.points[i] = {'coordinates': pt, 'properties': db[i]}
+                self.points[i] = {'coordinates': pt,
+                                  'properties': db[i]}
             # no ids, no attributes
             else:
-                self.points[i] = {'coordinates': pt, 'properties': None}
+                self.points[i] = {'coordinates': pt,
+                                  'properties': None}
         if from_shp:
             pts.close()
             if db:
