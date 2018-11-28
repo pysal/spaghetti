@@ -2,8 +2,8 @@ import numpy as np
 
 
 class NetworkBase(object):
-    """Base object for performing network analysis on a spaghetti.Network
-    object.
+    """Base object for performing network analysis on a
+    ``spaghetti.Network`` object.
     
     Parameters
     ----------
@@ -106,9 +106,9 @@ class NetworkBase(object):
 
 
 class NetworkG(NetworkBase):
-    """Compute a network constrained G statistic. This requires the capability
-    to compute a distance matrix between two point patterns. In this case one
-    will be observed and one will be simulated.
+    """Compute a network constrained G statistic. This requires the
+    capability to compute a distance matrix between two point patterns.
+    In this case one will be observed and one will be simulated.
     """
     def computeobserved(self):
         """compute the observed nearest
@@ -138,9 +138,9 @@ class NetworkG(NetworkBase):
 
 
 class NetworkK(NetworkBase):
-    """Compute a network constrained K statistic. This requires the capability
-    to compute a distance matrix between two point patterns. In this case one
-    will be observed and one will be simulated.
+    """Compute a network constrained K statistic. This requires the
+    capability to compute a distance matrix between two point patterns.
+    In this case one will be observed and one will be simulated.
     
     Attributes
     ----------
