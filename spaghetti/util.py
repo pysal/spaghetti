@@ -57,14 +57,16 @@ def get_neighbor_distances(ntw, v0, l):
     
     v0 : int
         Node id
+    
     l : dict
-        key is tuple (start node, end node); value is float.
+        key is tuple (start node, end node); value is ``float``.
         Cost per edge to travel, e.g. distance.
     
     Returns
     -------
+    
     neighbors : dict
-        key is int (node id); value is float (distance)
+        key is int (node id); value is ``float`` (distance)
     
     Examples
     --------
