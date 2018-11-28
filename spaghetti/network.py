@@ -794,7 +794,7 @@ class Network:
         obs_on_network : dict
             Dictionary of observations on the network. 
             Either {(edge):{pt_id:(coords)}} or 
-                   {edge:[(coord),(coord),(coord)]}
+            {edge:[(coord),(coord),(coord)]}
         
         Returns
         -------
