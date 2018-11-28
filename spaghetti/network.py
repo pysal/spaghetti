@@ -1735,7 +1735,6 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
     
     # edges
     edges = util._edges_as_gdf(net, points, id_col=id_col, geom_col=geom_col)
-    # set component ID in element_as_gdf
     
     if nodes_for_edges:
         return edges
