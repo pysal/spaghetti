@@ -309,7 +309,8 @@ class Network:
                 self.adjacencylist[vid].append(nvid)
                 self.adjacencylist[nvid].append(vid)
                 
-                # Sort the edges so that mono-directional keys can be stored.
+                # Sort the edges so that mono-directional
+                # keys can be stored.
                 edgenodes = sorted([vid, nvid])
                 edge = tuple(edgenodes)
                 self.edges.append(edge)
@@ -348,7 +349,8 @@ class Network:
         # 'graph represented' edge.
         self.graph_to_edges = {}
         
-        # build up bridges "rooted" on the initial non-articulation points
+        # build up bridges "rooted" on the initial
+        # non-articulation points
         bridges = []
         for s in segment_nodes:
             bridge = [s]
