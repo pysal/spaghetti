@@ -39,37 +39,46 @@ def compute_length(v0, v1):
     >>> point1, point2 = (0,0), (1,1)
     >>> spgh.util.compute_length(point1, point2)
     1.4142135623730951
+    
     """
     euc_dist = np.sqrt((v0[0] - v1[0])**2 + (v0[1] - v1[1])**2)
     return euc_dist
 
 
 def get_neighbor_distances(ntw, v0, l):
-    """Get distances to the nearest node neighbors along connecting edges.
+    """Get distances to the nearest node neighbors along
+    connecting edges.
     
     Parameters
     ----------
+    
     ntw : spaghetti.Network
         spaghetti Network object.
+    
     v0 : int
         Node id
+    
     l : dict
-        key is tuple (start node, end node); value is float.
+        key is tuple (start node, end node); value is ``float``.
         Cost per edge to travel, e.g. distance.
     
     Returns
     -------
+    
     neighbors : dict
-        key is int (node id); value is float (distance)
+        key is int (node id); value is ``float`` (distance)
     
     Examples
     --------
+    
     >>> import spaghetti as spgh
     >>> from libpysal import examples
     >>> ntw = spgh.Network(examples.get_path('streets.shp'))
-    >>> neighs = spgh.util.get_neighbor_distances(ntw, 0, ntw.edge_lengths)
+    >>> neighs = spgh.util.get_neighbor_distances(ntw, 0,
+    ...                                           ntw.edge_lengths)
     >>> neighs[1]
     102.62353453439829
+    
     """
     edges = ntw.enum_links_node(v0)
     neighbors = {}
@@ -82,7 +91,7 @@ def get_neighbor_distances(ntw, v0, l):
 
 
 def generatetree(pred):
-    """Rebuild the shortest path from root origin to destination
+    """Rebuild the shortest path from root origin to destination.
     
     Parameters
     ----------
@@ -106,6 +115,7 @@ def generatetree(pred):
     >>> tree = spgh.util.generatetree(pred)
     >>> tree[3]
     [23, 22, 20, 19, 170, 2, 0]
+    
     """
     tree = {}
     for i, p in enumerate(pred):
@@ -125,9 +135,9 @@ def generatetree(pred):
 
 
 def dijkstra(ntw, cost, v0, n=float('inf')):
-    """Compute the shortest path between a start node and all other nodes in
-    an origin-destination matrix.
-
+    """Compute the shortest path between a start node and all other
+    nodes in an origin-destination matrix.
+    
     Parameters
     ----------
     
@@ -135,7 +145,7 @@ def dijkstra(ntw, cost, v0, n=float('inf')):
         spaghetti Network object.
     
     cost : dict
-        key is tuple (start node, end node); value is float.
+        key is tuple (start node, end node); value is ``float``.
         Cost per edge to travel, e.g. distance.
     
     v0 : int
@@ -143,7 +153,7 @@ def dijkstra(ntw, cost, v0, n=float('inf')):
     
     n : float
         integer break point to stop iteration and return n neighbors.
-        Default is ('inf').
+        Default is ``'inf'``.
     
     Returns
     -------
@@ -170,6 +180,7 @@ def dijkstra(ntw, cost, v0, n=float('inf')):
     5505.6682
     >>> pred[196]
     133
+    
     """
     distance = [n for x in ntw.node_list]
     idx = ntw.node_list.index(v0)
@@ -207,10 +218,11 @@ def dijkstra_mp(ntw_cost_node):
     ----------
     
     ntw_cost_node : tuple
-        tuple of arguments to pass into dijkstra
-        (1) ntw - spaghetti.Network; spaghetti Network object; (2) cost - dict;
-        key is tuple (start node, end node); value is float - Cost per edge to
-        travel, e.g. distance; (3) node - int; Start node ID
+        tuple of arguments to pass into dijkstra as 
+        (1) ntw - ``spaghetti.Network; spaghetti Network object``;
+        (2) cost - ``dict`` keyed by tuple (start node, end node)
+        with values is ``float`` - Cost per edge to travel, e.g. dist.;
+        (3) node - ``int``; Start node ID
     
     Returns
     -------
@@ -237,6 +249,7 @@ def dijkstra_mp(ntw_cost_node):
     5505.6682
     >>> pred[196]
     133
+    
     """
     ntw, cost, node = ntw_cost_node
     distance, pred = dijkstra(ntw, cost, node)
@@ -270,6 +283,7 @@ def squared_distance_point_segment(point, segment):
     >>> point, segment = (1,1), ((0,0), (2,0))
     >>> spgh.util.squared_distance_point_segment(point, segment)
     (1.0, array([1., 0.]))
+    
     """
     #
     p0, p1 = [np.array(p) for p in segment]
@@ -329,6 +343,7 @@ def snap_points_on_segments(points, segments):
     >>> segments = [Chain([Point((0,0)), Point((2,0))])]
     >>> spgh.util.snap_points_on_segments(points, segments)
     {0: ([(0.0, 0.0), (2.0, 0.0)], array([1., 0.]))}
+    
     """
     
     # Put segments in an Rtree.
@@ -495,4 +510,3 @@ def _edges_as_gdf(net, points, id_col=None, geom_col=None):
         edges['comp_label'] = net.network_component_labels
     
     return edges
-

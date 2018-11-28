@@ -2,8 +2,8 @@ import numpy as np
 
 
 class NetworkBase(object):
-    """Base object for performing network analysis on a spaghetti.Network
-    object.
+    """Base object for performing network analysis on a
+    ``spaghetti.Network`` object.
     
     Parameters
     ----------
@@ -15,26 +15,27 @@ class NetworkBase(object):
         A spaghetti point pattern object.
     
     nsteps : int
-        The number of steps at which the count of the nearest neighbors
-        is computed.
-    
+            The number of steps at which the count of the nearest
+            neighbors is computed.
+        
     permutations : int
-        The number of permutations to perform (default 99).
+        The number of permutations to perform. Default 99.
     
     threshold : float
         The level at which significance is computed.
-        -- 0.5 would be 97.5% and 2.5%
+        (0.5 would be 97.5% and 2.5%).
     
     distribution : str
         The distribution from which random points are sampled
-        -- uniform or poisson
+        Either ``"uniform"`` or ``"poisson"``.
     
     lowerbound : float
-        The lower bound at which the function is computed. (Default 0).
+        The lower bound at which the G-function is computed.
+        Default 0.
     
     upperbound : float
-        The upper bound at which the function is computed. Defaults to
-        the maximum observed nearest neighbor distance.
+        The upper bound at which the G-function is computed.
+        Defaults to the maximum observed nearest neighbor distance.
     
     Attributes
     ----------
@@ -106,9 +107,9 @@ class NetworkBase(object):
 
 
 class NetworkG(NetworkBase):
-    """Compute a network constrained G statistic. This requires the capability
-    to compute a distance matrix between two point patterns. In this case one
-    will be observed and one will be simulated.
+    """Compute a network constrained G statistic. This requires the
+    capability to compute a distance matrix between two point patterns.
+    In this case one will be observed and one will be simulated.
     """
     def computeobserved(self):
         """compute the observed nearest
@@ -138,15 +139,15 @@ class NetworkG(NetworkBase):
 
 
 class NetworkK(NetworkBase):
-    """Compute a network constrained K statistic. This requires the capability
-    to compute a distance matrix between two point patterns. In this case one
-    will be observed and one will be simulated.
+    """Compute a network constrained K statistic. This requires the
+    capability to compute a distance matrix between two point patterns.
+    In this case one will be observed and one will be simulated.
     
     Attributes
     ----------
     
     lam : float
-        lambda value
+        ``lambda`` value
     
     Notes
     -----
@@ -185,15 +186,15 @@ class NetworkK(NetworkBase):
 
 
 class NetworkF(NetworkBase):
-    """Compute a network constrained F statistic. This requires the capability
-    to compute a distance matrix between two point patterns. In this case one
-    will be observed and one will be simulated.
+    """Compute a network constrained F statistic. This requires the
+    capability to compute a distance matrix between two point patterns.
+    In this case one will be observed and one will be simulated.
     
     Attributes
     ----------
     
     fsim : spaghetti.network.SimulatedPointPattern
-        simulated point pattern of `self.npts` points
+        simulated point pattern of ``self.nptsv points
     
     """
     
@@ -245,7 +246,8 @@ def gfunction(nearest, lowerbound, upperbound, nsteps=10):
         The end value of the sequence.
     
     nsteps : int
-        The number of distance bands. Default is 10. Must be non-negative.
+        The number of distance bands. Default is 10. Must be
+        non-negative.
     
     Returns
     -------
@@ -288,7 +290,8 @@ def kfunction(nearest, upperbound, intensity, nsteps=10):
         lambda value
     
     nsteps : int
-        The number of distance bands. Default is 10. Must be non-negative.
+        The number of distance bands. Default is 10. Must be
+        non-negative.
     
     Returns
     -------
@@ -329,7 +332,8 @@ def ffunction(nearest, lowerbound, upperbound, npts, nsteps=10):
         pointpattern.npoints
     
     nsteps : int
-        The number of distance bands. Default is 10. Must be non-negative.
+        The number of distance bands. Default is 10. Must be
+        non-negative.
     
     Returns
     -------
