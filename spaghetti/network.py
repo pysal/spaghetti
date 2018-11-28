@@ -154,8 +154,7 @@ class Network:
     
     def __init__(self, in_data=None, node_sig=11, unique_segs=True,
                  extractgraph=True, w_components=False, weightings=False):
-        """
-        """
+        
         if in_data is not None:
             self.in_data = in_data
             self.node_sig = node_sig
