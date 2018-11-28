@@ -25,7 +25,7 @@ class Network:
     
     in_data : geopandas.GeoDataFrame or str
         The input geographic data. Either (1) a path to a shapefile (str);
-        or (2) a geopandas.GeoDataFrame.
+        or (2) a ``geopandas.GeoDataFrame``.
     
     node_sig : int
         Round the x and y coordinates of all nodes to node_sig significant
@@ -42,7 +42,7 @@ class Network:
     
     w_components : bool
         Set to [True] to record connected components from a
-        `libpysal.weights.weights.W` object. Default is [False].
+        ``libpysal.weights.weights.W`` object. Default is [False].
     
     weightings : {dict, bool}
         If dict, lists of weightings for each edge. If bool, [True]
@@ -224,7 +224,7 @@ class Network:
     
     def extract_components(self, w, graph=False):
         """Extract connected component information from a
-        libpysal.weights.weights.W object
+        ``libpysal.weights.weights.W`` object
         
         Parameters
         ----------
@@ -612,7 +612,7 @@ class Network:
         
         in_data : geopandas.GeoDataFrame or str
             The input geographic data. Either (1) a path to a shapefile (str);
-            or (2) a geopandas.GeoDataFrame.
+            or (2) a ``geopandas.GeoDataFrame``.
         
         name : str
             Name to be assigned to the point dataset.
@@ -959,8 +959,8 @@ class Network:
     
     
     def node_distance_matrix(self, n_processes, gen_tree=False):
-        """ Called from within allneighbordistances(),
-        nearestneighbordistances(), and distancebandweights().
+        """ Called from within ``allneighbordistances()``,
+        ``nearestneighbordistances()``, and ``distancebandweights()``.
         
         Parameters
         -----------
@@ -1029,16 +1029,16 @@ class Network:
         
         sourcepattern : str or spaghetti.network.PointPattern
             The key of a point pattern snapped to the network OR
-            the full spaghetti.network.PointPattern object.
+            the full ``spaghetti.network.PointPattern`` object.
         
         destpattern : str
             (Optional) The key of a point pattern snapped to the network OR
-            the full spaghetti.network.PointPattern object.
+            the full ``spaghetti.network.PointPattern`` object.
         
         fill_diagonal : float, int
             (Optional) Fill the diagonal of the cost matrix. Default in None
-            and will populate the diagonal with numpy.nan Do not declare a
-            destpattern for a custom fill_diagonal.
+            and will populate the diagonal with ``numpy.nan`` Do not declare a
+            destpattern for a custom ``fill_diagonal``.
         
         n_processes : int, str
             (Optional) Specify the number of cores to utilize. Default is 1
@@ -1657,10 +1657,10 @@ class Network:
 
 def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
                    snapped=False, id_col='id', geom_col='geometry'):
-    """Return a GeoDataFrame of network elements. This can be (a) the
-    nodes of a network; (b) the edges of a network; (c) both the nodes
-    and edges of the network; (d) raw point pattern associated with the
-    network; or (e) snapped point pattern of (d).
+    """Return a ``geopandas.GeoDataFrame`` of network elements. This
+    can be (a) the nodes of a network; (b) the edges of a network;
+    (c) both the nodes and edges of the network; (d) raw point pattern
+    associated with the network; or (e) snapped point pattern of (d).
     
     Parameters
     ----------
@@ -1675,11 +1675,11 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
         Extract the network edges. Default is False.
     
     pp_name : str
-        Name of the network `PointPattern` to extract.
+        Name of the network ``PointPattern`` to extract.
         Default is None.
     
     snapped : bool
-        If extracting a network `PointPattern`, set to [True] for
+        If extracting a network ``PointPattern``, set to [True] for
         snapped point locations along the network. Default is False.
     
     id_col : str
@@ -1692,28 +1692,28 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
     ------
     
     KeyError
-        In order to extract a `PointPattern` it must already be a part
-        of the `spaghetti.Network` object. This exception is raised
-        when a `PointPattern` is being extracted that does not exist
-        within the `spaghetti.Network` object.
+        In order to extract a ``PointPattern`` it must already be a part
+        of the ``spaghetti.Network`` object. This exception is raised
+        when a ``PointPattern`` is being extracted that does not exist
+        within the ``spaghetti.Network`` object.
     
     Returns
     -------
     
     points : geopandas.GeoDataFrame
-        Network point elements (either nodes or `PointPattern` points)
-        as a simple `geopandas.GeoDataFrame` of `shapely.Point` objects
-        with an `id` column and `geometry` column.
+        Network point elements (either nodes or ``PointPattern`` points)
+        as a `geopandas.GeoDataFrame` of ``shapely.Point`` objects with
+        an ``id`` column and ``geometry`` column.
     
     lines : geopandas.GeoDataFrame
-        Network edge elements 
-        as a simple `geopandas.GeoDataFrame` of `shapely.LineString`
-        objects with an `id` column and `geometry` column.
+        Network edge elements as a ``geopandas.GeoDataFrame`` of
+        ``shapely.LineString`` objects with an ``id`` column and
+        ``geometry`` column.
     
     Notes
     -----
     
-    This function requires `geopandas`.
+    This function requires ``geopandas``.
     
     """
     
@@ -1753,7 +1753,7 @@ class PointPattern():
     
     in_data : geopandas.GeoDataFrame or str
         The input geographic data. Either (1) a path to a shapefile (str);
-        or (2) a geopandas.GeoDataFrame.
+        or (2) a ``geopandas.GeoDataFrame``.
     
     idvariable : str
         Field in the shapefile to use as an id variable.
