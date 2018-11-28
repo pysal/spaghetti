@@ -1822,24 +1822,27 @@ class PointPattern():
         coordinates.
     
     obs_to_node : list
-       list of incident network nodes to snapped observation points converted
-       from default_dict. Originally in the form of paired left/right nearest
-       network nodes - {netnode1: obs_id1, netnode2: obs_id1,
-       netnode1: obs_id2... netnode1: obs_idn}, then simplified to a list in
-       the form - [netnode1, netnode2, netnode1, netnode2, ...].
+       List of incident network nodes to snapped observation points
+       converted from a ``default_dict``. Originally in the form of
+       paired left/right nearest network nodes {netnode1: obs_id1,
+       netnode2: obs_id1, netnode1: obs_id2... netnode1: obs_idn}, then
+       simplified to a list in the form
+       [netnode1, netnode2, netnode1, netnode2, ...].
        
     dist_to_node : dict
-        Keys are observations ids (int). Values are distance lookup (dict).
-        Within distance lookup (dict) keys are the two incident nodes of the
-        edge and values are distance to each of those edges.
+        Keys are observations ids (``int``). Values are distance lookup
+        (``dict``). Within distance lookup (``dict``) keys are the two
+        incident nodes of the edge and values are distance to each of
+        those edges.
     
     snapped_coordinates : dict
-        Keys are the point ids (int). Values are the snapped x,y
+        Keys are the point ids (``int``). Values are the snapped x,y
         coordinates (tuple).
     
     snap_dist : bool
-        include the distance from the original location to the snapped
-        location along the network. Default is False.
+            Flag as ``True`` to include the distance from the original
+            location to the snapped location along the network. Default
+            is ``False``.
     
     """
     def __init__(self, in_data=None, idvariable=None, attribute=False):
