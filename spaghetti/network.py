@@ -108,7 +108,8 @@ class Network:
     """
     
     def __init__(self, in_data=None, node_sig=11,
-                 unique_segs=True, extractgraph=True):
+                 unique_segs=True, extractgraph=True, 
+                 w_components=False, weightings=None):
         """
         """
         if in_data is not None:
@@ -129,6 +130,11 @@ class Network:
             # This is a spatial representation of the network.
             self.edges = sorted(self.edges)
             
+            if w_components:
+                self.w_network = self.contiguityweights(graph=False,
+                                                        weightings=weightings)
+                
+            
             # Extract the graph.
             if extractgraph:
                 self.extractgraph()
@@ -142,6 +148,13 @@ class Network:
         results for a coordinate are as follows.
             (1) 0.0xxxx, (2) 0.xxxx, (3) x.xxx, (4) xx.xx,
             (5) xxx.x, (6) xxxx.0, (7) xxxx0.0
+        
+        Parameters
+        ----------
+        
+        v : tuple
+            xy coordinate of the vertex
+        
         """
         sig = self.node_sig
         if sig is None:
@@ -151,6 +164,14 @@ class Network:
                             + (sig - 1))\
                  for val in v]
         return tuple(out_v)
+    
+    
+    def _extract_components(self):
+        """
+        """
+        
+        
+            
     
     
     def _extractnetwork(self):
@@ -418,6 +439,8 @@ class Network:
                         working = False
         
         w = weights.W(neighbors, weights=_weights)
+        
+        # 
         
         return w
     
