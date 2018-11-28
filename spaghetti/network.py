@@ -259,6 +259,7 @@ class Network:
             component2edge[cpl] = [k for k,v\
                                      in edge2component.items()\
                                      if v == cpl]
+            sorted(component2edge[cpl])
         
         # component to ring lookup
         component_is_ring = {}
