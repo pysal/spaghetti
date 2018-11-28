@@ -485,7 +485,12 @@ def _edges_as_gdf(net, points, id_col=None, geom_col=None):
         node1 = points.loc[(points[id_col] == node1_id), geom_col].squeeze()
         node2 = points.loc[(points[id_col] == node2_id), geom_col].squeeze()
         edges[(node1_id, node2_id)] = LineString((node1, node2))
-    edges = gpd.GeoDataFrame(list(edges.items()), columns=[id_col, geom_col])
+    edges = gpd.GeoDataFrame(sorted(list(edges.items())),
+                             columns=[id_col, geom_col])
+    
+    # additional columns
+    if hasattr(net, 'network_component_labels'):
+        edges['comp_label'] = net.network_component_labels
     
     return edges
 
