@@ -1915,25 +1915,29 @@ class SimulatedPointPattern():
         The number of points.
     
     obs_to_edge : dict
-        Keys are edge ids (tuple). Values are snapped point information (dict).
-        Withing the snapped point information (dict) keys are observation id
-        (int), and values are snapped coordinates.
+        Keys are edge ids (tuple). Values are snapped point information
+        (``dict``).  Within the snapped point information (``dict``)
+        keys are observation ids (``int``), and values are snapped
+        coordinates.
     
     obs_to_node : list
-       list of incident network nodes to snapped observation points converted
-       from default_dict. Originally in the form of paired left/right nearest
-       network nodes - {netnode1: obs_id1, netnode2: obs_id1,
-       netnode1: obs_id2... netnode1: obs_idn}, then simplified to a list in
-       the form - [netnode1, netnode2, netnode1, netnode2, ...].
+       List of incident network nodes to snapped observation points
+       converted from a ``default_dict``. Originally in the form of
+       paired left/right nearest network nodes {netnode1: obs_id1,
+       netnode2: obs_id1, netnode1: obs_id2... netnode1: obs_idn}, then
+       simplified to a list in the form
+       [netnode1, netnode2, netnode1, netnode2, ...].
        
     dist_to_node : dict
-        Keys are observations ids (int). Values are distance lookup (dict).
-        Within distance lookup (dict) keys are the two incident nodes of the
-        edge and values are distance to each of those edges.
+        Keys are observations ids (``int``). Values are distance lookup
+        (``dict``). Within distance lookup (``dict``) keys are the two
+        incident nodes of the edge and values are distance to each of
+        those edges.
     
     snapped_coordinates : dict
-        Keys are the point ids (int). Values are the snapped x,y
+        Keys are the point ids (``int``). Values are the snapped x,y
         coordinates (tuple).
+    
     """
     def __init__(self):
         self.npoints = 0
