@@ -210,7 +210,7 @@ class Network:
         ----------
         
         v : tuple
-            xy coordinate of the vertex
+            X,Y coordinate of the vertex
         
         """
         sig = self.node_sig
@@ -411,26 +411,26 @@ class Network:
     
     
     def _yieldneighbor(self, node, segment_nodes, bridge):
-        """Used internally, this method traverses a bridge segement to find
-        the source and destination nodes.
+        """Used internally, this method traverses a bridge segement
+        to find the source and destination nodes.
         
         Parameters
         ----------
         
         node : int
-            node id
+            Node id
         
         segment_nodes : list
-            all non-articulation points in the network (degree-2 nodes).
+            All non-articulation points in the network (degree-2 nodes).
         
         bridge : list
-            inital bridge list containing only `node`
+            Inital bridge list containing only ``node``.
         
         Returns
         -------
         
         n : list
-            nodes to keep (articulation points)
+            Nodes to keep (articulation points).
         
         """
         n = []
