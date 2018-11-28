@@ -30,25 +30,25 @@ class Network:
     node_sig : int
         Round the x and y coordinates of all nodes to node_sig
         significant digits (combined significant digits on the left and
-        right of the decimal place). Default is 11. Set to None for no
-        rounding.
+        right of the decimal place). Default is 11. Set to ``None`` for
+        no rounding.
     
     unique_segs : bool
-        If True (default), keep only unique segments (i.e., prune out
-        any duplicated segments). If False keep all segments.
+        If ``True`` (default), keep only unique segments (i.e., prune
+        out any duplicated segments). If ``False`` keep all segments.
     
     extractgraph : bool
-        If True, extract a graph-theoretic object with no degree 2 nodes.
-        Default is True.
+        If ``True``, extract a graph-theoretic object with no degree 2
+        nodes. Default is ``True``.
     
     w_components : bool
-        Set to [True] to record connected components from a
-        ``libpysal.weights.weights.W`` object. Default is [False].
+        Set to ``True`` to record connected components from a
+        ``libpysal.weights.weights.W`` object. Default is False.
     
     weightings : {dict, bool}
-        If dict, lists of weightings for each edge. If bool, [True]
-        sets self.edge_lengths as the weightings, [False] sets to
-        no weightings. Default is False.
+        If ``dict``, lists of weightings for each edge. If ``bool``,
+        ``True`` flags ``self.edge_lengths`` as the weightings,
+        ``False`` sets to no weightings. Default is ``False``.
     
     Attributes
     ----------
