@@ -242,7 +242,7 @@ class Network:
         component_labels = w.component_labels
         
         # edge to component lookup
-        edge2component = dict(zip(self.edges, component_labels))
+        edge2component = dict(zip(edges, component_labels))
         
         # component ID to edge lookup
         component2edge = {}
