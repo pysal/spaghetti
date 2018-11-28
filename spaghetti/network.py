@@ -460,7 +460,7 @@ class Network:
         -------
         
          W : libpysal.weights.weights.W
-            A ``PySAL`` W Object representing the binary adjacency of
+            A ``pysal`` W Object representing the binary adjacency of
             the network.
         
         Examples
@@ -566,12 +566,12 @@ class Network:
             Distance threshold value.
         
         n_processes : int, str
-            (Optional) Specify the number of cores to utilize. Default is 1
-            core. Use (int) to specify an exact number or cores. Use ("all")
-            to request all available cores.
+            (Optional) Specify the number of cores to utilize. Default
+            is 1 core. Use ``int`` to specify an exact number or cores.
+            Use ``"all"`` to request all available cores.
         
         gen_tree : bool
-            rebuild shortest path {True}, or skip {False}
+            Rebuild shortest path with ``True``, or skip with ``False``.
         
         Returns
         -------
