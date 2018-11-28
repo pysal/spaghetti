@@ -24,8 +24,8 @@ class Network:
     ----------
     
     in_data : geopandas.GeoDataFrame or str
-        The input geographic data. Either (1) a path to a shapefile (str);
-        or (2) a ``geopandas.GeoDataFrame``.
+        The input geographic data. Either (1) a path to a shapefile
+        (str); or (2) a ``geopandas.GeoDataFrame``.
     
     node_sig : int
         Round the x and y coordinates of all nodes to node_sig significant
