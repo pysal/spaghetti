@@ -192,8 +192,9 @@ class Network:
                     as_graph = True
                     if network_weightings:
                         weightings = self.graph_lengths
-                    self.w_graph = self.contiguityweights(graph=as_graph,
-                                                         weightings=weightings)
+                    self.w_graph = self.contiguityweights(\
+                                                        graph=as_graph,
+                                                        weightings=weightings)
                     self.extract_components(self.w_graph, graph=as_graph)
                 
             self.node_list = sorted(self.nodes.values())
@@ -324,10 +325,11 @@ class Network:
     
     
     def extractgraph(self):
-        """Using the existing network representation, create a graph-theoretic
-        representation by removing all nodes with a neighbor incidence of two 
-        (non-articulation points). That is, we assume these nodes are bridges
-        between nodes with higher incidence.
+        """Using the existing network representation, create a
+        graph-theoretic representation by removing all nodes with a
+        neighbor incidence of two (non-articulation points). That is, we
+        assume these nodes are bridges between nodes with higher
+        incidence.
         """
         self.graphedges = []
         self.graph_lengths = {}
@@ -556,7 +558,8 @@ class Network:
         return w
     
     
-    def distancebandweights(self, threshold, n_proccess=None, gen_tree=False):
+    def distancebandweights(self, threshold,
+                            n_proccess=None, gen_tree=False):
         """Create distance based weights.
         
         Parameters
