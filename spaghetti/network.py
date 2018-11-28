@@ -1903,9 +1903,10 @@ class PointPattern():
 
 
 class SimulatedPointPattern():
-    """Struct style class to mirror the Point Pattern Class. If the
-    PointPattern class has methods, it might make sense to make this a child of
-    that class. This class is not intended to be used by the external user.
+    """Struct style class to mirror the ``PointPattern`` class. If the
+    ``PointPatternv class has methods, it might make sense to make this
+    a child of that class. This class is not intended to be used by the
+    external user.
     
     Attributes
     ----------
