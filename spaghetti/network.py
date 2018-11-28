@@ -998,7 +998,9 @@ class Network:
         # Single-core processing
         if not n_processes:
             for node in self.node_list:
-                distance, pred = util.dijkstra(self, self.edge_lengths, node)
+                distance, pred = util.dijkstra(self,
+                                               self.edge_lengths,
+                                               node)
                 pred = np.array(pred)
                 if gen_tree:
                     tree = util.generatetree(pred)
@@ -1035,9 +1037,9 @@ class Network:
     def allneighbordistances(self, sourcepattern, destpattern=None,
                              fill_diagonal=None, n_processes=None,
                              gen_tree=False, snap_dist=False):
-        """ Compute either all distances between i and j in a single point
-        pattern or all distances between each i from a source pattern and all
-        j from a destination pattern.
+        """ Compute either all distances between i and j in a single
+        point pattern or all distances between each i from a source
+        pattern and all j from a destination pattern.
         
         Parameters
         ----------
