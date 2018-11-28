@@ -1440,14 +1440,15 @@ class Network:
         
         distribution : str
             The distribution from which random points are sampled
-            -- uniform or poisson
+            Either ``"uniform"`` or ``"poisson"``.
         
         lowerbound : float
-            The lower bound at which the G-function is computed. (Default 0).
+            The lower bound at which the G-function is computed.
+            Default 0.
         
         upperbound : float
-            The upper bound at which the G-function is computed. Defaults to
-            the maximum observed nearest neighbor distance.
+            The upper bound at which the G-function is computed.
+            Defaults to the maximum observed nearest neighbor distance.
         
         Returns
         -------
@@ -1489,26 +1490,27 @@ class Network:
             A spaghetti point pattern object.
         
         nsteps : int
-            The number of steps at which the count of the nearest neighbors
-            is computed.
+            The number of steps at which the count of the nearest
+            neighbors is computed.
         
         permutations : int
-            The number of permutations to perform (default 99).
+            The number of permutations to perform. Default is 99.
         
         threshold : float
             The level at which significance is computed.
-            -- 0.5 would be 97.5% and 2.5%
+            (0.5 would be 97.5% and 2.5%).
         
         distribution : str
             The distribution from which random points are sampled
-            -- uniform or poisson
+            Either ``"uniform"`` or ``"poisson"``.
         
         lowerbound : float
-            The lower bound at which the K-function is computed. (Default 0).
+            The lower bound at which the K-function is computed.
+            Default is 0.
         
         upperbound : float
-            The upper bound at which the K-function is computed. Defaults to
-            the maximum observed nearest neighbor distance.
+            The upper bound at which the K-function is computed.
+            Defaults to the maximum observed nearest neighbor distance.
         
         Returns
         -------
@@ -1631,7 +1633,8 @@ class Network:
                 newedges.add(tuple(sorted([currentstart, currentstop])))
                 
                 # Modify edge_lengths.
-                current_start_stop = tuple(sorted([currentstart, currentstop]))
+                current_start_stop = tuple(sorted([currentstart,
+                                                   currentstop]))
                 sn.edge_lengths[current_start_stop] = interval
                 
                 # Increment the start to the stop.
@@ -1640,6 +1643,7 @@ class Network:
         sn.edges.update(newedges)
         sn.edges.difference_update(removeedges)
         sn.edges = list(sn.edges)
+        
         # Update the point pattern snapping.
         for instance in sn.pointpatterns.values():
             sn._snap_to_edge(instance)
