@@ -1049,34 +1049,38 @@ class Network:
             the full ``spaghetti.network.PointPattern`` object.
         
         destpattern : str
-            (Optional) The key of a point pattern snapped to the network OR
-            the full ``spaghetti.network.PointPattern`` object.
+            (Optional) The key of a point pattern snapped to the network
+            OR the full ``spaghetti.network.PointPattern`` object.
         
         fill_diagonal : float, int
-            (Optional) Fill the diagonal of the cost matrix. Default in None
-            and will populate the diagonal with ``numpy.nan`` Do not declare a
-            destpattern for a custom ``fill_diagonal``.
+            (Optional) Fill the diagonal of the cost matrix. Default is
+            ``None`` and will populate the diagonal with ``numpy.nan``.
+            Do not declare a ``destpattern`` for a custom
+            ``fill_diagonal``.
         
         n_processes : int, str
-            (Optional) Specify the number of cores to utilize. Default is 1
-            core. Use (int) to specify an exact number or cores.  Use ("all")
-            to request all available cores.
+            (Optional) Specify the number of cores to utilize. Default
+            is 1 core. Use ``int`` to specify an exact number or cores.
+             Use ``"all"`` to request all available cores.
         
         gen_tree : bool
-            rebuild shortest path {True}, or skip {False}
+            Rebuild shortest path ``True``, or skip ``False``.
         
         snap_dist : bool
-            include the distance from the original location to the snapped
-            location along the network. Default is False.
+            Flag as ``True`` to include the distance from the original
+            location to the snapped location along the network. Default
+            is ``False``.
         
         Returns
         -------
         
         nearest : numpy.ndarray
-            An array of shape (n,n) storing distances between all points.
+            An array of shape (n,n) storing distances between all
+            points.
         
         tree_nearest : dict
-            nearest network node to point pattern node shortest path lookup
+            Nearest network node to point pattern node shortest
+            path lookup.
         
         Examples
         --------
@@ -1172,7 +1176,8 @@ class Network:
                 if set1 == set2:  # same edge
                     x1, y1 = sourcepattern.snapped_coordinates[p1]
                     x2, y2 = destpattern.snapped_coordinates[p2]
-                    computed_length = util.compute_length((x1, y1), (x2, y2))
+                    computed_length = util.compute_length((x1, y1),
+                                                          (x2, y2))
                     nearest[p1, p2] = computed_length
                     
                 else:
