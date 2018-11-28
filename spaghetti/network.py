@@ -106,13 +106,14 @@ class Network:
         Component labels for networks segment
     
     network_component2edge : dict
-        Lookup {int: list} for segments comprising network connected
-        components keyed by component labels with edges in a list
-        as values.
+        Lookup ``{int: list}`` for segments comprising network
+        connected components keyed by component labels with edges in
+        a ``list`` as values.
     
     network_component_is_ring : dict
-        Lookup {int: bool} keyed by component labels with values as
-        [True] if the component is a closed ring, otherwise [False].
+        Lookup ``{int: bool}`` keyed by component labels with values
+        as ``True`` if the component is a closed ring, otherwise
+        ``False``.
     
     w_graph : libpysal.weights.weights.W
         Weights object created from the network segments
@@ -124,13 +125,13 @@ class Network:
         Component labels for networks segment
     
     graph_component2edge : dict
-        Lookup {int: list} for segments comprising network connected
+        Lookup ``{int: list}`` for segments comprising network connected
         components keyed by component labels with edges in a list
         as values.
     
     graph_component_is_ring : dict
-        Lookup {int: bool} keyed by component labels with values as
-        [True] if the component is a closed ring, otherwise [False].
+        Lookup ``{int: bool}`` keyed by component labels with values as
+        ``True`` if the component is a closed ring, otherwise ``False``.
     
     Examples
     --------
