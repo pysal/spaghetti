@@ -63,12 +63,12 @@ class Network:
         Keys are tuples of node coords and values are the node ID.
     
     edge_lengths : dict
-        Keys are tuples of sorted node IDs representing an edge and values
-        are the length.
+        Keys are tuples of sorted node IDs representing an edge and
+        values are the length.
     
     pointpatterns : dict
-        Keys are a string name of the pattern and values are point pattern
-        class instances.
+        Keys are a string name of the pattern and values are
+        ``PointPattern`` class instances.
     
     node_coords : dict
         Keys are the node ID and values are the (x,y) coordinates
@@ -81,10 +81,10 @@ class Network:
         List of node IDs.
     
     alldistances : dict
-        Keys are the node IDs (int). Values are tuples with two elements as
-        follows (1) a list of the shortest path distances; (2) a dict with the
-        key being the id of the destination node and the value being a list of
-        the shortest path.
+        Keys are the node IDs (``int``). Values are tuples with two
+        elements as follows (1) a list of the shortest path distances;
+        (2) a dict with the key being the id of the destination node and
+        the value being a list of the shortest path.
     
     distancematrix : numpy.ndarray
         all network nodes (non-observations) distance matrix.
@@ -93,8 +93,8 @@ class Network:
         tuples of graph edge ids.
     
     graph_lengths : dict
-        Keys are the graph edge ids (tuple). Values are the graph edge length
-        (float).
+        Keys are the graph edge ids (tuple). Values are the graph edge
+        length (``float``).
     
     w_network : libpysal.weights.weights.W
         Weights object created from the network segments
