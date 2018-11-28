@@ -981,10 +981,10 @@ class Network:
         -----------
         
         n_processes : int
-            cpu cores for multiprocessing.
+            Cpu cores for multiprocessing.
        
         gen_tree : bool
-            rebuild shortest path {True}, or skip {False}
+            Rebuild shortest path ``True``, or skip ``False``.
         
         Notes
         -----
