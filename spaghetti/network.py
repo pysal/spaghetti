@@ -1658,8 +1658,8 @@ class Network:
         ----------
         
         filename : str
-            The filename where the network should be saved. This should be a
-            full path or it will be save in the current directory.
+            The filename where the network should be saved. This should
+            be a full path or it will be save in the current directory.
         
         Examples
         --------
@@ -1709,24 +1709,25 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
         network object
     
     nodes : bool
-        Extract the network nodes (vertices). Default is False.
+        Extract the network nodes (vertices). Default is ``False``.
     
     edges : bool
-        Extract the network edges. Default is False.
+        Extract the network edges. Default is ``False``.
     
     pp_name : str
         Name of the network ``PointPattern`` to extract.
-        Default is None.
+        Default is ``None``.
     
     snapped : bool
-        If extracting a network ``PointPattern``, set to [True] for
-        snapped point locations along the network. Default is False.
+        If extracting a network ``PointPattern``, set to ``True`` for
+        snapped point locations along the network. Default is ``False``.
     
     id_col : str
-        GeoDataFrame column name for IDs. Default is 'id'.
+        GeoDataFrame column name for IDs. Default is ``'id'``.
     
     geom_col : str
-        GeoDataFrame column name for geometry. Default is 'geometry'.
+        GeoDataFrame column name for geometry. Default is
+        ``'geometry'``.
     
     Raises
     ------
@@ -1765,8 +1766,9 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
 
     # nodes/points
     if nodes or nodes_for_edges or pp_name:
-        points = util._points_as_gdf(net, nodes, nodes_for_edges, pp_name,
-                                     snapped, id_col=id_col, geom_col=geom_col)
+        points = util._points_as_gdf(net, nodes, nodes_for_edges,
+                                     pp_name, snapped, id_col=id_col,
+                                     geom_col=geom_col)
         
         # return points geodataframe if edges not specified or
         # if extracting `PointPattern` points
@@ -1774,7 +1776,8 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
             return points
     
     # edges
-    edges = util._edges_as_gdf(net, points, id_col=id_col, geom_col=geom_col)
+    edges = util._edges_as_gdf(net, points,
+                               id_col=id_col, geom_col=geom_col)
     
     if nodes_for_edges:
         return edges
