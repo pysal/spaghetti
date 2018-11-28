@@ -401,7 +401,7 @@ class Network:
                 if key == neigh:
                     continue
                 if key[0] == neigh[0] or key[0] == neigh[1]\
-                        or key[1] == neigh[0] or key[1] == neigh[1]:
+                or key[1] == neigh[0] or key[1] == neigh[1]:
                     neighbors[key].append(neigh)
                     if weightings:
                         _weights[key].append(weightings[neigh])
