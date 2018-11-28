@@ -695,6 +695,7 @@ class Network:
         
         pattern : spaghetti.network.PointPattern
             point pattern object
+        
         idx : int
             point id
         
@@ -723,14 +724,15 @@ class Network:
         -------
         
         obs_to_edge : dict
-            Dict with edges as keys and lists of points as values.
+            Dictionary with edges as keys and lists of points as values.
         
         edge_to_obs : dict
-            Dict with point ids as keys and edge tuples as values.
+            Dictionary with point ids as keys and edge tuples as values.
         
         dist_to_node : dict
-            Dict with point ids as keys and values as dicts with keys for node
-            ids and values as distances from point to node.
+            Dictionary with point ids as keys and values as dicts
+            with keys for node ids and values as distances from point
+            to node.
         
         """
         
