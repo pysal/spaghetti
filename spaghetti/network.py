@@ -133,7 +133,7 @@ class Network:
             if w_components:
                 self.w_network = self.contiguityweights(graph=False,
                                                         weightings=weightings)
-                
+                self._extract_components(self.w_network)
             
             # Extract the graph.
             if extractgraph:
@@ -166,12 +166,42 @@ class Network:
         return tuple(out_v)
     
     
-    def _extract_components(self):
-        """
+    def _extract_components(self, w, graph=False):
         """
         
+        Parameters
+        ----------
         
-            
+        w : libpysal.weights.weights.W
+            weights object created from the network segments (either
+            raw or graph-theoretic)
+        
+        """
+        
+        # connected component count and labels
+        self.n_components = w.n_components
+        self.component_labels = w.component_labels
+        
+        # edge to component lookup
+        edge2component = dict(zip(edges, self.component_labels))
+        
+        # component ID to edge lookup
+        component2edge = {}
+        cp_labs = set(w.component_labels)
+        for cpl in cp_labs:
+            component2edge[cpl] = [k for k,v\
+                                     in edge2component.items()\
+                                     if v == cpl]
+        self.component_edges = component2edge
+        
+        # component to ring lookup
+        component_is_ring = {}
+        for k,vs in self.component_edges.items():
+            component_is_ring[k] = True
+            for v in vs:
+                if len(w.neighbors[v]) != 2:
+                    component_is_ring[k] = False
+        self.component_is_ring = component_is_ring
     
     
     def _extractnetwork(self):
