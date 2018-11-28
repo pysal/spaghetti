@@ -245,7 +245,8 @@ def gfunction(nearest, lowerbound, upperbound, nsteps=10):
         The end value of the sequence.
     
     nsteps : int
-        The number of distance bands. Default is 10. Must be non-negative.
+        The number of distance bands. Default is 10. Must be
+        non-negative.
     
     Returns
     -------
@@ -288,7 +289,8 @@ def kfunction(nearest, upperbound, intensity, nsteps=10):
         lambda value
     
     nsteps : int
-        The number of distance bands. Default is 10. Must be non-negative.
+        The number of distance bands. Default is 10. Must be
+        non-negative.
     
     Returns
     -------
