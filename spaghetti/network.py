@@ -391,24 +391,32 @@ class Network:
         else:
             _weights = None
         
-        for key in edges:
-            neighbors[key] = []
-            if weightings:
-                _weights[key] = []
+        working = True
+        while working:
+            
+            for key in edges:
+                neighbors[key] = []
+                if weightings:
+                    _weights[key] = []
                 
-            for neigh in edges:
-                if key == neigh:
-                    continue
-                if key[0] == neigh[0] or key[0] == neigh[1]\
-                or key[1] == neigh[0] or key[1] == neigh[1]:
-                    neighbors[key].append(neigh)
-                    if weightings:
-                        _weights[key].append(weightings[neigh])
-                # TODO: Add a break condition - everything is sorted,
-                #       so we know when we have stepped beyond
-                #       a possible neighbor.
-                # if key[1] > neigh[1]:  #NOT THIS
-                    # break
+                for neigh in edges:
+                    
+                    if key == neigh:
+                        continue
+                    
+                    if key[0] == neigh[0] or key[0] == neigh[1]\
+                    or key[1] == neigh[0] or key[1] == neigh[1]:
+                        neighbors[key].append(neigh)
+                        
+                        if weightings:
+                            _weights[key].append(weightings[neigh])
+                    
+                    # break condition
+                    # -- everything is sorted, so we know when we have
+                    # stepped beyond a possible neighbor
+                    if key[1] > neigh[1]:
+                        working = False
+        
         w = weights.W(neighbors, weights=_weights)
         
         return w
