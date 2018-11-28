@@ -44,8 +44,10 @@ class Network:
         Set to [True] to record connected components from a
         `libpysal.weights.weights.W` object. Default is [False].
     
-    weightings : dict
-        Dict of lists of weightings for each edge.
+    weightings : {dict, bool}
+        If dict, lists of weightings for each edge. If bool, [True]
+        sets self.edge_lengths as the weightings, [False] sets to
+        no weightings. Default is False.
     
     Attributes
     ----------
@@ -151,7 +153,7 @@ class Network:
     """
     
     def __init__(self, in_data=None, node_sig=11, unique_segs=True,
-                 extractgraph=True, w_components=False, weightings=None):
+                 extractgraph=True, w_components=False, weightings=False):
         """
         """
         if in_data is not None:
@@ -174,6 +176,10 @@ class Network:
             
             if w_components:
                 as_graph = False
+                network_weightings = False
+                if weightings is True:
+                    weightings = self.edge_lengths
+                    network_weightings = True
                 self.w_network = self.contiguityweights(graph=as_graph,
                                                         weightings=weightings)
                 self.extract_components(self.w_network, graph=as_graph)
@@ -183,6 +189,8 @@ class Network:
                 self.extractgraph()
                 if w_components:
                     as_graph = True
+                    if network_weightings:
+                        weightings = self.graph_lengths
                     self.w_graph = self.contiguityweights(graph=as_graph,
                                                          weightings=weightings)
                     self.extract_components(self.w_graph, graph=as_graph)
