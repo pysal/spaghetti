@@ -256,10 +256,9 @@ class Network:
         component2edge = {}
         cp_labs = set(w.component_labels)
         for cpl in cp_labs:
-            component2edge[cpl] = [k for k,v\
-                                     in edge2component.items()\
-                                     if v == cpl]
-            sorted(component2edge[cpl])
+            component2edge[cpl] = sorted([k for k,v\
+                                          in edge2component.items()\
+                                          if v == cpl])
         
         # component to ring lookup
         component_is_ring = {}
