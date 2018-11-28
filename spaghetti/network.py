@@ -28,13 +28,14 @@ class Network:
         (str); or (2) a ``geopandas.GeoDataFrame``.
     
     node_sig : int
-        Round the x and y coordinates of all nodes to node_sig significant
-        digits (combined significant digits on the left and right of the
-        decimal place). Default is 11. Set to None for no rounding.
+        Round the x and y coordinates of all nodes to node_sig
+        significant digits (combined significant digits on the left and
+        right of the decimal place). Default is 11. Set to None for no
+        rounding.
     
     unique_segs : bool
-        If True (default), keep only unique segments (i.e., prune out any
-        duplicated segments). If False keep all segments.
+        If True (default), keep only unique segments (i.e., prune out
+        any duplicated segments). If False keep all segments.
     
     extractgraph : bool
         If True, extract a graph-theoretic object with no degree 2 nodes.
