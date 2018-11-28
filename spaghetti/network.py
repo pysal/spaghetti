@@ -40,6 +40,11 @@ class Network:
         If True, extract a graph-theoretic object with no degree 2 nodes.
         Default is True.
     
+    w_components : bool
+    
+    
+    weightings : 
+    
     Attributes
     ----------
     
@@ -107,9 +112,8 @@ class Network:
     
     """
     
-    def __init__(self, in_data=None, node_sig=11,
-                 unique_segs=True, extractgraph=True, 
-                 w_components=False, weightings=None):
+    def __init__(self, in_data=None, node_sig=11, unique_segs=True,
+                 extractgraph=True, w_components=False, weightings=None):
         """
         """
         if in_data is not None:
@@ -131,9 +135,10 @@ class Network:
             self.edges = sorted(self.edges)
             
             if w_components:
-                self.w_network = self.contiguityweights(graph=False,
+                as_graph = False
+                self.w_network = self.contiguityweights(graph=as_graph,
                                                         weightings=weightings)
-                self._extract_components(self.w_network)
+                self.extract_components(self.w_network, graph=as_graph)
             
             # Extract the graph.
             if extractgraph:
@@ -166,8 +171,9 @@ class Network:
         return tuple(out_v)
     
     
-    def _extract_components(self, w, graph=False):
-        """
+    def extract_components(self, w, graph=False):
+        """Extract connected component information from a
+        libpysal.weights.weights.W object
         
         Parameters
         ----------
@@ -176,14 +182,23 @@ class Network:
             weights object created from the network segments (either
             raw or graph-theoretic)
         
+        graph : bool
+        
+        
         """
+        if graph:
+            edges = self.graphedges
+            obj_type = 'graph_'
+        else:
+            edges = self.edges
+            obj_type = 'network_'
         
         # connected component count and labels
-        self.n_components = w.n_components
-        self.component_labels = w.component_labels
+        n_components = w.n_components
+        component_labels = w.component_labels
         
         # edge to component lookup
-        edge2component = dict(zip(edges, self.component_labels))
+        edge2component = dict(zip(self.edges, component_labels))
         
         # component ID to edge lookup
         component2edge = {}
@@ -192,16 +207,25 @@ class Network:
             component2edge[cpl] = [k for k,v\
                                      in edge2component.items()\
                                      if v == cpl]
-        self.component_edges = component2edge
         
         # component to ring lookup
         component_is_ring = {}
-        for k,vs in self.component_edges.items():
+        for k,vs in component2edge.items():
             component_is_ring[k] = True
             for v in vs:
                 if len(w.neighbors[v]) != 2:
                     component_is_ring[k] = False
-        self.component_is_ring = component_is_ring
+        
+        # set all new variables into list
+        extracted_attrs = [['n_components', n_components],
+                           ['component_labels', component_labels],
+                           ['component2edge', component2edge],
+                           ['component_is_ring', component_is_ring]]
+        
+        # iterate over list and set attribute with
+        # either "network" or "graph" extension
+        for (attr_str, attr) in extracted_attrs:
+            setattr(self, obj_type+attr_str, attr)
     
     
     def _extractnetwork(self):
@@ -469,8 +493,6 @@ class Network:
                         working = False
         
         w = weights.W(neighbors, weights=_weights)
-        
-        # 
         
         return w
     
@@ -1661,6 +1683,7 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
     
     # edges
     edges = util._edges_as_gdf(net, points, id_col=id_col, geom_col=geom_col)
+    # set component ID in element_as_gdf
     
     if nodes_for_edges:
         return edges
