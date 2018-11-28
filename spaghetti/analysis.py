@@ -146,7 +146,7 @@ class NetworkK(NetworkBase):
     ----------
     
     lam : float
-        lambda value
+        ``lambda`` value
     
     Notes
     -----
@@ -185,15 +185,15 @@ class NetworkK(NetworkBase):
 
 
 class NetworkF(NetworkBase):
-    """Compute a network constrained F statistic. This requires the capability
-    to compute a distance matrix between two point patterns. In this case one
-    will be observed and one will be simulated.
+    """Compute a network constrained F statistic. This requires the
+    capability to compute a distance matrix between two point patterns.
+    In this case one will be observed and one will be simulated.
     
     Attributes
     ----------
     
     fsim : spaghetti.network.SimulatedPointPattern
-        simulated point pattern of `self.npts` points
+        simulated point pattern of ``self.nptsv points
     
     """
     
