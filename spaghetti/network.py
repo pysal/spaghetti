@@ -25,7 +25,7 @@ class Network:
     
     in_data : geopandas.GeoDataFrame or str
         The input geographic data. Either (1) a path to a shapefile (str);
-        or (2) a geopandas.GeoDataFrame.
+        or (2) a ``geopandas.GeoDataFrame``.
     
     node_sig : int
         Round the x and y coordinates of all nodes to node_sig significant
@@ -39,6 +39,15 @@ class Network:
     extractgraph : bool
         If True, extract a graph-theoretic object with no degree 2 nodes.
         Default is True.
+    
+    w_components : bool
+        Set to [True] to record connected components from a
+        ``libpysal.weights.weights.W`` object. Default is [False].
+    
+    weightings : {dict, bool}
+        If dict, lists of weightings for each edge. If bool, [True]
+        sets self.edge_lengths as the weightings, [False] sets to
+        no weightings. Default is False.
     
     Attributes
     ----------
@@ -86,6 +95,42 @@ class Network:
         Keys are the graph edge ids (tuple). Values are the graph edge length
         (float).
     
+    w_network : libpysal.weights.weights.W
+        Weights object created from the network segments
+    
+    network_n_components : n
+        Count of connected components in the network.
+    
+    network_component_labels : numpy.ndarray
+        Component labels for networks segment
+    
+    network_component2edge : dict
+        Lookup {int: list} for segments comprising network connected
+        components keyed by component labels with edges in a list
+        as values.
+    
+    network_component_is_ring : dict
+        Lookup {int: bool} keyed by component labels with values as
+        [True] if the component is a closed ring, otherwise [False].
+    
+    w_graph : libpysal.weights.weights.W
+        Weights object created from the network segments
+    
+    graph_n_components : n
+        Count of connected components in the network.
+    
+    graph_component_labels : numpy.ndarray
+        Component labels for networks segment
+    
+    graph_component2edge : dict
+        Lookup {int: list} for segments comprising network connected
+        components keyed by component labels with edges in a list
+        as values.
+    
+    graph_component_is_ring : dict
+        Lookup {int: bool} keyed by component labels with values as
+        [True] if the component is a closed ring, otherwise [False].
+    
     Examples
     --------
     
@@ -107,10 +152,9 @@ class Network:
     
     """
     
-    def __init__(self, in_data=None, node_sig=11,
-                 unique_segs=True, extractgraph=True):
-        """
-        """
+    def __init__(self, in_data=None, node_sig=11, unique_segs=True,
+                 extractgraph=True, w_components=False, weightings=False):
+        
         if in_data is not None:
             self.in_data = in_data
             self.node_sig = node_sig
@@ -129,9 +173,26 @@ class Network:
             # This is a spatial representation of the network.
             self.edges = sorted(self.edges)
             
+            if w_components:
+                as_graph = False
+                network_weightings = False
+                if weightings is True:
+                    weightings = self.edge_lengths
+                    network_weightings = True
+                self.w_network = self.contiguityweights(graph=as_graph,
+                                                        weightings=weightings)
+                self.extract_components(self.w_network, graph=as_graph)
+            
             # Extract the graph.
             if extractgraph:
                 self.extractgraph()
+                if w_components:
+                    as_graph = True
+                    if network_weightings:
+                        weightings = self.graph_lengths
+                    self.w_graph = self.contiguityweights(graph=as_graph,
+                                                         weightings=weightings)
+                    self.extract_components(self.w_graph, graph=as_graph)
                 
             self.node_list = sorted(self.nodes.values())
     
@@ -142,6 +203,13 @@ class Network:
         results for a coordinate are as follows.
             (1) 0.0xxxx, (2) 0.xxxx, (3) x.xxx, (4) xx.xx,
             (5) xxx.x, (6) xxxx.0, (7) xxxx0.0
+        
+        Parameters
+        ----------
+        
+        v : tuple
+            xy coordinate of the vertex
+        
         """
         sig = self.node_sig
         if sig is None:
@@ -151,6 +219,64 @@ class Network:
                             + (sig - 1))\
                  for val in v]
         return tuple(out_v)
+    
+    
+    def extract_components(self, w, graph=False):
+        """Extract connected component information from a
+        ``libpysal.weights.weights.W`` object
+        
+        Parameters
+        ----------
+        
+        w : libpysal.weights.weights.W
+            Weights object created from the network segments (either
+            raw or graph-theoretic)
+        
+        graph : bool
+            Flag for raw network [False] or graph-theoretic network
+            [True]. Default is False.
+        
+        """
+        if graph:
+            edges = self.graphedges
+            obj_type = 'graph_'
+        else:
+            edges = self.edges
+            obj_type = 'network_'
+        
+        # connected component count and labels
+        n_components = w.n_components
+        component_labels = w.component_labels
+        
+        # edge to component lookup
+        edge2component = dict(zip(edges, component_labels))
+        
+        # component ID to edge lookup
+        component2edge = {}
+        cp_labs = set(w.component_labels)
+        for cpl in cp_labs:
+            component2edge[cpl] = sorted([k for k,v\
+                                          in edge2component.items()\
+                                          if v == cpl])
+        
+        # component to ring lookup
+        component_is_ring = {}
+        for k,vs in component2edge.items():
+            component_is_ring[k] = True
+            for v in vs:
+                if len(w.neighbors[v]) != 2:
+                    component_is_ring[k] = False
+        
+        # set all new variables into list
+        extracted_attrs = [['n_components', n_components],
+                           ['component_labels', component_labels],
+                           ['component2edge', component2edge],
+                           ['component_is_ring', component_is_ring]]
+        
+        # iterate over list and set attribute with
+        # either "network" or "graph" extension
+        for (attr_str, attr) in extracted_attrs:
+            setattr(self, obj_type+attr_str, attr)
     
     
     def _extractnetwork(self):
@@ -379,7 +505,6 @@ class Network:
         
         """
         
-        neighbors = {}
         neighbors = OrderedDict()
         
         if graph:
@@ -391,25 +516,33 @@ class Network:
             _weights = {}
         else:
             _weights = None
+        
+        working = True
+        while working:
             
-        for key in edges:
-            neighbors[key] = []
-            if weightings:
-                _weights[key] = []
+            for key in edges:
+                neighbors[key] = []
+                if weightings:
+                    _weights[key] = []
                 
-            for neigh in edges:
-                if key == neigh:
-                    continue
-                if key[0] == neigh[0] or key[0] == neigh[1]\
-                        or key[1] == neigh[0] or key[1] == neigh[1]:
-                    neighbors[key].append(neigh)
-                    if weightings:
-                        _weights[key].append(weightings[neigh])
-                # TODO: Add a break condition - everything is sorted,
-                #       so we know when we have stepped beyond
-                #       a possible neighbor.
-                # if key[1] > neigh[1]:  #NOT THIS
-                    # break
+                for neigh in edges:
+                    
+                    if key == neigh:
+                        continue
+                    
+                    if key[0] == neigh[0] or key[0] == neigh[1]\
+                    or key[1] == neigh[0] or key[1] == neigh[1]:
+                        neighbors[key].append(neigh)
+                        
+                        if weightings:
+                            _weights[key].append(weightings[neigh])
+                    
+                    # break condition
+                    # -- everything is sorted, so we know when we have
+                    # stepped beyond a possible neighbor
+                    if key[1] > neigh[1]:
+                        working = False
+        
         w = weights.W(neighbors, weights=_weights)
         
         return w
@@ -478,7 +611,7 @@ class Network:
         
         in_data : geopandas.GeoDataFrame or str
             The input geographic data. Either (1) a path to a shapefile (str);
-            or (2) a geopandas.GeoDataFrame.
+            or (2) a ``geopandas.GeoDataFrame``.
         
         name : str
             Name to be assigned to the point dataset.
@@ -825,8 +958,8 @@ class Network:
     
     
     def node_distance_matrix(self, n_processes, gen_tree=False):
-        """ Called from within allneighbordistances(),
-        nearestneighbordistances(), and distancebandweights().
+        """ Called from within ``allneighbordistances()``,
+        ``nearestneighbordistances()``, and ``distancebandweights()``.
         
         Parameters
         -----------
@@ -895,16 +1028,16 @@ class Network:
         
         sourcepattern : str or spaghetti.network.PointPattern
             The key of a point pattern snapped to the network OR
-            the full spaghetti.network.PointPattern object.
+            the full ``spaghetti.network.PointPattern`` object.
         
         destpattern : str
             (Optional) The key of a point pattern snapped to the network OR
-            the full spaghetti.network.PointPattern object.
+            the full ``spaghetti.network.PointPattern`` object.
         
         fill_diagonal : float, int
             (Optional) Fill the diagonal of the cost matrix. Default in None
-            and will populate the diagonal with numpy.nan Do not declare a
-            destpattern for a custom fill_diagonal.
+            and will populate the diagonal with ``numpy.nan`` Do not declare a
+            destpattern for a custom ``fill_diagonal``.
         
         n_processes : int, str
             (Optional) Specify the number of cores to utilize. Default is 1
@@ -1523,10 +1656,10 @@ class Network:
 
 def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
                    snapped=False, id_col='id', geom_col='geometry'):
-    """Return a GeoDataFrame of network elements. This can be (a) the
-    nodes of a network; (b) the edges of a network; (c) both the nodes
-    and edges of the network; (d) raw point pattern associated with the
-    network; or (e) snapped point pattern of (d).
+    """Return a ``geopandas.GeoDataFrame`` of network elements. This
+    can be (a) the nodes of a network; (b) the edges of a network;
+    (c) both the nodes and edges of the network; (d) raw point pattern
+    associated with the network; or (e) snapped point pattern of (d).
     
     Parameters
     ----------
@@ -1541,11 +1674,11 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
         Extract the network edges. Default is False.
     
     pp_name : str
-        Name of the network `PointPattern` to extract.
+        Name of the network ``PointPattern`` to extract.
         Default is None.
     
     snapped : bool
-        If extracting a network `PointPattern`, set to [True] for
+        If extracting a network ``PointPattern``, set to [True] for
         snapped point locations along the network. Default is False.
     
     id_col : str
@@ -1558,28 +1691,28 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
     ------
     
     KeyError
-        In order to extract a `PointPattern` it must already be a part
-        of the `spaghetti.Network` object. This exception is raised
-        when a `PointPattern` is being extracted that does not exist
-        within the `spaghetti.Network` object.
+        In order to extract a ``PointPattern`` it must already be a part
+        of the ``spaghetti.Network`` object. This exception is raised
+        when a ``PointPattern`` is being extracted that does not exist
+        within the ``spaghetti.Network`` object.
     
     Returns
     -------
     
     points : geopandas.GeoDataFrame
-        Network point elements (either nodes or `PointPattern` points)
-        as a simple `geopandas.GeoDataFrame` of `shapely.Point` objects
-        with an `id` column and `geometry` column.
+        Network point elements (either nodes or ``PointPattern`` points)
+        as a `geopandas.GeoDataFrame` of ``shapely.Point`` objects with
+        an ``id`` column and ``geometry`` column.
     
     lines : geopandas.GeoDataFrame
-        Network edge elements 
-        as a simple `geopandas.GeoDataFrame` of `shapely.LineString`
-        objects with an `id` column and `geometry` column.
+        Network edge elements as a ``geopandas.GeoDataFrame`` of
+        ``shapely.LineString`` objects with an ``id`` column and
+        ``geometry`` column.
     
     Notes
     -----
     
-    This function requires `geopandas`.
+    This function requires ``geopandas``.
     
     """
     
@@ -1619,7 +1752,7 @@ class PointPattern():
     
     in_data : geopandas.GeoDataFrame or str
         The input geographic data. Either (1) a path to a shapefile (str);
-        or (2) a geopandas.GeoDataFrame.
+        or (2) a ``geopandas.GeoDataFrame``.
     
     idvariable : str
         Field in the shapefile to use as an id variable.

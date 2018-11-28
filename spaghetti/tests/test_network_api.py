@@ -18,9 +18,10 @@ class TestNetwork(unittest.TestCase):
         self.path_to_shp = examples.get_path('streets.shp')
         
         # network instantiated from shapefile
-        self.ntw_from_shp = spgh.Network(in_data=self.path_to_shp)
-        
-        self.n_known_edges, self.n_known_nodes= 303, 230
+        self.ntw_from_shp = spgh.Network(in_data=self.path_to_shp,
+                                         weightings=True,
+                                         w_components=True)
+        self.n_known_edges, self.n_known_nodes = 303, 230
     
     def tearDown(self):
         pass
@@ -29,6 +30,11 @@ class TestNetwork(unittest.TestCase):
         # shp test against known
         self.assertEqual(len(self.ntw_from_shp.edges), self.n_known_edges)
         self.assertEqual(len(self.ntw_from_shp.nodes), self.n_known_nodes)
+        edgelengths = self.ntw_from_shp.edge_lengths.values()
+        self.assertAlmostEqual(sum(edgelengths), 104414.0920159, places=5)
+        self.assertIn(0, self.ntw_from_shp.adjacencylist[1])
+        self.assertIn(0, self.ntw_from_shp.adjacencylist[2])
+        self.assertNotIn(0, self.ntw_from_shp.adjacencylist[3])
     
     @unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
     def test_network_from_geopandas(self):
@@ -46,27 +52,23 @@ class TestNetwork(unittest.TestCase):
         self.assertEqual(len(self.ntw_from_shp.nodes),
                          len(self.ntw_from_gdf.nodes))
     
-    def test_extract_network(self):
-        self.assertEqual(len(self.ntw_from_shp.edges), 303)
-        self.assertEqual(len(self.ntw_from_shp.nodes), 230)
-        edgelengths = self.ntw_from_shp.edge_lengths.values()
-        self.assertAlmostEqual(sum(edgelengths), 104414.0920159, places=5)
-        self.assertIn(0, self.ntw_from_shp.adjacencylist[1])
-        self.assertIn(0, self.ntw_from_shp.adjacencylist[2])
-        self.assertNotIn(0, self.ntw_from_shp.adjacencylist[3])
+    def test_contiguity_weights(self):
+        known_network_histo = [(2, 35), (3, 89), (4, 105), (5, 61), (6, 13)]
+        observed_network_histo = self.ntw_from_shp.w_network.histogram
+        self.assertEqual(known_network_histo, observed_network_histo)
+        
+        known_graph_histo = [(2, 2), (3, 2), (4, 45), (5, 82), (6, 48)]
+        observed_graph_histo = self.ntw_from_shp.w_graph.histogram
+        self.assertEqual(observed_graph_histo, known_graph_histo)
     
-    def test_contiguity_weights_network(self):
-        ws = self.ntw_from_shp.edge_lengths
-        w = self.ntw_from_shp.contiguityweights(graph=False, weightings=ws)
-        self.assertEqual(w.n, 303)
-        self.assertEqual(w.histogram,
-                         [(2, 35), (3, 89), (4, 105), (5, 61), (6, 13)])
-    
-    def test_contiguity_weights_graph(self):
-        w = self.ntw_from_shp.contiguityweights(graph=True)
-        self.assertEqual(w.n, 179)
-        self.assertEqual(w.histogram,
-                         [(2, 2), (3, 2), (4, 45), (5, 82), (6, 48)])
+    def test_components(self):
+        known_network_edge = (225, 226)
+        observed_network_edge = self.ntw_from_shp.network_component2edge[0][-1]
+        self.assertEqual(observed_network_edge, known_network_edge)
+        
+        known_graph_edge = (206, 207)
+        observed_graph_edge = self.ntw_from_shp.graph_component2edge[0][-1]
+        self.assertEqual(observed_graph_edge, known_graph_edge)
     
     def test_distance_band_weights(self):
         # I do not trust this result, test should be manually checked.
