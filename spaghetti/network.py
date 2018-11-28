@@ -1039,7 +1039,7 @@ class Network:
     def allneighbordistances(self, sourcepattern, destpattern=None,
                              fill_diagonal=None, n_processes=None,
                              gen_tree=False, snap_dist=False):
-        """ Compute either all distances between i and j in a single
+        """Compute either all distances between i and j in a single
         point pattern or all distances between each i from a source
         pattern and all j from a destination pattern.
         
@@ -1063,7 +1063,7 @@ class Network:
         n_processes : int, str
             (Optional) Specify the number of cores to utilize. Default
             is 1 core. Use ``int`` to specify an exact number or cores.
-             Use ``"all"`` to request all available cores.
+            Use ``"all"`` to request all available cores.
         
         gen_tree : bool
             Rebuild shortest path ``True``, or skip ``False``.
