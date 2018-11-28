@@ -612,16 +612,16 @@ class Network:
     
     def snapobservations(self, in_data, name,
                          idvariable=None, attribute=None):
-        """Snap a point pattern shapefile to this network object. The point
-        pattern is stored in the network.pointpattern['key'] attribute of
-        the network object.
+        """Snap a point pattern shapefile to this network object. The
+        point pattern is stored in the ``network.pointpattern['key']``
+        attribute of the network object.
         
         Parameters
         ----------
         
         in_data : geopandas.GeoDataFrame or str
-            The input geographic data. Either (1) a path to a shapefile (str);
-            or (2) a ``geopandas.GeoDataFrame``.
+            The input geographic data. Either (1) a path to a
+            shapefile (``str``); or (2) a ``geopandas.GeoDataFrame``.
         
         name : str
             Name to be assigned to the point dataset.
@@ -630,8 +630,8 @@ class Network:
             Column name to be used as ID variable.
         
         attribute : bool
-            Defines whether attributes should be extracted. True for attribute
-            extraction. False for no attribute extraaction.
+            Defines whether attributes should be extracted. ``True`` for
+            attribute extraction. ``False`` for no attribute extraction.
         
         Examples
         --------
@@ -654,8 +654,8 @@ class Network:
     
     
     def compute_distance_to_nodes(self, x, y, edge):
-        """Given an observation on a network edge, return the distance to
-        the two nodes that bound that end.
+        """Given an observation on a network edge, return the distance
+        to the two nodes that bound that end.
         
         Parameters
         ----------
@@ -701,7 +701,8 @@ class Network:
         Returns
         -------
         dist : float
-            euclidean distance from original location to snapped location.
+            euclidean distance from original location to snapped
+            location.
         """
         loc = pattern.points[idx]['coordinates']
         snp = pattern.snapped_coordinates[idx]
