@@ -39,18 +39,22 @@ def compute_length(v0, v1):
     >>> point1, point2 = (0,0), (1,1)
     >>> spgh.util.compute_length(point1, point2)
     1.4142135623730951
+    
     """
     euc_dist = np.sqrt((v0[0] - v1[0])**2 + (v0[1] - v1[1])**2)
     return euc_dist
 
 
 def get_neighbor_distances(ntw, v0, l):
-    """Get distances to the nearest node neighbors along connecting edges.
+    """Get distances to the nearest node neighbors along
+    connecting edges.
     
     Parameters
     ----------
+    
     ntw : spaghetti.Network
         spaghetti Network object.
+    
     v0 : int
         Node id
     l : dict
