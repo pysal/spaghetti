@@ -505,7 +505,7 @@ class Network:
         3.0
         
         Next, a standard call ot Moran is made and the
-        result placed into `res`.
+        result placed into ``res``.
         
         >>> res = esda.moran.Moran(y, w, permutations=99)
         >>> type(res)
