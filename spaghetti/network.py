@@ -577,7 +577,8 @@ class Network:
         -------
         
         w : libpysal.weights.weights.W
-            A PySAL W Object representing the binary adjacency of the network.
+            A ``pysal`` W Object representing the binary adjacency of
+            the network.
         
         Examples
         --------
@@ -589,7 +590,8 @@ class Network:
         >>> w.n
         230
         >>> w.histogram
-        [(1, 22), (2, 58), (3, 63), (4, 40), (5, 36), (6, 3), (7, 5), (8, 3)]
+        [(1, 22), (2, 58), (3, 63), (4, 40),
+         (5, 36), (6, 3), (7, 5), (8, 3)]
         
         """
         try:
