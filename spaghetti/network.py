@@ -1376,7 +1376,7 @@ class Network:
         
         threshold : float
             The level at which significance is computed.
-            0.5 would be 97.5% and 2.5%
+            (0.5 would be 97.5% and 2.5%).
         
         distribution : str
             The distribution from which random points are sampled.
@@ -1428,15 +1428,15 @@ class Network:
             A spaghetti point pattern object.
         
         nsteps : int
-            The number of steps at which the count of the nearest neighbors
-            is computed.
+            The number of steps at which the count of the nearest
+            neighbors is computed.
         
         permutations : int
-            The number of permutations to perform (default 99).
+            The number of permutations to perform. Default 99.
         
         threshold : float
             The level at which significance is computed.
-            -- 0.5 would be 97.5% and 2.5%
+            (0.5 would be 97.5% and 2.5%).
         
         distribution : str
             The distribution from which random points are sampled
