@@ -794,7 +794,7 @@ class Network:
         obs_on_network : dict
             Dictionary of observations on the network. 
             Either {(edge):{pt_id:(coords)}} or 
-                   {edge:[(coord),(coord),(coord)]}
+            {edge:[(coord),(coord),(coord)]}
         
         Returns
         -------
@@ -1039,7 +1039,7 @@ class Network:
     def allneighbordistances(self, sourcepattern, destpattern=None,
                              fill_diagonal=None, n_processes=None,
                              gen_tree=False, snap_dist=False):
-        """ Compute either all distances between i and j in a single
+        """Compute either all distances between i and j in a single
         point pattern or all distances between each i from a source
         pattern and all j from a destination pattern.
         
@@ -1063,7 +1063,7 @@ class Network:
         n_processes : int, str
             (Optional) Specify the number of cores to utilize. Default
             is 1 core. Use ``int`` to specify an exact number or cores.
-             Use ``"all"`` to request all available cores.
+            Use ``"all"`` to request all available cores.
         
         gen_tree : bool
             Rebuild shortest path ``True``, or skip ``False``.
@@ -1903,7 +1903,7 @@ class PointPattern():
 
 class SimulatedPointPattern():
     """Struct style class to mirror the ``PointPattern`` class. If the
-    ``PointPatternv class has methods, it might make sense to make this
+    ``PointPattern`` class has methods, it might make sense to make this
     a child of that class. This class is not intended to be used by the
     external user.
     

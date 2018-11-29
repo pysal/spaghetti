@@ -24,6 +24,7 @@ spaghetti.network.Network
       ~Network.count_per_edge
       ~Network.distancebandweights
       ~Network.enum_links_node
+      ~Network.extract_components
       ~Network.extractgraph
       ~Network.loadnetwork
       ~Network.nearestneighbordistances

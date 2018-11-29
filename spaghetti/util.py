@@ -182,6 +182,7 @@ def dijkstra(ntw, cost, v0, n=float('inf')):
     133
     
     """
+    
     distance = [n for x in ntw.node_list]
     idx = ntw.node_list.index(v0)
     distance[ntw.node_list.index(v0)] = 0
@@ -251,6 +252,7 @@ def dijkstra_mp(ntw_cost_node):
     133
     
     """
+    
     ntw, cost, node = ntw_cost_node
     distance, pred = dijkstra(ntw, cost, node)
     return distance, pred
@@ -285,6 +287,7 @@ def squared_distance_point_segment(point, segment):
     (1.0, array([1., 0.]))
     
     """
+    
     #
     p0, p1 = [np.array(p) for p in segment]
     v = p1 - p0

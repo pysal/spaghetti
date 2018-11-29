@@ -345,6 +345,7 @@ def ffunction(nearest, lowerbound, upperbound, npts, nsteps=10):
         y-axis of values
     
     """
+    
     nobs = len(nearest)
     x = np.linspace(lowerbound, upperbound, nsteps)
     nearest = np.sort(nearest)
