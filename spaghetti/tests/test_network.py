@@ -72,7 +72,6 @@ class TestNetwork(unittest.TestCase):
         self.assertEqual(observed_graph_edge, known_graph_edge)
     
     def test_distance_band_weights(self):
-        # I do not trust this result, test should be manually checked.
         w = self.ntw_from_shp.distancebandweights(threshold=500)
         self.assertEqual(w.n, 230)
         self.assertEqual(w.histogram,
