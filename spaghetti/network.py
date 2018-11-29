@@ -596,9 +596,8 @@ class Network:
         (8, 3)
         
         """
-        try:
-            hasattr(self.alldistances)
-        except AttributeError:
+        
+        if not hasattr(self, 'alldistances'):
             self.node_distance_matrix(n_proccess, gen_tree=gen_tree)
             
         neighbor_query = np.where(self.distancematrix < threshold)
