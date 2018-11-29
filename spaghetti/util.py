@@ -251,6 +251,7 @@ def dijkstra_mp(ntw_cost_node):
     133
     
     """
+    
     ntw, cost, node = ntw_cost_node
     distance, pred = dijkstra(ntw, cost, node)
     return distance, pred
