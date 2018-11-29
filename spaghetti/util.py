@@ -285,6 +285,7 @@ def squared_distance_point_segment(point, segment):
     (1.0, array([1., 0.]))
     
     """
+    
     #
     p0, p1 = [np.array(p) for p in segment]
     v = p1 - p0
