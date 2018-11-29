@@ -182,6 +182,7 @@ def dijkstra(ntw, cost, v0, n=float('inf')):
     133
     
     """
+    
     distance = [n for x in ntw.node_list]
     idx = ntw.node_list.index(v0)
     distance[ntw.node_list.index(v0)] = 0
