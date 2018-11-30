@@ -5,6 +5,11 @@
 SPAtial GrapHs: nETworks, Topology, & Inference
 ===============================================
 
+*An example of snapping observation points to a network and plotting:*
+
+![snap_plot](figs/snap_plot.png)
+
+
 
 **Build & Versions**
 
