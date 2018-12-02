@@ -175,7 +175,7 @@ def dijkstra(ntw, cost, v0, initial_dist=np.inf):
     >>> import spaghetti as spgh
     >>> from libpysal import examples
     >>> ntw = spgh.Network(examples.get_path('streets.shp'))
-    >>> distance, pred = spgh.util.dijkstra(ntw, ntw.edge_lengths, 0)
+    >>> distance, pred = spgh.util.dijkstra(ntw, 0)
     >>> round(distance[196], 4)
     5505.6682
     >>> pred[196]
