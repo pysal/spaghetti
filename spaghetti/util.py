@@ -199,7 +199,7 @@ def dijkstra(ntw, cost, v0, initial_dist=np.inf):
         # Remove that node from the set.
         a.remove(v)
         last = v
-        # 4. Get the neighbors to the current node.
+        # Get the neighbors to the current node.
         neighbors = get_neighbor_distances(ntw, v, cost)
         for v1, indiv_cost in neighbors.items():
             if distance[v1] > distance[v] + indiv_cost:
