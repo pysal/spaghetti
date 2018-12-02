@@ -144,10 +144,6 @@ def dijkstra(ntw, cost, v0, initial_dist=np.inf):
     ntw :  spaghetti.Network
         spaghetti Network object.
     
-    cost : dict
-        key is tuple (start node, end node); value is ``float``.
-        Cost per edge to travel, e.g. distance.
-    
     v0 : int
         Start node ID
     
