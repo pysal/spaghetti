@@ -683,10 +683,10 @@ class Network:
             x-coordinate of the snapped point.
         
         y : float
-            y-coordiante of the snapped point.
+            y-coordinate of the snapped point.
         
         arc : tuple
-            (node0, node1) representation of the network edge.
+            (vtx0, vtx1) representation of the network arc.
         
         Returns
         -------
