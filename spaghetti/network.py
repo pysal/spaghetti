@@ -292,8 +292,8 @@ class Network:
     
     
     def _extractnetwork(self):
-        """Used internally to extract a network
-        from a polyline shapefile.
+        """Used internally to extract a network from a polyline
+        shapefile of a ``geopandas.GeoDataFrame``.
         """
         vertex_count = 0
         if isinstance(self.in_data, str):
@@ -335,43 +335,44 @@ class Network:
     
     def extractgraph(self):
         """Using the existing network representation, create a
-        graph-theoretic representation by removing all nodes with a
+        graph-theoretic representation by removing all vertices with a
         neighbor incidence of two (non-articulation points). That is, we
         assume these nodes are bridges between nodes with higher
         incidence.
         """
-        self.graphedges = []
-        self.graph_lengths = {}
+        self.edges = []
+        self.edge_lengths = {}
         
         # Find all nodes with cardinality 2. (non-articulation points)
-        segment_nodes = []
+        arc_vertices = []
         for k, v in self.adjacencylist.items():
             # len(v) == 1 #cul-de-sac
             # len(v) == 2 #bridge segment
             # len(v) > 2 #intersection
             if len(v) == 2:
-                segment_nodes.append(k)
+                arc_vertices.append(k)
                 
         # Start with a copy of the spatial representation and
         # iteratively remove edges deemed to be segments.
-        self.graphedges = copy.deepcopy(self.edges)
-        self.graph_lengths = copy.deepcopy(self.edge_lengths)
-        # Mapping all the 'network edges' contained within a single
+        self.edges = copy.deepcopy(self.arcs)
+        self.edge_lengths = copy.deepcopy(self.arc_lengths)
+        
+        # Mapping all the 'network arcs' contained within a single
         # 'graph represented' edge.
-        self.graph_to_edges = {}
+        self.edges_to_arcs = {}
         
         # build up bridges "rooted" on the initial
         # non-articulation points
         bridges = []
-        for s in segment_nodes:
+        for s in arc_vertices:
             bridge = [s]
-            neighbors = self._yieldneighbor(s, segment_nodes, bridge)
+            neighbors = self._yieldneighbor(s, arc_vertices, bridge)
             while neighbors:
                 cnode = neighbors.pop()
-                segment_nodes.remove(cnode)
+                arc_vertices.remove(cnode)
                 bridge.append(cnode)
                 newneighbors = self._yieldneighbor(cnode,
-                                                   segment_nodes,
+                                                   arc_vertices,
                                                    bridge)
                 neighbors += newneighbors
             bridges.append(bridge)
@@ -379,46 +380,51 @@ class Network:
         for bridge in bridges:
             if len(bridge) == 1:
                 n = self.adjacencylist[bridge[0]]
-                newedge = tuple(sorted([n[0], n[1]]))
+                new_edge = tuple(sorted([n[0], n[1]]))
+                
                 # Identify the edges to be removed.
                 e1 = tuple(sorted([bridge[0], n[0]]))
                 e2 = tuple(sorted([bridge[0], n[1]]))
+                
                 # Remove them from the graph.
-                self.graphedges.remove(e1)
-                self.graphedges.remove(e2)
+                self.edges.remove(e1)
+                self.edges.remove(e2)
+                
                 # Remove from the edge lengths.
                 length_e1 = self.edge_lengths[e1]
                 length_e2 = self.edge_lengths[e2]
-                self.graph_lengths.pop(e1, None)
-                self.graph_lengths.pop(e2, None)
-                self.graph_lengths[newedge] = length_e1 + length_e2
+                self.edge_lengths.pop(e1, None)
+                self.edge_lengths.pop(e2, None)
+                self.edge_lengths[new_edge] = length_e1 + length_e2
+                
                 # Update the pointers.
-                self.graph_to_edges[e1] = newedge
-                self.graph_to_edges[e2] = newedge
+                self.edges_to_arcs[e1] = new_edge
+                self.edges_to_arcs[e2] = new_edge
+            
             else:
                 cumulative_length = 0
-                startend = {}
+                start_end = {}
                 redundant = set([])
                 for b in bridge:
                     for n in self.adjacencylist[b]:
                         if n not in bridge:
-                            startend[b] = n
+                            start_end[b] = n
                         else:
                             redundant.add(tuple(sorted([b, n])))
                             
-                newedge = tuple(sorted(startend.values()))
-                for k, v in startend.items():
+                new_edge = tuple(sorted(start_end.values()))
+                for k, v in start_end.items():
                     redundant.add(tuple(sorted([k, v])))
                     
                 for r in redundant:
-                    self.graphedges.remove(r)
+                    self.edges.remove(r)
                     cumulative_length += self.edge_lengths[r]
-                    self.graph_lengths.pop(r, None)
-                    self.graph_to_edges[r] = newedge
-                self.graph_lengths[newedge] = cumulative_length
+                    self.edge_lengths.pop(r, None)
+                    self.edges_to_arcs[r] = new_edge
+                self.edge_lengths[new_edge] = cumulative_length
                 
-            self.graphedges.append(newedge)
-        self.graphedges = sorted(self.graphedges)
+            self.edges.append(new_edge)
+        self.edges = sorted(self.edges)
     
     
     def _yieldneighbor(self, node, segment_nodes, bridge):
