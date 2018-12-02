@@ -248,7 +248,7 @@ class Network:
             links = self.edges
             obj_type = 'graph_'
         else:
-            links = self.segments
+            links = self.arcs
             obj_type = 'network_'
         
         # connected component count and labels
@@ -277,7 +277,7 @@ class Network:
         if graph:
             c2l_attr_name = 'component2edge'
         else:
-            c2l_attr_name = 'component2segment'
+            c2l_attr_name = 'component2arc'
         
         # set all new variables into list
         extracted_attrs = [['n_components', n_components],
