@@ -17,8 +17,10 @@ __all__ = ["Network", "PointPattern", "NetworkG", "NetworkK", "NetworkF"]
 
 
 class Network:
-    """Spatially-constrained network representation
-    and analytical functionality.
+    """Spatially-constrained network representation and analytical
+    functionality. Naming conventions are as follows, (1) segments and
+    nodes for the full network object, and (2) edges and vertices for
+    the simplified graph-theoretic object.
     
     Parameters
     ----------
@@ -62,7 +64,11 @@ class Network:
     nodes : dict
         Keys are tuples of node coords and values are the node ID.
     
-    edge_lengths : dict
+    segments : list
+        List of segments, where each segment is a sorted tuple
+        of node IDs.
+    
+    segment_lengths : dict
         Keys are tuples of sorted node IDs representing an edge and
         values are the length.
     
@@ -73,9 +79,6 @@ class Network:
     node_coords : dict
         Keys are the node ID and values are the (x,y) coordinates
         inverse to nodes.
-    
-    edges : list
-        List of edges, where each edge is a sorted tuple of node IDs.
     
     node_list : list
         List of node IDs.
@@ -107,7 +110,7 @@ class Network:
     
     network_component2edge : dict
         Lookup ``{int: list}`` for segments comprising network
-        connected components keyed by component labels with edges in
+        connected components keyed by component labels with segments in
         a ``list`` as values.
     
     network_component_is_ring : dict
@@ -116,16 +119,16 @@ class Network:
         ``False``.
     
     w_graph : libpysal.weights.weights.W
-        Weights object created from the network segments
+        Weights object created from the graph edges
     
     graph_n_components : int
         Count of connected components in the network.
     
     graph_component_labels : numpy.ndarray
-        Component labels for networks segment
+        Component labels for graph edges
     
     graph_component2edge : dict
-        Lookup ``{int: list}`` for segments comprising network connected
+        Lookup ``{int: list}`` for segments comprising graph connected
         components keyed by component labels with edges in a list
         as values.
     
@@ -164,8 +167,9 @@ class Network:
             
             self.adjacencylist = defaultdict(list)
             self.nodes = {}
-            self.edge_lengths = {}
-            self.edges = []
+            
+            self.segments = []
+            self.segment_lengths = {}
             
             self.pointpatterns = {}
             
@@ -175,6 +179,7 @@ class Network:
             # This is a spatial representation of the network.
             self.edges = sorted(self.edges)
             
+            # extract connected components
             if w_components:
                 as_graph = False
                 network_weightings = False
