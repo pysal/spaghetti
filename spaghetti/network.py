@@ -806,7 +806,7 @@ class Network:
     
     
     def count_per_link(self, obs_on, graph=True):
-        """Compute the counts per edge.
+        """Compute the counts per arc or edge (link).
         
         Parameters
         ----------
@@ -830,11 +830,11 @@ class Network:
         >>> import spaghetti as spgh
         >>> ntw = spgh.Network(examples.get_path('streets.shp'))
         >>> ntw.snapobservations(examples.get_path('crimes.shp'),
-        ...                                           'crimes',
-        ...                                           attribute=True)
+        ...                                        'crimes',
+        ...                                         attribute=True)
         
-        >>> counts = ntw.count_per_edge(ntw.pointpatterns['crimes']
-        ...                             .obs_to_edge, graph=False)
+        >>> counts = ntw.count_per_link(ntw.pointpatterns['crimes']
+        ...                             .obs_to_arc, graph=False)
         >>> counts[(140, 142)]
         10
         
@@ -845,17 +845,17 @@ class Network:
         """
         counts = {}
         if graph:
-            for key, observations in obs_on_network.items():
+            for key, observations in obs_on.items():
                 cnt = len(observations)
-                if key in self.graph_to_edges.keys():
-                    key = self.graph_to_edges[key]
+                if key in self.edges_to_arcs.keys():
+                    key = self.edges_to_arcs[key]
                 try:
                     counts[key] += cnt
                 except KeyError:
                     counts[key] = cnt
         else:
-            for key in obs_on_network.keys():
-                counts[key] = len(obs_on_network[key])
+            for key in obs_on.keys():
+                counts[key] = len(obs_on[key])
         return counts
     
     
