@@ -183,7 +183,7 @@ class Network:
                 as_graph = False
                 network_weightings = False
                 if weightings is True:
-                    weightings = self.edge_lengths
+                    weightings = self.segment_lengths
                     network_weightings = True
                 self.w_network = self.contiguityweights(graph=as_graph,
                                                         weightings=weightings)
