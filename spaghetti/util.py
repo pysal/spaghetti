@@ -153,7 +153,7 @@ def dijkstra(ntw, cost, v0, initial_dist=np.inf):
     
     initial_dist : float
         integer break point to stop iteration and return n neighbors.
-        Default is ``'inf'``.
+        Default is ``numpy.inf``.
     
     Returns
     -------
