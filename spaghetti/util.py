@@ -222,9 +222,7 @@ def dijkstra_mp(ntw_node):
     ntw_cost_node : tuple
         tuple of arguments to pass into dijkstra as 
         (1) ntw - ``spaghetti.Network; spaghetti Network object``;
-        (2) cost - ``dict`` keyed by tuple (start node, end node)
-        with values is ``float`` - Cost per edge to travel, e.g. dist.;
-        (3) node - ``int``; Start node ID
+        (2) node - ``int``; Start node ID
     
     Returns
     -------
