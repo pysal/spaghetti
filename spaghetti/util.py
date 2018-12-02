@@ -134,7 +134,7 @@ def generatetree(pred):
     return tree
 
 
-def dijkstra(ntw, cost, v0, n=float('inf')):
+def dijkstra(ntw, cost, v0, initial_dist=float('inf')):
     """Compute the shortest path between a start node and all other
     nodes in an origin-destination matrix.
     
@@ -151,7 +151,7 @@ def dijkstra(ntw, cost, v0, n=float('inf')):
     v0 : int
         Start node ID
     
-    n : float
+    initial_dist : float
         integer break point to stop iteration and return n neighbors.
         Default is ``'inf'``.
     
@@ -183,7 +183,7 @@ def dijkstra(ntw, cost, v0, n=float('inf')):
     
     """
     
-    distance = [n for x in ntw.node_list]
+    distance = [initial_dist for x in ntw.node_list]
     idx = ntw.node_list.index(v0)
     distance[ntw.node_list.index(v0)] = 0
     pred = [-1 for x in ntw.node_list]
@@ -191,7 +191,7 @@ def dijkstra(ntw, cost, v0, n=float('inf')):
     a.add(v0)
     while len(a) > 0:
         # Get node with the lowest value from distance.
-        dist = n
+        dist = initial_dists
         for node in a:
             if distance[node] < dist:
                 dist = distance[node]
