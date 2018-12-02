@@ -706,7 +706,7 @@ class Network:
     
     
     def compute_snap_dist(self, pattern, idx):
-        """Given an observation snapped to a network edge, calculate the
+        """Given an observation snapped to a network arc, calculate the
         distance from the original location to the snapped location.
         
         Parameters
