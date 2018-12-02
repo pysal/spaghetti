@@ -1350,7 +1350,7 @@ class Network:
             raise KeyError(err_msg.format(self.pointpatterns.keys()))
             
         if not hasattr(self, 'alldistances'):
-            self.node_distance_matrix(n_processes, gen_tree=gen_tree)
+            self.full_distance_matrix(n_processes, gen_tree=gen_tree)
         
         symmetric = sourcepattern != destpattern
         
@@ -1385,6 +1385,7 @@ class Network:
             else:
                 val = np.min(all_dists[source_index,:]\
                                       [np.nonzero(all_dists[source_index,:])])
+            
             # nearest destination (may be more than one if
             # observations are equal distances away)
             dest_idxs = np.where(all_dists[source_index,:] == val)[0].tolist()
