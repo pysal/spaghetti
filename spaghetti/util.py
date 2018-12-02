@@ -183,6 +183,9 @@ def dijkstra(ntw, cost, v0, initial_dist=np.inf):
     
     """
     
+    # Cost per edge to travel, e.g. distance.
+    cost = ntw.edge_lengths
+    
     distance = [initial_dist for x in ntw.node_list]
     idx = ntw.node_list.index(v0)
     distance[ntw.node_list.index(v0)] = 0
