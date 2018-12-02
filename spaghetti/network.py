@@ -18,8 +18,8 @@ __all__ = ["Network", "PointPattern", "NetworkG", "NetworkK", "NetworkF"]
 
 class Network:
     """Spatially-constrained network representation and analytical
-    functionality. Naming conventions are as follows, (1) segments and
-    nodes for the full network object, and (2) edges and vertices for
+    functionality. Naming conventions are as follows, (1) arcs and
+    vertices for the full network object, and (2) edges and nodes for
     the simplified graph-theoretic object.
     
     Parameters
@@ -59,40 +59,40 @@ class Network:
         The input shapefile. This must be in .shp format.
     
     adjacencylist : list
-        List of lists storing node adjacency.
+        List of lists storing vertex adjacency.
     
-    nodes : dict
-        Keys are tuples of node coords and values are the node ID.
+    vertex_coords : dict
+        Keys are the vertex ID and values are the (x,y) coordinates
+        inverse to vertices.
     
-    segments : list
-        List of segments, where each segment is a sorted tuple
-        of node IDs.
+    vertex_list : list
+        List of vertex IDs.
     
-    segment_lengths : dict
-        Keys are tuples of sorted node IDs representing an edge and
+    vertices : dict
+        Keys are tuples of vertex coords and values are the vertex ID.
+    
+    arcs : list
+        List of arcs, where each arc is a sorted tuple
+        of vertex IDs.
+    
+    arc_lengths : dict
+        Keys are tuples of sorted vertex IDs representing an arc and
         values are the length.
     
     pointpatterns : dict
         Keys are a string name of the pattern and values are
         ``PointPattern`` class instances.
     
-    node_coords : dict
-        Keys are the node ID and values are the (x,y) coordinates
-        inverse to nodes.
-    
-    node_list : list
-        List of node IDs.
-    
     alldistances : dict
-        Keys are the node IDs (``int``). Values are tuples with two
+        Keys are the vertex IDs (``int``). Values are tuples with two
         elements as follows (1) a list of the shortest path distances;
-        (2) a dict with the key being the id of the destination node and
-        the value being a list of the shortest path.
+        (2) a dict with the key being the id of the destination vertex
+        and the value being a list of the shortest path.
     
     distancematrix : numpy.ndarray
-        all network nodes (non-observations) distance matrix.
+        all network vertices (non-observations) distance matrix.
     
-    graphedges : list
+    edges : list
         tuples of graph edge ids.
     
     graph_lengths : dict
@@ -100,7 +100,7 @@ class Network:
         length (``float``).
     
     w_network : libpysal.weights.weights.W
-        Weights object created from the network segments
+        Weights object created from the network arcs
     
     network_n_components : int
         Count of connected components in the network.
@@ -108,9 +108,9 @@ class Network:
     network_component_labels : numpy.ndarray
         Component labels for networks segment
     
-    network_component2edge : dict
-        Lookup ``{int: list}`` for segments comprising network
-        connected components keyed by component labels with segments in
+    network_component2arc : dict
+        Lookup ``{int: list}`` for arcs comprising network
+        connected components keyed by component labels with arcs in
         a ``list`` as values.
     
     network_component_is_ring : dict
@@ -168,22 +168,22 @@ class Network:
             self.adjacencylist = defaultdict(list)
             self.nodes = {}
             
-            self.segments = []
-            self.segment_lengths = {}
+            self.arcs = []
+            self.arc_lengths = {}
             
             self.pointpatterns = {}
             
             # spatial representation of the network
             self._extractnetwork()
-            self.segments = sorted(self.segments)
-            self.node_coords = dict((v, k) for k, v in self.nodes.items())
+            self.arcs = sorted(self.arcs)
+            self.vertex_coords = dict((v, k) for k, v in self.vertices.items())
             
             # extract connected components
             if w_components:
                 as_graph = False
                 network_weightings = False
                 if weightings is True:
-                    weightings = self.segment_lengths
+                    weightings = self.arc_lengths
                     network_weightings = True
                 self.w_network = self.contiguityweights(graph=as_graph,
                                                         weightings=weightings)
@@ -195,13 +195,13 @@ class Network:
                 if w_components:
                     as_graph = True
                     if network_weightings:
-                        weightings = self.graph_lengths
+                        weightings = self.edge_lengths
                     self.w_graph = self.contiguityweights(\
                                                         graph=as_graph,
                                                         weightings=weightings)
                     self.extract_components(self.w_graph, graph=as_graph)
                 
-            self.node_list = sorted(self.nodes.values())
+            self.vertex_list = sorted(self.vertices.values())
     
     
     def _round_sig(self, v):
@@ -274,10 +274,15 @@ class Network:
                 if len(w.neighbors[v]) != 2:
                     component_is_ring[k] = False
         
+        if graph:
+            c2l_attr_name = 'component2edge'
+        else:
+            c2l_attr_name = 'component2segment'
+        
         # set all new variables into list
         extracted_attrs = [['n_components', n_components],
                            ['component_labels', component_labels],
-                           ['component2edge', component2link],
+                           [c2l_attr_name, component2link],
                            ['component_is_ring', component_is_ring]]
         
         # iterate over list and set attribute with
@@ -316,14 +321,14 @@ class Network:
                 
                 # Sort the edges so that mono-directional
                 # keys can be stored.
-                edgenodes = sorted([vid, nvid])
-                edge = tuple(edgenodes)
-                self.edges.append(edge)
+                segment_nodes = sorted([vid, nvid])
+                segment = tuple(segment_nodes)
+                self.segments.append(segment)
                 length = util.compute_length(v, vertices[i + 1])
-                self.edge_lengths[edge] = length
+                self.segment_lengths[segment] = length
         if self.unique_segs:
             # Remove duplicate edges and duplicate adjacent nodes.
-            self.edges = list(set(self.edges))
+            self.segments = list(set(self.segments))
             for k, v in self.adjacencylist.items():
                 self.adjacencylist[k] = list(set(v))
     
