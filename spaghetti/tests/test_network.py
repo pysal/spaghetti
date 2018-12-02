@@ -364,8 +364,7 @@ class TestNetworkUtils(unittest.TestCase):
     
     def test_generate_tree(self):
         self.known_path = [23, 22, 20, 19, 170, 2, 0]
-        self.distance, self.pred = util.dijkstra(self.ntw,
-                                                 self.ntw.edge_lengths, 0)
+        self.distance, self.pred = util.dijkstra(self.ntw, 0)
         self.tree = util.generatetree(self.pred)
         self.assertEqual(self.tree[3], self.known_path)
     
