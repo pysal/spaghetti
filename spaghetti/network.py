@@ -669,7 +669,7 @@ class Network:
         self.pointpatterns[name] = PointPattern(in_data=in_data,
                                                 idvariable=idvariable,
                                                 attribute=attribute)
-        self._snap_to_edge(self.pointpatterns[name])
+        self._snap_to_link(self.pointpatterns[name])
     
     
     def compute_distance_to_nodes(self, x, y, edge):
@@ -730,8 +730,8 @@ class Network:
         return dist
     
     
-    def _snap_to_edge(self, pointpattern):
-        """ Used internally to snap point observations to network edges.
+    def _snap_to_arc(self, pointpattern):
+        """ Used internally to snap point observations to network arcs.
         
         Parameters
         -----------
@@ -742,32 +742,35 @@ class Network:
         Returns
         -------
         
-        obs_to_edge : dict
-            Dictionary with edges as keys and lists of points as values.
+        obs_to_arc : dict
+            Dictionary with arcs as keys and lists of points as values.
         
-        edge_to_obs : dict
-            Dictionary with point ids as keys and edge tuples as values.
+        arc_to_obs : dict
+            Dictionary with point ids as keys and arc tuples as values.
         
-        dist_to_node : dict
+        dist_to_vertex : dict
             Dictionary with point ids as keys and values as dicts
-            with keys for node ids and values as distances from point
-            to node.
+            with keys for vertex ids and values as distances from point
+            to vertex.
+        
+        dist_snapped : dict
+            Dictionary with point ids as keys and distance from point
+            to the network arc which it is snapped.
         
         """
         
-        obs_to_edge = {}
-        dist_to_node = {}
+        obs_to_arc = {}
+        dist_to_vertex = {}
         dist_snapped = {}
-        obs_to_node = defaultdict(list)
         
         pointpattern.snapped_coordinates = {}
-        segments = []
+        arcs_ = []
         s2e = {}
-        for edge in self.edges:
+        for arc in self.arcs:
             head = self.node_coords[edge[0]]
             tail = self.node_coords[edge[1]]
-            segments.append(cg.Chain([head, tail]))
-            s2e[(head, tail)] = edge
+            arcs_.append(cg.Chain([head, tail]))
+            s2e[(head, tail)] = arc
         
         # snap points
         points = {}
@@ -781,25 +784,25 @@ class Network:
             x, y = snapInfo[1].tolist()
             edge = s2e[tuple(snapInfo[0])]
             if edge not in obs_to_edge:
-                obs_to_edge[edge] = {}
-            obs_to_edge[edge][pointIdx] = (x, y)
+                obs_to_arc[arc] = {}
+            obs_to_arc[arc][pointIdx] = (x, y)
             pointpattern.snapped_coordinates[pointIdx] = (x, y)
             d1, d2 = self.compute_distance_to_nodes(x, y, edge)
-            dist_to_node[pointIdx] = {edge[0]: d1, edge[1]: d2}
+            dist_to_vertex[pointIdx] = {edge[0]: d1, edge[1]: d2}
             dist_snapped[pointIdx] = self.compute_snap_dist(pointpattern,
                                                             pointIdx)
         
-        # record obs_to_node
-        obs_to_node = defaultdict(list)
-        for k, v in obs_to_edge.items():
+        # record obs_to_vertex
+        obs_to_vertex = defaultdict(list)
+        for k, v in obs_to_arc.items():
             keys = v.keys()
-            obs_to_node[k[0]] = keys
-            obs_to_node[k[1]] = keys
+            obs_to_vertex[k[0]] = keys
+            obs_to_vertex[k[1]] = keys
         
-        pointpattern.obs_to_edge = obs_to_edge
-        pointpattern.dist_to_node = dist_to_node
+        pointpattern.obs_to_arc = obs_to_arc
+        pointpattern.dist_to_vertex = dist_to_vertex
         pointpattern.dist_snapped = dist_snapped
-        pointpattern.obs_to_node = list(obs_to_node)
+        pointpattern.obs_to_vertex = list(obs_to_vertex)
     
     
     def count_per_edge(self, obs_on_network, graph=True):
@@ -809,7 +812,7 @@ class Network:
         ----------
         
         obs_on_network : dict
-            Dictionary of observations on the network. 
+            Dictionary of observations on the network.
             Either {(edge):{pt_id:(coords)}} or 
             {edge:[(coord),(coord),(coord)]}
         
