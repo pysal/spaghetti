@@ -211,7 +211,7 @@ def dijkstra(ntw, v0, initial_dist=np.inf):
     return distance, pred
 
 
-def dijkstra_mp(ntw_cost_node):
+def dijkstra_mp(ntw_node):
     """
     Compute the shortest path between a start node and all other
     nodes in the web utilizing multiple cores upon request.
