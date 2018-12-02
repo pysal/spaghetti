@@ -474,7 +474,7 @@ class Network:
             Default is ``True``.
         
         weightings : dict
-            dictionary of lists of weightings for each edge.
+            dictionary of lists of weightings for each arc/edge.
         
         Returns
         -------
@@ -500,10 +500,10 @@ class Network:
         >>> ntw.snapobservations(examples.get_path('crimes.shp'),
         ...                      'crimes', attribute=True)
         
-        Find counts per network edge.
+        Find counts per network arc.
         
-        >>> counts = ntw.count_per_edge(ntw.pointpatterns['crimes']
-        ...                             .obs_to_edge, graph=False)
+        >>> counts = ntw.count_per_arc(ntw.pointpatterns['crimes']
+        ...                            .obs_to_arc, graph=False)
         >>> counts[(50, 165)]
         4
         
@@ -516,9 +516,9 @@ class Network:
         with observations.
         
         >>> w = ntw.contiguityweights(graph=False)
-        >>> edges = w.neighbors.keys()
-        >>> y = np.zeros(len(edges))
-        >>> for i, e in enumerate(edges):
+        >>> arcs = w.neighbors.keys()
+        >>> y = np.zeros(len(arcs))
+        >>> for i, e in enumerate(arcs):
         ...     if e in counts.keys():
         ...         y[i] = counts[e]
         >>> y[3]
@@ -536,9 +536,9 @@ class Network:
         neighbors = OrderedDict()
         
         if graph:
-            edges = self.graphedges
+            links = self.edges
         else:
-            edges = self.edges
+            links = self.arcs
             
         if weightings:
             _weights = {}
@@ -548,12 +548,12 @@ class Network:
         working = True
         while working:
             
-            for key in edges:
+            for key in links:
                 neighbors[key] = []
                 if weightings:
                     _weights[key] = []
                 
-                for neigh in edges:
+                for neigh in links:
                     
                     if key == neigh:
                         continue
