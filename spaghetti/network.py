@@ -337,8 +337,8 @@ class Network:
         """Using the existing network representation, create a
         graph-theoretic representation by removing all vertices with a
         neighbor incidence of two (non-articulation points). That is, we
-        assume these nodes are bridges between nodes with higher
-        incidence.
+        assume these vertices are bridges between vertices with higher
+        or lower incidence.
         """
         self.edges = []
         self.edge_lengths = {}
@@ -428,7 +428,7 @@ class Network:
     
     
     def _yieldneighbor(self, vtx, arc_vertices, bridge):
-        """Used internally, this method traverses a bridge segement
+        """Used internally, this method traverses a bridge arc
         to find the source and destination nodes.
         
         Parameters
