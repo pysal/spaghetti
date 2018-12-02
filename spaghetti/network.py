@@ -427,36 +427,39 @@ class Network:
         self.edges = sorted(self.edges)
     
     
-    def _yieldneighbor(self, node, segment_nodes, bridge):
+    def _yieldneighbor(self, vtx, arc_vertices, bridge):
         """Used internally, this method traverses a bridge segement
         to find the source and destination nodes.
         
         Parameters
         ----------
         
-        node : int
-            Node id
+        vtx : int
+            vertex id
         
-        segment_nodes : list
-            All non-articulation points in the network (degree-2 nodes).
+        arc_vertices : list
+            All non-articulation points in the network. These are
+            referred to as degree-2 vertices.
         
         bridge : list
-            Inital bridge list containing only ``node``.
+            Inital bridge list containing only ``vtx``.
         
         Returns
         -------
         
-        n : list
-            Nodes to keep (articulation points).
-        
+        nodes : list
+            Vertices to keep (articulation points). These elements are 
+            referred to as nodes.
         """
-        n = []
-        # get all nodes adjacent to `node`
-        for i in self.adjacencylist[node]:
-            if i in segment_nodes and i not in bridge:
-                n.append(i)
+        
+        nodes = []
+        
+        # get all nodes adjacent to `vtx`
+        for i in self.adjacencylist[vtx]:
+            if i in arc_vertices and i not in bridge:
+                nodes.append(i)
                 
-        return n
+        return nodes
     
     
     def contiguityweights(self, graph=True, weightings=None):
