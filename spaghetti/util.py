@@ -191,7 +191,7 @@ def dijkstra(ntw, cost, v0, initial_dist=np.inf):
     a.add(v0)
     while len(a) > 0:
         # Get node with the lowest value from distance.
-        dist = initial_dists
+        dist = initial_dist
         for node in a:
             if distance[node] < dist:
                 dist = distance[node]
