@@ -173,11 +173,10 @@ class Network:
             
             self.pointpatterns = {}
             
+            # spatial representation of the network
             self._extractnetwork()
+            self.segments = sorted(self.segments)
             self.node_coords = dict((v, k) for k, v in self.nodes.items())
-            
-            # This is a spatial representation of the network.
-            self.edges = sorted(self.edges)
             
             # extract connected components
             if w_components:
@@ -190,7 +189,7 @@ class Network:
                                                         weightings=weightings)
                 self.extract_components(self.w_network, graph=as_graph)
             
-            # Extract the graph.
+            # extract the graph
             if extractgraph:
                 self.extractgraph()
                 if w_components:
