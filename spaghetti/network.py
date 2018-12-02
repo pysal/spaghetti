@@ -925,37 +925,41 @@ class Network:
         """
         simpts = SimulatedPointPattern()
         
-        # Cumulative Network Length.
-        edges = []
-        lengths = np.zeros(len(self.edge_lengths))
-        for i, key in enumerate(self.edge_lengths.keys()):
-            edges.append(key)
-            lengths[i] = self.edge_lengths[key]
+        # cumulative network length.
+        arcs_ = []
+        lengths = np.zeros(len(self.arc_lengths))
+        for i, key in enumerate(self.arc_lengths.keys()):
+            arcs_.append(key)
+            lengths[i] = self.arc_lengths[key]
         stops = np.cumsum(lengths)
         totallength = stops[-1]
         
         if distribution is 'uniform':
             nrandompts = np.random.uniform(0, totallength, size=(count,))
+        
         elif distribution is 'poisson':
             mid_length = totallength / 2.
             nrandompts = np.random.poisson(mid_length, size=(count,))
             
         for i, r in enumerate(nrandompts):
             idx = np.where(r < stops)[0][0]
-            assignment_edge = edges[idx]
+            assignment_arc = arc_[idx]
             distance_from_start = stops[idx] - r
-            # Populate the coordinates dict.
-            x0, y0 = self._newpoint_coords(assignment_edge,
-                                           distance_from_start)
-            simpts.snapped_coordinates[i] = (x0, y0)
-            simpts.obs_to_node[assignment_edge[0]].append(i)
-            simpts.obs_to_node[assignment_edge[1]].append(i)
             
-            # Populate the distance to node.
-            distance_from_end = self.edge_lengths[edges[idx]]\
-                                                        - distance_from_start
-            simpts.dist_to_node[i] = {assignment_edge[0]: distance_from_start,
-                                      assignment_edge[1]: distance_from_end}
+            # Populate the coordinates dict
+            x0, y0 = self._newpoint_coords(assignment_arc,
+                                           distance_from_start)
+            
+            simpts.snapped_coordinates[i] = (x0, y0)
+            simpts.obs_to_vertex[assignment_arc[0]].append(i)
+            simpts.obs_to_vertex[assignment_arc[1]].append(i)
+            
+            # Populate the distance to vertex
+            distance_from_end = self.arc_lengths[arcs_[idx]]\
+                                - distance_from_start
+            
+            simpts.dist_to_node[i] = {assignment_arc[0]: distance_from_start,
+                                      assignment_arc[1]: distance_from_end}
             
             simpts.points = simpts.snapped_coordinates
             simpts.npoints = len(simpts.points)
