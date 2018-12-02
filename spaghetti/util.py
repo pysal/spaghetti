@@ -41,6 +41,7 @@ def compute_length(v0, v1):
     1.4142135623730951
     
     """
+    
     euc_dist = np.sqrt((v0[0] - v1[0])**2 + (v0[1] - v1[1])**2)
     return euc_dist
 
@@ -79,6 +80,7 @@ def get_neighbor_distances(ntw, v0, l):
     102.62353453439829
     
     """
+    
     edges = ntw.enum_links_node(v0)
     neighbors = {}
     for e in edges:
