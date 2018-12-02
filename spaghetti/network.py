@@ -1109,7 +1109,7 @@ class Network:
             points.
         
         tree_nearest : dict
-            Nearest network node to point pattern node shortest
+            Nearest network node to point pattern vertex shortest
             path lookup.
         
         Examples
@@ -1145,23 +1145,23 @@ class Network:
         """
         
         if not hasattr(self, 'alldistances'):
-            self.node_distance_matrix(n_processes, gen_tree=gen_tree)
+            self.full_distance_matrix(n_processes, gen_tree=gen_tree)
         
         if type(sourcepattern) is str:
             sourcepattern = self.pointpatterns[sourcepattern]
             if destpattern:
                 destpattern = self.pointpatterns[destpattern]
         
-        # Source setup
+        # source setup
         src_indices = list(sourcepattern.points.keys())
         src_d2n = copy.deepcopy(sourcepattern.dist_to_node)
         nsource_pts = len(src_indices)
-        src_nodes = {}
+        src_vertices = {}
         for s in src_indices:
             e1, e2 = src_d2n[s].keys()
-            src_nodes[s] = (e1, e2)
+            src_vertices[s] = (e1, e2)
             
-        # Destination setup
+        # destination setup
         symmetric = False
         if destpattern is None:
             symmetric = True
@@ -1170,7 +1170,7 @@ class Network:
         dst_d2n = copy.deepcopy(destpattern.dist_to_node)
         ndest_pts = len(dest_indices)
         dest_searchpts = copy.deepcopy(dest_indices)
-        dest_nodes = {}
+        dest_vertices = {}
         
         # add snapping distance to each pointpattern
         if snap_dist:
@@ -1183,7 +1183,7 @@ class Network:
         
         for s in dest_indices:
             e1, e2 = dst_d2n[s].keys()
-            dest_nodes[s] = (e1, e2)
+            dest_vertices[s] = (e1, e2)
             
         # Output setup
         nearest = np.empty((nsource_pts, ndest_pts))
@@ -1191,19 +1191,24 @@ class Network:
         tree_nearest = {}
         
         for p1 in src_indices:
-            # Get the source nodes and dist to source nodes.
-            source1, source2 = src_nodes[p1]
-            set1 = set(src_nodes[p1])
-            # Distance from node1 to p, distance from node2 to p.
+            
+            # Get the source vertices and dist to source vertices.
+            source1, source2 = src_vertices[p1]
+            set1 = set(src_vertices[p1])
+            
+            # Distance from vtx1 to p, distance from vtx2 to p.
             sdist1, sdist2 = src_d2n[p1].values()
             
             if symmetric:
+                
                 # Only compute the upper triangle if symmetric.
                 dest_searchpts.remove(p1)
+            
             for p2 in dest_searchpts:
-                dest1, dest2 = dest_nodes[p2]
-                set2 = set(dest_nodes[p2])
-                if set1 == set2:  # same edge
+                dest1, dest2 = dest_vertices[p2]
+                set2 = set(dest_vertices[p2])
+                
+                if set1 == set2:  # same arc
                     x1, y1 = sourcepattern.snapped_coordinates[p1]
                     x2, y2 = destpattern.snapped_coordinates[p2]
                     computed_length = util.compute_length((x1, y1),
@@ -1219,8 +1224,8 @@ class Network:
                     d22 = self.distancematrix[source2][dest2]
                     
                     # Find the shortest distance from the path passing
-                    # through each of the two origin nodes to the first
-                    # destination node.
+                    # through each of the two origin vertices to the
+                    # first destination vertex.
                     sd_1 = d11 + sdist1
                     sd_21 = d21 + sdist2
                     sp_combo1 = source1, dest1
@@ -1228,12 +1233,12 @@ class Network:
                         sd_1 = sd_21
                         sp_combo1 = source2, dest1
                     
-                    # Now add the point to node one distance on
-                    # the destination edge.
+                    # Now add the point to vertex one distance on
+                    # the destination arc.
                     len_1 = sd_1 + ddist1
                     
                     # Repeat the prior but now for the paths entering
-                    # at the second node of the second edge.
+                    # at the second vertex of the second arc.
                     sd_2 = d12 + sdist1
                     sd_22 = d22 + sdist2
                     sp_combo2 = source1, dest2
@@ -1243,7 +1248,7 @@ class Network:
                     len_2 = sd_2 + ddist2
                     
                     # Now find the shortest distance path between point
-                    # 1 on edge 1 and point 2 on edge 2, and assign.
+                    # 1 on arc 1 and point 2 on arc 2, and assign.
                     sp_12 = len_1
                     s_node, d_node = sp_combo1
                     if len_1 > len_2:
@@ -1254,19 +1259,23 @@ class Network:
                     tree_nearest[p1, p2] = (s_node, d_node)
                     
                 if symmetric:
+                    
                     # Mirror the upper and lower triangle
                     # when symmetric.
                     nearest[p2, p1] = nearest[p1, p2]
                     
         # Populate the main diagonal when symmetric.
         if symmetric:
+            
             if fill_diagonal is None:
                 np.fill_diagonal(nearest, np.nan)
+            
             else:
                 np.fill_diagonal(nearest, fill_diagonal)
         
         if gen_tree:
             return nearest, tree_nearest
+        
         else:
             return nearest
     
