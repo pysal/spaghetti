@@ -295,7 +295,7 @@ class Network:
         """Used internally to extract a network
         from a polyline shapefile.
         """
-        nodecount = 0
+        vertex_count = 0
         if isinstance(self.in_data, str):
             shps = open(self.in_data)
         else:
@@ -305,30 +305,30 @@ class Network:
             for i, v in enumerate(vertices[:-1]):
                 v = self._round_sig(v)
                 try:
-                    vid = self.nodes[v]
+                    vid = self.vertices[v]
                 except KeyError:
-                    self.nodes[v] = vid = nodecount
-                    nodecount += 1
+                    self.vertices[v] = vid = vertex_count
+                    vertex_count += 1
                 v2 = self._round_sig(vertices[i + 1])
                 try:
-                    nvid = self.nodes[v2]
+                    nvid = self.vertices[v2]
                 except KeyError:
-                    self.nodes[v2] = nvid = nodecount
-                    nodecount += 1
+                    self.vertices[v2] = nvid = vertex_count
+                    vertex_count += 1
                     
                 self.adjacencylist[vid].append(nvid)
                 self.adjacencylist[nvid].append(vid)
                 
                 # Sort the edges so that mono-directional
                 # keys can be stored.
-                segment_nodes = sorted([vid, nvid])
-                segment = tuple(segment_nodes)
-                self.segments.append(segment)
+                arc_vertices = sorted([vid, nvid])
+                arc = tuple(arc_vertices)
+                self.arcs.append(arc)
                 length = util.compute_length(v, vertices[i + 1])
-                self.segment_lengths[segment] = length
+                self.arc_lengths[arc] = length
         if self.unique_segs:
             # Remove duplicate edges and duplicate adjacent nodes.
-            self.segments = list(set(self.segments))
+            self.arc = list(set(self.arcs))
             for k, v in self.adjacencylist.items():
                 self.adjacencylist[k] = list(set(v))
     
