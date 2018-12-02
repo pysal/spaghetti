@@ -616,7 +616,7 @@ class Network:
         """
         
         if not hasattr(self, 'alldistances'):
-            self.node_distance_matrix(n_proccess, gen_tree=gen_tree)
+            self.full_distance_matrix(n_proccess, gen_tree=gen_tree)
             
         neighbor_query = np.where(self.distancematrix < threshold)
         neighbors = defaultdict(list)
@@ -631,7 +631,7 @@ class Network:
     
     def snapobservations(self, in_data, name,
                          idvariable=None, attribute=None):
-        """Snap a point pattern shapefile to this network object. The
+        """Snap a point pattern shapefile to network object. The
         point pattern is stored in the ``network.pointpattern['key']``
         attribute of the network object.
         
@@ -672,9 +672,9 @@ class Network:
         self._snap_to_link(self.pointpatterns[name])
     
     
-    def compute_distance_to_nodes(self, x, y, edge):
-        """Given an observation on a network edge, return the distance
-        to the two nodes that bound that end.
+    def compute_distance_to_vertices(self, x, y, arc):
+        """Given an observation on a network arc, return the distance
+        to the two vertices that bound that end.
         
         Parameters
         ----------
@@ -685,22 +685,22 @@ class Network:
         y : float
             y-coordiante of the snapped point.
         
-        edge : tuple
+        arc : tuple
             (node0, node1) representation of the network edge.
         
         Returns
         -------
         
         d1 : float
-            The distance to node0. Always the node with the lesser id.
+            The distance to vtx0. Always the vertex with the lesser id.
         
         d2 : float
-            The distance to node1. Always the node with the greater id.
+            The distance to vtx1. Always the vertex with the greater id.
         
         """
         
-        d1 = util.compute_length((x, y), self.node_coords[edge[0]])
-        d2 = util.compute_length((x, y), self.node_coords[edge[1]])
+        d1 = util.compute_length((x, y), self.vertex_coords[arc[0]])
+        d2 = util.compute_length((x, y), self.vertex_coords[arc[1]])
         
         return d1, d2
     
@@ -765,32 +765,32 @@ class Network:
         
         pointpattern.snapped_coordinates = {}
         arcs_ = []
-        s2e = {}
+        s2a = {}
         for arc in self.arcs:
             head = self.node_coords[edge[0]]
             tail = self.node_coords[edge[1]]
             arcs_.append(cg.Chain([head, tail]))
-            s2e[(head, tail)] = arc
+            s2a[(head, tail)] = arc
         
         # snap points
         points = {}
         p2id = {}
         for pointIdx, point in pointpattern.points.items():
             points[pointIdx] = point['coordinates']
-        snapped = util.snap_points_on_segments(points, segments)
+        snapped = util.snap_points_on_segments(points, arcs_)
         
-        # record obs_to_edge, dist_to_node, and dist_snapped
-        for pointIdx, snapInfo in snapped.items():
-            x, y = snapInfo[1].tolist()
-            edge = s2e[tuple(snapInfo[0])]
-            if edge not in obs_to_edge:
+        # record obs_to_arc, dist_to_vertex, and dist_snapped
+        for point_idx, snap_info in snapped.items():
+            x, y = snap_info[1].tolist()
+            edge = s2a[tuple(snap_info[0])]
+            if arc not in obs_to_arc:
                 obs_to_arc[arc] = {}
-            obs_to_arc[arc][pointIdx] = (x, y)
-            pointpattern.snapped_coordinates[pointIdx] = (x, y)
-            d1, d2 = self.compute_distance_to_nodes(x, y, edge)
-            dist_to_vertex[pointIdx] = {edge[0]: d1, edge[1]: d2}
-            dist_snapped[pointIdx] = self.compute_snap_dist(pointpattern,
-                                                            pointIdx)
+            obs_to_arc[arc][point_idx] = (x, y)
+            pointpattern.snapped_coordinates[point_idx] = (x, y)
+            d1, d2 = self.compute_distance_to_nodes(x, y, arc)
+            dist_to_vertex[point_idx] = {edge[0]: d1, arc[1]: d2}
+            dist_snapped[point_idx] = self.compute_snap_dist(pointpattern,
+                                                             point_idx)
         
         # record obs_to_vertex
         obs_to_vertex = defaultdict(list)
@@ -805,7 +805,7 @@ class Network:
         pointpattern.obs_to_vertex = list(obs_to_vertex)
     
     
-    def count_per_edge(self, obs_on_network, graph=True):
+    def count_per_link(self, obs_on, graph=True):
         """Compute the counts per edge.
         
         Parameters
