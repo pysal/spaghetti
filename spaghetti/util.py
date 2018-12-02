@@ -134,7 +134,7 @@ def generatetree(pred):
     return tree
 
 
-def dijkstra(ntw, cost, v0, initial_dist=float('inf')):
+def dijkstra(ntw, cost, v0, initial_dist=np.inf):
     """Compute the shortest path between a start node and all other
     nodes in an origin-destination matrix.
     
