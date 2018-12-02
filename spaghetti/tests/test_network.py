@@ -364,20 +364,17 @@ class TestNetworkUtils(unittest.TestCase):
     
     def test_generate_tree(self):
         self.known_path = [23, 22, 20, 19, 170, 2, 0]
-        self.distance, self.pred = util.dijkstra(self.ntw,
-                                                 self.ntw.edge_lengths, 0)
+        self.distance, self.pred = util.dijkstra(self.ntw, 0)
         self.tree = util.generatetree(self.pred)
         self.assertEqual(self.tree[3], self.known_path)
     
     def test_dijkstra(self):
-        self.distance, self.pred = util.dijkstra(self.ntw,
-                                                 self.ntw.edge_lengths, 0)
+        self.distance, self.pred = util.dijkstra(self.ntw, 0)
         self.assertAlmostEqual(self.distance[196], 5505.668247, places=4)
         self.assertEqual(self.pred[196], 133)
     
     def test_dijkstra_mp(self):
-        self.distance, self.pred = util.dijkstra_mp((self.ntw,
-                                                     self.ntw.edge_lengths, 0))
+        self.distance, self.pred = util.dijkstra_mp((self.ntw, 0))
         self.assertAlmostEqual(self.distance[196], 5505.668247, places=4)
         self.assertEqual(self.pred[196], 133)
     

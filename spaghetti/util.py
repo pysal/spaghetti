@@ -41,6 +41,7 @@ def compute_length(v0, v1):
     1.4142135623730951
     
     """
+    
     euc_dist = np.sqrt((v0[0] - v1[0])**2 + (v0[1] - v1[1])**2)
     return euc_dist
 
@@ -74,12 +75,12 @@ def get_neighbor_distances(ntw, v0, l):
     >>> import spaghetti as spgh
     >>> from libpysal import examples
     >>> ntw = spgh.Network(examples.get_path('streets.shp'))
-    >>> neighs = spgh.util.get_neighbor_distances(ntw, 0,
-    ...                                           ntw.edge_lengths)
+    >>> neighs = spgh.util.get_neighbor_distances(ntw, 0, ntw.edge_lengths)
     >>> neighs[1]
     102.62353453439829
     
     """
+    
     edges = ntw.enum_links_node(v0)
     neighbors = {}
     for e in edges:
@@ -111,7 +112,7 @@ def generatetree(pred):
     >>> import spaghetti as spgh
     >>> from libpysal import examples
     >>> ntw = spgh.Network(examples.get_path('streets.shp'))
-    >>> distance, pred = spgh.util.dijkstra(ntw, ntw.edge_lengths, 0)
+    >>> distance, pred = spgh.util.dijkstra(ntw, 0)
     >>> tree = spgh.util.generatetree(pred)
     >>> tree[3]
     [23, 22, 20, 19, 170, 2, 0]
@@ -134,7 +135,7 @@ def generatetree(pred):
     return tree
 
 
-def dijkstra(ntw, cost, v0, n=float('inf')):
+def dijkstra(ntw, v0, initial_dist=np.inf):
     """Compute the shortest path between a start node and all other
     nodes in an origin-destination matrix.
     
@@ -144,16 +145,12 @@ def dijkstra(ntw, cost, v0, n=float('inf')):
     ntw :  spaghetti.Network
         spaghetti Network object.
     
-    cost : dict
-        key is tuple (start node, end node); value is ``float``.
-        Cost per edge to travel, e.g. distance.
-    
     v0 : int
         Start node ID
     
-    n : float
+    initial_dist : float
         integer break point to stop iteration and return n neighbors.
-        Default is ``'inf'``.
+        Default is ``numpy.inf``.
     
     Returns
     -------
@@ -175,7 +172,7 @@ def dijkstra(ntw, cost, v0, n=float('inf')):
     >>> import spaghetti as spgh
     >>> from libpysal import examples
     >>> ntw = spgh.Network(examples.get_path('streets.shp'))
-    >>> distance, pred = spgh.util.dijkstra(ntw, ntw.edge_lengths, 0)
+    >>> distance, pred = spgh.util.dijkstra(ntw, 0)
     >>> round(distance[196], 4)
     5505.6682
     >>> pred[196]
@@ -183,34 +180,39 @@ def dijkstra(ntw, cost, v0, n=float('inf')):
     
     """
     
-    distance = [n for x in ntw.node_list]
+    # Cost per edge to travel, e.g. distance.
+    cost = ntw.edge_lengths
+    
+    distance = [initial_dist for x in ntw.node_list]
     idx = ntw.node_list.index(v0)
     distance[ntw.node_list.index(v0)] = 0
-    pred = [-1 for x in ntw.node_list]
-    a = set()
-    a.add(v0)
-    while len(a) > 0:
+    unvisited, pred = set([v0]), [-1 for x in ntw.node_list]
+    
+    while len(unvisited) > 0:
+        
         # Get node with the lowest value from distance.
-        dist = n
-        for node in a:
+        dist = initial_dist
+        for node in unvisited:
             if distance[node] < dist:
-                dist = distance[node]
-                v = node
+                dist, current = distance[node], node
+        
         # Remove that node from the set.
-        a.remove(v)
-        last = v
-        # 4. Get the neighbors to the current node.
-        neighbors = get_neighbor_distances(ntw, v, cost)
+        unvisited.remove(current)
+        
+        # Get the neighbors to the current node.
+        neighbors = get_neighbor_distances(ntw, current, cost)
         for v1, indiv_cost in neighbors.items():
-            if distance[v1] > distance[v] + indiv_cost:
-                distance[v1] = distance[v] + indiv_cost
-                pred[v1] = v
-                a.add(v1)
+            if distance[v1] > distance[current] + indiv_cost:
+                distance[v1] = distance[current] + indiv_cost
+                pred[v1] = current
+                unvisited.add(v1)
+    
     pred = np.array(pred, dtype=np.int)
+    
     return distance, pred
 
 
-def dijkstra_mp(ntw_cost_node):
+def dijkstra_mp(ntw_node):
     """
     Compute the shortest path between a start node and all other
     nodes in the web utilizing multiple cores upon request.
@@ -221,9 +223,7 @@ def dijkstra_mp(ntw_cost_node):
     ntw_cost_node : tuple
         tuple of arguments to pass into dijkstra as 
         (1) ntw - ``spaghetti.Network; spaghetti Network object``;
-        (2) cost - ``dict`` keyed by tuple (start node, end node)
-        with values is ``float`` - Cost per edge to travel, e.g. dist.;
-        (3) node - ``int``; Start node ID
+        (2) node - ``int``; Start node ID
     
     Returns
     -------
@@ -245,7 +245,7 @@ def dijkstra_mp(ntw_cost_node):
     >>> import spaghetti as spgh
     >>> from libpysal import examples
     >>> ntw = spgh.Network(examples.get_path('streets.shp'))
-    >>> distance, pred = spgh.util.dijkstra(ntw, ntw.edge_lengths, 0)
+    >>> distance, pred = spgh.util.dijkstra(ntw, 0)
     >>> round(distance[196], 4)
     5505.6682
     >>> pred[196]
@@ -253,8 +253,8 @@ def dijkstra_mp(ntw_cost_node):
     
     """
     
-    ntw, cost, node = ntw_cost_node
-    distance, pred = dijkstra(ntw, cost, node)
+    ntw, node = ntw_node
+    distance, pred = dijkstra(ntw, node)
     return distance, pred
 
 

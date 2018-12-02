@@ -993,15 +993,15 @@ class Network:
         Based on :cite:`Dijkstra1959a`.
         
         """
+        
         self.alldistances = {}
         nnodes = len(self.node_list)
         self.distancematrix = np.empty((nnodes, nnodes))
+        
         # Single-core processing
         if not n_processes:
             for node in self.node_list:
-                distance, pred = util.dijkstra(self,
-                                               self.edge_lengths,
-                                               node)
+                distance, pred = util.dijkstra(self, node)
                 pred = np.array(pred)
                 if gen_tree:
                     tree = util.generatetree(pred)
@@ -1009,6 +1009,7 @@ class Network:
                     tree = None
                 self.alldistances[node] = (distance, tree)
                 self.distancematrix[node] = distance
+        
         # Multiprocessing
         if n_processes:
             import multiprocessing as mp
@@ -1019,9 +1020,7 @@ class Network:
                 cores = n_processes
             p = mp.Pool(processes=cores)
             distance_pred = p.map(util.dijkstra_mp,
-                                  zip(repeat(self),
-                                      repeat(self.edge_lengths),
-                                      self.node_list))
+                                  zip(repeat(self), self.node_list))
             iterations = range(len(distance_pred))
             distance = [distance_pred[itr][0] for itr in iterations]
             pred = np.array([distance_pred[itr][1] for itr in iterations])
