@@ -74,7 +74,7 @@ def get_neighbor_distances(ntw, v0, l):
     >>> import spaghetti as spgh
     >>> from libpysal import examples
     >>> ntw = spgh.Network(examples.get_path('streets.shp'))
-    >>> neighs = spgh.util.get_neighbor_distances(ntw, 0)
+    >>> neighs = spgh.util.get_neighbor_distances(ntw, 0, ntw.edge_lengths)
     >>> neighs[1]
     102.62353453439829
     
