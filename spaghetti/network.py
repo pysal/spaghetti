@@ -1003,8 +1003,9 @@ class Network:
         return links
     
     
-    def node_distance_matrix(self, n_processes, gen_tree=False):
-        """ Called from within ``allneighbordistances()``,
+    def full_distance_matrix(self, n_processes, gen_tree=False):
+        """All vertex-to-vertex distances on a network. This function
+        is called from within ``allneighbordistances()``,
         ``nearestneighbordistances()``, and ``distancebandweights()``.
         
         Parameters
@@ -1024,20 +1025,20 @@ class Network:
         """
         
         self.alldistances = {}
-        nnodes = len(self.node_list)
-        self.distancematrix = np.empty((nnodes, nnodes))
+        nvtx = len(self.vertex_list)
+        self.distancematrix = np.empty((nvtx, nvtx))
         
         # Single-core processing
         if not n_processes:
-            for node in self.node_list:
-                distance, pred = util.dijkstra(self, node)
+            for vtx in self.vertex_list:
+                distance, pred = util.dijkstra(self, vtx)
                 pred = np.array(pred)
                 if gen_tree:
                     tree = util.generatetree(pred)
                 else:
                     tree = None
-                self.alldistances[node] = (distance, tree)
-                self.distancematrix[node] = distance
+                self.alldistances[vtx] = (distance, tree)
+                self.distancematrix[vtx] = distance
         
         # Multiprocessing
         if n_processes:
@@ -1049,18 +1050,18 @@ class Network:
                 cores = n_processes
             p = mp.Pool(processes=cores)
             distance_pred = p.map(util.dijkstra_mp,
-                                  zip(repeat(self), self.node_list))
+                                  zip(repeat(self), self.vertex_list))
             iterations = range(len(distance_pred))
             distance = [distance_pred[itr][0] for itr in iterations]
             pred = np.array([distance_pred[itr][1] for itr in iterations])
             
-            for node in self.node_list:
+            for vtx in self.vertex_list:
                 if gen_tree:
-                    tree = util.generatetree(pred[node])
+                    tree = util.generatetree(pred[vtx])
                 else:
                     tree = None
-                self.alldistances[node] = (distance[node], tree)
-                self.distancematrix[node] = distance[node]
+                self.alldistances[vtx] = (distance[vtx], tree)
+                self.distancematrix[vtx] = distance[vtx]
     
     
     def allneighbordistances(self, sourcepattern, destpattern=None,
