@@ -968,33 +968,36 @@ class Network:
         return simpts
     
     
-    def enum_links_node(self, v0):
-        """Returns the edges (links) around node.
+    def enum_links_vertex(self, v0):
+        """Returns the arcs (links) around vertices.
         
         Parameters
         -----------
         
         v0 : int
-            Node id
+            vertex id
         
         Returns
         -------
         
         links : list
-            List of tuple edges adjacent to the node.
+            List of tuple edges adjacent to the vertex.
         
         Examples
         --------
         
         >>> import spaghetti as spgh
         >>> ntw = spgh.Network(examples.get_path('streets.shp'))
-        >>> ntw.enum_links_node(24)
+        >>> ntw.enum_links_vertex(24)
         [(24, 48), (24, 25), (24, 26)]
         
         """
+        
         links = []
-        neighbornodes = self.adjacencylist[v0]
-        for n in neighbornodes:
+        
+        neighbor_vertices = self.adjacencylist[v0]
+        
+        for n in neighbor_vertices:
             links.append(tuple(sorted([n, v0])))
         
         return links
