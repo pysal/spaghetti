@@ -245,30 +245,30 @@ class Network:
         
         """
         if graph:
-            edges = self.graphedges
+            links = self.edges
             obj_type = 'graph_'
         else:
-            edges = self.edges
+            links = self.segments
             obj_type = 'network_'
         
         # connected component count and labels
         n_components = w.n_components
         component_labels = w.component_labels
         
-        # edge to component lookup
-        edge2component = dict(zip(edges, component_labels))
+        # link to component lookup
+        link2component = dict(zip(links, component_labels))
         
-        # component ID to edge lookup
-        component2edge = {}
+        # component ID to links lookup
+        component2link = {}
         cp_labs = set(w.component_labels)
         for cpl in cp_labs:
-            component2edge[cpl] = sorted([k for k,v\
-                                          in edge2component.items()\
+            component2link[cpl] = sorted([k for k,v\
+                                          in link2component.items()\
                                           if v == cpl])
         
         # component to ring lookup
         component_is_ring = {}
-        for k,vs in component2edge.items():
+        for k,vs in component2link.items():
             component_is_ring[k] = True
             for v in vs:
                 if len(w.neighbors[v]) != 2:
@@ -277,7 +277,7 @@ class Network:
         # set all new variables into list
         extracted_attrs = [['n_components', n_components],
                            ['component_labels', component_labels],
-                           ['component2edge', component2edge],
+                           ['component2edge', component2link],
                            ['component_is_ring', component_is_ring]]
         
         # iterate over list and set attribute with
