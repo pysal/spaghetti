@@ -186,9 +186,7 @@ def dijkstra(ntw, cost, v0, initial_dist=np.inf):
     distance = [initial_dist for x in ntw.node_list]
     idx = ntw.node_list.index(v0)
     distance[ntw.node_list.index(v0)] = 0
-    pred = [-1 for x in ntw.node_list]
-    a = set()
-    a.add(v0)
+    unvisited, pred = set([v0]), [-1 for x in ntw.node_list]
     while len(a) > 0:
         # Get node with the lowest value from distance.
         dist = initial_dist
