@@ -859,14 +859,14 @@ class Network:
         return counts
     
     
-    def _newpoint_coords(self, edge, distance):
+    def _newpoint_coords(self, arc, distance):
         """Used internally to compute new point
         coordinates during snapping.
         """
-        x1 = self.node_coords[edge[0]][0]
-        y1 = self.node_coords[edge[0]][1]
-        x2 = self.node_coords[edge[1]][0]
-        y2 = self.node_coords[edge[1]][1]
+        x1 = self.vertex_coords[arc[0]][0]
+        y1 = self.vertex_coords[arc[0]][1]
+        x2 = self.vertex_coords[arc[1]][0]
+        y2 = self.vertex_coords[arc[1]][1]
         if x1 == x2:  # Vertical line case
             x0 = x1
             if y1 < y2:
