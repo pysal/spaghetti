@@ -787,7 +787,7 @@ class Network:
                 obs_to_arc[arc] = {}
             obs_to_arc[arc][point_idx] = (x, y)
             pointpattern.snapped_coordinates[point_idx] = (x, y)
-            d1, d2 = self.compute_distance_to_nodes(x, y, arc)
+            d1, d2 = self.compute_distance_to_vertices(x, y, arc)
             dist_to_vertex[point_idx] = {edge[0]: d1, arc[1]: d2}
             dist_snapped[point_idx] = self.compute_snap_dist(pointpattern,
                                                              point_idx)
