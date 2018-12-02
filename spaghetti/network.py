@@ -923,6 +923,7 @@ class Network:
         True
         
         """
+        
         simpts = SimulatedPointPattern()
         
         # cumulative network length.
