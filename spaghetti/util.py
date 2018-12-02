@@ -74,8 +74,7 @@ def get_neighbor_distances(ntw, v0, l):
     >>> import spaghetti as spgh
     >>> from libpysal import examples
     >>> ntw = spgh.Network(examples.get_path('streets.shp'))
-    >>> neighs = spgh.util.get_neighbor_distances(ntw, 0,
-    ...                                           ntw.edge_lengths)
+    >>> neighs = spgh.util.get_neighbor_distances(ntw, 0)
     >>> neighs[1]
     102.62353453439829
     
@@ -111,7 +110,7 @@ def generatetree(pred):
     >>> import spaghetti as spgh
     >>> from libpysal import examples
     >>> ntw = spgh.Network(examples.get_path('streets.shp'))
-    >>> distance, pred = spgh.util.dijkstra(ntw, ntw.edge_lengths, 0)
+    >>> distance, pred = spgh.util.dijkstra(ntw, 0)
     >>> tree = spgh.util.generatetree(pred)
     >>> tree[3]
     [23, 22, 20, 19, 170, 2, 0]
