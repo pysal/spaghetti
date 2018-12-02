@@ -187,24 +187,28 @@ def dijkstra(ntw, cost, v0, initial_dist=np.inf):
     idx = ntw.node_list.index(v0)
     distance[ntw.node_list.index(v0)] = 0
     unvisited, pred = set([v0]), [-1 for x in ntw.node_list]
+    
     while len(unvisited) > 0:
+        
         # Get node with the lowest value from distance.
         dist = initial_dist
         for node in unvisited:
             if distance[node] < dist:
-                dist = distance[node]
-                v = node
+                dist, current = distance[node], node
+        
         # Remove that node from the set.
-        unvisited.remove(v)
-        last = v
+        unvisited.remove(current)
+        
         # Get the neighbors to the current node.
-        neighbors = get_neighbor_distances(ntw, v, cost)
+        neighbors = get_neighbor_distances(ntw, current, cost)
         for v1, indiv_cost in neighbors.items():
-            if distance[v1] > distance[v] + indiv_cost:
-                distance[v1] = distance[v] + indiv_cost
-                pred[v1] = v
+            if distance[v1] > distance[current] + indiv_cost:
+                distance[v1] = distance[current] + indiv_cost
+                pred[v1] = current
                 unvisited.add(v1)
+    
     pred = np.array(pred, dtype=np.int)
+    
     return distance, pred
 
 
