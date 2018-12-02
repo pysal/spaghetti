@@ -993,9 +993,11 @@ class Network:
         Based on :cite:`Dijkstra1959a`.
         
         """
+        
         self.alldistances = {}
         nnodes = len(self.node_list)
         self.distancematrix = np.empty((nnodes, nnodes))
+        
         # Single-core processing
         if not n_processes:
             for node in self.node_list:
@@ -1007,6 +1009,7 @@ class Network:
                     tree = None
                 self.alldistances[node] = (distance, tree)
                 self.distancematrix[node] = distance
+        
         # Multiprocessing
         if n_processes:
             import multiprocessing as mp
