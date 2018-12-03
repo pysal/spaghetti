@@ -777,18 +777,27 @@ class Network:
         p2id = {}
         for pointIdx, point in pointpattern.points.items():
             points[pointIdx] = point['coordinates']
-        snapped = util.snap_points_on_segments(points, arcs_)
+        
+        snapped = util.snap_points_to_links(points, arcs_)
         
         # record obs_to_arc, dist_to_vertex, and dist_snapped
         for point_idx, snap_info in snapped.items():
+            
             x, y = snap_info[1].tolist()
+            
             edge = s2a[tuple(snap_info[0])]
+            
             if arc not in obs_to_arc:
                 obs_to_arc[arc] = {}
+            
             obs_to_arc[arc][point_idx] = (x, y)
             pointpattern.snapped_coordinates[point_idx] = (x, y)
+            
             d1, d2 = self.compute_distance_to_vertices(x, y, arc)
-            dist_to_vertex[point_idx] = {edge[0]: d1, arc[1]: d2}
+            
+            dist_to_vertex[point_idx] = {arc[0]: d1,
+                                         arc[1]: d2}
+            
             dist_snapped[point_idx] = self.compute_snap_dist(pointpattern,
                                                              point_idx)
         
