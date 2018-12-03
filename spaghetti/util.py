@@ -118,20 +118,29 @@ def generatetree(pred):
     [23, 22, 20, 19, 170, 2, 0]
     
     """
+    
     tree = {}
+    
     for i, p in enumerate(pred):
+        
         if p == -1:
-            # root node
+            
+            # root vertex
             tree[i] = [i]
             continue
+        
         idx = p
         path = [idx]
+        
         while idx >= 0:
-            nextnode = pred[idx]
-            idx = nextnode
+            next_vertex = pred[idx]
+            idx = next_vertex
+            
             if idx >= 0:
-                path.append(nextnode)
+                path.append(next_vertex)
+        
         tree[i] = path
+    
     return tree
 
 
