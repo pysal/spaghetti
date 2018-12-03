@@ -1766,7 +1766,7 @@ class Network:
 
 def element_as_gdf(net, vertices=False, arcs=False, pp_name=None,
                    snapped=False, id_col='id', geom_col='geometry'):
-    """Return a ```geopandas.GeoDataFrame`` 
+    """Return a `geopandas.GeoDataFrame 
     <http://geopandas.org/data_structures.html#geodataframe`_ of network
     elements. This can be (a) the vertices of a network; (b) the arcs of
     a network; (c) both the vertices and arcs of the network; (d) raw
@@ -1825,7 +1825,7 @@ def element_as_gdf(net, vertices=False, arcs=False, pp_name=None,
     Notes
     -----
     
-    This function requires ```geopandas`` <http://geopandas.org>`_.
+    This function requires `geopandas <http://geopandas.org>`_.
     
     """
     
