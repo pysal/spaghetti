@@ -222,6 +222,16 @@ class TestNetworkPointPattern(unittest.TestCase):
         self.assertEqual(observed.all(), known.all())
         del self.ntw.alldistances
         del self.ntw.distancematrix
+        
+        matrix5, tree = self.ntw.allneighbordistances(self.pp2_str,
+                                                      gen_tree=True)
+        known_mtx_val = 1484112.694526529
+        known_tree_val = (-0.1, -0.1)
+        
+        self.assertAlmostEqual(np.nansum(matrix5[0]), known_mtx_val, places=4)
+        self.assertEqual(tree[(18, 19)], known_tree_val)
+        del self.ntw.alldistances
+        del self.ntw.distancematrix
     
     def test_all_neighbor_distances_multiproccessing(self):
         matrix1, tree = self.ntw.allneighbordistances(self.pp1_str,
