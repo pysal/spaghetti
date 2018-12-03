@@ -1126,7 +1126,7 @@ class Network:
             snapped to the same network arc a flag of -.1 is set for
             both the source and destination network vertex
             indicating the same arc is used while also raising an
-            ``IndexError``` when rebuilding the path.
+            ``IndexError`` when rebuilding the path.
         
         Examples
         --------
