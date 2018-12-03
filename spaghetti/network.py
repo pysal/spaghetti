@@ -20,7 +20,8 @@ class Network:
     """Spatially-constrained network representation and analytical
     functionality. Naming conventions are as follows, (1) arcs and
     vertices for the full network object, and (2) edges and nodes for
-    the simplified graph-theoretic object.
+    the simplified graph-theoretic object. The term 'link' is used to
+    refer to a network arc or a graph edge.
     
     Parameters
     ----------
@@ -823,19 +824,19 @@ class Network:
         
         obs_on_network : dict
             Dictionary of observations on the network.
-            Either {(edge):{pt_id:(coords)}} or 
-            {edge:[(coord),(coord),(coord)]}
+            Either {(link):{pt_id:(coords)}} or 
+            {link:[(coord),(coord),(coord)]}
         
         Returns
         -------
         counts : dict
-            {(edge):count}
+            {(link):count}
         
         Examples
         --------
         
-        Note that this passes the obs_to_edge attribute of a
-        point pattern snapped to the network.
+        Note that this passes the obs_to_arc or obs_to_edge attribute
+        of a point pattern snapped to the network.
         
         >>> import spaghetti as spgh
         >>> ntw = spgh.Network(examples.get_path('streets.shp'))
@@ -991,7 +992,7 @@ class Network:
         -------
         
         links : list
-            List of tuple edges adjacent to the vertex.
+            List of tuple arcs adjacent to the vertex.
         
         Examples
         --------
@@ -1619,7 +1620,7 @@ class Network:
         -------
         
         sn : spaghetti.Network
-            spaghetti Network object.
+            newly instantiated ``spaghetti.Network`` object.
         
        Examples
         --------
@@ -1765,10 +1766,12 @@ class Network:
 
 def element_as_gdf(net, vertices=False, arcs=False, pp_name=None,
                    snapped=False, id_col='id', geom_col='geometry'):
-    """Return a ``geopandas.GeoDataFrame`` of network elements. This
-    can be (a) the vertices of a network; (b) the arcs of a network;
-    (c) both the vertices and arcs of the network; (d) raw point pattern
-    associated with the network; or (e) snapped point pattern of (d).
+    """Return a ```geopandas.GeoDataFrame`` 
+    <http://geopandas.org/data_structures.html#geodataframe`_ of network
+    elements. This can be (a) the vertices of a network; (b) the arcs of
+    a network; (c) both the vertices and arcs of the network; (d) raw
+    point pattern associated with the network; or (e) snapped point
+    pattern of (d).
     
     Parameters
     ----------
@@ -1822,7 +1825,7 @@ def element_as_gdf(net, vertices=False, arcs=False, pp_name=None,
     Notes
     -----
     
-    This function requires ``geopandas``.
+    This function requires ```geopandas`` <http://geopandas.org>`_.
     
     """
     
