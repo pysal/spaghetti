@@ -312,6 +312,7 @@ def squared_distance_point_link(point, link):
         sqd = np.dot(w.T, w)
         nearp = p0
         return sqd, nearp
+    
     #
     c2 = np.dot(v, v)
     if c2 <= c1:
@@ -319,6 +320,7 @@ def squared_distance_point_link(point, link):
         sqd = np.dot(dp1.T, dp1)
         nearp = p1
         return sqd, nearp
+    
     #
     b = c1 / c2
     bv = np.dot(b, v)
@@ -430,7 +432,7 @@ def snap_points_to_links(points, links):
 
 
 @requires('geopandas', 'shapely')
-def _points_as_gdf(net, nodes, nodes_for_edges, pp_name, snapped,
+def _points_as_gdf(net, vertices, vertices_for_arcs, pp_name, snapped,
                    id_col=None, geom_col=None):
     """
     Internal function for returning a point geopandas.GeoDataFrame
@@ -439,9 +441,9 @@ def _points_as_gdf(net, nodes, nodes_for_edges, pp_name, snapped,
     Parameters
     ----------
     
-    nodes_for_edges : bool
+    vertices_for_arcs : bool
         Flag for points being an object returned [False] or for merely
-        creating network edges [True]. Set from within the parent
+        creating network arcs [True]. Set from within the parent
         function (``spaghetti.element_as_gdf()``).
     
     Raises
@@ -457,7 +459,7 @@ def _points_as_gdf(net, nodes, nodes_for_edges, pp_name, snapped,
     -------
     
     points : geopandas.GeoDataFrame
-        Network point elements (either nodes or ``PointPattern``
+        Network point elements (either vertices or ``PointPattern``
         points) as a simple ``geopandas.GeoDataFrame`` of
         ``shapely.Point`` objects with an ``id`` column and
         ``geometry`` column.
@@ -471,8 +473,8 @@ def _points_as_gdf(net, nodes, nodes_for_edges, pp_name, snapped,
     """
     
     # nodes
-    if nodes or nodes_for_edges:
-        pts_dict = net.node_coords
+    if vertices or vertices_for_arcs:
+        pts_dict = net.vertex_coords
     
     # raw point pattern
     if pp_name and not snapped:
@@ -498,7 +500,7 @@ def _points_as_gdf(net, nodes, nodes_for_edges, pp_name, snapped,
 
 
 @requires('geopandas', 'shapely')
-def _edges_as_gdf(net, points, id_col=None, geom_col=None):
+def _arcs_as_gdf(net, points, id_col=None, geom_col=None):
     """
     Internal function for returning a edges geopandas.GeoDataFrame
     called from within ``spaghetti.element_as_gdf()``.
@@ -507,7 +509,7 @@ def _edges_as_gdf(net, points, id_col=None, geom_col=None):
     -------
     
     points : geopandas.GeoDataFrame
-        Network point elements (either nodes or ``PointPattern``
+        Network point elements (either vertices or ``PointPattern``
         points) as a simple `geopandas.GeoDataFrame` of
         ``shapely.Point``` objects with an `id` column and
         ``geometry`` column.
@@ -520,17 +522,22 @@ def _edges_as_gdf(net, points, id_col=None, geom_col=None):
     
     """
     
-    # edges
-    edges = {}
-    for (node1_id, node2_id) in net.edges:
-        node1 = points.loc[(points[id_col] == node1_id), geom_col].squeeze()
-        node2 = points.loc[(points[id_col] == node2_id), geom_col].squeeze()
-        edges[(node1_id, node2_id)] = LineString((node1, node2))
-    edges = gpd.GeoDataFrame(sorted(list(edges.items())),
-                             columns=[id_col, geom_col])
+    # arcs
+    arcs = {}
+    
+    for (vtx1_id, vtx2_id) in net.vertices:
+        
+        vtx1 = points.loc[(points[id_col] == vtx1_id), geom_col].squeeze()
+        
+        vtx2 = points.loc[(points[id_col] == vtx2_id), geom_col].squeeze()
+        
+        arcs[(vtx1_id, vtx2_id)] = LineString((vtx1, vtx2))
+    
+    arcs = gpd.GeoDataFrame(sorted(list(arcs.items())),
+                            columns=[id_col, geom_col])
     
     # additional columns
     if hasattr(net, 'network_component_labels'):
-        edges['comp_label'] = net.network_component_labels
+        arcs['comp_label'] = net.network_component_labels
     
-    return edges
+    return arcs
