@@ -1120,7 +1120,13 @@ class Network:
         
         tree_nearest : dict
             Nearest network node to point pattern vertex shortest
-            path lookup.
+            path lookup. The values of the dictionary are a ``tuple``
+            of the nearest source vertex and the near destination
+            vertex to query the lookup tree. If two observations are
+            snapped to the same network arc a flag of -.1 is set for
+            both the source and destination network vertex
+            indicating the same arc is used while also raising an
+            ``IndexError``` when rebuilding the path.
         
         Examples
         --------
@@ -1218,12 +1224,18 @@ class Network:
                 dest1, dest2 = dest_vertices[p2]
                 set2 = set(dest_vertices[p2])
                 
-                if set1 == set2:  # same arc
+                # when the observations are snapped to the same arc
+                if set1 == set2:
                     x1, y1 = sourcepattern.snapped_coordinates[p1]
                     x2, y2 = destpattern.snapped_coordinates[p2]
+                    
                     computed_length = util.compute_length((x1, y1),
                                                           (x2, y2))
                     nearest[p1, p2] = computed_length
+                    # set the nearest network vertices to a flag of -.1
+                    # indicating the same arc is used while also raising
+                    # and indexing error when rebuilding the path
+                    tree_nearest[p1, p2] = (-.1, -.1)
                     
                 else:
                     ddist1, ddist2 = dst_d2n[p2].values()
