@@ -47,7 +47,7 @@ def compute_length(v0, v1):
 
 
 def get_neighbor_distances(ntw, v0, l):
-    """Get distances to the nearest node neighbors along
+    """Get distances to the nearest vertex neighbors along
     connecting edges.
     
     Parameters
@@ -57,17 +57,17 @@ def get_neighbor_distances(ntw, v0, l):
         spaghetti Network object.
     
     v0 : int
-        Node id
+        vertex id
     
     l : dict
-        key is tuple (start node, end node); value is ``float``.
-        Cost per edge to travel, e.g. distance.
+        key is tuple (start vertex, end vertex); value is ``float``.
+        Cost per arc to travel, e.g. distance.
     
     Returns
     -------
     
     neighbors : dict
-        key is int (node id); value is ``float`` (distance)
+        key is int (vertex id); value is ``float`` (distance)
     
     Examples
     --------
@@ -75,19 +75,19 @@ def get_neighbor_distances(ntw, v0, l):
     >>> import spaghetti as spgh
     >>> from libpysal import examples
     >>> ntw = spgh.Network(examples.get_path('streets.shp'))
-    >>> neighs = spgh.util.get_neighbor_distances(ntw, 0, ntw.edge_lengths)
+    >>> neighs = spgh.util.get_neighbor_distances(ntw, 0, ntw.arc_lengths)
     >>> neighs[1]
     102.62353453439829
     
     """
     
-    edges = ntw.enum_links_node(v0)
+    arcs = ntw.enum_links_vertex(v0)
     neighbors = {}
-    for e in edges:
-        if e[0] != v0:
-            neighbors[e[0]] = l[e]
+    for arc in arcs:
+        if arc[0] != v0:
+            neighbors[arc[0]] = l[arc]
         else:
-            neighbors[e[1]] = l[e]
+            neighbors[arc[1]] = l[arc]
     return neighbors
 
 
