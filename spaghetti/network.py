@@ -1609,65 +1609,65 @@ class Network:
         
         sn = Network()
         sn.adjacencylist = copy.deepcopy(self.adjacencylist)
-        sn.edge_lengths = copy.deepcopy(self.edge_lengths)
-        sn.edges = set(copy.deepcopy(self.edges))
-        sn.node_coords = copy.deepcopy(self.node_coords)
-        sn.node_list = copy.deepcopy(self.node_list)
-        sn.nodes = copy.deepcopy(self.nodes)
+        sn.arc_lengths = copy.deepcopy(self.arc_lengths)
+        sn.arc = set(copy.deepcopy(self.arc))
+        sn.vertex_coords = copy.deepcopy(self.vertex_coords)
+        sn.vertex_list = copy.deepcopy(self.vertex_list)
+        sn.vertices = copy.deepcopy(self.vertices)
         sn.pointpatterns = copy.deepcopy(self.pointpatterns)
         sn.in_data = self.in_data
         
-        current_node_id = max(self.nodes.values())
+        current_vertex_id = max(self.vertices.values())
         
-        newedges = set()
-        removeedges = set()
-        for e in sn.edges:
-            length = sn.edge_lengths[e]
+        new_arcs = set()
+        remove_arcs = set()
+        for arc in sn.arcs:
+            length = sn.arc_lengths[arc]
             interval = distance
             
             totallength = 0
-            currentstart = startnode = e[0]
-            endnode = e[1]
+            currentstart = start_vertex = arc[0]
+            end_vertex = arc[1]
             
             # If the edge will be segmented remove the current
             # edge from the adjacency list.
             if interval < length:
-                sn.adjacencylist[e[0]].remove(e[1])
-                sn.adjacencylist[e[1]].remove(e[0])
-                sn.edge_lengths.pop(e, None)
-                removeedges.add(e)
+                sn.adjacencylist[arc[0]].remove(arc[1])
+                sn.adjacencylist[arc[1]].remove(arc[0])
+                sn.arc_lengths.pop(arc, None)
+                remove_arcs.add(arc)
             else:
                 continue
                 
             while totallength < length:
-                currentstop = current_node_id
+                currentstop = current_vertex_id
                 if totallength + interval > length:
-                    currentstop = endnode
+                    currentstop = end_vertex
                     interval = length - totallength
                     totallength = length
                 else:
-                    current_node_id += 1
-                    currentstop = current_node_id
+                    current_vertex_id += 1
+                    currentstop = current_vertex_id
                     totallength += interval
                     
-                    # Compute the new node coordinate.
-                    newx, newy = self._newpoint_coords(e, totallength)
+                    # Compute the new vertex coordinate.
+                    newx, newy = self._newpoint_coords(arc, totallength)
                     
-                    # Update node_list.
-                    if currentstop not in sn.node_list:
-                        sn.node_list.append(currentstop)
+                    # Update vertex.
+                    if currentstop not in sn.vertex_list:
+                        sn.vertex_list.append(currentstop)
                     
-                    # Update nodes and node_coords.
-                    sn.node_coords[currentstop] = newx, newy
-                    sn.nodes[(newx, newy)] = currentstop
+                    # Update nodes and vertex.
+                    sn.vertex_coords[currentstop] = newx, newy
+                    sn.vertices[(newx, newy)] = currentstop
                 
                 # Update the adjacency list.
                 sn.adjacencylist[currentstart].append(currentstop)
                 sn.adjacencylist[currentstop].append(currentstart)
                 
-                # Add the new edge to the edge dict.
+                # Add the new arc to the arc dict.
                 # Iterating over this so we need to add after iterating.
-                newedges.add(tuple(sorted([currentstart, currentstop])))
+                new_arcs.add(tuple(sorted([currentstart, currentstop])))
                 
                 # Modify edge_lengths.
                 current_start_stop = tuple(sorted([currentstart,
