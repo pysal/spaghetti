@@ -145,30 +145,30 @@ def generatetree(pred):
 
 
 def dijkstra(ntw, v0, initial_dist=np.inf):
-    """Compute the shortest path between a start node and all other
-    nodes in an origin-destination matrix.
+    """Compute the shortest path between a start vertex and
+    all other vertices in an origin-destination matrix.
     
     Parameters
     ----------
     
     ntw :  spaghetti.Network
-        spaghetti Network object.
+        spaghetti.Network object
     
     v0 : int
-        Start node ID
+        Start vertex ID
     
     initial_dist : float
-        integer break point to stop iteration and return n neighbors.
+        Integer break point to stop iteration and return n neighbors.
         Default is ``numpy.inf``.
     
     Returns
     -------
     
     distance : list
-        List of distances from node to all other nodes.
+        List of distances from vertex to all other vertices.
     
     pred : list
-        List of preceeding nodes for traversal route.
+        List of preceeding vertices for traversal route.
     
     Notes
     -----
@@ -189,29 +189,34 @@ def dijkstra(ntw, v0, initial_dist=np.inf):
     
     """
     
-    # Cost per edge to travel, e.g. distance.
-    cost = ntw.edge_lengths
+    # Cost per arc to travel, e.g. distance.
+    cost = ntw.arc_lengths
     
-    distance = [initial_dist for x in ntw.node_list]
-    idx = ntw.node_list.index(v0)
-    distance[ntw.node_list.index(v0)] = 0
-    unvisited, pred = set([v0]), [-1 for x in ntw.node_list]
+    distance = [initial_dist for x in ntw.vertex_list]
+    idx = ntw.vertex_list.index(v0)
+    distance[ntw.vertex_list.index(v0)] = 0
+    unvisited, pred = set([v0]), [-1 for x in ntw.vertex_list]
     
     while len(unvisited) > 0:
         
-        # Get node with the lowest value from distance.
+        # Get vertex with the lowest value from distance.
         dist = initial_dist
-        for node in unvisited:
-            if distance[node] < dist:
-                dist, current = distance[node], node
+        for vertex in unvisited:
+            if distance[vertex] < dist:
+                dist, current = distance[vertex], vertex
         
-        # Remove that node from the set.
+        # Remove that vertex from the set.
         unvisited.remove(current)
         
-        # Get the neighbors to the current node.
-        neighbors = get_neighbor_distances(ntw, current, cost)
+        # Get the neighbors to the current vertex.
+        neighbors = get_neighbor_distances(ntw,
+                                           current,
+                                           cost)
+        
         for v1, indiv_cost in neighbors.items():
+            
             if distance[v1] > distance[current] + indiv_cost:
+                
                 distance[v1] = distance[current] + indiv_cost
                 pred[v1] = current
                 unvisited.add(v1)
@@ -221,27 +226,27 @@ def dijkstra(ntw, v0, initial_dist=np.inf):
     return distance, pred
 
 
-def dijkstra_mp(ntw_node):
+def dijkstra_mp(ntw_vertex):
     """
-    Compute the shortest path between a start node and all other
-    nodes in the web utilizing multiple cores upon request.
+    Compute the shortest path between a start vertex and all other
+    vertices in the web utilizing multiple cores upon request.
     
     Parameters
     ----------
     
-    ntw_cost_node : tuple
-        tuple of arguments to pass into dijkstra as 
-        (1) ntw - ``spaghetti.Network; spaghetti Network object``;
-        (2) node - ``int``; Start node ID
+    ntw_vertex : tuple
+        Tuple of arguments to pass into dijkstra as
+        (1) ntw - ``spaghetti.Network object``;
+        (2) vertex - ``int``; Start node ID
     
     Returns
     -------
     
     distance : list
-        List of distances from node to all other nodes.
+        List of distances from vertex to all other vertices.
     
     pred : list
-        List of preceeding nodes for traversal route.
+        List of preceeding vertices for traversal route.
     
     Notes
     -----
@@ -262,8 +267,8 @@ def dijkstra_mp(ntw_node):
     
     """
     
-    ntw, node = ntw_node
-    distance, pred = dijkstra(ntw, node)
+    ntw, vertex = ntw_vertex
+    distance, pred = dijkstra(ntw, vertex)
     return distance, pred
 
 
