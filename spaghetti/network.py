@@ -1736,11 +1736,11 @@ class Network:
         return self
 
 
-def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
+def element_as_gdf(net, vertices=False, arcs=False, pp_name=None,
                    snapped=False, id_col='id', geom_col='geometry'):
     """Return a ``geopandas.GeoDataFrame`` of network elements. This
-    can be (a) the nodes of a network; (b) the edges of a network;
-    (c) both the nodes and edges of the network; (d) raw point pattern
+    can be (a) the vertices of a network; (b) the arcs of a network;
+    (c) both the vertices and arcs of the network; (d) raw point pattern
     associated with the network; or (e) snapped point pattern of (d).
     
     Parameters
@@ -1749,11 +1749,11 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
     net : spaghetti.Network
         network object
     
-    nodes : bool
-        Extract the network nodes (vertices). Default is ``False``.
+    vertices : bool
+        Extract the network vertices. Default is ``False``.
     
-    edges : bool
-        Extract the network edges. Default is ``False``.
+    arcs : bool
+        Extract the network arcs. Default is ``False``.
     
     pp_name : str
         Name of the network ``PointPattern`` to extract.
@@ -1783,12 +1783,12 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
     -------
     
     points : geopandas.GeoDataFrame
-        Network point elements (either nodes or ``PointPattern`` points)
-        as a `geopandas.GeoDataFrame` of ``shapely.Point`` objects with
-        an ``id`` column and ``geometry`` column.
+        Network point elements (either vertices or ``PointPattern``
+        points) as a `geopandas.GeoDataFrame` of ``shapely.Point``
+        objects with an ``id`` column and ``geometry`` column.
     
     lines : geopandas.GeoDataFrame
-        Network edge elements as a ``geopandas.GeoDataFrame`` of
+        Network arc elements as a ``geopandas.GeoDataFrame`` of
         ``shapely.LineString`` objects with an ``id`` column and
         ``geometry`` column.
     
@@ -1799,31 +1799,32 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
     
     """
     
-    # need nodes place holder to create network segment LineStrings
+    # need vertices place holder to create network segment LineStrings
     # even if only network edges are desired.
-    nodes_for_edges = False
-    if edges and not nodes:
-        nodes_for_edges = True
+    vertices_for_arcs = False
+    if arcs and not vertices:
+        vertices_for_arcs = True
 
     # nodes/points
-    if nodes or nodes_for_edges or pp_name:
-        points = util._points_as_gdf(net, nodes, nodes_for_edges,
+    if vertices or vertices_for_arcs or pp_name:
+        points = util._points_as_gdf(net, vertices, vertices_for_arcs,
                                      pp_name, snapped, id_col=id_col,
                                      geom_col=geom_col)
         
-        # return points geodataframe if edges not specified or
+        # return points geodataframe if arcs not specified or
         # if extracting `PointPattern` points
-        if not edges or pp_name:
+        if not arcs or pp_name:
             return points
     
-    # edges
-    edges = util._edges_as_gdf(net, points,
-                               id_col=id_col, geom_col=geom_col)
+    # arcs
+    arcs = util._arcs_as_gdf(net, points,
+                             id_col=id_col, geom_col=geom_col)
     
-    if nodes_for_edges:
-        return edges
+    if vertices_for_arcs:
+        return arcs
+    
     else:
-        return points, edges
+        return points, arcs
 
 
 class PointPattern():
