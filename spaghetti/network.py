@@ -1580,15 +1580,15 @@ class Network:
                         upperbound=upperbound)
     
     
-    def segment_edges(self, distance):
-        """Segment all of the edges in the network at either a
-        fixed distance or a fixed number of segments.
+    def split_arcs(self, distance):
+        """Split all of the arcs in the network at either a
+        fixed distance or a fixed number of arcs.
         
         Parameters
         -----------
         
         distance : float
-            The distance at which edges are split.
+            The distance at which arcs are split.
         
         Returns
         -------
@@ -1601,8 +1601,8 @@ class Network:
        
         >>> import spaghetti as spgh
         >>> ntw = spgh.Network(examples.get_path('streets.shp'))
-        >>> n200 = ntw.segment_edges(200.0)
-        >>> len(n200.edges)
+        >>> n200 = ntw.split_arcs(200.0)
+        >>> len(n200.arcs)
         688
         
         """
