@@ -1345,6 +1345,7 @@ class Network:
         (([18, 19], 165.33982412719126), ([11], 165.33982412719126))
         
         """
+        
         if sourcepattern not in self.pointpatterns.keys():
             err_msg = 'Available point patterns are {}'
             raise KeyError(err_msg.format(self.pointpatterns.keys()))
@@ -1447,6 +1448,7 @@ class Network:
         >>> fres.lowerenvelope.shape[0]
         10
         """
+        
         return NetworkF(self, pointpattern, nsteps=nsteps,
                         permutations=permutations, threshold=threshold,
                         distribution=distribution, lowerbound=lowerbound,
@@ -1574,6 +1576,7 @@ class Network:
         >>> kres.lowerenvelope.shape[0]
         10
         """
+        
         return NetworkK(self, pointpattern, nsteps=nsteps,
                         permutations=permutations, threshold=threshold,
                         distribution=distribution, lowerbound=lowerbound,
@@ -1709,6 +1712,7 @@ class Network:
         >>> ntw = spgh.Network(examples.get_path('streets.shp'))
         >>> ntw.savenetwork('mynetwork.pkl')
         """
+        
         with open(filename, 'wb') as networkout:
             pickle.dump(self, networkout, protocol=2)
     
@@ -1730,6 +1734,7 @@ class Network:
             spaghetti Network object
             
         """
+        
         with open(filename, 'rb') as networkin:
             self = pickle.load(networkin)
             
@@ -1857,25 +1862,25 @@ class PointPattern():
     npoints : int
         The number of points.
     
-    obs_to_edge : dict
-        Keys are edge ids (tuple). Values are snapped point information
+    obs_to_arc : dict
+        Keys are arc ids (tuple). Values are snapped point information
         (``dict``).  Within the snapped point information (``dict``)
         keys are observation ids (``int``), and values are snapped
         coordinates.
     
-    obs_to_node : list
-       List of incident network nodes to snapped observation points
+    obs_to_vertex : list
+       List of incident network vertices to snapped observation points
        converted from a ``default_dict``. Originally in the form of
-       paired left/right nearest network nodes {netnode1: obs_id1,
-       netnode2: obs_id1, netnode1: obs_id2... netnode1: obs_idn}, then
+       paired left/right nearest network vertices {netvtx1: obs_id1,
+       netvtx2: obs_id1, netvtx1: obs_id2... netvtx1: obs_idn}, then
        simplified to a list in the form
-       [netnode1, netnode2, netnode1, netnode2, ...].
+       [netvtx1, netvtx2, netvtx1, netvtx2, ...].
        
-    dist_to_node : dict
+    dist_to_vertex : dict
         Keys are observations ids (``int``). Values are distance lookup
         (``dict``). Within distance lookup (``dict``) keys are the two
-        incident nodes of the edge and values are distance to each of
-        those edges.
+        incident vertices of the arc and values are distance to each of
+        those arcs.
     
     snapped_coordinates : dict
         Keys are the point ids (``int``). Values are the snapped x,y
@@ -1887,7 +1892,12 @@ class PointPattern():
             is ``False``.
     
     """
-    def __init__(self, in_data=None, idvariable=None, attribute=False):
+    
+    def __init__(self,
+                 in_data=None,
+                 idvariable=None,
+                 attribute=False):
+        
         self.points = {}
         self.npoints = 0
         
@@ -1956,36 +1966,43 @@ class SimulatedPointPattern():
     npoints : int
         The number of points.
     
-    obs_to_edge : dict
-        Keys are edge ids (tuple). Values are snapped point information
+    obs_to_arc : dict
+        Keys are arc ids (tuple). Values are snapped point information
         (``dict``).  Within the snapped point information (``dict``)
         keys are observation ids (``int``), and values are snapped
         coordinates.
     
-    obs_to_node : list
-       List of incident network nodes to snapped observation points
+    obs_to_vertex : list
+       List of incident network vertices to snapped observation points
        converted from a ``default_dict``. Originally in the form of
-       paired left/right nearest network nodes {netnode1: obs_id1,
-       netnode2: obs_id1, netnode1: obs_id2... netnode1: obs_idn}, then
+       paired left/right nearest network vertices {netvtx1: obs_id1,
+       netvtx2: obs_id1, netvtx1: obs_id2... netvtx1: obs_idn}, then
        simplified to a list in the form
-       [netnode1, netnode2, netnode1, netnode2, ...].
+       [netvtx1, netvtx2, netvtx1, netvtx2, ...].
        
-    dist_to_node : dict
+    dist_to_vertex : dict
         Keys are observations ids (``int``). Values are distance lookup
         (``dict``). Within distance lookup (``dict``) keys are the two
-        incident nodes of the edge and values are distance to each of
-        those edges.
+        incident vertices of the arc and values are distance to each of
+        those arcs.
     
     snapped_coordinates : dict
         Keys are the point ids (``int``). Values are the snapped x,y
         coordinates (tuple).
     
+    snap_dist : bool
+            Flag as ``True`` to include the distance from the original
+            location to the snapped location along the network. Default
+            is ``False``.
+    
     """
+    
     def __init__(self):
+        
         self.npoints = 0
-        self.obs_to_edge = {}
-        self.obs_to_node = defaultdict(list)
-        self.dist_to_node = {}
+        self.obs_to_arc = {}
+        self.obs_to_vertex = defaultdict(list)
+        self.dist_to_vertex = {}
         self.snapped_coordinates = {}
 
 
@@ -1996,6 +2013,7 @@ class SortedEdges(OrderedDict):
     OrderedDict : collections.OrderedDict
     
     """
+    
     def next_key(self, key):
         """
         Parameters
@@ -2009,11 +2027,13 @@ class SortedEdges(OrderedDict):
         n : 
             
         """
+        
         next = self._OrderedDict__map[key][1]
         if next is self._OrderedDict__root:
             raise ValueError("{!r} is the last key.".format(key))
         n = next[2]
         return n
+    
     
     def first_key(self):
         """
@@ -2024,6 +2044,7 @@ class SortedEdges(OrderedDict):
         key : 
             
         """
+        
         for key in self:
             return key
         raise ValueError("No sorted edges remain.")
