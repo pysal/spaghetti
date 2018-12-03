@@ -391,11 +391,11 @@ class TestNetworkUtils(unittest.TestCase):
         self.assertEqual(self.sqrd_nearp[0], 1.0)
         self.assertEqual(self.sqrd_nearp[1].all(), np.array([1., 0.]).all())
     
-    def snap_points_to_links(self):
+    def test_snap_points_to_links(self):
         self.points = {0: cg.shapes.Point((1,1))}
         self.links = [cg.shapes.Chain([cg.shapes.Point((0,0)),
                                        cg.shapes.Point((2,0))])]
-        self.snapped = util.snap_points_on_segments(self.points, self.links)
+        self.snapped = util.snap_points_to_links(self.points, self.links)
         self.known_coords = [xy._Point__loc for xy in self.snapped[0][0]]
         self.assertEqual(self.known_coords, [(0.0, 0.0), (2.0, 0.0)])
         self.assertEqual(self.snapped[0][1].all(), np.array([1., 0.]).all())
