@@ -18,21 +18,21 @@ spaghetti.network.Network
       ~Network.NetworkK
       ~Network.__init__
       ~Network.allneighbordistances
-      ~Network.compute_distance_to_nodes
+      ~Network.compute_distance_to_vertices
       ~Network.compute_snap_dist
       ~Network.contiguityweights
-      ~Network.count_per_edge
+      ~Network.count_per_link
       ~Network.distancebandweights
-      ~Network.enum_links_node
+      ~Network.enum_links_vertex
       ~Network.extract_components
       ~Network.extractgraph
+      ~Network.full_distance_matrix
       ~Network.loadnetwork
       ~Network.nearestneighbordistances
-      ~Network.node_distance_matrix
       ~Network.savenetwork
-      ~Network.segment_edges
       ~Network.simulate_observations
       ~Network.snapobservations
+      ~Network.split_arcs
    
    
 
