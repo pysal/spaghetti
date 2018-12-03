@@ -1224,7 +1224,6 @@ class Network:
                     computed_length = util.compute_length((x1, y1),
                                                           (x2, y2))
                     nearest[p1, p2] = computed_length
-                    tree_nearest[p1, p2] = (p1, p2)
                     
                 else:
                     ddist1, ddist2 = dst_d2n[p2].values()
