@@ -48,7 +48,7 @@ def compute_length(v0, v1):
 
 def get_neighbor_distances(ntw, v0, l):
     """Get distances to the nearest vertex neighbors along
-    connecting edges.
+    connecting arcs.
     
     Parameters
     ----------
@@ -382,8 +382,8 @@ def snap_points_to_links(points, links):
         if (x1, y1) not in vertex_2_link:
             vertex_2_link[(x1, y1)] = []
         
-        vertex_2_link[(x0, y0)].append(segment)
-        vertex_2_link[(x1, y1)].append(segment)
+        vertex_2_link[(x0, y0)].append(link)
+        vertex_2_link[(x1, y1)].append(link)
         
         x0, y0, x1, y1 = link.bounding_box
         x0 -= SMALL
@@ -525,7 +525,7 @@ def _arcs_as_gdf(net, points, id_col=None, geom_col=None):
     # arcs
     arcs = {}
     
-    for (vtx1_id, vtx2_id) in net.vertices:
+    for (vtx1_id, vtx2_id) in net.arcs:
         
         vtx1 = points.loc[(points[id_col] == vtx1_id), geom_col].squeeze()
         
