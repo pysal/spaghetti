@@ -503,8 +503,8 @@ class Network:
         
         Find counts per network arc.
         
-        >>> counts = ntw.count_per_arc(ntw.pointpatterns['crimes']
-        ...                            .obs_to_arc, graph=False)
+        >>> counts = ntw.count_per_link(ntw.pointpatterns['crimes']
+        ...                             .obs_to_arc, graph=False)
         >>> counts[(50, 165)]
         4
         
