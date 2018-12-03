@@ -776,8 +776,8 @@ class Network:
         # snap points
         points = {}
         p2id = {}
-        for pointIdx, point in pointpattern.points.items():
-            points[pointIdx] = point['coordinates']
+        for point_idx, point in pointpattern.points.items():
+            points[point_idx] = point['coordinates']
         
         snapped = util.snap_points_to_links(points, arcs_)
         
@@ -786,7 +786,7 @@ class Network:
             
             x, y = snap_info[1].tolist()
             
-            edge = s2a[tuple(snap_info[0])]
+            arc = s2a[tuple(snap_info[0])]
             
             if arc not in obs_to_arc:
                 obs_to_arc[arc] = {}
@@ -1170,7 +1170,7 @@ class Network:
         for s in src_indices:
             e1, e2 = src_d2n[s].keys()
             src_vertices[s] = (e1, e2)
-            
+        
         # destination setup
         symmetric = False
         if destpattern is None:
