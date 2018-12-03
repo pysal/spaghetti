@@ -20,14 +20,16 @@ class Network:
     """Spatially-constrained network representation and analytical
     functionality. Naming conventions are as follows, (1) arcs and
     vertices for the full network object, and (2) edges and nodes for
-    the simplified graph-theoretic object.
+    the simplified graph-theoretic object. The term 'link' is used to
+    refer to a network arc or a graph edge.
     
     Parameters
     ----------
     
-    in_data : geopandas.GeoDataFrame or str
+    in_data : {geopandas.GeoDataFrame, str}
         The input geographic data. Either (1) a path to a shapefile
-        (str); or (2) a ``geopandas.GeoDataFrame``.
+        (str); or (2) a `geopandas.GeoDataFrame 
+        <http://geopandas.org/data_structures.html#geodataframe>`_.
     
     vertex_sig : int
         Round the x and y coordinates of all vertices to ``vertex_sig``
@@ -45,8 +47,12 @@ class Network:
     
     w_components : bool
         Set to ``True`` to record connected components from a
-        ``libpysal.weights.weights.W`` object. Default is False.
-    
+        `libpysal.weights.weights.W 
+        <https://libpysal.readthedocs.io/en/latest/generated/
+        libpysal.weights.W.html#libpysal.weights.W>`_
+        object. Default is False.
+        
+        
     weightings : {dict, bool}
         If ``dict``, lists of weightings for each arc. If ``bool``,
         ``True`` flags ``self.arc_lengths`` as the weightings,
@@ -54,9 +60,6 @@ class Network:
     
     Attributes
     ----------
-    
-    in_data : str
-        The input shapefile. This must be in .shp format.
     
     adjacencylist : list
         List of lists storing vertex adjacency.
@@ -89,7 +92,7 @@ class Network:
         (2) a dict with the key being the id of the destination vertex
         and the value being a list of the shortest path.
     
-    distancematrix : numpy.ndarray
+    distancematrix : `numpy.ndarray <https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html>`_
         all network vertices (non-observations) distance matrix.
     
     edges : list
@@ -99,13 +102,13 @@ class Network:
         Keys are the graph edge ids (tuple). Values are the graph edge
         length (``float``).
     
-    w_network : libpysal.weights.weights.W
+    w_network : `libpysal.weights.weights.W <https://libpysal.readthedocs.io/en/latest/generated/libpysal.weights.W.html#libpysal.weights.W>`_
         Weights object created from the network arcs
     
     network_n_components : int
         Count of connected components in the network.
     
-    network_component_labels : numpy.ndarray
+    network_component_labels : `numpy.ndarray <https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html>`_
         Component labels for networks arc
     
     network_component2arc : dict
@@ -118,13 +121,13 @@ class Network:
         as ``True`` if the component is a closed ring, otherwise
         ``False``.
     
-    w_graph : libpysal.weights.weights.W
+    w_graph : `libpysal.weights.weights.W <https://libpysal.readthedocs.io/en/latest/generated/libpysal.weights.W.html#libpysal.weights.W>`_
         Weights object created from the graph edges
     
     graph_n_components : int
         Count of connected components in the network.
     
-    graph_component_labels : numpy.ndarray
+    graph_component_labels : `numpy.ndarray <https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html>`_
         Component labels for graph edges
     
     graph_component2edge : dict
@@ -235,7 +238,7 @@ class Network:
         Parameters
         ----------
         
-        w : libpysal.weights.weights.W
+        w : `libpysal.weights.weights.W <https://libpysal.readthedocs.io/en/latest/generated/libpysal.weights.W.html#libpysal.weights.W>`_
             Weights object created from the network segments (either
             raw or graph-theoretic)
         
@@ -480,7 +483,7 @@ class Network:
         Returns
         -------
         
-         W : libpysal.weights.weights.W
+         W : `libpysal.weights.weights.W <https://libpysal.readthedocs.io/en/latest/generated/libpysal.weights.W.html#libpysal.weights.W>`_
             A ``pysal`` W Object representing the binary adjacency of
             the network.
         
@@ -587,7 +590,7 @@ class Network:
         threshold : float
             Distance threshold value.
         
-        n_processes : int, str
+        n_processes : {int, str}
             (Optional) Specify the number of cores to utilize. Default
             is 1 core. Use ``int`` to specify an exact number or cores.
             Use ``"all"`` to request all available cores.
@@ -598,7 +601,7 @@ class Network:
         Returns
         -------
         
-        w : libpysal.weights.weights.W
+        w : `libpysal.weights.weights.W <https://libpysal.readthedocs.io/en/latest/generated/libpysal.weights.W.html#libpysal.weights.W>`_
             A ``pysal`` W Object representing the binary adjacency of
             the network.
         
@@ -639,7 +642,7 @@ class Network:
         Parameters
         ----------
         
-        in_data : geopandas.GeoDataFrame or str
+        in_data : {geopandas.GeoDataFrame, str}
             The input geographic data. Either (1) a path to a
             shapefile (``str``); or (2) a ``geopandas.GeoDataFrame``.
         
@@ -823,19 +826,19 @@ class Network:
         
         obs_on_network : dict
             Dictionary of observations on the network.
-            Either {(edge):{pt_id:(coords)}} or 
-            {edge:[(coord),(coord),(coord)]}
+            Either {(link):{pt_id:(coords)}} or 
+            {link:[(coord),(coord),(coord)]}
         
         Returns
         -------
         counts : dict
-            {(edge):count}
+            {(link):count}
         
         Examples
         --------
         
-        Note that this passes the obs_to_edge attribute of a
-        point pattern snapped to the network.
+        Note that this passes the obs_to_arc or obs_to_edge attribute
+        of a point pattern snapped to the network.
         
         >>> import spaghetti as spgh
         >>> ntw = spgh.Network(examples.get_path('streets.shp'))
@@ -991,7 +994,7 @@ class Network:
         -------
         
         links : list
-            List of tuple edges adjacent to the vertex.
+            List of tuple arcs adjacent to the vertex.
         
         Examples
         --------
@@ -1077,14 +1080,14 @@ class Network:
     def allneighbordistances(self, sourcepattern, destpattern=None,
                              fill_diagonal=None, n_processes=None,
                              gen_tree=False, snap_dist=False):
-        """Compute either all distances between i and j in a single
-        point pattern or all distances between each i from a source
-        pattern and all j from a destination pattern.
+        """Compute either all distances between ``i`` and ``j`` in a
+        single point pattern or all distances between each ``i`` from a
+        source pattern and all ``j`` from a destination pattern.
         
         Parameters
         ----------
         
-        sourcepattern : str or spaghetti.network.PointPattern
+        sourcepattern : {str, spaghetti.network.PointPattern}
             The key of a point pattern snapped to the network OR
             the full ``spaghetti.network.PointPattern`` object.
         
@@ -1092,13 +1095,13 @@ class Network:
             (Optional) The key of a point pattern snapped to the network
             OR the full ``spaghetti.network.PointPattern`` object.
         
-        fill_diagonal : float, int
+        fill_diagonal : {float, int}
             (Optional) Fill the diagonal of the cost matrix. Default is
             ``None`` and will populate the diagonal with ``numpy.nan``.
             Do not declare a ``destpattern`` for a custom
             ``fill_diagonal``.
         
-        n_processes : int, str
+        n_processes : {int, str}
             (Optional) Specify the number of cores to utilize. Default
             is 1 core. Use ``int`` to specify an exact number or cores.
             Use ``"all"`` to request all available cores.
@@ -1114,7 +1117,7 @@ class Network:
         Returns
         -------
         
-        nearest : numpy.ndarray
+        nearest : `numpy.ndarray <https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html>`_
             An array of shape (n,n) storing distances between all
             points.
         
@@ -1126,7 +1129,7 @@ class Network:
             snapped to the same network arc a flag of -.1 is set for
             both the source and destination network vertex
             indicating the same arc is used while also raising an
-            ``IndexError``` when rebuilding the path.
+            ``IndexError`` when rebuilding the path.
         
         Examples
         --------
@@ -1320,7 +1323,7 @@ class Network:
             (Optional) The key of a point pattern snapped to the
             network.
         
-        n_processes : int, str
+        n_processes : {int, str}
             (Optional) Specify the number of cores to utilize. Default
             is 1 core. Use ``int`` to specify an exact number or cores.
             Use ``"all"`` to request all available cores.
@@ -1328,7 +1331,7 @@ class Network:
         gen_tree : bool
             Rebuild shortest path ``True``, or skip ``False``.
         
-        all_dists : numpy.ndarray
+        all_dists : `numpy.ndarray <https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html>`_
             An array of shape (n,n) storing distances between all
             points.
         
@@ -1619,7 +1622,7 @@ class Network:
         -------
         
         sn : spaghetti.Network
-            spaghetti Network object.
+            newly instantiated ``spaghetti.Network`` object.
         
        Examples
         --------
@@ -1765,10 +1768,12 @@ class Network:
 
 def element_as_gdf(net, vertices=False, arcs=False, pp_name=None,
                    snapped=False, id_col='id', geom_col='geometry'):
-    """Return a ``geopandas.GeoDataFrame`` of network elements. This
-    can be (a) the vertices of a network; (b) the arcs of a network;
-    (c) both the vertices and arcs of the network; (d) raw point pattern
-    associated with the network; or (e) snapped point pattern of (d).
+    """Return a `geopandas.GeoDataFrame 
+    <http://geopandas.org/data_structures.html#geodataframe>`_ of
+    network elements. This can be (a) the vertices of a network; (b) the
+    arcs of a network; (c) both the vertices and arcs of the network;
+    (d) raw point pattern associated with the network; or (e) snapped
+    point pattern of (d).
     
     Parameters
     ----------
@@ -1822,7 +1827,7 @@ def element_as_gdf(net, vertices=False, arcs=False, pp_name=None,
     Notes
     -----
     
-    This function requires ``geopandas``.
+    This function requires `geopandas <http://geopandas.org>`_.
     
     """
     
@@ -1863,10 +1868,11 @@ class PointPattern():
     Parameters
     ----------
     
-    in_data : geopandas.GeoDataFrame or str
+    in_data : {geopandas.GeoDataFrame, str}
         The input geographic data. Either (1) a path to a shapefile
-        ``str``; or (2) a ``geopandas.GeoDataFrame``.
-    
+        ``str``; or (2) a `geopandas.GeoDataFrame 
+        <http://geopandas.org/data_structures.html#geodataframe>`_.
+        
     idvariable : str
         Field in the shapefile to use as an id variable.
     
