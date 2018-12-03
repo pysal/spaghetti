@@ -47,8 +47,8 @@ def compute_length(v0, v1):
 
 
 def get_neighbor_distances(ntw, v0, l):
-    """Get distances to the nearest node neighbors along
-    connecting edges.
+    """Get distances to the nearest vertex neighbors along
+    connecting arcs.
     
     Parameters
     ----------
@@ -57,17 +57,17 @@ def get_neighbor_distances(ntw, v0, l):
         spaghetti Network object.
     
     v0 : int
-        Node id
+        vertex id
     
     l : dict
-        key is tuple (start node, end node); value is ``float``.
-        Cost per edge to travel, e.g. distance.
+        key is tuple (start vertex, end vertex); value is ``float``.
+        Cost per arc to travel, e.g. distance.
     
     Returns
     -------
     
     neighbors : dict
-        key is int (node id); value is ``float`` (distance)
+        key is int (vertex id); value is ``float`` (distance)
     
     Examples
     --------
@@ -75,19 +75,19 @@ def get_neighbor_distances(ntw, v0, l):
     >>> import spaghetti as spgh
     >>> from libpysal import examples
     >>> ntw = spgh.Network(examples.get_path('streets.shp'))
-    >>> neighs = spgh.util.get_neighbor_distances(ntw, 0, ntw.edge_lengths)
+    >>> neighs = spgh.util.get_neighbor_distances(ntw, 0, ntw.arc_lengths)
     >>> neighs[1]
     102.62353453439829
     
     """
     
-    edges = ntw.enum_links_node(v0)
+    arcs = ntw.enum_links_vertex(v0)
     neighbors = {}
-    for e in edges:
-        if e[0] != v0:
-            neighbors[e[0]] = l[e]
+    for arc in arcs:
+        if arc[0] != v0:
+            neighbors[arc[0]] = l[arc]
         else:
-            neighbors[e[1]] = l[e]
+            neighbors[arc[1]] = l[arc]
     return neighbors
 
 
@@ -118,48 +118,57 @@ def generatetree(pred):
     [23, 22, 20, 19, 170, 2, 0]
     
     """
+    
     tree = {}
+    
     for i, p in enumerate(pred):
+        
         if p == -1:
-            # root node
+            
+            # root vertex
             tree[i] = [i]
             continue
+        
         idx = p
         path = [idx]
+        
         while idx >= 0:
-            nextnode = pred[idx]
-            idx = nextnode
+            next_vertex = pred[idx]
+            idx = next_vertex
+            
             if idx >= 0:
-                path.append(nextnode)
+                path.append(next_vertex)
+        
         tree[i] = path
+    
     return tree
 
 
 def dijkstra(ntw, v0, initial_dist=np.inf):
-    """Compute the shortest path between a start node and all other
-    nodes in an origin-destination matrix.
+    """Compute the shortest path between a start vertex and
+    all other vertices in an origin-destination matrix.
     
     Parameters
     ----------
     
     ntw :  spaghetti.Network
-        spaghetti Network object.
+        spaghetti.Network object
     
     v0 : int
-        Start node ID
+        Start vertex ID
     
     initial_dist : float
-        integer break point to stop iteration and return n neighbors.
+        Integer break point to stop iteration and return n neighbors.
         Default is ``numpy.inf``.
     
     Returns
     -------
     
     distance : list
-        List of distances from node to all other nodes.
+        List of distances from vertex to all other vertices.
     
     pred : list
-        List of preceeding nodes for traversal route.
+        List of preceeding vertices for traversal route.
     
     Notes
     -----
@@ -180,29 +189,34 @@ def dijkstra(ntw, v0, initial_dist=np.inf):
     
     """
     
-    # Cost per edge to travel, e.g. distance.
-    cost = ntw.edge_lengths
+    # Cost per arc to travel, e.g. distance.
+    cost = ntw.arc_lengths
     
-    distance = [initial_dist for x in ntw.node_list]
-    idx = ntw.node_list.index(v0)
-    distance[ntw.node_list.index(v0)] = 0
-    unvisited, pred = set([v0]), [-1 for x in ntw.node_list]
+    distance = [initial_dist for x in ntw.vertex_list]
+    idx = ntw.vertex_list.index(v0)
+    distance[ntw.vertex_list.index(v0)] = 0
+    unvisited, pred = set([v0]), [-1 for x in ntw.vertex_list]
     
     while len(unvisited) > 0:
         
-        # Get node with the lowest value from distance.
+        # Get vertex with the lowest value from distance.
         dist = initial_dist
-        for node in unvisited:
-            if distance[node] < dist:
-                dist, current = distance[node], node
+        for vertex in unvisited:
+            if distance[vertex] < dist:
+                dist, current = distance[vertex], vertex
         
-        # Remove that node from the set.
+        # Remove that vertex from the set.
         unvisited.remove(current)
         
-        # Get the neighbors to the current node.
-        neighbors = get_neighbor_distances(ntw, current, cost)
+        # Get the neighbors to the current vertex.
+        neighbors = get_neighbor_distances(ntw,
+                                           current,
+                                           cost)
+        
         for v1, indiv_cost in neighbors.items():
+            
             if distance[v1] > distance[current] + indiv_cost:
+                
                 distance[v1] = distance[current] + indiv_cost
                 pred[v1] = current
                 unvisited.add(v1)
@@ -212,27 +226,27 @@ def dijkstra(ntw, v0, initial_dist=np.inf):
     return distance, pred
 
 
-def dijkstra_mp(ntw_node):
+def dijkstra_mp(ntw_vertex):
     """
-    Compute the shortest path between a start node and all other
-    nodes in the web utilizing multiple cores upon request.
+    Compute the shortest path between a start vertex and all other
+    vertices in the web utilizing multiple cores upon request.
     
     Parameters
     ----------
     
-    ntw_cost_node : tuple
-        tuple of arguments to pass into dijkstra as 
-        (1) ntw - ``spaghetti.Network; spaghetti Network object``;
-        (2) node - ``int``; Start node ID
+    ntw_vertex : tuple
+        Tuple of arguments to pass into dijkstra as
+        (1) ntw - ``spaghetti.Network object``;
+        (2) vertex - ``int``; Start node ID
     
     Returns
     -------
     
     distance : list
-        List of distances from node to all other nodes.
+        List of distances from vertex to all other vertices.
     
     pred : list
-        List of preceeding nodes for traversal route.
+        List of preceeding vertices for traversal route.
     
     Notes
     -----
@@ -253,13 +267,13 @@ def dijkstra_mp(ntw_node):
     
     """
     
-    ntw, node = ntw_node
-    distance, pred = dijkstra(ntw, node)
+    ntw, vertex = ntw_vertex
+    distance, pred = dijkstra(ntw, vertex)
     return distance, pred
 
 
-def squared_distance_point_segment(point, segment):
-    """Find the squared distance between a point and a segment.
+def squared_distance_point_link(point, link):
+    """Find the squared distance between a point and a link.
     
     Parameters
     ----------
@@ -267,29 +281,29 @@ def squared_distance_point_segment(point, segment):
     point : tuple
         point coordinates (x,y)
     
-    segment : list
+    link : list
         List of 2 point coordinate tuples [(x0,y0), (x1,y1)].
     
     Returns
     -------
     sqd : float
-        distance squared between point and segment
+        distance squared between point and edge
     
     nearp : numpy.ndarray
-        array of (xb, yb); the nearest point on the segment
+        array of (xb, yb); the nearest point on the edge
     
     Examples
     --------
     
     >>> import spaghetti as spgh
-    >>> point, segment = (1,1), ((0,0), (2,0))
-    >>> spgh.util.squared_distance_point_segment(point, segment)
+    >>> point, link = (1,1), ((0,0), (2,0))
+    >>> spgh.util.squared_distance_point_link(point, link)
     (1.0, array([1., 0.]))
     
     """
     
     #
-    p0, p1 = [np.array(p) for p in segment]
+    p0, p1 = [np.array(p) for p in link]
     v = p1 - p0
     p = np.array(point)
     w = p - p0
@@ -298,6 +312,7 @@ def squared_distance_point_segment(point, segment):
         sqd = np.dot(w.T, w)
         nearp = p0
         return sqd, nearp
+    
     #
     c2 = np.dot(v, v)
     if c2 <= c1:
@@ -305,6 +320,7 @@ def squared_distance_point_segment(point, segment):
         sqd = np.dot(dp1.T, dp1)
         nearp = p1
         return sqd, nearp
+    
     #
     b = c1 / c2
     bv = np.dot(b, v)
@@ -315,8 +331,9 @@ def squared_distance_point_segment(point, segment):
     return sqd, nearp
 
 
-def snap_points_on_segments(points, segments):
-    """Place points onto closet segment in a set of segments
+def snap_points_to_links(points, links):
+    """Place points onto closest link in a set of links
+    (arc/edges)
     
     Parameters
     ----------
@@ -324,18 +341,18 @@ def snap_points_on_segments(points, segments):
     points : dict
         Point id as key and (x,y) coordinate as value
     
-    segments : list
+    links : list
         Elements are of type libpysal.cg.shapes.Chain
-        ** Note ** each element is a segment represented as a chain with
-        *one head and one tail node* in other words one link only.
+        ** Note ** each element is a links represented as a chain with
+        *one head and one tail vertex* in other words one link only.
     
     Returns
     -------
     
     p2s : dict
         key [point id (see points in arguments)]; value [a 2-tuple 
-        ((head, tail), point) where (head, tail) is the target segment,
-        and point is the snapped location on the segment.
+        ((head, tail), point) where (head, tail) is the target link,
+        and point is the snapped location on the link.
     
     Examples
     --------
@@ -343,54 +360,60 @@ def snap_points_on_segments(points, segments):
     >>> import spaghetti as spgh
     >>> from libpysal.cg.shapes import Point, Chain
     >>> points = {0: Point((1,1))}
-    >>> segments = [Chain([Point((0,0)), Point((2,0))])]
-    >>> spgh.util.snap_points_on_segments(points, segments)
+    >>> link = [Chain([Point((0,0)), Point((2,0))])]
+    >>> spgh.util.snap_points_to_links(points, link)
     {0: ([(0.0, 0.0), (2.0, 0.0)], array([1., 0.]))}
     
     """
     
-    # Put segments in an Rtree.
+    # Put links in an Rtree.
     rt = cg.Rtree()
     SMALL = np.finfo(float).eps
-    node2segs = {}
+    vertex_2_link = {}
     
-    for segment in segments:
-        head, tail = segment.vertices
+    for link in links:
+        head, tail = link.vertices
         x0, y0 = head
         x1, y1 = tail
-        if (x0, y0) not in node2segs:
-            node2segs[(x0, y0)] = []
-        if (x1, y1) not in node2segs:
-            node2segs[(x1, y1)] = []
-        node2segs[(x0, y0)].append(segment)
-        node2segs[(x1, y1)].append(segment)
-        x0, y0, x1, y1 = segment.bounding_box
+        
+        if (x0, y0) not in vertex_2_link:
+            vertex_2_link[(x0, y0)] = []
+        
+        if (x1, y1) not in vertex_2_link:
+            vertex_2_link[(x1, y1)] = []
+        
+        vertex_2_link[(x0, y0)].append(link)
+        vertex_2_link[(x1, y1)].append(link)
+        
+        x0, y0, x1, y1 = link.bounding_box
         x0 -= SMALL
         y0 -= SMALL
         x1 += SMALL
         y1 += SMALL
-        r = cg.Rect(x0, y0, x1, y1)
-        rt.insert(segment, r)
         
-    # Build a KDtree on segment nodes.
-    kt = cg.KDTree(list(node2segs.keys()))
+        r = cg.Rect(x0, y0, x1, y1)
+        rt.insert(link, r)
+        
+    # Build a KDtree on link vertices.
+    kt = cg.KDTree(list(vertex_2_link.keys()))
     p2s = {}
     
     for ptIdx, point in points.items():
-        # First, find nearest neighbor segment node for the point.
+        
+        # First, find nearest neighbor link vertices for the point.
         dmin, node = kt.query(point, k=1)
         node = tuple(kt.data[node])
-        closest = node2segs[node][0].vertices
+        closest = vertex_2_link[node][0].vertices
         
-        # Use this segment as the candidate closest segment:  closest
-        # Use the distance as the distance to beat:           dmin
+        # Use this link as the candidate closest link:  closest
+        # Use the distance as the distance to beat:     dmin
         p2s[ptIdx] = (closest, np.array(node))
         x0 = point[0] - dmin
         y0 = point[1] - dmin
         x1 = point[0] + dmin
         y1 = point[1] + dmin
         
-        # Find all segments with bounding boxes that intersect
+        # Find all links with bounding boxes that intersect
         # a query rectangle centered on the point with sides of length 2*dmin.
         candidates = [cand for cand in rt.intersection([x0, y0, x1, y1])]
         dmin += SMALL
@@ -398,8 +421,8 @@ def snap_points_on_segments(points, segments):
         
         # Of the candidate segments, find the nearest to the query point.
         for candidate in candidates:
-            dnc, p2b = squared_distance_point_segment(point,
-                                                      candidate.vertices)
+            dnc, p2b = squared_distance_point_link(point,
+                                                   candidate.vertices)
             if dnc <= dmin2:
                 closest = candidate.vertices
                 dmin2 = dnc
@@ -409,7 +432,7 @@ def snap_points_on_segments(points, segments):
 
 
 @requires('geopandas', 'shapely')
-def _points_as_gdf(net, nodes, nodes_for_edges, pp_name, snapped,
+def _points_as_gdf(net, vertices, vertices_for_arcs, pp_name, snapped,
                    id_col=None, geom_col=None):
     """
     Internal function for returning a point geopandas.GeoDataFrame
@@ -418,9 +441,9 @@ def _points_as_gdf(net, nodes, nodes_for_edges, pp_name, snapped,
     Parameters
     ----------
     
-    nodes_for_edges : bool
+    vertices_for_arcs : bool
         Flag for points being an object returned [False] or for merely
-        creating network edges [True]. Set from within the parent
+        creating network arcs [True]. Set from within the parent
         function (``spaghetti.element_as_gdf()``).
     
     Raises
@@ -436,7 +459,7 @@ def _points_as_gdf(net, nodes, nodes_for_edges, pp_name, snapped,
     -------
     
     points : geopandas.GeoDataFrame
-        Network point elements (either nodes or ``PointPattern``
+        Network point elements (either vertices or ``PointPattern``
         points) as a simple ``geopandas.GeoDataFrame`` of
         ``shapely.Point`` objects with an ``id`` column and
         ``geometry`` column.
@@ -450,8 +473,8 @@ def _points_as_gdf(net, nodes, nodes_for_edges, pp_name, snapped,
     """
     
     # nodes
-    if nodes or nodes_for_edges:
-        pts_dict = net.node_coords
+    if vertices or vertices_for_arcs:
+        pts_dict = net.vertex_coords
     
     # raw point pattern
     if pp_name and not snapped:
@@ -477,7 +500,7 @@ def _points_as_gdf(net, nodes, nodes_for_edges, pp_name, snapped,
 
 
 @requires('geopandas', 'shapely')
-def _edges_as_gdf(net, points, id_col=None, geom_col=None):
+def _arcs_as_gdf(net, points, id_col=None, geom_col=None):
     """
     Internal function for returning a edges geopandas.GeoDataFrame
     called from within ``spaghetti.element_as_gdf()``.
@@ -486,7 +509,7 @@ def _edges_as_gdf(net, points, id_col=None, geom_col=None):
     -------
     
     points : geopandas.GeoDataFrame
-        Network point elements (either nodes or ``PointPattern``
+        Network point elements (either vertices or ``PointPattern``
         points) as a simple `geopandas.GeoDataFrame` of
         ``shapely.Point``` objects with an `id` column and
         ``geometry`` column.
@@ -499,17 +522,22 @@ def _edges_as_gdf(net, points, id_col=None, geom_col=None):
     
     """
     
-    # edges
-    edges = {}
-    for (node1_id, node2_id) in net.edges:
-        node1 = points.loc[(points[id_col] == node1_id), geom_col].squeeze()
-        node2 = points.loc[(points[id_col] == node2_id), geom_col].squeeze()
-        edges[(node1_id, node2_id)] = LineString((node1, node2))
-    edges = gpd.GeoDataFrame(sorted(list(edges.items())),
-                             columns=[id_col, geom_col])
+    # arcs
+    arcs = {}
+    
+    for (vtx1_id, vtx2_id) in net.arcs:
+        
+        vtx1 = points.loc[(points[id_col] == vtx1_id), geom_col].squeeze()
+        
+        vtx2 = points.loc[(points[id_col] == vtx2_id), geom_col].squeeze()
+        
+        arcs[(vtx1_id, vtx2_id)] = LineString((vtx1, vtx2))
+    
+    arcs = gpd.GeoDataFrame(sorted(list(arcs.items())),
+                            columns=[id_col, geom_col])
     
     # additional columns
     if hasattr(net, 'network_component_labels'):
-        edges['comp_label'] = net.network_component_labels
+        arcs['comp_label'] = net.network_component_labels
     
-    return edges
+    return arcs

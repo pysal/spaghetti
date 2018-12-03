@@ -22,17 +22,21 @@ class TestNetwork(unittest.TestCase):
         self.ntw_from_shp = spgh.Network(in_data=self.path_to_shp,
                                          weightings=True,
                                          w_components=True)
-        self.n_known_edges, self.n_known_nodes = 303, 230
+        self.n_known_arcs, self.n_known_vertices = 303, 230
     
     def tearDown(self):
         pass
     
     def test_network_data_read(self):
         # shp test against known
-        self.assertEqual(len(self.ntw_from_shp.edges), self.n_known_edges)
-        self.assertEqual(len(self.ntw_from_shp.nodes), self.n_known_nodes)
-        edgelengths = self.ntw_from_shp.edge_lengths.values()
-        self.assertAlmostEqual(sum(edgelengths), 104414.0920159, places=5)
+        self.assertEqual(len(self.ntw_from_shp.arcs),
+                             self.n_known_arcs)
+        self.assertEqual(len(self.ntw_from_shp.vertices),
+                             self.n_known_vertices)
+        
+        arc_lengths = self.ntw_from_shp.arc_lengths.values()
+        self.assertAlmostEqual(sum(arc_lengths), 104414.0920159, places=5)
+        
         self.assertIn(0, self.ntw_from_shp.adjacencylist[1])
         self.assertIn(0, self.ntw_from_shp.adjacencylist[2])
         self.assertNotIn(0, self.ntw_from_shp.adjacencylist[3])
@@ -44,14 +48,16 @@ class TestNetwork(unittest.TestCase):
         self.ntw_from_gdf = spgh.Network(in_data=gdf)
         
         # gdf test against known
-        self.assertEqual(len(self.ntw_from_gdf.edges), self.n_known_edges)
-        self.assertEqual(len(self.ntw_from_gdf.nodes), self.n_known_nodes)
+        self.assertEqual(len(self.ntw_from_gdf.arcs),
+                             self.n_known_arcs)
+        self.assertEqual(len(self.ntw_from_gdf.vertices),
+                             self.n_known_vertices)
         
         # shp against gdf
-        self.assertEqual(len(self.ntw_from_shp.edges),
-                         len(self.ntw_from_gdf.edges))
-        self.assertEqual(len(self.ntw_from_shp.nodes),
-                         len(self.ntw_from_gdf.nodes))
+        self.assertEqual(len(self.ntw_from_shp.arcs),
+                         len(self.ntw_from_gdf.arcs))
+        self.assertEqual(len(self.ntw_from_shp.vertices),
+                         len(self.ntw_from_gdf.vertices))
     
     def test_contiguity_weights(self):
         known_network_histo = [(2, 35), (3, 89), (4, 105), (5, 61), (6, 13)]
@@ -63,9 +69,9 @@ class TestNetwork(unittest.TestCase):
         self.assertEqual(observed_graph_histo, known_graph_histo)
     
     def test_components(self):
-        known_network_edge = (225, 226)
-        observed_network_edge = self.ntw_from_shp.network_component2edge[0][-1]
-        self.assertEqual(observed_network_edge, known_network_edge)
+        known_network_arc = (225, 226)
+        observed_network_arc = self.ntw_from_shp.network_component2arc[0][-1]
+        self.assertEqual(observed_network_arc, known_network_arc)
         
         known_graph_edge = (206, 207)
         observed_graph_edge = self.ntw_from_shp.graph_component2edge[0][-1]
@@ -78,48 +84,48 @@ class TestNetwork(unittest.TestCase):
                          [(1, 22), (2, 58), (3, 63), (4, 40),
                           (5, 36), (6, 3), (7, 5), (8, 3)])
     
-    def test_edge_segmentation_200(self):
-        n200 = self.ntw_from_shp.segment_edges(200.0)
-        self.assertEqual(len(n200.edges), 688)
+    def test_split_arcs_200(self):
+        n200 = self.ntw_from_shp.split_arcs(200.0)
+        self.assertEqual(len(n200.arcs), 688)
     
-    def test_enum_links_node(self):
-        coincident = self.ntw_from_shp.enum_links_node(24)
+    def test_enum_links_vertex(self):
+        coincident = self.ntw_from_shp.enum_links_vertex(24)
         self.assertIn((24, 48), coincident)
     
     @unittest.skipIf(GEOPANDAS_EXTINCT, 'Missing Geopandas')
     def test_element_as_gdf(self):
-        nodes, edges = spgh.element_as_gdf(self.ntw_from_shp,
-                                           nodes=True,
-                                           edges=True)
+        vertices, arcs = spgh.element_as_gdf(self.ntw_from_shp,
+                                             vertices=True,
+                                             arcs=True)
         
-        known_node_wkt = 'POINT (728368.04762 877125.89535)'
-        obs_node = nodes.loc[(nodes['id'] == 0), 'geometry'].squeeze()
-        obs_node_wkt = obs_node.wkt
-        self.assertEqual(obs_node_wkt, known_node_wkt)
+        known_vertex_wkt = 'POINT (728368.04762 877125.89535)'
+        obs_vertex = vertices.loc[(vertices['id'] == 0), 'geometry'].squeeze()
+        obs_vertex_wkt = obs_vertex.wkt
+        self.assertEqual(obs_vertex_wkt, known_vertex_wkt)
         
-        known_edge_wkt = 'LINESTRING (728368.04762 877125.89535, '\
+        known_arc_wkt = 'LINESTRING (728368.04762 877125.89535, '\
                          + '728368.13931 877023.27186)'
-        obs_edge = edges.loc[(edges['id'] == (0,1)), 'geometry'].squeeze()
-        obs_edge_wkt = obs_edge.wkt
-        self.assertEqual(obs_edge_wkt, known_edge_wkt)
+        obs_arc = arcs.loc[(arcs['id'] == (0,1)), 'geometry'].squeeze()
+        obs_arc_wkt = obs_arc.wkt
+        self.assertEqual(obs_arc_wkt, known_arc_wkt)
         
-        edges = spgh.element_as_gdf(self.ntw_from_shp, edges=True)
-        known_edge_wkt = 'LINESTRING (728368.04762 877125.89535, '\
+        arcs = spgh.element_as_gdf(self.ntw_from_shp, arcs=True)
+        known_arc_wkt = 'LINESTRING (728368.04762 877125.89535, '\
                          + '728368.13931 877023.27186)'
-        obs_edge = edges.loc[(edges['id'] == (0,1)), 'geometry'].squeeze()
-        obs_edge_wkt = obs_edge.wkt
-        self.assertEqual(obs_edge_wkt, known_edge_wkt)
+        obs_arc = arcs.loc[(arcs['id'] == (0,1)), 'geometry'].squeeze()
+        obs_arc_wkt = obs_arc.wkt
+        self.assertEqual(obs_arc_wkt, known_arc_wkt)
     
     def test_round_sig(self):
         # round to 2 significant digits test
         x_round2, y_round2 = 1200, 1900
-        self.ntw_from_shp.node_sig = 2
+        self.ntw_from_shp.vertex_sig = 2
         obs_xy_round2 = self.ntw_from_shp._round_sig((1215, 1865))
         self.assertEqual(obs_xy_round2, (x_round2, y_round2))
         
         # round to no significant digits test
         x_roundNone, y_roundNone = 1215, 1865
-        self.ntw_from_shp.node_sig = None
+        self.ntw_from_shp.vertex_sig = None
         obs_xy_roundNone = self.ntw_from_shp._round_sig((1215, 1865))
         self.assertEqual(obs_xy_roundNone, (x_roundNone, y_roundNone))
 
@@ -157,22 +163,22 @@ class TestNetworkPointPattern(unittest.TestCase):
         self.assertEqual(self.pp1.npoints, self.gdf_pp1.npoints)
         self.assertEqual(self.pp2.npoints, self.gdf_pp2.npoints)
     
-    def test_edge_segmentation_1000(self):
-        n1000 = self.ntw.segment_edges(1000.0)
-        self.assertEqual(len(n1000.edges), 303)
+    def test_split_arcs_1000(self):
+        n1000 = self.ntw.split_arcs(1000.0)
+        self.assertEqual(len(n1000.arcs), 303)
     
     def test_add_point_pattern(self):
         self.assertEqual(self.pp1.npoints, self.known_pp1_npoints)
         self.assertIn('properties', self.pp1.points[0])
         self.assertIn([1], self.pp1.points[0]['properties'])
     
-    def test_count_per_edge(self):
-        counts = self.ntw.count_per_edge(self.pp1.obs_to_edge, graph=False)
+    def test_count_per_link_network(self):
+        counts = self.ntw.count_per_link(self.pp1.obs_to_arc, graph=False)
         meancounts = sum(counts.values()) / float(len(counts.keys()))
         self.assertAlmostEqual(meancounts, 1.0, places=5)
     
-    def test_count_per_graph_edge(self):
-        counts = self.ntw.count_per_edge(self.pp1.obs_to_edge, graph=True)
+    def test_count_per_edge_graph(self):
+        counts = self.ntw.count_per_link(self.pp1.obs_to_arc, graph=True)
         meancounts = sum(counts.values()) / float(len(counts.keys()))
         self.assertAlmostEqual(meancounts, 1.0, places=5)
     
@@ -358,7 +364,7 @@ class TestNetworkUtils(unittest.TestCase):
     def test_get_neighbor_distances(self):
         self.known_neighs = {1: 102.62353453439829, 2: 660.000001049743}
         self.neighs = util.get_neighbor_distances(self.ntw, 0,
-                                                  self.ntw.edge_lengths)
+                                                  self.ntw.arc_lengths)
         self.assertAlmostEqual(self.neighs[1], 102.62353453439829, places=4)
         self.assertAlmostEqual(self.neighs[2], 660.000001049743, places=4)
     
@@ -378,18 +384,18 @@ class TestNetworkUtils(unittest.TestCase):
         self.assertAlmostEqual(self.distance[196], 5505.668247, places=4)
         self.assertEqual(self.pred[196], 133)
     
-    def test_square_distance_point_segment(self):
-        self.point, self.segment = (1,1), ((0,0), (2,0))
-        self.sqrd_nearp = util.squared_distance_point_segment(self.point,
-                                                              self.segment)
+    def test_squared_distance_point_link(self):
+        self.point, self.link = (1,1), ((0,0), (2,0))
+        self.sqrd_nearp = util.squared_distance_point_link(self.point,
+                                                           self.link)
         self.assertEqual(self.sqrd_nearp[0], 1.0)
         self.assertEqual(self.sqrd_nearp[1].all(), np.array([1., 0.]).all())
     
-    def test_snap_points_on_segments(self):
+    def test_snap_points_to_links(self):
         self.points = {0: cg.shapes.Point((1,1))}
-        self.segments = [cg.shapes.Chain([cg.shapes.Point((0,0)),
-                                          cg.shapes.Point((2,0))])]
-        self.snapped = util.snap_points_on_segments(self.points, self.segments)
+        self.links = [cg.shapes.Chain([cg.shapes.Point((0,0)),
+                                       cg.shapes.Point((2,0))])]
+        self.snapped = util.snap_points_to_links(self.points, self.links)
         self.known_coords = [xy._Point__loc for xy in self.snapped[0][0]]
         self.assertEqual(self.known_coords, [(0.0, 0.0), (2.0, 0.0)])
         self.assertEqual(self.snapped[0][1].all(), np.array([1., 0.]).all())

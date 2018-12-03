@@ -17,8 +17,10 @@ __all__ = ["Network", "PointPattern", "NetworkG", "NetworkK", "NetworkF"]
 
 
 class Network:
-    """Spatially-constrained network representation
-    and analytical functionality.
+    """Spatially-constrained network representation and analytical
+    functionality. Naming conventions are as follows, (1) arcs and
+    vertices for the full network object, and (2) edges and nodes for
+    the simplified graph-theoretic object.
     
     Parameters
     ----------
@@ -27,15 +29,15 @@ class Network:
         The input geographic data. Either (1) a path to a shapefile
         (str); or (2) a ``geopandas.GeoDataFrame``.
     
-    node_sig : int
-        Round the x and y coordinates of all nodes to node_sig
+    vertex_sig : int
+        Round the x and y coordinates of all vertices to ``vertex_sig``
         significant digits (combined significant digits on the left and
         right of the decimal place). Default is 11. Set to ``None`` for
         no rounding.
     
-    unique_segs : bool
-        If ``True`` (default), keep only unique segments (i.e., prune
-        out any duplicated segments). If ``False`` keep all segments.
+    unique_arcs : bool
+        If ``True`` (default), keep only unique arcs (i.e., prune
+        out any duplicated arcs). If ``False`` keep all segments.
     
     extractgraph : bool
         If ``True``, extract a graph-theoretic object with no degree 2
@@ -46,8 +48,8 @@ class Network:
         ``libpysal.weights.weights.W`` object. Default is False.
     
     weightings : {dict, bool}
-        If ``dict``, lists of weightings for each edge. If ``bool``,
-        ``True`` flags ``self.edge_lengths`` as the weightings,
+        If ``dict``, lists of weightings for each arc. If ``bool``,
+        ``True`` flags ``self.arc_lengths`` as the weightings,
         ``False`` sets to no weightings. Default is ``False``.
     
     Attributes
@@ -57,57 +59,58 @@ class Network:
         The input shapefile. This must be in .shp format.
     
     adjacencylist : list
-        List of lists storing node adjacency.
+        List of lists storing vertex adjacency.
     
-    nodes : dict
-        Keys are tuples of node coords and values are the node ID.
+    vertex_coords : dict
+        Keys are the vertex ID and values are the (x,y) coordinates
+        inverse to vertices.
     
-    edge_lengths : dict
-        Keys are tuples of sorted node IDs representing an edge and
+    vertex_list : list
+        List of vertex IDs.
+    
+    vertices : dict
+        Keys are tuples of vertex coords and values are the vertex ID.
+    
+    arcs : list
+        List of arcs, where each arc is a sorted tuple
+        of vertex IDs.
+    
+    arc_lengths : dict
+        Keys are tuples of sorted vertex IDs representing an arc and
         values are the length.
     
     pointpatterns : dict
         Keys are a string name of the pattern and values are
         ``PointPattern`` class instances.
     
-    node_coords : dict
-        Keys are the node ID and values are the (x,y) coordinates
-        inverse to nodes.
-    
-    edges : list
-        List of edges, where each edge is a sorted tuple of node IDs.
-    
-    node_list : list
-        List of node IDs.
-    
     alldistances : dict
-        Keys are the node IDs (``int``). Values are tuples with two
+        Keys are the vertex IDs (``int``). Values are tuples with two
         elements as follows (1) a list of the shortest path distances;
-        (2) a dict with the key being the id of the destination node and
-        the value being a list of the shortest path.
+        (2) a dict with the key being the id of the destination vertex
+        and the value being a list of the shortest path.
     
     distancematrix : numpy.ndarray
-        all network nodes (non-observations) distance matrix.
+        all network vertices (non-observations) distance matrix.
     
-    graphedges : list
+    edges : list
         tuples of graph edge ids.
     
-    graph_lengths : dict
+    edge_lengths : dict
         Keys are the graph edge ids (tuple). Values are the graph edge
         length (``float``).
     
     w_network : libpysal.weights.weights.W
-        Weights object created from the network segments
+        Weights object created from the network arcs
     
     network_n_components : int
         Count of connected components in the network.
     
     network_component_labels : numpy.ndarray
-        Component labels for networks segment
+        Component labels for networks arc
     
-    network_component2edge : dict
-        Lookup ``{int: list}`` for segments comprising network
-        connected components keyed by component labels with edges in
+    network_component2arc : dict
+        Lookup ``{int: list}`` for arcs comprising network
+        connected components keyed by component labels with arcs in
         a ``list`` as values.
     
     network_component_is_ring : dict
@@ -116,16 +119,16 @@ class Network:
         ``False``.
     
     w_graph : libpysal.weights.weights.W
-        Weights object created from the network segments
+        Weights object created from the graph edges
     
     graph_n_components : int
         Count of connected components in the network.
     
     graph_component_labels : numpy.ndarray
-        Component labels for networks segment
+        Component labels for graph edges
     
     graph_component2edge : dict
-        Lookup ``{int: list}`` for segments comprising network connected
+        Lookup ``{int: list}`` for edges comprising graph connected
         components keyed by component labels with edges in a list
         as values.
     
@@ -154,50 +157,51 @@ class Network:
     
     """
     
-    def __init__(self, in_data=None, node_sig=11, unique_segs=True,
+    def __init__(self, in_data=None, vertex_sig=11, unique_arcs=True,
                  extractgraph=True, w_components=False, weightings=False):
         
         if in_data is not None:
             self.in_data = in_data
-            self.node_sig = node_sig
-            self.unique_segs = unique_segs
+            self.vertex_sig = vertex_sig
+            self.unique_arcs = unique_arcs
             
             self.adjacencylist = defaultdict(list)
-            self.nodes = {}
-            self.edge_lengths = {}
-            self.edges = []
+            self.vertices = {}
+            
+            self.arcs = []
+            self.arc_lengths = {}
             
             self.pointpatterns = {}
             
+            # spatial representation of the network
             self._extractnetwork()
-            self.node_coords = dict((v, k) for k, v in self.nodes.items())
+            self.arcs = sorted(self.arcs)
+            self.vertex_coords = dict((v, k) for k, v in self.vertices.items())
             
-            # This is a spatial representation of the network.
-            self.edges = sorted(self.edges)
-            
+            # extract connected components
             if w_components:
                 as_graph = False
                 network_weightings = False
                 if weightings is True:
-                    weightings = self.edge_lengths
+                    weightings = self.arc_lengths
                     network_weightings = True
                 self.w_network = self.contiguityweights(graph=as_graph,
                                                         weightings=weightings)
                 self.extract_components(self.w_network, graph=as_graph)
             
-            # Extract the graph.
+            # extract the graph
             if extractgraph:
                 self.extractgraph()
                 if w_components:
                     as_graph = True
                     if network_weightings:
-                        weightings = self.graph_lengths
+                        weightings = self.edge_lengths
                     self.w_graph = self.contiguityweights(\
                                                         graph=as_graph,
                                                         weightings=weightings)
                     self.extract_components(self.w_graph, graph=as_graph)
                 
-            self.node_list = sorted(self.nodes.values())
+            self.vertex_list = sorted(self.vertices.values())
     
     
     def _round_sig(self, v):
@@ -214,7 +218,7 @@ class Network:
             X,Y coordinate of the vertex
         
         """
-        sig = self.node_sig
+        sig = self.vertex_sig
         if sig is None:
             return v
         out_v = [val if val == 0 \
@@ -241,39 +245,44 @@ class Network:
         
         """
         if graph:
-            edges = self.graphedges
+            links = self.edges
             obj_type = 'graph_'
         else:
-            edges = self.edges
+            links = self.arcs
             obj_type = 'network_'
         
         # connected component count and labels
         n_components = w.n_components
         component_labels = w.component_labels
         
-        # edge to component lookup
-        edge2component = dict(zip(edges, component_labels))
+        # link to component lookup
+        link2component = dict(zip(links, component_labels))
         
-        # component ID to edge lookup
-        component2edge = {}
+        # component ID to links lookup
+        component2link = {}
         cp_labs = set(w.component_labels)
         for cpl in cp_labs:
-            component2edge[cpl] = sorted([k for k,v\
-                                          in edge2component.items()\
+            component2link[cpl] = sorted([k for k,v\
+                                          in link2component.items()\
                                           if v == cpl])
         
         # component to ring lookup
         component_is_ring = {}
-        for k,vs in component2edge.items():
+        for k,vs in component2link.items():
             component_is_ring[k] = True
             for v in vs:
                 if len(w.neighbors[v]) != 2:
                     component_is_ring[k] = False
         
+        if graph:
+            c2l_attr_name = 'component2edge'
+        else:
+            c2l_attr_name = 'component2arc'
+        
         # set all new variables into list
         extracted_attrs = [['n_components', n_components],
                            ['component_labels', component_labels],
-                           ['component2edge', component2edge],
+                           [c2l_attr_name, component2link],
                            ['component_is_ring', component_is_ring]]
         
         # iterate over list and set attribute with
@@ -283,10 +292,10 @@ class Network:
     
     
     def _extractnetwork(self):
-        """Used internally to extract a network
-        from a polyline shapefile.
+        """Used internally to extract a network from a polyline
+        shapefile of a ``geopandas.GeoDataFrame``.
         """
-        nodecount = 0
+        vertex_count = 0
         if isinstance(self.in_data, str):
             shps = open(self.in_data)
         else:
@@ -296,73 +305,75 @@ class Network:
             for i, v in enumerate(vertices[:-1]):
                 v = self._round_sig(v)
                 try:
-                    vid = self.nodes[v]
+                    vid = self.vertices[v]
                 except KeyError:
-                    self.nodes[v] = vid = nodecount
-                    nodecount += 1
+                    self.vertices[v] = vid = vertex_count
+                    vertex_count += 1
                 v2 = self._round_sig(vertices[i + 1])
                 try:
-                    nvid = self.nodes[v2]
+                    nvid = self.vertices[v2]
                 except KeyError:
-                    self.nodes[v2] = nvid = nodecount
-                    nodecount += 1
+                    self.vertices[v2] = nvid = vertex_count
+                    vertex_count += 1
                     
                 self.adjacencylist[vid].append(nvid)
                 self.adjacencylist[nvid].append(vid)
                 
                 # Sort the edges so that mono-directional
                 # keys can be stored.
-                edgenodes = sorted([vid, nvid])
-                edge = tuple(edgenodes)
-                self.edges.append(edge)
+                arc_vertices = sorted([vid, nvid])
+                arc = tuple(arc_vertices)
+                self.arcs.append(arc)
                 length = util.compute_length(v, vertices[i + 1])
-                self.edge_lengths[edge] = length
-        if self.unique_segs:
+                self.arc_lengths[arc] = length
+        
+        if self.unique_arcs:
             # Remove duplicate edges and duplicate adjacent nodes.
-            self.edges = list(set(self.edges))
+            self.arc = list(set(self.arcs))
             for k, v in self.adjacencylist.items():
                 self.adjacencylist[k] = list(set(v))
     
     
     def extractgraph(self):
         """Using the existing network representation, create a
-        graph-theoretic representation by removing all nodes with a
+        graph-theoretic representation by removing all vertices with a
         neighbor incidence of two (non-articulation points). That is, we
-        assume these nodes are bridges between nodes with higher
-        incidence.
+        assume these vertices are bridges between vertices with higher
+        or lower incidence.
         """
-        self.graphedges = []
-        self.graph_lengths = {}
+        self.edges = []
+        self.edge_lengths = {}
         
         # Find all nodes with cardinality 2. (non-articulation points)
-        segment_nodes = []
+        arc_vertices = []
         for k, v in self.adjacencylist.items():
             # len(v) == 1 #cul-de-sac
             # len(v) == 2 #bridge segment
             # len(v) > 2 #intersection
             if len(v) == 2:
-                segment_nodes.append(k)
+                arc_vertices.append(k)
                 
         # Start with a copy of the spatial representation and
         # iteratively remove edges deemed to be segments.
-        self.graphedges = copy.deepcopy(self.edges)
-        self.graph_lengths = copy.deepcopy(self.edge_lengths)
-        # Mapping all the 'network edges' contained within a single
+        self.edges = copy.deepcopy(self.arcs)
+        self.edge_lengths = copy.deepcopy(self.arc_lengths)
+        
+        # Mapping all the 'network arcs' contained within a single
         # 'graph represented' edge.
-        self.graph_to_edges = {}
+        self.edges_to_arcs = {}
         
         # build up bridges "rooted" on the initial
         # non-articulation points
         bridges = []
-        for s in segment_nodes:
+        for s in arc_vertices:
             bridge = [s]
-            neighbors = self._yieldneighbor(s, segment_nodes, bridge)
+            neighbors = self._yieldneighbor(s, arc_vertices, bridge)
             while neighbors:
                 cnode = neighbors.pop()
-                segment_nodes.remove(cnode)
+                arc_vertices.remove(cnode)
                 bridge.append(cnode)
                 newneighbors = self._yieldneighbor(cnode,
-                                                   segment_nodes,
+                                                   arc_vertices,
                                                    bridge)
                 neighbors += newneighbors
             bridges.append(bridge)
@@ -370,78 +381,86 @@ class Network:
         for bridge in bridges:
             if len(bridge) == 1:
                 n = self.adjacencylist[bridge[0]]
-                newedge = tuple(sorted([n[0], n[1]]))
+                new_edge = tuple(sorted([n[0], n[1]]))
+                
                 # Identify the edges to be removed.
                 e1 = tuple(sorted([bridge[0], n[0]]))
                 e2 = tuple(sorted([bridge[0], n[1]]))
+                
                 # Remove them from the graph.
-                self.graphedges.remove(e1)
-                self.graphedges.remove(e2)
+                self.edges.remove(e1)
+                self.edges.remove(e2)
+                
                 # Remove from the edge lengths.
                 length_e1 = self.edge_lengths[e1]
                 length_e2 = self.edge_lengths[e2]
-                self.graph_lengths.pop(e1, None)
-                self.graph_lengths.pop(e2, None)
-                self.graph_lengths[newedge] = length_e1 + length_e2
+                self.edge_lengths.pop(e1, None)
+                self.edge_lengths.pop(e2, None)
+                self.edge_lengths[new_edge] = length_e1 + length_e2
+                
                 # Update the pointers.
-                self.graph_to_edges[e1] = newedge
-                self.graph_to_edges[e2] = newedge
+                self.edges_to_arcs[e1] = new_edge
+                self.edges_to_arcs[e2] = new_edge
+            
             else:
                 cumulative_length = 0
-                startend = {}
+                start_end = {}
                 redundant = set([])
                 for b in bridge:
                     for n in self.adjacencylist[b]:
                         if n not in bridge:
-                            startend[b] = n
+                            start_end[b] = n
                         else:
                             redundant.add(tuple(sorted([b, n])))
                             
-                newedge = tuple(sorted(startend.values()))
-                for k, v in startend.items():
+                new_edge = tuple(sorted(start_end.values()))
+                for k, v in start_end.items():
                     redundant.add(tuple(sorted([k, v])))
                     
                 for r in redundant:
-                    self.graphedges.remove(r)
+                    self.edges.remove(r)
                     cumulative_length += self.edge_lengths[r]
-                    self.graph_lengths.pop(r, None)
-                    self.graph_to_edges[r] = newedge
-                self.graph_lengths[newedge] = cumulative_length
+                    self.edge_lengths.pop(r, None)
+                    self.edges_to_arcs[r] = new_edge
+                self.edge_lengths[new_edge] = cumulative_length
                 
-            self.graphedges.append(newedge)
-        self.graphedges = sorted(self.graphedges)
+            self.edges.append(new_edge)
+        self.edges = sorted(self.edges)
     
     
-    def _yieldneighbor(self, node, segment_nodes, bridge):
-        """Used internally, this method traverses a bridge segement
+    def _yieldneighbor(self, vtx, arc_vertices, bridge):
+        """Used internally, this method traverses a bridge arc
         to find the source and destination nodes.
         
         Parameters
         ----------
         
-        node : int
-            Node id
+        vtx : int
+            vertex id
         
-        segment_nodes : list
-            All non-articulation points in the network (degree-2 nodes).
+        arc_vertices : list
+            All non-articulation points in the network. These are
+            referred to as degree-2 vertices.
         
         bridge : list
-            Inital bridge list containing only ``node``.
+            Inital bridge list containing only ``vtx``.
         
         Returns
         -------
         
-        n : list
-            Nodes to keep (articulation points).
-        
+        nodes : list
+            Vertices to keep (articulation points). These elements are 
+            referred to as nodes.
         """
-        n = []
-        # get all nodes adjacent to `node`
-        for i in self.adjacencylist[node]:
-            if i in segment_nodes and i not in bridge:
-                n.append(i)
+        
+        nodes = []
+        
+        # get all nodes adjacent to `vtx`
+        for i in self.adjacencylist[vtx]:
+            if i in arc_vertices and i not in bridge:
+                nodes.append(i)
                 
-        return n
+        return nodes
     
     
     def contiguityweights(self, graph=True, weightings=None):
@@ -456,7 +475,7 @@ class Network:
             Default is ``True``.
         
         weightings : dict
-            dictionary of lists of weightings for each edge.
+            dictionary of lists of weightings for each arc/edge.
         
         Returns
         -------
@@ -482,10 +501,10 @@ class Network:
         >>> ntw.snapobservations(examples.get_path('crimes.shp'),
         ...                      'crimes', attribute=True)
         
-        Find counts per network edge.
+        Find counts per network arc.
         
-        >>> counts = ntw.count_per_edge(ntw.pointpatterns['crimes']
-        ...                             .obs_to_edge, graph=False)
+        >>> counts = ntw.count_per_link(ntw.pointpatterns['crimes']
+        ...                             .obs_to_arc, graph=False)
         >>> counts[(50, 165)]
         4
         
@@ -498,9 +517,9 @@ class Network:
         with observations.
         
         >>> w = ntw.contiguityweights(graph=False)
-        >>> edges = w.neighbors.keys()
-        >>> y = np.zeros(len(edges))
-        >>> for i, e in enumerate(edges):
+        >>> arcs = w.neighbors.keys()
+        >>> y = np.zeros(len(arcs))
+        >>> for i, e in enumerate(arcs):
         ...     if e in counts.keys():
         ...         y[i] = counts[e]
         >>> y[3]
@@ -518,9 +537,9 @@ class Network:
         neighbors = OrderedDict()
         
         if graph:
-            edges = self.graphedges
+            links = self.edges
         else:
-            edges = self.edges
+            links = self.arcs
             
         if weightings:
             _weights = {}
@@ -530,12 +549,12 @@ class Network:
         working = True
         while working:
             
-            for key in edges:
+            for key in links:
                 neighbors[key] = []
                 if weightings:
                     _weights[key] = []
                 
-                for neigh in edges:
+                for neigh in links:
                     
                     if key == neigh:
                         continue
@@ -598,7 +617,7 @@ class Network:
         """
         
         if not hasattr(self, 'alldistances'):
-            self.node_distance_matrix(n_proccess, gen_tree=gen_tree)
+            self.full_distance_matrix(n_proccess, gen_tree=gen_tree)
             
         neighbor_query = np.where(self.distancematrix < threshold)
         neighbors = defaultdict(list)
@@ -613,7 +632,7 @@ class Network:
     
     def snapobservations(self, in_data, name,
                          idvariable=None, attribute=None):
-        """Snap a point pattern shapefile to this network object. The
+        """Snap a point pattern shapefile to network object. The
         point pattern is stored in the ``network.pointpattern['key']``
         attribute of the network object.
         
@@ -651,12 +670,12 @@ class Network:
         self.pointpatterns[name] = PointPattern(in_data=in_data,
                                                 idvariable=idvariable,
                                                 attribute=attribute)
-        self._snap_to_edge(self.pointpatterns[name])
+        self._snap_to_link(self.pointpatterns[name])
     
     
-    def compute_distance_to_nodes(self, x, y, edge):
-        """Given an observation on a network edge, return the distance
-        to the two nodes that bound that end.
+    def compute_distance_to_vertices(self, x, y, arc):
+        """Given an observation on a network arc, return the distance
+        to the two vertices that bound that end.
         
         Parameters
         ----------
@@ -665,30 +684,30 @@ class Network:
             x-coordinate of the snapped point.
         
         y : float
-            y-coordiante of the snapped point.
+            y-coordinate of the snapped point.
         
-        edge : tuple
-            (node0, node1) representation of the network edge.
+        arc : tuple
+            (vtx0, vtx1) representation of the network arc.
         
         Returns
         -------
         
         d1 : float
-            The distance to node0. Always the node with the lesser id.
+            The distance to vtx0. Always the vertex with the lesser id.
         
         d2 : float
-            The distance to node1. Always the node with the greater id.
+            The distance to vtx1. Always the vertex with the greater id.
         
         """
         
-        d1 = util.compute_length((x, y), self.node_coords[edge[0]])
-        d2 = util.compute_length((x, y), self.node_coords[edge[1]])
+        d1 = util.compute_length((x, y), self.vertex_coords[arc[0]])
+        d2 = util.compute_length((x, y), self.vertex_coords[arc[1]])
         
         return d1, d2
     
     
     def compute_snap_dist(self, pattern, idx):
-        """Given an observation snapped to a network edge, calculate the
+        """Given an observation snapped to a network arc, calculate the
         distance from the original location to the snapped location.
         
         Parameters
@@ -712,8 +731,8 @@ class Network:
         return dist
     
     
-    def _snap_to_edge(self, pointpattern):
-        """ Used internally to snap point observations to network edges.
+    def _snap_to_link(self, pointpattern):
+        """ Used internally to snap point observations to network arcs.
         
         Parameters
         -----------
@@ -724,74 +743,86 @@ class Network:
         Returns
         -------
         
-        obs_to_edge : dict
-            Dictionary with edges as keys and lists of points as values.
+        obs_to_arc : dict
+            Dictionary with arcs as keys and lists of points as values.
         
-        edge_to_obs : dict
-            Dictionary with point ids as keys and edge tuples as values.
+        arc_to_obs : dict
+            Dictionary with point ids as keys and arc tuples as values.
         
-        dist_to_node : dict
+        dist_to_vertex : dict
             Dictionary with point ids as keys and values as dicts
-            with keys for node ids and values as distances from point
-            to node.
+            with keys for vertex ids and values as distances from point
+            to vertex.
+        
+        dist_snapped : dict
+            Dictionary with point ids as keys and distance from point
+            to the network arc which it is snapped.
         
         """
         
-        obs_to_edge = {}
-        dist_to_node = {}
+        obs_to_arc = {}
+        dist_to_vertex = {}
         dist_snapped = {}
-        obs_to_node = defaultdict(list)
         
         pointpattern.snapped_coordinates = {}
-        segments = []
-        s2e = {}
-        for edge in self.edges:
-            head = self.node_coords[edge[0]]
-            tail = self.node_coords[edge[1]]
-            segments.append(cg.Chain([head, tail]))
-            s2e[(head, tail)] = edge
+        arcs_ = []
+        s2a = {}
+        for arc in self.arcs:
+            head = self.vertex_coords[arc[0]]
+            tail = self.vertex_coords[arc[1]]
+            arcs_.append(cg.Chain([head, tail]))
+            s2a[(head, tail)] = arc
         
         # snap points
         points = {}
         p2id = {}
-        for pointIdx, point in pointpattern.points.items():
-            points[pointIdx] = point['coordinates']
-        snapped = util.snap_points_on_segments(points, segments)
+        for point_idx, point in pointpattern.points.items():
+            points[point_idx] = point['coordinates']
         
-        # record obs_to_edge, dist_to_node, and dist_snapped
-        for pointIdx, snapInfo in snapped.items():
-            x, y = snapInfo[1].tolist()
-            edge = s2e[tuple(snapInfo[0])]
-            if edge not in obs_to_edge:
-                obs_to_edge[edge] = {}
-            obs_to_edge[edge][pointIdx] = (x, y)
-            pointpattern.snapped_coordinates[pointIdx] = (x, y)
-            d1, d2 = self.compute_distance_to_nodes(x, y, edge)
-            dist_to_node[pointIdx] = {edge[0]: d1, edge[1]: d2}
-            dist_snapped[pointIdx] = self.compute_snap_dist(pointpattern,
-                                                            pointIdx)
+        snapped = util.snap_points_to_links(points, arcs_)
         
-        # record obs_to_node
-        obs_to_node = defaultdict(list)
-        for k, v in obs_to_edge.items():
+        # record obs_to_arc, dist_to_vertex, and dist_snapped
+        for point_idx, snap_info in snapped.items():
+            
+            x, y = snap_info[1].tolist()
+            
+            arc = s2a[tuple(snap_info[0])]
+            
+            if arc not in obs_to_arc:
+                obs_to_arc[arc] = {}
+            
+            obs_to_arc[arc][point_idx] = (x, y)
+            pointpattern.snapped_coordinates[point_idx] = (x, y)
+            
+            d1, d2 = self.compute_distance_to_vertices(x, y, arc)
+            
+            dist_to_vertex[point_idx] = {arc[0]: d1,
+                                         arc[1]: d2}
+            
+            dist_snapped[point_idx] = self.compute_snap_dist(pointpattern,
+                                                             point_idx)
+        
+        # record obs_to_vertex
+        obs_to_vertex = defaultdict(list)
+        for k, v in obs_to_arc.items():
             keys = v.keys()
-            obs_to_node[k[0]] = keys
-            obs_to_node[k[1]] = keys
+            obs_to_vertex[k[0]] = keys
+            obs_to_vertex[k[1]] = keys
         
-        pointpattern.obs_to_edge = obs_to_edge
-        pointpattern.dist_to_node = dist_to_node
+        pointpattern.obs_to_arc = obs_to_arc
+        pointpattern.dist_to_vertex = dist_to_vertex
         pointpattern.dist_snapped = dist_snapped
-        pointpattern.obs_to_node = list(obs_to_node)
+        pointpattern.obs_to_vertex = list(obs_to_vertex)
     
     
-    def count_per_edge(self, obs_on_network, graph=True):
-        """Compute the counts per edge.
+    def count_per_link(self, obs_on, graph=True):
+        """Compute the counts per arc or edge (link).
         
         Parameters
         ----------
         
         obs_on_network : dict
-            Dictionary of observations on the network. 
+            Dictionary of observations on the network.
             Either {(edge):{pt_id:(coords)}} or 
             {edge:[(coord),(coord),(coord)]}
         
@@ -809,11 +840,11 @@ class Network:
         >>> import spaghetti as spgh
         >>> ntw = spgh.Network(examples.get_path('streets.shp'))
         >>> ntw.snapobservations(examples.get_path('crimes.shp'),
-        ...                                           'crimes',
-        ...                                           attribute=True)
+        ...                                        'crimes',
+        ...                                         attribute=True)
         
-        >>> counts = ntw.count_per_edge(ntw.pointpatterns['crimes']
-        ...                             .obs_to_edge, graph=False)
+        >>> counts = ntw.count_per_link(ntw.pointpatterns['crimes']
+        ...                             .obs_to_arc, graph=False)
         >>> counts[(140, 142)]
         10
         
@@ -824,28 +855,28 @@ class Network:
         """
         counts = {}
         if graph:
-            for key, observations in obs_on_network.items():
+            for key, observations in obs_on.items():
                 cnt = len(observations)
-                if key in self.graph_to_edges.keys():
-                    key = self.graph_to_edges[key]
+                if key in self.edges_to_arcs.keys():
+                    key = self.edges_to_arcs[key]
                 try:
                     counts[key] += cnt
                 except KeyError:
                     counts[key] = cnt
         else:
-            for key in obs_on_network.keys():
-                counts[key] = len(obs_on_network[key])
+            for key in obs_on.keys():
+                counts[key] = len(obs_on[key])
         return counts
     
     
-    def _newpoint_coords(self, edge, distance):
+    def _newpoint_coords(self, arc, distance):
         """Used internally to compute new point
         coordinates during snapping.
         """
-        x1 = self.node_coords[edge[0]][0]
-        y1 = self.node_coords[edge[0]][1]
-        x2 = self.node_coords[edge[1]][0]
-        y2 = self.node_coords[edge[1]][1]
+        x1 = self.vertex_coords[arc[0]][0]
+        y1 = self.vertex_coords[arc[0]][1]
+        x2 = self.vertex_coords[arc[1]][0]
+        y2 = self.vertex_coords[arc[1]][1]
         if x1 == x2:  # Vertical line case
             x0 = x1
             if y1 < y2:
@@ -902,39 +933,44 @@ class Network:
         True
         
         """
+        
         simpts = SimulatedPointPattern()
         
-        # Cumulative Network Length.
-        edges = []
-        lengths = np.zeros(len(self.edge_lengths))
-        for i, key in enumerate(self.edge_lengths.keys()):
-            edges.append(key)
-            lengths[i] = self.edge_lengths[key]
+        # cumulative network length.
+        arcs_ = []
+        lengths = np.zeros(len(self.arc_lengths))
+        for i, key in enumerate(self.arc_lengths.keys()):
+            arcs_.append(key)
+            lengths[i] = self.arc_lengths[key]
         stops = np.cumsum(lengths)
         totallength = stops[-1]
         
         if distribution is 'uniform':
             nrandompts = np.random.uniform(0, totallength, size=(count,))
+        
         elif distribution is 'poisson':
             mid_length = totallength / 2.
             nrandompts = np.random.poisson(mid_length, size=(count,))
             
         for i, r in enumerate(nrandompts):
             idx = np.where(r < stops)[0][0]
-            assignment_edge = edges[idx]
+            assignment_arc = arcs_[idx]
             distance_from_start = stops[idx] - r
-            # Populate the coordinates dict.
-            x0, y0 = self._newpoint_coords(assignment_edge,
-                                           distance_from_start)
-            simpts.snapped_coordinates[i] = (x0, y0)
-            simpts.obs_to_node[assignment_edge[0]].append(i)
-            simpts.obs_to_node[assignment_edge[1]].append(i)
             
-            # Populate the distance to node.
-            distance_from_end = self.edge_lengths[edges[idx]]\
-                                                        - distance_from_start
-            simpts.dist_to_node[i] = {assignment_edge[0]: distance_from_start,
-                                      assignment_edge[1]: distance_from_end}
+            # Populate the coordinates dict
+            x0, y0 = self._newpoint_coords(assignment_arc,
+                                           distance_from_start)
+            
+            simpts.snapped_coordinates[i] = (x0, y0)
+            simpts.obs_to_vertex[assignment_arc[0]].append(i)
+            simpts.obs_to_vertex[assignment_arc[1]].append(i)
+            
+            # Populate the distance to vertex
+            distance_from_end = self.arc_lengths[arcs_[idx]]\
+                                - distance_from_start
+            
+            simpts.dist_to_vertex[i] = {assignment_arc[0]: distance_from_start,
+                                        assignment_arc[1]: distance_from_end}
             
             simpts.points = simpts.snapped_coordinates
             simpts.npoints = len(simpts.points)
@@ -942,40 +978,44 @@ class Network:
         return simpts
     
     
-    def enum_links_node(self, v0):
-        """Returns the edges (links) around node.
+    def enum_links_vertex(self, v0):
+        """Returns the arcs (links) around vertices.
         
         Parameters
         -----------
         
         v0 : int
-            Node id
+            vertex id
         
         Returns
         -------
         
         links : list
-            List of tuple edges adjacent to the node.
+            List of tuple edges adjacent to the vertex.
         
         Examples
         --------
         
         >>> import spaghetti as spgh
         >>> ntw = spgh.Network(examples.get_path('streets.shp'))
-        >>> ntw.enum_links_node(24)
+        >>> ntw.enum_links_vertex(24)
         [(24, 48), (24, 25), (24, 26)]
         
         """
+        
         links = []
-        neighbornodes = self.adjacencylist[v0]
-        for n in neighbornodes:
+        
+        neighbor_vertices = self.adjacencylist[v0]
+        
+        for n in neighbor_vertices:
             links.append(tuple(sorted([n, v0])))
         
         return links
     
     
-    def node_distance_matrix(self, n_processes, gen_tree=False):
-        """ Called from within ``allneighbordistances()``,
+    def full_distance_matrix(self, n_processes, gen_tree=False):
+        """All vertex-to-vertex distances on a network. This function
+        is called from within ``allneighbordistances()``,
         ``nearestneighbordistances()``, and ``distancebandweights()``.
         
         Parameters
@@ -995,43 +1035,43 @@ class Network:
         """
         
         self.alldistances = {}
-        nnodes = len(self.node_list)
-        self.distancematrix = np.empty((nnodes, nnodes))
+        nvtx = len(self.vertex_list)
+        self.distancematrix = np.empty((nvtx, nvtx))
         
         # Single-core processing
         if not n_processes:
-            for node in self.node_list:
-                distance, pred = util.dijkstra(self, node)
+            for vtx in self.vertex_list:
+                distance, pred = util.dijkstra(self, vtx)
                 pred = np.array(pred)
                 if gen_tree:
                     tree = util.generatetree(pred)
                 else:
                     tree = None
-                self.alldistances[node] = (distance, tree)
-                self.distancematrix[node] = distance
+                self.alldistances[vtx] = (distance, tree)
+                self.distancematrix[vtx] = distance
         
         # Multiprocessing
         if n_processes:
             import multiprocessing as mp
             from itertools import repeat
-            if n_processes == "all":
+            if n_processes == 'all':
                 cores = mp.cpu_count()
             else:
                 cores = n_processes
             p = mp.Pool(processes=cores)
             distance_pred = p.map(util.dijkstra_mp,
-                                  zip(repeat(self), self.node_list))
+                                  zip(repeat(self), self.vertex_list))
             iterations = range(len(distance_pred))
             distance = [distance_pred[itr][0] for itr in iterations]
             pred = np.array([distance_pred[itr][1] for itr in iterations])
             
-            for node in self.node_list:
+            for vtx in self.vertex_list:
                 if gen_tree:
-                    tree = util.generatetree(pred[node])
+                    tree = util.generatetree(pred[vtx])
                 else:
                     tree = None
-                self.alldistances[node] = (distance[node], tree)
-                self.distancematrix[node] = distance[node]
+                self.alldistances[vtx] = (distance[vtx], tree)
+                self.distancematrix[vtx] = distance[vtx]
     
     
     def allneighbordistances(self, sourcepattern, destpattern=None,
@@ -1079,7 +1119,7 @@ class Network:
             points.
         
         tree_nearest : dict
-            Nearest network node to point pattern node shortest
+            Nearest network node to point pattern vertex shortest
             path lookup.
         
         Examples
@@ -1115,32 +1155,32 @@ class Network:
         """
         
         if not hasattr(self, 'alldistances'):
-            self.node_distance_matrix(n_processes, gen_tree=gen_tree)
+            self.full_distance_matrix(n_processes, gen_tree=gen_tree)
         
         if type(sourcepattern) is str:
             sourcepattern = self.pointpatterns[sourcepattern]
             if destpattern:
                 destpattern = self.pointpatterns[destpattern]
         
-        # Source setup
+        # source setup
         src_indices = list(sourcepattern.points.keys())
-        src_d2n = copy.deepcopy(sourcepattern.dist_to_node)
+        src_d2n = copy.deepcopy(sourcepattern.dist_to_vertex)
         nsource_pts = len(src_indices)
-        src_nodes = {}
+        src_vertices = {}
         for s in src_indices:
             e1, e2 = src_d2n[s].keys()
-            src_nodes[s] = (e1, e2)
-            
-        # Destination setup
+            src_vertices[s] = (e1, e2)
+        
+        # destination setup
         symmetric = False
         if destpattern is None:
             symmetric = True
             destpattern = sourcepattern
         dest_indices = list(destpattern.points.keys())
-        dst_d2n = copy.deepcopy(destpattern.dist_to_node)
+        dst_d2n = copy.deepcopy(destpattern.dist_to_vertex)
         ndest_pts = len(dest_indices)
         dest_searchpts = copy.deepcopy(dest_indices)
-        dest_nodes = {}
+        dest_vertices = {}
         
         # add snapping distance to each pointpattern
         if snap_dist:
@@ -1153,7 +1193,7 @@ class Network:
         
         for s in dest_indices:
             e1, e2 = dst_d2n[s].keys()
-            dest_nodes[s] = (e1, e2)
+            dest_vertices[s] = (e1, e2)
             
         # Output setup
         nearest = np.empty((nsource_pts, ndest_pts))
@@ -1161,19 +1201,24 @@ class Network:
         tree_nearest = {}
         
         for p1 in src_indices:
-            # Get the source nodes and dist to source nodes.
-            source1, source2 = src_nodes[p1]
-            set1 = set(src_nodes[p1])
-            # Distance from node1 to p, distance from node2 to p.
+            
+            # Get the source vertices and dist to source vertices.
+            source1, source2 = src_vertices[p1]
+            set1 = set(src_vertices[p1])
+            
+            # Distance from vtx1 to p, distance from vtx2 to p.
             sdist1, sdist2 = src_d2n[p1].values()
             
             if symmetric:
+                
                 # Only compute the upper triangle if symmetric.
                 dest_searchpts.remove(p1)
+            
             for p2 in dest_searchpts:
-                dest1, dest2 = dest_nodes[p2]
-                set2 = set(dest_nodes[p2])
-                if set1 == set2:  # same edge
+                dest1, dest2 = dest_vertices[p2]
+                set2 = set(dest_vertices[p2])
+                
+                if set1 == set2:  # same arc
                     x1, y1 = sourcepattern.snapped_coordinates[p1]
                     x2, y2 = destpattern.snapped_coordinates[p2]
                     computed_length = util.compute_length((x1, y1),
@@ -1189,8 +1234,8 @@ class Network:
                     d22 = self.distancematrix[source2][dest2]
                     
                     # Find the shortest distance from the path passing
-                    # through each of the two origin nodes to the first
-                    # destination node.
+                    # through each of the two origin vertices to the
+                    # first destination vertex.
                     sd_1 = d11 + sdist1
                     sd_21 = d21 + sdist2
                     sp_combo1 = source1, dest1
@@ -1198,12 +1243,12 @@ class Network:
                         sd_1 = sd_21
                         sp_combo1 = source2, dest1
                     
-                    # Now add the point to node one distance on
-                    # the destination edge.
+                    # Now add the point to vertex one distance on
+                    # the destination arc.
                     len_1 = sd_1 + ddist1
                     
                     # Repeat the prior but now for the paths entering
-                    # at the second node of the second edge.
+                    # at the second vertex of the second arc.
                     sd_2 = d12 + sdist1
                     sd_22 = d22 + sdist2
                     sp_combo2 = source1, dest2
@@ -1213,30 +1258,34 @@ class Network:
                     len_2 = sd_2 + ddist2
                     
                     # Now find the shortest distance path between point
-                    # 1 on edge 1 and point 2 on edge 2, and assign.
+                    # 1 on arc 1 and point 2 on arc 2, and assign.
                     sp_12 = len_1
-                    s_node, d_node = sp_combo1
+                    s_vertex, d_vertex = sp_combo1
                     if len_1 > len_2:
                         sp_12 = len_2
-                        s_node, d_node = sp_combo2
+                        s_vertex, d_vertex = sp_combo2
                     
                     nearest[p1, p2] = sp_12
-                    tree_nearest[p1, p2] = (s_node, d_node)
+                    tree_nearest[p1, p2] = (s_vertex, d_vertex)
                     
                 if symmetric:
+                    
                     # Mirror the upper and lower triangle
                     # when symmetric.
                     nearest[p2, p1] = nearest[p1, p2]
                     
         # Populate the main diagonal when symmetric.
         if symmetric:
+            
             if fill_diagonal is None:
                 np.fill_diagonal(nearest, np.nan)
+            
             else:
                 np.fill_diagonal(nearest, fill_diagonal)
         
         if gen_tree:
             return nearest, tree_nearest
+        
         else:
             return nearest
     
@@ -1306,12 +1355,13 @@ class Network:
         (([18, 19], 165.33982412719126), ([11], 165.33982412719126))
         
         """
+        
         if sourcepattern not in self.pointpatterns.keys():
             err_msg = 'Available point patterns are {}'
             raise KeyError(err_msg.format(self.pointpatterns.keys()))
             
         if not hasattr(self, 'alldistances'):
-            self.node_distance_matrix(n_processes, gen_tree=gen_tree)
+            self.full_distance_matrix(n_processes, gen_tree=gen_tree)
         
         symmetric = sourcepattern != destpattern
         
@@ -1346,6 +1396,7 @@ class Network:
             else:
                 val = np.min(all_dists[source_index,:]\
                                       [np.nonzero(all_dists[source_index,:])])
+            
             # nearest destination (may be more than one if
             # observations are equal distances away)
             dest_idxs = np.where(all_dists[source_index,:] == val)[0].tolist()
@@ -1407,6 +1458,7 @@ class Network:
         >>> fres.lowerenvelope.shape[0]
         10
         """
+        
         return NetworkF(self, pointpattern, nsteps=nsteps,
                         permutations=permutations, threshold=threshold,
                         distribution=distribution, lowerbound=lowerbound,
@@ -1534,21 +1586,22 @@ class Network:
         >>> kres.lowerenvelope.shape[0]
         10
         """
+        
         return NetworkK(self, pointpattern, nsteps=nsteps,
                         permutations=permutations, threshold=threshold,
                         distribution=distribution, lowerbound=lowerbound,
                         upperbound=upperbound)
     
     
-    def segment_edges(self, distance):
-        """Segment all of the edges in the network at either a
-        fixed distance or a fixed number of segments.
+    def split_arcs(self, distance):
+        """Split all of the arcs in the network at either a
+        fixed distance or a fixed number of arcs.
         
         Parameters
         -----------
         
         distance : float
-            The distance at which edges are split.
+            The distance at which arcs are split.
         
         Returns
         -------
@@ -1561,89 +1614,93 @@ class Network:
        
         >>> import spaghetti as spgh
         >>> ntw = spgh.Network(examples.get_path('streets.shp'))
-        >>> n200 = ntw.segment_edges(200.0)
-        >>> len(n200.edges)
+        >>> n200 = ntw.split_arcs(200.0)
+        >>> len(n200.arcs)
         688
         
         """
         
         sn = Network()
         sn.adjacencylist = copy.deepcopy(self.adjacencylist)
-        sn.edge_lengths = copy.deepcopy(self.edge_lengths)
-        sn.edges = set(copy.deepcopy(self.edges))
-        sn.node_coords = copy.deepcopy(self.node_coords)
-        sn.node_list = copy.deepcopy(self.node_list)
-        sn.nodes = copy.deepcopy(self.nodes)
+        sn.arc_lengths = copy.deepcopy(self.arc_lengths)
+        sn.arcs = set(copy.deepcopy(self.arcs))
+        sn.vertex_coords = copy.deepcopy(self.vertex_coords)
+        sn.vertex_list = copy.deepcopy(self.vertex_list)
+        sn.vertices = copy.deepcopy(self.vertices)
         sn.pointpatterns = copy.deepcopy(self.pointpatterns)
         sn.in_data = self.in_data
         
-        current_node_id = max(self.nodes.values())
+        current_vertex_id = max(self.vertices.values())
         
-        newedges = set()
-        removeedges = set()
-        for e in sn.edges:
-            length = sn.edge_lengths[e]
+        new_arcs = set()
+        remove_arcs = set()
+        
+        for arc in sn.arcs:
+            length = sn.arc_lengths[arc]
             interval = distance
             
             totallength = 0
-            currentstart = startnode = e[0]
-            endnode = e[1]
+            currentstart = start_vertex = arc[0]
+            end_vertex = arc[1]
             
             # If the edge will be segmented remove the current
             # edge from the adjacency list.
             if interval < length:
-                sn.adjacencylist[e[0]].remove(e[1])
-                sn.adjacencylist[e[1]].remove(e[0])
-                sn.edge_lengths.pop(e, None)
-                removeedges.add(e)
+                sn.adjacencylist[arc[0]].remove(arc[1])
+                sn.adjacencylist[arc[1]].remove(arc[0])
+                sn.arc_lengths.pop(arc, None)
+                remove_arcs.add(arc)
+            
             else:
                 continue
-                
+            
             while totallength < length:
-                currentstop = current_node_id
+                currentstop = current_vertex_id
+                
                 if totallength + interval > length:
-                    currentstop = endnode
+                    currentstop = end_vertex
                     interval = length - totallength
                     totallength = length
+                
                 else:
-                    current_node_id += 1
-                    currentstop = current_node_id
+                    current_vertex_id += 1
+                    currentstop = current_vertex_id
                     totallength += interval
                     
-                    # Compute the new node coordinate.
-                    newx, newy = self._newpoint_coords(e, totallength)
+                    # Compute the new vertex coordinate.
+                    newx, newy = self._newpoint_coords(arc, totallength)
                     
-                    # Update node_list.
-                    if currentstop not in sn.node_list:
-                        sn.node_list.append(currentstop)
+                    # Update vertex.
+                    if currentstop not in sn.vertex_list:
+                        sn.vertex_list.append(currentstop)
                     
-                    # Update nodes and node_coords.
-                    sn.node_coords[currentstop] = newx, newy
-                    sn.nodes[(newx, newy)] = currentstop
+                    # Update nodes and vertex.
+                    sn.vertex_coords[currentstop] = newx, newy
+                    sn.vertices[(newx, newy)] = currentstop
                 
                 # Update the adjacency list.
                 sn.adjacencylist[currentstart].append(currentstop)
                 sn.adjacencylist[currentstop].append(currentstart)
                 
-                # Add the new edge to the edge dict.
+                # Add the new arc to the arc dict.
                 # Iterating over this so we need to add after iterating.
-                newedges.add(tuple(sorted([currentstart, currentstop])))
+                new_arcs.add(tuple(sorted([currentstart, currentstop])))
                 
-                # Modify edge_lengths.
+                # Modify arc_lengths.
                 current_start_stop = tuple(sorted([currentstart,
                                                    currentstop]))
-                sn.edge_lengths[current_start_stop] = interval
+                sn.arc_lengths[current_start_stop] = interval
                 
                 # Increment the start to the stop.
                 currentstart = currentstop
         
-        sn.edges.update(newedges)
-        sn.edges.difference_update(removeedges)
-        sn.edges = list(sn.edges)
+        sn.arcs.update(new_arcs)
+        sn.arcs.difference_update(remove_arcs)
+        sn.arcs = list(sn.arcs)
         
         # Update the point pattern snapping.
         for instance in sn.pointpatterns.values():
-            sn._snap_to_edge(instance)
+            sn._snap_to_link(instance)
             
         return sn
     
@@ -1665,6 +1722,7 @@ class Network:
         >>> ntw = spgh.Network(examples.get_path('streets.shp'))
         >>> ntw.savenetwork('mynetwork.pkl')
         """
+        
         with open(filename, 'wb') as networkout:
             pickle.dump(self, networkout, protocol=2)
     
@@ -1686,17 +1744,18 @@ class Network:
             spaghetti Network object
             
         """
+        
         with open(filename, 'rb') as networkin:
             self = pickle.load(networkin)
             
         return self
 
 
-def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
+def element_as_gdf(net, vertices=False, arcs=False, pp_name=None,
                    snapped=False, id_col='id', geom_col='geometry'):
     """Return a ``geopandas.GeoDataFrame`` of network elements. This
-    can be (a) the nodes of a network; (b) the edges of a network;
-    (c) both the nodes and edges of the network; (d) raw point pattern
+    can be (a) the vertices of a network; (b) the arcs of a network;
+    (c) both the vertices and arcs of the network; (d) raw point pattern
     associated with the network; or (e) snapped point pattern of (d).
     
     Parameters
@@ -1705,11 +1764,11 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
     net : spaghetti.Network
         network object
     
-    nodes : bool
-        Extract the network nodes (vertices). Default is ``False``.
+    vertices : bool
+        Extract the network vertices. Default is ``False``.
     
-    edges : bool
-        Extract the network edges. Default is ``False``.
+    arcs : bool
+        Extract the network arcs. Default is ``False``.
     
     pp_name : str
         Name of the network ``PointPattern`` to extract.
@@ -1739,12 +1798,12 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
     -------
     
     points : geopandas.GeoDataFrame
-        Network point elements (either nodes or ``PointPattern`` points)
-        as a `geopandas.GeoDataFrame` of ``shapely.Point`` objects with
-        an ``id`` column and ``geometry`` column.
+        Network point elements (either vertices or ``PointPattern``
+        points) as a `geopandas.GeoDataFrame` of ``shapely.Point``
+        objects with an ``id`` column and ``geometry`` column.
     
     lines : geopandas.GeoDataFrame
-        Network edge elements as a ``geopandas.GeoDataFrame`` of
+        Network arc elements as a ``geopandas.GeoDataFrame`` of
         ``shapely.LineString`` objects with an ``id`` column and
         ``geometry`` column.
     
@@ -1755,31 +1814,32 @@ def element_as_gdf(net, nodes=False, edges=False, pp_name=None,
     
     """
     
-    # need nodes place holder to create network segment LineStrings
+    # need vertices place holder to create network segment LineStrings
     # even if only network edges are desired.
-    nodes_for_edges = False
-    if edges and not nodes:
-        nodes_for_edges = True
+    vertices_for_arcs = False
+    if arcs and not vertices:
+        vertices_for_arcs = True
 
     # nodes/points
-    if nodes or nodes_for_edges or pp_name:
-        points = util._points_as_gdf(net, nodes, nodes_for_edges,
+    if vertices or vertices_for_arcs or pp_name:
+        points = util._points_as_gdf(net, vertices, vertices_for_arcs,
                                      pp_name, snapped, id_col=id_col,
                                      geom_col=geom_col)
         
-        # return points geodataframe if edges not specified or
+        # return points geodataframe if arcs not specified or
         # if extracting `PointPattern` points
-        if not edges or pp_name:
+        if not arcs or pp_name:
             return points
     
-    # edges
-    edges = util._edges_as_gdf(net, points,
-                               id_col=id_col, geom_col=geom_col)
+    # arcs
+    arcs = util._arcs_as_gdf(net, points,
+                             id_col=id_col, geom_col=geom_col)
     
-    if nodes_for_edges:
-        return edges
+    if vertices_for_arcs:
+        return arcs
+    
     else:
-        return points, edges
+        return points, arcs
 
 
 class PointPattern():
@@ -1812,25 +1872,25 @@ class PointPattern():
     npoints : int
         The number of points.
     
-    obs_to_edge : dict
-        Keys are edge ids (tuple). Values are snapped point information
+    obs_to_arc : dict
+        Keys are arc ids (tuple). Values are snapped point information
         (``dict``).  Within the snapped point information (``dict``)
         keys are observation ids (``int``), and values are snapped
         coordinates.
     
-    obs_to_node : list
-       List of incident network nodes to snapped observation points
+    obs_to_vertex : list
+       List of incident network vertices to snapped observation points
        converted from a ``default_dict``. Originally in the form of
-       paired left/right nearest network nodes {netnode1: obs_id1,
-       netnode2: obs_id1, netnode1: obs_id2... netnode1: obs_idn}, then
+       paired left/right nearest network vertices {netvtx1: obs_id1,
+       netvtx2: obs_id1, netvtx1: obs_id2... netvtx1: obs_idn}, then
        simplified to a list in the form
-       [netnode1, netnode2, netnode1, netnode2, ...].
+       [netvtx1, netvtx2, netvtx1, netvtx2, ...].
        
-    dist_to_node : dict
+    dist_to_vertex : dict
         Keys are observations ids (``int``). Values are distance lookup
         (``dict``). Within distance lookup (``dict``) keys are the two
-        incident nodes of the edge and values are distance to each of
-        those edges.
+        incident vertices of the arc and values are distance to each of
+        those arcs.
     
     snapped_coordinates : dict
         Keys are the point ids (``int``). Values are the snapped x,y
@@ -1842,7 +1902,12 @@ class PointPattern():
             is ``False``.
     
     """
-    def __init__(self, in_data=None, idvariable=None, attribute=False):
+    
+    def __init__(self,
+                 in_data=None,
+                 idvariable=None,
+                 attribute=False):
+        
         self.points = {}
         self.npoints = 0
         
@@ -1911,36 +1976,43 @@ class SimulatedPointPattern():
     npoints : int
         The number of points.
     
-    obs_to_edge : dict
-        Keys are edge ids (tuple). Values are snapped point information
+    obs_to_arc : dict
+        Keys are arc ids (tuple). Values are snapped point information
         (``dict``).  Within the snapped point information (``dict``)
         keys are observation ids (``int``), and values are snapped
         coordinates.
     
-    obs_to_node : list
-       List of incident network nodes to snapped observation points
+    obs_to_vertex : list
+       List of incident network vertices to snapped observation points
        converted from a ``default_dict``. Originally in the form of
-       paired left/right nearest network nodes {netnode1: obs_id1,
-       netnode2: obs_id1, netnode1: obs_id2... netnode1: obs_idn}, then
+       paired left/right nearest network vertices {netvtx1: obs_id1,
+       netvtx2: obs_id1, netvtx1: obs_id2... netvtx1: obs_idn}, then
        simplified to a list in the form
-       [netnode1, netnode2, netnode1, netnode2, ...].
+       [netvtx1, netvtx2, netvtx1, netvtx2, ...].
        
-    dist_to_node : dict
+    dist_to_vertex : dict
         Keys are observations ids (``int``). Values are distance lookup
         (``dict``). Within distance lookup (``dict``) keys are the two
-        incident nodes of the edge and values are distance to each of
-        those edges.
+        incident vertices of the arc and values are distance to each of
+        those arcs.
     
     snapped_coordinates : dict
         Keys are the point ids (``int``). Values are the snapped x,y
         coordinates (tuple).
     
+    snap_dist : bool
+            Flag as ``True`` to include the distance from the original
+            location to the snapped location along the network. Default
+            is ``False``.
+    
     """
+    
     def __init__(self):
+        
         self.npoints = 0
-        self.obs_to_edge = {}
-        self.obs_to_node = defaultdict(list)
-        self.dist_to_node = {}
+        self.obs_to_arc = {}
+        self.obs_to_vertex = defaultdict(list)
+        self.dist_to_vertex = {}
         self.snapped_coordinates = {}
 
 
@@ -1951,6 +2023,7 @@ class SortedEdges(OrderedDict):
     OrderedDict : collections.OrderedDict
     
     """
+    
     def next_key(self, key):
         """
         Parameters
@@ -1964,11 +2037,13 @@ class SortedEdges(OrderedDict):
         n : 
             
         """
+        
         next = self._OrderedDict__map[key][1]
         if next is self._OrderedDict__root:
             raise ValueError("{!r} is the last key.".format(key))
         n = next[2]
         return n
+    
     
     def first_key(self):
         """
@@ -1979,6 +2054,7 @@ class SortedEdges(OrderedDict):
         key : 
             
         """
+        
         for key in self:
             return key
         raise ValueError("No sorted edges remain.")

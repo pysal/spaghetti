@@ -53,9 +53,11 @@ class NetworkBase(object):
         observed y-axis of values
     
     """
+    
     def __init__(self, ntw, pointpattern, nsteps=10, permutations=99,
                  threshold=0.5, distribution='poisson',
                  lowerbound=None, upperbound=None):
+        
         self.ntw = ntw
         self.pointpattern = pointpattern
         self.nsteps = nsteps
@@ -82,6 +84,7 @@ class NetworkBase(object):
     def validatedistribution(self):
         """enusure statistical distribution is supported
         """
+        
         valid_distributions = ['uniform', 'poisson']
         assert(self.distribution in valid_distributions),\
                "Distribution not in {}".format(valid_distributions)
@@ -90,6 +93,7 @@ class NetworkBase(object):
     def computeenvelope(self):
         """compute upper and lower bounds of envelope
         """
+        
         upper = 1.0 - self.threshold / 2.0
         lower = self.threshold / 2.0
 
@@ -100,6 +104,7 @@ class NetworkBase(object):
     def setbounds(self, nearest):
         """set upper and lower bounds
         """
+        
         if self.lowerbound is None:
             self.lowerbound = 0
         if self.upperbound is None:
@@ -111,9 +116,11 @@ class NetworkG(NetworkBase):
     capability to compute a distance matrix between two point patterns.
     In this case one will be observed and one will be simulated.
     """
+    
     def computeobserved(self):
         """compute the observed nearest
         """
+        
         nearest = np.nanmin(self.ntw.allneighbordistances(self.pointpattern),
                             axis=1)
         self.setbounds(nearest)
@@ -126,6 +133,7 @@ class NetworkG(NetworkBase):
     def computepermutations(self):
         """compute permutations of the nearest
         """
+        
         for p in range(self.permutations):
             sim = self.ntw.simulate_observations(self.npts,
                                                 distribution=self.distribution)
@@ -155,13 +163,15 @@ class NetworkK(NetworkBase):
     Based on :cite:`Okabe2001`.
     
     """
+    
     def computeobserved(self):
         """compute the observed nearest
         """
+        
         nearest = self.ntw.allneighbordistances(self.pointpattern)
         self.setbounds(nearest)
         
-        self.lam = self.npts / sum(self.ntw.edge_lengths.values())
+        self.lam = self.npts / sum(self.ntw.arc_lengths.values())
         observedx, observedy = kfunction(nearest,
                                          self.upperbound,
                                          self.lam,
@@ -173,6 +183,7 @@ class NetworkK(NetworkBase):
     def computepermutations(self):
         """compute permutations of the nearest
         """
+        
         for p in range(self.permutations):
             sim = self.ntw.simulate_observations(self.npts,
                                                 distribution=self.distribution)
@@ -198,10 +209,10 @@ class NetworkF(NetworkBase):
     
     """
     
-    
     def computeobserved(self):
         """compute the observed nearest and simulated nearest
         """
+        
         self.fsim = self.ntw.simulate_observations(self.npts)
         # Compute nearest neighbor distances from the simulated to the
         # observed.
@@ -220,6 +231,7 @@ class NetworkF(NetworkBase):
     def computepermutations(self):
         """compute permutations of the nearest
         """
+        
         for p in range(self.permutations):
             sim = self.ntw.simulate_observations(self.npts,
                                                 distribution=self.distribution)
@@ -259,6 +271,7 @@ def gfunction(nearest, lowerbound, upperbound, nsteps=10):
         y-axis of values
     
     """
+    
     nobs = len(nearest)
     x = np.linspace(lowerbound, upperbound, nsteps)
     nearest = np.sort(nearest)
@@ -303,6 +316,7 @@ def kfunction(nearest, upperbound, intensity, nsteps=10):
         y-axis of values
     
     """
+    
     nobs = len(nearest)
     x = np.linspace(0, upperbound, nsteps)
     y = np.empty(len(x))
