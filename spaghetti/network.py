@@ -95,7 +95,7 @@ class Network:
     edges : list
         tuples of graph edge ids.
     
-    graph_lengths : dict
+    edge_lengths : dict
         Keys are the graph edge ids (tuple). Values are the graph edge
         length (``float``).
     
