@@ -1621,6 +1621,7 @@ class Network:
         
         new_arcs = set()
         remove_arcs = set()
+        
         for arc in sn.arcs:
             length = sn.arc_lengths[arc]
             interval = distance
@@ -1636,15 +1637,18 @@ class Network:
                 sn.adjacencylist[arc[1]].remove(arc[0])
                 sn.arc_lengths.pop(arc, None)
                 remove_arcs.add(arc)
+            
             else:
                 continue
-                
+            
             while totallength < length:
                 currentstop = current_vertex_id
+                
                 if totallength + interval > length:
                     currentstop = end_vertex
                     interval = length - totallength
                     totallength = length
+                
                 else:
                     current_vertex_id += 1
                     currentstop = current_vertex_id
@@ -1669,21 +1673,21 @@ class Network:
                 # Iterating over this so we need to add after iterating.
                 new_arcs.add(tuple(sorted([currentstart, currentstop])))
                 
-                # Modify edge_lengths.
+                # Modify arc_lengths.
                 current_start_stop = tuple(sorted([currentstart,
                                                    currentstop]))
-                sn.edge_lengths[current_start_stop] = interval
+                sn.arc_lengths[current_start_stop] = interval
                 
                 # Increment the start to the stop.
                 currentstart = currentstop
         
-        sn.edges.update(newedges)
-        sn.edges.difference_update(removeedges)
-        sn.edges = list(sn.edges)
+        sn.arcs.update(new_arcs)
+        sn.arcs.difference_update(remove_arcs)
+        sn.arcs = list(sn.arcs)
         
         # Update the point pattern snapping.
         for instance in sn.pointpatterns.values():
-            sn._snap_to_edge(instance)
+            sn._snap_to_arc(instance)
             
         return sn
     
