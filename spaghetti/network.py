@@ -336,7 +336,7 @@ class Network:
         
         if self.unique_arcs:
             # Remove duplicate edges and duplicate adjacent nodes.
-            self.arc = list(set(self.arcs))
+            self.arcs = list(set(self.arcs))
             for k, v in self.adjacencylist.items():
                 self.adjacencylist[k] = list(set(v))
     
