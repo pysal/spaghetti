@@ -46,11 +46,11 @@ class Network:
         nodes. Default is ``True``.
     
     w_components : bool
-        Set to ``True`` to record connected components from a
+        Set to ``False`` to not record connected components from a
         `libpysal.weights.weights.W 
         <https://libpysal.readthedocs.io/en/latest/generated/
         libpysal.weights.W.html#libpysal.weights.W>`_
-        object. Default is False.
+        object. Default is True.
         
         
     weightings : {dict, bool}
@@ -165,7 +165,7 @@ class Network:
     """
     
     def __init__(self, in_data=None, vertex_sig=11, unique_arcs=True,
-                 extractgraph=True, w_components=False, weightings=False):
+                 extractgraph=True, w_components=True, weightings=False):
         
         if in_data is not None:
             self.in_data = in_data
