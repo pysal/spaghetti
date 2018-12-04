@@ -1,6 +1,0 @@
-spaghetti.network.Network.savenetwork
-=====================================
-
-.. currentmodule:: spaghetti.network
-
-.. automethod:: Network.savenetwork

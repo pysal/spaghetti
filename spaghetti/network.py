@@ -103,7 +103,7 @@ class Network:
         length (``float``).
     
     non_articulation_points : list
-        All nodes with degree 2 that are not in an isolated
+        All vertices with degree 2 that are not in an isolated
         island ring (loop) component
     
     w_network : `libpysal.weights.weights.W <https://libpysal.readthedocs.io/en/latest/generated/libpysal.weights.W.html#libpysal.weights.W>`_
@@ -351,7 +351,7 @@ class Network:
         self.edges = []
         self.edge_lengths = {}
         
-        # Find all nodes with degree 2 that are not in an isolated
+        # Find all vertices with degree 2 that are not in an isolated
         # island ring (loop) component. These are non-articulation
         # points on the graph representation.
         non_articulation_points = self._yield_napts()
