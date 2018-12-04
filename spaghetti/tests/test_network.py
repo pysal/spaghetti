@@ -45,7 +45,8 @@ class TestNetwork(unittest.TestCase):
     def test_network_from_geopandas(self):
         # network instantiated from geodataframe
         gdf = geopandas.read_file(self.path_to_shp)
-        self.ntw_from_gdf = spgh.Network(in_data=gdf)
+        self.ntw_from_gdf = spgh.Network(in_data=gdf,
+                                         w_components=True)
         
         # gdf test against known
         self.assertEqual(len(self.ntw_from_gdf.arcs),
@@ -64,7 +65,7 @@ class TestNetwork(unittest.TestCase):
         observed_network_histo = self.ntw_from_shp.w_network.histogram
         self.assertEqual(known_network_histo, observed_network_histo)
         
-        known_graph_histo = [(2, 2), (3, 2), (4, 45), (5, 82), (6, 48)]
+        known_graph_histo = [(2, 2), (3, 2), (4, 47), (5, 80), (6, 48)]
         observed_graph_histo = self.ntw_from_shp.w_graph.histogram
         self.assertEqual(observed_graph_histo, known_graph_histo)
     
@@ -73,7 +74,7 @@ class TestNetwork(unittest.TestCase):
         observed_network_arc = self.ntw_from_shp.network_component2arc[0][-1]
         self.assertEqual(observed_network_arc, known_network_arc)
         
-        known_graph_edge = (206, 207)
+        known_graph_edge = (207, 208)
         observed_graph_edge = self.ntw_from_shp.graph_component2edge[0][-1]
         self.assertEqual(observed_graph_edge, known_graph_edge)
     
