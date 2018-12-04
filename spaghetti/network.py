@@ -355,6 +355,8 @@ class Network:
         # island ring (loop) component. These are non-articulation
         # points on the graph representation.
         non_articulation_points = self._yield_napts()
+        # retain non_articulation_points as an attribute
+        self.non_articulation_points = list(non_articulation_points)
         
         # Start with a copy of the spatial representation and
         # iteratively remove edges deemed to be segments.
@@ -435,9 +437,6 @@ class Network:
         # converted the graph edges into a sorted set to prune out
         # duplicate graph edges created during simplification
         self.edges = sorted(set(self.edges))
-        
-        # retain non_articulation_points as an attribute
-        self.non_articulation_points = list(non_articulation_points)
     
     
     def _yield_napts(self):
