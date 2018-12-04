@@ -102,6 +102,10 @@ class Network:
         Keys are the graph edge ids (tuple). Values are the graph edge
         length (``float``).
     
+    non_articulation_points : list
+        All nodes with degree 2 that are not in an isolated
+        island ring (loop) component
+    
     w_network : `libpysal.weights.weights.W <https://libpysal.readthedocs.io/en/latest/generated/libpysal.weights.W.html#libpysal.weights.W>`_
         Weights object created from the network arcs
     
@@ -347,15 +351,11 @@ class Network:
         self.edges = []
         self.edge_lengths = {}
         
-        # Find all nodes with cardinality 2. (non-articulation points)
-        arc_vertices = []
-        for k, v in self.adjacencylist.items():
-            # len(v) == 1 #cul-de-sac
-            # len(v) == 2 #bridge segment
-            # len(v) > 2 #intersection
-            if len(v) == 2:
-                arc_vertices.append(k)
-                
+        # Find all nodes with degree 2 that are not in an isolated
+        # island ring (loop) component. These are non-articulation
+        # points on the graph representation.
+        non_articulation_points = self._yield_napts()
+        
         # Start with a copy of the spatial representation and
         # iteratively remove edges deemed to be segments.
         self.edges = copy.deepcopy(self.arcs)
@@ -367,21 +367,23 @@ class Network:
         
         # build up bridges "rooted" on the initial
         # non-articulation points
-        bridges = []
-        for s in arc_vertices:
+        bridge_roots = []
+        for s in non_articulation_points:
             bridge = [s]
-            neighbors = self._yieldneighbor(s, arc_vertices, bridge)
+            neighbors = self._yieldneighbor(s,
+                                            non_articulation_points,
+                                            bridge)
             while neighbors:
                 cnode = neighbors.pop()
-                arc_vertices.remove(cnode)
+                non_articulation_points.remove(cnode)
                 bridge.append(cnode)
                 newneighbors = self._yieldneighbor(cnode,
-                                                   arc_vertices,
+                                                   non_articulation_points,
                                                    bridge)
                 neighbors += newneighbors
-            bridges.append(bridge)
+            bridge_roots.append(bridge)
             
-        for bridge in bridges:
+        for bridge in bridge_roots:
             if len(bridge) == 1:
                 n = self.adjacencylist[bridge[0]]
                 new_edge = tuple(sorted([n[0], n[1]]))
@@ -426,9 +428,107 @@ class Network:
                     self.edge_lengths.pop(r, None)
                     self.edges_to_arcs[r] = new_edge
                 self.edge_lengths[new_edge] = cumulative_length
-                
+            
+            # add the updated graph edge
             self.edges.append(new_edge)
-        self.edges = sorted(self.edges)
+        
+        # converted the graph edges into a sorted set to prune out
+        # duplicate graph edges created during simplification
+        self.edges = sorted(set(self.edges))
+        
+        # retain non_articulation_points as an attribute
+        self.non_articulation_points = list(non_articulation_points)
+    
+    
+    def _yield_napts(self):
+        """Find all nodes with degree 2 that are not in an isolated
+        island ring (loop) component. These are non-articulation
+        points on the graph representation.
+        
+        Returns
+        -------
+        
+        napts : list
+            non-articulation points on a graph representation
+        
+        """
+        
+        # non-articulation points
+        napts = set()
+        
+        # network vertices remaining to evaluate
+        unvisted = set(self.vertices.values())
+        
+        while unvisted:
+            
+            # iterate over each component
+            for component_id, ring in self.network_component_is_ring.items():
+                
+                # evaluate for non-articulation points
+                napts, unvisted = self._evaluate_napts(napts, unvisted,
+                                                       component_id, ring)
+                
+        napts = list(napts)
+        
+        return napts
+    
+    
+    def _evaluate_napts(self, napts, unvisited, component_id, ring):
+        """Evaluate one connected component in a network for
+        non-articulation points (napts) and return an updated set of
+        napts and unvisted vertices.
+        
+        Parameters
+        ----------
+        
+        napts : set
+            Non-articulation points (napts) in the network. The
+            'napts' here do not include those within an isolated
+            loop island.
+        
+        unvisited : set
+            Vertices left to evaluate in the network.
+        
+        component_id : int
+            ID for the network connected component for the
+            current iteration of the algorithm.
+        
+        ring : bool
+            Network component is isolated island loop ``True`` or
+            not ``False``.
+        
+        Returns
+        -------
+        
+        napts : set
+            Updated 'napts' object.
+        
+        unvisited : set
+            Updated 'napts' object.
+        
+        """
+        
+        # iterate over each `edge` of the `component`
+        for component in self.network_component2arc[component_id]:
+            
+            # each `component` has two vertices
+            for vertex in component:
+                
+                # if `component` is not an isolated island
+                # and `vertex` has exactly 2 neighbors,
+                # add `vertex` to `napts`
+                if not ring:
+                    if len(self.adjacencylist[vertex]) == 2:
+                        napts.add(vertex)
+                
+                # remove `vertex` from `unvisited` if
+                # it is still in the set
+                try:
+                    unvisited.remove(vertex)
+                except KeyError:
+                    pass
+        
+        return napts, unvisited
     
     
     def _yieldneighbor(self, vtx, arc_vertices, bridge):
