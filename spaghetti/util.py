@@ -499,8 +499,7 @@ def _points_as_gdf(net, vertices, vertices_for_arcs, pp_name, snapped,
 
 @requires('geopandas', 'shapely')
 def _arcs_as_gdf(net, points, id_col=None, geom_col=None):
-    """
-    Internal function for returning a edges geopandas.GeoDataFrame
+    """Internal function for returning a edges geopandas.GeoDataFrame
     called from within ``spaghetti.element_as_gdf()``.
     
     Returns
