@@ -227,8 +227,7 @@ def dijkstra(ntw, v0, initial_dist=np.inf):
 
 
 def dijkstra_mp(ntw_vertex):
-    """
-    Compute the shortest path between a start vertex and all other
+    """Compute the shortest path between a start vertex and all other
     vertices in the web utilizing multiple cores upon request.
     
     Parameters
@@ -434,8 +433,7 @@ def snap_points_to_links(points, links):
 @requires('geopandas', 'shapely')
 def _points_as_gdf(net, vertices, vertices_for_arcs, pp_name, snapped,
                    id_col=None, geom_col=None):
-    """
-    Internal function for returning a point geopandas.GeoDataFrame
+    """Internal function for returning a point geopandas.GeoDataFrame
     called from within ``spaghetti.element_as_gdf()``.
     
     Parameters
@@ -501,8 +499,7 @@ def _points_as_gdf(net, vertices, vertices_for_arcs, pp_name, snapped,
 
 @requires('geopandas', 'shapely')
 def _arcs_as_gdf(net, points, id_col=None, geom_col=None):
-    """
-    Internal function for returning a edges geopandas.GeoDataFrame
+    """Internal function for returning a edges geopandas.GeoDataFrame
     called from within ``spaghetti.element_as_gdf()``.
     
     Returns
