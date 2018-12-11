@@ -227,8 +227,7 @@ def dijkstra(ntw, v0, initial_dist=np.inf):
 
 
 def dijkstra_mp(ntw_vertex):
-    """
-    Compute the shortest path between a start vertex and all other
+    """Compute the shortest path between a start vertex and all other
     vertices in the web utilizing multiple cores upon request.
     
     Parameters
