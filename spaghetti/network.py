@@ -335,6 +335,7 @@ class Network:
         """Used internally to extract a network from a polyline
         shapefile of a ``geopandas.GeoDataFrame``.
         """
+        
         # initialize vertex count
         vertex_count = 0
         
@@ -412,87 +413,135 @@ class Network:
         assume these vertices are bridges between vertices with higher
         or lower incidence.
         """
+        
+        # initialize edges and edge_lengths
         self.edges = []
         self.edge_lengths = {}
         
-        # Find all vertices with degree 2 that are not in an isolated
+        # find all vertices with degree 2 that are not in an isolated
         # island ring (loop) component. These are non-articulation
         # points on the graph representation.
         non_articulation_points = self._yield_napts()
         # retain non_articulation_points as an attribute
         self.non_articulation_points = list(non_articulation_points)
         
-        # Start with a copy of the spatial representation and
+        # start with a copy of the spatial representation and
         # iteratively remove edges deemed to be segments.
         self.edges = copy.deepcopy(self.arcs)
         self.edge_lengths = copy.deepcopy(self.arc_lengths)
         
-        # Mapping all the 'network arcs' contained within a single
+        # mapping all the 'network arcs' contained within a single
         # 'graph represented' edge.
         self.edges_to_arcs = {}
         
         # build up bridges "rooted" on the initial
         # non-articulation points
         bridge_roots = []
+        
+        # iterate over all vertices that are not contained within
+        # isolated loops that have a degree of 2
         for s in non_articulation_points:
+        
+            # initialize bridge with an articulation point
             bridge = [s]
+            
+            # fetch all vertices adjacent to point `s`
+            # that are also degree 2
             neighbors = self._yieldneighbor(s,
                                             non_articulation_points,
                                             bridge)
             while neighbors:
+                
+                # extract the current node in `neighbors`
                 cnode = neighbors.pop()
+                # remove it from `non_articulation_points`
                 non_articulation_points.remove(cnode)
+                # add it to bridge
                 bridge.append(cnode)
+                # fetch neighbors for the current node
                 newneighbors = self._yieldneighbor(cnode,
                                                    non_articulation_points,
                                                    bridge)
+                # add the new neighbors back into `neighbors`
                 neighbors += newneighbors
-            bridge_roots.append(bridge)
             
+            # once all potential neighbors are exhausted add the
+            # current bridge of non-articulation points to the
+            # list of rooted bridges
+            bridge_roots.append(bridge)
+        
+        # iterate over the list of newly created rooted bridges
         for bridge in bridge_roots:
+            
+            # if the vertex is only one non-articulation
+            # point in the bridge
             if len(bridge) == 1:
+                
+                # that the singular element of the bridge
                 n = self.adjacencylist[bridge[0]]
+                # and create a new graph edge from it
                 new_edge = tuple(sorted([n[0], n[1]]))
                 
-                # Identify the edges to be removed.
+                # identify the arcs to be removed
                 e1 = tuple(sorted([bridge[0], n[0]]))
                 e2 = tuple(sorted([bridge[0], n[1]]))
                 
-                # Remove them from the graph.
+                # remove the network arcs (spatial) from the
+                # graph-theoretic representation
                 self.edges.remove(e1)
                 self.edges.remove(e2)
                 
-                # Remove from the edge lengths.
+                # remove the former network arc lengths from the
+                # graph edge lengths lookup
                 length_e1 = self.edge_lengths[e1]
                 length_e2 = self.edge_lengths[e2]
                 self.edge_lengths.pop(e1, None)
                 self.edge_lengths.pop(e2, None)
+                
+                # and add the new edge length in their place
                 self.edge_lengths[new_edge] = length_e1 + length_e2
                 
-                # Update the pointers.
+                # update the pointers
                 self.edges_to_arcs[e1] = new_edge
                 self.edges_to_arcs[e2] = new_edge
             
+            # if there are more than one vertices in the bridge
             else:
                 cumulative_length = 0
                 start_end = {}
+                
+                # initialize a redundant set of bridge edges
                 redundant = set([])
+                
+                # iterate over the current bridge
                 for b in bridge:
+                    # iterate over each node in the bridge
                     for n in self.adjacencylist[b]:
+                        # start the bridge with this node
                         if n not in bridge:
                             start_end[b] = n
+                        # or create a redundant edge with the current
+                        # node and `b`
                         else:
                             redundant.add(tuple(sorted([b, n])))
-                            
+                
+                # initialize a new graph edge
                 new_edge = tuple(sorted(start_end.values()))
+                
+                # add start_end redundant edge
                 for k, v in start_end.items():
                     redundant.add(tuple(sorted([k, v])))
-                    
+                
+                # remove all redundant network arcs while
+                # adjusting the graph edge lengths lookup
+                # and the edges_to_arcs lookup
                 for r in redundant:
                     self.edges.remove(r)
                     cumulative_length += self.edge_lengths[r]
                     self.edge_lengths.pop(r, None)
                     self.edges_to_arcs[r] = new_edge
+                
+                # finally, add the new cumulative edge length
                 self.edge_lengths[new_edge] = cumulative_length
             
             # add the updated graph edge
