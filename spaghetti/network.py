@@ -167,7 +167,12 @@ class Network:
     def __init__(self, in_data=None, vertex_sig=11, unique_arcs=True,
                  extractgraph=True, w_components=True, weightings=False):
         
+        # do this when creating a clean network instance from a
+        # shapefile or a geopandas.GeoDataFrame, otherwise a shell
+        # network instance is created (see `split_arcs()` method)
         if in_data is not None:
+            
+            # set parameters as attributes
             self.in_data = in_data
             self.vertex_sig = vertex_sig
             self.unique_arcs = unique_arcs
@@ -175,9 +180,11 @@ class Network:
             self.adjacencylist = defaultdict(list)
             self.vertices = {}
             
+            # initialize network arcs and arc_lengths
             self.arcs = []
             self.arc_lengths = {}
             
+            # initialize pointpatterns
             self.pointpatterns = {}
             
             # spatial representation of the network
@@ -190,13 +197,18 @@ class Network:
                 as_graph = False
                 network_weightings = False
                 if weightings is True:
+                    # set network arc weights to length if weights are
+                    # desired, but no other input in given
                     weightings = self.arc_lengths
                     network_weightings = True
+                # extract contiguity weights from libpysal
                 self.w_network = self.contiguityweights(graph=as_graph,
                                                         weightings=weightings)
+                # extract connected components from the `w_network`
                 self.extract_components(self.w_network, graph=as_graph)
             
-            # extract the graph
+            # extract the graph -- repeat similar as above
+            # for extracting the network
             if extractgraph:
                 self.extractgraph()
                 if w_components:
@@ -207,7 +219,8 @@ class Network:
                                                         graph=as_graph,
                                                         weightings=weightings)
                     self.extract_components(self.w_graph, graph=as_graph)
-                
+            
+            # sorted list of vertex ids
             self.vertex_list = sorted(self.vertices.values())
     
     
