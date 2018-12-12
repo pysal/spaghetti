@@ -196,11 +196,13 @@ class Network:
             if w_components:
                 as_graph = False
                 network_weightings = False
+                
                 if weightings is True:
                     # set network arc weights to length if weights are
                     # desired, but no other input in given
                     weightings = self.arc_lengths
                     network_weightings = True
+                
                 # extract contiguity weights from libpysal
                 self.w_network = self.contiguityweights(graph=as_graph,
                                                         weightings=weightings)
@@ -211,10 +213,13 @@ class Network:
             # for extracting the network
             if extractgraph:
                 self.extractgraph()
+                
                 if w_components:
                     as_graph = True
+                    
                     if network_weightings:
                         weightings = self.edge_lengths
+                    
                     self.w_graph = self.contiguityweights(\
                                                         graph=as_graph,
                                                         weightings=weightings)
@@ -276,6 +281,8 @@ class Network:
             ``True``. Default is ``False``.
         
         """
+        
+        # flag network (arcs) or graph (edges)
         if graph:
             links = self.edges
             obj_type = 'graph_'
@@ -306,6 +313,7 @@ class Network:
                 if len(w.neighbors[v]) != 2:
                     component_is_ring[k] = False
         
+        # attribute label name depends on object type
         if graph:
             c2l_attr_name = 'component2edge'
         else:
