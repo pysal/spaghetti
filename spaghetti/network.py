@@ -302,27 +302,53 @@ class Network:
         """Used internally to extract a network from a polyline
         shapefile of a ``geopandas.GeoDataFrame``.
         """
+        # initialize vertex count
         vertex_count = 0
+        
+        # determine if input network data is coming from
+        # shapefile or a geopandas.GeoDataFrame
         if isinstance(self.in_data, str):
             shps = open(self.in_data)
         else:
             shps = self.in_data.geometry
+        
+        # iterate over each record of the network lines
         for shp in shps:
+            
+            # fetch all vertices between euclidean segments
+            # in the line record -- these vertices are
+            # coordinates in an (x, y) tuple.
             vertices = weights._contW_lists._get_verts(shp)
+            
+            # iterate over each vertex (v)
             for i, v in enumerate(vertices[:-1]):
+                
+                # -- For vertex 1
+                # adjust precision -- this was originally
+                # implemented to handle high-precision
+                # network network vertices
                 v = self._round_sig(v)
+                
+                # when the vertex already exists in lookup
+                # set it as the current `vid`
                 try:
                     vid = self.vertices[v]
+                # when the vertex is not present in the lookup
+                # add it and adjust vertex count
                 except KeyError:
                     self.vertices[v] = vid = vertex_count
                     vertex_count += 1
+                
+                # -- For vertex 2
+                # repeat the steps above for vertex 1
                 v2 = self._round_sig(vertices[i + 1])
                 try:
                     nvid = self.vertices[v2]
                 except KeyError:
                     self.vertices[v2] = nvid = vertex_count
                     vertex_count += 1
-                    
+                
+                # records vertex 1 and vertex 2 adjacency
                 self.adjacencylist[vid].append(nvid)
                 self.adjacencylist[nvid].append(vid)
                 
@@ -330,8 +356,13 @@ class Network:
                 # keys can be stored.
                 arc_vertices = sorted([vid, nvid])
                 arc = tuple(arc_vertices)
+                
+                # record the euclidean arc within the network
                 self.arcs.append(arc)
-                length = util.compute_length(v, vertices[i + 1])
+                
+                # record length
+                length = util.compute_length(v,
+                                             vertices[i + 1])
                 self.arc_lengths[arc] = length
         
         if self.unique_arcs:
