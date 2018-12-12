@@ -238,13 +238,25 @@ class Network:
             X,Y coordinate of the vertex
         
         """
+        
+        # set the number of significant digits
         sig = self.vertex_sig
+        
+        # simply return vertex (x,y) coordinates
         if sig is None:
             return v
+        
+        # for each coordinate in a coordinate pair
+        # if the coordinate location is (0.0) simply return zero
+        # else -- (1) take the absolute value of `val`; (2) take the
+        # base 10 log for [1]; (3) take the floor of [2]; (4) convert
+        # [3] into a negative integer; (5) add `sig - 1` to [4];
+        # (6) round `val` by [5]
         out_v = [val if val == 0 \
                  else round(val, -int(np.floor(np.log10(np.fabs(val))))\
                             + (sig - 1))\
                  for val in v]
+        
         return tuple(out_v)
     
     
