@@ -577,9 +577,12 @@ class Network:
             for component_id, ring in self.network_component_is_ring.items():
                 
                 # evaluate for non-articulation points
-                napts, unvisted = self._evaluate_napts(napts, unvisted,
-                                                       component_id, ring)
-                
+                napts, unvisted = self._evaluate_napts(napts,
+                                                       unvisted,
+                                                       component_id,
+                                                       ring)
+        
+        # convert set of non-articulation points into list
         napts = list(napts)
         
         return napts
