@@ -634,7 +634,8 @@ class Network:
                         napts.add(vertex)
                 
                 # remove `vertex` from `unvisited` if
-                # it is still in the set
+                # it is still in the set else move along to
+                # the next iteration
                 try:
                     unvisited.remove(vertex)
                 except KeyError:
@@ -668,13 +669,18 @@ class Network:
             referred to as nodes.
         """
         
+        # instantiate empty lis to fill with network articulation
+        # points (nodes with a degree of 1 [endpoints] or greater
+        # than 2 [intersections])
         nodes = []
         
-        # get all nodes adjacent to `vtx`
+        # get all nodes adjacent to `vtx` that are not in the
+        # set of 'bridge' vertices
         for i in self.adjacencylist[vtx]:
+            
             if i in arc_vertices and i not in bridge:
                 nodes.append(i)
-                
+        
         return nodes
     
     
