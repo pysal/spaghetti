@@ -1003,7 +1003,7 @@ class Network:
     
     
     def _snap_to_link(self, pointpattern):
-        """ Used internally to snap point observations to network arcs.
+        """Used internally to snap point observations to network arcs.
         
         Parameters
         -----------
@@ -1031,55 +1031,89 @@ class Network:
         
         """
         
-        obs_to_arc = {}
-        dist_to_vertex = {}
-        dist_snapped = {}
-        
+        # instantiate observations snapped coordinates lookup
         pointpattern.snapped_coordinates = {}
+        
+        # record throw-away arcs (pysal.cg.Chain) enumerator
         arcs_ = []
+        
+        # snapped(point)-to-arc lookup
         s2a = {}
+        
+        # iterate over network arc ids
         for arc in self.arcs:
+            
+            # record the start and end of the arc
             head = self.vertex_coords[arc[0]]
             tail = self.vertex_coords[arc[1]]
+            
+            # create a pysal.cg.Chain object of the arc
+            # and add it to the arcs enumerator
             arcs_.append(cg.Chain([head, tail]))
+            
+            # add the arc into the snapped(point)-to-arc lookup
             s2a[(head, tail)] = arc
         
-        # snap points
-        points = {}
-        p2id = {}
+        # instantiate crosswalks
+        points = {}             # point id to coordinates lookup
+        obs_to_arc = {}         # observations to arcs lookup
+        dist_to_vertex = {}     # distance to vertices lookup
+        dist_snapped = {}       # snapped distance lookup
+        
+        # fetch and records point coordinates keyed by id
         for point_idx, point in pointpattern.points.items():
             points[point_idx] = point['coordinates']
         
+        # snap point observations to the network
         snapped = util.snap_points_to_links(points, arcs_)
         
         # record obs_to_arc, dist_to_vertex, and dist_snapped
+        
+        # iterate over the snapped observation points
         for point_idx, snap_info in snapped.items():
             
+            # fetch the x and y coordinate 
             x, y = snap_info[1].tolist()
             
+            # look up the arc from snapped(point)-to-arc
             arc = s2a[tuple(snap_info[0])]
             
+            # add the arc key to observations to arcs lookup
             if arc not in obs_to_arc:
                 obs_to_arc[arc] = {}
             
+            # add the (x,y) coordinates of the original observation
+            # point location to the observations to arcs lookup
             obs_to_arc[arc][point_idx] = (x, y)
+            
+            # add the (x,y) coordinates of the snapped observation
+            # point location to the snapped coordinates lookup
             pointpattern.snapped_coordinates[point_idx] = (x, y)
             
+            # calculate the distance to the left and right vertex
+            # along the network link from the snapped point location
             d1, d2 = self.compute_distance_to_vertices(x, y, arc)
             
+            # record the distances in the distance to vertices lookup
             dist_to_vertex[point_idx] = {arc[0]: d1,
                                          arc[1]: d2}
             
+            # record the snapped distance
             dist_snapped[point_idx] = self.compute_snap_dist(pointpattern,
                                                              point_idx)
         
-        # record obs_to_vertex
+        # instantiate observations to network vertex lookup
         obs_to_vertex = defaultdict(list)
+        
+        # iterate over the observations to arcs lookup
         for k, v in obs_to_arc.items():
+            
+            # record the left and right vertex ids
             keys = v.keys()
             obs_to_vertex[k[0]] = keys
             obs_to_vertex[k[1]] = keys
         
+        # set crosswalks as attributes of the `pointpattern` class
         pointpattern.obs_to_arc = obs_to_arc
         pointpattern.dist_to_vertex = dist_to_vertex
         pointpattern.dist_snapped = dist_snapped
