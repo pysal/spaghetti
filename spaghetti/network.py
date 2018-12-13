@@ -688,7 +688,7 @@ class Network:
     
     
     def contiguityweights(self, graph=True, weightings=None):
-        """Create a contiguity-based W object.
+        """Create a contiguity-based libpysal W object.
         
         Parameters
         ----------
@@ -758,35 +758,52 @@ class Network:
         
         """
         
+        # instantiate OrderedDict to record network link
+        # adjacency which will be keyed by the link id (a tuple)
+        # with values being lists of tuples (contiguous links)
         neighbors = OrderedDict()
         
+        # flag network (arcs) or graph (edges)
         if graph:
             links = self.edges
         else:
             links = self.arcs
-            
+        
+        # if weightings are desired instantiate a dictionary
+        # other ignore weightings
         if weightings:
             _weights = {}
         else:
             _weights = None
         
+        # iterate over all links until all possibilities
+        # for network link adjacency are exhausted
         working = True
         while working:
             
+            # for each network link (1)
             for key in links:
+                
+                # instantiate a slot in the OrderedDict
                 neighbors[key] = []
+                
                 if weightings:
                     _weights[key] = []
                 
+                # for each network link (2)
                 for neigh in links:
                     
+                    # skip if comparing link to itself
                     if key == neigh:
                         continue
                     
+                    # if link(1) and link(2) share any vertex
+                    # update neighbors adjacency
                     if key[0] == neigh[0] or key[0] == neigh[1]\
                     or key[1] == neigh[0] or key[1] == neigh[1]:
                         neighbors[key].append(neigh)
                         
+                        # and add weights if desired
                         if weightings:
                             _weights[key].append(weightings[neigh])
                     
@@ -796,6 +813,7 @@ class Network:
                     if key[1] > neigh[1]:
                         working = False
         
+        # call libpysal for `W` instance
         w = weights.W(neighbors, weights=_weights)
         
         return w
