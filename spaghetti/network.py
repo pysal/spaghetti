@@ -858,15 +858,29 @@ class Network:
         
         """
         
+        # if the a vertex-to-vertex network distance matrix is
+        # not present in the `network.Network` object; calculate
+        # one at this point
         if not hasattr(self, 'alldistances'):
             self.full_distance_matrix(n_proccess, gen_tree=gen_tree)
-            
+        
+        # identify all network vertices which are within the
+        # `threshold` parameter
         neighbor_query = np.where(self.distancematrix < threshold)
+        
+        # create an instance for recording neighbors which 
+        # inserts a new key if not present in object
         neighbors = defaultdict(list)
+        
+        # iterate over neighbors within the `threshold`
+        # and record all network vertices as neighbors
+        # if the vertex is not being compared to itself
         for i, n in enumerate(neighbor_query[0]):
             neigh = neighbor_query[1][i]
             if n != neigh:
-                neighbors[n].append(neighbor_query[1][i])
+                neighbors[n].append(neigh)
+        
+        # call libpysal for `W` instance
         w = weights.W(neighbors)
         
         return w
