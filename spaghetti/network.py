@@ -923,9 +923,13 @@ class Network:
         
         """
         
+        # create attribute of `pointpattern` but instantiating a
+        # `network.PointPattern` class
         self.pointpatterns[name] = PointPattern(in_data=in_data,
                                                 idvariable=idvariable,
                                                 attribute=attribute)
+        
+        # allocate the point observations to the nework
         self._snap_to_link(self.pointpatterns[name])
     
     
@@ -956,7 +960,10 @@ class Network:
         
         """
         
+        # distance to vertex 1
         d1 = util.compute_length((x, y), self.vertex_coords[arc[0]])
+        
+        # distance to vertex 2
         d2 = util.compute_length((x, y), self.vertex_coords[arc[1]])
         
         return d1, d2
@@ -981,9 +988,17 @@ class Network:
             euclidean distance from original location to snapped
             location.
         """
+        
+        # set of original (x,y) point coordinates
         loc = pattern.points[idx]['coordinates']
+        
+        # set of snapped (x,y) point coordinate
         snp = pattern.snapped_coordinates[idx]
+        
+        # distance from the original location to
+        # the snapped location along the network
         dist = util.compute_length(loc, snp)
+        
         return dist
     
     
