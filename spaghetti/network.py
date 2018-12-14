@@ -1158,19 +1158,37 @@ class Network:
         287
         
         """
+        
+        # instantiate observation counts by link lookup
         counts = {}
+        
+        # graph-theoretic object of nodes and edges
         if graph:
+            
+            # iterate the links-to-observations lookup
             for key, observations in obs_on.items():
+                
+                # isolate observation count for the link
                 cnt = len(observations)
+                
+                # extract link (edges) key
                 if key in self.edges_to_arcs.keys():
                     key = self.edges_to_arcs[key]
+                
+                # either add to current count or a dictionary
+                # entry or create new dictionary entry
                 try:
                     counts[key] += cnt
                 except KeyError:
                     counts[key] = cnt
+        
+        # network object of arcs and vertices
         else:
+            
+            # simplified version of the above process
             for key in obs_on.keys():
                 counts[key] = len(obs_on[key])
+        
         return counts
     
     
