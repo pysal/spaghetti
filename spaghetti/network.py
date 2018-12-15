@@ -1955,6 +1955,7 @@ class Network:
         10
         """
         
+        # call analysis.NetworkK
         return NetworkK(self, pointpattern, nsteps=nsteps,
                         permutations=permutations, threshold=threshold,
                         distribution=distribution, lowerbound=lowerbound,
