@@ -1897,8 +1897,7 @@ class Network:
     def NetworkK(self, pointpattern, nsteps=10, permutations=99,
                  threshold=0.5, distribution='uniform',
                  lowerbound=None, upperbound=None):
-        """
-        Computes a network constrained K-Function
+        """Computes a network constrained K-Function
         
         Parameters
         ----------
