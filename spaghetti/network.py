@@ -1286,44 +1286,67 @@ class Network:
         
         """
         
+        # instantiate an empty `SimulatedPointPattern()`
         simpts = SimulatedPointPattern()
         
-        # cumulative network length.
+         # record throw-away arcs enumerator
         arcs_ = []
+        
+        # create array and fill each entry as length of network arc
         lengths = np.zeros(len(self.arc_lengths))
         for i, key in enumerate(self.arc_lengths.keys()):
             arcs_.append(key)
             lengths[i] = self.arc_lengths[key]
+        
+        # cumulative network length
         stops = np.cumsum(lengths)
         totallength = stops[-1]
         
+        # create lengths with a uniform distribution
         if distribution is 'uniform':
-            nrandompts = np.random.uniform(0, totallength, size=(count,))
+            nrandompts = np.random.uniform(0,
+                                           totallength,
+                                           size=(count,))
         
+        # create lengths with a poisson distribution
         elif distribution is 'poisson':
+            # calculate poisson from half the network length
             mid_length = totallength / 2.
-            nrandompts = np.random.poisson(mid_length, size=(count,))
-            
+            nrandompts = np.random.poisson(mid_length,
+                                           size=(count,))
+        
+        # iterate over random distances created above
         for i, r in enumerate(nrandompts):
+            
+            # take the first element of the index array (arc id)
+            # where the random distance is less than that that of
+            # its value in `stops`
             idx = np.where(r < stops)[0][0]
+            
+            # assign the simulated point to the ar
             assignment_arc = arcs_[idx]
+            
+            # calculate and set the distance from the arc start
             distance_from_start = stops[idx] - r
             
-            # Populate the coordinates dict
+            # populate the coordinates dict
             x0, y0 = self._newpoint_coords(assignment_arc,
                                            distance_from_start)
             
+            # record the snapped coordinates and associated vertices
             simpts.snapped_coordinates[i] = (x0, y0)
             simpts.obs_to_vertex[assignment_arc[0]].append(i)
             simpts.obs_to_vertex[assignment_arc[1]].append(i)
             
-            # Populate the distance to vertex
+            # calculate and set the distance from the arc end
             distance_from_end = self.arc_lengths[arcs_[idx]]\
                                 - distance_from_start
             
+            # populate the distances to vertices
             simpts.dist_to_vertex[i] = {assignment_arc[0]: distance_from_start,
                                         assignment_arc[1]: distance_from_end}
             
+            # set snapped coordinates and point count attributes 
             simpts.points = simpts.snapped_coordinates
             simpts.npoints = len(simpts.points)
             
