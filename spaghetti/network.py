@@ -1825,6 +1825,7 @@ class Network:
         10
         """
         
+        # call analysis.NetworkF
         return NetworkF(self, pointpattern, nsteps=nsteps,
                         permutations=permutations, threshold=threshold,
                         distribution=distribution, lowerbound=lowerbound,
@@ -1886,6 +1887,7 @@ class Network:
         10
         """
         
+        # call analysis.NetworkG
         return NetworkG(self, pointpattern, nsteps=nsteps,
                         permutations=permutations, threshold=threshold,
                         distribution=distribution, lowerbound=lowerbound,
@@ -1895,8 +1897,7 @@ class Network:
     def NetworkK(self, pointpattern, nsteps=10, permutations=99,
                  threshold=0.5, distribution='uniform',
                  lowerbound=None, upperbound=None):
-        """
-        Computes a network constrained K-Function
+        """Computes a network constrained K-Function
         
         Parameters
         ----------
@@ -1953,6 +1954,7 @@ class Network:
         10
         """
         
+        # call analysis.NetworkK
         return NetworkK(self, pointpattern, nsteps=nsteps,
                         permutations=permutations, threshold=threshold,
                         distribution=distribution, lowerbound=lowerbound,
