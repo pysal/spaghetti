@@ -1825,6 +1825,7 @@ class Network:
         10
         """
         
+        # call analysis.NetworkF
         return NetworkF(self, pointpattern, nsteps=nsteps,
                         permutations=permutations, threshold=threshold,
                         distribution=distribution, lowerbound=lowerbound,
