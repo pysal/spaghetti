@@ -1196,26 +1196,55 @@ class Network:
         """Used internally to compute new point
         coordinates during snapping.
         """
+        
+        # extract coordinates for vertex 1 of arc
         x1 = self.vertex_coords[arc[0]][0]
         y1 = self.vertex_coords[arc[0]][1]
+        
+        # extract coordinates for vertex 2 of arc
         x2 = self.vertex_coords[arc[1]][0]
         y2 = self.vertex_coords[arc[1]][1]
-        if x1 == x2:  # Vertical line case
+        
+        # if the network are is vertical set the (x) coordinate
+        # and proceed to calculating the (y) coordinate
+        if x1 == x2:
             x0 = x1
+            
+            # if the vertical direction is positive from
+            # vertex 1 to vertex 2 on the euclidean plane
             if y1 < y2:
                 y0 = y1 + distance
+            
+            # if the vertical direction is negative from
+            # vertex 1 to vertex 2 on the euclidean plane
             elif y1 > y2:
                 y0 = y2 + distance
-            else:    # Zero length edge
+            
+            # otherwise the link is zero-length
+            # -- this should never happen
+            else:
                 y0 = y1
+            
             return x0, y0
+        
+        # calculate the slope of the arc, `m`
         m = (y2 - y1) / (x2 - x1)
+        
+        # if the horizontal direction is negative from
+        # vertex 1 to vertex 2 on the euclidean plane
         if x1 > x2:
             x0 = x1 - distance / np.sqrt(1 + m**2)
+        
+        # if the horizontal direction is positive from
+        # vertex 1 to vertex 2 on the euclidean plane
         elif x1 < x2:
             x0 = x1 + distance / np.sqrt(1 + m**2)
+        
+        # calculate the (y) coordinate
         y0 = m * (x0 - x1) + y1
         
+        
+        # the new (x,y) coordinates for the snapped observation
         return x0, y0
     
     
@@ -1326,10 +1355,12 @@ class Network:
         
         """
         
+        # instantiate links list
         links = []
         
         neighbor_vertices = self.adjacencylist[v0]
         
+        # enumerate links associated with the current vertex
         for n in neighbor_vertices:
             links.append(tuple(sorted([n, v0])))
         
