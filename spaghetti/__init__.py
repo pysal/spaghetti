@@ -4,5 +4,5 @@ __version__ = "1.1.1post3"
 ====================================================================
 
 """
-from .network import Network, PointPattern, SimulatedPointPattern, SortedEdges
+from .network import Network, PointPattern, SimulatedPointPattern
 from .network import element_as_gdf
