@@ -1411,24 +1411,39 @@ class Network:
         
         """
         
+        # create `alldistances` attribute which will store
+        # the distance cost matrix and path tree
         self.alldistances = {}
+        
+        # create an empty matrix which will store shortest path distance
         nvtx = len(self.vertex_list)
         self.distancematrix = np.empty((nvtx, nvtx))
         
-        # Single-core processing
+        # single-core processing
         if not n_processes:
+            
+            # iterate over each network vertex
             for vtx in self.vertex_list:
+                
+                # calculate the shortest path and preceding
+                # vertices for traversal route
                 distance, pred = util.dijkstra(self, vtx)
                 pred = np.array(pred)
+                
+                # generate the shortest path tree
                 if gen_tree:
                     tree = util.generatetree(pred)
                 else:
                     tree = None
+                
+                # populate distances and paths
                 self.alldistances[vtx] = (distance, tree)
                 self.distancematrix[vtx] = distance
         
-        # Multiprocessing
+        # multiprocessing
         if n_processes:
+            
+            # set up multiprocessing schema
             import multiprocessing as mp
             from itertools import repeat
             if n_processes == 'all':
@@ -1436,17 +1451,30 @@ class Network:
             else:
                 cores = n_processes
             p = mp.Pool(processes=cores)
+            
+            # calculate the shortest path and preceding
+            # vertices for traversal route by mapping each process
             distance_pred = p.map(util.dijkstra_mp,
                                   zip(repeat(self), self.vertex_list))
+            
+            # set range of iterations
             iterations = range(len(distance_pred))
+            
+            # fill shortest paths
             distance = [distance_pred[itr][0] for itr in iterations]
+            
+            # fill preceding vertices
             pred = np.array([distance_pred[itr][1] for itr in iterations])
             
+            # iterate of network vertices and generate
+            # the shortest path tree for each
             for vtx in self.vertex_list:
                 if gen_tree:
                     tree = util.generatetree(pred[vtx])
                 else:
                     tree = None
+                
+                # populate distances and paths
                 self.alldistances[vtx] = (distance[vtx], tree)
                 self.distancematrix[vtx] = distance[vtx]
     
