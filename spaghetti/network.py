@@ -2086,7 +2086,7 @@ class Network:
         Returns
         -------
         
-        sn : spaghetti.Network
+        split_network : spaghetti.Network
             newly instantiated ``spaghetti.Network`` object.
         
        Examples
@@ -2100,89 +2100,126 @@ class Network:
         
         """
         
-        sn = Network()
-        sn.adjacencylist = copy.deepcopy(self.adjacencylist)
-        sn.arc_lengths = copy.deepcopy(self.arc_lengths)
-        sn.arcs = set(copy.deepcopy(self.arcs))
-        sn.vertex_coords = copy.deepcopy(self.vertex_coords)
-        sn.vertex_list = copy.deepcopy(self.vertex_list)
-        sn.vertices = copy.deepcopy(self.vertices)
-        sn.pointpatterns = copy.deepcopy(self.pointpatterns)
-        sn.in_data = self.in_data
+        # create new shell network instance
+        split_network = Network()
         
+        # duplicate input network attributes
+        split_network.adjacencylist = copy.deepcopy(self.adjacencylist)
+        split_network.arc_lengths = copy.deepcopy(self.arc_lengths)
+        split_network.arcs = set(copy.deepcopy(self.arcs))
+        split_network.vertex_coords = copy.deepcopy(self.vertex_coords)
+        split_network.vertex_list = copy.deepcopy(self.vertex_list)
+        split_network.vertices = copy.deepcopy(self.vertices)
+        split_network.pointpatterns = copy.deepcopy(self.pointpatterns)
+        split_network.in_data = self.in_data
+        
+        # set vertex id to start iterations
         current_vertex_id = max(self.vertices.values())
         
+        # instantiate sets for newly created network arcs and
+        # input network arcs to remove
         new_arcs = set()
         remove_arcs = set()
         
-        for arc in sn.arcs:
-            length = sn.arc_lengths[arc]
+        # iterate over all network arcs
+        for arc in split_network.arcs:
+            
+            # fetch network arc length
+            length = split_network.arc_lengths[arc]
+            
+            # set initial segmentation interval
             interval = distance
             
+            # initialize arc new arc length at zero
             totallength = 0
+            
+            # initialize the starting vertex, current vertex, and
+            # ending vertex
             currentstart = start_vertex = arc[0]
             end_vertex = arc[1]
             
-            # If the edge will be segmented remove the current
-            # edge from the adjacency list.
+            # if the arc will be split remove the current
+            # arc from the adjacency list
             if interval < length:
-                sn.adjacencylist[arc[0]].remove(arc[1])
-                sn.adjacencylist[arc[1]].remove(arc[0])
-                sn.arc_lengths.pop(arc, None)
+                
+                # remove old arc adjacency information
+                split_network.adjacencylist[arc[0]].remove(arc[1])
+                split_network.adjacencylist[arc[1]].remove(arc[0])
+                
+                # remove old arc length information
+                split_network.arc_lengths.pop(arc, None)
+                
+                # add old arc to set of arcs to remove
                 remove_arcs.add(arc)
             
+            # if the arc will not be split, do nothing and continue
             else:
                 continue
             
+            # traverse the length of the arc
             while totallength < length:
+                
+                # set/update the current vertex id
                 currentstop = current_vertex_id
                 
+                # once an can not be split further
                 if totallength + interval > length:
+                    # record the ending vertex
                     currentstop = end_vertex
+                    # set the length remainder
                     interval = length - totallength
+                    # full old length reached
                     totallength = length
                 
                 else:
+                    # set the current vertex id
                     current_vertex_id += 1
+                    # set the current stopping id
                     currentstop = current_vertex_id
+                    # add the interval distance to the traversed length
                     totallength += interval
                     
-                    # Compute the new vertex coordinate.
+                    # compute the new vertex coordinate
                     newx, newy = self._newpoint_coords(arc, totallength)
                     
-                    # Update vertex.
-                    if currentstop not in sn.vertex_list:
-                        sn.vertex_list.append(currentstop)
+                    # update the vertex
+                    if currentstop not in split_network.vertex_list:
+                        split_network.vertex_list.append(currentstop)
                     
-                    # Update nodes and vertex.
-                    sn.vertex_coords[currentstop] = newx, newy
-                    sn.vertices[(newx, newy)] = currentstop
+                    # update vertex coordinates and vertex id
+                    split_network.vertex_coords[currentstop] = newx, newy
+                    split_network.vertices[(newx, newy)] = currentstop
                 
-                # Update the adjacency list.
-                sn.adjacencylist[currentstart].append(currentstop)
-                sn.adjacencylist[currentstop].append(currentstart)
+                # update the new network adjacency list
+                split_network.adjacencylist[currentstart].append(currentstop)
+                split_network.adjacencylist[currentstop].append(currentstart)
                 
-                # Add the new arc to the arc dict.
-                # Iterating over this so we need to add after iterating.
+                # add the new arc to the arc dictionary
+                # iterating over this so we need to add after iterating
                 new_arcs.add(tuple(sorted([currentstart, currentstop])))
                 
-                # Modify arc_lengths.
+                # modify arc_lengths
                 current_start_stop = tuple(sorted([currentstart,
                                                    currentstop]))
-                sn.arc_lengths[current_start_stop] = interval
                 
-                # Increment the start to the stop.
+                # set the length of the arc
+                split_network.arc_lengths[current_start_stop] = interval
+                
+                # increment the starting vertex to the stopping vertex
                 currentstart = currentstop
         
-        sn.arcs.update(new_arcs)
-        sn.arcs.difference_update(remove_arcs)
-        sn.arcs = list(sn.arcs)
+        # add the newly created arcs to the network
+        split_network.arcs.update(new_arcs)
         
-        # Update the point pattern snapping.
-        for instance in sn.pointpatterns.values():
-            sn._snap_to_link(instance)
-            
-        return sn
+        # remove the old arcs the network
+        split_network.arcs.difference_update(remove_arcs)
+        split_network.arcs = list(split_network.arcs)
+        
+        # update the snapped point pattern
+        for instance in split_network.pointpatterns.values():
+            split_network._snap_to_link(instance)
+        
+        return split_network
     
     
     def savenetwork(self, filename):
@@ -2302,10 +2339,13 @@ def element_as_gdf(net, vertices=False, arcs=False, pp_name=None,
     if arcs and not vertices:
         vertices_for_arcs = True
 
-    # nodes/points
+    # vertices/nodes/points
     if vertices or vertices_for_arcs or pp_name:
-        points = util._points_as_gdf(net, vertices, vertices_for_arcs,
-                                     pp_name, snapped, id_col=id_col,
+        points = util._points_as_gdf(net,
+                                     vertices,
+                                     vertices_for_arcs,
+                                     pp_name, snapped,
+                                     id_col=id_col,
                                      geom_col=geom_col)
         
         # return points geodataframe if arcs not specified or
@@ -2314,8 +2354,10 @@ def element_as_gdf(net, vertices=False, arcs=False, pp_name=None,
             return points
     
     # arcs
-    arcs = util._arcs_as_gdf(net, points,
-                             id_col=id_col, geom_col=geom_col)
+    arcs = util._arcs_as_gdf(net,
+                             points,
+                             id_col=id_col,
+                             geom_col=geom_col)
     
     if vertices_for_arcs:
         return arcs
@@ -2391,59 +2433,79 @@ class PointPattern():
                  idvariable=None,
                  attribute=False):
         
+        # initialize points dictionary and counter
         self.points = {}
         self.npoints = 0
         
+        # flag for points from a shapefile
         if isinstance(in_data, str):
             from_shp = True
         else:
             from_shp = False
-            
+        
+        # either set native point id from dataset or create new ids
         if idvariable:
-            ids = weights.util.get_ids(in_data, idvariable)
+            ids = weights.util.get_ids(in_data,
+                                       idvariable)
         else:
             ids = None
-            
+        
+        # extract the point geometries
         if from_shp:
             pts = open(in_data)
         else:
             pts_objs = list(in_data.geometry)
             pts = [cg.shapes.Point((p.x, p.y)) for p in pts_objs]
-            
-        # Get attributes if requested
+        
+        
+        # fetch attributes if requested
         if attribute:
+            
+            # open the database file if data is from shapefile
             if from_shp:
                 dbname = os.path.splitext(in_data)[0] + '.dbf'
                 db = open(dbname)
+            
+            # if data is from a GeoDataFrame, drop the geometry column
+            # and declare attribute values as a list of lists
             else:
                 db = in_data.drop(in_data.geometry.name,
                                    axis=1).values.tolist()
                 db = [[d] for d in db]
         else:
             db = None
-            
+        
+        # iterate over all points
         for i, pt in enumerate(pts):
+            
             # ids, attributes
             if ids and db is not None:
                 self.points[ids[i]] = {'coordinates': pt,
                                        'properties': db[i]}
+            
             # ids, no attributes
             elif ids and db is None:
                 self.points[ids[i]] = {'coordinates': pt,
                                        'properties': None}
+            
             # no ids, attributes
             elif not ids and db is not None:
                 self.points[i] = {'coordinates': pt,
                                   'properties': db[i]}
+            
             # no ids, no attributes
             else:
                 self.points[i] = {'coordinates': pt,
                                   'properties': None}
+        
+        # close the shapefile and database file
+        # if the input data is a .shp
         if from_shp:
             pts.close()
             if db:
                 db.close()
-                
+        
+        # record number of points
         self.npoints = len(self.points.keys())
 
 
@@ -2492,6 +2554,7 @@ class SimulatedPointPattern():
     
     def __init__(self):
         
+        # duplicate post-snapping PointPattern class structure
         self.npoints = 0
         self.obs_to_arc = {}
         self.obs_to_vertex = defaultdict(list)
