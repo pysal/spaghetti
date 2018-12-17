@@ -43,6 +43,7 @@ def compute_length(v0, v1):
     """
     
     euc_dist = np.sqrt((v0[0] - v1[0])**2 + (v0[1] - v1[1])**2)
+    
     return euc_dist
 
 
@@ -81,13 +82,21 @@ def get_neighbor_distances(ntw, v0, l):
     
     """
     
+    # fetch links associated with vertices
     arcs = ntw.enum_links_vertex(v0)
+    
+    # create neighbor distance lookup
     neighbors = {}
+    
+    # iterate over each associated link
     for arc in arcs:
+        
+        # set distance from vertex1 to vertex2 (link length)
         if arc[0] != v0:
             neighbors[arc[0]] = l[arc]
         else:
             neighbors[arc[1]] = l[arc]
+    
     return neighbors
 
 
@@ -98,7 +107,7 @@ def generatetree(pred):
     ----------
     
     pred : list
-        List of preceding nodes for traversal route.
+        List of preceding vertices for traversal route.
     
     Returns
     --------
@@ -119,26 +128,37 @@ def generatetree(pred):
     
     """
     
+    # instantiate tree lookup
     tree = {}
     
+    # iterate over the list of predecessor vertices
     for i, p in enumerate(pred):
         
+        # if the route begins/ends with itself set the
+        # root vertex and continue to next iteration
         if p == -1:
             
-            # root vertex
+            # tree keyed by root vertex with root vertex as path
             tree[i] = [i]
             continue
         
+        # set the initial vertex `p` as `idx`
         idx = p
+        # and add it as the first vertex in the path
         path = [idx]
         
+        # iterate through the path until back to home vertex
         while idx >= 0:
+            # set the next vertex on the path
             next_vertex = pred[idx]
+            # and redeclare the current `idx`
             idx = next_vertex
             
+            # add the vertex to path while not at home vertex
             if idx >= 0:
                 path.append(next_vertex)
         
+        # tree keyed by root vertex with network vertices as path
         tree[i] = path
     
     return tree
@@ -189,39 +209,59 @@ def dijkstra(ntw, v0, initial_dist=np.inf):
     
     """
     
-    # Cost per arc to travel, e.g. distance.
+    # cost per arc to travel, e.g. distance
     cost = ntw.arc_lengths
     
+    # initialize travel costs as `inf` for all distances
     distance = [initial_dist for x in ntw.vertex_list]
-    idx = ntw.vertex_list.index(v0)
-    distance[ntw.vertex_list.index(v0)] = 0
-    unvisited, pred = set([v0]), [-1 for x in ntw.vertex_list]
     
+    # label distance to self as 0
+    distance[ntw.vertex_list.index(v0)] = 0
+    
+    # instantiate set of unvisited vertices
+    unvisited = set([v0])
+    
+    # initially label as predecessor vertices with -1 as path
+    pred = [-1 for x in ntw.vertex_list]
+    
+    # iterate over `unvisited` until all vertices have been visited
     while len(unvisited) > 0:
         
-        # Get vertex with the lowest value from distance.
+        # get vertex with the lowest value from distance
         dist = initial_dist
+        
         for vertex in unvisited:
             if distance[vertex] < dist:
-                dist, current = distance[vertex], vertex
+                dist = distance[vertex]
+                current = vertex
         
-        # Remove that vertex from the set.
+        # remove that vertex from the set
         unvisited.remove(current)
         
-        # Get the neighbors to the current vertex.
+        # get the neighbors (and costs) to the current vertex
         neighbors = get_neighbor_distances(ntw,
                                            current,
                                            cost)
         
+        # iterate over neighbors to find least cost along path
         for v1, indiv_cost in neighbors.items():
             
+            # if the labeled cost is greater than
+            # the currently calculated cost
             if distance[v1] > distance[current] + indiv_cost:
                 
+                # relabel to the currently calculated cost
                 distance[v1] = distance[current] + indiv_cost
+                
+                # set the current vertex as a predecessor on the path
                 pred[v1] = current
+                
+                # add the neighbor vertex to `unvisted`
                 unvisited.add(v1)
     
-    pred = np.array(pred, dtype=np.int)
+    # cast preceding vertices list as an array of integers
+    pred = np.array(pred,
+                    dtype=np.int)
     
     return distance, pred
 
@@ -266,8 +306,13 @@ def dijkstra_mp(ntw_vertex):
     
     """
     
+    # unpack network object and source vertex
     ntw, vertex = ntw_vertex
-    distance, pred = dijkstra(ntw, vertex)
+    
+    # calculate shortest path distances and predecessor vertices
+    distance, pred = dijkstra(ntw,
+                              vertex)
+    
     return distance, pred
 
 
@@ -301,32 +346,42 @@ def squared_distance_point_link(point, link):
     
     """
     
-    #
+    # cast vertices comprising the network link as an array
     p0, p1 = [np.array(p) for p in link]
-    v = p1 - p0
+    
+    # cast the observation point as an array
     p = np.array(point)
+    
+    # subtract point 0 coords from point 1
+    v = p1 - p0
+    # subtract point 0 coords from the observation coords
     w = p - p0
+    
+    # if the point 0 vertex is the closest point along the link
     c1 = np.dot(w, v)
     if c1 <= 0.:
         sqd = np.dot(w.T, w)
         nearp = p0
+        
         return sqd, nearp
     
-    #
+    # if the point 1 vertex is the closest point along the link
     c2 = np.dot(v, v)
     if c2 <= c1:
         dp1 = p - p1
         sqd = np.dot(dp1.T, dp1)
         nearp = p1
+        
         return sqd, nearp
     
-    #
+    # otherwise the closest point along the link lies between p0 and p1
     b = c1 / c2
     bv = np.dot(b, v)
     pb = p0 + bv
     d2 = p - pb
     sqd = np.dot(d2, d2)
     nearp = pb
+    
     return sqd, nearp
 
 
@@ -348,7 +403,7 @@ def snap_points_to_links(points, links):
     Returns
     -------
     
-    p2s : dict
+    point2link : dict
         key [point id (see points in arguments)]; value [a 2-tuple 
         ((head, tail), point) where (head, tail) is the target link,
         and point is the snapped location on the link.
@@ -365,12 +420,18 @@ def snap_points_to_links(points, links):
     
     """
     
-    # Put links in an Rtree.
-    rt = cg.Rtree()
+    # instantiate an rtree
+    rtree = cg.Rtree()
+    # set the smallest possible float epsilon on machine
     SMALL = np.finfo(float).eps
+    
+    # initialize network vertex to link lookup
     vertex_2_link = {}
     
+    # iterate over network links
     for link in links:
+        
+        # extract network link (x,y) vertex coordinates
         head, tail = link.vertices
         x0, y0 = head
         x1, y1 = tail
@@ -384,50 +445,58 @@ def snap_points_to_links(points, links):
         vertex_2_link[(x0, y0)].append(link)
         vertex_2_link[(x1, y1)].append(link)
         
-        x0, y0, x1, y1 = link.bounding_box
-        x0 -= SMALL
-        y0 -= SMALL
-        x1 += SMALL
-        y1 += SMALL
+        # minimally increase the bounding box exterior
+        bx0, by0, bx1, by1 = link.bounding_box
+        bx0 -= SMALL
+        by0 -= SMALL
+        bx1 += SMALL
+        by1 += SMALL
         
-        r = cg.Rect(x0, y0, x1, y1)
-        rt.insert(link, r)
+        # create a rectangle
+        rect = cg.Rect(bx0, by0, bx1, by1)
         
-    # Build a KDtree on link vertices.
-    kt = cg.KDTree(list(vertex_2_link.keys()))
-    p2s = {}
+        # insert the network link and its associated
+        # rectangle into the rtree
+        rtree.insert(link, rect)
+        
+    # build a KDtree on link vertices
+    kdtree = cg.KDTree(list(vertex_2_link.keys()))
     
-    for ptIdx, point in points.items():
+    point2link = {}
+    
+    for pt_idx, point in points.items():
         
-        # First, find nearest neighbor link vertices for the point.
-        dmin, node = kt.query(point, k=1)
-        node = tuple(kt.data[node])
-        closest = vertex_2_link[node][0].vertices
+        # first, find nearest neighbor link vertices for the point
+        dmin, vertex = kdtree.query(point, k=1)
+        vertex = tuple(kdtree.data[vertex])
+        closest = vertex_2_link[vertex][0].vertices
         
         # Use this link as the candidate closest link:  closest
         # Use the distance as the distance to beat:     dmin
-        p2s[ptIdx] = (closest, np.array(node))
+        point2link[pt_idx] = (closest, np.array(vertex))
         x0 = point[0] - dmin
         y0 = point[1] - dmin
         x1 = point[0] + dmin
         y1 = point[1] + dmin
         
         # Find all links with bounding boxes that intersect
-        # a query rectangle centered on the point with sides of length 2*dmin.
-        candidates = [cand for cand in rt.intersection([x0, y0, x1, y1])]
+        # a query rectangle centered on the point with sides
+        # of length dmin * dmin
+        candidates = [cand for cand in rtree.intersection([x0, y0, x1, y1])]
         dmin += SMALL
         dmin2 = dmin * dmin
         
-        # Of the candidate segments, find the nearest to the query point.
+        # of the candidate arcs, find the nearest to the query point
         for candidate in candidates:
-            dnc, p2b = squared_distance_point_link(point,
-                                                   candidate.vertices)
-            if dnc <= dmin2:
+            dist2cand, nearp = squared_distance_point_link(point,
+                                                           candidate.vertices)
+            if dist2cand <= dmin2:
                 closest = candidate.vertices
-                dmin2 = dnc
-                p2s[ptIdx] = (closest, p2b)
+                dmin2 = dist2cand
+                point2link[pt_idx] = (closest,
+                                      nearp)
                 
-    return p2s
+    return point2link
 
 
 @requires('geopandas', 'shapely')
@@ -470,7 +539,7 @@ def _points_as_gdf(net, vertices, vertices_for_arcs, pp_name, snapped,
     
     """
     
-    # nodes
+    # vertices / nodes
     if vertices or vertices_for_arcs:
         pts_dict = net.vertex_coords
     
@@ -491,7 +560,9 @@ def _points_as_gdf(net, vertices, vertices_for_arcs, pp_name, snapped,
     
     # instantiate geopandas.GeoDataFrame
     pts_list = list(pts_dict.items())
-    points = gpd.GeoDataFrame(pts_list, columns=[id_col, geom_col])
+    points = gpd.GeoDataFrame(pts_list,
+                              columns=[id_col,
+                                       geom_col])
     points.geometry = points.geometry.apply(lambda p: Point(p))
     
     return points
@@ -522,16 +593,19 @@ def _arcs_as_gdf(net, points, id_col=None, geom_col=None):
     # arcs
     arcs = {}
     
+    # iterate over network arcs
     for (vtx1_id, vtx2_id) in net.arcs:
         
+        # extract vertices comprising the network arc
         vtx1 = points.loc[(points[id_col] == vtx1_id), geom_col].squeeze()
-        
         vtx2 = points.loc[(points[id_col] == vtx2_id), geom_col].squeeze()
-        
+        # create a LineString for the network arc
         arcs[(vtx1_id, vtx2_id)] = LineString((vtx1, vtx2))
     
+    # instantiate GeoDataFrame
     arcs = gpd.GeoDataFrame(sorted(list(arcs.items())),
-                            columns=[id_col, geom_col])
+                            columns=[id_col,
+                                     geom_col])
     
     # additional columns
     if hasattr(net, 'network_component_labels'):
