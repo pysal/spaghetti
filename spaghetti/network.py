@@ -420,19 +420,19 @@ class Network:
         
         # find all vertices with degree 2 that are not in an isolated
         # island ring (loop) component. These are non-articulation
-        # points on the graph representation.
+        # points on the graph representation
         non_articulation_points = self._yield_napts()
         # retain non_articulation_points as an attribute
         self.non_articulation_points = list(non_articulation_points)
         
         # start with a copy of the spatial representation and
-        # iteratively remove edges deemed to be segments.
+        # iteratively remove edges deemed to be segments
         self.edges = copy.deepcopy(self.arcs)
         self.edge_lengths = copy.deepcopy(self.arc_lengths)
         
         # mapping all the 'network arcs' contained within a single
-        # 'graph represented' edge.
-        self.edges_to_arcs = {}
+        # 'graph represented' edge
+        self.arcs_to_edges = {}
         
         # build up bridges "rooted" on the initial
         # non-articulation points
@@ -502,8 +502,8 @@ class Network:
                 self.edge_lengths[new_edge] = length_e1 + length_e2
                 
                 # update the pointers
-                self.edges_to_arcs[e1] = new_edge
-                self.edges_to_arcs[e2] = new_edge
+                self.arcs_to_edges[e1] = new_edge
+                self.arcs_to_edges[e2] = new_edge
             
             # if there are more than one vertices in the bridge
             else:
@@ -539,7 +539,7 @@ class Network:
                     self.edges.remove(r)
                     cumulative_length += self.edge_lengths[r]
                     self.edge_lengths.pop(r, None)
-                    self.edges_to_arcs[r] = new_edge
+                    self.arcs_to_edges[r] = new_edge
                 
                 # finally, add the new cumulative edge length
                 self.edge_lengths[new_edge] = cumulative_length
@@ -1172,8 +1172,8 @@ class Network:
                 cnt = len(observations)
                 
                 # extract link (edges) key
-                if key in self.edges_to_arcs.keys():
-                    key = self.edges_to_arcs[key]
+                if key in self.arcs_to_edges.keys():
+                    key = self.arcs_to_edges[key]
                 
                 # either add to current count or a dictionary
                 # entry or create new dictionary entry
