@@ -98,7 +98,7 @@ def generatetree(pred):
     ----------
     
     pred : list
-        List of preceeding nodes for traversal route.
+        List of preceding nodes for traversal route.
     
     Returns
     --------
