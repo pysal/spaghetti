@@ -2183,7 +2183,7 @@ class Network:
                     newx, newy = self._newpoint_coords(arc, totallength)
                     
                     # update the vertex
-                    if currentstop not in sn.vertex_list:
+                    if currentstop not in split_network.vertex_list:
                         split_network.vertex_list.append(currentstop)
                     
                     # update vertex coordinates and vertex id
