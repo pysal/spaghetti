@@ -22,7 +22,7 @@ spaghetti.Network
     spaghetti.Network.compute_distance_to_vertices
     spaghetti.Network.compute_snap_dist
     spaghetti.Network.count_per_link
-    spaghetti.network.Network.simulate_observations
+    spaghetti.Network.simulate_observations
     spaghetti.network.Network.enum_links_vertex
     spaghetti.network.Network.full_distance_matrix
     spaghetti.network.Network.allneighbordistances
