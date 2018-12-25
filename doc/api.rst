@@ -36,6 +36,7 @@ spaghetti.Network
     spaghetti.Network._evaluate_napts
     spaghetti.Network._extractnetwork
     spaghetti.Network._newpoint_coords
+    spaghetti.Network._round_sig
 
 
 spaghetti.PointPattern
