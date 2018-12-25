@@ -27,12 +27,13 @@ spaghetti.Network
     spaghetti.Network.full_distance_matrix
     spaghetti.Network.allneighbordistances
     spaghetti.Network.nearestneighbordistances
-    spaghetti.Network.NetworkF
-    spaghetti.Network.NetworkG
-    spaghetti.Network.NetworkK
     spaghetti.Network.split_arcs
     spaghetti.Network.savenetwork
     spaghetti.Network.loadnetwork
+    spaghetti.Network.NetworkF
+    spaghetti.Network.NetworkG
+    spaghetti.Network.NetworkK
+    
 
 
 spaghetti.PointPattern
