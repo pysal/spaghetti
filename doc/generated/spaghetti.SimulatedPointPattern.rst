@@ -1,7 +1,7 @@
-spaghetti.network.SimulatedPointPattern
-=======================================
+spaghetti.SimulatedPointPattern
+===============================
 
-.. currentmodule:: spaghetti.network
+.. currentmodule:: spaghetti
 
 .. autoclass:: SimulatedPointPattern
 

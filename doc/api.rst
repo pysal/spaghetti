@@ -13,27 +13,33 @@ spaghetti.Network
 
 .. autosummary::
    :toctree: generated/
-
-    spaghetti.network.Network
-    spaghetti.network.Network.extract_components
-    spaghetti.network.Network.extractgraph
-    spaghetti.network.Network.contiguityweights
-    spaghetti.network.Network.distancebandweights
-    spaghetti.network.Network.snapobservations
-    spaghetti.network.Network.compute_distance_to_vertices
-    spaghetti.network.Network.compute_snap_dist
-    spaghetti.network.Network.count_per_link
-    spaghetti.network.Network.simulate_observations
-    spaghetti.network.Network.enum_links_vertex
-    spaghetti.network.Network.full_distance_matrix
-    spaghetti.network.Network.allneighbordistances
-    spaghetti.network.Network.nearestneighbordistances
-    spaghetti.network.Network.NetworkF
-    spaghetti.network.Network.NetworkG
-    spaghetti.network.Network.NetworkK
-    spaghetti.network.Network.split_arcs
-    spaghetti.network.Network.savenetwork
-    spaghetti.network.Network.loadnetwork
+    
+    spaghetti.Network.extract_components
+    spaghetti.Network.extractgraph
+    spaghetti.Network.contiguityweights
+    spaghetti.Network.distancebandweights
+    spaghetti.Network.snapobservations
+    spaghetti.Network.compute_distance_to_vertices
+    spaghetti.Network.compute_snap_dist
+    spaghetti.Network.count_per_link
+    spaghetti.Network.simulate_observations
+    spaghetti.Network.enum_links_vertex
+    spaghetti.Network.full_distance_matrix
+    spaghetti.Network.allneighbordistances
+    spaghetti.Network.nearestneighbordistances
+    spaghetti.Network.split_arcs
+    spaghetti.Network.savenetwork
+    spaghetti.Network.loadnetwork
+    spaghetti.Network.NetworkF
+    spaghetti.Network.NetworkG
+    spaghetti.Network.NetworkK
+    spaghetti.Network._evaluate_napts
+    spaghetti.Network._extractnetwork
+    spaghetti.Network._newpoint_coords
+    spaghetti.Network._round_sig
+    spaghetti.Network._snap_to_link
+    spaghetti.Network._yield_napts
+    spaghetti.Network._yieldneighbor
 
 
 spaghetti.PointPattern
@@ -42,7 +48,7 @@ spaghetti.PointPattern
 .. autosummary::
    :toctree: generated/
    
-   spaghetti.network.PointPattern
+   spaghetti.PointPattern
 
 
 spaghetti.SimulatedPointPattern
@@ -51,7 +57,7 @@ spaghetti.SimulatedPointPattern
 .. autosummary::
    :toctree: generated/
    
-    spaghetti.network.SimulatedPointPattern
+    spaghetti.SimulatedPointPattern
 
 
 spaghetti
@@ -60,4 +66,4 @@ spaghetti
 .. autosummary::
    :toctree: generated/
    
-    spaghetti.network.element_as_gdf
+    spaghetti.element_as_gdf

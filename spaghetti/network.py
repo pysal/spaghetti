@@ -233,8 +233,8 @@ class Network:
         """Used internally to round the vertex to a set number of
         significant digits. If ``sig`` is set to 4, then the following
         are some possible results for a coordinate are as follows.
-            (1) 0.0xxxx, (2) 0.xxxx, (3) x.xxx, (4) xx.xx,
-            (5) xxx.x, (6) xxxx.0, (7) xxxx0.0
+        (1) 0.0xxxx, (2) 0.xxxx, (3) x.xxx, (4) xx.xx,
+        (5) xxx.x, (6) xxxx.0, (7) xxxx0.0
         
         Parameters
         ----------

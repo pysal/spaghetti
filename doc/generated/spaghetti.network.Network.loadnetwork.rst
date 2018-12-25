@@ -1,6 +1,0 @@
-spaghetti.network.Network.loadnetwork
-=====================================
-
-.. currentmodule:: spaghetti.network
-
-.. automethod:: Network.loadnetwork
