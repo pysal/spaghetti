@@ -33,7 +33,7 @@ spaghetti.Network
     spaghetti.Network.NetworkF
     spaghetti.Network.NetworkG
     spaghetti.Network.NetworkK
-    
+    spaghetti.Network._evaluate_napts
 
 
 spaghetti.PointPattern
