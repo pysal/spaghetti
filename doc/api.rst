@@ -15,7 +15,7 @@ spaghetti.Network
    :toctree: generated/
     
     spaghetti.Network.extract_components
-    spaghetti.network.Network.extractgraph
+    spaghetti.Network.extractgraph
     spaghetti.network.Network.contiguityweights
     spaghetti.network.Network.distancebandweights
     spaghetti.network.Network.snapobservations
