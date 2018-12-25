@@ -57,7 +57,7 @@ spaghetti.SimulatedPointPattern
 .. autosummary::
    :toctree: generated/
    
-    spaghetti.network.SimulatedPointPattern
+    spaghetti.SimulatedPointPattern
 
 
 spaghetti
