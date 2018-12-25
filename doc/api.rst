@@ -27,7 +27,7 @@ spaghetti.Network
     spaghetti.Network.full_distance_matrix
     spaghetti.Network.allneighbordistances
     spaghetti.Network.nearestneighbordistances
-    spaghetti.network.Network.NetworkF
+    spaghetti.Network.NetworkF
     spaghetti.network.Network.NetworkG
     spaghetti.network.Network.NetworkK
     spaghetti.network.Network.split_arcs
