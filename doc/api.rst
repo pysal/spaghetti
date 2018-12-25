@@ -32,7 +32,7 @@ spaghetti.Network
     spaghetti.Network.NetworkK
     spaghetti.Network.split_arcs
     spaghetti.Network.savenetwork
-    spaghetti.network.Network.loadnetwork
+    spaghetti.Network.loadnetwork
 
 
 spaghetti.PointPattern
