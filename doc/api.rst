@@ -30,7 +30,7 @@ spaghetti.Network
     spaghetti.Network.NetworkF
     spaghetti.Network.NetworkG
     spaghetti.network.Network.NetworkK
-    spaghetti.network.Network.split_arcs
+    spaghetti.Network.split_arcs
     spaghetti.network.Network.savenetwork
     spaghetti.network.Network.loadnetwork
 
