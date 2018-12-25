@@ -25,7 +25,7 @@ spaghetti.Network
     spaghetti.Network.simulate_observations
     spaghetti.Network.enum_links_vertex
     spaghetti.Network.full_distance_matrix
-    spaghetti.network.Network.allneighbordistances
+    spaghetti.Network.allneighbordistances
     spaghetti.network.Network.nearestneighbordistances
     spaghetti.network.Network.NetworkF
     spaghetti.network.Network.NetworkG
