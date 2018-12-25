@@ -29,7 +29,7 @@ spaghetti.Network
     spaghetti.Network.nearestneighbordistances
     spaghetti.Network.NetworkF
     spaghetti.Network.NetworkG
-    spaghetti.network.Network.NetworkK
+    spaghetti.Network.NetworkK
     spaghetti.Network.split_arcs
     spaghetti.network.Network.savenetwork
     spaghetti.network.Network.loadnetwork
