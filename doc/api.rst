@@ -38,6 +38,7 @@ spaghetti.Network
     spaghetti.Network._newpoint_coords
     spaghetti.Network._round_sig
     spaghetti.Network._snap_to_link
+    spaghetti.Network._yield_napts
 
 
 spaghetti.PointPattern
