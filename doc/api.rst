@@ -17,7 +17,7 @@ spaghetti.Network
     spaghetti.Network.extract_components
     spaghetti.Network.extractgraph
     spaghetti.Network.contiguityweights
-    spaghetti.network.Network.distancebandweights
+    spaghetti.Network.distancebandweights
     spaghetti.network.Network.snapobservations
     spaghetti.network.Network.compute_distance_to_vertices
     spaghetti.network.Network.compute_snap_dist
