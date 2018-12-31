@@ -50,7 +50,7 @@ install:
 
 script:
   - python setup.py sdist >/dev/null
-  - nosetests --with-doctest --with-coverage --cover-package=spaghetti;
+  - nosetests --verbose --with-doctest --with-coverage --cover-package=spaghetti;
 
 notifications:
     email:
