@@ -37,7 +37,7 @@ before_install:
 install:
   - conda install --yes pip
   - if "$PYSAL_PYPI"; then
-        echo 'testing pypi libpysal' && pip install libpysal;
+        echo 'testing conda libpysal' && conda install --yes libpysal;
         else echo 'testing git libpysal';
         git clone https://github.com/pysal/libpysal.git;
         cd libpysal; pip install .; cd ../;
