@@ -46,7 +46,8 @@ install:
         echo 'plus testing'; conda install --yes --file requirements_plus.txt;
         else conda install --yes --file requirements.txt;
     fi;
-  - conda install --yes -r requirements_dev.txt -r requirements_docs.txt
+  - conda install --yes --file requirements_dev.txt
+  - conda install --yes --file requirements_docs.txt
 
 script:
   - python setup.py sdist >/dev/null
