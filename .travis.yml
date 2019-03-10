@@ -37,7 +37,7 @@ before_install:
 install:
   - conda install --yes pip
   - if "$PYSAL_PYPI"; then
-        echo 'testing conda libpysal' && conda install libpysal;
+        echo 'testing conda libpysal' && conda install --yes libpysal;
         else echo 'testing git libpysal';
         git clone https://github.com/pysal/libpysal.git;
         cd libpysal; pip install .; cd ../;
@@ -46,7 +46,7 @@ install:
         echo 'plus testing'; conda install --yes --file requirements_plus.txt;
         else conda install --yes --file requirements.txt;
     fi;
-  - conda install -r requirements_dev.txt -r requirements_docs.txt
+  - conda install --yes -r requirements_dev.txt -r requirements_docs.txt
 
 script:
   - python setup.py sdist >/dev/null
