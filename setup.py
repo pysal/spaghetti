@@ -45,8 +45,7 @@ def setup_package():
     
     # Requirements for: basic build, tests, building docs, plus builds
     _groups_files = {'base': 'requirements.txt',
-                     'tests': 'requirements_tests.txt',
-                     'docs': 'requirements_docs.txt',
+                     'dev': 'requirements_dev.txt',
                      'plus': 'requirements_plus.txt'}
     reqs = _get_requirements_from_files(_groups_files)
     install_reqs = reqs.pop('base')
