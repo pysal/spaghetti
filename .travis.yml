@@ -46,7 +46,7 @@ install:
         echo 'plus testing'; conda install --yes --file requirements_plus.txt;
         else conda install --yes --file requirements.txt;
     fi;
-  - onda install --yes --file requirements_dev.txt
+  - conda install --yes --file requirements_dev.txt
 
 script:
   - python setup.py sdist >/dev/null
