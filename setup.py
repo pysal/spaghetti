@@ -43,11 +43,12 @@ def _get_requirements_from_files(groups_files):
 def setup_package():
     """sets up the python package"""
     
-    # Requirements for: basic build, tests, building docs, plus builds
+    # Requirements for: base, dev, docs, plus, and test builds
     _groups_files = {'base': 'requirements.txt',
-                     'tests': 'requirements_tests.txt',
+                     'dev': 'requirements_dev.txt',
                      'docs': 'requirements_docs.txt',
-                     'plus': 'requirements_plus.txt'}
+                     'plus': 'requirements_plus.txt',
+                     'tests': 'requirements_tests.txt'}
     reqs = _get_requirements_from_files(_groups_files)
     install_reqs = reqs.pop('base')
     extras_reqs = reqs
