@@ -1,7 +1,11 @@
+coverage
+coveralls
+matplotlib
 nose
 nose-progressive
-nose-exclude
-coverage
+matplotlib
+numpydoc
 sphinx>=1.4.3
+sphinxcontrib-bibtex
 sphinxcontrib-napoleon
-coveralls
+sphinx_bootstrap_theme
