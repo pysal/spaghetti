@@ -1,1 +1,1 @@
-geopandas>=0.4.1
+geopandas
