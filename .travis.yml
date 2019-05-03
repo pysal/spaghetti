@@ -3,25 +3,20 @@ sudo: false
 branches:
   only:
     - master
-python:
-  - 3.5
-  - 3.6
-
-env: 
-    - PYSAL_PYPI=true PYSAL_PLUS=true
-    - PYSAL_PYPI=true PYSAL_PLUS=false
-    - PYSAL_PYPI=false PYSAL_PLUS=true
-    - PYSAL_PYPI=false PYSAL_PLUS=false
 
 matrix:
   allow_failures:
-      - python: 3.5
+      - python: 3.6
         env: PYSAL_PYPI=false PYSAL_PLUS=false
-      - python: 3.5
+      - python: 3.6
         env: PYSAL_PYPI=false PYSAL_PLUS=true
-      - python: 3.6
+      - python: 3.7
+        dist: xenial
+        sudo: true
         env: PYSAL_PYPI=false PYSAL_PLUS=false
-      - python: 3.6
+      - python: 3.7
+        dist: xenial
+        sudo: true
         env: PYSAL_PYPI=false PYSAL_PLUS=true
 
 before_install:
