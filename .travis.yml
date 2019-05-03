@@ -4,10 +4,9 @@ branches:
   only:
     - master
 
-
 matrix:
-  include:
-    allow_failures:
+  allow_failures:
+    include:
         - python: 3.6
           env: PYSAL_PYPI=false PYSAL_PLUS=false
         - python: 3.6
