@@ -1,42 +1,29 @@
+dist: xenial
 language: python
-sudo: false
+sudo: true
 branches:
   only:
     - master
 
+python:
+  - 3.6
+  - 3.7
+
 env:
-  global:
-  - PYSAL_PYPI=true PYSAL_PLUS=true
-  - PYSAL_PYPI=true PYSAL_PLUS=false
-  - PYSAL_PYPI=false PYSAL_PLUS=true
-  - PYSAL_PYPI=false PYSAL_PLUS=false
+    - PYSAL_PYPI=true PYSAL_PLUS=true
+    - PYSAL_PYPI=true PYSAL_PLUS=false
+    - PYSAL_PYPI=false PYSAL_PLUS=true
+    - PYSAL_PYPI=false PYSAL_PLUS=false
 
 matrix:
-  include:
-    - python: 3.6
-      env: PYSAL_PYPI=false PYSAL_PLUS=false
-    - python: 3.6
-      env: PYSAL_PYPI=false PYSAL_PLUS=true
-    - python: 3.7
-      dist: xenial
-      sudo: true
-      env: PYSAL_PYPI=false PYSAL_PLUS=false
-    - python: 3.7
-      dist: xenial
-      sudo: true
-      env: PYSAL_PYPI=false PYSAL_PLUS=true
   allow_failures:
     - python: 3.6
       env: PYSAL_PYPI=false PYSAL_PLUS=false
     - python: 3.6
       env: PYSAL_PYPI=false PYSAL_PLUS=true
     - python: 3.7
-      dist: xenial
-      sudo: true
       env: PYSAL_PYPI=false PYSAL_PLUS=false
     - python: 3.7
-      dist: xenial
-      sudo: true
       env: PYSAL_PYPI=false PYSAL_PLUS=true
 
 before_install:
