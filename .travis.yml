@@ -4,6 +4,12 @@ branches:
   only:
     - master
 
+env: 
+    - PYSAL_PYPI=true PYSAL_PLUS=true
+    - PYSAL_PYPI=true PYSAL_PLUS=false
+    - PYSAL_PYPI=false PYSAL_PLUS=true
+    - PYSAL_PYPI=false PYSAL_PLUS=false
+
 matrix:
   include:
     - python: 3.6
