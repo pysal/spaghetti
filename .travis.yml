@@ -5,19 +5,6 @@ branches:
     - master
 
 matrix:
-  include:
-    - python: 3.6
-      env: PYSAL_PYPI=false PYSAL_PLUS=false
-    - python: 3.6
-      env: PYSAL_PYPI=false PYSAL_PLUS=true
-    - python: 3.7
-      dist: xenial
-      sudo: true
-      env: PYSAL_PYPI=false PYSAL_PLUS=false
-    - python: 3.7
-      dist: xenial
-      sudo: true
-      env: PYSAL_PYPI=false PYSAL_PLUS=true
   allowed_failures:
     - python: 3.6
       env: PYSAL_PYPI=false PYSAL_PLUS=false
