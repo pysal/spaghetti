@@ -1,3 +1,4 @@
+dist: xenial
 language: python
 sudo: true
 branches:
@@ -22,12 +23,8 @@ matrix:
     - python: 3.6
       env: PYSAL_PYPI=false PYSAL_PLUS=true
     - python: 3.7
-      dist: xenial
-      sudo: true
       env: PYSAL_PYPI=false PYSAL_PLUS=false
     - python: 3.7
-      dist: xenial
-      sudo: true
       env: PYSAL_PYPI=false PYSAL_PLUS=true
 
 
