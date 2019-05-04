@@ -73,8 +73,8 @@ def setup_package():
                        'Topic :: Scientific/Engineering :: GIS',
                        'License :: OSI Approved :: BSD License',
                        'Programming Language :: Python',
-                       'Programming Language :: Python :: 3.5',
-                       'Programming Language :: Python :: 3.6'],
+                       'Programming Language :: Python :: 3.6',
+                       'Programming Language :: Python :: 3.7'],
           license='3-Clause BSD',
           packages=[package],
           py_modules=[package],
@@ -82,7 +82,7 @@ def setup_package():
           extras_require=extras_reqs,
           zip_safe=False,
           cmdclass = {'build.py':build_py},
-          python_requires='>3.4')
+          python_requires='>3.5')
 
 
 if __name__ == '__main__':
