@@ -480,7 +480,8 @@ def snap_points_to_links(points, links):
         # Find all links with bounding boxes that intersect
         # a query rectangle centered on the point with sides
         # of length dmin * dmin
-        candidates = [cand.object for cand in rtree.intersection([x0, y0, x1, y1], objects=True)]
+        rtree_lookup = rtree.intersection([x0, y0, x1, y1]
+        candidates = [cand.object for cand in rtree_lookup, objects=True)]
         dmin += SMALL
         dmin2 = dmin * dmin
         
