@@ -82,7 +82,8 @@ Requirements
 
 - `scipy`
 - `numpy`
-- `libpysal`
+- `esda`
+- `rtree`
 
 
 Contribute
