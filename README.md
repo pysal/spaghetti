@@ -64,13 +64,13 @@ Examples
 Installation
 ------------
 
-Install the latest stable of `spaghetti` via `pip` by running:
+Install the latest stable of `spaghetti` via [PyPI](https://pypi.org/project/spaghetti/) by running:
 
 ```
 $ pip install spaghetti
 ```
 
-Install the latest stable of `spaghetti` via `conda` by running:
+Install the latest stable of `spaghetti` via [conda-forge](https://github.com/conda-forge/spaghetti-feedstock) by running:
 
 ```
 $ conda install --channel conda-forge spaghetti
