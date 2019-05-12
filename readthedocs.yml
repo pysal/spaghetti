@@ -1,7 +1,19 @@
-python:
-    version: 3.7
-    setup_py_install: true
-    pip_install: true
-    extra_requirements:
-        - tests
-        - docs
+		 # Required
+ version: 2
+
+  # Build documentation in the docs/ directory with Sphinx
+ sphinx:
+   configuration: doc/conf.py
+
+  # Optionally build your docs in additional formats such as PDF and ePub
+ formats: all
+
+  python:		 python:
+     version: 3.5		     version: 3.7
+     setup_py_install: true		     install:
+     pip_install: true		         - requirements: requirements.txt
+     extra_requirements:		         - method: pip
+         - tests		           path: .
+         - docs		           extra_requirements:
+               - tests
+               - docs
