@@ -16,6 +16,10 @@ SPAtial GrapHs: nETworks, Topology, & Inference
 [![PyPI version](https://badge.fury.io/py/spaghetti.svg)](https://badge.fury.io/py/spaghetti) [![GitHub version](https://img.shields.io/github/release/pysal/spaghetti.svg)](https://img.shields.io/github/release/pysal/spaghetti) [![Build Status](https://travis-ci.org/pysal/spaghetti.svg?branch=master)](https://travis-ci.org/pysal/spaghetti) [![Documentation Status](https://readthedocs.org/projects/pysal-spaghetti/badge/?version=latest)](https://pysal-spaghetti.readthedocs.io/en/latest/?badge=latest) [![Coverage Status](https://coveralls.io/repos/github/pysal/spaghetti/badge.svg)](https://coveralls.io/github/pysal/spaghetti)
 
 
+**Anaconda**
+
+[![Anaconda-Server Badge](https://anaconda.org/conda-forge/spaghetti/badges/version.svg)](https://anaconda.org/conda-forge/spaghetti) [![Anaconda-Server Badge](https://anaconda.org/conda-forge/spaghetti/badges/platforms.svg)](https://anaconda.org/conda-forge/spaghetti) [![Anaconda-Server Badge](https://anaconda.org/conda-forge/spaghetti/badges/downloads.svg)](https://anaconda.org/conda-forge/spaghetti) [![Anaconda-Server Badge](https://anaconda.org/conda-forge/spaghetti/badges/installer/conda.svg)](https://conda.anaconda.org/conda-forge)
+
 **Issues & Pull Requests**
 
 [![GitHub issues open](https://img.shields.io/github/issues/pysal/spaghetti.svg?maxAge=3600)](https://github.com/pysal/spaghetti/issues) [![GitHub issues closed](https://img.shields.io/github/issues-closed/pysal/spaghetti.svg?maxAge=3600)](https://github.com/pysal/spaghetti/issues) ![Github pull requests open](https://img.shields.io/github/issues-pr/pysal/spaghetti.svg) ![Github pull requests closed](https://img.shields.io/github/issues-pr-closed/pysal/spaghetti.svg)
