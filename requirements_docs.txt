@@ -2,4 +2,3 @@ sphinx>=1.4.3
 sphinxcontrib-bibtex
 sphinx_bootstrap_theme
 numpydoc
-esda
