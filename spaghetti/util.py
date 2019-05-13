@@ -2,6 +2,7 @@ from warnings import warn
 
 from libpysal import cg
 from libpysal.common import requires
+from rtree import Rtree
 
 try:
     import geopandas as gpd
@@ -421,7 +422,7 @@ def snap_points_to_links(points, links):
     """
     
     # instantiate an rtree
-    rtree = cg.Rtree()
+    rtree = Rtree()
     # set the smallest possible float epsilon on machine
     SMALL = np.finfo(float).eps
     
@@ -429,7 +430,7 @@ def snap_points_to_links(points, links):
     vertex_2_link = {}
     
     # iterate over network links
-    for link in links:
+    for i,link in enumerate(links):
         
         # extract network link (x,y) vertex coordinates
         head, tail = link.vertices
@@ -452,12 +453,9 @@ def snap_points_to_links(points, links):
         bx1 += SMALL
         by1 += SMALL
         
-        # create a rectangle
-        rect = cg.Rect(bx0, by0, bx1, by1)
-        
         # insert the network link and its associated
         # rectangle into the rtree
-        rtree.insert(link, rect)
+        rtree.insert(i, (bx0, by0, bx1, by1), obj=link)
         
     # build a KDtree on link vertices
     kdtree = cg.KDTree(list(vertex_2_link.keys()))
@@ -482,7 +480,8 @@ def snap_points_to_links(points, links):
         # Find all links with bounding boxes that intersect
         # a query rectangle centered on the point with sides
         # of length dmin * dmin
-        candidates = [cand for cand in rtree.intersection([x0, y0, x1, y1])]
+        rtree_lookup = rtree.intersection([x0, y0, x1, y1], objects=True)
+        candidates = [cand.object for cand in rtree_lookup]
         dmin += SMALL
         dmin2 = dmin * dmin
         

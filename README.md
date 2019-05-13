@@ -64,13 +64,19 @@ Examples
 Installation
 ------------
 
-(Recommended) Install the latest stable of spaghetti by running:
+Install the latest stable of `spaghetti` via [PyPI](https://pypi.org/project/spaghetti/) by running:
 
 ```
 $ pip install spaghetti
 ```
 
-Install the most current development version of spaghetti by running:
+Install the latest stable of `spaghetti` via [conda-forge](https://github.com/conda-forge/spaghetti-feedstock) by running:
+
+```
+$ conda install --channel conda-forge spaghetti
+```
+
+Install the most current development version of `spaghetti` by running:
 
 ```
 $ pip install git+https://github.com/pysal/spaghetti
@@ -82,7 +88,14 @@ Requirements
 
 - `scipy`
 - `numpy`
-- `libpysal`
+- `esda`
+- `rtree`
+
+
+Soft Dependencies
+-----------------
+- `shapely`
+- `geopandas`
 
 
 Contribute
