@@ -1,6 +1,6 @@
 .. Installation
 
-spaghetti supports python `3.5`_ and `3.6`_ only. Please make sure that you are
+spaghetti supports python `3.6`_ and `3.7`_ only. Please make sure that you are
 operating in a python 3 environment.
 
 Installation
