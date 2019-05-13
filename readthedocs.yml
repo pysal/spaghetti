@@ -9,13 +9,13 @@ sphinx:
 formats: all
 
 python:
-  version: 3.7
+  version: 3.6
   install:
   - method: pip
     path: .
-#    extra_requirements:
-#      - tests
-#      - docs
+    extra_requirements:
+      - tests
+      - docs
 
 conda:
   environment: environment.yml
