@@ -14,7 +14,7 @@ Install the latest stable of spaghetti from the `Python Package Index`_ with
 
   $ pip install spaghetti
 
-Install the latest stable of spaghetti via `conda-forge`_ by running:
+Install the latest stable of spaghetti via `conda-forge`_ by running::
 
   $ conda install --channel conda-forge spaghetti
 
