@@ -33,8 +33,8 @@ to `pysal/spaghetti`_, you can contribute to the giddy development.
 
 |
 
-.. _3.5: https://docs.python.org/3.5/
 .. _3.6: https://docs.python.org/3.6/
+.. _3.7: https://docs.python.org/3.6/
 .. _Python Package Index: https://pypi.org/project/spaghetti/
 .. _pysal/spaghetti: https://github.com/pysal/spaghetti
 .. _fork: https://help.github.com/articles/fork-a-repo/
