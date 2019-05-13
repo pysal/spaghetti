@@ -6,10 +6,10 @@ dependencies:
 #  - geopandas
   - rtree
 #  - sphinx>=1.4.3
-#  - sphinxcontrib-bibtex
-#  - sphinx_bootstrap_theme
-#  - numpydoc
+  - sphinxcontrib-bibtex
+  - sphinx_bootstrap_theme
+  - numpydoc
 #  - scipy>=0.11
 #  - numpy>=1.3
 #  - pandas
-#  - esda>=2.0.0
+  - esda>=2.0.0
