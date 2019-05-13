@@ -38,7 +38,7 @@ to `pysal/spaghetti`_, you can contribute to the giddy development.
 |
 
 .. _3.6: https://docs.python.org/3.6/
-.. _3.7: https://docs.python.org/3.6/
+.. _3.7: https://docs.python.org/3.7/
 .. _Python Package Index: https://pypi.org/project/spaghetti/
 .. _conda-forge: https://github.com/conda-forge/spaghetti-feedstock
 .. _pysal/spaghetti: https://github.com/pysal/spaghetti
