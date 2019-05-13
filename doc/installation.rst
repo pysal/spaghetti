@@ -14,6 +14,9 @@ Install the latest stable of spaghetti from the `Python Package Index`_ with
 
   $ pip install spaghetti
 
+Install the latest stable of spaghetti via `conda-forge`_ by running:
+
+
 or download the source distribution (``.tar.gz``) and decompress it to your
 selected destination. Open a command shell and navigate to the decompressed
 folder::
@@ -36,5 +39,6 @@ to `pysal/spaghetti`_, you can contribute to the giddy development.
 .. _3.6: https://docs.python.org/3.6/
 .. _3.7: https://docs.python.org/3.6/
 .. _Python Package Index: https://pypi.org/project/spaghetti/
+.. _conda-forge: https://github.com/conda-forge/spaghetti-feedstock
 .. _pysal/spaghetti: https://github.com/pysal/spaghetti
 .. _fork: https://help.github.com/articles/fork-a-repo/
