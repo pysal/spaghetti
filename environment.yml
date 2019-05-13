@@ -13,3 +13,4 @@ dependencies:
 #  - numpy>=1.3
 #  - pandas
   - esda>=2.0.0
+  - matplotlib
