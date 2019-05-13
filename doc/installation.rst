@@ -16,6 +16,7 @@ Install the latest stable of spaghetti from the `Python Package Index`_ with
 
 Install the latest stable of spaghetti via `conda-forge`_ by running:
 
+  $ conda install --channel conda-forge spaghetti
 
 or download the source distribution (``.tar.gz``) and decompress it to your
 selected destination. Open a command shell and navigate to the decompressed
