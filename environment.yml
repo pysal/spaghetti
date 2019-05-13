@@ -5,7 +5,7 @@ dependencies:
   - python=3.6
 #  - geopandas
   - rtree
-  - scipy>=0.11
-  - numpy>=1.3
-  - pandas
-  - esda>=2.0.0
+#  - scipy>=0.11
+#  - numpy>=1.3
+#  - pandas
+#  - esda>=2.0.0
