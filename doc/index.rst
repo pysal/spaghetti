@@ -20,7 +20,7 @@ the analysis of network events.
         <div class="col-sm-.5 col-xs-hidden">
         </div>
         <div class="col-md-4 col-xs-15">
-            <a href="http://nbviewer.jupyter.org/gist/jGaboardi/0d9ea5c966a4ad57123bef35b87c4607" class="thumbnail">
+            <a href="http://nbviewer.jupyter.org/gist/jGaboardi/0d9ea5c966a4ad57123bef35b87c4607?flush_cache=true" class="thumbnail">
                 <img src="_static/images/snapped.png" class="img-responsive center-block">
                 <div class="caption text-center">
                 <h6>Snapping Points to Segments</h6>
@@ -28,7 +28,7 @@ the analysis of network events.
             </a>
         </div>
         <div class="col-sm-4 col-xs-15">
-            <a href="http://nbviewer.jupyter.org/gist/jGaboardi/2697ff11933bb0ea8b94c4326a540453" class="thumbnail">
+            <a href="http://nbviewer.jupyter.org/gist/jGaboardi/2697ff11933bb0ea8b94c4326a540453?flush_cache=true" class="thumbnail">
                 <img src="_static/images/network_k.png" class="img-responsive center-block">
                 <div class="caption text-center">
                 <h6>Spaghetti Network Functionality</h6>
@@ -36,7 +36,7 @@ the analysis of network events.
             </a>
         </div>
         <div class="col-sm-4 col-xs-15">
-            <a href="http://nbviewer.jupyter.org/gist/jGaboardi/a671d31a796e06d9df669d018d5b66ba" class="thumbnail">
+            <a href="http://nbviewer.jupyter.org/gist/jGaboardi/a671d31a796e06d9df669d018d5b66ba?flush_cache=true" class="thumbnail">
                 <img src="_static/images/pmedian.png"
                 class="img-responsive center-block">
                 <div class="caption text-center">
