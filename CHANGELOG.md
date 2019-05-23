@@ -2,9 +2,11 @@
 
 Version 1.3 (2019-05-21)
 
-We closed a total of 12 issues (enhancements and bug fixes) through 5 pull requests, since our last release on 2019-05-14.
+We closed a total of 14 issues (enhancements and bug fixes) through 5 pull requests, since our last release on 2019-05-14.
 
 ## Issues Closed
+- Manually updated CHANGELOG following stable release (#281)
+- v1.3 release (#264)
 - add `requirements_dev.txt` to `MANIFEST.in` (#277)
 - Update changelog (#279)
 - version bump to include req_dev in MANIFEST.in (#278)
