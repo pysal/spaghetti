@@ -15,7 +15,6 @@ env:
     - PYSAL_PYPI=false PYSAL_PLUS=true
     - PYSAL_PYPI=false PYSAL_PLUS=false
 
-
 matrix:
   allow_failures:
     - python: 3.6
