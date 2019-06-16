@@ -80,3 +80,7 @@
   div.body {
      max-width: 1080px;
  }
+
+table.longtable.align-default{
+    text-align: left;
+}
