@@ -54,7 +54,7 @@ the analysis of network events.
 Citing spaghetti
 ----------------
 
-If you use PySAL-spaghetti in a scientific publication, we would appreciate citations to the following paper:
+If you use PySAL-spaghetti in a scientific publication, we would appreciate using the following citation:
 
   Bibtex entry::
 
