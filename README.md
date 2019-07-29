@@ -90,7 +90,7 @@ $ pip install spaghetti
 $ pip install .
 ```
 
-**Warning**
+***Warning***
 
 When installing via `pip`, you have to ensure that the required dependencies for `spaghetti` are installed on your operating system. Details on how to install these packages are linked below. Using `conda` (above) avoids having to install the dependencies separately.
 
