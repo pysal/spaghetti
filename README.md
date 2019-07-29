@@ -68,17 +68,31 @@ Examples
 Installation
 ------------
 
-Install the latest stable of `spaghetti` via [PyPI](https://pypi.org/project/spaghetti/) by running:
+As of version 1.3, `spaghetti` officially supports Python [`3.6`](https://docs.python.org/3.6/) and [`3.7`](https://docs.python.org/3.7/) only. Please make sure that you are operating in a Python 3 environment.
 
+**Installing with `conda` via [conda-forge](https://github.com/conda-forge/spaghetti-feedstock) (highly recommended)**
+
+To install `spaghetti` and all its dependencies, we recommend using the [`conda`](https://docs.conda.io/en/latest/)
+manager, specifically with the [`conda-forge`](https://conda-forge.org) channel. This can be obtained by installing the [`Anaconda Distribution`](https://docs.continuum.io/anaconda/) (a free Python distribution for data science), or through [`miniconda`](https://docs.conda.io/en/latest/miniconda.html) (minimal distribution only containing Python and the conda package manager). 
+
+Using `conda`, `spaghetti` can be installed as follows:
+```
+$ conda config --set channel_priority strict
+$ conda install --channel conda-forge spaghetti
+```
+
+**Installing with [`PyPI`](https://pypi.org/project/spaghetti/)**
 ```
 $ pip install spaghetti
 ```
-
-Install the latest stable of `spaghetti` via [conda-forge](https://github.com/conda-forge/spaghetti-feedstock) by running:
-
+*or* download the source distribution (`.tar.gz`) and decompress it to your selected destination. Open a command shell and navigate to the decompressed folder.
 ```
-$ conda install --channel conda-forge spaghetti
+$ pip install .
 ```
+
+**Warning**
+
+When installing via `pip`, you have to ensure that the required dependencies for `spaghetti` are installed on your operating system. Details on how to install these packages are linked below. Using `conda` (above) avoids having to install the dependencies separately.
 
 Install the most current development version of `spaghetti` by running:
 
@@ -89,18 +103,16 @@ $ pip install git+https://github.com/pysal/spaghetti
 
 Requirements
 ------------
-
-- `scipy`
-- `numpy`
-- `esda`
-- `rtree`
-
+- [`esda`](https://esda.readthedocs.io/en/latest/)
+- [`libspatialindex`](https://libspatialindex.org/index.html)
+- [`numpy`](https://numpy.org/devdocs/)
+- [`rtree`](http://toblerity.org/rtree/install.html)
+- [`scipy`](http://scipy.github.io/devdocs/)
 
 Soft Dependencies
 -----------------
-- `shapely`
-- `geopandas`
-
+- [`geopandas`](http://geopandas.org/install.html)
+- [`shapely`](https://shapely.readthedocs.io/en/latest/)
 
 Contribute
 ----------
