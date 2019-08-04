@@ -44,7 +44,7 @@ SPAtial GrapHs: nETworks, Topology, & Inference
 
 **Misc.**
 
-![Github search hit counter](https://img.shields.io/github/search/pysal/spaghetti/goto.svg) ![Github code size in bytes](https://img.shields.io/github/languages/code-size/pysal/spaghetti.svg) ![Github repo size in bytes](https://img.shields.io/github/repo-size/pysal/spaghetti.svg)
+![Github search hit counter](https://img.shields.io/github/search/pysal/spaghetti/goto.svg) ![Github code size in bytes](https://img.shields.io/github/languages/code-size/pysal/spaghetti.svg) ![Github repo size in bytes](https://img.shields.io/github/repo-size/pysal/spaghetti.svg) [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 --------------------------------------
 
