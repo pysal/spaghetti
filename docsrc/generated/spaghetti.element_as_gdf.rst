@@ -1,0 +1,6 @@
+spaghetti.element\_as\_gdf
+==========================
+
+.. currentmodule:: spaghetti
+
+.. autofunction:: element_as_gdf
