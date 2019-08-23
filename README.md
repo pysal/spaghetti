@@ -1,5 +1,5 @@
 
-[pysal/spaghetti](https://pysal-spaghetti.readthedocs.io)
+[pysal/spaghetti](http://pysal.org/spaghetti/)
 =========================================================
 
 SPAtial GrapHs: nETworks, Topology, & Inference
@@ -13,7 +13,7 @@ SPAtial GrapHs: nETworks, Topology, & Inference
 
 **Build & Versions**
 
-[![PyPI version](https://badge.fury.io/py/spaghetti.svg)](https://badge.fury.io/py/spaghetti) [![GitHub version](https://img.shields.io/github/release/pysal/spaghetti.svg)](https://img.shields.io/github/release/pysal/spaghetti) [![Build Status](https://travis-ci.org/pysal/spaghetti.svg?branch=master)](https://travis-ci.org/pysal/spaghetti) [![Documentation Status](https://readthedocs.org/projects/pysal-spaghetti/badge/?version=latest)](https://pysal-spaghetti.readthedocs.io/en/latest/?badge=latest) [![Coverage Status](https://coveralls.io/repos/github/pysal/spaghetti/badge.svg)](https://coveralls.io/github/pysal/spaghetti)
+[![PyPI version](https://badge.fury.io/py/spaghetti.svg)](https://badge.fury.io/py/spaghetti) [![GitHub version](https://img.shields.io/github/release/pysal/spaghetti.svg)](https://img.shields.io/github/release/pysal/spaghetti) [![Build Status](https://travis-ci.org/pysal/spaghetti.svg?branch=master)](https://travis-ci.org/pysal/spaghetti) [![Coverage Status](https://coveralls.io/repos/github/pysal/spaghetti/badge.svg)](https://coveralls.io/github/pysal/spaghetti)
 
 
 **Anaconda**
