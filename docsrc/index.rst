@@ -64,6 +64,7 @@ If you use PySAL-spaghetti in a scientific publication, we would appreciate usin
         year = {2018},
         title = {pysal/spaghetti},
         url = {https://github.com/pysal/spaghetti},
+        doi = {10.5281/zenodo.1343650},
         keywords = {graph-theory,network-analysis,python,spatial-networks,topology}
       }
 
