@@ -1,10 +1,6 @@
 language: minimal
 sudo: false
 
-python:
-  - 3.6
-  - 3.7
-
 env:
     - PYSAL_PYPI=true PYSAL_PLUS=true
     - PYSAL_PYPI=true PYSAL_PLUS=false
