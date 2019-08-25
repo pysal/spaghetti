@@ -1,19 +1,21 @@
 language: minimal
 sudo: false
 
-#env:
-#  - PY=3.6 PYSAL_PYPI=true PYSAL_PLUS=true
-#  - PY=3.6 PYSAL_PYPI=true PYSAL_PLUS=false
-#  - PY=3.6 PYSAL_PYPI=false PYSAL_PLUS=true
-#  - PY=3.6 PYSAL_PYPI=false PYSAL_PLUS=false
-#  - PY=3.7 PYSAL_PYPI=true PYSAL_PLUS=true
-#  - PY=3.7 PYSAL_PYPI=true PYSAL_PLUS=false
-#  - PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=true
-#  - PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=false
-
 matrix:
   fast_finish: true
   include:
+    - name: "python-3.6-pypi"
+      env: PY=3.6 PYSAL_PYPI=true PYSAL_PLUS=false
+    - name: "python-3.6-pypi-plus"
+      env: PY=3.6 PYSAL_PYPI=true PYSAL_PLUS=true
+    - name: "python-3.7-pypi"
+      env: PY=3.7 PYSAL_PYPI=true PYSAL_PLUS=false
+    - name: "python-3.7-pypi-plus"
+      env: PY=3.7 PYSAL_PYPI=true PYSAL_PLUS=true
+    - name: "tarball-pypi"
+      env: PY=3.7 PYSAL_PYPI=true PYSAL_PLUS=false
+    - name: "tarball-pypi-plus"
+      env: PY=3.7 PYSAL_PYPI=true PYSAL_PLUS=true
     - name: "python-3.6"
       env: PY=3.6 PYSAL_PYPI=false PYSAL_PLUS=false
     - name: "python-3.6-plus"
