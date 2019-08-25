@@ -1,8 +1,9 @@
 language: minimal
 sudo: false
 
-- name: "python-3.6"
-  env: PY=3.6 PYSAL_PYPI=true PYSAL_PLUS=true
+#- name: "python-3.6"
+#  env: PY=3.6 PYSAL_PYPI=true PYSAL_PLUS=true
+#
     
 env:
     - PY=3.6 PYSAL_PYPI=true PYSAL_PLUS=false
