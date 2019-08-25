@@ -1,35 +1,43 @@
 language: minimal
 sudo: false
 
-name:
-  - "python-3.6"
-  - "python-3.7"
-  - "tarball"
-
-env:
-  - PY=3.6 PYSAL_PYPI=true PYSAL_PLUS=true
-  - PY=3.6 PYSAL_PYPI=true PYSAL_PLUS=false
-  - PY=3.6 PYSAL_PYPI=false PYSAL_PLUS=true
-  - PY=3.6 PYSAL_PYPI=false PYSAL_PLUS=false
-  - PY=3.7 PYSAL_PYPI=true PYSAL_PLUS=true
-  - PY=3.7 PYSAL_PYPI=true PYSAL_PLUS=false
-  - PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=true
-  - PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=false
+#env:
+#  - PY=3.6 PYSAL_PYPI=true PYSAL_PLUS=true
+#  - PY=3.6 PYSAL_PYPI=true PYSAL_PLUS=false
+#  - PY=3.6 PYSAL_PYPI=false PYSAL_PLUS=true
+#  - PY=3.6 PYSAL_PYPI=false PYSAL_PLUS=false
+#  - PY=3.7 PYSAL_PYPI=true PYSAL_PLUS=true
+#  - PY=3.7 PYSAL_PYPI=true PYSAL_PLUS=false
+#  - PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=true
+#  - PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=false
 
 matrix:
   fast_finish: true
-  allow_failures:
+  include:
     - name: "python-3.6"
       env: PY=3.6 PYSAL_PYPI=false PYSAL_PLUS=false
-    - name: "python-3.6"
+    - name: "python-3.6-plus"
       env: PY=3.6 PYSAL_PYPI=false PYSAL_PLUS=true
     - name: "python-3.7"
       env: PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=false
-    - name: "python-3.7"
+    - name: "python-3.7-plus"
       env: PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=true
     - name: "tarball"
       env: PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=false
+    - name: "tarball-plus"
+      env: PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=true
+  allow_failures:
+    - name: "python-3.6"
+      env: PY=3.6 PYSAL_PYPI=false PYSAL_PLUS=false
+    - name: "python-3.6-plus"
+      env: PY=3.6 PYSAL_PYPI=false PYSAL_PLUS=true
+    - name: "python-3.7"
+      env: PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=false
+    - name: "python-3.7-plus"
+      env: PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=true
     - name: "tarball"
+      env: PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=false
+    - name: "tarball-plus"
       env: PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=true
 
 before_install:
