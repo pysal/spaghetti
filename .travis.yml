@@ -1,13 +1,14 @@
 language: minimal
 sudo: false
 
-#- name: "python-3.6"
-#  env: PY=3.6 PYSAL_PYPI=true PYSAL_PLUS=true
-#
-    
+name:
+  - "python-3.6"
+  - "python-3.7"
+  - "tarball"
+
 env:
-  - name : "python-3.6"
-    - PY=3.6 PYSAL_PYPI=true PYSAL_PLUS=false
+  - PY=3.6 PYSAL_PYPI=true PYSAL_PLUS=true
+  - PY=3.6 PYSAL_PYPI=true PYSAL_PLUS=false
   - PY=3.6 PYSAL_PYPI=false PYSAL_PLUS=true
   - PY=3.6 PYSAL_PYPI=false PYSAL_PLUS=false
   - PY=3.7 PYSAL_PYPI=true PYSAL_PLUS=true
@@ -25,6 +26,10 @@ matrix:
     - name: "python-3.7"
       env: PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=false
     - name: "python-3.7"
+      env: PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=true
+    - name: "tarball"
+      env: PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=false
+    - name: "tarball"
       env: PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=true
 
 before_install:
