@@ -6,13 +6,14 @@ sudo: false
 #
     
 env:
+  - name : "python-3.6"
     - PY=3.6 PYSAL_PYPI=true PYSAL_PLUS=false
-    - PY=3.6 PYSAL_PYPI=false PYSAL_PLUS=true
-    - PY=3.6 PYSAL_PYPI=false PYSAL_PLUS=false
-    - PY=3.7 PYSAL_PYPI=true PYSAL_PLUS=true
-    - PY=3.7 PYSAL_PYPI=true PYSAL_PLUS=false
-    - PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=true
-    - PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=false
+  - PY=3.6 PYSAL_PYPI=false PYSAL_PLUS=true
+  - PY=3.6 PYSAL_PYPI=false PYSAL_PLUS=false
+  - PY=3.7 PYSAL_PYPI=true PYSAL_PLUS=true
+  - PY=3.7 PYSAL_PYPI=true PYSAL_PLUS=false
+  - PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=true
+  - PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=false
 
 matrix:
   fast_finish: true
