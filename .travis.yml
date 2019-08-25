@@ -2,10 +2,14 @@ language: minimal
 sudo: false
 
 env:
-    - PYSAL_PYPI=true PYSAL_PLUS=true
-    - PYSAL_PYPI=true PYSAL_PLUS=false
-    - PYSAL_PYPI=false PYSAL_PLUS=true
-    - PYSAL_PYPI=false PYSAL_PLUS=false
+    - PY=3.6 PYSAL_PYPI=true PYSAL_PLUS=true
+    - PY=3.6 PYSAL_PYPI=true PYSAL_PLUS=false
+    - PY=3.6 PYSAL_PYPI=false PYSAL_PLUS=true
+    - PY=3.6 PYSAL_PYPI=false PYSAL_PLUS=false
+    - PY=3.7 PYSAL_PYPI=true PYSAL_PLUS=true
+    - PY=3.7 PYSAL_PYPI=true PYSAL_PLUS=false
+    - PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=true
+    - PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=false
 
 matrix:
   allow_failures:
