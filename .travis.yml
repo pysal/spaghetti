@@ -49,8 +49,14 @@ install:
     fi;
 
 script:
-  - python setup.py sdist >/dev/null
-  - nosetests --verbose --with-doctest --with-coverage --cover-package=spaghetti;
+  - if [[ $TRAVIS_JOB_NAME == python-* ]]; then
+      travis_wait 45 nosetests --verbose --with-coverage --cover-package=spaghetti ;
+    fi
+
+  - if [[ $TRAVIS_JOB_NAME == 'tarball' ]]; then
+      pip wheel . -w dist --no-deps ;
+      twine check dist/* ;
+    fi
 
 notifications:
     email:
