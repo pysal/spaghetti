@@ -70,7 +70,7 @@ install:
 
 script:
   - if [[ $TRAVIS_JOB_NAME == python-* ]]; then
-      travis_wait 45 nosetests --verbose --with-coverage --cover-package=spaghetti ;
+      travis_wait 45 nosetests --verbose --with-coverage --with-doctest --cover-package=spaghetti ;
     fi
 
   - if [[ $TRAVIS_JOB_NAME == tarball* ]]; then
