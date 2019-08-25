@@ -55,6 +55,7 @@ before_install:
     conda info --all
 
 install:
+  - pip install -e . --no-deps --force-reinstall
   - if "$PYSAL_PYPI"; then
         echo 'testing conda libpysal' && conda install --yes libpysal;
         else echo 'testing git libpysal';
