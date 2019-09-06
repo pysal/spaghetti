@@ -81,9 +81,9 @@ script:
 notifications:
     email:
         recipients:
-          - sjsrey@gmail.com
-          - levi.john.wolf@gmail.com
-          - jgaboardi@gmail.com
+          - sjsrey+travis@gmail.com
+          - levi.john.wolf+travis@gmail.com
+          - jgaboardi+travis@gmail.com
         on_success: change
         on_failure: change
 
