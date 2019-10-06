@@ -2110,8 +2110,7 @@ class Network:
         )
 
     def split_arcs(self, distance):
-        """Split all of the arcs in the network at either a
-        fixed distance or a fixed number of arcs.
+        """Split all of the arcs in the network at either a fixed distance.
         
         Parameters
         -----------
