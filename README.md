@@ -11,40 +11,11 @@ SPAtial GrapHs: nETworks, Topology, & Inference
 
 
 
-**Build & Versions**
-
-[![PyPI version](https://badge.fury.io/py/spaghetti.svg)](https://badge.fury.io/py/spaghetti) [![GitHub version](https://img.shields.io/github/release/pysal/spaghetti.svg)](https://img.shields.io/github/release/pysal/spaghetti) [![Build Status](https://travis-ci.org/pysal/spaghetti.svg?branch=master)](https://travis-ci.org/pysal/spaghetti) [![Documentation](https://img.shields.io/static/v1.svg?label=docs&message=current&color=9cf)](http://pysal.org/spaghetti/) [![Coverage Status](https://coveralls.io/repos/github/pysal/spaghetti/badge.svg)](https://coveralls.io/github/pysal/spaghetti)
-
-
-**Anaconda**
-
-[![Anaconda-Server Badge](https://anaconda.org/conda-forge/spaghetti/badges/version.svg)](https://anaconda.org/conda-forge/spaghetti) [![Anaconda-Server Badge](https://anaconda.org/conda-forge/spaghetti/badges/platforms.svg)](https://anaconda.org/conda-forge/spaghetti) [![Anaconda-Server Badge](https://anaconda.org/conda-forge/spaghetti/badges/downloads.svg)](https://anaconda.org/conda-forge/spaghetti) [![Anaconda-Server Badge](https://anaconda.org/conda-forge/spaghetti/badges/installer/conda.svg)](https://conda.anaconda.org/conda-forge)
-
-**Issues & Pull Requests**
-
-[![GitHub issues open](https://img.shields.io/github/issues/pysal/spaghetti.svg?maxAge=3600)](https://github.com/pysal/spaghetti/issues) [![GitHub issues closed](https://img.shields.io/github/issues-closed/pysal/spaghetti.svg?maxAge=3600)](https://github.com/pysal/spaghetti/issues) ![Github pull requests open](https://img.shields.io/github/issues-pr/pysal/spaghetti.svg) ![Github pull requests closed](https://img.shields.io/github/issues-pr-closed/pysal/spaghetti.svg)
-
-**Commit Activity**
-
-![Github commit activity](https://img.shields.io/github/commit-activity/y/pysal/spaghetti.svg) ![Github commit activity](https://img.shields.io/github/commit-activity/4w/pysal/spaghetti.svg) ![Github commit activity](https://img.shields.io/github/commit-activity/w/pysal/spaghetti.svg) 
-
-
-**Community & GitHub Stats**
-
-![Github contributors](https://img.shields.io/github/contributors/pysal/spaghetti.svg) [![Gitter](https://badges.gitter.im/pysal/Spaghetti.svg)](https://gitter.im/pysal/Spaghetti?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) ![Github forks](https://img.shields.io/github/forks/pysal/spaghetti.svg?style=social&label=Forks) ![Github stars](https://img.shields.io/github/stars/pysal/spaghetti.svg?style=social&label=Stars) ![Github watchers](https://img.shields.io/github/watchers/pysal/spaghetti.svg?style=social&label=Watchers)
-
-**Languages**
-
-![Pypi python versions](https://img.shields.io/pypi/pyversions/spaghetti.svg) ![Github languages](https://img.shields.io/github/languages/count/pysal/spaghetti.svg) ![Github top language](https://img.shields.io/github/languages/top/pysal/spaghetti.svg)
-
-
-**Licensing & Citation**
-
-[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause) [![DOI](https://zenodo.org/badge/88305306.svg)](https://zenodo.org/badge/latestdoi/88305306)
-
-**Misc.**
-
-![Github search hit counter](https://img.shields.io/github/search/pysal/spaghetti/goto.svg) ![Github code size in bytes](https://img.shields.io/github/languages/code-size/pysal/spaghetti.svg) ![Github repo size in bytes](https://img.shields.io/github/repo-size/pysal/spaghetti.svg) [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+|[![PyPI version](https://badge.fury.io/py/spaghetti.svg)](https://badge.fury.io/py/spaghetti)| [![Anaconda-Server Badge](https://anaconda.org/conda-forge/spaghetti/badges/version.svg)](https://anaconda.org/conda-forge/spaghetti) | [![Anaconda-Server Badge](https://anaconda.org/conda-forge/spaghetti/badges/downloads.svg)](https://anaconda.org/conda-forge/spaghetti) | [![Gitter](https://badges.gitter.im/pysal/Spaghetti.svg)](https://gitter.im/pysal/Spaghetti?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+|:---:|:---:|:---:|:---:|
+|[![Build Status](https://travis-ci.org/pysal/spaghetti.svg?branch=master)](https://travis-ci.org/pysal/spaghetti) | [![Documentation](https://img.shields.io/static/v1.svg?label=docs&message=current&color=9cf)](http://pysal.org/spaghetti/) | [![Coverage Status](https://coveralls.io/repos/github/pysal/spaghetti/badge.svg)](https://coveralls.io/github/pysal/spaghetti) | [![Anaconda-Server Badge](https://anaconda.org/conda-forge/spaghetti/badges/installer/conda.svg)](https://conda.anaconda.org/conda-forge)
+|[![GitHub issues open](https://img.shields.io/github/issues/pysal/spaghetti.svg?maxAge=3600)](https://github.com/pysal/spaghetti/issues) | ![Github pull requests open](https://img.shields.io/github/issues-pr/pysal/spaghetti.svg) | ![Pypi python versions](https://img.shields.io/pypi/pyversions/spaghetti.svg) | [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
+|[![GitHub issues closed](https://img.shields.io/github/issues-closed/pysal/spaghetti.svg?maxAge=3600)](https://github.com/pysal/spaghetti/issues) | ![Github pull requests closed](https://img.shields.io/github/issues-pr-closed/pysal/spaghetti.svg) | [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) | [![DOI](https://zenodo.org/badge/88305306.svg)](https://zenodo.org/badge/latestdoi/88305306)
 
 --------------------------------------
 
