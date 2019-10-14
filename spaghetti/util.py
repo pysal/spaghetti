@@ -44,7 +44,7 @@ def compute_length(v0, v1):
     
     """
 
-    euc_dist = np.sqrt((v0[0] - v1[0]) ** 2 + (v0[1] - v1[1]) ** 2)
+    euc_dist = cg.standalone.get_points_dist(v0, v1)
 
     return euc_dist
 
