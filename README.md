@@ -7,9 +7,11 @@ SPAtial GrapHs: nETworks, Topology, & Inference
 
 *An example of snapping observation points to a network and plotting:*
 
-![snap_plot](figs/snap_plot.png)
+![snap_plot](figs/snap_plot.png =10x5)
 
-
+<p align="center">
+<img src="figs/snap_plot.png" width="650" height="450" />
+</p>
 
 |[![PyPI version](https://badge.fury.io/py/spaghetti.svg)](https://badge.fury.io/py/spaghetti)| [![Anaconda-Server Badge](https://anaconda.org/conda-forge/spaghetti/badges/version.svg)](https://anaconda.org/conda-forge/spaghetti) | [![Anaconda-Server Badge](https://anaconda.org/conda-forge/spaghetti/badges/downloads.svg)](https://anaconda.org/conda-forge/spaghetti) | [![Gitter](https://badges.gitter.im/pysal/Spaghetti.svg)](https://gitter.im/pysal/Spaghetti?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 |:---:|:---:|:---:|:---:|
