@@ -1549,7 +1549,7 @@ class Network:
         >>> s2d_dist = ntw.allneighbordistances('crimes',
         ...                                     destpattern='schools')
         >>> s2d_dist[0,0], s2d_dist[1,0]
-        (4520.72353741989, 6340.422971967316)
+        (4520.72353741989, 6340.422971967315)
         
         
         >>> s2d_dist, tree = ntw.allneighbordistances('schools',
