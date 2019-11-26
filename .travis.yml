@@ -60,7 +60,7 @@ install:
   - pip install -e . --no-deps --force-reinstall
   - if "$PYSAL_PYPI"; then
         echo 'testing conda libpysal' && conda install --yes libpysal;
-        else echo 'testing git libpysal';
+    else echo 'testing git libpysal';
         git clone https://github.com/pysal/libpysal.git;
         cd libpysal; pip install .; cd ../;
     fi;
