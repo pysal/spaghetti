@@ -2,7 +2,6 @@ language: minimal
 sudo: false
 
 matrix:
-  fast_finish: true
   include:
     - name: "python-3.6-pypi"
       env: PY=3.6 PYSAL_PYPI=true PYSAL_PLUS=false
