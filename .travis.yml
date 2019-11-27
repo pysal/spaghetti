@@ -2,7 +2,6 @@ language: minimal
 sudo: false
 
 matrix:
-  fast_finish: true
   include:
     - name: "python-3.6-pypi"
       env: PY=3.6 PYSAL_PYPI=true PYSAL_PLUS=false
@@ -58,24 +57,28 @@ before_install:
 
 install:
   - pip install -e . --no-deps --force-reinstall
-  - if "$PYSAL_PYPI"; then
-        echo 'testing conda libpysal' && conda install --yes libpysal;
+  - if [ "$PYSAL_PYPI" == true ]; then
+        echo 'testing conda libpysal';
+        conda install --yes libpysal;
     else echo 'testing git libpysal';
         git clone https://github.com/pysal/libpysal.git;
-        cd libpysal; pip install .; cd ../;
+        cd libpysal;
+        pip install .;
+        cd ../;
     fi;
   - if [ "$PYSAL_PLUS" == true ]; then
-        echo 'plus testing'; conda install --yes --file requirements_plus.txt;
+        echo 'plus testing';
+        conda install --yes --file requirements_plus.txt;
     fi;
 
 script:
   - if [[ $TRAVIS_JOB_NAME == python-* ]]; then
-      travis_wait 45 nosetests --verbose --with-coverage --with-doctest --cover-package=spaghetti ;
+      travis_wait 45 nosetests --verbose --with-coverage --with-doctest --cover-package=spaghetti;
     fi
 
   - if [[ $TRAVIS_JOB_NAME == tarball* ]]; then
-      pip wheel . -w dist --no-deps ;
-      twine check dist/* ;
+      pip wheel . -w dist --no-deps;
+      twine check dist/*;
     fi
 
 notifications:
