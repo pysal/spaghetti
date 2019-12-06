@@ -2,8 +2,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>spaghetti.Network.split_arcs &#8212; spaghetti v1.3.1 Manual</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -122,28 +121,22 @@
 <h1>spaghetti.Network.split_arcs<a class="headerlink" href="#spaghetti-network-split-arcs" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="spaghetti.Network.split_arcs">
-<code class="descclassname">Network.</code><code class="descname">split_arcs</code><span class="sig-paren">(</span><em>distance</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.split_arcs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.split_arcs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">split_arcs</code><span class="sig-paren">(</span><em class="sig-param">distance</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.split_arcs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.split_arcs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Split all of the arcs in the network at a fixed distance.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>distance</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd><p class="first last">The distance at which arcs are split.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>distance</strong><span class="classifier">float</span></dt><dd><p>The distance at which arcs are split.</p>
 </dd>
 </dl>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>split_network</strong> <span class="classifier-delimiter">:</span> <span class="classifier">spaghetti.Network</span></dt>
-<dd><p class="first last">newly instantiated <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>split_network</strong><span class="classifier">spaghetti.Network</span></dt><dd><p>newly instantiated <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object.</p>
 </dd>
 </dl>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p class="rubric">Examples</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">spaghetti</span> <span class="k">as</span> <span class="nn">spgh</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span> <span class="o">=</span> <span class="n">spgh</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;streets.shp&#39;</span><span class="p">))</span>
@@ -176,7 +169,7 @@
     </p>
     <p>
         &copy; Copyright 2018, pysal developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.<br/>
     </p>
   </div>
 </footer>
