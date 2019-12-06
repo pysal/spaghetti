@@ -52,6 +52,7 @@ before_install:
     conda config --set channel_priority strict
     conda config --set safety_checks disabled
     conda create --name TEST python=$PY --file requirements.txt --file requirements_dev.txt --file requirements_docs.txt --file requirements_tests.txt
+    pip install 'sphinx_bootstrap_theme>=0.7.0' --force-reinstall
     source activate TEST
     conda info --all
 
