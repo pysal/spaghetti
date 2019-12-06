@@ -248,10 +248,17 @@ autodoc_default_options = {"members": True}
 # display the source code for Plot directive
 plot_include_source = True
 
-
 def setup(app):
     app.add_stylesheet("pysal-styles.css")
 
-
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {"https://docs.python.org/3.6/": None}
+intersphinx_mapping = {
+    "numpy": ("https://docs.scipy.org/doc/numpy", None),
+    "pandas": ("https://pandas.pydata.org/pandas-docs/stable/", None),
+    "geopandas": ("https://geopandas.readthedocs.io/en/latest/", None),
+    "sklearn": ("https://scikit-learn.org/stable/", None),
+    "giddy": ("https://giddy.readthedocs.io/en/latest/", None),
+    "libpysal": ("https://pysal.org/libpysal/", None),
+    "esda": ("https://esda.readthedocs.io/en/latest/", None),
+    "region": ("https://region.readthedocs.io/en/latest/", None),
+}
