@@ -2,8 +2,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>spaghetti.SimulatedPointPattern &#8212; spaghetti v1.3.1 Manual</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -122,68 +121,58 @@
 <h1>spaghetti.SimulatedPointPattern<a class="headerlink" href="#spaghetti-simulatedpointpattern" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="spaghetti.SimulatedPointPattern">
-<em class="property">class </em><code class="descclassname">spaghetti.</code><code class="descname">SimulatedPointPattern</code><a class="reference internal" href="../_modules/spaghetti/network.html#SimulatedPointPattern"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.SimulatedPointPattern" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">spaghetti.</code><code class="sig-name descname">SimulatedPointPattern</code><a class="reference internal" href="../_modules/spaghetti/network.html#SimulatedPointPattern"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.SimulatedPointPattern" title="Permalink to this definition">¶</a></dt>
 <dd><p>Struct style class to mirror the <code class="docutils literal notranslate"><span class="pre">PointPattern</span></code> class. If the
 <code class="docutils literal notranslate"><span class="pre">PointPattern</span></code> class has methods, it might make sense to make this
 a child of that class. This class is not intended to be used by the
 external user.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>npoints</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd><p class="first last">The number of points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>npoints</strong><span class="classifier">int</span></dt><dd><p>The number of points.</p>
 </dd>
-<dt><strong>obs_to_arc</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
-<dd><p class="first last">Keys are arc ids (tuple). Values are snapped point information
+<dt><strong>obs_to_arc</strong><span class="classifier">dict</span></dt><dd><p>Keys are arc ids (tuple). Values are snapped point information
 (<code class="docutils literal notranslate"><span class="pre">dict</span></code>).  Within the snapped point information (<code class="docutils literal notranslate"><span class="pre">dict</span></code>)
 keys are observation ids (<code class="docutils literal notranslate"><span class="pre">int</span></code>), and values are snapped
 coordinates.</p>
 </dd>
-<dt><strong>obs_to_vertex</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
-<dd><p class="first last">List of incident network vertices to snapped observation points
+<dt><strong>obs_to_vertex</strong><span class="classifier">list</span></dt><dd><p>List of incident network vertices to snapped observation points
 converted from a <code class="docutils literal notranslate"><span class="pre">default_dict</span></code>. Originally in the form of
 paired left/right nearest network vertices {netvtx1: obs_id1,
 netvtx2: obs_id1, netvtx1: obs_id2… netvtx1: obs_idn}, then
 simplified to a list in the form
 [netvtx1, netvtx2, netvtx1, netvtx2, …].</p>
 </dd>
-<dt><strong>dist_to_vertex</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
-<dd><p class="first last">Keys are observations ids (<code class="docutils literal notranslate"><span class="pre">int</span></code>). Values are distance lookup
+<dt><strong>dist_to_vertex</strong><span class="classifier">dict</span></dt><dd><p>Keys are observations ids (<code class="docutils literal notranslate"><span class="pre">int</span></code>). Values are distance lookup
 (<code class="docutils literal notranslate"><span class="pre">dict</span></code>). Within distance lookup (<code class="docutils literal notranslate"><span class="pre">dict</span></code>) keys are the two
 incident vertices of the arc and values are distance to each of
 those arcs.</p>
 </dd>
-<dt><strong>snapped_coordinates</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
-<dd><p class="first last">Keys are the point ids (<code class="docutils literal notranslate"><span class="pre">int</span></code>). Values are the snapped x,y
+<dt><strong>snapped_coordinates</strong><span class="classifier">dict</span></dt><dd><p>Keys are the point ids (<code class="docutils literal notranslate"><span class="pre">int</span></code>). Values are the snapped x,y
 coordinates (tuple).</p>
 </dd>
-<dt><strong>snap_dist</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">Flag as <code class="docutils literal notranslate"><span class="pre">True</span></code> to include the distance from the original
+<dt><strong>snap_dist</strong><span class="classifier">bool</span></dt><dd><p>Flag as <code class="docutils literal notranslate"><span class="pre">True</span></code> to include the distance from the original
 location to the snapped location along the network. Default
 is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 </dd>
 </dl>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <dl class="method">
 <dt id="spaghetti.SimulatedPointPattern.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#SimulatedPointPattern.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.SimulatedPointPattern.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#SimulatedPointPattern.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.SimulatedPointPattern.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
 <p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#spaghetti.SimulatedPointPattern.__init__" title="spaghetti.SimulatedPointPattern.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>()</td>
-<td>Initialize self.</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#spaghetti.SimulatedPointPattern.__init__" title="spaghetti.SimulatedPointPattern.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>()</p></td>
+<td><p>Initialize self.</p></td>
 </tr>
 </tbody>
 </table>
@@ -211,7 +200,7 @@ is <code class="docutils literal notranslate"><span class="pre">False</span></co
     </p>
     <p>
         &copy; Copyright 2018, pysal developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.<br/>
     </p>
   </div>
 </footer>
