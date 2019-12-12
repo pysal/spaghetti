@@ -49,9 +49,8 @@ class Network:
     
     w_components : bool
         Set to ``False`` to not record connected components from a
-        `libpysal.weights.weights.W 
-        <https://libpysal.readthedocs.io/en/latest/generated/
-        libpysal.weights.W.html#libpysal.weights.W>`_
+        `libpysal.weights.W 
+        <https://pysal.org/libpysal/generated/libpysal.weights.W.html#libpysal.weights.W>`_
         object. Default is True.
         
         
@@ -108,7 +107,7 @@ class Network:
         All vertices with degree 2 that are not in an isolated
         island ring (loop) component
     
-    w_network : `libpysal.weights.weights.W <https://libpysal.readthedocs.io/en/latest/generated/libpysal.weights.W.html#libpysal.weights.W>`_
+    w_network : `libpysal.weights.W <https://pysal.org/libpysal/generated/libpysal.weights.W.html#libpysal.weights.W>`_
         Weights object created from the network arcs
     
     network_n_components : int
@@ -127,7 +126,7 @@ class Network:
         as ``True`` if the component is a closed ring, otherwise
         ``False``.
     
-    w_graph : `libpysal.weights.weights.W <https://libpysal.readthedocs.io/en/latest/generated/libpysal.weights.W.html#libpysal.weights.W>`_
+    w_graph : `libpysal.weights.W <https://pysal.org/libpysal/generated/libpysal.weights.W.html#libpysal.weights.W>`_
         Weights object created from the graph edges
     
     graph_n_components : int
@@ -277,12 +276,12 @@ class Network:
 
     def extract_components(self, w, graph=False):
         """Extract connected component information from a
-        ``libpysal.weights.weights.W`` object
+        ``libpysal.weights.W`` object
         
         Parameters
         ----------
         
-        w : `libpysal.weights.weights.W <https://libpysal.readthedocs.io/en/latest/generated/libpysal.weights.W.html#libpysal.weights.W>`_
+        w : `libpysal.weights.W <https://pysal.org/libpysal/generated/libpysal.weights.W.html#libpysal.weights.W>`_
             Weights object created from the network segments (either
             raw or graph-theoretic)
         
@@ -706,7 +705,7 @@ class Network:
         Returns
         -------
         
-         W : `libpysal.weights.weights.W <https://libpysal.readthedocs.io/en/latest/generated/libpysal.weights.W.html#libpysal.weights.W>`_
+         W : `libpysal.weights.W <https://pysal.org/libpysal/generated/libpysal.weights.W.html#libpysal.weights.W>`_
             A ``pysal`` W Object representing the binary adjacency of
             the network.
         
@@ -844,7 +843,7 @@ class Network:
         Returns
         -------
         
-        w : `libpysal.weights.weights.W <https://libpysal.readthedocs.io/en/latest/generated/libpysal.weights.W.html#libpysal.weights.W>`_
+        w : `libpysal.weights.W <https://pysal.org/libpysal/generated/libpysal.weights.W.html#libpysal.weights.W>`_
             A ``pysal`` W Object representing the binary adjacency of
             the network.
         
