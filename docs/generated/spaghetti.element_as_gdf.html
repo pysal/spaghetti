@@ -12,10 +12,6 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="../_static/pysal_favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -25,6 +21,10 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
   </head><body>
 
@@ -115,66 +115,10 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-12 content">
+    <div class="body col-md-12 content" role="main">
       
   <div class="section" id="spaghetti-element-as-gdf">
 <h1>spaghetti.element_as_gdf<a class="headerlink" href="#spaghetti-element-as-gdf" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="spaghetti.element_as_gdf">
-<code class="sig-prename descclassname">spaghetti.</code><code class="sig-name descname">element_as_gdf</code><span class="sig-paren">(</span><em class="sig-param">net</em>, <em class="sig-param">vertices=False</em>, <em class="sig-param">arcs=False</em>, <em class="sig-param">pp_name=None</em>, <em class="sig-param">snapped=False</em>, <em class="sig-param">id_col='id'</em>, <em class="sig-param">geom_col='geometry'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#element_as_gdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.element_as_gdf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a <a class="reference external" href="http://geopandas.org/data_structures.html#geodataframe">geopandas.GeoDataFrame</a> of
-network elements. This can be (a) the vertices of a network; (b) the
-arcs of a network; (c) both the vertices and arcs of the network;
-(d) raw point pattern associated with the network; or (e) snapped
-point pattern of (d).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>net</strong><span class="classifier">spaghetti.Network</span></dt><dd><p>network object</p>
-</dd>
-<dt><strong>vertices</strong><span class="classifier">bool</span></dt><dd><p>Extract the network vertices. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
-</dd>
-<dt><strong>arcs</strong><span class="classifier">bool</span></dt><dd><p>Extract the network arcs. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
-</dd>
-<dt><strong>pp_name</strong><span class="classifier">str</span></dt><dd><p>Name of the network <code class="docutils literal notranslate"><span class="pre">PointPattern</span></code> to extract.
-Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
-</dd>
-<dt><strong>snapped</strong><span class="classifier">bool</span></dt><dd><p>If extracting a network <code class="docutils literal notranslate"><span class="pre">PointPattern</span></code>, set to <code class="docutils literal notranslate"><span class="pre">True</span></code> for
-snapped point locations along the network. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
-</dd>
-<dt><strong>id_col</strong><span class="classifier">str</span></dt><dd><p>GeoDataFrame column name for IDs. Default is <code class="docutils literal notranslate"><span class="pre">'id'</span></code>.</p>
-</dd>
-<dt><strong>geom_col</strong><span class="classifier">str</span></dt><dd><p>GeoDataFrame column name for geometry. Default is
-<code class="docutils literal notranslate"><span class="pre">'geometry'</span></code>.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>points</strong><span class="classifier">geopandas.GeoDataFrame</span></dt><dd><p>Network point elements (either vertices or <code class="docutils literal notranslate"><span class="pre">PointPattern</span></code>
-points) as a <cite>geopandas.GeoDataFrame</cite> of <code class="docutils literal notranslate"><span class="pre">shapely.Point</span></code>
-objects with an <code class="docutils literal notranslate"><span class="pre">id</span></code> column and <code class="docutils literal notranslate"><span class="pre">geometry</span></code> column.</p>
-</dd>
-<dt><strong>lines</strong><span class="classifier">geopandas.GeoDataFrame</span></dt><dd><p>Network arc elements as a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> of
-<code class="docutils literal notranslate"><span class="pre">shapely.LineString</span></code> objects with an <code class="docutils literal notranslate"><span class="pre">id</span></code> column and
-<code class="docutils literal notranslate"><span class="pre">geometry</span></code> column.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>KeyError</strong></dt><dd><p>In order to extract a <code class="docutils literal notranslate"><span class="pre">PointPattern</span></code> it must already be a part
-of the <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object. This exception is raised
-when a <code class="docutils literal notranslate"><span class="pre">PointPattern</span></code> is being extracted that does not exist
-within the <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<p class="rubric">Notes</p>
-<p>This function requires <a class="reference external" href="http://geopandas.org">geopandas</a>.</p>
-</dd></dl>
-
 </div>
 
 

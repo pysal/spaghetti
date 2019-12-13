@@ -12,10 +12,6 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="../_static/pysal_favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -25,6 +21,10 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
   </head><body>
 
@@ -115,62 +115,10 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-12 content">
+    <div class="body col-md-12 content" role="main">
       
   <div class="section" id="spaghetti-network-networkk">
 <h1>spaghetti.Network.NetworkK<a class="headerlink" href="#spaghetti-network-networkk" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
-<dt id="spaghetti.Network.NetworkK">
-<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">NetworkK</code><span class="sig-paren">(</span><em class="sig-param">pointpattern</em>, <em class="sig-param">nsteps=10</em>, <em class="sig-param">permutations=99</em>, <em class="sig-param">threshold=0.5</em>, <em class="sig-param">distribution='uniform'</em>, <em class="sig-param">lowerbound=None</em>, <em class="sig-param">upperbound=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.NetworkK"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.NetworkK" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes a network constrained K-Function</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>pointpattern</strong><span class="classifier">spaghetti.network.PointPattern</span></dt><dd><p>A spaghetti point pattern object.</p>
-</dd>
-<dt><strong>nsteps</strong><span class="classifier">int</span></dt><dd><p>The number of steps at which the count of the nearest
-neighbors is computed.</p>
-</dd>
-<dt><strong>permutations</strong><span class="classifier">int</span></dt><dd><p>The number of permutations to perform. Default is 99.</p>
-</dd>
-<dt><strong>threshold</strong><span class="classifier">float</span></dt><dd><p>The level at which significance is computed.
-(0.5 would be 97.5% and 2.5%).</p>
-</dd>
-<dt><strong>distribution</strong><span class="classifier">str</span></dt><dd><p>The distribution from which random points are sampled
-Either <code class="docutils literal notranslate"><span class="pre">&quot;uniform&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;poisson&quot;</span></code>.</p>
-</dd>
-<dt><strong>lowerbound</strong><span class="classifier">float</span></dt><dd><p>The lower bound at which the K-function is computed.
-Default is 0.</p>
-</dd>
-<dt><strong>upperbound</strong><span class="classifier">float</span></dt><dd><p>The upper bound at which the K-function is computed.
-Defaults to the maximum observed nearest neighbor distance.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>NetworkK</strong><span class="classifier">spaghetti.analysis.NetworkK</span></dt><dd><p>A network K class instance.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<p class="rubric">Notes</p>
-<p>Based on <a class="reference internal" href="../references.html#okabe2001" id="id1">[OY01]</a>.</p>
-<p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">spaghetti</span> <span class="k">as</span> <span class="nn">spgh</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span> <span class="o">=</span> <span class="n">spgh</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">in_data</span><span class="o">=</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;streets.shp&#39;</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pt_str</span> <span class="o">=</span> <span class="s1">&#39;crimes&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">in_data</span> <span class="o">=</span> <span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.shp&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pt_str</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span><span class="n">in_data</span><span class="p">,</span> <span class="n">pt_str</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">crimes</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s1">&#39;crimes&#39;</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">simulate_observations</span><span class="p">(</span><span class="n">crimes</span><span class="o">.</span><span class="n">npoints</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">kres</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">NetworkK</span><span class="p">(</span><span class="n">crimes</span><span class="p">,</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">nsteps</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">kres</span><span class="o">.</span><span class="n">lowerenvelope</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="go">10</span>
-</pre></div>
-</div>
-</dd></dl>
-
 </div>
 
 
