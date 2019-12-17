@@ -4,7 +4,7 @@
 # You can set these variables from the command line.
 SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
-SPHINXPROJ    = PACKAGE_NAME
+SPHINXPROJ    = spaghetti
 SOURCEDIR     = .
 BUILDDIR      = _build
 
@@ -23,7 +23,7 @@ github:
 	@make html
 
 sync:
-	@rsync -avh _build/html/ ../docs/ --delete
+	@rsync -avh --exclude '.nojekyll' _build/html/ ../docs/ --delete
 	@make clean
 
 clean:
