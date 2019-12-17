@@ -12,6 +12,10 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="../_static/pysal_favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -21,10 +25,6 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js "></script>
-<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
-<script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
-<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
   </head><body>
 
@@ -115,10 +115,29 @@
 
 <div class="container">
   <div class="row">
-    <div class="body col-md-12 content" role="main">
+    <div class="col-md-12 content">
       
   <div class="section" id="spaghetti-network-extract-components">
 <h1>spaghetti.Network.extract_components<a class="headerlink" href="#spaghetti-network-extract-components" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="spaghetti.Network.extract_components">
+<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">extract_components</code><span class="sig-paren">(</span><em class="sig-param">w</em>, <em class="sig-param">graph=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.extract_components"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.extract_components" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract connected component information from a
+libpysal.weights.W object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>w</strong><span class="classifier">libpysal.weights.W</span></dt><dd><p>Weights object created from the network segments (either
+raw or graph-theoretic)</p>
+</dd>
+<dt><strong>graph</strong><span class="classifier">bool</span></dt><dd><p>Flag for raw network [False] or graph-theoretic network
+<code class="docutils literal notranslate"><span class="pre">True</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 
 
@@ -141,7 +160,7 @@
     </p>
     <p>
         &copy; Copyright 2018, pysal developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.0.<br/>
     </p>
   </div>
 </footer>

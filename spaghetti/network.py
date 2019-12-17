@@ -276,12 +276,12 @@ class Network:
 
     def extract_components(self, w, graph=False):
         """Extract connected component information from a
-        ``libpysal.weights.W`` object
+        libpysal.weights.W object
         
         Parameters
         ----------
         
-        w : `libpysal.weights.W <https://pysal.org/libpysal/generated/libpysal.weights.W.html#libpysal.weights.W>`_
+        w : libpysal.weights.W
             Weights object created from the network segments (either
             raw or graph-theoretic)
         
