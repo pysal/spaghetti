@@ -243,7 +243,7 @@ numpydoc_show_class_members = False
 numpydoc_use_plots = True
 class_members_toctree = True
 numpydoc_show_inherited_class_members = True
-numpydoc_xref_param_type=True
+numpydoc_xref_param_type = True
 
 # automatically document class members
 autodoc_default_options = {"members": True, "undoc-members": True}
