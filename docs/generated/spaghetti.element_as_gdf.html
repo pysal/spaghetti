@@ -127,35 +127,35 @@ network elements. This can be (a) the vertices of a network; (b) the
 arcs of a network; (c) both the vertices and arcs of the network;
 (d) raw point pattern associated with the network; or (e) snapped
 point pattern of (d).</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>net</strong><span class="classifier">spaghetti.Network</span></dt><dd><p>network object</p>
+<dd class="field-odd"><dl>
+<dt><strong>net</strong><span class="classifier"><a class="reference internal" href="spaghetti.Network.html#spaghetti.Network" title="spaghetti.Network"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network</span></code></a></span></dt><dd><p>network object</p>
 </dd>
-<dt><strong>vertices</strong><span class="classifier">bool</span></dt><dd><p>Extract the network vertices. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<dt><strong>vertices</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.7)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>Extract the network vertices. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 </dd>
-<dt><strong>arcs</strong><span class="classifier">bool</span></dt><dd><p>Extract the network arcs. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<dt><strong>arcs</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.7)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>Extract the network arcs. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 </dd>
-<dt><strong>pp_name</strong><span class="classifier">str</span></dt><dd><p>Name of the network <code class="docutils literal notranslate"><span class="pre">PointPattern</span></code> to extract.
+<dt><strong>pp_name</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>Name of the network <code class="docutils literal notranslate"><span class="pre">PointPattern</span></code> to extract.
 Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 </dd>
-<dt><strong>snapped</strong><span class="classifier">bool</span></dt><dd><p>If extracting a network <code class="docutils literal notranslate"><span class="pre">PointPattern</span></code>, set to <code class="docutils literal notranslate"><span class="pre">True</span></code> for
+<dt><strong>snapped</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.7)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>If extracting a network <code class="docutils literal notranslate"><span class="pre">PointPattern</span></code>, set to <code class="docutils literal notranslate"><span class="pre">True</span></code> for
 snapped point locations along the network. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 </dd>
-<dt><strong>id_col</strong><span class="classifier">str</span></dt><dd><p>GeoDataFrame column name for IDs. Default is <code class="docutils literal notranslate"><span class="pre">'id'</span></code>.</p>
+<dt><strong>id_col</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>GeoDataFrame column name for IDs. Default is <code class="docutils literal notranslate"><span class="pre">'id'</span></code>.</p>
 </dd>
-<dt><strong>geom_col</strong><span class="classifier">str</span></dt><dd><p>GeoDataFrame column name for geometry. Default is
+<dt><strong>geom_col</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>GeoDataFrame column name for geometry. Default is
 <code class="docutils literal notranslate"><span class="pre">'geometry'</span></code>.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>points</strong><span class="classifier">geopandas.GeoDataFrame</span></dt><dd><p>Network point elements (either vertices or <code class="docutils literal notranslate"><span class="pre">PointPattern</span></code>
+<dd class="field-even"><dl>
+<dt><strong>points</strong><span class="classifier"><a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.6.1+29.g4f7036a)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a></span></dt><dd><p>Network point elements (either vertices or <code class="docutils literal notranslate"><span class="pre">PointPattern</span></code>
 points) as a <cite>geopandas.GeoDataFrame</cite> of <code class="docutils literal notranslate"><span class="pre">shapely.Point</span></code>
 objects with an <code class="docutils literal notranslate"><span class="pre">id</span></code> column and <code class="docutils literal notranslate"><span class="pre">geometry</span></code> column.</p>
 </dd>
-<dt><strong>lines</strong><span class="classifier">geopandas.GeoDataFrame</span></dt><dd><p>Network arc elements as a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> of
+<dt><strong>lines</strong><span class="classifier"><a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.6.1+29.g4f7036a)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a></span></dt><dd><p>Network arc elements as a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> of
 <code class="docutils literal notranslate"><span class="pre">shapely.LineString</span></code> objects with an <code class="docutils literal notranslate"><span class="pre">id</span></code> column and
 <code class="docutils literal notranslate"><span class="pre">geometry</span></code> column.</p>
 </dd>
@@ -163,7 +163,7 @@ objects with an <code class="docutils literal notranslate"><span class="pre">id<
 </dd>
 <dt class="field-odd">Raises</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>KeyError</strong></dt><dd><p>In order to extract a <code class="docutils literal notranslate"><span class="pre">PointPattern</span></code> it must already be a part
+<dt><a class="reference external" href="https://docs.python.org/3.7/library/exceptions.html#KeyError" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KeyError</span></code></a></dt><dd><p>In order to extract a <code class="docutils literal notranslate"><span class="pre">PointPattern</span></code> it must already be a part
 of the <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object. This exception is raised
 when a <code class="docutils literal notranslate"><span class="pre">PointPattern</span></code> is being extracted that does not exist
 within the <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object.</p>

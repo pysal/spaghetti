@@ -133,7 +133,7 @@
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Network&quot;</span><span class="p">,</span> <span class="s2">&quot;PointPattern&quot;</span><span class="p">,</span> <span class="s2">&quot;NetworkG&quot;</span><span class="p">,</span> <span class="s2">&quot;NetworkK&quot;</span><span class="p">,</span> <span class="s2">&quot;NetworkF&quot;</span><span class="p">]</span>
 
 
-<span class="k">class</span> <span class="nc">Network</span><span class="p">:</span>
+<div class="viewcode-block" id="Network"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network">[docs]</a><span class="k">class</span> <span class="nc">Network</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Spatially-constrained network representation and analytical</span>
 <span class="sd">    functionality. Naming conventions are as follows, (1) arcs and</span>
 <span class="sd">    vertices for the full network object, and (2) edges and nodes for</span>
@@ -145,8 +145,7 @@
 <span class="sd">    </span>
 <span class="sd">    in_data : {geopandas.GeoDataFrame, str}</span>
 <span class="sd">        The input geographic data. Either (1) a path to a shapefile</span>
-<span class="sd">        (str); or (2) a `geopandas.GeoDataFrame </span>
-<span class="sd">        &lt;http://geopandas.org/data_structures.html#geodataframe&gt;`_.</span>
+<span class="sd">        (str); or (2) a `geopandas.GeoDataFrame`.</span>
 <span class="sd">    </span>
 <span class="sd">    vertex_sig : int</span>
 <span class="sd">        Round the x and y coordinates of all vertices to ``vertex_sig``</span>
@@ -164,15 +163,13 @@
 <span class="sd">    </span>
 <span class="sd">    w_components : bool</span>
 <span class="sd">        Set to ``False`` to not record connected components from a</span>
-<span class="sd">        `libpysal.weights.W </span>
-<span class="sd">        &lt;https://pysal.org/libpysal/generated/libpysal.weights.W.html#libpysal.weights.W&gt;`_</span>
-<span class="sd">        object. Default is True.</span>
+<span class="sd">        `libpysal.weights.W` object. Default is ``True``.</span>
 <span class="sd">        </span>
 <span class="sd">        </span>
 <span class="sd">    weightings : {dict, bool}</span>
 <span class="sd">        If ``dict``, lists of weightings for each arc. If ``bool``,</span>
 <span class="sd">        ``True`` flags ``self.arc_lengths`` as the weightings,</span>
-<span class="sd">        ``False`` sets to no weightings. Default is ``False``.</span>
+<span class="sd">        False sets to no weightings. Default is `False.</span>
 <span class="sd">    </span>
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
@@ -208,7 +205,7 @@
 <span class="sd">        (2) a dict with the key being the id of the destination vertex</span>
 <span class="sd">        and the value being a list of the shortest path.</span>
 <span class="sd">    </span>
-<span class="sd">    distancematrix : `numpy.ndarray &lt;https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html&gt;`_</span>
+<span class="sd">    distancematrix : numpy.ndarray</span>
 <span class="sd">        all network vertices (non-observations) distance matrix.</span>
 <span class="sd">    </span>
 <span class="sd">    edges : list</span>
@@ -222,13 +219,13 @@
 <span class="sd">        All vertices with degree 2 that are not in an isolated</span>
 <span class="sd">        island ring (loop) component</span>
 <span class="sd">    </span>
-<span class="sd">    w_network : `libpysal.weights.W &lt;https://pysal.org/libpysal/generated/libpysal.weights.W.html#libpysal.weights.W&gt;`_</span>
+<span class="sd">    w_network : libpysal.weights.W`</span>
 <span class="sd">        Weights object created from the network arcs</span>
 <span class="sd">    </span>
 <span class="sd">    network_n_components : int</span>
 <span class="sd">        Count of connected components in the network.</span>
 <span class="sd">    </span>
-<span class="sd">    network_component_labels : `numpy.ndarray &lt;https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html&gt;`_</span>
+<span class="sd">    network_component_labels : `numpy.ndarray`</span>
 <span class="sd">        Component labels for networks arc</span>
 <span class="sd">    </span>
 <span class="sd">    network_component2arc : dict</span>
@@ -280,7 +277,7 @@
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<div class="viewcode-block" id="Network.__init__"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">in_data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">vertex_sig</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span>
@@ -350,7 +347,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">extract_components</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w_graph</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="n">as_graph</span><span class="p">)</span>
 
             <span class="c1"># sorted list of vertex ids</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">vertex_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vertex_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">values</span><span class="p">())</span></div>
 
 <div class="viewcode-block" id="Network._round_sig"><a class="viewcode-back" href="../../generated/spaghetti.Network._round_sig.html#spaghetti.Network._round_sig">[docs]</a>    <span class="k">def</span> <span class="nf">_round_sig</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Used internally to round the vertex to a set number of</span>
@@ -804,15 +801,15 @@
         <span class="k">return</span> <span class="n">nodes</span></div>
 
 <div class="viewcode-block" id="Network.contiguityweights"><a class="viewcode-back" href="../../generated/spaghetti.Network.contiguityweights.html#spaghetti.Network.contiguityweights">[docs]</a>    <span class="k">def</span> <span class="nf">contiguityweights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">weightings</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create a contiguity-based libpysal W object.</span>
+        <span class="sd">&quot;&quot;&quot;Create a contiguity-based ``W`` object.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        </span>
-<span class="sd">        graph : bool</span>
-<span class="sd">            ``{True, False}`` controls whether the W is generated using</span>
-<span class="sd">            the spatial representation or the graph representation.</span>
-<span class="sd">            Default is ``True``.</span>
+<span class="sd">        graph : bool (optional - default is ``True``)</span>
+<span class="sd">            ``{True, False}`` controls whether the ``W`` is generated</span>
+<span class="sd">            using the spatial representation (``False``) or the graph</span>
+<span class="sd">            representation (``True``).</span>
 <span class="sd">        </span>
 <span class="sd">        weightings : dict</span>
 <span class="sd">            dictionary of lists of weightings for each arc/edge.</span>
@@ -820,9 +817,8 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        </span>
-<span class="sd">         W : `libpysal.weights.W &lt;https://pysal.org/libpysal/generated/libpysal.weights.W.html#libpysal.weights.W&gt;`_</span>
-<span class="sd">            A ``pysal`` W Object representing the binary adjacency of</span>
-<span class="sd">            the network.</span>
+<span class="sd">         W : libpysal.weights.W</span>
+<span class="sd">            A ``W`` representing the binary adjacency of the network.</span>
 <span class="sd">        </span>
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
@@ -835,24 +831,25 @@
 <span class="sd">        &gt;&gt;&gt; import numpy as np</span>
 <span class="sd">        &gt;&gt;&gt; ntw = spgh.Network(examples.get_path(&#39;streets.shp&#39;))</span>
 <span class="sd">        </span>
-<span class="sd">        Snap point observations to the network with</span>
-<span class="sd">        attribute information.</span>
+<span class="sd">        Snap point observations to the network with attribute information.</span>
 <span class="sd">        </span>
-<span class="sd">        &gt;&gt;&gt; ntw.snapobservations(examples.get_path(&#39;crimes.shp&#39;),</span>
-<span class="sd">        ...                      &#39;crimes&#39;, attribute=True)</span>
+<span class="sd">        &gt;&gt;&gt; ntw.snapobservations(</span>
+<span class="sd">        ...     examples.get_path(&#39;crimes.shp&#39;), &#39;crimes&#39;, attribute=True</span>
+<span class="sd">        ... )</span>
 <span class="sd">        </span>
 <span class="sd">        Find counts per network arc.</span>
 <span class="sd">        </span>
-<span class="sd">        &gt;&gt;&gt; counts = ntw.count_per_link(ntw.pointpatterns[&#39;crimes&#39;]</span>
-<span class="sd">        ...                             .obs_to_arc, graph=False)</span>
+<span class="sd">        &gt;&gt;&gt; counts = ntw.count_per_link(</span>
+<span class="sd">        ...     ntw.pointpatterns[&#39;crimes&#39;].obs_to_arc, graph=False</span>
+<span class="sd">        ... )</span>
 <span class="sd">        &gt;&gt;&gt; counts[(50, 165)]</span>
 <span class="sd">        4</span>
 <span class="sd">        </span>
-<span class="sd">        Create a contiguity based W object.</span>
+<span class="sd">        Create a contiguity-based ``W`` object.</span>
 <span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; w = ntw.contiguityweights(graph=False)</span>
 <span class="sd">        </span>
-<span class="sd">        Using the W object, access to ESDA functionality is provided.</span>
+<span class="sd">        Using the ``W`` object, access to ``esda`` functionality is provided.</span>
 <span class="sd">        First, a vector of attributes is created for all edges</span>
 <span class="sd">        with observations.</span>
 <span class="sd">        </span>
@@ -865,7 +862,7 @@
 <span class="sd">        &gt;&gt;&gt; y[3]</span>
 <span class="sd">        3.0</span>
 <span class="sd">        </span>
-<span class="sd">        Next, a standard call ot Moran is made and the</span>
+<span class="sd">        Next, a standard call to ``esda.Moran`` is made and the</span>
 <span class="sd">        result placed into ``res``.</span>
 <span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; res = esda.moran.Moran(y, w, permutations=99)</span>
@@ -2411,7 +2408,7 @@
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">networkin</span><span class="p">:</span>
             <span class="bp">self</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">networkin</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="bp">self</span></div>
+        <span class="k">return</span> <span class="bp">self</span></div></div>
 
 
 <div class="viewcode-block" id="element_as_gdf"><a class="viewcode-back" href="../../generated/spaghetti.element_as_gdf.html#spaghetti.element_as_gdf">[docs]</a><span class="k">def</span> <span class="nf">element_as_gdf</span><span class="p">(</span>

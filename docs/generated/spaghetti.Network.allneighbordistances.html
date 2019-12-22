@@ -121,31 +121,31 @@
 <h1>spaghetti.Network.allneighbordistances<a class="headerlink" href="#spaghetti-network-allneighbordistances" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="spaghetti.Network.allneighbordistances">
-<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">allneighbordistances</code><span class="sig-paren">(</span><em class="sig-param">sourcepattern</em>, <em class="sig-param">destpattern=None</em>, <em class="sig-param">fill_diagonal=None</em>, <em class="sig-param">n_processes=None</em>, <em class="sig-param">gen_tree=False</em>, <em class="sig-param">snap_dist=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.allneighbordistances"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.allneighbordistances" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">allneighbordistances</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">sourcepattern</em>, <em class="sig-param">destpattern=None</em>, <em class="sig-param">fill_diagonal=None</em>, <em class="sig-param">n_processes=None</em>, <em class="sig-param">gen_tree=False</em>, <em class="sig-param">snap_dist=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.allneighbordistances"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.allneighbordistances" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute either all distances between <code class="docutils literal notranslate"><span class="pre">i</span></code> and <code class="docutils literal notranslate"><span class="pre">j</span></code> in a
 single point pattern or all distances between each <code class="docutils literal notranslate"><span class="pre">i</span></code> from a
 source pattern and all <code class="docutils literal notranslate"><span class="pre">j</span></code> from a destination pattern.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>sourcepattern</strong><span class="classifier">{str, spaghetti.network.PointPattern}</span></dt><dd><p>The key of a point pattern snapped to the network OR
+<dd class="field-odd"><dl>
+<dt><strong>sourcepattern</strong><span class="classifier">{<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.network.PointPattern</span></code>}</span></dt><dd><p>The key of a point pattern snapped to the network OR
 the full <code class="docutils literal notranslate"><span class="pre">spaghetti.network.PointPattern</span></code> object.</p>
 </dd>
-<dt><strong>destpattern</strong><span class="classifier">str</span></dt><dd><p>(Optional) The key of a point pattern snapped to the network
+<dt><strong>destpattern</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>(Optional) The key of a point pattern snapped to the network
 OR the full <code class="docutils literal notranslate"><span class="pre">spaghetti.network.PointPattern</span></code> object.</p>
 </dd>
-<dt><strong>fill_diagonal</strong><span class="classifier">{float, int}</span></dt><dd><p>(Optional) Fill the diagonal of the cost matrix. Default is
+<dt><strong>fill_diagonal</strong><span class="classifier">{<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a>}</span></dt><dd><p>(Optional) Fill the diagonal of the cost matrix. Default is
 <code class="docutils literal notranslate"><span class="pre">None</span></code> and will populate the diagonal with <code class="docutils literal notranslate"><span class="pre">numpy.nan</span></code>.
 Do not declare a <code class="docutils literal notranslate"><span class="pre">destpattern</span></code> for a custom
 <code class="docutils literal notranslate"><span class="pre">fill_diagonal</span></code>.</p>
 </dd>
-<dt><strong>n_processes</strong><span class="classifier">{int, str}</span></dt><dd><p>(Optional) Specify the number of cores to utilize. Default
+<dt><strong>n_processes</strong><span class="classifier">{<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a>}</span></dt><dd><p>(Optional) Specify the number of cores to utilize. Default
 is 1 core. Use <code class="docutils literal notranslate"><span class="pre">int</span></code> to specify an exact number or cores.
 Use <code class="docutils literal notranslate"><span class="pre">&quot;all&quot;</span></code> to request all available cores.</p>
 </dd>
-<dt><strong>gen_tree</strong><span class="classifier">bool</span></dt><dd><p>Rebuild shortest path <code class="docutils literal notranslate"><span class="pre">True</span></code>, or skip <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<dt><strong>gen_tree</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.7)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>Rebuild shortest path <code class="docutils literal notranslate"><span class="pre">True</span></code>, or skip <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 </dd>
-<dt><strong>snap_dist</strong><span class="classifier">bool</span></dt><dd><p>Flag as <code class="docutils literal notranslate"><span class="pre">True</span></code> to include the distance from the original
+<dt><strong>snap_dist</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.7)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>Flag as <code class="docutils literal notranslate"><span class="pre">True</span></code> to include the distance from the original
 location to the snapped location along the network. Default
 is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 </dd>
@@ -153,10 +153,10 @@ is <code class="docutils literal notranslate"><span class="pre">False</span></co
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl>
-<dt><strong>nearest</strong><span class="classifier"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html">numpy.ndarray</a></span></dt><dd><p>An array of shape (n,n) storing distances between all
+<dt><strong>nearest</strong><span class="classifier"><cite>numpy.ndarray &lt;https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html&gt;</cite><code class="xref py py-obj docutils literal notranslate"><span class="pre">_</span></code></span></dt><dd><p>An array of shape (n,n) storing distances between all
 points.</p>
 </dd>
-<dt><strong>tree_nearest</strong><span class="classifier">dict</span></dt><dd><p>Nearest network node to point pattern vertex shortest
+<dt><strong>tree_nearest</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Nearest network node to point pattern vertex shortest
 path lookup. The values of the dictionary are a <code class="docutils literal notranslate"><span class="pre">tuple</span></code>
 of the nearest source vertex and the near destination
 vertex to query the lookup tree. If two observations are

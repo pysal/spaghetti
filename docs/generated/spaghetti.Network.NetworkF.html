@@ -121,35 +121,35 @@
 <h1>spaghetti.Network.NetworkF<a class="headerlink" href="#spaghetti-network-networkf" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="spaghetti.Network.NetworkF">
-<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">NetworkF</code><span class="sig-paren">(</span><em class="sig-param">pointpattern</em>, <em class="sig-param">nsteps=10</em>, <em class="sig-param">permutations=99</em>, <em class="sig-param">threshold=0.2</em>, <em class="sig-param">distribution='uniform'</em>, <em class="sig-param">lowerbound=None</em>, <em class="sig-param">upperbound=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.NetworkF"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.NetworkF" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">NetworkF</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">pointpattern</em>, <em class="sig-param">nsteps=10</em>, <em class="sig-param">permutations=99</em>, <em class="sig-param">threshold=0.2</em>, <em class="sig-param">distribution='uniform'</em>, <em class="sig-param">lowerbound=None</em>, <em class="sig-param">upperbound=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.NetworkF"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.NetworkF" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes a network constrained F-Function</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>pointpattern</strong><span class="classifier">spaghetti.network.PointPattern</span></dt><dd><p>A spaghetti point pattern object.</p>
+<dd class="field-odd"><dl>
+<dt><strong>pointpattern</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.network.PointPattern</span></code></span></dt><dd><p>A spaghetti point pattern object.</p>
 </dd>
-<dt><strong>nsteps</strong><span class="classifier">int</span></dt><dd><p>The number of steps at which the count of the nearest
+<dt><strong>nsteps</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of steps at which the count of the nearest
 neighbors is computed.</p>
 </dd>
-<dt><strong>permutations</strong><span class="classifier">int</span></dt><dd><p>The number of permutations to perform. Default 99.</p>
+<dt><strong>permutations</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of permutations to perform. Default 99.</p>
 </dd>
-<dt><strong>threshold</strong><span class="classifier">float</span></dt><dd><p>The level at which significance is computed.
+<dt><strong>threshold</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The level at which significance is computed.
 (0.5 would be 97.5% and 2.5%).</p>
 </dd>
-<dt><strong>distribution</strong><span class="classifier">str</span></dt><dd><p>The distribution from which random points are sampled.
+<dt><strong>distribution</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>The distribution from which random points are sampled.
 Either <code class="docutils literal notranslate"><span class="pre">&quot;uniform&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;poisson&quot;</span></code>.</p>
 </dd>
-<dt><strong>lowerbound</strong><span class="classifier">float</span></dt><dd><p>The lower bound at which the F-function is computed.
+<dt><strong>lowerbound</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The lower bound at which the F-function is computed.
 Default 0.</p>
 </dd>
-<dt><strong>upperbound</strong><span class="classifier">float</span></dt><dd><p>The upper bound at which the F-function is computed.
+<dt><strong>upperbound</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The upper bound at which the F-function is computed.
 Defaults to the maximum observed nearest neighbor distance.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>NetworkF</strong><span class="classifier">spaghetti.analysis.NetworkF</span></dt><dd><p>A network F class instance.</p>
+<dd class="field-even"><dl>
+<dt><strong>NetworkF</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.analysis.NetworkF</span></code></span></dt><dd><p>A network F class instance.</p>
 </dd>
 </dl>
 </dd>

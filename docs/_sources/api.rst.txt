@@ -14,6 +14,7 @@ spaghetti.Network
 .. autosummary::
    :toctree: generated/
     
+    spaghetti.Network
     spaghetti.Network.extract_components
     spaghetti.Network.extractgraph
     spaghetti.Network.contiguityweights

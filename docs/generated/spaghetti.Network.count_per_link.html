@@ -121,20 +121,20 @@
 <h1>spaghetti.Network.count_per_link<a class="headerlink" href="#spaghetti-network-count-per-link" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="spaghetti.Network.count_per_link">
-<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">count_per_link</code><span class="sig-paren">(</span><em class="sig-param">obs_on</em>, <em class="sig-param">graph=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.count_per_link"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.count_per_link" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">count_per_link</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">obs_on</em>, <em class="sig-param">graph=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.count_per_link"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.count_per_link" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the counts per arc or edge (link).</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>obs_on_network</strong><span class="classifier">dict</span></dt><dd><p>Dictionary of observations on the network.
+<dd class="field-odd"><dl>
+<dt><strong>obs_on_network</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Dictionary of observations on the network.
 Either {(link):{pt_id:(coords)}} or 
 {link:[(coord),(coord),(coord)]}</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>counts</strong><span class="classifier">dict</span></dt><dd><p>{(link):count}</p>
+<dd class="field-even"><dl>
+<dt><strong>counts</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>{(link):count}</p>
 </dd>
 </dl>
 </dd>

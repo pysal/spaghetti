@@ -121,25 +121,25 @@
 <h1>spaghetti.Network.compute_distance_to_vertices<a class="headerlink" href="#spaghetti-network-compute-distance-to-vertices" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="spaghetti.Network.compute_distance_to_vertices">
-<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">compute_distance_to_vertices</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">y</em>, <em class="sig-param">arc</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.compute_distance_to_vertices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.compute_distance_to_vertices" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">compute_distance_to_vertices</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">x</em>, <em class="sig-param">y</em>, <em class="sig-param">arc</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.compute_distance_to_vertices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.compute_distance_to_vertices" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given an observation on a network arc, return the distance
 to the two vertices that bound that end.</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>x</strong><span class="classifier">float</span></dt><dd><p>x-coordinate of the snapped point.</p>
+<dd class="field-odd"><dl>
+<dt><strong>x</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>x-coordinate of the snapped point.</p>
 </dd>
-<dt><strong>y</strong><span class="classifier">float</span></dt><dd><p>y-coordinate of the snapped point.</p>
+<dt><strong>y</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>y-coordinate of the snapped point.</p>
 </dd>
-<dt><strong>arc</strong><span class="classifier">tuple</span></dt><dd><p>(vtx0, vtx1) representation of the network arc.</p>
+<dt><strong>arc</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#tuple" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">tuple</span></code></a></span></dt><dd><p>(vtx0, vtx1) representation of the network arc.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>d1</strong><span class="classifier">float</span></dt><dd><p>The distance to vtx0. Always the vertex with the lesser id.</p>
+<dd class="field-even"><dl>
+<dt><strong>d1</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The distance to vtx0. Always the vertex with the lesser id.</p>
 </dd>
-<dt><strong>d2</strong><span class="classifier">float</span></dt><dd><p>The distance to vtx1. Always the vertex with the greater id.</p>
+<dt><strong>d2</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The distance to vtx1. Always the vertex with the greater id.</p>
 </dd>
 </dl>
 </dd>

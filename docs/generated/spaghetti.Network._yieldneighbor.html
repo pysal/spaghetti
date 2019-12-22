@@ -121,24 +121,24 @@
 <h1>spaghetti.Network._yieldneighbor<a class="headerlink" href="#spaghetti-network-yieldneighbor" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="spaghetti.Network._yieldneighbor">
-<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">_yieldneighbor</code><span class="sig-paren">(</span><em class="sig-param">vtx</em>, <em class="sig-param">arc_vertices</em>, <em class="sig-param">bridge</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network._yieldneighbor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network._yieldneighbor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">_yieldneighbor</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">vtx</em>, <em class="sig-param">arc_vertices</em>, <em class="sig-param">bridge</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network._yieldneighbor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network._yieldneighbor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Used internally, this method traverses a bridge arc
 to find the source and destination nodes.</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>vtx</strong><span class="classifier">int</span></dt><dd><p>vertex id</p>
+<dd class="field-odd"><dl>
+<dt><strong>vtx</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>vertex id</p>
 </dd>
-<dt><strong>arc_vertices</strong><span class="classifier">list</span></dt><dd><p>All non-articulation points in the network. These are
+<dt><strong>arc_vertices</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#list" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">list</span></code></a></span></dt><dd><p>All non-articulation points in the network. These are
 referred to as degree-2 vertices.</p>
 </dd>
-<dt><strong>bridge</strong><span class="classifier">list</span></dt><dd><p>Inital bridge list containing only <code class="docutils literal notranslate"><span class="pre">vtx</span></code>.</p>
+<dt><strong>bridge</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#list" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">list</span></code></a></span></dt><dd><p>Inital bridge list containing only <code class="docutils literal notranslate"><span class="pre">vtx</span></code>.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>nodes</strong><span class="classifier">list</span></dt><dd><p>Vertices to keep (articulation points). These elements are 
+<dd class="field-even"><dl>
+<dt><strong>nodes</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#list" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">list</span></code></a></span></dt><dd><p>Vertices to keep (articulation points). These elements are 
 referred to as nodes.</p>
 </dd>
 </dl>

@@ -121,21 +121,21 @@
 <h1>spaghetti.Network.snapobservations<a class="headerlink" href="#spaghetti-network-snapobservations" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="spaghetti.Network.snapobservations">
-<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">snapobservations</code><span class="sig-paren">(</span><em class="sig-param">in_data</em>, <em class="sig-param">name</em>, <em class="sig-param">idvariable=None</em>, <em class="sig-param">attribute=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.snapobservations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.snapobservations" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">snapobservations</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">in_data</em>, <em class="sig-param">name</em>, <em class="sig-param">idvariable=None</em>, <em class="sig-param">attribute=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.snapobservations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.snapobservations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Snap a point pattern shapefile to network object. The
 point pattern is stored in the <code class="docutils literal notranslate"><span class="pre">network.pointpattern['key']</span></code>
 attribute of the network object.</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>in_data</strong><span class="classifier">{geopandas.GeoDataFrame, str}</span></dt><dd><p>The input geographic data. Either (1) a path to a
+<dd class="field-odd"><dl>
+<dt><strong>in_data</strong><span class="classifier">{<a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.6.1+29.g4f7036a)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a>}</span></dt><dd><p>The input geographic data. Either (1) a path to a
 shapefile (<code class="docutils literal notranslate"><span class="pre">str</span></code>); or (2) a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code>.</p>
 </dd>
-<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Name to be assigned to the point dataset.</p>
+<dt><strong>name</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>Name to be assigned to the point dataset.</p>
 </dd>
-<dt><strong>idvariable</strong><span class="classifier">str</span></dt><dd><p>Column name to be used as ID variable.</p>
+<dt><strong>idvariable</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>Column name to be used as ID variable.</p>
 </dd>
-<dt><strong>attribute</strong><span class="classifier">bool</span></dt><dd><p>Defines whether attributes should be extracted. <code class="docutils literal notranslate"><span class="pre">True</span></code> for
+<dt><strong>attribute</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.7)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>Defines whether attributes should be extracted. <code class="docutils literal notranslate"><span class="pre">True</span></code> for
 attribute extraction. <code class="docutils literal notranslate"><span class="pre">False</span></code> for no attribute extraction.</p>
 </dd>
 </dl>

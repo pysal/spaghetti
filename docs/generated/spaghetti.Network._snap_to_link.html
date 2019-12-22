@@ -121,26 +121,26 @@
 <h1>spaghetti.Network._snap_to_link<a class="headerlink" href="#spaghetti-network-snap-to-link" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="spaghetti.Network._snap_to_link">
-<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">_snap_to_link</code><span class="sig-paren">(</span><em class="sig-param">pointpattern</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network._snap_to_link"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network._snap_to_link" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">_snap_to_link</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">pointpattern</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network._snap_to_link"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network._snap_to_link" title="Permalink to this definition">¶</a></dt>
 <dd><p>Used internally to snap point observations to network arcs.</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>pointpattern</strong><span class="classifier">spaghetti.network.PointPattern</span></dt><dd><p>point pattern object</p>
+<dd class="field-odd"><dl>
+<dt><strong>pointpattern</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.network.PointPattern</span></code></span></dt><dd><p>point pattern object</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>obs_to_arc</strong><span class="classifier">dict</span></dt><dd><p>Dictionary with arcs as keys and lists of points as values.</p>
+<dd class="field-even"><dl>
+<dt><strong>obs_to_arc</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Dictionary with arcs as keys and lists of points as values.</p>
 </dd>
-<dt><strong>arc_to_obs</strong><span class="classifier">dict</span></dt><dd><p>Dictionary with point ids as keys and arc tuples as values.</p>
+<dt><strong>arc_to_obs</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Dictionary with point ids as keys and arc tuples as values.</p>
 </dd>
-<dt><strong>dist_to_vertex</strong><span class="classifier">dict</span></dt><dd><p>Dictionary with point ids as keys and values as dicts
+<dt><strong>dist_to_vertex</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Dictionary with point ids as keys and values as dicts
 with keys for vertex ids and values as distances from point
 to vertex.</p>
 </dd>
-<dt><strong>dist_snapped</strong><span class="classifier">dict</span></dt><dd><p>Dictionary with point ids as keys and distance from point
+<dt><strong>dist_snapped</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Dictionary with point ids as keys and distance from point
 to the network arc which it is snapped.</p>
 </dd>
 </dl>

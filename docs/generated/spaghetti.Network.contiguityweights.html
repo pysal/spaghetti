@@ -121,23 +121,22 @@
 <h1>spaghetti.Network.contiguityweights<a class="headerlink" href="#spaghetti-network-contiguityweights" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="spaghetti.Network.contiguityweights">
-<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">contiguityweights</code><span class="sig-paren">(</span><em class="sig-param">graph=True</em>, <em class="sig-param">weightings=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.contiguityweights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.contiguityweights" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a contiguity-based libpysal W object.</p>
+<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">contiguityweights</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">graph=True</em>, <em class="sig-param">weightings=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.contiguityweights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.contiguityweights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a contiguity-based <code class="docutils literal notranslate"><span class="pre">W</span></code> object.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>graph</strong><span class="classifier">bool</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">{True,</span> <span class="pre">False}</span></code> controls whether the W is generated using
-the spatial representation or the graph representation.
-Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<dd class="field-odd"><dl>
+<dt><strong>graph</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.7)"><span class="xref std std-ref">bool</span></a> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">optional</span></code> - <code class="xref py py-obj docutils literal notranslate"><span class="pre">default</span></code> <code class="xref py py-obj docutils literal notranslate"><span class="pre">is</span></code> <code class="docutils literal notranslate"><span class="pre">True</span></code>)</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">{True,</span> <span class="pre">False}</span></code> controls whether the <code class="docutils literal notranslate"><span class="pre">W</span></code> is generated
+using the spatial representation (<code class="docutils literal notranslate"><span class="pre">False</span></code>) or the graph
+representation (<code class="docutils literal notranslate"><span class="pre">True</span></code>).</p>
 </dd>
-<dt><strong>weightings</strong><span class="classifier">dict</span></dt><dd><p>dictionary of lists of weightings for each arc/edge.</p>
+<dt><strong>weightings</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>dictionary of lists of weightings for each arc/edge.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl>
-<dt><strong>W</strong><span class="classifier"><a class="reference external" href="https://pysal.org/libpysal/generated/libpysal.weights.W.html#libpysal.weights.W">libpysal.weights.W</a></span></dt><dd><p>A <code class="docutils literal notranslate"><span class="pre">pysal</span></code> W Object representing the binary adjacency of
-the network.</p>
+<dt><strong>W</strong><span class="classifier"><a class="reference external" href="https://pysal.org/libpysal/generated/libpysal.weights.W.html#libpysal.weights.W" title="(in libpysal v4.2.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">libpysal.weights.W</span></code></a></span></dt><dd><p>A <code class="docutils literal notranslate"><span class="pre">W</span></code> representing the binary adjacency of the network.</p>
 </dd>
 </dl>
 </dd>
@@ -151,24 +150,25 @@ the network.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span> <span class="o">=</span> <span class="n">spgh</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;streets.shp&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>Snap point observations to the network with
-attribute information.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;crimes.shp&#39;</span><span class="p">),</span>
-<span class="gp">... </span>                     <span class="s1">&#39;crimes&#39;</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<p>Snap point observations to the network with attribute information.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;crimes.shp&#39;</span><span class="p">),</span> <span class="s1">&#39;crimes&#39;</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">True</span>
+<span class="gp">... </span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Find counts per network arc.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">counts</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">count_per_link</span><span class="p">(</span><span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s1">&#39;crimes&#39;</span><span class="p">]</span>
-<span class="gp">... </span>                            <span class="o">.</span><span class="n">obs_to_arc</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">counts</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">count_per_link</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s1">&#39;crimes&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">obs_to_arc</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">False</span>
+<span class="gp">... </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">counts</span><span class="p">[(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">165</span><span class="p">)]</span>
 <span class="go">4</span>
 </pre></div>
 </div>
-<p>Create a contiguity based W object.</p>
+<p>Create a contiguity-based <code class="docutils literal notranslate"><span class="pre">W</span></code> object.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">contiguityweights</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Using the W object, access to ESDA functionality is provided.
+<p>Using the <code class="docutils literal notranslate"><span class="pre">W</span></code> object, access to <code class="docutils literal notranslate"><span class="pre">esda</span></code> functionality is provided.
 First, a vector of attributes is created for all edges
 with observations.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">contiguityweights</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -181,7 +181,7 @@ with observations.</p>
 <span class="go">3.0</span>
 </pre></div>
 </div>
-<p>Next, a standard call ot Moran is made and the
+<p>Next, a standard call to <code class="docutils literal notranslate"><span class="pre">esda.Moran</span></code> is made and the
 result placed into <code class="docutils literal notranslate"><span class="pre">res</span></code>.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">esda</span><span class="o">.</span><span class="n">moran</span><span class="o">.</span><span class="n">Moran</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">99</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>

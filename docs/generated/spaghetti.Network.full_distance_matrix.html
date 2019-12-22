@@ -121,22 +121,22 @@
 <h1>spaghetti.Network.full_distance_matrix<a class="headerlink" href="#spaghetti-network-full-distance-matrix" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="spaghetti.Network.full_distance_matrix">
-<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">full_distance_matrix</code><span class="sig-paren">(</span><em class="sig-param">n_processes</em>, <em class="sig-param">gen_tree=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.full_distance_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.full_distance_matrix" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">full_distance_matrix</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">n_processes</em>, <em class="sig-param">gen_tree=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.full_distance_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.full_distance_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>All vertex-to-vertex distances on a network. This function
 is called from within <code class="docutils literal notranslate"><span class="pre">allneighbordistances()</span></code>,
 <code class="docutils literal notranslate"><span class="pre">nearestneighbordistances()</span></code>, and <code class="docutils literal notranslate"><span class="pre">distancebandweights()</span></code>.</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>n_processes</strong><span class="classifier">int</span></dt><dd><p>Cpu cores for multiprocessing.</p>
+<dd class="field-odd"><dl>
+<dt><strong>n_processes</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>Cpu cores for multiprocessing.</p>
 </dd>
-<dt><strong>gen_tree</strong><span class="classifier">bool</span></dt><dd><p>Rebuild shortest path <code class="docutils literal notranslate"><span class="pre">True</span></code>, or skip <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<dt><strong>gen_tree</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.7)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>Rebuild shortest path <code class="docutils literal notranslate"><span class="pre">True</span></code>, or skip <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>Based on <a class="reference internal" href="../references.html#dijkstra1959a" id="id1">[Dij59]</a>.</p>
+<p>Based on <a class="bibtex reference internal" href="../references.html#dijkstra1959a" id="id1">[Dij59]</a>.</p>
 </dd></dl>
 
 </div>

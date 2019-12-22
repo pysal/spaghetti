@@ -121,24 +121,24 @@
 <h1>spaghetti.Network.distancebandweights<a class="headerlink" href="#spaghetti-network-distancebandweights" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="spaghetti.Network.distancebandweights">
-<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">distancebandweights</code><span class="sig-paren">(</span><em class="sig-param">threshold</em>, <em class="sig-param">n_proccess=None</em>, <em class="sig-param">gen_tree=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.distancebandweights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.distancebandweights" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">distancebandweights</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">threshold</em>, <em class="sig-param">n_proccess=None</em>, <em class="sig-param">gen_tree=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.distancebandweights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.distancebandweights" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create distance based weights.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>threshold</strong><span class="classifier">float</span></dt><dd><p>Distance threshold value.</p>
+<dd class="field-odd"><dl>
+<dt><strong>threshold</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>Distance threshold value.</p>
 </dd>
-<dt><strong>n_processes</strong><span class="classifier">{int, str}</span></dt><dd><p>(Optional) Specify the number of cores to utilize. Default
+<dt><strong>n_processes</strong><span class="classifier">{<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a>}</span></dt><dd><p>(Optional) Specify the number of cores to utilize. Default
 is 1 core. Use <code class="docutils literal notranslate"><span class="pre">int</span></code> to specify an exact number or cores.
 Use <code class="docutils literal notranslate"><span class="pre">&quot;all&quot;</span></code> to request all available cores.</p>
 </dd>
-<dt><strong>gen_tree</strong><span class="classifier">bool</span></dt><dd><p>Rebuild shortest path with <code class="docutils literal notranslate"><span class="pre">True</span></code>, or skip with <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<dt><strong>gen_tree</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.7)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>Rebuild shortest path with <code class="docutils literal notranslate"><span class="pre">True</span></code>, or skip with <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl>
-<dt><strong>w</strong><span class="classifier"><a class="reference external" href="https://pysal.org/libpysal/generated/libpysal.weights.W.html#libpysal.weights.W">libpysal.weights.W</a></span></dt><dd><p>A <code class="docutils literal notranslate"><span class="pre">pysal</span></code> W Object representing the binary adjacency of
+<dt><strong>w</strong><span class="classifier"><cite>libpysal.weights.W &lt;https://pysal.org/libpysal/generated/libpysal.weights.W.html#libpysal.weights.W&gt;</cite><code class="xref py py-obj docutils literal notranslate"><span class="pre">_</span></code></span></dt><dd><p>A <code class="docutils literal notranslate"><span class="pre">pysal</span></code> W Object representing the binary adjacency of
 the network.</p>
 </dd>
 </dl>

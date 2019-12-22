@@ -121,23 +121,23 @@
 <h1>spaghetti.Network.simulate_observations<a class="headerlink" href="#spaghetti-network-simulate-observations" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="spaghetti.Network.simulate_observations">
-<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">simulate_observations</code><span class="sig-paren">(</span><em class="sig-param">count</em>, <em class="sig-param">distribution='uniform'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.simulate_observations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.simulate_observations" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">simulate_observations</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">count</em>, <em class="sig-param">distribution='uniform'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.simulate_observations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.simulate_observations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a simulated point pattern on the network.</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>count</strong><span class="classifier">int</span></dt><dd><p>The number of points to create or mean of the distribution
+<dd class="field-odd"><dl>
+<dt><strong>count</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of points to create or mean of the distribution
 if not ‘uniform’.</p>
 </dd>
-<dt><strong>distribution</strong><span class="classifier">str</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">{'uniform',</span> <span class="pre">'poisson'}</span></code> distribution of random points.
+<dt><strong>distribution</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">{'uniform',</span> <span class="pre">'poisson'}</span></code> distribution of random points.
 If <code class="docutils literal notranslate"><span class="pre">&quot;poisson&quot;</span></code>, the distribution is calculated from half
 the total network length.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>random_pts</strong><span class="classifier">dict</span></dt><dd><p>Keys are the edge tuple. Values are lists of new
+<dd class="field-even"><dl>
+<dt><strong>random_pts</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are the edge tuple. Values are lists of new
 point coordinates.</p>
 </dd>
 </dl>
