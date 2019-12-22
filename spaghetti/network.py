@@ -30,8 +30,7 @@ class Network:
     
     in_data : {geopandas.GeoDataFrame, str}
         The input geographic data. Either (1) a path to a shapefile
-        (str); or (2) a `geopandas.GeoDataFrame 
-        <http://geopandas.org/data_structures.html#geodataframe>`_.
+        (str); or (2) a `geopandas.GeoDataFrame`.
     
     vertex_sig : int
         Round the x and y coordinates of all vertices to ``vertex_sig``
@@ -49,15 +48,13 @@ class Network:
     
     w_components : bool
         Set to ``False`` to not record connected components from a
-        `libpysal.weights.W 
-        <https://pysal.org/libpysal/generated/libpysal.weights.W.html#libpysal.weights.W>`_
-        object. Default is True.
+        `libpysal.weights.W` object. Default is ``True``.
         
         
     weightings : {dict, bool}
         If ``dict``, lists of weightings for each arc. If ``bool``,
         ``True`` flags ``self.arc_lengths`` as the weightings,
-        ``False`` sets to no weightings. Default is ``False``.
+        False sets to no weightings. Default is `False.
     
     Attributes
     ----------
@@ -93,7 +90,7 @@ class Network:
         (2) a dict with the key being the id of the destination vertex
         and the value being a list of the shortest path.
     
-    distancematrix : `numpy.ndarray <https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html>`_
+    distancematrix : numpy.ndarray
         all network vertices (non-observations) distance matrix.
     
     edges : list
@@ -107,13 +104,13 @@ class Network:
         All vertices with degree 2 that are not in an isolated
         island ring (loop) component
     
-    w_network : `libpysal.weights.W <https://pysal.org/libpysal/generated/libpysal.weights.W.html#libpysal.weights.W>`_
+    w_network : libpysal.weights.W`
         Weights object created from the network arcs
     
     network_n_components : int
         Count of connected components in the network.
     
-    network_component_labels : `numpy.ndarray <https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html>`_
+    network_component_labels : `numpy.ndarray`
         Component labels for networks arc
     
     network_component2arc : dict
@@ -689,15 +686,15 @@ class Network:
         return nodes
 
     def contiguityweights(self, graph=True, weightings=None):
-        """Create a contiguity-based libpysal W object.
+        """Create a contiguity-based ``W`` object.
         
         Parameters
         ----------
         
-        graph : bool
-            ``{True, False}`` controls whether the W is generated using
-            the spatial representation or the graph representation.
-            Default is ``True``.
+        graph : bool (optional - default is ``True``)
+            ``{True, False}`` controls whether the ``W`` is generated
+            using the spatial representation (``False``) or the graph
+            representation (``True``).
         
         weightings : dict
             dictionary of lists of weightings for each arc/edge.
@@ -705,9 +702,8 @@ class Network:
         Returns
         -------
         
-         W : `libpysal.weights.W <https://pysal.org/libpysal/generated/libpysal.weights.W.html#libpysal.weights.W>`_
-            A ``pysal`` W Object representing the binary adjacency of
-            the network.
+         W : libpysal.weights.W
+            A ``W`` representing the binary adjacency of the network.
         
         Examples
         --------
@@ -720,24 +716,25 @@ class Network:
         >>> import numpy as np
         >>> ntw = spgh.Network(examples.get_path('streets.shp'))
         
-        Snap point observations to the network with
-        attribute information.
+        Snap point observations to the network with attribute information.
         
-        >>> ntw.snapobservations(examples.get_path('crimes.shp'),
-        ...                      'crimes', attribute=True)
+        >>> ntw.snapobservations(
+        ...     examples.get_path('crimes.shp'), 'crimes', attribute=True
+        ... )
         
         Find counts per network arc.
         
-        >>> counts = ntw.count_per_link(ntw.pointpatterns['crimes']
-        ...                             .obs_to_arc, graph=False)
+        >>> counts = ntw.count_per_link(
+        ...     ntw.pointpatterns['crimes'].obs_to_arc, graph=False
+        ... )
         >>> counts[(50, 165)]
         4
         
-        Create a contiguity based W object.
+        Create a contiguity-based ``W`` object.
         
         >>> w = ntw.contiguityweights(graph=False)
         
-        Using the W object, access to ESDA functionality is provided.
+        Using the ``W`` object, access to ``esda`` functionality is provided.
         First, a vector of attributes is created for all edges
         with observations.
         
@@ -750,7 +747,7 @@ class Network:
         >>> y[3]
         3.0
         
-        Next, a standard call ot Moran is made and the
+        Next, a standard call to ``esda.Moran`` is made and the
         result placed into ``res``.
         
         >>> res = esda.moran.Moran(y, w, permutations=99)
