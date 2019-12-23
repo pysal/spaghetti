@@ -106,13 +106,13 @@ BibTeX Citation
 
 ```
 @misc{Gaboardi2018,
-author = {Gaboardi, James D. and Laura, Jay and Rey, Sergio and Wolf, Levi John and Folch, David C. and Kang, Wei and Stephens, Philip and Schmidt, Charles},
-month = {oct},
-year = {2018},
-title = {pysal/spaghetti},
-url = {https://github.com/pysal/spaghetti},
-doi = {10.5281/zenodo.1343650},
-keywords = {graph-theory,network-analysis,python,spatial-networks,topology}
+    author    = {Gaboardi, James D. and Laura, Jay and Rey, Sergio and Wolf, Levi John and Folch, David C. and Kang, Wei and Stephens, Philip and Schmidt, Charles},
+    month     = {oct},
+    year      = {2018},
+    title     = {pysal/spaghetti},
+    url       = {https://github.com/pysal/spaghetti},
+    doi       = {10.5281/zenodo.1343650},
+    keywords  = {graph-theory,network-analysis,python,spatial-networks,topology}
 }
 ```
 
