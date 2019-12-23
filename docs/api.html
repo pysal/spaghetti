@@ -67,10 +67,8 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#spaghetti-network">spaghetti.Network</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#spaghetti-pointpattern">spaghetti.PointPattern</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#spaghetti-simulatedpointpattern">spaghetti.SimulatedPointPattern</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#spaghetti">spaghetti</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#network-instantiation">Network instantiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#network-point-patterns">Network point patterns</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
@@ -88,10 +86,8 @@
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">API reference</a><ul>
-<li><a class="reference internal" href="#spaghetti-network">spaghetti.Network</a></li>
-<li><a class="reference internal" href="#spaghetti-pointpattern">spaghetti.PointPattern</a></li>
-<li><a class="reference internal" href="#spaghetti-simulatedpointpattern">spaghetti.SimulatedPointPattern</a></li>
-<li><a class="reference internal" href="#spaghetti">spaghetti</a></li>
+<li><a class="reference internal" href="#network-instantiation">Network instantiation</a></li>
+<li><a class="reference internal" href="#network-point-patterns">Network point patterns</a></li>
 </ul>
 </li>
 </ul>
@@ -125,8 +121,8 @@
       
   <div class="section" id="api-reference">
 <span id="api-ref"></span><h1>API reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="spaghetti-network">
-<span id="network-api"></span><h2>spaghetti.Network<a class="headerlink" href="#spaghetti-network" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="network-instantiation">
+<span id="network-api"></span><h2>Network instantiation<a class="headerlink" href="#network-instantiation" title="Permalink to this headline">¶</a></h2>
 <table class="longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
@@ -136,89 +132,14 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/spaghetti.Network.html#spaghetti.Network" title="spaghetti.Network"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network</span></code></a>([in_data, vertex_sig, …])</p></td>
 <td><p>Spatially-constrained network representation and analytical functionality.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/spaghetti.Network.extract_components.html#spaghetti.Network.extract_components" title="spaghetti.Network.extract_components"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network.extract_components</span></code></a>(self, w)</p></td>
-<td><p>Extract connected component information from a libpysal.weights.W object</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/spaghetti.Network.extractgraph.html#spaghetti.Network.extractgraph" title="spaghetti.Network.extractgraph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network.extractgraph</span></code></a>(self)</p></td>
-<td><p>Using the existing network representation, create a graph-theoretic representation by removing all vertices with a neighbor incidence of two (non-articulation points).</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/spaghetti.Network.contiguityweights.html#spaghetti.Network.contiguityweights" title="spaghetti.Network.contiguityweights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network.contiguityweights</span></code></a>(self[, …])</p></td>
-<td><p>Create a contiguity-based <code class="docutils literal notranslate"><span class="pre">W</span></code> object.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/spaghetti.Network.distancebandweights.html#spaghetti.Network.distancebandweights" title="spaghetti.Network.distancebandweights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network.distancebandweights</span></code></a>(self, …)</p></td>
-<td><p>Create distance based weights.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/spaghetti.Network.snapobservations.html#spaghetti.Network.snapobservations" title="spaghetti.Network.snapobservations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network.snapobservations</span></code></a>(self, …)</p></td>
-<td><p>Snap a point pattern shapefile to network object.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/spaghetti.Network.compute_distance_to_vertices.html#spaghetti.Network.compute_distance_to_vertices" title="spaghetti.Network.compute_distance_to_vertices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network.compute_distance_to_vertices</span></code></a>(…)</p></td>
-<td><p>Given an observation on a network arc, return the distance to the two vertices that bound that end.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/spaghetti.Network.compute_snap_dist.html#spaghetti.Network.compute_snap_dist" title="spaghetti.Network.compute_snap_dist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network.compute_snap_dist</span></code></a>(self, …)</p></td>
-<td><p>Given an observation snapped to a network arc, calculate the distance from the original location to the snapped location.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/spaghetti.Network.count_per_link.html#spaghetti.Network.count_per_link" title="spaghetti.Network.count_per_link"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network.count_per_link</span></code></a>(self, obs_on)</p></td>
-<td><p>Compute the counts per arc or edge (link).</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/spaghetti.Network.simulate_observations.html#spaghetti.Network.simulate_observations" title="spaghetti.Network.simulate_observations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network.simulate_observations</span></code></a>(…)</p></td>
-<td><p>Generate a simulated point pattern on the network.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/spaghetti.Network.enum_links_vertex.html#spaghetti.Network.enum_links_vertex" title="spaghetti.Network.enum_links_vertex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network.enum_links_vertex</span></code></a>(self, v0)</p></td>
-<td><p>Returns the arcs (links) around vertices.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/spaghetti.Network.full_distance_matrix.html#spaghetti.Network.full_distance_matrix" title="spaghetti.Network.full_distance_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network.full_distance_matrix</span></code></a>(self, …)</p></td>
-<td><p>All vertex-to-vertex distances on a network.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/spaghetti.Network.allneighbordistances.html#spaghetti.Network.allneighbordistances" title="spaghetti.Network.allneighbordistances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network.allneighbordistances</span></code></a>(self, …)</p></td>
-<td><p>Compute either all distances between <code class="docutils literal notranslate"><span class="pre">i</span></code> and <code class="docutils literal notranslate"><span class="pre">j</span></code> in a single point pattern or all distances between each <code class="docutils literal notranslate"><span class="pre">i</span></code> from a source pattern and all <code class="docutils literal notranslate"><span class="pre">j</span></code> from a destination pattern.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/spaghetti.Network.nearestneighbordistances.html#spaghetti.Network.nearestneighbordistances" title="spaghetti.Network.nearestneighbordistances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network.nearestneighbordistances</span></code></a>(…)</p></td>
-<td><p>Compute the interpattern nearest neighbor distances or the intrapattern nearest neighbor distances between a source pattern and a destination pattern.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/spaghetti.Network.split_arcs.html#spaghetti.Network.split_arcs" title="spaghetti.Network.split_arcs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network.split_arcs</span></code></a>(self, distance)</p></td>
-<td><p>Split all of the arcs in the network at a fixed distance.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/spaghetti.Network.savenetwork.html#spaghetti.Network.savenetwork" title="spaghetti.Network.savenetwork"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network.savenetwork</span></code></a>(self, filename)</p></td>
-<td><p>Save a network to disk as a binary file.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/spaghetti.Network.loadnetwork.html#spaghetti.Network.loadnetwork" title="spaghetti.Network.loadnetwork"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network.loadnetwork</span></code></a>(filename)</p></td>
-<td><p>Load a network from a binary file saved on disk.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/spaghetti.Network.NetworkF.html#spaghetti.Network.NetworkF" title="spaghetti.Network.NetworkF"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network.NetworkF</span></code></a>(self, pointpattern)</p></td>
-<td><p>Computes a network constrained F-Function</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/spaghetti.Network.NetworkG.html#spaghetti.Network.NetworkG" title="spaghetti.Network.NetworkG"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network.NetworkG</span></code></a>(self, pointpattern)</p></td>
-<td><p>Computes a network constrained G-Function</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/spaghetti.Network.NetworkK.html#spaghetti.Network.NetworkK" title="spaghetti.Network.NetworkK"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network.NetworkK</span></code></a>(self, pointpattern)</p></td>
-<td><p>Computes a network constrained K-Function</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/spaghetti.Network._evaluate_napts.html#spaghetti.Network._evaluate_napts" title="spaghetti.Network._evaluate_napts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network._evaluate_napts</span></code></a>(self, …)</p></td>
-<td><p>Evaluate one connected component in a network for non-articulation points (napts) and return an updated set of napts and unvisted vertices.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/spaghetti.Network._extractnetwork.html#spaghetti.Network._extractnetwork" title="spaghetti.Network._extractnetwork"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network._extractnetwork</span></code></a>(self)</p></td>
-<td><p>Used internally to extract a network from a polyline shapefile of a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code>.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/spaghetti.Network._newpoint_coords.html#spaghetti.Network._newpoint_coords" title="spaghetti.Network._newpoint_coords"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network._newpoint_coords</span></code></a>(self, …)</p></td>
-<td><p>Used internally to compute new point coordinates during snapping.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/spaghetti.Network._round_sig.html#spaghetti.Network._round_sig" title="spaghetti.Network._round_sig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network._round_sig</span></code></a>(self, v)</p></td>
-<td><p>Used internally to round the vertex to a set number of significant digits.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/spaghetti.Network._snap_to_link.html#spaghetti.Network._snap_to_link" title="spaghetti.Network._snap_to_link"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network._snap_to_link</span></code></a>(self, …)</p></td>
-<td><p>Used internally to snap point observations to network arcs.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/spaghetti.Network._yield_napts.html#spaghetti.Network._yield_napts" title="spaghetti.Network._yield_napts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network._yield_napts</span></code></a>(self)</p></td>
-<td><p>Find all nodes with degree 2 that are not in an isolated island ring (loop) component.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/spaghetti.Network._yieldneighbor.html#spaghetti.Network._yieldneighbor" title="spaghetti.Network._yieldneighbor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network._yieldneighbor</span></code></a>(self, vtx, …)</p></td>
-<td><p>Used internally, this method traverses a bridge arc to find the source and destination nodes.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/spaghetti.element_as_gdf.html#spaghetti.element_as_gdf" title="spaghetti.element_as_gdf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.element_as_gdf</span></code></a>(net[, vertices, …])</p></td>
+<td><p>Return a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> of network elements.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="section" id="spaghetti-pointpattern">
-<h2>spaghetti.PointPattern<a class="headerlink" href="#spaghetti-pointpattern" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="network-point-patterns">
+<h2>Network point patterns<a class="headerlink" href="#network-point-patterns" title="Permalink to this headline">¶</a></h2>
 <table class="longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
@@ -226,35 +147,10 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/spaghetti.PointPattern.html#spaghetti.PointPattern" title="spaghetti.PointPattern"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.PointPattern</span></code></a>([in_data, …])</p></td>
-<td><p>A stub point pattern class used to store a point pattern.</p></td>
+<td><p>Note from the original author of <code class="docutils literal notranslate"><span class="pre">pysal.network</span></code>:  A stub point pattern class used to store a point pattern.</p></td>
 </tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="spaghetti-simulatedpointpattern">
-<h2>spaghetti.SimulatedPointPattern<a class="headerlink" href="#spaghetti-simulatedpointpattern" title="Permalink to this headline">¶</a></h2>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/spaghetti.SimulatedPointPattern.html#spaghetti.SimulatedPointPattern" title="spaghetti.SimulatedPointPattern"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.SimulatedPointPattern</span></code></a>()</p></td>
-<td><p>Struct style class to mirror the <code class="docutils literal notranslate"><span class="pre">PointPattern</span></code> class.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="spaghetti">
-<h2>spaghetti<a class="headerlink" href="#spaghetti" title="Permalink to this headline">¶</a></h2>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/spaghetti.element_as_gdf.html#spaghetti.element_as_gdf" title="spaghetti.element_as_gdf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.element_as_gdf</span></code></a>(net[, vertices, …])</p></td>
-<td><p>Return a <a class="reference external" href="http://geopandas.org/data_structures.html#geodataframe">geopandas.GeoDataFrame</a> of network elements.This can be (a) the vertices of a network; (b) the arcs of a network; (c) both the vertices and arcs of the network; (d) raw point pattern associated with the network; or (e) snapped point pattern of (d)..</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/spaghetti.SimulatedPointPattern.html#spaghetti.SimulatedPointPattern" title="spaghetti.SimulatedPointPattern"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.SimulatedPointPattern</span></code></a>()</p></td>
+<td><p>Note from the original author of <code class="docutils literal notranslate"><span class="pre">pysal.network</span></code>: Struct style class to mirror the <code class="docutils literal notranslate"><span class="pre">PointPattern</span></code> class.</p></td>
 </tr>
 </tbody>
 </table>
