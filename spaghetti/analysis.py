@@ -1,4 +1,4 @@
-import numpy as np
+import numpy
 
 
 class NetworkBase(object):
@@ -9,14 +9,14 @@ class NetworkBase(object):
     ----------
     
     ntw : spaghetti.Network
-        spaghetti Network object.
+        A spaghetti network object.
     
     pointpattern : spaghetti.network.PointPattern
         A spaghetti point pattern object.
     
     nsteps : int
-            The number of steps at which the count of the nearest
-            neighbors is computed.
+        The number of steps at which the count of the nearest
+        neighbors is computed.
         
     permutations : int
         The number of permutations to perform. Default 99.
@@ -30,27 +30,27 @@ class NetworkBase(object):
         Either ``"uniform"`` or ``"poisson"``.
     
     lowerbound : float
-        The lower bound at which the G-function is computed.
+        The lower bound at which the {`F`,`G`,`K`}-function is computed.
         Default 0.
     
     upperbound : float
-        The upper bound at which the G-function is computed.
+        The upper bound at which the {`F`,`G`,`K`}-function is computed.
         Defaults to the maximum observed nearest neighbor distance.
     
     Attributes
     ----------
     
     sim : numpy.ndarray
-        simulated distance matrix
+        A simulated distance matrix.
     
     npts : int
-        pointpattern.npoints
+        The number of points (``pointpattern.npoints``).
     
     xaxis : numpy.ndarray
-        observed x-axis of values
+        The observed x-axis of values.
     
     observed : numpy.ndarray
-        observed y-axis of values
+        The observed y-axis of values.
     
     """
 
@@ -78,7 +78,7 @@ class NetworkBase(object):
         self.validatedistribution()
 
         # create an empty array to store the simulated points
-        self.sim = np.empty((permutations, nsteps))
+        self.sim = numpy.empty((permutations, nsteps))
         self.npts = self.pointpattern.npoints
 
         # set the lower and upper bounds (lower only for G)
@@ -97,9 +97,9 @@ class NetworkBase(object):
         """
 
         valid_distributions = ["uniform", "poisson"]
-        assert (
-            self.distribution in valid_distributions
-        ), "Distribution not in {}".format(valid_distributions)
+        assert self.distribution in valid_distributions, (
+            "Distribution not in %s" % valid_distributions
+        )
 
     def computeenvelope(self):
         """compute upper and lower bounds of envelope
@@ -108,8 +108,8 @@ class NetworkBase(object):
         upper = 1.0 - self.threshold / 2.0
         lower = self.threshold / 2.0
 
-        self.upperenvelope = np.nanmax(self.sim, axis=0) * upper
-        self.lowerenvelope = np.nanmin(self.sim, axis=0) * lower
+        self.upperenvelope = numpy.nanmax(self.sim, axis=0) * upper
+        self.lowerenvelope = numpy.nanmin(self.sim, axis=0) * lower
 
     def setbounds(self, nearest):
         """set upper and lower bounds
@@ -118,21 +118,21 @@ class NetworkBase(object):
         if self.lowerbound is None:
             self.lowerbound = 0
         if self.upperbound is None:
-            self.upperbound = np.nanmax(nearest)
+            self.upperbound = numpy.nanmax(nearest)
 
 
 class NetworkG(NetworkBase):
-    """Compute a network constrained G statistic. This requires the
+    """Compute a network constrained `G` statistic. This requires the
     capability to compute a distance matrix between two point patterns.
     In this case one will be observed and one will be simulated.
     """
 
     def computeobserved(self):
-        """compute the observed nearest
+        """Compute the observed nearest.
         """
 
         # find nearest point that is not NaN
-        nearest = np.nanmin(self.ntw.allneighbordistances(self.pointpattern), axis=1)
+        nearest = numpy.nanmin(self.ntw.allneighbordistances(self.pointpattern), axis=1)
         self.setbounds(nearest)
 
         # compute a G-Function
@@ -145,7 +145,7 @@ class NetworkG(NetworkBase):
         self.xaxis = observedx
 
     def computepermutations(self):
-        """compute permutations of the nearest
+        """Compute permutations of the nearest.
         """
 
         # for each round of permutations
@@ -157,7 +157,7 @@ class NetworkG(NetworkBase):
             )
 
             # find nearest observation
-            nearest = np.nanmin(self.ntw.allneighbordistances(sim), axis=1)
+            nearest = numpy.nanmin(self.ntw.allneighbordistances(sim), axis=1)
 
             # compute a G-Function
             simx, simy = gfunction(
@@ -169,7 +169,7 @@ class NetworkG(NetworkBase):
 
 
 class NetworkK(NetworkBase):
-    """Compute a network constrained K statistic. This requires the
+    """Compute a network constrained `K` statistic. This requires the
     capability to compute a distance matrix between two point patterns.
     In this case one will be observed and one will be simulated.
     
@@ -177,7 +177,7 @@ class NetworkK(NetworkBase):
     ----------
     
     lam : float
-        ``lambda`` value
+        The ``lambda`` value.
     
     Notes
     -----
@@ -187,7 +187,7 @@ class NetworkK(NetworkBase):
     """
 
     def computeobserved(self):
-        """compute the observed nearest
+        """Compute the observed nearest.
         """
 
         # find nearest point that is not NaN
@@ -207,7 +207,7 @@ class NetworkK(NetworkBase):
         self.xaxis = observedx
 
     def computepermutations(self):
-        """compute permutations of the nearest
+        """Compute permutations of the nearest.
         """
 
         # for each round of permutations
@@ -231,7 +231,7 @@ class NetworkK(NetworkBase):
 
 
 class NetworkF(NetworkBase):
-    """Compute a network constrained F statistic. This requires the
+    """Compute a network constrained `F` statistic. This requires the
     capability to compute a distance matrix between two point patterns.
     In this case one will be observed and one will be simulated.
     
@@ -239,12 +239,12 @@ class NetworkF(NetworkBase):
     ----------
     
     fsim : spaghetti.network.SimulatedPointPattern
-        simulated point pattern of ``self.nptsv points
+        A simulated point pattern of ``self.npts`` points.
     
     """
 
     def computeobserved(self):
-        """compute the observed nearest and simulated nearest
+        """Compute the observed nearest and simulated nearest.
         """
 
         # create an initial simulated point pattern
@@ -252,7 +252,7 @@ class NetworkF(NetworkBase):
 
         # find nearest neighbor distances from
         # the simulated to the observed
-        nearest = np.nanmin(
+        nearest = numpy.nanmin(
             self.ntw.allneighbordistances(self.fsim, self.pointpattern), axis=1
         )
         self.setbounds(nearest)
@@ -271,7 +271,7 @@ class NetworkF(NetworkBase):
         self.xaxis = observedx
 
     def computepermutations(self):
-        """compute permutations of the nearest
+        """Compute permutations of the nearest.
         """
 
         # for each round of permutations
@@ -283,7 +283,9 @@ class NetworkF(NetworkBase):
             )
 
             # find nearest observation
-            nearest = np.nanmin(self.ntw.allneighbordistances(sim, self.fsim), axis=1)
+            nearest = numpy.nanmin(
+                self.ntw.allneighbordistances(sim, self.fsim), axis=1
+            )
 
             # compute an F-function
             simx, simy = ffunction(
@@ -295,7 +297,7 @@ class NetworkF(NetworkBase):
 
 
 def gfunction(nearest, lowerbound, upperbound, nsteps=10):
-    """Compute a G-Function
+    """Compute a `G`-function.
 
     Parameters
     ----------
@@ -317,10 +319,10 @@ def gfunction(nearest, lowerbound, upperbound, nsteps=10):
     -------
     
     x : numpy.ndarray
-        x-axis of values
+        The x-axis of values.
     
     y : numpy.ndarray
-        y-axis of values
+        The y-axis of values.
     
     """
 
@@ -328,13 +330,13 @@ def gfunction(nearest, lowerbound, upperbound, nsteps=10):
     nobs = len(nearest)
 
     # create interval for x-axis
-    x = np.linspace(lowerbound, upperbound, nsteps)
+    x = numpy.linspace(lowerbound, upperbound, nsteps)
 
     # sort nearest neighbor distances
-    nearest = np.sort(nearest)
+    nearest = numpy.sort(nearest)
 
     # create empty y-axis vector
-    y = np.empty(len(x))
+    y = numpy.empty(len(x))
 
     # iterate over x-axis interval
     for i, r in enumerate(x):
@@ -356,7 +358,7 @@ def gfunction(nearest, lowerbound, upperbound, nsteps=10):
 
 
 def kfunction(nearest, upperbound, intensity, nsteps=10):
-    """Compute a K-Function
+    """Compute a `K`-function.
 
     Parameters
     ----------
@@ -378,10 +380,10 @@ def kfunction(nearest, upperbound, intensity, nsteps=10):
     -------
     
     x : numpy.ndarray
-        x-axis of values
+        The x-axis of values.
     
     y : numpy.ndarray
-        y-axis of values
+        The y-axis of values.
     
     """
 
@@ -389,10 +391,10 @@ def kfunction(nearest, upperbound, intensity, nsteps=10):
     nobs = len(nearest)
 
     # create interval for x-axis
-    x = np.linspace(0, upperbound, nsteps)
+    x = numpy.linspace(0, upperbound, nsteps)
 
     # create empty y-axis vector
-    y = np.empty(len(x))
+    y = numpy.empty(len(x))
 
     # iterate over x-axis interval
     for i, r in enumerate(x):
@@ -407,7 +409,7 @@ def kfunction(nearest, upperbound, intensity, nsteps=10):
 
 
 def ffunction(nearest, lowerbound, upperbound, npts, nsteps=10):
-    """Compute an F-Function
+    """Compute an `F`-function.
 
     Parameters
     ----------
@@ -422,7 +424,7 @@ def ffunction(nearest, lowerbound, upperbound, npts, nsteps=10):
         The end value of the sequence.
     
     npts : int
-        pointpattern.npoints
+         The number of points (``pointpattern.npoints``).
     
     nsteps : int
         The number of distance bands. Default is 10. Must be
@@ -432,10 +434,10 @@ def ffunction(nearest, lowerbound, upperbound, npts, nsteps=10):
     -------
     
     x : numpy.ndarray
-        x-axis of values
+        The x-axis of values.
     
     y : numpy.ndarray
-        y-axis of values
+        The y-axis of values.
     
     """
 
@@ -443,13 +445,13 @@ def ffunction(nearest, lowerbound, upperbound, npts, nsteps=10):
     nobs = len(nearest)
 
     # create interval for x-axis
-    x = np.linspace(lowerbound, upperbound, nsteps)
+    x = numpy.linspace(lowerbound, upperbound, nsteps)
 
     # sort nearest neighbor distances
-    nearest = np.sort(nearest)
+    nearest = numpy.sort(nearest)
 
     # create empty y-axis vector
-    y = np.empty(len(x))
+    y = numpy.empty(len(x))
 
     # iterate over x-axis interval
     for i, r in enumerate(x):
