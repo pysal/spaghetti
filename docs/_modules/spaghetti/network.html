@@ -65,8 +65,9 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../api.html">API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../api.html#network-instantiation">Network instantiation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../api.html#network-point-patterns">Network point patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#network-feature-instantiation">Network feature instantiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#network-feature-extraction">Network feature extraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#save-and-load-a-network">Save and load a network</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a></li>
@@ -2379,7 +2380,7 @@
 
         <span class="k">return</span> <span class="n">split_network</span></div>
 
-<div class="viewcode-block" id="Network.savenetwork"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.savenetwork">[docs]</a>    <span class="k">def</span> <span class="nf">savenetwork</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.savenetwork"><a class="viewcode-back" href="../../generated/spaghetti.Network.savenetwork.html#spaghetti.Network.savenetwork">[docs]</a>    <span class="k">def</span> <span class="nf">savenetwork</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Save a network to disk as a binary file.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
@@ -2402,7 +2403,7 @@
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">networkout</span><span class="p">:</span>
             <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">networkout</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Network.loadnetwork"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.loadnetwork">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Network.loadnetwork"><a class="viewcode-back" href="../../generated/spaghetti.Network.loadnetwork.html#spaghetti.Network.loadnetwork">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">loadnetwork</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Load a network from a binary file saved on disk.</span>
 <span class="sd">        </span>
@@ -2530,9 +2531,10 @@
 
 
 <div class="viewcode-block" id="PointPattern"><a class="viewcode-back" href="../../generated/spaghetti.PointPattern.html#spaghetti.PointPattern">[docs]</a><span class="k">class</span> <span class="nc">PointPattern</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Note from the original author of ``pysal.network``: </span>
-<span class="sd">    A stub point pattern class used to store a point pattern. This</span>
-<span class="sd">    class is monkey patched with network specific attributes when the</span>
+    <span class="sd">&quot;&quot;&quot;A stub point pattern class used to store a point pattern.</span>
+<span class="sd">    </span>
+<span class="sd">    Note from the original author of ``pysal.network``: </span>
+<span class="sd">    This class is monkey patched with network specific attributes when the</span>
 <span class="sd">    points are snapped to a network. In the future this class may be</span>
 <span class="sd">    replaced with a generic point pattern class.</span>
 <span class="sd">    </span>
@@ -2662,7 +2664,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">npoints</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div></div>
 
 
-<div class="viewcode-block" id="SimulatedPointPattern"><a class="viewcode-back" href="../../generated/spaghetti.SimulatedPointPattern.html#spaghetti.SimulatedPointPattern">[docs]</a><span class="k">class</span> <span class="nc">SimulatedPointPattern</span><span class="p">:</span>
+<span class="k">class</span> <span class="nc">SimulatedPointPattern</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Note from the original author of ``pysal.network``:</span>
 <span class="sd">    Struct style class to mirror the ``PointPattern`` class.</span>
 <span class="sd">    If the ``PointPattern`` class has methods, it might make</span>
@@ -2706,14 +2708,14 @@
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="SimulatedPointPattern.__init__"><a class="viewcode-back" href="../../generated/spaghetti.SimulatedPointPattern.html#spaghetti.SimulatedPointPattern.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
         <span class="c1"># duplicate post-snapping PointPattern class structure</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">npoints</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">obs_to_arc</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">obs_to_vertex</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dist_to_vertex</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">snapped_coordinates</span> <span class="o">=</span> <span class="p">{}</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">snapped_coordinates</span> <span class="o">=</span> <span class="p">{}</span>
 </pre></div>
 
     </div>

@@ -67,8 +67,9 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#network-instantiation">Network instantiation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#network-point-patterns">Network point patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#network-feature-instantiation">Network feature instantiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#network-feature-extraction">Network feature extraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#save-and-load-a-network">Save and load a network</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
@@ -86,8 +87,9 @@
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">API reference</a><ul>
-<li><a class="reference internal" href="#network-instantiation">Network instantiation</a></li>
-<li><a class="reference internal" href="#network-point-patterns">Network point patterns</a></li>
+<li><a class="reference internal" href="#network-feature-instantiation">Network feature instantiation</a></li>
+<li><a class="reference internal" href="#network-feature-extraction">Network feature extraction</a></li>
+<li><a class="reference internal" href="#save-and-load-a-network">Save and load a network</a></li>
 </ul>
 </li>
 </ul>
@@ -121,8 +123,8 @@
       
   <div class="section" id="api-reference">
 <span id="api-ref"></span><h1>API reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="network-instantiation">
-<span id="network-api"></span><h2>Network instantiation<a class="headerlink" href="#network-instantiation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="network-feature-instantiation">
+<span id="network-api"></span><h2>Network feature instantiation<a class="headerlink" href="#network-feature-instantiation" title="Permalink to this headline">¶</a></h2>
 <table class="longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
@@ -132,25 +134,39 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/spaghetti.Network.html#spaghetti.Network" title="spaghetti.Network"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network</span></code></a>([in_data, vertex_sig, …])</p></td>
 <td><p>Spatially-constrained network representation and analytical functionality.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/spaghetti.element_as_gdf.html#spaghetti.element_as_gdf" title="spaghetti.element_as_gdf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.element_as_gdf</span></code></a>(net[, vertices, …])</p></td>
-<td><p>Return a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> of network elements.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/spaghetti.PointPattern.html#spaghetti.PointPattern" title="spaghetti.PointPattern"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.PointPattern</span></code></a>([in_data, …])</p></td>
+<td><p>A stub point pattern class used to store a point pattern.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="section" id="network-point-patterns">
-<h2>Network point patterns<a class="headerlink" href="#network-point-patterns" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="network-feature-extraction">
+<h2>Network feature extraction<a class="headerlink" href="#network-feature-extraction" title="Permalink to this headline">¶</a></h2>
 <table class="longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/spaghetti.PointPattern.html#spaghetti.PointPattern" title="spaghetti.PointPattern"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.PointPattern</span></code></a>([in_data, …])</p></td>
-<td><p>Note from the original author of <code class="docutils literal notranslate"><span class="pre">pysal.network</span></code>:  A stub point pattern class used to store a point pattern.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/spaghetti.element_as_gdf.html#spaghetti.element_as_gdf" title="spaghetti.element_as_gdf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.element_as_gdf</span></code></a>(net[, vertices, …])</p></td>
+<td><p>Return a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> of network elements.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/spaghetti.SimulatedPointPattern.html#spaghetti.SimulatedPointPattern" title="spaghetti.SimulatedPointPattern"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.SimulatedPointPattern</span></code></a>()</p></td>
-<td><p>Note from the original author of <code class="docutils literal notranslate"><span class="pre">pysal.network</span></code>: Struct style class to mirror the <code class="docutils literal notranslate"><span class="pre">PointPattern</span></code> class.</p></td>
+</tbody>
+</table>
+</div>
+<div class="section" id="save-and-load-a-network">
+<h2>Save and load a network<a class="headerlink" href="#save-and-load-a-network" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/spaghetti.Network.savenetwork.html#spaghetti.Network.savenetwork" title="spaghetti.Network.savenetwork"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network.savenetwork</span></code></a>(self, filename)</p></td>
+<td><p>Save a network to disk as a binary file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/spaghetti.Network.loadnetwork.html#spaghetti.Network.loadnetwork" title="spaghetti.Network.loadnetwork"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network.loadnetwork</span></code></a>(filename)</p></td>
+<td><p>Load a network from a binary file saved on disk.</p></td>
 </tr>
 </tbody>
 </table>
