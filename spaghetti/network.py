@@ -2417,9 +2417,10 @@ def element_as_gdf(
 
 
 class PointPattern:
-    """Note from the original author of ``pysal.network``: 
-    A stub point pattern class used to store a point pattern. This
-    class is monkey patched with network specific attributes when the
+    """A stub point pattern class used to store a point pattern.
+    
+    Note from the original author of ``pysal.network``: 
+    This class is monkey patched with network specific attributes when the
     points are snapped to a network. In the future this class may be
     replaced with a generic point pattern class.
     

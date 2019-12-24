@@ -8,21 +8,30 @@ API reference
 .. _network_api:
 
 
-Network instantiation
----------------------
+Network feature instantiation
+-----------------------------
 
 .. autosummary::
    :toctree: generated/
     
     spaghetti.Network
-    spaghetti.element_as_gdf
+    spaghetti.PointPattern
 
 
-Network point patterns
-----------------------
+Network feature extraction
+--------------------------
 
 .. autosummary::
    :toctree: generated/
-   
-    spaghetti.PointPattern
-    spaghetti.SimulatedPointPattern
+    
+    spaghetti.element_as_gdf
+
+
+Save and load a network
+-----------------------
+
+.. autosummary::
+   :toctree: generated/
+    
+    spaghetti.Network.savenetwork
+    spaghetti.Network.loadnetwork
