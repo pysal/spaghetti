@@ -570,7 +570,7 @@ def _arcs_as_gdf(net, points, id_col=None, geom_col=None):
     points : geopandas.GeoDataFrame
         Network point elements (either vertices or ``network.PointPattern``
         points) as a simple ``geopandas.GeoDataFrame`` of
-        ``shapely.geoemtry.Point`` objects with an `id` column and
+        ``shapely.geometry.Point`` objects with an `id` column and
         ``geometry`` column.
     
     Notes
