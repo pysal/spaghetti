@@ -2,8 +2,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>spaghetti.Network.count_per_link &#8212; spaghetti v1.3.1 Manual</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -122,30 +121,24 @@
 <h1>spaghetti.Network.count_per_link<a class="headerlink" href="#spaghetti-network-count-per-link" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="spaghetti.Network.count_per_link">
-<code class="descclassname">Network.</code><code class="descname">count_per_link</code><span class="sig-paren">(</span><em>obs_on</em>, <em>graph=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.count_per_link"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.count_per_link" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">count_per_link</code><span class="sig-paren">(</span><em class="sig-param">obs_on</em>, <em class="sig-param">graph=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.count_per_link"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.count_per_link" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the counts per arc or edge (link).</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>obs_on_network</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
-<dd><p class="first last">Dictionary of observations on the network.
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>obs_on_network</strong><span class="classifier">dict</span></dt><dd><p>Dictionary of observations on the network.
 Either {(link):{pt_id:(coords)}} or 
 {link:[(coord),(coord),(coord)]}</p>
 </dd>
 </dl>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>counts</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
-<dd><p class="first last">{(link):count}</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>counts</strong><span class="classifier">dict</span></dt><dd><p>{(link):count}</p>
 </dd>
 </dl>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p class="rubric">Examples</p>
 <p>Note that this passes the obs_to_arc or obs_to_edge attribute
 of a point pattern snapped to the network.</p>
@@ -191,7 +184,7 @@ of a point pattern snapped to the network.</p>
     </p>
     <p>
         &copy; Copyright 2018, pysal developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.<br/>
     </p>
   </div>
 </footer>

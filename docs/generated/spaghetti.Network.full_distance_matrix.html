@@ -2,8 +2,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>spaghetti.Network.full_distance_matrix &#8212; spaghetti v1.3.1 Manual</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -122,26 +121,20 @@
 <h1>spaghetti.Network.full_distance_matrix<a class="headerlink" href="#spaghetti-network-full-distance-matrix" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="spaghetti.Network.full_distance_matrix">
-<code class="descclassname">Network.</code><code class="descname">full_distance_matrix</code><span class="sig-paren">(</span><em>n_processes</em>, <em>gen_tree=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.full_distance_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.full_distance_matrix" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">full_distance_matrix</code><span class="sig-paren">(</span><em class="sig-param">n_processes</em>, <em class="sig-param">gen_tree=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.full_distance_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.full_distance_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>All vertex-to-vertex distances on a network. This function
 is called from within <code class="docutils literal notranslate"><span class="pre">allneighbordistances()</span></code>,
 <code class="docutils literal notranslate"><span class="pre">nearestneighbordistances()</span></code>, and <code class="docutils literal notranslate"><span class="pre">distancebandweights()</span></code>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>n_processes</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd><p class="first last">Cpu cores for multiprocessing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n_processes</strong><span class="classifier">int</span></dt><dd><p>Cpu cores for multiprocessing.</p>
 </dd>
-<dt><strong>gen_tree</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">Rebuild shortest path <code class="docutils literal notranslate"><span class="pre">True</span></code>, or skip <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<dt><strong>gen_tree</strong><span class="classifier">bool</span></dt><dd><p>Rebuild shortest path <code class="docutils literal notranslate"><span class="pre">True</span></code>, or skip <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 </dd>
 </dl>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p class="rubric">Notes</p>
 <p>Based on <a class="reference internal" href="../references.html#dijkstra1959a" id="id1">[Dij59]</a>.</p>
 </dd></dl>
@@ -168,7 +161,7 @@ is called from within <code class="docutils literal notranslate"><span class="pr
     </p>
     <p>
         &copy; Copyright 2018, pysal developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.<br/>
     </p>
   </div>
 </footer>

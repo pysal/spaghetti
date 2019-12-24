@@ -2,8 +2,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>spaghetti.Network.snapobservations &#8212; spaghetti v1.3.1 Manual</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -122,34 +121,26 @@
 <h1>spaghetti.Network.snapobservations<a class="headerlink" href="#spaghetti-network-snapobservations" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="spaghetti.Network.snapobservations">
-<code class="descclassname">Network.</code><code class="descname">snapobservations</code><span class="sig-paren">(</span><em>in_data</em>, <em>name</em>, <em>idvariable=None</em>, <em>attribute=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.snapobservations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.snapobservations" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Network.</code><code class="sig-name descname">snapobservations</code><span class="sig-paren">(</span><em class="sig-param">in_data</em>, <em class="sig-param">name</em>, <em class="sig-param">idvariable=None</em>, <em class="sig-param">attribute=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.snapobservations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.snapobservations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Snap a point pattern shapefile to network object. The
 point pattern is stored in the <code class="docutils literal notranslate"><span class="pre">network.pointpattern['key']</span></code>
 attribute of the network object.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>in_data</strong> <span class="classifier-delimiter">:</span> <span class="classifier">{geopandas.GeoDataFrame, str}</span></dt>
-<dd><p class="first last">The input geographic data. Either (1) a path to a
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>in_data</strong><span class="classifier">{geopandas.GeoDataFrame, str}</span></dt><dd><p>The input geographic data. Either (1) a path to a
 shapefile (<code class="docutils literal notranslate"><span class="pre">str</span></code>); or (2) a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code>.</p>
 </dd>
-<dt><strong>name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd><p class="first last">Name to be assigned to the point dataset.</p>
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Name to be assigned to the point dataset.</p>
 </dd>
-<dt><strong>idvariable</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd><p class="first last">Column name to be used as ID variable.</p>
+<dt><strong>idvariable</strong><span class="classifier">str</span></dt><dd><p>Column name to be used as ID variable.</p>
 </dd>
-<dt><strong>attribute</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">Defines whether attributes should be extracted. <code class="docutils literal notranslate"><span class="pre">True</span></code> for
+<dt><strong>attribute</strong><span class="classifier">bool</span></dt><dd><p>Defines whether attributes should be extracted. <code class="docutils literal notranslate"><span class="pre">True</span></code> for
 attribute extraction. <code class="docutils literal notranslate"><span class="pre">False</span></code> for no attribute extraction.</p>
 </dd>
 </dl>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p class="rubric">Examples</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">spaghetti</span> <span class="k">as</span> <span class="nn">spgh</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">streets_file</span> <span class="o">=</span> <span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s1">&#39;streets.shp&#39;</span><span class="p">)</span>
@@ -185,7 +176,7 @@ attribute extraction. <code class="docutils literal notranslate"><span class="pr
     </p>
     <p>
         &copy; Copyright 2018, pysal developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.<br/>
     </p>
   </div>
 </footer>
