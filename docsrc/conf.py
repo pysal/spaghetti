@@ -44,6 +44,7 @@ extensions = [  #'sphinx_gallery.gen_gallery',
     "sphinx.ext.intersphinx",
     "numpydoc",
     "matplotlib.sphinxext.plot_directive",
+    "nbsphinx"
 ]
 
 
@@ -155,6 +156,7 @@ html_theme_options = {
     # Navigation bar menu
     "navbar_links": [
         ("Installation", "installation"),
+        ("Tutorial", "tutorial"),
         ("API", "api"),
         ("References", "references"),
     ],
