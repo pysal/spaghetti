@@ -260,7 +260,7 @@ class NetworkF(NetworkBase):
 
         # find nearest neighbor distances from
         # the simulated to the observed
-        nearest = np.nanmin(
+        nearest = numpy.nanmin(
             self.ntw.allneighbordistances(self.fsim, self.pointpattern), axis=1
         )
         self.setbounds(nearest)
