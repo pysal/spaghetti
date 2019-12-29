@@ -202,7 +202,7 @@ class NetworkK(NetworkBase):
         """
 
         # find nearest point that is not NaN
-        nearest = np.nanmin(self.ntw.allneighbordistances(self.pointpattern), axis=1)
+        nearest = numpy.nanmin(self.ntw.allneighbordistances(self.pointpattern), axis=1)
         self.setbounds(nearest)
 
         # compute a G-Function
@@ -227,7 +227,7 @@ class NetworkK(NetworkBase):
             )
 
             # find nearest observation
-            nearest = np.nanmin(self.ntw.allneighbordistances(sim), axis=1)
+            nearest = numpy.nanmin(self.ntw.allneighbordistances(sim), axis=1)
 
             # compute a G-Function
             simx, simy = gfunction(
@@ -306,7 +306,119 @@ class NetworkF(NetworkBase):
 
 
 def gfunction(nearest, lowerbound, upperbound, nsteps=10):
-    """Compute a `G`-function.
+    """Compute a `G`-function,
+
+    Parameters
+    ----------
+    
+    nearest : numpy.ndarray
+        A vector of nearest neighbor distances.
+    
+    lowerbound : int or float
+        The starting value of the sequence.
+    
+    upperbound : int or float
+        The end value of the sequence.
+    
+    nsteps : int
+        The number of distance bands. Default is 10. Must be
+        non-negative.
+    
+    Returns
+    -------
+    
+    x : numpy.ndarray
+        x-axis of values
+    
+    y : numpy.ndarray
+        y-axis of values
+    
+    """
+
+    # set observation count
+    nobs = len(nearest)
+
+    # create interval for x-axis
+    x = numpy.linspace(lowerbound, upperbound, nsteps)
+
+    # sort nearest neighbor distances
+    nearest = numpy.sort(nearest)
+
+    # create empty y-axis vector
+    y = numpy.empty(len(x))
+
+    # iterate over x-axis interval
+    for i, r in enumerate(x):
+
+        # slice out and count neighbors within radius
+        cnt = len(nearest[nearest <= r])
+
+        # if there is one or more neighbors compute `g`
+        if cnt > 0:
+            g = cnt / float(nobs)
+        # otherwise set `g` to zero
+        else:
+            g = 0
+
+        # label `g` on the y-axis
+        y[i] = g
+
+    return x, y
+
+
+def kfunction(nearest, upperbound, intensity, nsteps=10):
+    """Compute a `K`-function.
+
+    Parameters
+    ----------
+    
+    nearest : numpy.ndarray
+        A vector of nearest neighbor distances.
+    
+    upperbound : int or float
+        The end value of the sequence.
+    
+    intensity : float
+        lambda value
+    
+    nsteps : int
+        The number of distance bands. Default is 10. Must be
+        non-negative.
+    
+    Returns
+    -------
+    
+    x : numpy.ndarray
+        x-axis of values
+    
+    y : numpy.ndarray
+        y-axis of values
+    
+    """
+
+    # set observation count
+    nobs = len(nearest)
+
+    # create interval for x-axis
+    x = numpy.linspace(0, upperbound, nsteps)
+
+    # create empty y-axis vector
+    y = numpy.empty(len(x))
+
+    # iterate over x-axis interval
+    for i, r in enumerate(x):
+
+        # slice out and count neighbors within radius
+        y[i] = len(nearest[nearest <= r])
+
+    # compute k for y-axis vector
+    y *= intensity ** -1
+
+    return x, y
+
+
+def ffunction(nearest, lowerbound, upperbound, npts, nsteps=10):
+    """Compute an `F`-function.
 
     Parameters
     ----------
@@ -331,10 +443,10 @@ def gfunction(nearest, lowerbound, upperbound, nsteps=10):
     -------
     
     x : numpy.ndarray
-        The x-axis of values.
+        x-axis of values
     
     y : numpy.ndarray
-        The y-axis of values.
+        y-axis of values
     
     """
 
@@ -365,118 +477,6 @@ def gfunction(nearest, lowerbound, upperbound, nsteps=10):
 
         # label `f` on the y-axis
         y[i] = f
-
-    return x, y
-
-
-def kfunction(nearest, upperbound, intensity, nsteps=10):
-    """Compute a `K`-function.
-
-    Parameters
-    ----------
-    
-    nearest : numpy.ndarray
-        A vector of nearest neighbor distances.
-    
-    lowerbound : int or float
-        The starting value of the sequence.
-    
-    upperbound : int or float
-        The end value of the sequence.
-    
-    nsteps : int
-        The number of distance bands. Default is 10. Must be
-        non-negative.
-    
-    Returns
-    -------
-    
-    x : numpy.ndarray
-        The x-axis of values.
-    
-    y : numpy.ndarray
-        The y-axis of values.
-    
-    """
-
-    # set observation count
-    nobs = len(nearest)
-
-    # create interval for x-axis
-    x = numpy.linspace(0, upperbound, nsteps)
-
-    # create empty y-axis vector
-    y = numpy.empty(len(x))
-
-    # iterate over x-axis interval
-    for i, r in enumerate(x):
-
-        # slice out and count neighbors within radius
-        cnt = len(nearest[nearest <= r])
-
-        # if there is one or more neighbors compute `g`
-        if cnt > 0:
-            g = cnt / float(nobs)
-        # otherwise set `g` to zero
-        else:
-            g = 0
-
-        # label `g` on the y-axis
-        y[i] = g
-
-    return x, y
-
-
-def ffunction(nearest, lowerbound, upperbound, npts, nsteps=10):
-    """Compute an `F`-function.
-
-    Parameters
-    ----------
-    
-    nearest : numpy.ndarray
-        A vector of nearest neighbor distances.
-    
-    upperbound : int or float
-        The end value of the sequence.
-    
-    npts : int
-         The number of points (``pointpattern.npoints``).
-    
-    nsteps : int
-        The number of distance bands. Default is 10. Must be
-        non-negative.
-    
-    Returns
-    -------
-    
-    x : numpy.ndarray
-        The x-axis of values.
-    
-    y : numpy.ndarray
-        The y-axis of values.
-    
-    """
-
-    # set observation count
-    nobs = len(nearest)
-
-    # create interval for x-axis
-    x = numpy.linspace(lowerbound, upperbound, nsteps)
-
-    # sort nearest neighbor distances
-    nearest = numpy.sort(nearest)
-
-    # create empty y-axis vector
-    y = numpy.empty(len(x))
-
-    # iterate over x-axis interval
-    for i, r in enumerate(x):
-
-        # slice out and count neighbors within radius
-        y[i] = len(nearest[nearest <= r])
-
-    # compute k for y-axis vector
-    y *= intensity ** -1
 
     return x, y
 
