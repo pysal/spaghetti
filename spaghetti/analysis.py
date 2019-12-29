@@ -11,7 +11,7 @@ class NetworkBase(object):
     ntw : spaghetti.Network
         A spaghetti network object.
     
-    pointpattern : spaghetti.PointPattern
+    pointpattern : spaghetti.network.PointPattern
         A spaghetti point pattern object.
     
     nsteps : int
@@ -125,76 +125,6 @@ class NetworkG(NetworkBase):
     """Compute a network constrained `G` statistic. This requires the
     capability to compute a distance matrix between two point patterns.
     In this case one will be observed and one will be simulated.
-    
-    Attributes
-    ----------
-    
-    fsim : spaghetti.SimulatedPointPattern
-        simulated point pattern of ``self.nptsv`` points
-    
-    """
-
-    def computeobserved(self):
-        """Compute the observed nearest.
-        """
-
-        # find nearest point that is not NaN
-        nearest = numpy.nanmin(self.ntw.allneighbordistances(self.pointpattern), axis=1)
-        self.setbounds(nearest)
-
-        # compute an F-function
-        observedx, observedy = ffunction(
-            nearest,
-            self.lowerbound,
-            self.upperbound,
-            nsteps=self.nsteps,
-            npts=self.npts,
-        )
-
-        # set observed values
-        self.observed = observedy
-        self.xaxis = observedx
-
-    def computepermutations(self):
-        """Compute permutations of the nearest.
-        """
-
-        # for each round of permutations
-        for p in range(self.permutations):
-
-            # simulate a point pattern
-            sim = self.ntw.simulate_observations(
-                self.npts, distribution=self.distribution
-            )
-
-            # find nearest observation
-            nearest = numpy.nanmin(self.ntw.allneighbordistances(sim), axis=1)
-
-            # compute an F-function
-            simx, simy = ffunction(
-                nearest, self.lowerbound, self.upperbound, self.npts, nsteps=self.nsteps
-            )
-
-            # label the permutation
-            self.sim[p] = simy
-
-
-class NetworkK(NetworkBase):
-    """Compute a network constrained `K` statistic. This requires the
-    capability to compute a distance matrix between two point patterns.
-    In this case one will be observed and one will be simulated.
-    
-    Attributes
-    ----------
-    
-    lam : float
-        The ``lambda`` value.
-    
-    Notes
-    -----
-    
-    Based on :cite:`Okabe2001`.
-    
     """
 
     def computeobserved(self):
@@ -238,6 +168,67 @@ class NetworkK(NetworkBase):
             self.sim[p] = simy
 
 
+class NetworkK(NetworkBase):
+    """Compute a network constrained `K` statistic. This requires the
+    capability to compute a distance matrix between two point patterns.
+    In this case one will be observed and one will be simulated.
+    
+    Attributes
+    ----------
+    
+    lam : float
+        The ``lambda`` value.
+    
+    Notes
+    -----
+    
+    Based on :cite:`Okabe2001`.
+    
+    """
+
+    def computeobserved(self):
+        """Compute the observed nearest.
+        """
+
+        # find nearest point that is not NaN
+        nearest = self.ntw.allneighbordistances(self.pointpattern)
+        self.setbounds(nearest)
+
+        # set the intensity (lambda)
+        self.lam = self.npts / sum(self.ntw.arc_lengths.values())
+
+        # compute a K-Function
+        observedx, observedy = kfunction(
+            nearest, self.upperbound, self.lam, nsteps=self.nsteps
+        )
+
+        # set observed values
+        self.observed = observedy
+        self.xaxis = observedx
+
+    def computepermutations(self):
+        """Compute permutations of the nearest.
+        """
+
+        # for each round of permutations
+        for p in range(self.permutations):
+
+            # simulate a point pattern
+            sim = self.ntw.simulate_observations(
+                self.npts, distribution=self.distribution
+            )
+
+            # find nearest observation
+            nearest = self.ntw.allneighbordistances(sim)
+
+            # compute a K-Function
+            simx, simy = kfunction(
+                nearest, self.upperbound, self.lam, nsteps=self.nsteps
+            )
+
+            # label the permutation
+            self.sim[p] = simy
+
 
 class NetworkF(NetworkBase):
     """Compute a network constrained `F` statistic. This requires the
@@ -267,12 +258,20 @@ class NetworkF(NetworkBase):
 
         self.setbounds(nearest)
 
-        # set the intensity (lambda)
-        self.lam = self.npts / sum(self.ntw.arc_lengths.values())
+        # find nearest neighbor distances from
+        # the simulated to the observed
+        nearest = np.nanmin(
+            self.ntw.allneighbordistances(self.fsim, self.pointpattern), axis=1
+        )
+        self.setbounds(nearest)
 
-        # compute a K-Function
-        observedx, observedy = kfunction(
-            nearest, self.upperbound, self.lam, nsteps=self.nsteps
+        # compute an F-function
+        observedx, observedy = ffunction(
+            nearest,
+            self.lowerbound,
+            self.upperbound,
+            nsteps=self.nsteps,
+            npts=self.npts,
         )
 
         # set observed values
@@ -296,9 +295,9 @@ class NetworkF(NetworkBase):
                 self.ntw.allneighbordistances(sim, self.fsim), axis=1
             )
 
-            # compute a K-Function
-            simx, simy = kfunction(
-                nearest, self.upperbound, self.lam, nsteps=self.nsteps
+            # compute an F-function
+            simx, simy = ffunction(
+                nearest, self.lowerbound, self.upperbound, self.npts, nsteps=self.nsteps
             )
 
             # label the permutation
@@ -306,7 +305,7 @@ class NetworkF(NetworkBase):
 
 
 def gfunction(nearest, lowerbound, upperbound, nsteps=10):
-    """Compute a `G`-function,
+    """Compute a `G`-function.
 
     Parameters
     ----------
@@ -328,10 +327,10 @@ def gfunction(nearest, lowerbound, upperbound, nsteps=10):
     -------
     
     x : numpy.ndarray
-        x-axis of values
+        The x-axis of values.
     
     y : numpy.ndarray
-        y-axis of values
+        The y-axis of values.
     
     """
 
@@ -389,10 +388,10 @@ def kfunction(nearest, upperbound, intensity, nsteps=10):
     -------
     
     x : numpy.ndarray
-        x-axis of values
+        The x-axis of values.
     
     y : numpy.ndarray
-        y-axis of values
+        The y-axis of values.
     
     """
 
@@ -433,7 +432,7 @@ def ffunction(nearest, lowerbound, upperbound, npts, nsteps=10):
         The end value of the sequence.
     
     npts : int
-        pointpattern.npoints
+         The number of points (``pointpattern.npoints``).
     
     nsteps : int
         The number of distance bands. Default is 10. Must be
@@ -443,10 +442,10 @@ def ffunction(nearest, lowerbound, upperbound, npts, nsteps=10):
     -------
     
     x : numpy.ndarray
-        x-axis of values
+        The x-axis of values.
     
     y : numpy.ndarray
-        y-axis of values
+        The y-axis of values.
     
     """
 
@@ -479,4 +478,3 @@ def ffunction(nearest, lowerbound, upperbound, npts, nsteps=10):
         y[i] = f
 
     return x, y
-
