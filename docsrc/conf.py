@@ -114,7 +114,7 @@ html_favicon = "_static/images/pysal_favicon.ico"
 #
 html_theme_options = {
     # Navigation bar title. (Default: ``project`` value)
-    "navbar_title": "spaghetti",
+    "navbar_title": project,
     # Render the next and previous page links in navbar. (Default: true)
     "navbar_sidebarrel": False,
     # Render the current pages TOC in the navbar. (Default: true)
@@ -173,7 +173,7 @@ html_static_path = ["_static"]
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = "spaghetti" + "doc"
+htmlhelp_basename =  project + "doc"
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -199,8 +199,8 @@ latex_elements = {
 latex_documents = [
     (
         master_doc,
-        "spaghetti.tex",
-        u"spaghetti Documentation",
+        "%s.tex" % project,
+        u"%s Documentation" % project,
         u"pysal developers",
         "manual",
     )
@@ -211,7 +211,7 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [(master_doc, "spaghetti", u"spaghetti Documentation", [author], 1)]
+man_pages = [(master_doc, "%s"  % project, u"%s Documentation"  % project, [author], 1)]
 
 
 # -- Options for Texinfo output -------------------------------------------
@@ -222,10 +222,10 @@ man_pages = [(master_doc, "spaghetti", u"spaghetti Documentation", [author], 1)]
 texinfo_documents = [
     (
         master_doc,
-        "spaghetti",
-        u"spaghetti Documentation",
+        "%s" % project,
+        u"%s Documentation" % project,
         author,
-        "spaghetti",
+        "%s" % project,
         "SPAtial GrapHs: nETworks, Topology, & Inference",
         "Miscellaneous",
     )
