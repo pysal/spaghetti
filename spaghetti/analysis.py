@@ -11,7 +11,7 @@ class NetworkBase(object):
     ntw : spaghetti.Network
         A spaghetti network object.
     
-    pointpattern : spaghetti.network.PointPattern
+    pointpattern : spaghetti.PointPattern
         A spaghetti point pattern object.
     
     nsteps : int
@@ -125,6 +125,13 @@ class NetworkG(NetworkBase):
     """Compute a network constrained `G` statistic. This requires the
     capability to compute a distance matrix between two point patterns.
     In this case one will be observed and one will be simulated.
+    
+    Attributes
+    ----------
+    
+    fsim : spaghetti.SimulatedPointPattern
+        simulated point pattern of ``self.nptsv`` points
+    
     """
 
     def computeobserved(self):
@@ -135,9 +142,13 @@ class NetworkG(NetworkBase):
         nearest = numpy.nanmin(self.ntw.allneighbordistances(self.pointpattern), axis=1)
         self.setbounds(nearest)
 
-        # compute a G-Function
-        observedx, observedy = gfunction(
-            nearest, self.lowerbound, self.upperbound, nsteps=self.nsteps
+        # compute an F-function
+        observedx, observedy = ffunction(
+            nearest,
+            self.lowerbound,
+            self.upperbound,
+            nsteps=self.nsteps,
+            npts=self.npts,
         )
 
         # set observed values
@@ -159,9 +170,9 @@ class NetworkG(NetworkBase):
             # find nearest observation
             nearest = numpy.nanmin(self.ntw.allneighbordistances(sim), axis=1)
 
-            # compute a G-Function
-            simx, simy = gfunction(
-                nearest, self.lowerbound, self.upperbound, nsteps=self.nsteps
+            # compute an F-function
+            simx, simy = ffunction(
+                nearest, self.lowerbound, self.upperbound, self.npts, nsteps=self.nsteps
             )
 
             # label the permutation
@@ -191,15 +202,12 @@ class NetworkK(NetworkBase):
         """
 
         # find nearest point that is not NaN
-        nearest = self.ntw.allneighbordistances(self.pointpattern)
+        nearest = np.nanmin(self.ntw.allneighbordistances(self.pointpattern), axis=1)
         self.setbounds(nearest)
 
-        # set the intensity (lambda)
-        self.lam = self.npts / sum(self.ntw.arc_lengths.values())
-
-        # compute a K-Function
-        observedx, observedy = kfunction(
-            nearest, self.upperbound, self.lam, nsteps=self.nsteps
+        # compute a G-Function
+        observedx, observedy = gfunction(
+            nearest, self.lowerbound, self.upperbound, nsteps=self.nsteps
         )
 
         # set observed values
@@ -219,15 +227,16 @@ class NetworkK(NetworkBase):
             )
 
             # find nearest observation
-            nearest = self.ntw.allneighbordistances(sim)
+            nearest = np.nanmin(self.ntw.allneighbordistances(sim), axis=1)
 
-            # compute a K-Function
-            simx, simy = kfunction(
-                nearest, self.upperbound, self.lam, nsteps=self.nsteps
+            # compute a G-Function
+            simx, simy = gfunction(
+                nearest, self.lowerbound, self.upperbound, nsteps=self.nsteps
             )
 
             # label the permutation
             self.sim[p] = simy
+
 
 
 class NetworkF(NetworkBase):
@@ -255,15 +264,15 @@ class NetworkF(NetworkBase):
         nearest = numpy.nanmin(
             self.ntw.allneighbordistances(self.fsim, self.pointpattern), axis=1
         )
+
         self.setbounds(nearest)
 
-        # compute an F-function
-        observedx, observedy = ffunction(
-            nearest,
-            self.lowerbound,
-            self.upperbound,
-            nsteps=self.nsteps,
-            npts=self.npts,
+        # set the intensity (lambda)
+        self.lam = self.npts / sum(self.ntw.arc_lengths.values())
+
+        # compute a K-Function
+        observedx, observedy = kfunction(
+            nearest, self.upperbound, self.lam, nsteps=self.nsteps
         )
 
         # set observed values
@@ -287,9 +296,9 @@ class NetworkF(NetworkBase):
                 self.ntw.allneighbordistances(sim, self.fsim), axis=1
             )
 
-            # compute an F-function
-            simx, simy = ffunction(
-                nearest, self.lowerbound, self.upperbound, self.npts, nsteps=self.nsteps
+            # compute a K-Function
+            simx, simy = kfunction(
+                nearest, self.upperbound, self.lam, nsteps=self.nsteps
             )
 
             # label the permutation
@@ -311,120 +320,8 @@ def gfunction(nearest, lowerbound, upperbound, nsteps=10):
     upperbound : int or float
         The end value of the sequence.
     
-    nsteps : int
-        The number of distance bands. Default is 10. Must be
-        non-negative.
-    
-    Returns
-    -------
-    
-    x : numpy.ndarray
-        The x-axis of values.
-    
-    y : numpy.ndarray
-        The y-axis of values.
-    
-    """
-
-    # set observation count
-    nobs = len(nearest)
-
-    # create interval for x-axis
-    x = numpy.linspace(lowerbound, upperbound, nsteps)
-
-    # sort nearest neighbor distances
-    nearest = numpy.sort(nearest)
-
-    # create empty y-axis vector
-    y = numpy.empty(len(x))
-
-    # iterate over x-axis interval
-    for i, r in enumerate(x):
-
-        # slice out and count neighbors within radius
-        cnt = len(nearest[nearest <= r])
-
-        # if there is one or more neighbors compute `g`
-        if cnt > 0:
-            g = cnt / float(nobs)
-        # otherwise set `g` to zero
-        else:
-            g = 0
-
-        # label `g` on the y-axis
-        y[i] = g
-
-    return x, y
-
-
-def kfunction(nearest, upperbound, intensity, nsteps=10):
-    """Compute a `K`-function.
-
-    Parameters
-    ----------
-    
-    nearest : numpy.ndarray
-        A vector of nearest neighbor distances.
-    
-    upperbound : int or float
-        The end value of the sequence.
-    
-    intensity : float
-        lambda value
-    
-    nsteps : int
-        The number of distance bands. Default is 10. Must be
-        non-negative.
-    
-    Returns
-    -------
-    
-    x : numpy.ndarray
-        The x-axis of values.
-    
-    y : numpy.ndarray
-        The y-axis of values.
-    
-    """
-
-    # set observation count
-    nobs = len(nearest)
-
-    # create interval for x-axis
-    x = numpy.linspace(0, upperbound, nsteps)
-
-    # create empty y-axis vector
-    y = numpy.empty(len(x))
-
-    # iterate over x-axis interval
-    for i, r in enumerate(x):
-
-        # slice out and count neighbors within radius
-        y[i] = len(nearest[nearest <= r])
-
-    # compute k for y-axis vector
-    y *= intensity ** -1
-
-    return x, y
-
-
-def ffunction(nearest, lowerbound, upperbound, npts, nsteps=10):
-    """Compute an `F`-function.
-
-    Parameters
-    ----------
-    
-    nearest : numpy.ndarray
-        A vector of nearest neighbor distances.
-    
-    lowerbound : int or float
-        The starting value of the sequence.
-    
-    upperbound : int or float
-        The end value of the sequence.
-    
     npts : int
-         The number of points (``pointpattern.npoints``).
+        pointpattern.npoints
     
     nsteps : int
         The number of distance bands. Default is 10. Must be
@@ -470,3 +367,116 @@ def ffunction(nearest, lowerbound, upperbound, npts, nsteps=10):
         y[i] = f
 
     return x, y
+
+
+def kfunction(nearest, upperbound, intensity, nsteps=10):
+    """Compute a `K`-function.
+
+    Parameters
+    ----------
+    
+    nearest : numpy.ndarray
+        A vector of nearest neighbor distances.
+    
+    lowerbound : int or float
+        The starting value of the sequence.
+    
+    upperbound : int or float
+        The end value of the sequence.
+    
+    nsteps : int
+        The number of distance bands. Default is 10. Must be
+        non-negative.
+    
+    Returns
+    -------
+    
+    x : numpy.ndarray
+        The x-axis of values.
+    
+    y : numpy.ndarray
+        The y-axis of values.
+    
+    """
+
+    # set observation count
+    nobs = len(nearest)
+
+    # create interval for x-axis
+    x = numpy.linspace(0, upperbound, nsteps)
+
+    # create empty y-axis vector
+    y = numpy.empty(len(x))
+
+    # iterate over x-axis interval
+    for i, r in enumerate(x):
+
+        # slice out and count neighbors within radius
+        cnt = len(nearest[nearest <= r])
+
+        # if there is one or more neighbors compute `g`
+        if cnt > 0:
+            g = cnt / float(nobs)
+        # otherwise set `g` to zero
+        else:
+            g = 0
+
+        # label `g` on the y-axis
+        y[i] = g
+
+    return x, y
+
+
+def ffunction(nearest, lowerbound, upperbound, npts, nsteps=10):
+    """Compute an `F`-function.
+
+    Parameters
+    ----------
+    
+    nearest : numpy.ndarray
+        A vector of nearest neighbor distances.
+    
+    upperbound : int or float
+        The end value of the sequence.
+    
+    npts : int
+         The number of points (``pointpattern.npoints``).
+    
+    nsteps : int
+        The number of distance bands. Default is 10. Must be
+        non-negative.
+    
+    Returns
+    -------
+    
+    x : numpy.ndarray
+        The x-axis of values.
+    
+    y : numpy.ndarray
+        The y-axis of values.
+    
+    """
+
+    # set observation count
+    nobs = len(nearest)
+
+    # create interval for x-axis
+    x = numpy.linspace(lowerbound, upperbound, nsteps)
+
+    # sort nearest neighbor distances
+    nearest = numpy.sort(nearest)
+
+    # create empty y-axis vector
+    y = numpy.empty(len(x))
+
+    # iterate over x-axis interval
+    for i, r in enumerate(x):
+
+        # slice out and count neighbors within radius
+        y[i] = len(nearest[nearest <= r])
+
+    # compute k for y-axis vector
+    y *= intensity ** -1
+
+    return x, y
+
