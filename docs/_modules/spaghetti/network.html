@@ -129,6 +129,7 @@
 <span class="kn">from</span> <span class="nn">.analysis</span> <span class="kn">import</span> <span class="n">NetworkG</span><span class="p">,</span> <span class="n">NetworkK</span><span class="p">,</span> <span class="n">NetworkF</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">util</span>
 <span class="kn">from</span> <span class="nn">libpysal</span> <span class="kn">import</span> <span class="n">cg</span><span class="p">,</span> <span class="n">examples</span><span class="p">,</span> <span class="n">weights</span>
+<span class="kn">from</span> <span class="nn">libpysal.common</span> <span class="kn">import</span> <span class="n">requires</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">libpysal</span> <span class="kn">import</span> <span class="nb">open</span>
@@ -2436,7 +2437,8 @@
         <span class="k">return</span> <span class="bp">self</span></div></div>
 
 
-<div class="viewcode-block" id="element_as_gdf"><a class="viewcode-back" href="../../generated/spaghetti.element_as_gdf.html#spaghetti.element_as_gdf">[docs]</a><span class="k">def</span> <span class="nf">element_as_gdf</span><span class="p">(</span>
+<div class="viewcode-block" id="element_as_gdf"><a class="viewcode-back" href="../../generated/spaghetti.element_as_gdf.html#spaghetti.element_as_gdf">[docs]</a><span class="nd">@requires</span><span class="p">(</span><span class="s2">&quot;geopandas&quot;</span><span class="p">,</span> <span class="s2">&quot;shapely&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">element_as_gdf</span><span class="p">(</span>
     <span class="n">net</span><span class="p">,</span>
     <span class="n">vertices</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">arcs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
