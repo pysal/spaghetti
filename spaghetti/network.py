@@ -2381,6 +2381,23 @@ def element_as_gdf(
     
     This function requires ``geopandas``.
     
+    
+    Examples
+    --------
+    
+    >>> import spaghetti
+    >>> from libpysal import examples
+    >>> ntw = spaghetti.Network(examples.get_path("streets.shp"))
+    >>> vertices_df, arcs_df = spaghetti.element_as_gdf(
+    ...     ntw, vertices=True, arcs=True
+    ... )
+    >>> vertices_df.loc[0]
+    id                                          0
+    geometry    POINT (728368.04762 877125.89535)
+    Name: 0, dtype: object
+    >>> arcs_df.geometry.length.sum()
+    104414.09200823458
+    
     """
 
     # need vertices place holder to create network segment LineStrings
