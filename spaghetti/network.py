@@ -6,6 +6,7 @@ import numpy
 from .analysis import NetworkG, NetworkK, NetworkF
 from . import util
 from libpysal import cg, examples, weights
+from libpysal.common import requires
 
 try:
     from libpysal import open
@@ -2313,6 +2314,7 @@ class Network:
         return self
 
 
+@requires("geopandas", "shapely")
 def element_as_gdf(
     net,
     vertices=False,
