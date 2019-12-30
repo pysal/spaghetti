@@ -12,6 +12,9 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"TeX": {"equationNumbers": {"autoNumber": "AMS", "useLabelIds": true}}, "tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
@@ -19,7 +22,7 @@
     <link rel="shortcut icon" href="_static/pysal_favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="API reference" href="api.html" />
+    <link rel="next" title="Tutorial" href="tutorial.html" />
     <link rel="prev" title="spaghetti" href="index.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -46,6 +49,7 @@
           <ul class="nav navbar-nav">
             
                 <li><a href="#">Installation</a></li>
+                <li><a href="tutorial.html">Tutorial</a></li>
                 <li><a href="api.html">API</a></li>
                 <li><a href="references.html">References</a></li>
             
@@ -64,6 +68,11 @@
 <li class="toctree-l2"><a class="reference internal" href="#installing-with-conda-via-spaghetti-feedstock-highly-recommended">Installing with <code class="docutils literal notranslate"><span class="pre">conda</span></code> via spaghetti-feedstock (highly recommended)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installing-with-python-package-index">Installing with Python Package Index</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#development-version">Development Version</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/Basic_spaghetti_tutorial.html">Basic <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/Use_case-facility_location.html">Demostrating network-based optimal facility location modeling</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
@@ -121,13 +130,13 @@
   <div class="row">
     <div class="col-md-12 content">
       
-  <p>As of version 1.3, spaghetti supports Python <a class="reference external" href="https://docs.python.org/3.6/">3.6</a> and <a class="reference external" href="https://docs.python.org/3.7/">3.7</a> only. Please make sure that you are operating in a Python 3 environment.</p>
+  <p>As of version 1.3, <cite>spaghetti</cite> supports Python <a class="reference external" href="https://docs.python.org/3.6/">3.6</a> and <a class="reference external" href="https://docs.python.org/3.7/">3.7</a> only. Please make sure that you are operating in a Python 3 environment.</p>
 <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="installing-with-conda-via-spaghetti-feedstock-highly-recommended">
 <h2>Installing with <code class="docutils literal notranslate"><span class="pre">conda</span></code> via <a class="reference external" href="https://github.com/conda-forge/spaghetti-feedstock">spaghetti-feedstock</a> (highly recommended)<a class="headerlink" href="#installing-with-conda-via-spaghetti-feedstock-highly-recommended" title="Permalink to this headline">¶</a></h2>
-<p>To install <code class="docutils literal notranslate"><span class="pre">spaghetti</span></code> and all its dependencies, we recommend using the <a class="reference external" href="https://docs.conda.io/en/latest/">conda</a> manager, specifically with the <a class="reference external" href="https://conda-forge.org">conda-forge</a> channel. This can be obtained by installing the <a class="reference external" href="https://docs.continuum.io/anaconda/">Anaconda Distribution</a> (a free Python distribution for data science), or through <a class="reference external" href="https://docs.conda.io/en/latest/miniconda.html">miniconda</a> (minimal distribution only containing Python and the <code class="docutils literal notranslate"><span class="pre">conda</span></code> package manager).</p>
-<p>Using <cite>conda</cite>, <cite>spaghetti</cite> can be installed as follows:</p>
+<p>To install <cite>spaghetti</cite> and all its dependencies, we recommend using the <a class="reference external" href="https://docs.conda.io/en/latest/">conda</a> manager, specifically with the <a class="reference external" href="https://conda-forge.org">conda-forge</a> channel. This can be obtained by installing the <a class="reference external" href="https://docs.continuum.io/anaconda/">Anaconda Distribution</a> (a free Python distribution for data science), or through <a class="reference external" href="https://docs.conda.io/en/latest/miniconda.html">miniconda</a> (minimal distribution only containing Python and the <code class="docutils literal notranslate"><span class="pre">conda</span></code> package manager).</p>
+<p>Using <code class="docutils literal notranslate"><span class="pre">conda</span></code>, <cite>spaghetti</cite> can be installed as follows:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ conda config --set channel_priority strict
 $ conda install --channel conda-forge spaghetti
 </pre></div>
@@ -143,7 +152,7 @@ $ conda install --channel conda-forge spaghetti
 </pre></div>
 </div>
 <p><strong>Warning</strong></p>
-<p>When installing via <cite>pip</cite>, you have to ensure that the required dependencies for <cite>spaghetti</cite> are installed on your operating system. Details on how to install these packages are linked <a class="reference external" href="https://github.com/pysal/spaghetti#requirements">here</a>. Using <cite>conda</cite> (above) avoids having to install the dependencies separately.</p>
+<p>When installing via <code class="docutils literal notranslate"><span class="pre">pip</span></code>, you have to ensure that the required dependencies for <cite>spaghetti</cite> are installed on your operating system. Details on how to install these packages are linked <a class="reference external" href="https://github.com/pysal/spaghetti#requirements">here</a>. Using <code class="docutils literal notranslate"><span class="pre">conda</span></code> (above) avoids having to install the dependencies separately.</p>
 <p>Install the most current development version of <cite>spaghetti</cite> by running:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install git+https://github.com/pysal/spaghetti
 </pre></div>
@@ -151,7 +160,7 @@ $ conda install --channel conda-forge spaghetti
 </div>
 <div class="section" id="development-version">
 <h2>Development Version<a class="headerlink" href="#development-version" title="Permalink to this headline">¶</a></h2>
-<p>Install the most current development version of spaghetti by running:</p>
+<p>Install the most current development version of <cite>spaghetti</cite> by running:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install git+https://github.com/pysal/spaghetti
 </pre></div>
 </div>
@@ -182,7 +191,7 @@ $ conda install --channel conda-forge spaghetti
     </p>
     <p>
         &copy; Copyright 2018, pysal developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.0.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.<br/>
     </p>
   </div>
 </footer>

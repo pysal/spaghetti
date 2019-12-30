@@ -1,16 +1,17 @@
 .. documentation master file
 
-spaghetti
-=========
+`spaghetti`
+===========
 
 SPAtial GrapHs: nETworks, Topology, & Inference
 -----------------------------------------------
 
-Spaghetti is an open-source python library for the analysis of network-based
-spatial data. Originating from the ``network`` module in `PySAL (Python Spatial 
+`Spaghetti` is an open-source Python library for the analysis of network-based
+spatial data. Originating from the `network` module in `PySAL (Python Spatial 
 Analysis Library) <http://pysal.org>`_, it is under active development for the 
 inclusion of newly proposed methods for building graph-theoretic networks and 
-the analysis of network events.
+the analysis of network events. An installation guide, API reference, 
+and usage tutorials are provided here through the links above.
 
 
 .. raw:: html
@@ -51,20 +52,22 @@ the analysis of network events.
     </div>
 
 
-Citing spaghetti
-----------------
+Citing `spaghetti`
+------------------
 
 If you use PySAL-spaghetti in a scientific publication, we would appreciate using the following citation:
 
   Bibtex entry::
 
       @misc{Gaboardi2018,
-        author = {Gaboardi, James D. and Laura, Jay and Rey, Sergio and Wolf, Levi John and Folch, David C. and Kang, Wei and Stephens, Philip and Schmidt, Charles},
-        month = {oct},
-        year = {2018},
-        title = {pysal/spaghetti},
-        url = {https://github.com/pysal/spaghetti},
-        doi = {10.5281/zenodo.1343650},
+        author   = {Gaboardi, James D. and Laura, Jay and Rey, Sergio and
+                    Wolf, Levi John and Folch, David C. and Kang, Wei and 
+                    Stephens, Philip and Schmidt, Charles},
+        month    = {oct},
+        year     = {2018},
+        title    = {pysal/spaghetti},
+        url      = {https://github.com/pysal/spaghetti},
+        doi      = {10.5281/zenodo.1343650},
         keywords = {graph-theory,network-analysis,python,spatial-networks,topology}
       }
 
@@ -75,6 +78,7 @@ If you use PySAL-spaghetti in a scientific publication, we would appreciate usin
    :caption: Contents:
 
    Installation <installation>
+   Tutorial <tutorial>
    API <api>
    References <references>
 
