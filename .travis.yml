@@ -13,8 +13,6 @@ matrix:
       env: PY=3.7 PYSAL_PYPI=true PYSAL_PLUS=true
     - name: "tarball-pypi"
       env: PY=3.7 PYSAL_PYPI=true PYSAL_PLUS=false
-    - name: "tarball-pypi-plus"
-      env: PY=3.7 PYSAL_PYPI=true PYSAL_PLUS=true
     - name: "python-3.6"
       env: PY=3.6 PYSAL_PYPI=false PYSAL_PLUS=false
     - name: "python-3.6-plus"
@@ -22,10 +20,6 @@ matrix:
     - name: "python-3.7"
       env: PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=false
     - name: "python-3.7-plus"
-      env: PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=true
-    - name: "tarball"
-      env: PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=false
-    - name: "tarball-plus"
       env: PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=true
   allow_failures:
     - name: "python-3.6"
@@ -35,10 +29,6 @@ matrix:
     - name: "python-3.7"
       env: PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=false
     - name: "python-3.7-plus"
-      env: PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=true
-    - name: "tarball"
-      env: PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=false
-    - name: "tarball-plus"
       env: PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=true
 
 before_install:
