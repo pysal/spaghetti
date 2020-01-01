@@ -1,16 +1,15 @@
-name: docs
+name: test-environment
 channels:
   - conda-forge
 dependencies:
   - python=3.7
-#  - geopandas
+  - geopandas
   - rtree
-#  - sphinx>=1.4.3
-  - sphinxcontrib-bibtex
-  - sphinx_bootstrap_theme
-  - numpydoc
-#  - scipy>=0.11
-#  - numpy>=1.3
-#  - pandas
-  - esda>=2.0.0
+  - libspatialindex
+  - pulp
+  - esda
   - matplotlib
+  - watermark
+  - seaborn
+  - pip:
+    - ortools
