@@ -22,17 +22,16 @@ This package is part of a [refactoring of PySAL](https://github.com/pysal/pysal/
 
 --------------------------------------
 
-Spaghetti is an open-source python library for the analysis of network-based spatial data. Originating from the `network` module in [PySAL (Python Spatial Analysis Library)](http://pysal.org), it is under active development for the inclusion of newly proposed methods for building graph-theoretic networks and the analysis of network events.
+Spaghetti is an open-source Python library for the analysis of network-based spatial data. Originating from the `network` module in [PySAL (Python Spatial Analysis Library)](http://pysal.org), it is under active development for the inclusion of newly proposed methods for building graph-theoretic networks and the analysis of network events.
 
 -------------------------------
 
 
 Examples
 --------
-* [Network Usage](https://github.com/pysal/spaghetti/blob/master/notebooks/Network_Usage.ipynb)
-* [Spaghetti Pointpatterns Empirical](https://github.com/pysal/spaghetti/blob/master/notebooks/Spaghetti_Pointpatterns_Empirical.ipynb)
-* [Snapping Demonstration](https://github.com/pysal/spaghetti/blob/master/notebooks/Snapping_Demonstration.ipynb)
-* [Facility Location](https://github.com/pysal/spaghetti/blob/master/notebooks/Facility_Location.ipynb)
+* [Network Representation](https://pysal.org/spaghetti/notebooks/Basic_spaghetti_tutorial.html)
+* [Spatial Network Analysis](https://pysal.org/spaghetti/notebooks/Advanced_spaghetti_tutorial.html)
+* [Optimal Facility Location](https://pysal.org/spaghetti/notebooks/Use_case-facility_location.html)
 
 
 Installation
