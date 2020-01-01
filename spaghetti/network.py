@@ -922,7 +922,7 @@ class Network:
         Notes
         -----
         
-        See cite:`AnselinRey2014` and cite:`rey_open_2015` for more details
+        See :cite:`AnselinRey2014` and :cite:`rey_open_2015` for more details
         regarding spatial weights.
         
         Examples
