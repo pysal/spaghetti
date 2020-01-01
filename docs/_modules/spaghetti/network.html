@@ -69,7 +69,8 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">Tutorial</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../notebooks/Basic_spaghetti_tutorial.html">Basic <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../notebooks/Basic_spaghetti_tutorial.html">Basic <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../notebooks/Advanced_spaghetti_tutorial.html">Advanced <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../notebooks/Use_case-facility_location.html">Demostrating network-based optimal facility location modeling</a></li>
 </ul>
 </li>
@@ -263,15 +264,71 @@
 <span class="sd">        Lookup in the form {int: bool} keyed by component labels with values as</span>
 <span class="sd">        ``True`` if the component is a closed ring, otherwise ``False``.</span>
 <span class="sd">    </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    </span>
+<span class="sd">    See :cite:`Cliff1981`, :cite:`Tansel1983a`,</span>
+<span class="sd">    :cite:`AhujaRavindraK`, :cite:`Labbe1995`,</span>
+<span class="sd">    :cite:`Kuby2009`, :cite:`Barthelemy2011`, </span>
+<span class="sd">    :cite:`daskin2013`, :cite:`Okabe2012`,</span>
+<span class="sd">    :cite:`Ducruet2014`, :cite:`Weber2016`, for more in-depth discussion on</span>
+<span class="sd">    spatial networks, graph theory, and location along networks. </span>
+<span class="sd">    For related network-centric software see</span>
+<span class="sd">    `SANET &lt;http://sanet.csis.u-tokyo.ac.jp&gt;`_ :cite:`Okabe2006a`,</span>
+<span class="sd">    `NetworkX &lt;https://networkx.github.io&gt;`_ :cite:`Hagberg2008`, </span>
+<span class="sd">    `Pandana &lt;http://udst.github.io/pandana/&gt;`_ :cite:`Foti2012`,</span>
+<span class="sd">    and `OSMnx &lt;https://osmnx.readthedocs.io/en/stable/&gt;`_ :cite:`Boeing2017`.</span>
+<span class="sd">    </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    </span>
-<span class="sd">    Instantiate an instance of a network.</span>
+<span class="sd">    Create an instance of a network.</span>
 <span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; import spaghetti</span>
 <span class="sd">    &gt;&gt;&gt; from libpysal import examples</span>
 <span class="sd">    &gt;&gt;&gt; streets_file = examples.get_path(&quot;streets.shp&quot;)</span>
 <span class="sd">    &gt;&gt;&gt; ntw = spaghetti.Network(in_data=streets_file)</span>
+<span class="sd">    </span>
+<span class="sd">    Fetch the number connected components in the network.</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; ntw.network_n_components</span>
+<span class="sd">    1</span>
+<span class="sd">    </span>
+<span class="sd">    Unique component labels in the network.</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; import numpy</span>
+<span class="sd">    &gt;&gt;&gt; numpy.unique(ntw.network_component_labels)</span>
+<span class="sd">    array([0], dtype=int32)</span>
+<span class="sd">    </span>
+<span class="sd">    Show whether each component of the network is an isolated ring (or not).</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; ntw.network_component_is_ring</span>
+<span class="sd">    {0: False}</span>
+<span class="sd">    </span>
+<span class="sd">    Show how many network arcs are associated with the component.</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; arcs = len(ntw.network_component2arc[ntw.network_component_labels[0]])</span>
+<span class="sd">    &gt;&gt;&gt; arcs</span>
+<span class="sd">    303</span>
+<span class="sd">    </span>
+<span class="sd">    Do the same as above, but for the graph-theoretic representation</span>
+<span class="sd">    of the network object.</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; ntw.graph_n_components</span>
+<span class="sd">    1</span>
+<span class="sd">    &gt;&gt;&gt; numpy.unique(ntw.graph_component_labels)</span>
+<span class="sd">    array([0], dtype=int32)</span>
+<span class="sd">    &gt;&gt;&gt; ntw.graph_component_is_ring</span>
+<span class="sd">    {0: False}</span>
+<span class="sd">    &gt;&gt;&gt; edges = len(ntw.graph_component2edge[ntw.graph_component_labels[0]])</span>
+<span class="sd">    &gt;&gt;&gt; edges</span>
+<span class="sd">    179</span>
+<span class="sd">    </span>
+<span class="sd">    The number of arcs in the network is always greater than or equal</span>
+<span class="sd">    to the number of edges in the graph-theoretic representation.</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; arcs &gt;= edges</span>
+<span class="sd">    True</span>
 <span class="sd">    </span>
 <span class="sd">    Snap point observations to the network with attribute information.</span>
 <span class="sd">    </span>
@@ -282,6 +339,11 @@
 <span class="sd">   </span>
 <span class="sd">    &gt;&gt;&gt; schools_file = examples.get_path(&quot;schools.shp&quot;)</span>
 <span class="sd">    &gt;&gt;&gt; ntw.snapobservations(schools_file, &quot;schools&quot;, attribute=False)</span>
+<span class="sd">    </span>
+<span class="sd">    Show the point patterns associated with the network.</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; ntw.pointpatterns.keys()</span>
+<span class="sd">    dict_keys([&#39;crimes&#39;, &#39;schools&#39;])</span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -792,6 +854,7 @@
 <span class="sd">        nodes : list</span>
 <span class="sd">            Vertices to keep (articulation points). These elements are</span>
 <span class="sd">            referred to as nodes.</span>
+<span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># instantiate empty lis to fill with network articulation</span>
@@ -831,7 +894,7 @@
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
 <span class="sd">        </span>
-<span class="sd">        Instantiate an instance of a network.</span>
+<span class="sd">        Instantiate a network.</span>
 <span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; import spaghetti</span>
 <span class="sd">        &gt;&gt;&gt; from libpysal import examples</span>
@@ -857,9 +920,10 @@
 <span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; w = ntw.contiguityweights(graph=False)</span>
 <span class="sd">        </span>
-<span class="sd">        Using the ``W`` object, access to ``esda`` functionality is provided.</span>
-<span class="sd">        First, a vector of attributes is created for all edges</span>
-<span class="sd">        with observations.</span>
+<span class="sd">        Using the ``W`` object, access to </span>
+<span class="sd">        `esda &lt;https://esda.readthedocs.io/en/latest/index.html&gt;`_ </span>
+<span class="sd">        functionality is provided. First, a vector of attributes is</span>
+<span class="sd">        created for all edges with observations.</span>
 <span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; w = ntw.contiguityweights(graph=False)</span>
 <span class="sd">        &gt;&gt;&gt; arcs = w.neighbors.keys()</span>
@@ -867,15 +931,26 @@
 <span class="sd">        &gt;&gt;&gt; for i, e in enumerate(arcs):</span>
 <span class="sd">        ...     if e in counts.keys():</span>
 <span class="sd">        ...         y[i] = counts[e]</span>
+<span class="sd">        </span>
+<span class="sd">        Fetch the number of observations associated with arc ``3``, </span>
+<span class="sd">        where ``3`` is the basic 0-indexed ID of ``w.neighbors.keys()``</span>
+<span class="sd">        created through ``enumerate(arcs)``.</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; y[3]</span>
 <span class="sd">        3.0</span>
 <span class="sd">        </span>
-<span class="sd">        Next, a standard call to ``esda.Moran`` is made and the</span>
-<span class="sd">        result placed into ``res``.</span>
+<span class="sd">        Next, a standard call to </span>
+<span class="sd">        `esda.Moran &lt;https://esda.readthedocs.io/en/latest/generated/esda.Moran.html#esda.Moran&gt;`_ </span>
+<span class="sd">        is made and the result placed into ``res``.</span>
 <span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; res = esda.moran.Moran(y, w, permutations=99)</span>
 <span class="sd">        &gt;&gt;&gt; type(res)</span>
 <span class="sd">        &lt;class &#39;esda.moran.Moran&#39;&gt;</span>
+<span class="sd">        </span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        </span>
+<span class="sd">        See :cite:`pysal2007` and :cite:`esda:_2019` for more details.</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -968,16 +1043,34 @@
 <span class="sd">            A ``W`` object representing the binary adjacency of</span>
 <span class="sd">            the network.</span>
 <span class="sd">        </span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        </span>
+<span class="sd">        See cite:`AnselinRey2014` and cite:`rey_open_2015` for more details</span>
+<span class="sd">        regarding spatial weights.</span>
+<span class="sd">        </span>
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
+<span class="sd">        </span>
+<span class="sd">        Instantiate an instance of a network.</span>
 <span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; import spaghetti</span>
 <span class="sd">        &gt;&gt;&gt; from libpysal import examples</span>
 <span class="sd">        &gt;&gt;&gt; streets_file = examples.get_path(&quot;streets.shp&quot;)</span>
 <span class="sd">        &gt;&gt;&gt; ntw = spaghetti.Network(in_data=streets_file)</span>
+<span class="sd">        </span>
+<span class="sd">        Create a contiguity-based ``W`` object based on network distance, ``500`` </span>
+<span class="sd">        `US feet in this case &lt;https://github.com/pysal/libpysal/blob/master/libpysal/examples/geodanet/streets.prj&gt;`_.</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; w = ntw.distancebandweights(threshold=500)</span>
+<span class="sd">        </span>
+<span class="sd">        Show the number of units in the ``W`` object.</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; w.n</span>
 <span class="sd">        230</span>
+<span class="sd">        </span>
+<span class="sd">        There are ``8`` units with ``3`` neighbors in the ``W`` object.</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; w.histogram[-1]</span>
 <span class="sd">        (8, 3)</span>
 <span class="sd">        </span>
@@ -1033,16 +1126,30 @@
 <span class="sd">            attribute extraction. ``False`` for no attribute extraction.</span>
 <span class="sd">            Default is ``False``.</span>
 <span class="sd">        </span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        </span>
+<span class="sd">        See :cite:`doi:10.1111/gean.12211` for a detailed discussion on</span>
+<span class="sd">        the modeling consequences of snapping points to spatial networks.</span>
+<span class="sd">        </span>
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
+<span class="sd">        </span>
+<span class="sd">        Instantiate a network.</span>
 <span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; import spaghetti</span>
 <span class="sd">        &gt;&gt;&gt; from libpysal import examples</span>
 <span class="sd">        &gt;&gt;&gt; streets_file = examples.get_path(&quot;streets.shp&quot;)</span>
 <span class="sd">        &gt;&gt;&gt; ntw = spaghetti.Network(in_data=streets_file)</span>
+<span class="sd">        </span>
+<span class="sd">        Snap observations to the network.</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; pt_str = &quot;crimes&quot;</span>
 <span class="sd">        &gt;&gt;&gt; in_data = examples.get_path(pt_str+&quot;.shp&quot;)</span>
 <span class="sd">        &gt;&gt;&gt; ntw.snapobservations(in_data, pt_str, attribute=True)</span>
+<span class="sd">        </span>
+<span class="sd">        Isolate the number of points in the dataset.</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; ntw.pointpatterns[pt_str].npoints</span>
 <span class="sd">        287</span>
 <span class="sd">        </span>
@@ -1107,9 +1214,11 @@
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+<span class="sd">        </span>
 <span class="sd">        dist : float</span>
 <span class="sd">            The euclidean distance from original location to the snapped</span>
 <span class="sd">            location.</span>
+<span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># set of original (x,y) point coordinates</span>
@@ -1264,6 +1373,9 @@
 <span class="sd">        &gt;&gt;&gt; import spaghetti</span>
 <span class="sd">        &gt;&gt;&gt; from libpysal import examples</span>
 <span class="sd">        &gt;&gt;&gt; ntw = spaghetti.Network(examples.get_path(&quot;streets.shp&quot;))</span>
+<span class="sd">        </span>
+<span class="sd">        Snap observations to the network.</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; ntw.snapobservations(</span>
 <span class="sd">        ...     examples.get_path(&quot;crimes.shp&quot;), &quot;crimes&quot;, attribute=True</span>
 <span class="sd">        ... )</span>
@@ -1389,18 +1501,33 @@
 <span class="sd">        </span>
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
-<span class="sd">       </span>
+<span class="sd">        </span>
+<span class="sd">        Instantiate a network.</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; import spaghetti</span>
 <span class="sd">        &gt;&gt;&gt; from libpysal import examples</span>
 <span class="sd">        &gt;&gt;&gt; ntw = spaghetti.Network(examples.get_path(&quot;streets.shp&quot;))</span>
+<span class="sd">        </span>
+<span class="sd">        Snap observations to the network.</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; ntw.snapobservations(</span>
 <span class="sd">        ...     examples.get_path(&quot;crimes.shp&quot;), &quot;crimes&quot;, attribute=True</span>
 <span class="sd">        ... )</span>
-<span class="sd">       </span>
+<span class="sd">        </span>
+<span class="sd">        Isolate the number of points in the dataset.</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; npts = ntw.pointpatterns[&quot;crimes&quot;].npoints</span>
+<span class="sd">        &gt;&gt;&gt; npts</span>
+<span class="sd">        287</span>
+<span class="sd">        </span>
+<span class="sd">        Simulate ``npts`` number of points along the network </span>
+<span class="sd">        in a `uniform` distribution.</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; sim = ntw.simulate_observations(npts)</span>
 <span class="sd">        &gt;&gt;&gt; isinstance(sim, spaghetti.network.SimulatedPointPattern)</span>
 <span class="sd">        True</span>
+<span class="sd">        &gt;&gt;&gt; sim.npoints</span>
+<span class="sd">        287</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1485,9 +1612,14 @@
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
 <span class="sd">        </span>
+<span class="sd">        Create an instance of a network.</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; import spaghetti</span>
 <span class="sd">        &gt;&gt;&gt; from libpysal import examples</span>
 <span class="sd">        &gt;&gt;&gt; ntw = spaghetti.Network(examples.get_path(&quot;streets.shp&quot;))</span>
+<span class="sd">        </span>
+<span class="sd">        Enumerate the links/arcs that are adjacent to vertex ``24``.</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; ntw.enum_links_vertex(24)</span>
 <span class="sd">        [(24, 48), (24, 25), (24, 26)]</span>
 <span class="sd">        </span>
@@ -1524,7 +1656,7 @@
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 <span class="sd">        </span>
-<span class="sd">        Based on :cite:`Dijkstra1959a`.</span>
+<span class="sd">        Based on :cite:`Dijkstra1959a` and :cite:`doi:10.1002/9781119967101.ch3`.</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1659,32 +1791,51 @@
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
 <span class="sd">        </span>
+<span class="sd">        Create a network instance.</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; import spaghetti</span>
 <span class="sd">        &gt;&gt;&gt; from libpysal import examples</span>
 <span class="sd">        &gt;&gt;&gt; ntw = spaghetti.Network(examples.get_path(&quot;streets.shp&quot;))</span>
+<span class="sd">        </span>
+<span class="sd">        Snap observations to the network.</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; ntw.snapobservations(</span>
 <span class="sd">        ...     examples.get_path(&quot;crimes.shp&quot;), &quot;crimes&quot;, attribute=True</span>
 <span class="sd">        ... )</span>
 <span class="sd">        </span>
+<span class="sd">        Calculate all distances between observations in the ``crimes`` dataset.</span>
 <span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; s2s_dist = ntw.allneighbordistances(&quot;crimes&quot;)</span>
+<span class="sd">        </span>
+<span class="sd">        If calculating a ``type-a`` to ``type-a`` distance matrix</span>
+<span class="sd">        the distance between an observation and itself is ``nan`` and</span>
+<span class="sd">        the distance between one observation and another will be positive value.</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; s2s_dist[0,0], s2s_dist[1,0]</span>
 <span class="sd">        (nan, 3105.189475447081)</span>
 <span class="sd">        </span>
+<span class="sd">        If calculating a ``type-a`` to ``type-b`` distance matrix</span>
+<span class="sd">        the distance between all observations will likely be positive</span>
+<span class="sd">        values, may be zero (or approximately zero), but will never be negative.</span>
 <span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; ntw.snapobservations(</span>
 <span class="sd">        ...     examples.get_path(&quot;schools.shp&quot;), &quot;schools&quot;, attribute=False</span>
 <span class="sd">        ... )</span>
-<span class="sd">        </span>
-<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; s2d_dist = ntw.allneighbordistances(&quot;crimes&quot;, destpattern=&quot;schools&quot;)</span>
 <span class="sd">        &gt;&gt;&gt; s2d_dist[0,0], s2d_dist[1,0]</span>
 <span class="sd">        (4520.72353741989, 6340.422971967315)</span>
 <span class="sd">        </span>
+<span class="sd">        Shortest paths can also be reconstructed when desired by</span>
+<span class="sd">        setting the ``gen_tree`` keyword argument to ``True``. Here</span>
+<span class="sd">        it is shown that the shortest path between school ``6`` and</span>
+<span class="sd">        school ``7`` flows along network arcs through network</span>
+<span class="sd">        vertices ``173`` and ``64``. The ``ntw.alldistances`` attribute</span>
+<span class="sd">        may then be queried for the network elements comprising that path.</span>
 <span class="sd">        </span>
-<span class="sd">        &gt;&gt;&gt; s2d_dist, tree = ntw.allneighbordistances(&quot;schools&quot;, gen_tree=True)</span>
+<span class="sd">        &gt;&gt;&gt; d2d_dist, tree = ntw.allneighbordistances(&quot;schools&quot;, gen_tree=True)</span>
 <span class="sd">        &gt;&gt;&gt; tree[(6, 7)]</span>
 <span class="sd">        (173, 64)</span>
+<span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># calculate the network vertex to vertex distance matrix</span>
@@ -1930,17 +2081,40 @@
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
 <span class="sd">        </span>
+<span class="sd">        Instantiate a network.</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; import spaghetti</span>
 <span class="sd">        &gt;&gt;&gt; from libpysal import examples</span>
 <span class="sd">        &gt;&gt;&gt; ntw = spaghetti.Network(examples.get_path(&quot;streets.shp&quot;))</span>
+<span class="sd">        </span>
+<span class="sd">        Snap observations to the network.</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; ntw.snapobservations(examples.get_path(&quot;crimes.shp&quot;), &quot;crimes&quot;)</span>
+<span class="sd">        </span>
+<span class="sd">        Fetch nearest neighbor distances while (potentially) </span>
+<span class="sd">        keeping neighbors that have been geocoded directly on top of</span>
+<span class="sd">        each other. Here it is demonstrated that observation ``11``</span>
+<span class="sd">        has two neighbors (``18`` and ``19``) at an exactly equal distance.</span>
+<span class="sd">        However, observation ``18`` is shown to have only one neighbor</span>
+<span class="sd">        (``18``) with no distance between them.</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; nn = ntw.nearestneighbordistances(&quot;crimes&quot;, keep_zero_dist=True)</span>
 <span class="sd">        &gt;&gt;&gt; nn[11], nn[18]</span>
 <span class="sd">        (([18, 19], 165.33982412719126), ([19], 0.0))</span>
 <span class="sd">        </span>
+<span class="sd">        This may be remedied by setting the ``keep_zero_dist`` keyword</span>
+<span class="sd">        argument to ``False``. With this parameter set, observation ``11``</span>
+<span class="sd">        still has the same neighbor/distance values, but </span>
+<span class="sd">        observation ``18`` now has a single nearest neighbor (``11``)</span>
+<span class="sd">        with a non-zero, postive distance.</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; nn = ntw.nearestneighbordistances(&quot;crimes&quot;, keep_zero_dist=False)</span>
 <span class="sd">        &gt;&gt;&gt; nn[11], nn[18]</span>
 <span class="sd">        (([18, 19], 165.33982412719126), ([11], 165.33982412719126))</span>
+<span class="sd">        </span>
+<span class="sd">        There are valid reasons for both retaining or masking zero distance</span>
+<span class="sd">        neighbors. When conducting analysis, thought must be given as to</span>
+<span class="sd">        which model more accurately represents the specific scenario.</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -2013,236 +2187,6 @@
 
         <span class="k">return</span> <span class="n">nearest</span></div>
 
-<div class="viewcode-block" id="Network.NetworkF"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.NetworkF">[docs]</a>    <span class="k">def</span> <span class="nf">NetworkF</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">pointpattern</span><span class="p">,</span>
-        <span class="n">nsteps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-        <span class="n">permutations</span><span class="o">=</span><span class="mi">99</span><span class="p">,</span>
-        <span class="n">threshold</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
-        <span class="n">distribution</span><span class="o">=</span><span class="s2">&quot;uniform&quot;</span><span class="p">,</span>
-        <span class="n">lowerbound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">upperbound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Compute a network constrained `F`-function.</span>
-<span class="sd">        </span>
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        </span>
-<span class="sd">        pointpattern : spaghetti.PointPattern</span>
-<span class="sd">            A ``spaghetti`` point pattern object.</span>
-<span class="sd">        </span>
-<span class="sd">        nsteps : int</span>
-<span class="sd">            The number of steps at which the count of the nearest</span>
-<span class="sd">            neighbors is computed.</span>
-<span class="sd">        </span>
-<span class="sd">        permutations : int</span>
-<span class="sd">            The number of permutations to perform. Default 99.</span>
-<span class="sd">        </span>
-<span class="sd">        threshold : float</span>
-<span class="sd">            The level at which significance is computed.</span>
-<span class="sd">            (0.5 would be 97.5% and 2.5%).</span>
-<span class="sd">        </span>
-<span class="sd">        distribution : str</span>
-<span class="sd">            The distribution from which random points are sampled.</span>
-<span class="sd">            Either ``&quot;uniform&quot;`` or ``&quot;poisson&quot;``.</span>
-<span class="sd">        </span>
-<span class="sd">        lowerbound : float</span>
-<span class="sd">            The lower bound at which the `F`-function is computed.</span>
-<span class="sd">            Default 0.</span>
-<span class="sd">        </span>
-<span class="sd">        upperbound : float</span>
-<span class="sd">            The upper bound at which the `F`-function is computed.</span>
-<span class="sd">            Defaults to the maximum observed nearest neighbor distance.</span>
-<span class="sd">        </span>
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        </span>
-<span class="sd">        NetworkF : spaghetti.analysis.NetworkF</span>
-<span class="sd">            A network `F` class instance.</span>
-<span class="sd">        </span>
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        </span>
-<span class="sd">        &gt;&gt;&gt; import spaghetti</span>
-<span class="sd">        &gt;&gt;&gt; from libpysal import examples</span>
-<span class="sd">        &gt;&gt;&gt; ntw = spaghetti.Network(in_data=examples.get_path(&quot;streets.shp&quot;))</span>
-<span class="sd">        &gt;&gt;&gt; pt_str = &quot;crimes&quot;</span>
-<span class="sd">        &gt;&gt;&gt; in_data = examples.get_path(pt_str+&quot;.shp&quot;)</span>
-<span class="sd">        &gt;&gt;&gt; ntw.snapobservations(in_data, pt_str, attribute=True)</span>
-<span class="sd">        &gt;&gt;&gt; crimes = ntw.pointpatterns[pt_str]</span>
-<span class="sd">        &gt;&gt;&gt; sim = ntw.simulate_observations(crimes.npoints)</span>
-<span class="sd">        &gt;&gt;&gt; fres = ntw.NetworkF(crimes, permutations=5, nsteps=10)</span>
-<span class="sd">        &gt;&gt;&gt; fres.lowerenvelope.shape[0]</span>
-<span class="sd">        10</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="c1"># call analysis.NetworkF</span>
-        <span class="k">return</span> <span class="n">NetworkF</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span>
-            <span class="n">pointpattern</span><span class="p">,</span>
-            <span class="n">nsteps</span><span class="o">=</span><span class="n">nsteps</span><span class="p">,</span>
-            <span class="n">permutations</span><span class="o">=</span><span class="n">permutations</span><span class="p">,</span>
-            <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">,</span>
-            <span class="n">distribution</span><span class="o">=</span><span class="n">distribution</span><span class="p">,</span>
-            <span class="n">lowerbound</span><span class="o">=</span><span class="n">lowerbound</span><span class="p">,</span>
-            <span class="n">upperbound</span><span class="o">=</span><span class="n">upperbound</span><span class="p">,</span>
-        <span class="p">)</span></div>
-
-<div class="viewcode-block" id="Network.NetworkG"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.NetworkG">[docs]</a>    <span class="k">def</span> <span class="nf">NetworkG</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">pointpattern</span><span class="p">,</span>
-        <span class="n">nsteps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-        <span class="n">permutations</span><span class="o">=</span><span class="mi">99</span><span class="p">,</span>
-        <span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-        <span class="n">distribution</span><span class="o">=</span><span class="s2">&quot;uniform&quot;</span><span class="p">,</span>
-        <span class="n">lowerbound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">upperbound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Compute a network constrained `G`-function.</span>
-<span class="sd">        </span>
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        </span>
-<span class="sd">        pointpattern : spaghetti.PointPattern</span>
-<span class="sd">            A ``spaghetti`` point pattern object.</span>
-<span class="sd">        </span>
-<span class="sd">        nsteps : int</span>
-<span class="sd">            The number of steps at which the count of the nearest</span>
-<span class="sd">            neighbors is computed.</span>
-<span class="sd">        </span>
-<span class="sd">        permutations : int</span>
-<span class="sd">            The number of permutations to perform. Default 99.</span>
-<span class="sd">        </span>
-<span class="sd">        threshold : float</span>
-<span class="sd">            The level at which significance is computed.</span>
-<span class="sd">            (0.5 would be 97.5% and 2.5%).</span>
-<span class="sd">        </span>
-<span class="sd">        distribution : str</span>
-<span class="sd">            The distribution from which random points are sampled</span>
-<span class="sd">            Either ``&quot;uniform&quot;`` or ``&quot;poisson&quot;``.</span>
-<span class="sd">        </span>
-<span class="sd">        lowerbound : float</span>
-<span class="sd">            The lower bound at which the `G`-function is computed.</span>
-<span class="sd">            Default 0.</span>
-<span class="sd">        </span>
-<span class="sd">        upperbound : float</span>
-<span class="sd">            The upper bound at which the `G`-function is computed.</span>
-<span class="sd">            Defaults to the maximum observed nearest neighbor distance.</span>
-<span class="sd">        </span>
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        </span>
-<span class="sd">        NetworkG : spaghetti.analysis.NetworkG</span>
-<span class="sd">            A network `G` class instance.</span>
-<span class="sd">        </span>
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        </span>
-<span class="sd">        &gt;&gt;&gt; import spaghetti</span>
-<span class="sd">        &gt;&gt;&gt; from libpysal import examples</span>
-<span class="sd">        &gt;&gt;&gt; ntw = spaghetti.Network(in_data=examples.get_path(&quot;streets.shp&quot;))</span>
-<span class="sd">        &gt;&gt;&gt; pt_str = &quot;crimes&quot;</span>
-<span class="sd">        &gt;&gt;&gt; in_data = examples.get_path(pt_str+&quot;.shp&quot;)</span>
-<span class="sd">        &gt;&gt;&gt; ntw.snapobservations(in_data, pt_str, attribute=True)</span>
-<span class="sd">        &gt;&gt;&gt; crimes = ntw.pointpatterns[pt_str]</span>
-<span class="sd">        &gt;&gt;&gt; sim = ntw.simulate_observations(crimes.npoints)</span>
-<span class="sd">        &gt;&gt;&gt; gres = ntw.NetworkG(crimes, permutations=5, nsteps=10)</span>
-<span class="sd">        &gt;&gt;&gt; gres.lowerenvelope.shape[0]</span>
-<span class="sd">        10</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="c1"># call analysis.NetworkG</span>
-        <span class="k">return</span> <span class="n">NetworkG</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span>
-            <span class="n">pointpattern</span><span class="p">,</span>
-            <span class="n">nsteps</span><span class="o">=</span><span class="n">nsteps</span><span class="p">,</span>
-            <span class="n">permutations</span><span class="o">=</span><span class="n">permutations</span><span class="p">,</span>
-            <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">,</span>
-            <span class="n">distribution</span><span class="o">=</span><span class="n">distribution</span><span class="p">,</span>
-            <span class="n">lowerbound</span><span class="o">=</span><span class="n">lowerbound</span><span class="p">,</span>
-            <span class="n">upperbound</span><span class="o">=</span><span class="n">upperbound</span><span class="p">,</span>
-        <span class="p">)</span></div>
-
-<div class="viewcode-block" id="Network.NetworkK"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.NetworkK">[docs]</a>    <span class="k">def</span> <span class="nf">NetworkK</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">pointpattern</span><span class="p">,</span>
-        <span class="n">nsteps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-        <span class="n">permutations</span><span class="o">=</span><span class="mi">99</span><span class="p">,</span>
-        <span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-        <span class="n">distribution</span><span class="o">=</span><span class="s2">&quot;uniform&quot;</span><span class="p">,</span>
-        <span class="n">lowerbound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">upperbound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Compute a network constrained `K`-function.</span>
-<span class="sd">        </span>
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        </span>
-<span class="sd">        pointpattern : spaghetti.PointPattern</span>
-<span class="sd">            A ``spaghetti`` point pattern object.</span>
-<span class="sd">        </span>
-<span class="sd">        nsteps : int</span>
-<span class="sd">            The number of steps at which the count of the nearest</span>
-<span class="sd">            neighbors is computed.</span>
-<span class="sd">        </span>
-<span class="sd">        permutations : int</span>
-<span class="sd">            The number of permutations to perform. Default is 99.</span>
-<span class="sd">        </span>
-<span class="sd">        threshold : float</span>
-<span class="sd">            The level at which significance is computed.</span>
-<span class="sd">            (0.5 would be 97.5% and 2.5%).</span>
-<span class="sd">        </span>
-<span class="sd">        distribution : str</span>
-<span class="sd">            The distribution from which random points are sampled</span>
-<span class="sd">            Either ``&quot;uniform&quot;`` or ``&quot;poisson&quot;``.</span>
-<span class="sd">        </span>
-<span class="sd">        lowerbound : float</span>
-<span class="sd">            The lower bound at which the `K`-function is computed.</span>
-<span class="sd">            Default is 0.</span>
-<span class="sd">        </span>
-<span class="sd">        upperbound : float</span>
-<span class="sd">            The upper bound at which the `K`-function is computed.</span>
-<span class="sd">            Defaults to the maximum observed nearest neighbor distance.</span>
-<span class="sd">        </span>
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        </span>
-<span class="sd">        NetworkK : spaghetti.analysis.NetworkK</span>
-<span class="sd">            A network `K` class instance.</span>
-<span class="sd">        </span>
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        </span>
-<span class="sd">        Based on :cite:`Okabe2001`.</span>
-<span class="sd">        </span>
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        </span>
-<span class="sd">        &gt;&gt;&gt; import spaghetti</span>
-<span class="sd">        &gt;&gt;&gt; from libpysal import examples</span>
-<span class="sd">        &gt;&gt;&gt; ntw = spaghetti.Network(in_data=examples.get_path(&quot;streets.shp&quot;))</span>
-<span class="sd">        &gt;&gt;&gt; pt_str = &quot;crimes&quot;</span>
-<span class="sd">        &gt;&gt;&gt; in_data = examples.get_path(pt_str+&quot;.shp&quot;)</span>
-<span class="sd">        &gt;&gt;&gt; ntw.snapobservations(in_data, pt_str, attribute=True)</span>
-<span class="sd">        &gt;&gt;&gt; crimes = ntw.pointpatterns[pt_str]</span>
-<span class="sd">        &gt;&gt;&gt; sim = ntw.simulate_observations(crimes.npoints)</span>
-<span class="sd">        &gt;&gt;&gt; kres = ntw.NetworkK(crimes, permutations=5, nsteps=10)</span>
-<span class="sd">        &gt;&gt;&gt; kres.lowerenvelope.shape[0]</span>
-<span class="sd">        10</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="c1"># call analysis.NetworkK</span>
-        <span class="k">return</span> <span class="n">NetworkK</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span>
-            <span class="n">pointpattern</span><span class="p">,</span>
-            <span class="n">nsteps</span><span class="o">=</span><span class="n">nsteps</span><span class="p">,</span>
-            <span class="n">permutations</span><span class="o">=</span><span class="n">permutations</span><span class="p">,</span>
-            <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">,</span>
-            <span class="n">distribution</span><span class="o">=</span><span class="n">distribution</span><span class="p">,</span>
-            <span class="n">lowerbound</span><span class="o">=</span><span class="n">lowerbound</span><span class="p">,</span>
-            <span class="n">upperbound</span><span class="o">=</span><span class="n">upperbound</span><span class="p">,</span>
-        <span class="p">)</span></div>
-
 <div class="viewcode-block" id="Network.split_arcs"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.split_arcs">[docs]</a>    <span class="k">def</span> <span class="nf">split_arcs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Split all of the arcs in the network at a fixed distance.</span>
 <span class="sd">        </span>
@@ -2260,10 +2204,18 @@
 <span class="sd">        </span>
 <span class="sd">       Examples</span>
 <span class="sd">        --------</span>
-<span class="sd">       </span>
+<span class="sd">        </span>
+<span class="sd">        Instantiate a network.</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; import spaghetti</span>
 <span class="sd">        &gt;&gt;&gt; from libpysal import examples</span>
 <span class="sd">        &gt;&gt;&gt; ntw = spaghetti.Network(examples.get_path(&quot;streets.shp&quot;))</span>
+<span class="sd">        </span>
+<span class="sd">        Split the network into a segments of 200 distance units in length </span>
+<span class="sd">        (`US feet in this case &lt;https://github.com/pysal/libpysal/blob/master/libpysal/examples/geodanet/streets.prj&gt;`_.).</span>
+<span class="sd">        This will include &quot;remainder&quot; segments unless the network is</span>
+<span class="sd">        comprised of arcs with lengths exactly divisible by ``distance``.</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; n200 = ntw.split_arcs(200.0)</span>
 <span class="sd">        &gt;&gt;&gt; len(n200.arcs)</span>
 <span class="sd">        688</span>
@@ -2332,7 +2284,7 @@
                 <span class="c1"># set/update the current vertex id</span>
                 <span class="n">currentstop</span> <span class="o">=</span> <span class="n">current_vertex_id</span>
 
-                <span class="c1"># once an can not be split further</span>
+                <span class="c1"># once an arc can not be split further</span>
                 <span class="k">if</span> <span class="n">totallength</span> <span class="o">+</span> <span class="n">interval</span> <span class="o">&gt;</span> <span class="n">length</span><span class="p">:</span>
                     <span class="c1"># record the ending vertex</span>
                     <span class="n">currentstop</span> <span class="o">=</span> <span class="n">end_vertex</span>
@@ -2390,6 +2342,298 @@
 
         <span class="k">return</span> <span class="n">split_network</span></div>
 
+<div class="viewcode-block" id="Network.NetworkF"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.NetworkF">[docs]</a>    <span class="k">def</span> <span class="nf">NetworkF</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">pointpattern</span><span class="p">,</span>
+        <span class="n">nsteps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="n">permutations</span><span class="o">=</span><span class="mi">99</span><span class="p">,</span>
+        <span class="n">threshold</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+        <span class="n">distribution</span><span class="o">=</span><span class="s2">&quot;uniform&quot;</span><span class="p">,</span>
+        <span class="n">lowerbound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">upperbound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute a network constrained `F`-function.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        </span>
+<span class="sd">        pointpattern : spaghetti.PointPattern</span>
+<span class="sd">            A ``spaghetti`` point pattern object.</span>
+<span class="sd">        </span>
+<span class="sd">        nsteps : int</span>
+<span class="sd">            The number of steps at which the count of the nearest</span>
+<span class="sd">            neighbors is computed.</span>
+<span class="sd">        </span>
+<span class="sd">        permutations : int</span>
+<span class="sd">            The number of permutations to perform. Default 99.</span>
+<span class="sd">        </span>
+<span class="sd">        threshold : float</span>
+<span class="sd">            The level at which significance is computed.</span>
+<span class="sd">            (0.5 would be 97.5% and 2.5%).</span>
+<span class="sd">        </span>
+<span class="sd">        distribution : str</span>
+<span class="sd">            The distribution from which random points are sampled.</span>
+<span class="sd">            Either ``&quot;uniform&quot;`` or ``&quot;poisson&quot;``.</span>
+<span class="sd">        </span>
+<span class="sd">        lowerbound : float</span>
+<span class="sd">            The lower bound at which the `F`-function is computed.</span>
+<span class="sd">            Default 0.</span>
+<span class="sd">        </span>
+<span class="sd">        upperbound : float</span>
+<span class="sd">            The upper bound at which the `F`-function is computed.</span>
+<span class="sd">            Defaults to the maximum observed nearest neighbor distance.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        </span>
+<span class="sd">        NetworkF : spaghetti.analysis.NetworkF</span>
+<span class="sd">            A network `F` class instance.</span>
+<span class="sd">        </span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        </span>
+<span class="sd">        Based on :cite:`doi:10.1002/9780470549094.ch5` and mentioned in</span>
+<span class="sd">        :cite:`doi:10.1002/9781119967101.ch5`.</span>
+<span class="sd">        </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        </span>
+<span class="sd">        Create a network instance.</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; import spaghetti</span>
+<span class="sd">        &gt;&gt;&gt; from libpysal import examples</span>
+<span class="sd">        &gt;&gt;&gt; ntw = spaghetti.Network(in_data=examples.get_path(&quot;streets.shp&quot;))</span>
+<span class="sd">        </span>
+<span class="sd">        Snap observation points onto the network.</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; pt_str = &quot;crimes&quot;</span>
+<span class="sd">        &gt;&gt;&gt; in_data = examples.get_path(pt_str+&quot;.shp&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; ntw.snapobservations(in_data, pt_str, attribute=True)</span>
+<span class="sd">        </span>
+<span class="sd">        Simulate observations along the network.</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; crimes = ntw.pointpatterns[pt_str]</span>
+<span class="sd">        &gt;&gt;&gt; sim = ntw.simulate_observations(crimes.npoints)</span>
+<span class="sd">        </span>
+<span class="sd">        Compute a network constrained `F`-function of crimes </span>
+<span class="sd">        with ``5`` ``permutations`` and ``10`` ``nsteps``.</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; fres = ntw.NetworkF(crimes, permutations=5, nsteps=10)</span>
+<span class="sd">        &gt;&gt;&gt; fres.lowerenvelope.shape[0]</span>
+<span class="sd">        10</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># call analysis.NetworkF</span>
+        <span class="k">return</span> <span class="n">NetworkF</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">pointpattern</span><span class="p">,</span>
+            <span class="n">nsteps</span><span class="o">=</span><span class="n">nsteps</span><span class="p">,</span>
+            <span class="n">permutations</span><span class="o">=</span><span class="n">permutations</span><span class="p">,</span>
+            <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">,</span>
+            <span class="n">distribution</span><span class="o">=</span><span class="n">distribution</span><span class="p">,</span>
+            <span class="n">lowerbound</span><span class="o">=</span><span class="n">lowerbound</span><span class="p">,</span>
+            <span class="n">upperbound</span><span class="o">=</span><span class="n">upperbound</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Network.NetworkG"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.NetworkG">[docs]</a>    <span class="k">def</span> <span class="nf">NetworkG</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">pointpattern</span><span class="p">,</span>
+        <span class="n">nsteps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="n">permutations</span><span class="o">=</span><span class="mi">99</span><span class="p">,</span>
+        <span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">distribution</span><span class="o">=</span><span class="s2">&quot;uniform&quot;</span><span class="p">,</span>
+        <span class="n">lowerbound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">upperbound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute a network constrained `G`-function.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        </span>
+<span class="sd">        pointpattern : spaghetti.PointPattern</span>
+<span class="sd">            A ``spaghetti`` point pattern object.</span>
+<span class="sd">        </span>
+<span class="sd">        nsteps : int</span>
+<span class="sd">            The number of steps at which the count of the nearest</span>
+<span class="sd">            neighbors is computed.</span>
+<span class="sd">        </span>
+<span class="sd">        permutations : int</span>
+<span class="sd">            The number of permutations to perform. Default 99.</span>
+<span class="sd">        </span>
+<span class="sd">        threshold : float</span>
+<span class="sd">            The level at which significance is computed.</span>
+<span class="sd">            (0.5 would be 97.5% and 2.5%).</span>
+<span class="sd">        </span>
+<span class="sd">        distribution : str</span>
+<span class="sd">            The distribution from which random points are sampled</span>
+<span class="sd">            Either ``&quot;uniform&quot;`` or ``&quot;poisson&quot;``.</span>
+<span class="sd">        </span>
+<span class="sd">        lowerbound : float</span>
+<span class="sd">            The lower bound at which the `G`-function is computed.</span>
+<span class="sd">            Default 0.</span>
+<span class="sd">        </span>
+<span class="sd">        upperbound : float</span>
+<span class="sd">            The upper bound at which the `G`-function is computed.</span>
+<span class="sd">            Defaults to the maximum observed nearest neighbor distance.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        </span>
+<span class="sd">        NetworkG : spaghetti.analysis.NetworkG</span>
+<span class="sd">            A network `G` class instance.</span>
+<span class="sd">        </span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        </span>
+<span class="sd">        Based on :cite:`doi:10.1002/9780470549094.ch5` and mentioned in</span>
+<span class="sd">        :cite:`doi:10.1002/9781119967101.ch5`.</span>
+<span class="sd">        </span>
+<span class="sd">        [note from `jlaura`] Both the `G` and `K` functions generate a</span>
+<span class="sd">        full distance matrix.  This is because, I know that the full </span>
+<span class="sd">        generation is correct and I believe that the truncated generated, </span>
+<span class="sd">        e.g. nearest neighbor, has a bug.</span>
+<span class="sd">        </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        </span>
+<span class="sd">        Create a network instance.</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; import spaghetti</span>
+<span class="sd">        &gt;&gt;&gt; from libpysal import examples</span>
+<span class="sd">        &gt;&gt;&gt; ntw = spaghetti.Network(in_data=examples.get_path(&quot;streets.shp&quot;))</span>
+<span class="sd">        </span>
+<span class="sd">        Snap observation points onto the network.</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; pt_str = &quot;crimes&quot;</span>
+<span class="sd">        &gt;&gt;&gt; in_data = examples.get_path(pt_str+&quot;.shp&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; ntw.snapobservations(in_data, pt_str, attribute=True)</span>
+<span class="sd">        </span>
+<span class="sd">        Simulate observations along the network.</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; crimes = ntw.pointpatterns[pt_str]</span>
+<span class="sd">        &gt;&gt;&gt; sim = ntw.simulate_observations(crimes.npoints)</span>
+<span class="sd">        </span>
+<span class="sd">        Compute a network constrained `G`-function of crimes </span>
+<span class="sd">        with ``5`` ``permutations`` and ``10`` ``nsteps``.</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; gres = ntw.NetworkG(crimes, permutations=5, nsteps=10)</span>
+<span class="sd">        &gt;&gt;&gt; gres.lowerenvelope.shape[0]</span>
+<span class="sd">        10</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># call analysis.NetworkG</span>
+        <span class="k">return</span> <span class="n">NetworkG</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">pointpattern</span><span class="p">,</span>
+            <span class="n">nsteps</span><span class="o">=</span><span class="n">nsteps</span><span class="p">,</span>
+            <span class="n">permutations</span><span class="o">=</span><span class="n">permutations</span><span class="p">,</span>
+            <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">,</span>
+            <span class="n">distribution</span><span class="o">=</span><span class="n">distribution</span><span class="p">,</span>
+            <span class="n">lowerbound</span><span class="o">=</span><span class="n">lowerbound</span><span class="p">,</span>
+            <span class="n">upperbound</span><span class="o">=</span><span class="n">upperbound</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Network.NetworkK"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.NetworkK">[docs]</a>    <span class="k">def</span> <span class="nf">NetworkK</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">pointpattern</span><span class="p">,</span>
+        <span class="n">nsteps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="n">permutations</span><span class="o">=</span><span class="mi">99</span><span class="p">,</span>
+        <span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">distribution</span><span class="o">=</span><span class="s2">&quot;uniform&quot;</span><span class="p">,</span>
+        <span class="n">lowerbound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">upperbound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute a network constrained `K`-function.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        </span>
+<span class="sd">        pointpattern : spaghetti.PointPattern</span>
+<span class="sd">            A ``spaghetti`` point pattern object.</span>
+<span class="sd">        </span>
+<span class="sd">        nsteps : int</span>
+<span class="sd">            The number of steps at which the count of the nearest</span>
+<span class="sd">            neighbors is computed.</span>
+<span class="sd">        </span>
+<span class="sd">        permutations : int</span>
+<span class="sd">            The number of permutations to perform. Default is 99.</span>
+<span class="sd">        </span>
+<span class="sd">        threshold : float</span>
+<span class="sd">            The level at which significance is computed.</span>
+<span class="sd">            (0.5 would be 97.5% and 2.5%).</span>
+<span class="sd">        </span>
+<span class="sd">        distribution : str</span>
+<span class="sd">            The distribution from which random points are sampled</span>
+<span class="sd">            Either ``&quot;uniform&quot;`` or ``&quot;poisson&quot;``.</span>
+<span class="sd">        </span>
+<span class="sd">        lowerbound : float</span>
+<span class="sd">            The lower bound at which the `K`-function is computed.</span>
+<span class="sd">            Default is 0.</span>
+<span class="sd">        </span>
+<span class="sd">        upperbound : float</span>
+<span class="sd">            The upper bound at which the `K`-function is computed.</span>
+<span class="sd">            Defaults to the maximum observed nearest neighbor distance.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        </span>
+<span class="sd">        NetworkK : spaghetti.analysis.NetworkK</span>
+<span class="sd">            A network `K` class instance.</span>
+<span class="sd">        </span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        </span>
+<span class="sd">        Based on :cite:`doi:10.1111/j.1538-4632.2001.tb00448.x` </span>
+<span class="sd">        and :cite:`doi:10.1002/9781119967101.ch6`.</span>
+<span class="sd">        </span>
+<span class="sd">        [note from `jlaura`] Both the `G` and `K` functions generate a</span>
+<span class="sd">        full distance matrix.  This is because, I know that the full </span>
+<span class="sd">        generation is correct and I believe that the truncated generated, </span>
+<span class="sd">        e.g. nearest neighbor, has a bug.</span>
+<span class="sd">        </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        </span>
+<span class="sd">        Create a network instance.</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; import spaghetti</span>
+<span class="sd">        &gt;&gt;&gt; from libpysal import examples</span>
+<span class="sd">        &gt;&gt;&gt; ntw = spaghetti.Network(in_data=examples.get_path(&quot;streets.shp&quot;))</span>
+<span class="sd">        </span>
+<span class="sd">        Snap observation points onto the network.</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; pt_str = &quot;crimes&quot;</span>
+<span class="sd">        &gt;&gt;&gt; in_data = examples.get_path(pt_str+&quot;.shp&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; ntw.snapobservations(in_data, pt_str, attribute=True)</span>
+<span class="sd">        </span>
+<span class="sd">        Simulate observations along the network.</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; crimes = ntw.pointpatterns[pt_str]</span>
+<span class="sd">        &gt;&gt;&gt; sim = ntw.simulate_observations(crimes.npoints)</span>
+<span class="sd">        </span>
+<span class="sd">        Compute a network constrained `K`-function of crimes </span>
+<span class="sd">        with ``5`` ``permutations`` and ``10`` ``nsteps``.</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; kres = ntw.NetworkK(crimes, permutations=5, nsteps=10)</span>
+<span class="sd">        &gt;&gt;&gt; kres.lowerenvelope.shape[0]</span>
+<span class="sd">        10</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># call analysis.NetworkK</span>
+        <span class="k">return</span> <span class="n">NetworkK</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">pointpattern</span><span class="p">,</span>
+            <span class="n">nsteps</span><span class="o">=</span><span class="n">nsteps</span><span class="p">,</span>
+            <span class="n">permutations</span><span class="o">=</span><span class="n">permutations</span><span class="p">,</span>
+            <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">,</span>
+            <span class="n">distribution</span><span class="o">=</span><span class="n">distribution</span><span class="p">,</span>
+            <span class="n">lowerbound</span><span class="o">=</span><span class="n">lowerbound</span><span class="p">,</span>
+            <span class="n">upperbound</span><span class="o">=</span><span class="n">upperbound</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
 <div class="viewcode-block" id="Network.savenetwork"><a class="viewcode-back" href="../../generated/spaghetti.Network.savenetwork.html#spaghetti.Network.savenetwork">[docs]</a>    <span class="k">def</span> <span class="nf">savenetwork</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Save a network to disk as a binary file.</span>
 <span class="sd">        </span>
@@ -2403,9 +2647,14 @@
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
 <span class="sd">        </span>
+<span class="sd">        Create a network instance.</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; import spaghetti</span>
 <span class="sd">        &gt;&gt;&gt; from libpysal import examples</span>
 <span class="sd">        &gt;&gt;&gt; ntw = spaghetti.Network(examples.get_path(&quot;streets.shp&quot;))</span>
+<span class="sd">        </span>
+<span class="sd">        Save out the network instance.</span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; ntw.savenetwork(&quot;mynetwork.pkl&quot;)</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2427,7 +2676,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        </span>
 <span class="sd">        self : spaghetti.Network</span>
-<span class="sd">            A pre-computed `spaghetti` network object.</span>
+<span class="sd">            A pre-computed ``spaghetti`` network object.</span>
 <span class="sd">            </span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -2510,16 +2759,28 @@
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    </span>
+<span class="sd">    Instantiate a network object.</span>
+<span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; import spaghetti</span>
 <span class="sd">    &gt;&gt;&gt; from libpysal import examples</span>
 <span class="sd">    &gt;&gt;&gt; ntw = spaghetti.Network(examples.get_path(&quot;streets.shp&quot;))</span>
+<span class="sd">    </span>
+<span class="sd">    Extract the network elements (vertices and arcs) as</span>
+<span class="sd">    ``geopandas.GeoDataFrame`` objects.</span>
+<span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; vertices_df, arcs_df = spaghetti.element_as_gdf(</span>
 <span class="sd">    ...     ntw, vertices=True, arcs=True</span>
 <span class="sd">    ... )</span>
+<span class="sd">    </span>
+<span class="sd">    Examine the first vertex.</span>
+<span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; vertices_df.loc[0]</span>
 <span class="sd">    id                                          0</span>
 <span class="sd">    geometry    POINT (728368.04762 877125.89535)</span>
 <span class="sd">    Name: 0, dtype: object</span>
+<span class="sd">    </span>
+<span class="sd">    Calculate the total length of the network.</span>
+<span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; arcs_df.geometry.length.sum()</span>
 <span class="sd">    104414.09200823458</span>
 <span class="sd">    </span>

@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Advanced pysal.spaghetti tutorial: &#8212; spaghetti v1.3.1 Manual</title>
+    <title>Advanced pysal.spaghetti tutorial &#8212; spaghetti v1.3.1 Manual</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/pysal-styles.css" />
@@ -22,6 +22,8 @@
     <link rel="shortcut icon" href="../_static/pysal_favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Demostrating network-based optimal facility location modeling" href="Use_case-facility_location.html" />
+    <link rel="prev" title="Basic pysal.spaghetti tutorial" href="Basic_spaghetti_tutorial.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -61,15 +63,16 @@
   <ul class="dropdown-menu globaltoc"
       role="menu"
       aria-labelledby="dLabelGlobalToc"><p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../installation.html#installing-with-conda-via-spaghetti-feedstock-highly-recommended">Installing with <code class="docutils literal notranslate"><span class="pre">conda</span></code> via spaghetti-feedstock (highly recommended)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../installation.html#installing-with-python-package-index">Installing with Python Package Index</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../installation.html#development-version">Development Version</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Basic_spaghetti_tutorial.html">Basic <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial:</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorial.html">Tutorial</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Basic_spaghetti_tutorial.html">Basic <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Advanced <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Use_case-facility_location.html">Demostrating network-based optimal facility location modeling</a></li>
 </ul>
 </li>
@@ -93,30 +96,33 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Advanced <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial:</a></li>
-<li><a class="reference internal" href="#Creating-and-visualizing-a-spaghetti.Network-object">Creating and visualizing a <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object</a><ul>
-<li><a class="reference internal" href="#Author:-James-D.-Gaboardi-jgaboardi&#64;gmail.com">Author: James D. Gaboardi jgaboardi&#64;gmail.com</a><ul>
-<li><a class="reference internal" href="#This-notebook-is-an-advanced-walk-through-for:">This notebook is an advanced walk-through for:</a></li>
-<li><a class="reference internal" href="#In-addtion-to-the-base-spaghetti-requirements-(their-dependecies),-this-notebook-requires-installations-of:">In addtion to the base spaghetti requirements (their dependecies), this notebook requires installations of:</a></li>
+<li><a class="reference internal" href="#">Advanced <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a><ul>
+<li><a class="reference internal" href="#Creating-and-visualizing-a-spaghetti.Network-object">Creating and visualizing a <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object</a></li>
+<li><a class="reference internal" href="#1.-Instantiating-a-spaghetti.Network-object">1. Instantiating a <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object</a><ul>
+<li><a class="reference internal" href="#Instantiate-the-network-from-a-.shp-file">Instantiate the network from a <code class="docutils literal notranslate"><span class="pre">.shp</span></code> file</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#Instantiate-a-network">Instantiate a network</a></li>
-<li><a class="reference internal" href="#Snap-point-patterns-to-the-network">Snap point patterns to the network</a></li>
-<li><a class="reference internal" href="#A-network-is-composed-of-a-single-topological-representation-of-roads-and-n-point-patterns-which-are-snapped-to-the-network.">A network is composed of a single topological representation of roads and <span class="math notranslate nohighlight">\(n\)</span> point patterns which are snapped to the network.</a></li>
-<li><a class="reference internal" href="#Attributes-for-every-point-pattern">Attributes for every point pattern</a></li>
-<li><a class="reference internal" href="#Counts-per-link-(arc-or-edge)-are-important,-but-should-not-be-precomputed-since-we-have-different-representations-of-the-network-(spatial-and-graph-currently).-(Relatively)-Uniform-segmentation-still-needs-to-be-done.">Counts per link (arc or edge) are important, but should not be precomputed since we have different representations of the network (spatial and graph currently). (Relatively) Uniform segmentation still needs to be done.</a></li>
-<li><a class="reference internal" href="#Network-segmentation">Network segmentation</a></li>
-<li><a class="reference internal" href="#Create-geopandas.GeoDataFrame-objects-of-the-vertices-and-arcs">Create <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> objects of the vertices and arcs</a></li>
-<li><a class="reference internal" href="#Visualization-of-the-shapefile-derived,-unsegmented-network-with-vertices-in-a-larger,-blue,-semi-opaque-form-and-the-distance-segmented-network-with-small,-red,-fully-opaque-vertices.">Visualization of the shapefile derived, unsegmented network with vertices in a larger, blue, semi-opaque form and the distance segmented network with small, red, fully opaque vertices.</a></li>
-<li><a class="reference internal" href="#Moran’s-I-using-the-digitized-network">Moran’s I using the digitized network</a></li>
-<li><a class="reference internal" href="#Moran’s-I-using-the-graph-representation-to-generate-the-W">Moran’s I using the graph representation to generate the W</a></li>
-<li><a class="reference internal" href="#Moran’s-I-using-the-segmented-network-and-intensities-instead-of-counts">Moran’s I using the segmented network and intensities instead of counts</a></li>
-<li><a class="reference internal" href="#Timings-for-distance-based-methods,-e.g. G-function">Timings for distance based methods, e.g. G-function</a></li>
-<li><a class="reference internal" href="#Simulate-a-point-pattern-on-the-network">Simulate a point pattern on the network</a></li>
-<li><a class="reference internal" href="#F-function">F-function</a></li>
-<li><a class="reference internal" href="#Create-a-nearest-neighbor-matrix-using-the-crimes-point-pattern">Create a nearest neighbor matrix using the crimes point pattern</a></li>
-<li><a class="reference internal" href="#G-function">G-function</a></li>
-<li><a class="reference internal" href="#K-function">K-function</a></li>
+<li><a class="reference internal" href="#2.-Allocating-observations-(snapping-points)-to-a-network:">2. Allocating observations (snapping points) to a network:</a></li>
+<li><a class="reference internal" href="#3.-Network-segmentation">3. Network segmentation</a><ul>
+<li><a class="reference internal" href="#Split-network-arcs-into-segments-of-200-(US-feet-is-this-case)">Split network arcs into segments of 200 (US feet is this case)</a></li>
+<li><a class="reference internal" href="#Calculate-observations-per-link-on-the-segmented-network">Calculate observations per link on the segmented network</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#4.-Extract-geopandas.GeoDataFrame-objects-of-the-vertices-and-arcs">4. Extract <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> objects of the vertices and arcs</a></li>
+<li><a class="reference internal" href="#5.-Visualization-demonstration">5. Visualization demonstration</a></li>
+<li><a class="reference internal" href="#6.-Spatial-Analysis-with-pysal/esda">6. Spatial Analysis with pysal/esda</a><ul>
+<li><a class="reference internal" href="#6.1-Moran’s-I-using-the-digitized-network">6.1 Moran’s <em>I</em> using the digitized network</a></li>
+<li><a class="reference internal" href="#6.2-Moran’s-I-using-the-graph-representation-to-generate-the-W">6.2 Moran’s <em>I</em> using the graph representation to generate the <em>W</em></a></li>
+<li><a class="reference internal" href="#6.3-Moran’s-I-using-the-segmented-network-and-intensities-instead-of-counts">6.3 Moran’s <em>I</em> using the segmented network and intensities instead of counts</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#7.-Simulate-a-point-pattern-on-the-network">7. Simulate a point pattern on the network</a></li>
+<li><a class="reference internal" href="#8.-Network-constrained-observation-cluster-testing">8. Network-constrained observation cluster testing</a><ul>
+<li><a class="reference internal" href="#F-function"><em>F</em>-function</a></li>
+<li><a class="reference internal" href="#G-function"><em>G</em>-function</a></li>
+<li><a class="reference internal" href="#K-function"><em>K</em>-function</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -353,24 +359,15 @@ div.rendered_html tbody tr:hover {
 Interactive online version:
 <span class="raw-html"><a href="https://mybinder.org/v2/gh/pysal/spaghetti/master?filepath=doc/notebooks/Advanced_spaghetti_tutorial.ipynb"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a></span></p>
 </div>
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 100%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p>#### If any part of this notebook is used in your research, please cite with the reference found in <code class="docutils literal notranslate"><span class="pre">`README.md</span></code> &lt;<a class="reference external" href="https://github.com/pysal/spaghetti#bibtex-citation">https://github.com/pysal/spaghetti#bibtex-citation</a>&gt;`__.</p></td>
-</tr>
-</tbody>
-</table>
-<div class="section" id="Advanced-pysal.spaghetti-tutorial:">
-<h1>Advanced <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial:<a class="headerlink" href="#Advanced-pysal.spaghetti-tutorial:" title="Permalink to this headline">¶</a></h1>
-</div>
+<hr class="docutils" />
+<p><strong>If any part of this notebook is used in your research, please cite with the reference found in</strong> <a class="reference external" href="https://github.com/pysal/spaghetti#bibtex-citation">README.md</a><strong>.</strong></p>
+<hr class="docutils" />
+<div class="section" id="Advanced-pysal.spaghetti-tutorial">
+<h1>Advanced <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial<a class="headerlink" href="#Advanced-pysal.spaghetti-tutorial" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="Creating-and-visualizing-a-spaghetti.Network-object">
-<h1>Creating and visualizing a <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object<a class="headerlink" href="#Creating-and-visualizing-a-spaghetti.Network-object" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="Author:-James-D.-Gaboardi-jgaboardi&#64;gmail.com">
-<h2>Author: James D. Gaboardi <a class="reference external" href="mailto:jgaboardi&#37;&#52;&#48;gmail&#46;com">jgaboardi<span>&#64;</span>gmail<span>&#46;</span>com</a><a class="headerlink" href="#Author:-James-D.-Gaboardi-jgaboardi@gmail.com" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="This-notebook-is-an-advanced-walk-through-for:">
-<h3>This notebook is an advanced walk-through for:<a class="headerlink" href="#This-notebook-is-an-advanced-walk-through-for:" title="Permalink to this headline">¶</a></h3>
+<h2>Creating and visualizing a <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object<a class="headerlink" href="#Creating-and-visualizing-a-spaghetti.Network-object" title="Permalink to this headline">¶</a></h2>
+<p><strong>Author: James D. Gaboardi</strong> <a class="reference external" href="mailto:jgaboardi&#37;&#52;&#48;gmail&#46;com">jgaboardi<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
+<p><strong>This notebook is an advanced walk-through for:</strong></p>
 <ol class="arabic simple">
 <li><p>Exploring the attributes of network objects and point patterns</p></li>
 <li><p>Understanding the difference between a network and its graph-theoretic representation</p></li>
@@ -391,7 +388,7 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2019-12-27T16:57:09-05:00
+2019-12-31T20:42:10-05:00
 
 CPython 3.7.3
 IPython 7.10.2
@@ -405,28 +402,17 @@ CPU cores  : 4
 interpreter: 64bit
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="In-addtion-to-the-base-spaghetti-requirements-(their-dependecies),-this-notebook-requires-installations-of:">
-<h3>In addtion to the base spaghetti <a class="reference external" href="https://github.com/pysal/spaghetti/blob/master/requirements.txt">requirements</a> (their dependecies), this notebook requires installations of:<a class="headerlink" href="#In-addtion-to-the-base-spaghetti-requirements-(their-dependecies),-this-notebook-requires-installations-of:" title="Permalink to this headline">¶</a></h3>
+<p><strong>In addtion to the base</strong> <a class="reference external" href="https://github.com/pysal/spaghetti/blob/master/requirements.txt">spaghetti requirements</a> <strong>(and their dependecies), this notebook requires installations of:</strong></p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">`matplotlib</span></code> &lt;<a class="reference external" href="https://matplotlib.org">https://matplotlib.org</a>&gt;`__</p>
+<li><p><a class="reference external" href="https://matplotlib.org">matplotlib</a></p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">conda</span> <span class="pre">install</span> <span class="pre">matplotlib</span></code></p></li>
 </ul>
 </li>
 </ul>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
 <hr class="docutils" />
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -436,6 +422,7 @@ interpreter: 64bit
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span>
 <span class="kn">import</span> <span class="nn">spaghetti</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 <span class="o">%</span><span class="k">matplotlib</span> inline
 <span class="o">%</span><span class="k">watermark</span> -iv
 </pre></div>
@@ -446,18 +433,20 @@ interpreter: 64bit
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-numpy      1.17.3
 esda       2.1.1
-spaghetti  1.3.1
 libpysal   4.2.0
+numpy      1.17.3
 matplotlib 3.1.2
+spaghetti  1.3.1
 
 </pre></div></div>
 </div>
 </div>
-</div>
-<div class="section" id="Instantiate-a-network">
-<h2>Instantiate a network<a class="headerlink" href="#Instantiate-a-network" title="Permalink to this headline">¶</a></h2>
+<hr class="docutils" />
+<div class="section" id="1.-Instantiating-a-spaghetti.Network-object">
+<h2>1. Instantiating a <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object<a class="headerlink" href="#1.-Instantiating-a-spaghetti.Network-object" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="Instantiate-the-network-from-a-.shp-file">
+<h3>Instantiate the network from a <code class="docutils literal notranslate"><span class="pre">.shp</span></code> file<a class="headerlink" href="#Instantiate-the-network-from-a-.shp-file" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
@@ -468,9 +457,12 @@ matplotlib 3.1.2
 </div>
 </div>
 </div>
-<div class="section" id="Snap-point-patterns-to-the-network">
-<h2>Snap point patterns to the network<a class="headerlink" href="#Snap-point-patterns-to-the-network" title="Permalink to this headline">¶</a></h2>
-<div class="nbinput nblast docutils container">
+</div>
+<hr class="docutils" />
+<div class="section" id="2.-Allocating-observations-(snapping-points)-to-a-network:">
+<h2>2. Allocating observations (snapping points) to a network:<a class="headerlink" href="#2.-Allocating-observations-(snapping-points)-to-a-network:" title="Permalink to this headline">¶</a></h2>
+<p><strong>A network is composed of a single topological representation of network elements (arcs and vertices) to which point patterns may be snapped.</strong></p>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
@@ -483,18 +475,30 @@ matplotlib 3.1.2
 <span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span>
     <span class="n">libpysal</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;schools.shp&quot;</span><span class="p">),</span> <span class="s2">&quot;schools&quot;</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">False</span>
 <span class="p">)</span>
+<span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
 </div>
-<div class="section" id="A-network-is-composed-of-a-single-topological-representation-of-roads-and-n-point-patterns-which-are-snapped-to-the-network.">
-<h2>A network is composed of a single topological representation of roads and <span class="math notranslate nohighlight">\(n\)</span> point patterns which are snapped to the network.<a class="headerlink" href="#A-network-is-composed-of-a-single-topological-representation-of-roads-and-n-point-patterns-which-are-snapped-to-the-network." title="Permalink to this headline">¶</a></h2>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x107278080&gt;,
+ &#39;schools&#39;: &lt;spaghetti.network.PointPattern at 0x120889048&gt;}
+</pre></div></div>
+</div>
+<p><strong>Attributes for every point pattern</strong></p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">dist_snapped</span></code> dict keyed by point id with the value as snapped distance from observation to network arc</p></li>
+</ol>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span>
+<span></span><span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;crimes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dist_snapped</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -504,27 +508,138 @@ matplotlib 3.1.2
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x108c0f080&gt;,
- &#39;schools&#39;: &lt;spaghetti.network.PointPattern at 0x121bd96a0&gt;}
+221.5867616973843
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="Attributes-for-every-point-pattern">
-<h2>Attributes for every point pattern<a class="headerlink" href="#Attributes-for-every-point-pattern" title="Permalink to this headline">¶</a></h2>
-<ol class="arabic simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">dist_snapped</span></code> dict keyed by pointid with the value as snapped distance from observation to network arc</p></li>
+<ol class="arabic simple" start="2">
 <li><p><code class="docutils literal notranslate"><span class="pre">dist_to_vertex</span></code> dict keyed by pointid with the value being a dict in the form {node: distance to vertex, node: distance to vertex}</p></li>
+</ol>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;crimes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dist_to_vertex</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{161: 83.70599311338093, 162: 316.8274480625799}
+</pre></div></div>
+</div>
+<ol class="arabic simple" start="3">
 <li><p><code class="docutils literal notranslate"><span class="pre">npoints</span></code> point observations in set</p></li>
+</ol>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;crimes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">npoints</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+287
+</pre></div></div>
+</div>
+<ol class="arabic simple" start="4">
 <li><p><code class="docutils literal notranslate"><span class="pre">obs_to_arc</span></code> dict keyed by arc with the value being a dict in the form {pointID:(x-coord, y-coord), pointID:(x-coord, y-coord), … }</p></li>
+</ol>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;crimes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">obs_to_arc</span><span class="p">[(</span><span class="mi">161</span><span class="p">,</span> <span class="mi">162</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{0: (727919.2473619275, 875942.4986759046)}
+</pre></div></div>
+</div>
+<ol class="arabic simple" start="5">
 <li><p><code class="docutils literal notranslate"><span class="pre">obs_to_vertex</span></code> list of incident network vertices to snapped observation points</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">points</span></code> geojson like representation of the point pattern. Includes properties if read with attributes=True</p></li>
+</ol>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;crimes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">obs_to_vertex</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+161
+</pre></div></div>
+</div>
+<ol class="arabic simple" start="6">
+<li><p><code class="docutils literal notranslate"><span class="pre">points</span></code> geojson like representation of the point pattern. Includes properties if read with attributes=<code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+</ol>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;crimes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;coordinates&#39;: (727913.0000000029, 875720.9999999977), &#39;properties&#39;: [[1, 1]]}
+</pre></div></div>
+</div>
+<ol class="arabic simple" start="7">
 <li><p><code class="docutils literal notranslate"><span class="pre">snapped_coordinates</span></code> dict keyed by pointid with the value being (x-coord, y-coord)</p></li>
 </ol>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
 </div>
-<div class="section" id="Counts-per-link-(arc-or-edge)-are-important,-but-should-not-be-precomputed-since-we-have-different-representations-of-the-network-(spatial-and-graph-currently).-(Relatively)-Uniform-segmentation-still-needs-to-be-done.">
-<h2>Counts per link (arc or edge) are important, but should not be precomputed since we have different representations of the network (spatial and graph currently). (Relatively) Uniform segmentation still needs to be done.<a class="headerlink" href="#Counts-per-link-(arc-or-edge)-are-important,-but-should-not-be-precomputed-since-we-have-different-representations-of-the-network-(spatial-and-graph-currently).-(Relatively)-Uniform-segmentation-still-needs-to-be-done." title="Permalink to this headline">¶</a></h2>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;crimes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">snapped_coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(727919.2473619275, 875942.4986759046)
+</pre></div></div>
+</div>
+<p><strong>Counts per link (arc or edge) are important, but should not be precomputed since we have different representations of the network (spatial and graph currently). (Relatively) Uniform segmentation still needs to be done.</strong></p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -533,16 +648,17 @@ matplotlib 3.1.2
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">sum</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+<span></span><span class="n">orig_counts_per_link</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+<span class="n">orig_counts_per_link</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -551,10 +667,13 @@ matplotlib 3.1.2
 </pre></div></div>
 </div>
 </div>
-<div class="section" id="Network-segmentation">
-<h2>Network segmentation<a class="headerlink" href="#Network-segmentation" title="Permalink to this headline">¶</a></h2>
+<hr class="docutils" />
+<div class="section" id="3.-Network-segmentation">
+<h2>3. Network segmentation<a class="headerlink" href="#3.-Network-segmentation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="Split-network-arcs-into-segments-of-200-(US-feet-is-this-case)">
+<h3>Split network arcs into segments of 200 (<a class="reference external" href="https://github.com/pysal/libpysal/blob/master/libpysal/examples/geodanet/streets.prj">US feet is this case</a>)<a class="headerlink" href="#Split-network-arcs-into-segments-of-200-(US-feet-is-this-case)" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -562,18 +681,22 @@ matplotlib 3.1.2
 </pre></div>
 </div>
 </div>
+</div>
+<div class="section" id="Calculate-observations-per-link-on-the-segmented-network">
+<h3>Calculate observations per link on the segmented network<a class="headerlink" href="#Calculate-observations-per-link-on-the-segmented-network" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">counts</span> <span class="o">=</span> <span class="n">n200</span><span class="o">.</span><span class="n">count_per_link</span><span class="p">(</span><span class="n">n200</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;crimes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">obs_to_arc</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="nb">sum</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+<span class="n">segm_counts_per_link</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+<span class="n">segm_counts_per_link</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -582,10 +705,12 @@ matplotlib 3.1.2
 </pre></div></div>
 </div>
 </div>
-<div class="section" id="Create-geopandas.GeoDataFrame-objects-of-the-vertices-and-arcs">
-<h2>Create <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> objects of the vertices and arcs<a class="headerlink" href="#Create-geopandas.GeoDataFrame-objects-of-the-vertices-and-arcs" title="Permalink to this headline">¶</a></h2>
+</div>
+<hr class="docutils" />
+<div class="section" id="4.-Extract-geopandas.GeoDataFrame-objects-of-the-vertices-and-arcs">
+<h2>4. Extract <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> objects of the vertices and arcs<a class="headerlink" href="#4.-Extract-geopandas.GeoDataFrame-objects-of-the-vertices-and-arcs" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -593,7 +718,6 @@ matplotlib 3.1.2
 <span class="n">vertices_df</span><span class="p">,</span> <span class="n">arcs_df</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span>
     <span class="n">ntw</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="n">ntw</span><span class="o">.</span><span class="n">vertex_coords</span><span class="p">,</span> <span class="n">arcs</span><span class="o">=</span><span class="n">ntw</span><span class="o">.</span><span class="n">arcs</span>
 <span class="p">)</span>
-
 <span class="c1"># network segmented at 200-meter increments</span>
 <span class="n">vertices200_df</span><span class="p">,</span> <span class="n">arcs200_df</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span>
     <span class="n">n200</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="n">n200</span><span class="o">.</span><span class="n">vertex_coords</span><span class="p">,</span> <span class="n">arcs</span><span class="o">=</span><span class="n">n200</span><span class="o">.</span><span class="n">arcs</span>
@@ -602,50 +726,60 @@ matplotlib 3.1.2
 </div>
 </div>
 </div>
-<div class="section" id="Visualization-of-the-shapefile-derived,-unsegmented-network-with-vertices-in-a-larger,-blue,-semi-opaque-form-and-the-distance-segmented-network-with-small,-red,-fully-opaque-vertices.">
-<h2>Visualization of the shapefile derived, unsegmented network with vertices in a larger, blue, semi-opaque form and the distance segmented network with small, red, fully opaque vertices.<a class="headerlink" href="#Visualization-of-the-shapefile-derived,-unsegmented-network-with-vertices-in-a-larger,-blue,-semi-opaque-form-and-the-distance-segmented-network-with-small,-red,-fully-opaque-vertices." title="Permalink to this headline">¶</a></h2>
+<hr class="docutils" />
+<div class="section" id="5.-Visualization-demonstration">
+<h2>5. Visualization demonstration<a class="headerlink" href="#5.-Visualization-demonstration" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>shapefile derived, unsegmented network with vertices in a larger, blue, semi-opaque form</p></li>
+<li><p>distance segmented network with small, red, fully opaque vertices</p></li>
+</ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">base</span> <span class="o">=</span> <span class="n">arcs_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
 <span class="n">vertices_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
-<span class="n">arcs200_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
 <span class="n">vertices200_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.axes._subplots.AxesSubplot at 0x106a01b00&gt;
+&lt;matplotlib.axes._subplots.AxesSubplot at 0x104dcca58&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Advanced_spaghetti_tutorial_23_1.png" src="../_images/notebooks_Advanced_spaghetti_tutorial_23_1.png" />
+<img alt="../_images/notebooks_Advanced_spaghetti_tutorial_33_1.png" src="../_images/notebooks_Advanced_spaghetti_tutorial_33_1.png" />
 </div>
 </div>
 </div>
-<div class="section" id="Moran’s-I-using-the-digitized-network">
-<h2>Moran’s I using the digitized network<a class="headerlink" href="#Moran’s-I-using-the-digitized-network" title="Permalink to this headline">¶</a></h2>
+<hr class="docutils" />
+<div class="section" id="6.-Spatial-Analysis-with-pysal/esda">
+<h2>6. Spatial Analysis with <a class="reference external" href="https://esda.readthedocs.io/en/latest/">pysal/esda</a><a class="headerlink" href="#6.-Spatial-Analysis-with-pysal/esda" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="6.1-Moran’s-I-using-the-digitized-network">
+<h3>6.1 Moran’s <em>I</em> using the digitized network<a class="headerlink" href="#6.1-Moran’s-I-using-the-digitized-network" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Binary Adjacency</span>
+<span></span><span class="c1"># Compute the counts</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">count_per_link</span><span class="p">(</span><span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;crimes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">obs_to_arc</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Binary Adjacency</span>
 <span class="n">w</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">contiguityweights</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="c1"># Build the y vector</span>
 <span class="n">arcs</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">neighbors</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">arcs</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">arcs</span><span class="p">))</span>
 
 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">arcs</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">counts</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -666,24 +800,25 @@ matplotlib 3.1.2
 </pre></div></div>
 </div>
 </div>
-<div class="section" id="Moran’s-I-using-the-graph-representation-to-generate-the-W">
-<h2>Moran’s I using the graph representation to generate the W<a class="headerlink" href="#Moran’s-I-using-the-graph-representation-to-generate-the-W" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="6.2-Moran’s-I-using-the-graph-representation-to-generate-the-W">
+<h3>6.2 Moran’s <em>I</em> using the graph representation to generate the <em>W</em><a class="headerlink" href="#6.2-Moran’s-I-using-the-graph-representation-to-generate-the-W" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Note that we have to regenerate the counts per arc, since the graph will have less edges.</p></li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">counts</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">count_per_link</span><span class="p">(</span><span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s1">&#39;crimes&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">obs_to_arc</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span></span><span class="c1"># Compute the counts</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">count_per_link</span><span class="p">(</span><span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;crimes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">obs_to_arc</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># Binary Adjacency</span>
 <span class="n">w</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">contiguityweights</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># Build the y vector</span>
 <span class="n">edges</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">neighbors</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">edges</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">edges</span><span class="p">))</span>
 
 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">edges</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">counts</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -705,29 +840,27 @@ matplotlib 3.1.2
 </pre></div></div>
 </div>
 </div>
-<div class="section" id="Moran’s-I-using-the-segmented-network-and-intensities-instead-of-counts">
-<h2>Moran’s I using the segmented network and intensities instead of counts<a class="headerlink" href="#Moran’s-I-using-the-segmented-network-and-intensities-instead-of-counts" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="6.3-Moran’s-I-using-the-segmented-network-and-intensities-instead-of-counts">
+<h3>6.3 Moran’s <em>I</em> using the segmented network and intensities instead of counts<a class="headerlink" href="#6.3-Moran’s-I-using-the-segmented-network-and-intensities-instead-of-counts" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Binary Adjacency</span>
-<span class="n">w</span> <span class="o">=</span> <span class="n">n200</span><span class="o">.</span><span class="n">contiguityweights</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span></span><span class="c1"># Compute the counts</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="n">n200</span><span class="o">.</span><span class="n">count_per_link</span><span class="p">(</span><span class="n">n200</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;crimes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">obs_to_arc</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-<span class="c1"># Compute the counts</span>
-<span class="n">counts</span> <span class="o">=</span> <span class="n">n200</span><span class="o">.</span><span class="n">count_per_link</span><span class="p">(</span>
-    <span class="n">n200</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s1">&#39;crimes&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">obs_to_arc</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">False</span>
-<span class="p">)</span>
+<span class="c1"># Binary Adjacency</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">n200</span><span class="o">.</span><span class="n">contiguityweights</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="c1"># Build the y vector and convert from raw counts to intensities</span>
 <span class="n">arcs</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">neighbors</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">arcs</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">n200</span><span class="o">.</span><span class="n">arcs</span><span class="p">))</span>
 
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">edges</span><span class="p">):</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">arcs</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">counts</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="n">length</span> <span class="o">=</span> <span class="n">n200</span><span class="o">.</span><span class="n">arc_lengths</span><span class="p">[</span><span class="n">a</span><span class="p">]</span>
-        <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">counts</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">/</span> <span class="n">length</span>
+        <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">counts</span><span class="p">[</span><span class="n">a</span><span class="p">])</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">length</span><span class="p">)</span>
 
 <span class="c1"># Moran&#39;s I</span>
 <span class="n">res</span> <span class="o">=</span> <span class="n">esda</span><span class="o">.</span><span class="n">moran</span><span class="o">.</span><span class="n">Moran</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">99</span><span class="p">)</span>
@@ -736,7 +869,7 @@ matplotlib 3.1.2
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
+<div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
@@ -744,148 +877,11 @@ matplotlib 3.1.2
 [&#39;EI&#39;, &#39;EI_sim&#39;, &#39;I&#39;, &#39;VI_norm&#39;, &#39;VI_rand&#39;, &#39;VI_sim&#39;, &#39;_Moran__calc&#39;, &#39;_Moran__moments&#39;, &#39;__class__&#39;, &#39;__delattr__&#39;, &#39;__dict__&#39;, &#39;__dir__&#39;, &#39;__doc__&#39;, &#39;__eq__&#39;, &#39;__format__&#39;, &#39;__ge__&#39;, &#39;__getattribute__&#39;, &#39;__gt__&#39;, &#39;__hash__&#39;, &#39;__init__&#39;, &#39;__init_subclass__&#39;, &#39;__le__&#39;, &#39;__lt__&#39;, &#39;__module__&#39;, &#39;__ne__&#39;, &#39;__new__&#39;, &#39;__reduce__&#39;, &#39;__reduce_ex__&#39;, &#39;__repr__&#39;, &#39;__setattr__&#39;, &#39;__sizeof__&#39;, &#39;__str__&#39;, &#39;__subclasshook__&#39;, &#39;__weakref__&#39;, &#39;_statistic&#39;, &#39;by_col&#39;, &#39;n&#39;, &#39;p_norm&#39;, &#39;p_rand&#39;, &#39;p_sim&#39;, &#39;p_z_sim&#39;, &#39;permutations&#39;, &#39;seI_norm&#39;, &#39;seI_rand&#39;, &#39;seI_sim&#39;, &#39;sim&#39;, &#39;w&#39;, &#39;y&#39;, &#39;z&#39;, &#39;z2ss&#39;, &#39;z_norm&#39;, &#39;z_rand&#39;, &#39;z_sim&#39;]
 </pre></div></div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-/Users/jgaboardi/miniconda3/envs/py3_spgh_dev/lib/python3.7/site-packages/esda/moran.py:206: RuntimeWarning: invalid value encountered in double_scalars
-  k = k_num / k_den
-/Users/jgaboardi/miniconda3/envs/py3_spgh_dev/lib/python3.7/site-packages/esda/moran.py:217: RuntimeWarning: invalid value encountered in double_scalars
-  return self.n / self.w.s0 * inum / self.z2ss
-/Users/jgaboardi/miniconda3/envs/py3_spgh_dev/lib/python3.7/site-packages/esda/moran.py:165: RuntimeWarning: invalid value encountered in greater_equal
-  above = sim &gt;= self.I
-/Users/jgaboardi/miniconda3/envs/py3_spgh_dev/lib/python3.7/site-packages/esda/moran.py:181: RuntimeWarning: invalid value encountered in true_divide
-  self.z /= sy
-</pre></div></div>
 </div>
 </div>
-<div class="section" id="Timings-for-distance-based-methods,-e.g. G-function">
-<h2>Timings for distance based methods, e.g. G-function<a class="headerlink" href="#Timings-for-distance-based-methods,-e.g. G-function" title="Permalink to this headline">¶</a></h2>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="n">n0</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">allneighbordistances</span><span class="p">(</span><span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s1">&#39;crimes&#39;</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t1</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-0.45281219482421875
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="n">n1</span> <span class="o">=</span> <span class="n">n200</span><span class="o">.</span><span class="n">allneighbordistances</span><span class="p">(</span><span class="n">n200</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s1">&#39;crimes&#39;</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t1</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-1.844743013381958
-</pre></div></div>
-</div>
-<ul class="simple">
-<li><p>Note that the first time these methods are called, the underlying vertex-to-vertex shortest path distance matrix has to be calculated. Subsequent calls will not require this, and will be much faster:</p></li>
-</ul>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="n">n0</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">allneighbordistances</span><span class="p">(</span><span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s1">&#39;crimes&#39;</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t1</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-0.17812275886535645
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="o">%</span><span class="k">timeit</span> ntw.allneighbordistances(ntw.pointpatterns[&quot;crimes&quot;])
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-174 ms ± 7.08 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="nb">print</span><span class="p">(</span><span class="nb">dir</span><span class="p">(</span><span class="n">ntw</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-[&#39;NetworkF&#39;, &#39;NetworkG&#39;, &#39;NetworkK&#39;, &#39;__class__&#39;, &#39;__delattr__&#39;, &#39;__dict__&#39;, &#39;__dir__&#39;, &#39;__doc__&#39;, &#39;__eq__&#39;, &#39;__format__&#39;, &#39;__ge__&#39;, &#39;__getattribute__&#39;, &#39;__gt__&#39;, &#39;__hash__&#39;, &#39;__init__&#39;, &#39;__init_subclass__&#39;, &#39;__le__&#39;, &#39;__lt__&#39;, &#39;__module__&#39;, &#39;__ne__&#39;, &#39;__new__&#39;, &#39;__reduce__&#39;, &#39;__reduce_ex__&#39;, &#39;__repr__&#39;, &#39;__setattr__&#39;, &#39;__sizeof__&#39;, &#39;__str__&#39;, &#39;__subclasshook__&#39;, &#39;__weakref__&#39;, &#39;_evaluate_napts&#39;, &#39;_extractnetwork&#39;, &#39;_newpoint_coords&#39;, &#39;_round_sig&#39;, &#39;_snap_to_link&#39;, &#39;_yield_napts&#39;, &#39;_yieldneighbor&#39;, &#39;adjacencylist&#39;, &#39;alldistances&#39;, &#39;allneighbordistances&#39;, &#39;arc_lengths&#39;, &#39;arcs&#39;, &#39;arcs_to_edges&#39;, &#39;compute_distance_to_vertices&#39;, &#39;compute_snap_dist&#39;, &#39;contiguityweights&#39;, &#39;count_per_link&#39;, &#39;distancebandweights&#39;, &#39;distancematrix&#39;, &#39;edge_lengths&#39;, &#39;edges&#39;, &#39;enum_links_vertex&#39;, &#39;extract_components&#39;, &#39;extractgraph&#39;, &#39;full_distance_matrix&#39;, &#39;graph_component2edge&#39;, &#39;graph_component_is_ring&#39;, &#39;graph_component_labels&#39;, &#39;graph_n_components&#39;, &#39;in_data&#39;, &#39;loadnetwork&#39;, &#39;nearestneighbordistances&#39;, &#39;network_component2arc&#39;, &#39;network_component_is_ring&#39;, &#39;network_component_labels&#39;, &#39;network_n_components&#39;, &#39;non_articulation_points&#39;, &#39;pointpatterns&#39;, &#39;savenetwork&#39;, &#39;simulate_observations&#39;, &#39;snapobservations&#39;, &#39;split_arcs&#39;, &#39;unique_arcs&#39;, &#39;vertex_coords&#39;, &#39;vertex_list&#39;, &#39;vertex_sig&#39;, &#39;vertices&#39;, &#39;w_graph&#39;, &#39;w_network&#39;]
-</pre></div></div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">n1</span> <span class="o">=</span> <span class="n">n200</span><span class="o">.</span><span class="n">allneighbordistances</span><span class="p">(</span><span class="n">n200</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s1">&#39;crimes&#39;</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="section" id="Simulate-a-point-pattern-on-the-network">
-<h2>Simulate a point pattern on the network<a class="headerlink" href="#Simulate-a-point-pattern-on-the-network" title="Permalink to this headline">¶</a></h2>
+<hr class="docutils" />
+<div class="section" id="7.-Simulate-a-point-pattern-on-the-network">
+<h2>7. Simulate a point pattern on the network<a class="headerlink" href="#7.-Simulate-a-point-pattern-on-the-network" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>Need to supply a count of the number of points and a distirbution (default is uniform). Generally, this will not be called by the user, since the simulation will be used for Monte Carlo permutation.</p></li>
 </ul>
@@ -894,31 +890,32 @@ matplotlib 3.1.2
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">npts</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s1">&#39;crimes&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">npoints</span>
+<span></span><span class="n">npts</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;crimes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">npoints</span>
 <span class="n">sim</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">simulate_observations</span><span class="p">(</span><span class="n">npts</span><span class="p">)</span>
-<span class="n">sim</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">dir</span><span class="p">(</span><span class="n">sim</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
-</pre></div>
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;spaghetti.network.SimulatedPointPattern at 0x121cdd6d8&gt;
+[&#39;__class__&#39;, &#39;__delattr__&#39;, &#39;__dict__&#39;, &#39;__dir__&#39;, &#39;__doc__&#39;, &#39;__eq__&#39;, &#39;__format__&#39;, &#39;__ge__&#39;, &#39;__getattribute__&#39;, &#39;__gt__&#39;, &#39;__hash__&#39;, &#39;__init__&#39;, &#39;__init_subclass__&#39;, &#39;__le__&#39;, &#39;__lt__&#39;, &#39;__module__&#39;, &#39;__ne__&#39;, &#39;__new__&#39;, &#39;__reduce__&#39;, &#39;__reduce_ex__&#39;, &#39;__repr__&#39;, &#39;__setattr__&#39;, &#39;__sizeof__&#39;, &#39;__str__&#39;, &#39;__subclasshook__&#39;, &#39;__weakref__&#39;, &#39;dist_to_vertex&#39;, &#39;npoints&#39;, &#39;obs_to_arc&#39;, &#39;obs_to_vertex&#39;, &#39;points&#39;, &#39;snapped_coordinates&#39;]
 </pre></div></div>
 </div>
 </div>
+<hr class="docutils" />
+<div class="section" id="8.-Network-constrained-observation-cluster-testing">
+<h2>8. Network-constrained observation cluster testing<a class="headerlink" href="#8.-Network-constrained-observation-cluster-testing" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="F-function">
-<h2>F-function<a class="headerlink" href="#F-function" title="Permalink to this headline">¶</a></h2>
+<h3><em>F</em>-function<a class="headerlink" href="#F-function" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">fres</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">NetworkF</span><span class="p">(</span><span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s1">&#39;crimes&#39;</span><span class="p">],</span>
-                    <span class="n">permutations</span><span class="o">=</span><span class="mi">99</span><span class="p">)</span>
+<span></span><span class="n">fres</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">NetworkF</span><span class="p">(</span><span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;crimes&quot;</span><span class="p">],</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">99</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -927,12 +924,12 @@ matplotlib 3.1.2
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fres</span><span class="o">.</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">fres</span><span class="o">.</span><span class="n">observed</span><span class="p">,</span> <span class="s1">&#39;b-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Observed&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fres</span><span class="o">.</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">fres</span><span class="o">.</span><span class="n">upperenvelope</span><span class="p">,</span> <span class="s1">&#39;r--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Upper&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fres</span><span class="o">.</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">fres</span><span class="o">.</span><span class="n">lowerenvelope</span><span class="p">,</span> <span class="s1">&#39;k--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Lower&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;x-large&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Network F Function&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;xx-large&#39;</span><span class="p">)</span>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fres</span><span class="o">.</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">fres</span><span class="o">.</span><span class="n">observed</span><span class="p">,</span> <span class="s2">&quot;b-&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Observed&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fres</span><span class="o">.</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">fres</span><span class="o">.</span><span class="n">upperenvelope</span><span class="p">,</span> <span class="s2">&quot;r--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Upper&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fres</span><span class="o">.</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">fres</span><span class="o">.</span><span class="n">lowerenvelope</span><span class="p">,</span> <span class="s2">&quot;k--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Lower&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;x-large&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Network F Function&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;xx-large&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -945,20 +942,14 @@ matplotlib 3.1.2
 </div>
 </div>
 </div>
-<div class="section" id="Create-a-nearest-neighbor-matrix-using-the-crimes-point-pattern">
-<h2>Create a nearest neighbor matrix using the crimes point pattern<a class="headerlink" href="#Create-a-nearest-neighbor-matrix-using-the-crimes-point-pattern" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><p>[note from jlaura] Right now, both the G and K functions generate a full distance matrix. This is because, I know that the full generation is correct and I believe that the truncated generated, e.g. nearest neighbor, has a bug.</p></li>
-</ul>
-</div>
 <div class="section" id="G-function">
-<h2>G-function<a class="headerlink" href="#G-function" title="Permalink to this headline">¶</a></h2>
+<h3><em>G</em>-function<a class="headerlink" href="#G-function" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">gres</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">NetworkG</span><span class="p">(</span><span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s1">&#39;crimes&#39;</span><span class="p">],</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">99</span><span class="p">)</span>
+<span></span><span class="n">gres</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">NetworkG</span><span class="p">(</span><span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;crimes&quot;</span><span class="p">],</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">99</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -967,12 +958,12 @@ matplotlib 3.1.2
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">gres</span><span class="o">.</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">gres</span><span class="o">.</span><span class="n">observed</span><span class="p">,</span> <span class="s1">&#39;b-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Observed&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">gres</span><span class="o">.</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">gres</span><span class="o">.</span><span class="n">upperenvelope</span><span class="p">,</span> <span class="s1">&#39;r--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Upper&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">gres</span><span class="o">.</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">gres</span><span class="o">.</span><span class="n">lowerenvelope</span><span class="p">,</span> <span class="s1">&#39;k--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Lower&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;x-large&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Network G Function&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;xx-large&#39;</span><span class="p">)</span>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">gres</span><span class="o">.</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">gres</span><span class="o">.</span><span class="n">observed</span><span class="p">,</span> <span class="s2">&quot;b-&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Observed&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">gres</span><span class="o">.</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">gres</span><span class="o">.</span><span class="n">upperenvelope</span><span class="p">,</span> <span class="s2">&quot;r--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Upper&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">gres</span><span class="o">.</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">gres</span><span class="o">.</span><span class="n">lowerenvelope</span><span class="p">,</span> <span class="s2">&quot;k--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Lower&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;x-large&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Network G Function&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;xx-large&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -981,41 +972,33 @@ matplotlib 3.1.2
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Advanced_spaghetti_tutorial_48_0.png" src="../_images/notebooks_Advanced_spaghetti_tutorial_48_0.png" />
+<img alt="../_images/notebooks_Advanced_spaghetti_tutorial_47_0.png" src="../_images/notebooks_Advanced_spaghetti_tutorial_47_0.png" />
 </div>
 </div>
 </div>
 <div class="section" id="K-function">
-<h2>K-function<a class="headerlink" href="#K-function" title="Permalink to this headline">¶</a></h2>
-<div class="nbinput docutils container">
+<h3><em>K</em>-function<a class="headerlink" href="#K-function" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">kres</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">NetworkK</span><span class="p">(</span><span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s1">&#39;crimes&#39;</span><span class="p">],</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">99</span><span class="p">)</span>
+<span></span><span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s2">&quot;invalid value encountered&quot;</span><span class="p">)</span>
+<span class="n">kres</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">NetworkK</span><span class="p">(</span><span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;crimes&quot;</span><span class="p">],</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">99</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-/Users/jgaboardi/spaghetti/spaghetti/analysis.py:401: RuntimeWarning: invalid value encountered in less_equal
-  y[i] = len(nearest[nearest &lt;= r])
-</pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kres</span><span class="o">.</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">kres</span><span class="o">.</span><span class="n">observed</span><span class="p">,</span> <span class="s1">&#39;b-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Observed&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kres</span><span class="o">.</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">kres</span><span class="o">.</span><span class="n">upperenvelope</span><span class="p">,</span> <span class="s1">&#39;r--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Upper&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kres</span><span class="o">.</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">kres</span><span class="o">.</span><span class="n">lowerenvelope</span><span class="p">,</span> <span class="s1">&#39;k--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Lower&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;x-large&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Network K Function&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;xx-large&#39;</span><span class="p">)</span>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kres</span><span class="o">.</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">kres</span><span class="o">.</span><span class="n">observed</span><span class="p">,</span> <span class="s2">&quot;b-&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Observed&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kres</span><span class="o">.</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">kres</span><span class="o">.</span><span class="n">upperenvelope</span><span class="p">,</span> <span class="s2">&quot;r--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Upper&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kres</span><span class="o">.</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">kres</span><span class="o">.</span><span class="n">lowerenvelope</span><span class="p">,</span> <span class="s2">&quot;k--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Lower&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;x-large&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Network K Function&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;xx-large&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1024,7 +1007,8 @@ matplotlib 3.1.2
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Advanced_spaghetti_tutorial_51_0.png" src="../_images/notebooks_Advanced_spaghetti_tutorial_51_0.png" />
+<img alt="../_images/notebooks_Advanced_spaghetti_tutorial_50_0.png" src="../_images/notebooks_Advanced_spaghetti_tutorial_50_0.png" />
+</div>
 </div>
 </div>
 </div>

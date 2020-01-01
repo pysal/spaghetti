@@ -10,7 +10,7 @@
     "\n",
     "\n",
     "----------------\n",
-    "## Basic `pysal.spaghetti` tutorial:\n",
+    "## Basic `pysal.spaghetti` tutorial\n",
     "### Creating and visualizing a `spaghetti.Network` object\n",
     "\n",
     "**Author: James D. Gaboardi** **<jgaboardi@gmail.com>**\n",
@@ -27,8 +27,8 @@
    "execution_count": 1,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2019-12-29T19:45:04.040352Z",
-     "start_time": "2019-12-29T19:45:03.791961Z"
+     "end_time": "2020-01-01T01:30:04.044192Z",
+     "start_time": "2020-01-01T01:30:03.762128Z"
     }
    },
    "outputs": [
@@ -36,7 +36,7 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "2019-12-29T14:45:04-05:00\n",
+      "2019-12-31T20:30:04-05:00\n",
       "\n",
       "CPython 3.7.3\n",
       "IPython 7.10.2\n",
@@ -77,8 +77,8 @@
    "execution_count": 2,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2019-12-29T19:45:05.935548Z",
-     "start_time": "2019-12-29T19:45:04.047176Z"
+     "end_time": "2020-01-01T01:30:06.797509Z",
+     "start_time": "2020-01-01T01:30:04.051940Z"
     }
    },
    "outputs": [
@@ -117,8 +117,8 @@
    "execution_count": 3,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2019-12-29T19:45:06.032324Z",
-     "start_time": "2019-12-29T19:45:05.944217Z"
+     "end_time": "2020-01-01T01:30:06.977641Z",
+     "start_time": "2020-01-01T01:30:06.804390Z"
     }
    },
    "outputs": [],
@@ -140,8 +140,8 @@
    "execution_count": 4,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2019-12-29T19:45:06.083705Z",
-     "start_time": "2019-12-29T19:45:06.035900Z"
+     "end_time": "2020-01-01T01:30:07.116697Z",
+     "start_time": "2020-01-01T01:30:06.983474Z"
     }
    },
    "outputs": [],
@@ -168,8 +168,8 @@
    "execution_count": 5,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2019-12-29T19:45:06.094904Z",
-     "start_time": "2019-12-29T19:45:06.086154Z"
+     "end_time": "2020-01-01T01:30:07.130823Z",
+     "start_time": "2020-01-01T01:30:07.119982Z"
     }
    },
    "outputs": [
@@ -202,8 +202,8 @@
    "execution_count": 6,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2019-12-29T19:45:06.304918Z",
-     "start_time": "2019-12-29T19:45:06.097996Z"
+     "end_time": "2020-01-01T01:30:07.474640Z",
+     "start_time": "2020-01-01T01:30:07.142401Z"
     }
    },
    "outputs": [],
@@ -225,8 +225,8 @@
    "execution_count": 7,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2019-12-29T19:45:06.325077Z",
-     "start_time": "2019-12-29T19:45:06.307378Z"
+     "end_time": "2020-01-01T01:30:07.494636Z",
+     "start_time": "2020-01-01T01:30:07.477940Z"
     }
    },
    "outputs": [
@@ -263,8 +263,8 @@
    "execution_count": 8,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2019-12-29T19:45:06.347511Z",
-     "start_time": "2019-12-29T19:45:06.332245Z"
+     "end_time": "2020-01-01T01:30:07.535775Z",
+     "start_time": "2020-01-01T01:30:07.511299Z"
     }
    },
    "outputs": [],
@@ -289,8 +289,8 @@
    "execution_count": 9,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2019-12-29T19:45:06.361226Z",
-     "start_time": "2019-12-29T19:45:06.351192Z"
+     "end_time": "2020-01-01T01:30:07.558599Z",
+     "start_time": "2020-01-01T01:30:07.544270Z"
     }
    },
    "outputs": [
@@ -324,8 +324,8 @@
    "execution_count": 10,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2019-12-29T19:45:06.389879Z",
-     "start_time": "2019-12-29T19:45:06.364535Z"
+     "end_time": "2020-01-01T01:30:07.607306Z",
+     "start_time": "2020-01-01T01:30:07.567559Z"
     }
    },
    "outputs": [],
@@ -350,8 +350,8 @@
    "execution_count": 11,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2019-12-29T19:45:06.405800Z",
-     "start_time": "2019-12-29T19:45:06.392861Z"
+     "end_time": "2020-01-01T01:30:07.627067Z",
+     "start_time": "2020-01-01T01:30:07.609702Z"
     }
    },
    "outputs": [
@@ -384,8 +384,8 @@
    "execution_count": 12,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2019-12-29T19:45:06.911665Z",
-     "start_time": "2019-12-29T19:45:06.410229Z"
+     "end_time": "2020-01-01T01:30:08.333227Z",
+     "start_time": "2020-01-01T01:30:07.641871Z"
     }
    },
    "outputs": [],
@@ -406,8 +406,8 @@
    "execution_count": 13,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2019-12-29T19:45:06.924444Z",
-     "start_time": "2019-12-29T19:45:06.916830Z"
+     "end_time": "2020-01-01T01:30:08.350131Z",
+     "start_time": "2020-01-01T01:30:08.336042Z"
     }
    },
    "outputs": [],
@@ -433,8 +433,8 @@
    "execution_count": 14,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2019-12-29T19:45:06.939987Z",
-     "start_time": "2019-12-29T19:45:06.929359Z"
+     "end_time": "2020-01-01T01:30:08.365723Z",
+     "start_time": "2020-01-01T01:30:08.354467Z"
     }
    },
    "outputs": [],
@@ -454,8 +454,8 @@
    "execution_count": 15,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2019-12-29T19:45:06.954650Z",
-     "start_time": "2019-12-29T19:45:06.943974Z"
+     "end_time": "2020-01-01T01:30:08.378483Z",
+     "start_time": "2020-01-01T01:30:08.368555Z"
     }
    },
    "outputs": [],
@@ -478,8 +478,8 @@
    "execution_count": 16,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2019-12-29T19:45:06.969141Z",
-     "start_time": "2019-12-29T19:45:06.960035Z"
+     "end_time": "2020-01-01T01:30:08.390729Z",
+     "start_time": "2020-01-01T01:30:08.382779Z"
     }
    },
    "outputs": [],
@@ -500,8 +500,8 @@
    "execution_count": 17,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2019-12-29T19:45:07.707910Z",
-     "start_time": "2019-12-29T19:45:06.971810Z"
+     "end_time": "2020-01-01T01:30:09.192985Z",
+     "start_time": "2020-01-01T01:30:08.396866Z"
     }
    },
    "outputs": [
