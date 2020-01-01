@@ -1,6 +1,6 @@
 .. Installation
 
-As of version 1.3, spaghetti supports Python `3.6`_ and `3.7`_ only. Please make sure that you are operating in a Python 3 environment.
+As of version 1.3, `spaghetti` supports Python 3.6_ and 3.7_ only. Please make sure that you are operating in a Python 3 environment.
 
 Installation
 ============
@@ -8,9 +8,9 @@ Installation
 Installing with ``conda`` via `spaghetti-feedstock`_ (highly recommended)
 -------------------------------------------------------------------------
 
-To install ``spaghetti`` and all its dependencies, we recommend using the `conda`_ manager, specifically with the `conda-forge`_ channel. This can be obtained by installing the `Anaconda Distribution`_ (a free Python distribution for data science), or through `miniconda`_ (minimal distribution only containing Python and the ``conda`` package manager). 
+To install `spaghetti` and all its dependencies, we recommend using the conda_ manager, specifically with the conda-forge_ channel. This can be obtained by installing the `Anaconda Distribution`_ (a free Python distribution for data science), or through miniconda_ (minimal distribution only containing Python and the ``conda`` package manager). 
 
-Using `conda`, `spaghetti` can be installed as follows::
+Using ``conda``, `spaghetti` can be installed as follows::
 
   $ conda config --set channel_priority strict
   $ conda install --channel conda-forge spaghetti
@@ -31,7 +31,7 @@ Installing with `Python Package Index`_
 
 **Warning**
 
-When installing via `pip`, you have to ensure that the required dependencies for `spaghetti` are installed on your operating system. Details on how to install these packages are linked `here`_. Using `conda` (above) avoids having to install the dependencies separately.
+When installing via ``pip``, you have to ensure that the required dependencies for `spaghetti` are installed on your operating system. Details on how to install these packages are linked here_. Using ``conda`` (above) avoids having to install the dependencies separately.
 
 Install the most current development version of `spaghetti` by running: ::
 
@@ -40,11 +40,11 @@ Install the most current development version of `spaghetti` by running: ::
 Development Version
 -------------------
 
-Install the most current development version of spaghetti by running::
+Install the most current development version of `spaghetti` by running::
 
   $ pip install git+https://github.com/pysal/spaghetti
 
-You can  also `fork`_ the `pysal/spaghetti`_ repo and create a local clone of your fork. By making changes to your local clone and submitting a pull request to `pysal/spaghetti`_, you can contribute to the spaghetti development.
+You can  also fork_ the `pysal/spaghetti`_ repo and create a local clone of your fork. By making changes to your local clone and submitting a pull request to `pysal/spaghetti`_, you can contribute to the spaghetti development.
 
 |
 

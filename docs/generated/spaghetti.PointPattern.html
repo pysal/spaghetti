@@ -12,6 +12,9 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"TeX": {"equationNumbers": {"autoNumber": "AMS", "useLabelIds": true}}, "tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
@@ -19,8 +22,8 @@
     <link rel="shortcut icon" href="../_static/pysal_favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="spaghetti.SimulatedPointPattern" href="spaghetti.SimulatedPointPattern.html" />
-    <link rel="prev" title="spaghetti.Network._yieldneighbor" href="spaghetti.Network._yieldneighbor.html" />
+    <link rel="next" title="spaghetti.element_as_gdf" href="spaghetti.element_as_gdf.html" />
+    <link rel="prev" title="spaghetti.Network" href="spaghetti.Network.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -46,6 +49,7 @@
           <ul class="nav navbar-nav">
             
                 <li><a href="../installation.html">Installation</a></li>
+                <li><a href="../tutorial.html">Tutorial</a></li>
                 <li><a href="../api.html">API</a></li>
                 <li><a href="../references.html">References</a></li>
             
@@ -66,11 +70,16 @@
 <li class="toctree-l2"><a class="reference internal" href="../installation.html#development-version">Development Version</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/Basic_spaghetti_tutorial.html">Basic <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/Advanced_spaghetti_tutorial.html">Advanced <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/Use_case-facility_location.html">Demostrating network-based optimal facility location modeling</a></li>
+</ul>
+</li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../api.html#spaghetti-network">spaghetti.Network</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../api.html#spaghetti-pointpattern">spaghetti.PointPattern</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api.html#spaghetti-simulatedpointpattern">spaghetti.SimulatedPointPattern</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api.html#spaghetti">spaghetti</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#network-feature-instantiation">Network feature instantiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#network-feature-extraction">Network feature extraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#save-and-load-a-network">Save and load a network</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
@@ -122,51 +131,52 @@
 <dl class="class">
 <dt id="spaghetti.PointPattern">
 <em class="property">class </em><code class="sig-prename descclassname">spaghetti.</code><code class="sig-name descname">PointPattern</code><span class="sig-paren">(</span><em class="sig-param">in_data=None</em>, <em class="sig-param">idvariable=None</em>, <em class="sig-param">attribute=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#PointPattern"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.PointPattern" title="Permalink to this definition">¶</a></dt>
-<dd><p>A stub point pattern class used to store a point pattern. This
-class is monkey patched with network specific attributes when the
+<dd><p>A stub point pattern class used to store a point pattern.</p>
+<p>Note from the original author of <code class="docutils literal notranslate"><span class="pre">pysal.network</span></code>: 
+This class is monkey patched with network specific attributes when the
 points are snapped to a network. In the future this class may be
 replaced with a generic point pattern class.</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>in_data</strong><span class="classifier">{geopandas.GeoDataFrame, str}</span></dt><dd><p>The input geographic data. Either (1) a path to a shapefile
-<code class="docutils literal notranslate"><span class="pre">str</span></code>; or (2) a <a class="reference external" href="http://geopandas.org/data_structures.html#geodataframe">geopandas.GeoDataFrame</a>.</p>
+<dd class="field-odd"><dl>
+<dt><strong>in_data</strong><span class="classifier">{<a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.6.1+30.g0da3a7d)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a>}</span></dt><dd><p>The input geographic data. Either (1) a path to a shapefile
+<code class="docutils literal notranslate"><span class="pre">str</span></code>; or (2) a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code>.</p>
 </dd>
-<dt><strong>idvariable</strong><span class="classifier">str</span></dt><dd><p>Field in the shapefile to use as an id variable.</p>
+<dt><strong>idvariable</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>Field in the shapefile to use as an ID variable.</p>
 </dd>
-<dt><strong>attribute</strong><span class="classifier">bool</span></dt><dd><p>A flag to indicate whether all attributes are tagged to this
+<dt><strong>attribute</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.7)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>A flag to indicate whether all attributes are tagged to this
 class (<code class="docutils literal notranslate"><span class="pre">True</span></code>) or excluded (<code class="docutils literal notranslate"><span class="pre">False</span></code>). Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Attributes</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>points</strong><span class="classifier">dict</span></dt><dd><p>Keys are the point ids (int). Values are the x,y
+<dd class="field-even"><dl>
+<dt><strong>points</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are the point ids (int). Values are the x,y
 coordinates (tuple).</p>
 </dd>
-<dt><strong>npoints</strong><span class="classifier">int</span></dt><dd><p>The number of points.</p>
+<dt><strong>npoints</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of points.</p>
 </dd>
-<dt><strong>obs_to_arc</strong><span class="classifier">dict</span></dt><dd><p>Keys are arc ids (tuple). Values are snapped point information
+<dt><strong>obs_to_arc</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are arc ids (tuple). Values are snapped point information
 (<code class="docutils literal notranslate"><span class="pre">dict</span></code>).  Within the snapped point information (<code class="docutils literal notranslate"><span class="pre">dict</span></code>)
 keys are observation ids (<code class="docutils literal notranslate"><span class="pre">int</span></code>), and values are snapped
 coordinates.</p>
 </dd>
-<dt><strong>obs_to_vertex</strong><span class="classifier">list</span></dt><dd><p>List of incident network vertices to snapped observation points
+<dt><strong>obs_to_vertex</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#list" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">list</span></code></a></span></dt><dd><p>List of incident network vertices to snapped observation points
 converted from a <code class="docutils literal notranslate"><span class="pre">default_dict</span></code>. Originally in the form of
 paired left/right nearest network vertices {netvtx1: obs_id1,
 netvtx2: obs_id1, netvtx1: obs_id2… netvtx1: obs_idn}, then
 simplified to a list in the form
 [netvtx1, netvtx2, netvtx1, netvtx2, …].</p>
 </dd>
-<dt><strong>dist_to_vertex</strong><span class="classifier">dict</span></dt><dd><p>Keys are observations ids (<code class="docutils literal notranslate"><span class="pre">int</span></code>). Values are distance lookup
+<dt><strong>dist_to_vertex</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are observations ids (<code class="docutils literal notranslate"><span class="pre">int</span></code>). Values are distance lookup
 (<code class="docutils literal notranslate"><span class="pre">dict</span></code>). Within distance lookup (<code class="docutils literal notranslate"><span class="pre">dict</span></code>) keys are the two
 incident vertices of the arc and values are distance to each of
 those arcs.</p>
 </dd>
-<dt><strong>snapped_coordinates</strong><span class="classifier">dict</span></dt><dd><p>Keys are the point ids (<code class="docutils literal notranslate"><span class="pre">int</span></code>). Values are the snapped x,y
+<dt><strong>snapped_coordinates</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are the point ids (int). Values are the snapped x,y
 coordinates (tuple).</p>
 </dd>
-<dt><strong>snap_dist</strong><span class="classifier">bool</span></dt><dd><p>Flag as <code class="docutils literal notranslate"><span class="pre">True</span></code> to include the distance from the original
+<dt><strong>snap_dist</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.7)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>Flag as <code class="docutils literal notranslate"><span class="pre">True</span></code> to include the distance from the original
 location to the snapped location along the network. Default
 is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 </dd>
@@ -175,7 +185,7 @@ is <code class="docutils literal notranslate"><span class="pre">False</span></co
 </dl>
 <dl class="method">
 <dt id="spaghetti.PointPattern.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">in_data=None</em>, <em class="sig-param">idvariable=None</em>, <em class="sig-param">attribute=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#PointPattern.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.PointPattern.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">in_data=None</em>, <em class="sig-param">idvariable=None</em>, <em class="sig-param">attribute=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#PointPattern.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.PointPattern.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
@@ -186,7 +196,7 @@ is <code class="docutils literal notranslate"><span class="pre">False</span></co
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#spaghetti.PointPattern.__init__" title="spaghetti.PointPattern.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([in_data, idvariable, attribute])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#spaghetti.PointPattern.__init__" title="spaghetti.PointPattern.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(self[, in_data, idvariable, attribute])</p></td>
 <td><p>Initialize self.</p></td>
 </tr>
 </tbody>
@@ -215,7 +225,7 @@ is <code class="docutils literal notranslate"><span class="pre">False</span></co
     </p>
     <p>
         &copy; Copyright 2018, pysal developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.<br/>
     </p>
   </div>
 </footer>

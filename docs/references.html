@@ -12,6 +12,9 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"TeX": {"equationNumbers": {"autoNumber": "AMS", "useLabelIds": true}}, "tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
@@ -19,7 +22,7 @@
     <link rel="shortcut icon" href="_static/pysal_favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="spaghetti.element_as_gdf" href="generated/spaghetti.element_as_gdf.html" />
+    <link rel="prev" title="spaghetti.Network.loadnetwork" href="generated/spaghetti.Network.loadnetwork.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -45,6 +48,7 @@
           <ul class="nav navbar-nav">
             
                 <li><a href="installation.html">Installation</a></li>
+                <li><a href="tutorial.html">Tutorial</a></li>
                 <li><a href="api.html">API</a></li>
                 <li><a href="#">References</a></li>
             
@@ -65,11 +69,16 @@
 <li class="toctree-l2"><a class="reference internal" href="installation.html#development-version">Development Version</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/Basic_spaghetti_tutorial.html">Basic <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/Advanced_spaghetti_tutorial.html">Advanced <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/Use_case-facility_location.html">Demostrating network-based optimal facility location modeling</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="api.html#spaghetti-network">spaghetti.Network</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#spaghetti-pointpattern">spaghetti.PointPattern</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#spaghetti-simulatedpointpattern">spaghetti.SimulatedPointPattern</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#spaghetti">spaghetti</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#network-feature-instantiation">Network feature instantiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#network-feature-extraction">Network feature extraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#save-and-load-a-network">Save and load a network</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">References</a></li>
@@ -119,11 +128,74 @@
   <div class="section" id="references">
 <h1>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h1>
 <p id="bibtex-bibliography-references-0"><dl class="citation">
-<dt class="label" id="dijkstra1959a"><span class="brackets">Dij59</span></dt>
+<dt class="bibtex label" id="ahujaravindrak"><span class="brackets">Ahu93</span></dt>
+<dd><p>Ravindra K. Ahuja. <em>Network flows : theory, algorithms, and applications</em>. Prentice Hall, Englewood Cliffs, N.J., 1993. ISBN 013617549X.</p>
+</dd>
+<dt class="bibtex label" id="barthelemy2011"><span class="brackets">Barthelemy11</span></dt>
+<dd><p>Marc Barthélemy. Spatial networks. <em>Physics Reports</em>, 499(1–3):1–101, 2011. <a class="reference external" href="https://doi.org/https://doi.org/10.1016/j.physrep.2010.11.002">doi:https://doi.org/10.1016/j.physrep.2010.11.002</a>.</p>
+</dd>
+<dt class="bibtex label" id="boeing2017"><span class="brackets">Boe17</span></dt>
+<dd><p>Geoff Boeing. OSMnx: New Nethods for Acquiring, Constructing, Analyzing, and Visualizing Complex Street Networks. <em>Computers, Environment and Urban Systems</em>, 65:126–139, 2017. <a class="reference external" href="https://doi.org/10.1016/j.compenvurbsys.2017.05.004">doi:10.1016/j.compenvurbsys.2017.05.004</a>.</p>
+</dd>
+<dt class="bibtex label" id="cliff1981"><span class="brackets">CH81</span></dt>
+<dd><p>A.D. Cliff and P. Haggett. Graph Theory. In N. Wrigley and R.J. Bennett, editors, <em>Quantitative Geography: A British View</em>, chapter 22, pages 225–234. Routledge &amp; Kegan Paul, London, 1981.</p>
+</dd>
+<dt class="bibtex label" id="daskin2013"><span class="brackets">Das13</span></dt>
+<dd><p>Mark S. Daskin. <em>Network and Discrete Location: Models, Algorithms, and Applications, Second Edition</em>. John Wiley &amp; Sons, Ltd, 2013. ISBN 9781118537015. <a class="reference external" href="https://doi.org/10.1002/9781118537015">doi:10.1002/9781118537015</a>.</p>
+</dd>
+<dt class="bibtex label" id="dijkstra1959a"><span class="brackets">Dij59</span></dt>
 <dd><p>E. W. Dijkstra. A Note on Two Problems in Connexion with Graphs. <em>Numerische Mathematik</em>, 1(1):269–271, 1959. <a class="reference external" href="https://doi.org/10.1007/BF01386390">doi:10.1007/BF01386390</a>.</p>
 </dd>
-<dt class="label" id="okabe2001"><span class="brackets">OY01</span></dt>
-<dd><p>Atsuyuki Okabe and Ikuho Yamada. The K-Function Method on a Network and Its Computational Implementation. <em>Geographical Analysis</em>, 33(3):271–290, 2001.</p>
+<dt class="bibtex label" id="ducruet2014"><span class="brackets">DB14</span></dt>
+<dd><p>César Ducruet and Laurent Beauguitte. Spatial Science and Network Science: Review and Outcomes of a Complex Relationship. <em>Networks and Spatial Economics</em>, 14(3–4):297–316, 2014. <a class="reference external" href="https://doi.org/10.1007/s11067-013-9222-6">doi:10.1007/s11067-013-9222-6</a>.</p>
+</dd>
+<dt class="bibtex label" id="foti2012"><span class="brackets">FWL12</span></dt>
+<dd><p>Fletcher Foti, Paul Waddell, and Dennis Luxen. A Generalized Computational Framework for Accessibility: From the Pedestrian to the Metropolitan Scale. <em>4th Transportation Research Board Conference on Innovations in Travel Modeling (ITM)</em>, pages 1–14, 2012.</p>
+</dd>
+<dt class="bibtex label" id="doi-10-1111-gean-12211"><span class="brackets">GFH19</span></dt>
+<dd><p>James D. Gaboardi, David C. Folch, and Mark W. Horner. Connecting Points to Spatial Networks: Effects on Discrete Optimization Models. <em>Geographical Analysis</em>, 0:1–24, 2019. <a class="reference external" href="https://doi.org/10.1111/gean.12211">doi:10.1111/gean.12211</a>.</p>
+</dd>
+<dt class="bibtex label" id="hagberg2008"><span class="brackets">HSS08</span></dt>
+<dd><p>Aric A. Hagberg, Daniel A. Schult, and Pieter J. Swart. Exploring Network Structure, Dynamics, and Function using NetworkX. In Gäel Varoquaux, Travis Vaught, and Jarrod Millman, editors, <em>Proceedings of the 7th Python in Science Conference (SciPy 2008)</em>, 11–15. Pasadena, CA USA, 2008.</p>
+</dd>
+<dt class="bibtex label" id="kuby2009"><span class="brackets">KRUT09</span></dt>
+<dd><p>M.J. Kuby, T.D. Roberts, C.D. Upchurch, and S. Tierney. Network Analysis. In Rob Kitchin and Nigel Thrift, editors, <em>International Encyclopedia of Human Geography</em>, pages 391–398. Elsevier, Oxford, 2009. <a class="reference external" href="https://doi.org/https://doi.org/10.1016/B978-008044910-4.00481-8">doi:https://doi.org/10.1016/B978-008044910-4.00481-8</a>.</p>
+</dd>
+<dt class="bibtex label" id="labbe1995"><span class="brackets">LabbePT95</span></dt>
+<dd><p>Martine Labbé, Dominique Peeters, and Jacques-François Thisse. Location on Networks. In <em>Network Routing</em>, volume 8 of Handbooks in Operations Research and Management Science, chapter 7, pages 551–624. Elsevier, 1995. <a class="reference external" href="https://doi.org/10.1016/S0927-0507(05)80111-2">doi:10.1016/S0927-0507(05)80111-2</a>.</p>
+</dd>
+<dt class="bibtex label" id="doi-10-1002-9780470549094-ch5"><span class="brackets">OSullivanU10</span></dt>
+<dd><p>D. O’Sullivan and D.J. Unwin. <em>Point Pattern Analysis</em>, chapter 5, pages 121–156. John Wiley &amp; Sons, Ltd, 2010. <a class="reference external" href="https://doi.org/10.1002/9780470549094.ch5">doi:10.1002/9780470549094.ch5</a>.</p>
+</dd>
+<dt class="bibtex label" id="doi-10-1002-9781119967101-ch3"><span class="brackets">OS12a</span></dt>
+<dd><p>Atsuyki Okabe and Kokichi Sugihara. <em>Basic Computational Methods for Network Spatial Analysis</em>, chapter 3, pages 45–80. John Wiley &amp; Sons, Ltd, 2012. <a class="reference external" href="https://doi.org/10.1002/9781119967101.ch3">doi:10.1002/9781119967101.ch3</a>.</p>
+</dd>
+<dt class="bibtex label" id="doi-10-1002-9781119967101-ch6"><span class="brackets">OS12b</span></dt>
+<dd><p>Atsuyki Okabe and Kokichi Sugihara. <em>Network K Function Methods</em>, chapter 6, pages 119–136. John Wiley &amp; Sons, Ltd, 2012. <a class="reference external" href="https://doi.org/10.1002/9781119967101.ch6">doi:10.1002/9781119967101.ch6</a>.</p>
+</dd>
+<dt class="bibtex label" id="doi-10-1002-9781119967101-ch5"><span class="brackets">OS12c</span></dt>
+<dd><p>Atsuyki Okabe and Kokichi Sugihara. <em>Network Nearest-Neighbor Distance Methods</em>, chapter 5, pages 101–118. John Wiley &amp; Sons, Ltd, 2012. <a class="reference external" href="https://doi.org/10.1002/9781119967101.ch5">doi:10.1002/9781119967101.ch5</a>.</p>
+</dd>
+<dt class="bibtex label" id="okabe2012"><span class="brackets">OS12d</span></dt>
+<dd><p>Atsuyki Okabe and Kokichi Sugihara. <em>Spatial Analysis Along Networks</em>. John Wiley &amp; Sons, Inc., West Sussex, UK, 2012. <a class="reference external" href="https://doi.org/10.1002/9781119967101">doi:10.1002/9781119967101</a>.</p>
+</dd>
+<dt class="bibtex label" id="okabe2006a"><span class="brackets">OOS06</span></dt>
+<dd><p>Atsuyuki Okabe, Keiichi Okunuki, and Shino Shiode. SANET: A Toolbox for Spatial Analysis on a Network. <em>Geographical Analysis</em>, 38:57–66, 2006. <a class="reference external" href="https://doi.org/10.1111/j.0016-7363.2005.00674.x">doi:10.1111/j.0016-7363.2005.00674.x</a>.</p>
+</dd>
+<dt class="bibtex label" id="doi-10-1111-j-1538-4632-2001-tb00448-x"><span class="brackets">OY01</span></dt>
+<dd><p>Atsuyuki Okabe and Ikuho Yamada. The K-Function Method on a Network and Its Computational Implementation. <em>Geographical Analysis</em>, 33(3):271–290, 2001. <a class="reference external" href="https://doi.org/10.1111/j.1538-4632.2001.tb00448.x">doi:10.1111/j.1538-4632.2001.tb00448.x</a>.</p>
+</dd>
+<dt class="bibtex label" id="esda-2019"><span class="brackets">RWK+19</span></dt>
+<dd><p>S.J. Rey, L.J. Wolf, W. Kang, P. Stephens, J.Laura, C.Schmidt, D. Arribas-Bel, S. Lumnitz, J.C. Duque, David C. Folch, Luc Anselin, N. Malizia, J.D. Gaboardi, F. Fernandes, M. Seth, mhwang4, and mlyons-tcc. pysal/esda. July 2019. <a class="reference external" href="https://doi.org/10.5281/zenodo.3265190">doi:10.5281/zenodo.3265190</a>.</p>
+</dd>
+<dt class="bibtex label" id="pysal2007"><span class="brackets">RA07</span></dt>
+<dd><p>Sergio J. Rey and Luc Anselin. PySAL: A Python Library of Spatial Analytical Methods. <em>The Review of Regional Studies</em>, 37(1):5–27, 2007. URL: <a class="reference external" href="https://rrs.scholasticahq.com/article/8285.pdf">https://rrs.scholasticahq.com/article/8285.pdf</a>.</p>
+</dd>
+<dt class="bibtex label" id="tansel1983a"><span class="brackets">TFL83</span></dt>
+<dd><p>Barbaros C Tansel, Richard L Francis, and Timothy J Lowe. State of the Art—Location on Networks: A survey. Part I: The p-center and p-median Problems. <em>Management Science</em>, 29(4):482–497, 1983. <a class="reference external" href="https://doi.org/https://doi.org/10.1287/mnsc.29.4.482">doi:https://doi.org/10.1287/mnsc.29.4.482</a>.</p>
+</dd>
+<dt class="bibtex label" id="weber2016"><span class="brackets">Web16</span></dt>
+<dd><p>Joe Weber. The Properties of Topological Network Connectivity Measures and Their Application to U.S. Urban Freeway Networks. <em>The Professional Geographer</em>, 0124(January):1–11, 2016. <a class="reference external" href="https://doi.org/10.1080/00330124.2015.1106324">doi:10.1080/00330124.2015.1106324</a>.</p>
 </dd>
 </dl>
 </p>
@@ -149,7 +221,7 @@
     </p>
     <p>
         &copy; Copyright 2018, pysal developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.<br/>
     </p>
   </div>
 </footer>

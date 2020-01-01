@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>spaghetti.Network &#8212; spaghetti v1.3.1 Manual</title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pysal-styles.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"TeX": {"equationNumbers": {"autoNumber": "AMS", "useLabelIds": true}}, "tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../_static/pysal_favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="spaghetti.PointPattern" href="spaghetti.PointPattern.html" />
+    <link rel="prev" title="API reference" href="../api.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          spaghetti</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.3.1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../installation.html">Installation</a></li>
+                <li><a href="../tutorial.html">Tutorial</a></li>
+                <li><a href="../api.html">API</a></li>
+                <li><a href="../references.html">References</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#installing-with-conda-via-spaghetti-feedstock-highly-recommended">Installing with <code class="docutils literal notranslate"><span class="pre">conda</span></code> via spaghetti-feedstock (highly recommended)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#installing-with-python-package-index">Installing with Python Package Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#development-version">Development Version</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/Basic_spaghetti_tutorial.html">Basic <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/Advanced_spaghetti_tutorial.html">Advanced <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/Use_case-facility_location.html">Demostrating network-based optimal facility location modeling</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#network-feature-instantiation">Network feature instantiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#network-feature-extraction">Network feature extraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#save-and-load-a-network">Save and load a network</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">spaghetti.Network</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="spaghetti-network">
+<h1>spaghetti.Network<a class="headerlink" href="#spaghetti-network" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="spaghetti.Network">
+<em class="property">class </em><code class="sig-prename descclassname">spaghetti.</code><code class="sig-name descname">Network</code><span class="sig-paren">(</span><em class="sig-param">in_data=None</em>, <em class="sig-param">vertex_sig=11</em>, <em class="sig-param">unique_arcs=True</em>, <em class="sig-param">extractgraph=True</em>, <em class="sig-param">w_components=True</em>, <em class="sig-param">weightings=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Spatially-constrained network representation and analytical
+functionality. Naming conventions are as follows, (1) arcs and
+vertices for the full network object, and (2) edges and nodes for
+the simplified graph-theoretic object. The term ‘link’ is used to
+refer to a network arc or a graph edge.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>in_data</strong><span class="classifier">{<a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.6.1+30.g0da3a7d)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a>}</span></dt><dd><p>The input geographic data. Either (1) a path to a shapefile
+(str); or (2) a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code>.</p>
+</dd>
+<dt><strong>vertex_sig</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>Round the x and y coordinates of all vertices to <code class="docutils literal notranslate"><span class="pre">vertex_sig</span></code>
+significant digits (combined significant digits on the left and
+right of the decimal place). Default is 11. Set to <code class="docutils literal notranslate"><span class="pre">None</span></code> for
+no rounding.</p>
+</dd>
+<dt><strong>unique_arcs</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.7)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code> (default), keep only unique arcs (i.e., prune
+out any duplicated arcs). If <code class="docutils literal notranslate"><span class="pre">False</span></code> keep all segments.</p>
+</dd>
+<dt><strong>extractgraph</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.7)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, extract a graph-theoretic object with no degree 2
+nodes. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</dd>
+<dt><strong>w_components</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.7)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>Set to <code class="docutils literal notranslate"><span class="pre">False</span></code> to not record connected components from a
+<code class="docutils literal notranslate"><span class="pre">libpysal.weights.W</span></code> object. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</dd>
+<dt><strong>weightings</strong><span class="classifier">{<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.7)"><span class="xref std std-ref">bool</span></a>}</span></dt><dd><p>If dict, lists of weightings for each arc. If bool,
+<code class="docutils literal notranslate"><span class="pre">True</span></code> flags <code class="docutils literal notranslate"><span class="pre">self.arc_lengths</span></code> as the weightings,
+<code class="docutils literal notranslate"><span class="pre">False</span></code> sets no weightings. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>See <a class="bibtex reference internal" href="../references.html#cliff1981" id="id1">[CH81]</a>, <a class="bibtex reference internal" href="../references.html#tansel1983a" id="id2">[TFL83]</a>,
+<a class="bibtex reference internal" href="../references.html#ahujaravindrak" id="id3">[Ahu93]</a>, <a class="bibtex reference internal" href="../references.html#labbe1995" id="id4">[LabbePT95]</a>,
+<a class="bibtex reference internal" href="../references.html#kuby2009" id="id5">[KRUT09]</a>, <a class="bibtex reference internal" href="../references.html#barthelemy2011" id="id6">[Barthelemy11]</a>, 
+<a class="bibtex reference internal" href="../references.html#daskin2013" id="id7">[Das13]</a>, <a class="bibtex reference internal" href="../references.html#okabe2012" id="id8">[OS12d]</a>,
+<a class="bibtex reference internal" href="../references.html#ducruet2014" id="id9">[DB14]</a>, <a class="bibtex reference internal" href="../references.html#weber2016" id="id10">[Web16]</a>, for more in-depth discussion on
+spatial networks, graph theory, and location along networks. 
+For related network-centric software see
+<a class="reference external" href="http://sanet.csis.u-tokyo.ac.jp">SANET</a> <a class="bibtex reference internal" href="../references.html#okabe2006a" id="id11">[OOS06]</a>,
+<a class="reference external" href="https://networkx.github.io">NetworkX</a> <a class="bibtex reference internal" href="../references.html#hagberg2008" id="id12">[HSS08]</a>, 
+<a class="reference external" href="http://udst.github.io/pandana/">Pandana</a> <a class="bibtex reference internal" href="../references.html#foti2012" id="id13">[FWL12]</a>,
+and <a class="reference external" href="https://osmnx.readthedocs.io/en/stable/">OSMnx</a> <a class="bibtex reference internal" href="../references.html#boeing2017" id="id14">[Boe17]</a>.</p>
+<p class="rubric">Examples</p>
+<p>Create an instance of a network.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">spaghetti</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">libpysal</span> <span class="kn">import</span> <span class="n">examples</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">streets_file</span> <span class="o">=</span> <span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;streets.shp&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">in_data</span><span class="o">=</span><span class="n">streets_file</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Fetch the number connected components in the network.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span><span class="o">.</span><span class="n">network_n_components</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+<p>Unique component labels in the network.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">numpy</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">ntw</span><span class="o">.</span><span class="n">network_component_labels</span><span class="p">)</span>
+<span class="go">array([0], dtype=int32)</span>
+</pre></div>
+</div>
+<p>Show whether each component of the network is an isolated ring (or not).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span><span class="o">.</span><span class="n">network_component_is_ring</span>
+<span class="go">{0: False}</span>
+</pre></div>
+</div>
+<p>Show how many network arcs are associated with the component.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">arcs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ntw</span><span class="o">.</span><span class="n">network_component2arc</span><span class="p">[</span><span class="n">ntw</span><span class="o">.</span><span class="n">network_component_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arcs</span>
+<span class="go">303</span>
+</pre></div>
+</div>
+<p>Do the same as above, but for the graph-theoretic representation
+of the network object.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span><span class="o">.</span><span class="n">graph_n_components</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">numpy</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">ntw</span><span class="o">.</span><span class="n">graph_component_labels</span><span class="p">)</span>
+<span class="go">array([0], dtype=int32)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span><span class="o">.</span><span class="n">graph_component_is_ring</span>
+<span class="go">{0: False}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">edges</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ntw</span><span class="o">.</span><span class="n">graph_component2edge</span><span class="p">[</span><span class="n">ntw</span><span class="o">.</span><span class="n">graph_component_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">edges</span>
+<span class="go">179</span>
+</pre></div>
+</div>
+<p>The number of arcs in the network is always greater than or equal
+to the number of edges in the graph-theoretic representation.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">arcs</span> <span class="o">&gt;=</span> <span class="n">edges</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>Snap point observations to the network with attribute information.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">crimes_file</span> <span class="o">=</span> <span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;crimes.shp&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span><span class="n">crimes_file</span><span class="p">,</span> <span class="s2">&quot;crimes&quot;</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>And without attribute information.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">schools_file</span> <span class="o">=</span> <span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;schools.shp&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span><span class="n">schools_file</span><span class="p">,</span> <span class="s2">&quot;schools&quot;</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Show the point patterns associated with the network.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="go">dict_keys([&#39;crimes&#39;, &#39;schools&#39;])</span>
+</pre></div>
+</div>
+<dl class="field-list">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl>
+<dt><strong>adjacencylist</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#list" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">list</span></code></a></span></dt><dd><p>List of lists storing vertex adjacency.</p>
+</dd>
+<dt><strong>vertex_coords</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are the vertex ID and values are the (x,y) coordinates
+inverse to vertices.</p>
+</dd>
+<dt><strong>vertex_list</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#list" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">list</span></code></a></span></dt><dd><p>List of vertex IDs.</p>
+</dd>
+<dt><strong>vertices</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are tuples of vertex coords and values are the vertex ID.</p>
+</dd>
+<dt><strong>arcs</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#list" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">list</span></code></a></span></dt><dd><p>List of arcs, where each arc is a sorted tuple
+of vertex IDs.</p>
+</dd>
+<dt><strong>arc_lengths</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are tuples of sorted vertex IDs representing an arc and
+values are the length.</p>
+</dd>
+<dt><strong>pointpatterns</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are a string name of the pattern and values are
+<code class="docutils literal notranslate"><span class="pre">PointPattern</span></code> class instances.</p>
+</dd>
+<dt><strong>alldistances</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are the vertex IDs (int). Values are tuples with two
+elements as follows (1) a list of the shortest path distances;
+(2) a dict with the key being the id of the destination vertex
+and the value being a list of the shortest path.</p>
+</dd>
+<dt><strong>distancematrix</strong><span class="classifier"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></span></dt><dd><p>All network vertices (non-observations) distance matrix.</p>
+</dd>
+<dt><strong>edges</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#list" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">list</span></code></a></span></dt><dd><p>Tuples of graph edge ids.</p>
+</dd>
+<dt><strong>edge_lengths</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are the graph edge ids (tuple). Values are the graph edge
+length (float).</p>
+</dd>
+<dt><strong>non_articulation_points</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#list" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">list</span></code></a></span></dt><dd><p>All vertices with degree 2 that are not in an isolated
+island ring (loop) component.</p>
+</dd>
+<dt><strong>w_network</strong><span class="classifier"><a class="reference external" href="https://pysal.org/libpysal/generated/libpysal.weights.W.html#libpysal.weights.W" title="(in libpysal v4.2.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">libpysal.weights.W</span></code></a></span></dt><dd><p>Weights object created from the network arcs.</p>
+</dd>
+<dt><strong>network_n_components</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>Count of connected components in the network.</p>
+</dd>
+<dt><strong>network_component_labels</strong><span class="classifier"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></span></dt><dd><p>Component labels for network arcs.</p>
+</dd>
+<dt><strong>network_component2arc</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Lookup in the form {int: list} for arcs comprising network
+connected components keyed by component labels with arcs in
+a list as values.</p>
+</dd>
+<dt><strong>network_component_is_ring</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Lookup in the form {int: bool} keyed by component labels with values
+as <code class="docutils literal notranslate"><span class="pre">True</span></code> if the component is a closed ring, otherwise <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+<dt><strong>w_graph</strong><span class="classifier"><a class="reference external" href="https://pysal.org/libpysal/generated/libpysal.weights.W.html#libpysal.weights.W" title="(in libpysal v4.2.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">libpysal.weights.W</span></code></a></span></dt><dd><p>Weights object created from the graph edges.</p>
+</dd>
+<dt><strong>graph_n_components</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>Count of connected components in the network.</p>
+</dd>
+<dt><strong>graph_component_labels</strong><span class="classifier"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></span></dt><dd><p>Component labels for graph edges.</p>
+</dd>
+<dt><strong>graph_component2edge</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Lookup in the form {int: list} for edges comprising graph connected
+components keyed by component labels with edges in a list
+as values.</p>
+</dd>
+<dt><strong>graph_component_is_ring</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Lookup in the form {int: bool} keyed by component labels with values as
+<code class="docutils literal notranslate"><span class="pre">True</span></code> if the component is a closed ring, otherwise <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="method">
+<dt id="spaghetti.Network.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">in_data=None</em>, <em class="sig-param">vertex_sig=11</em>, <em class="sig-param">unique_arcs=True</em>, <em class="sig-param">extractgraph=True</em>, <em class="sig-param">w_components=True</em>, <em class="sig-param">weightings=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#spaghetti.Network.NetworkF" title="spaghetti.Network.NetworkF"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NetworkF</span></code></a>(self, pointpattern[, nsteps, …])</p></td>
+<td><p>Compute a network constrained <cite>F</cite>-function.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#spaghetti.Network.NetworkG" title="spaghetti.Network.NetworkG"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NetworkG</span></code></a>(self, pointpattern[, nsteps, …])</p></td>
+<td><p>Compute a network constrained <cite>G</cite>-function.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#spaghetti.Network.NetworkK" title="spaghetti.Network.NetworkK"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NetworkK</span></code></a>(self, pointpattern[, nsteps, …])</p></td>
+<td><p>Compute a network constrained <cite>K</cite>-function.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#spaghetti.Network.__init__" title="spaghetti.Network.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(self[, in_data, vertex_sig, …])</p></td>
+<td><p>Initialize self.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#spaghetti.Network.allneighbordistances" title="spaghetti.Network.allneighbordistances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">allneighbordistances</span></code></a>(self, sourcepattern[, …])</p></td>
+<td><p>Compute either all distances between <code class="docutils literal notranslate"><span class="pre">i</span></code> and <code class="docutils literal notranslate"><span class="pre">j</span></code> in a single point pattern or all distances between each <code class="docutils literal notranslate"><span class="pre">i</span></code> from a source pattern and all <code class="docutils literal notranslate"><span class="pre">j</span></code> from a destination pattern.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#spaghetti.Network.compute_distance_to_vertices" title="spaghetti.Network.compute_distance_to_vertices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_distance_to_vertices</span></code></a>(self, x, y, arc)</p></td>
+<td><p>Given an observation on a network arc, return the distance to the two vertices that bound that end.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#spaghetti.Network.compute_snap_dist" title="spaghetti.Network.compute_snap_dist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_snap_dist</span></code></a>(self, pattern, idx)</p></td>
+<td><p>Given an observation snapped to a network arc, calculate the distance from the original location to the snapped location.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#spaghetti.Network.contiguityweights" title="spaghetti.Network.contiguityweights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">contiguityweights</span></code></a>(self[, graph, weightings])</p></td>
+<td><p>Create a contiguity-based <code class="docutils literal notranslate"><span class="pre">libpysal.weights.W</span></code> object.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#spaghetti.Network.count_per_link" title="spaghetti.Network.count_per_link"><code class="xref py py-obj docutils literal notranslate"><span class="pre">count_per_link</span></code></a>(self, obs_on[, graph])</p></td>
+<td><p>Compute the counts per arc or edge (link).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#spaghetti.Network.distancebandweights" title="spaghetti.Network.distancebandweights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">distancebandweights</span></code></a>(self, threshold[, …])</p></td>
+<td><p>Create distance-based weights.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#spaghetti.Network.enum_links_vertex" title="spaghetti.Network.enum_links_vertex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enum_links_vertex</span></code></a>(self, v0)</p></td>
+<td><p>Returns the arcs (links) adjacent to vertices.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#spaghetti.Network.extract_components" title="spaghetti.Network.extract_components"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_components</span></code></a>(self, w[, graph])</p></td>
+<td><p>Extract connected component information from a <code class="docutils literal notranslate"><span class="pre">libpysal.weights.W</span></code> object</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#spaghetti.Network.extractgraph" title="spaghetti.Network.extractgraph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extractgraph</span></code></a>(self)</p></td>
+<td><p>Using the existing network representation, create a graph-theoretic representation by removing all vertices with a neighbor incidence of two (non-articulation points).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#spaghetti.Network.full_distance_matrix" title="spaghetti.Network.full_distance_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">full_distance_matrix</span></code></a>(self, n_processes[, …])</p></td>
+<td><p>All vertex-to-vertex distances on a network.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="spaghetti.Network.loadnetwork.html#spaghetti.Network.loadnetwork" title="spaghetti.Network.loadnetwork"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loadnetwork</span></code></a>(filename)</p></td>
+<td><p>Load a network from a binary file saved on disk.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#spaghetti.Network.nearestneighbordistances" title="spaghetti.Network.nearestneighbordistances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nearestneighbordistances</span></code></a>(self, sourcepattern)</p></td>
+<td><p>Compute the interpattern nearest neighbor distances or the intrapattern nearest neighbor distances between a source pattern and a destination pattern.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="spaghetti.Network.savenetwork.html#spaghetti.Network.savenetwork" title="spaghetti.Network.savenetwork"><code class="xref py py-obj docutils literal notranslate"><span class="pre">savenetwork</span></code></a>(self, filename)</p></td>
+<td><p>Save a network to disk as a binary file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#spaghetti.Network.simulate_observations" title="spaghetti.Network.simulate_observations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">simulate_observations</span></code></a>(self, count[, …])</p></td>
+<td><p>Generate a simulated point pattern on the network.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#spaghetti.Network.snapobservations" title="spaghetti.Network.snapobservations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">snapobservations</span></code></a>(self, in_data, name[, …])</p></td>
+<td><p>Snap a point pattern shapefile to a network object.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#spaghetti.Network.split_arcs" title="spaghetti.Network.split_arcs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">split_arcs</span></code></a>(self, distance)</p></td>
+<td><p>Split all of the arcs in the network at a fixed distance.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="spaghetti.Network.NetworkF">
+<code class="sig-name descname">NetworkF</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">pointpattern</em>, <em class="sig-param">nsteps=10</em>, <em class="sig-param">permutations=99</em>, <em class="sig-param">threshold=0.2</em>, <em class="sig-param">distribution='uniform'</em>, <em class="sig-param">lowerbound=None</em>, <em class="sig-param">upperbound=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.NetworkF"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.NetworkF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a network constrained <cite>F</cite>-function.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>pointpattern</strong><span class="classifier"><a class="reference internal" href="spaghetti.PointPattern.html#spaghetti.PointPattern" title="spaghetti.PointPattern"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.PointPattern</span></code></a></span></dt><dd><p>A <code class="docutils literal notranslate"><span class="pre">spaghetti</span></code> point pattern object.</p>
+</dd>
+<dt><strong>nsteps</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of steps at which the count of the nearest
+neighbors is computed.</p>
+</dd>
+<dt><strong>permutations</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of permutations to perform. Default 99.</p>
+</dd>
+<dt><strong>threshold</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The level at which significance is computed.
+(0.5 would be 97.5% and 2.5%).</p>
+</dd>
+<dt><strong>distribution</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>The distribution from which random points are sampled.
+Either <code class="docutils literal notranslate"><span class="pre">&quot;uniform&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;poisson&quot;</span></code>.</p>
+</dd>
+<dt><strong>lowerbound</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The lower bound at which the <cite>F</cite>-function is computed.
+Default 0.</p>
+</dd>
+<dt><strong>upperbound</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The upper bound at which the <cite>F</cite>-function is computed.
+Defaults to the maximum observed nearest neighbor distance.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>NetworkF</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.analysis.NetworkF</span></code></span></dt><dd><p>A network <cite>F</cite> class instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Based on <a class="bibtex reference internal" href="../references.html#doi-10-1002-9780470549094-ch5" id="id15">[OSullivanU10]</a> and mentioned in
+<a class="bibtex reference internal" href="../references.html#doi-10-1002-9781119967101-ch5" id="id16">[OS12c]</a>.</p>
+<p class="rubric">Examples</p>
+<p>Create a network instance.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">spaghetti</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">libpysal</span> <span class="kn">import</span> <span class="n">examples</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">in_data</span><span class="o">=</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;streets.shp&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Snap observation points onto the network.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pt_str</span> <span class="o">=</span> <span class="s2">&quot;crimes&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">in_data</span> <span class="o">=</span> <span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="n">pt_str</span><span class="o">+</span><span class="s2">&quot;.shp&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span><span class="n">in_data</span><span class="p">,</span> <span class="n">pt_str</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Simulate observations along the network.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">crimes</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="n">pt_str</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">simulate_observations</span><span class="p">(</span><span class="n">crimes</span><span class="o">.</span><span class="n">npoints</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Compute a network constrained <cite>F</cite>-function of crimes 
+with <code class="docutils literal notranslate"><span class="pre">5</span></code> <code class="docutils literal notranslate"><span class="pre">permutations</span></code> and <code class="docutils literal notranslate"><span class="pre">10</span></code> <code class="docutils literal notranslate"><span class="pre">nsteps</span></code>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fres</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">NetworkF</span><span class="p">(</span><span class="n">crimes</span><span class="p">,</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">nsteps</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fres</span><span class="o">.</span><span class="n">lowerenvelope</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">10</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="spaghetti.Network.NetworkG">
+<code class="sig-name descname">NetworkG</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">pointpattern</em>, <em class="sig-param">nsteps=10</em>, <em class="sig-param">permutations=99</em>, <em class="sig-param">threshold=0.5</em>, <em class="sig-param">distribution='uniform'</em>, <em class="sig-param">lowerbound=None</em>, <em class="sig-param">upperbound=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.NetworkG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.NetworkG" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a network constrained <cite>G</cite>-function.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>pointpattern</strong><span class="classifier"><a class="reference internal" href="spaghetti.PointPattern.html#spaghetti.PointPattern" title="spaghetti.PointPattern"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.PointPattern</span></code></a></span></dt><dd><p>A <code class="docutils literal notranslate"><span class="pre">spaghetti</span></code> point pattern object.</p>
+</dd>
+<dt><strong>nsteps</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of steps at which the count of the nearest
+neighbors is computed.</p>
+</dd>
+<dt><strong>permutations</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of permutations to perform. Default 99.</p>
+</dd>
+<dt><strong>threshold</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The level at which significance is computed.
+(0.5 would be 97.5% and 2.5%).</p>
+</dd>
+<dt><strong>distribution</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>The distribution from which random points are sampled
+Either <code class="docutils literal notranslate"><span class="pre">&quot;uniform&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;poisson&quot;</span></code>.</p>
+</dd>
+<dt><strong>lowerbound</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The lower bound at which the <cite>G</cite>-function is computed.
+Default 0.</p>
+</dd>
+<dt><strong>upperbound</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The upper bound at which the <cite>G</cite>-function is computed.
+Defaults to the maximum observed nearest neighbor distance.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>NetworkG</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.analysis.NetworkG</span></code></span></dt><dd><p>A network <cite>G</cite> class instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Based on <a class="bibtex reference internal" href="../references.html#doi-10-1002-9780470549094-ch5" id="id17">[OSullivanU10]</a> and mentioned in
+<a class="bibtex reference internal" href="../references.html#doi-10-1002-9781119967101-ch5" id="id18">[OS12c]</a>.</p>
+<p>[note from <cite>jlaura</cite>] Both the <cite>G</cite> and <cite>K</cite> functions generate a
+full distance matrix.  This is because, I know that the full 
+generation is correct and I believe that the truncated generated, 
+e.g. nearest neighbor, has a bug.</p>
+<p class="rubric">Examples</p>
+<p>Create a network instance.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">spaghetti</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">libpysal</span> <span class="kn">import</span> <span class="n">examples</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">in_data</span><span class="o">=</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;streets.shp&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Snap observation points onto the network.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pt_str</span> <span class="o">=</span> <span class="s2">&quot;crimes&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">in_data</span> <span class="o">=</span> <span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="n">pt_str</span><span class="o">+</span><span class="s2">&quot;.shp&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span><span class="n">in_data</span><span class="p">,</span> <span class="n">pt_str</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Simulate observations along the network.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">crimes</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="n">pt_str</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">simulate_observations</span><span class="p">(</span><span class="n">crimes</span><span class="o">.</span><span class="n">npoints</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Compute a network constrained <cite>G</cite>-function of crimes 
+with <code class="docutils literal notranslate"><span class="pre">5</span></code> <code class="docutils literal notranslate"><span class="pre">permutations</span></code> and <code class="docutils literal notranslate"><span class="pre">10</span></code> <code class="docutils literal notranslate"><span class="pre">nsteps</span></code>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gres</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">NetworkG</span><span class="p">(</span><span class="n">crimes</span><span class="p">,</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">nsteps</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gres</span><span class="o">.</span><span class="n">lowerenvelope</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">10</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="spaghetti.Network.NetworkK">
+<code class="sig-name descname">NetworkK</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">pointpattern</em>, <em class="sig-param">nsteps=10</em>, <em class="sig-param">permutations=99</em>, <em class="sig-param">threshold=0.5</em>, <em class="sig-param">distribution='uniform'</em>, <em class="sig-param">lowerbound=None</em>, <em class="sig-param">upperbound=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.NetworkK"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.NetworkK" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a network constrained <cite>K</cite>-function.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>pointpattern</strong><span class="classifier"><a class="reference internal" href="spaghetti.PointPattern.html#spaghetti.PointPattern" title="spaghetti.PointPattern"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.PointPattern</span></code></a></span></dt><dd><p>A <code class="docutils literal notranslate"><span class="pre">spaghetti</span></code> point pattern object.</p>
+</dd>
+<dt><strong>nsteps</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of steps at which the count of the nearest
+neighbors is computed.</p>
+</dd>
+<dt><strong>permutations</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of permutations to perform. Default is 99.</p>
+</dd>
+<dt><strong>threshold</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The level at which significance is computed.
+(0.5 would be 97.5% and 2.5%).</p>
+</dd>
+<dt><strong>distribution</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>The distribution from which random points are sampled
+Either <code class="docutils literal notranslate"><span class="pre">&quot;uniform&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;poisson&quot;</span></code>.</p>
+</dd>
+<dt><strong>lowerbound</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The lower bound at which the <cite>K</cite>-function is computed.
+Default is 0.</p>
+</dd>
+<dt><strong>upperbound</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The upper bound at which the <cite>K</cite>-function is computed.
+Defaults to the maximum observed nearest neighbor distance.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>NetworkK</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.analysis.NetworkK</span></code></span></dt><dd><p>A network <cite>K</cite> class instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Based on <a class="bibtex reference internal" href="../references.html#doi-10-1111-j-1538-4632-2001-tb00448-x" id="id19">[OY01]</a> 
+and <a class="bibtex reference internal" href="../references.html#doi-10-1002-9781119967101-ch6" id="id20">[OS12b]</a>.</p>
+<p>[note from <cite>jlaura</cite>] Both the <cite>G</cite> and <cite>K</cite> functions generate a
+full distance matrix.  This is because, I know that the full 
+generation is correct and I believe that the truncated generated, 
+e.g. nearest neighbor, has a bug.</p>
+<p class="rubric">Examples</p>
+<p>Create a network instance.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">spaghetti</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">libpysal</span> <span class="kn">import</span> <span class="n">examples</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">in_data</span><span class="o">=</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;streets.shp&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Snap observation points onto the network.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pt_str</span> <span class="o">=</span> <span class="s2">&quot;crimes&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">in_data</span> <span class="o">=</span> <span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="n">pt_str</span><span class="o">+</span><span class="s2">&quot;.shp&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span><span class="n">in_data</span><span class="p">,</span> <span class="n">pt_str</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Simulate observations along the network.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">crimes</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="n">pt_str</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">simulate_observations</span><span class="p">(</span><span class="n">crimes</span><span class="o">.</span><span class="n">npoints</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Compute a network constrained <cite>K</cite>-function of crimes 
+with <code class="docutils literal notranslate"><span class="pre">5</span></code> <code class="docutils literal notranslate"><span class="pre">permutations</span></code> and <code class="docutils literal notranslate"><span class="pre">10</span></code> <code class="docutils literal notranslate"><span class="pre">nsteps</span></code>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">kres</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">NetworkK</span><span class="p">(</span><span class="n">crimes</span><span class="p">,</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">nsteps</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kres</span><span class="o">.</span><span class="n">lowerenvelope</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">10</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="spaghetti.Network.allneighbordistances">
+<code class="sig-name descname">allneighbordistances</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">sourcepattern</em>, <em class="sig-param">destpattern=None</em>, <em class="sig-param">fill_diagonal=None</em>, <em class="sig-param">n_processes=1</em>, <em class="sig-param">gen_tree=False</em>, <em class="sig-param">snap_dist=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.allneighbordistances"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.allneighbordistances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute either all distances between <code class="docutils literal notranslate"><span class="pre">i</span></code> and <code class="docutils literal notranslate"><span class="pre">j</span></code> in a
+single point pattern or all distances between each <code class="docutils literal notranslate"><span class="pre">i</span></code> from a
+source pattern and all <code class="docutils literal notranslate"><span class="pre">j</span></code> from a destination pattern.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>sourcepattern</strong><span class="classifier">{<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference internal" href="spaghetti.PointPattern.html#spaghetti.PointPattern" title="spaghetti.PointPattern"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.PointPattern</span></code></a>}</span></dt><dd><p>The key of a point pattern snapped to the network or
+the full <code class="docutils literal notranslate"><span class="pre">spaghetti.PointPattern</span></code> object.</p>
+</dd>
+<dt><strong>destpattern</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>(Optional) The key of a point pattern snapped to the network
+or the full <code class="docutils literal notranslate"><span class="pre">spaghetti.PointPattern</span></code> object.</p>
+</dd>
+<dt><strong>fill_diagonal</strong><span class="classifier">{<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a>}</span></dt><dd><p>(Optional) Fill the diagonal of the cost matrix. Default is
+<code class="docutils literal notranslate"><span class="pre">None</span></code> and will populate the diagonal with <code class="docutils literal notranslate"><span class="pre">numpy.nan</span></code>.
+Do not declare a <code class="docutils literal notranslate"><span class="pre">destpattern</span></code> for a custom
+<code class="docutils literal notranslate"><span class="pre">fill_diagonal</span></code>.</p>
+</dd>
+<dt><strong>n_processes</strong><span class="classifier">{<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a>}</span></dt><dd><p>Specify the number of cores to utilize. Default is 1 core.
+Use <code class="docutils literal notranslate"><span class="pre">&quot;all&quot;</span></code> to request all available cores.
+Specify the exact number of cores with an integer.</p>
+</dd>
+<dt><strong>gen_tree</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.7)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>Rebuild shortest path <code class="docutils literal notranslate"><span class="pre">True</span></code>, or skip <code class="docutils literal notranslate"><span class="pre">False</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+<dt><strong>snap_dist</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.7)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>Flag as <code class="docutils literal notranslate"><span class="pre">True</span></code> to include the distance from the original
+location to the snapped location along the network. Default
+is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>nearest</strong><span class="classifier"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></span></dt><dd><p>An array of shape (n,m) storing distances between all
+source and destination points.</p>
+</dd>
+<dt><strong>tree_nearest</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Nearest network node to point pattern vertex shortest
+path lookup. The values of the dictionary are a tuple
+of the nearest source vertex and the nearest destination
+vertex to query the lookup tree. If two observations are
+snapped to the same network arc a flag of -.1 is set for
+both the source and destination network vertex
+indicating the same arc is used while also raising an
+<code class="docutils literal notranslate"><span class="pre">IndexError</span></code> when rebuilding the path.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Create a network instance.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">spaghetti</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">libpysal</span> <span class="kn">import</span> <span class="n">examples</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;streets.shp&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Snap observations to the network.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;crimes.shp&quot;</span><span class="p">),</span> <span class="s2">&quot;crimes&quot;</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">True</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Calculate all distances between observations in the <code class="docutils literal notranslate"><span class="pre">crimes</span></code> dataset.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s2s_dist</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">allneighbordistances</span><span class="p">(</span><span class="s2">&quot;crimes&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If calculating a <code class="docutils literal notranslate"><span class="pre">type-a</span></code> to <code class="docutils literal notranslate"><span class="pre">type-a</span></code> distance matrix
+the distance between an observation and itself is <code class="docutils literal notranslate"><span class="pre">nan</span></code> and
+the distance between one observation and another will be positive value.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s2s_dist</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">s2s_dist</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">(nan, 3105.189475447081)</span>
+</pre></div>
+</div>
+<p>If calculating a <code class="docutils literal notranslate"><span class="pre">type-a</span></code> to <code class="docutils literal notranslate"><span class="pre">type-b</span></code> distance matrix
+the distance between all observations will likely be positive
+values, may be zero (or approximately zero), but will never be negative.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;schools.shp&quot;</span><span class="p">),</span> <span class="s2">&quot;schools&quot;</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">False</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s2d_dist</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">allneighbordistances</span><span class="p">(</span><span class="s2">&quot;crimes&quot;</span><span class="p">,</span> <span class="n">destpattern</span><span class="o">=</span><span class="s2">&quot;schools&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s2d_dist</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">s2d_dist</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">(4520.72353741989, 6340.422971967315)</span>
+</pre></div>
+</div>
+<p>Shortest paths can also be reconstructed when desired by
+setting the <code class="docutils literal notranslate"><span class="pre">gen_tree</span></code> keyword argument to <code class="docutils literal notranslate"><span class="pre">True</span></code>. Here
+it is shown that the shortest path between school <code class="docutils literal notranslate"><span class="pre">6</span></code> and
+school <code class="docutils literal notranslate"><span class="pre">7</span></code> flows along network arcs through network
+vertices <code class="docutils literal notranslate"><span class="pre">173</span></code> and <code class="docutils literal notranslate"><span class="pre">64</span></code>. The <code class="docutils literal notranslate"><span class="pre">ntw.alldistances</span></code> attribute
+may then be queried for the network elements comprising that path.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d2d_dist</span><span class="p">,</span> <span class="n">tree</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">allneighbordistances</span><span class="p">(</span><span class="s2">&quot;schools&quot;</span><span class="p">,</span> <span class="n">gen_tree</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span><span class="p">[(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">)]</span>
+<span class="go">(173, 64)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="spaghetti.Network.compute_distance_to_vertices">
+<code class="sig-name descname">compute_distance_to_vertices</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">x</em>, <em class="sig-param">y</em>, <em class="sig-param">arc</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.compute_distance_to_vertices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.compute_distance_to_vertices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given an observation on a network arc, return the distance
+to the two vertices that bound that end.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>x</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The x-coordinate of the snapped point.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The y-coordinate of the snapped point.</p>
+</dd>
+<dt><strong>arc</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#tuple" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">tuple</span></code></a></span></dt><dd><p>The (vtx0, vtx1) representation of the network arc.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>d1</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The distance to vtx0. Always the vertex with the lesser id.</p>
+</dd>
+<dt><strong>d2</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The distance to vtx1. Always the vertex with the greater id.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="spaghetti.Network.compute_snap_dist">
+<code class="sig-name descname">compute_snap_dist</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">pattern</em>, <em class="sig-param">idx</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.compute_snap_dist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.compute_snap_dist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given an observation snapped to a network arc, calculate the
+distance from the original location to the snapped location.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>pattern</strong><span class="classifier"><a class="reference internal" href="spaghetti.PointPattern.html#spaghetti.PointPattern" title="spaghetti.PointPattern"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.PointPattern</span></code></a></span></dt><dd><p>The point pattern object.</p>
+</dd>
+<dt><strong>idx</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The point id.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>dist</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The euclidean distance from original location to the snapped
+location.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="spaghetti.Network.contiguityweights">
+<code class="sig-name descname">contiguityweights</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">graph=True</em>, <em class="sig-param">weightings=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.contiguityweights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.contiguityweights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a contiguity-based <code class="docutils literal notranslate"><span class="pre">libpysal.weights.W</span></code> object.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>graph</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.7)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>Controls whether the <code class="docutils literal notranslate"><span class="pre">libpysal.weights.W</span></code> is generated
+using the spatial representation (<code class="docutils literal notranslate"><span class="pre">False</span></code>) or the graph
+representation (<code class="docutils literal notranslate"><span class="pre">True</span></code>). Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</dd>
+<dt><strong>weightings</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Dictionary of lists of weightings for each arc/edge.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>W</strong><span class="classifier"><a class="reference external" href="https://pysal.org/libpysal/generated/libpysal.weights.W.html#libpysal.weights.W" title="(in libpysal v4.2.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">libpysal.weights.W</span></code></a></span></dt><dd><p>A <code class="docutils literal notranslate"><span class="pre">W</span></code> representing the binary adjacency of the network.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>See <a class="bibtex reference internal" href="../references.html#pysal2007" id="id21">[RA07]</a> and <a class="bibtex reference internal" href="../references.html#esda-2019" id="id22">[RWK+19]</a> for more details.</p>
+<p class="rubric">Examples</p>
+<p>Instantiate a network.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">spaghetti</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">libpysal</span> <span class="kn">import</span> <span class="n">examples</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">esda</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;streets.shp&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Snap point observations to the network with attribute information.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;crimes.shp&quot;</span><span class="p">),</span> <span class="s2">&quot;crimes&quot;</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">True</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Find counts per network arc.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">counts</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">count_per_link</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;crimes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">obs_to_arc</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">False</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">counts</span><span class="p">[(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">165</span><span class="p">)]</span>
+<span class="go">4</span>
+</pre></div>
+</div>
+<p>Create a contiguity-based <code class="docutils literal notranslate"><span class="pre">W</span></code> object.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">contiguityweights</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Using the <code class="docutils literal notranslate"><span class="pre">W</span></code> object, access to 
+<a class="reference external" href="https://esda.readthedocs.io/en/latest/index.html">esda</a> 
+functionality is provided. First, a vector of attributes is
+created for all edges with observations.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">contiguityweights</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arcs</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">neighbors</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">arcs</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">arcs</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">counts</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+<span class="gp">... </span>        <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">counts</span><span class="p">[</span><span class="n">e</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Fetch the number of observations associated with arc <code class="docutils literal notranslate"><span class="pre">3</span></code>, 
+where <code class="docutils literal notranslate"><span class="pre">3</span></code> is the basic 0-indexed ID of <code class="docutils literal notranslate"><span class="pre">w.neighbors.keys()</span></code>
+created through <code class="docutils literal notranslate"><span class="pre">enumerate(arcs)</span></code>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">y</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+<span class="go">3.0</span>
+</pre></div>
+</div>
+<p>Next, a standard call to 
+<a class="reference external" href="https://esda.readthedocs.io/en/latest/generated/esda.Moran.html#esda.Moran">esda.Moran</a> 
+is made and the result placed into <code class="docutils literal notranslate"><span class="pre">res</span></code>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">esda</span><span class="o">.</span><span class="n">moran</span><span class="o">.</span><span class="n">Moran</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">99</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+<span class="go">&lt;class &#39;esda.moran.Moran&#39;&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="spaghetti.Network.count_per_link">
+<code class="sig-name descname">count_per_link</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">obs_on</em>, <em class="sig-param">graph=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.count_per_link"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.count_per_link" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the counts per arc or edge (link).</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>obs_on</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Dictionary of observations on the network.
+Either in the form {(&lt;LINK&gt;):{&lt;POINT_ID&gt;:(&lt;COORDS&gt;)}} or 
+{&lt;LINK&gt;:[(&lt;COORD&gt;),(&lt;COORD&gt;)]}.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>counts</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Counts per network link in the form {(&lt;LINK&gt;):&lt;COUNT&gt;}.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Note that this passes the <code class="docutils literal notranslate"><span class="pre">obs_to_arc</span></code> or <code class="docutils literal notranslate"><span class="pre">obs_to_edge</span></code> attribute
+of a point pattern snapped to the network.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">spaghetti</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">libpysal</span> <span class="kn">import</span> <span class="n">examples</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;streets.shp&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Snap observations to the network.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;crimes.shp&quot;</span><span class="p">),</span> <span class="s2">&quot;crimes&quot;</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">True</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">counts</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">count_per_link</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;crimes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">obs_to_arc</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">False</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">counts</span><span class="p">[(</span><span class="mi">140</span><span class="p">,</span> <span class="mi">142</span><span class="p">)]</span>
+<span class="go">10</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">values</span><span class="p">())])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span>
+<span class="go">287</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="spaghetti.Network.distancebandweights">
+<code class="sig-name descname">distancebandweights</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">threshold</em>, <em class="sig-param">n_processes=1</em>, <em class="sig-param">gen_tree=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.distancebandweights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.distancebandweights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create distance-based weights.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>threshold</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>Distance threshold value.</p>
+</dd>
+<dt><strong>n_processes</strong><span class="classifier">{<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a>}</span></dt><dd><p>Specify the number of cores to utilize. Default is 1 core.
+Use <code class="docutils literal notranslate"><span class="pre">&quot;all&quot;</span></code> to request all available cores.
+Specify the exact number of cores with an integer.</p>
+</dd>
+<dt><strong>gen_tree</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.7)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>Rebuild shortest path with <code class="docutils literal notranslate"><span class="pre">True</span></code>, or skip with <code class="docutils literal notranslate"><span class="pre">False</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>w</strong><span class="classifier"><a class="reference external" href="https://pysal.org/libpysal/generated/libpysal.weights.W.html#libpysal.weights.W" title="(in libpysal v4.2.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">libpysal.weights.W</span></code></a></span></dt><dd><p>A <code class="docutils literal notranslate"><span class="pre">W</span></code> object representing the binary adjacency of
+the network.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>See cite:<cite>AnselinRey2014</cite> and cite:<cite>rey_open_2015</cite> for more details
+regarding spatial weights.</p>
+<p class="rubric">Examples</p>
+<p>Instantiate an instance of a network.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">spaghetti</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">libpysal</span> <span class="kn">import</span> <span class="n">examples</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">streets_file</span> <span class="o">=</span> <span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;streets.shp&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">in_data</span><span class="o">=</span><span class="n">streets_file</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Create a contiguity-based <code class="docutils literal notranslate"><span class="pre">W</span></code> object based on network distance, <code class="docutils literal notranslate"><span class="pre">500</span></code> 
+<a class="reference external" href="https://github.com/pysal/libpysal/blob/master/libpysal/examples/geodanet/streets.prj">US feet in this case</a>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">distancebandweights</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Show the number of units in the <code class="docutils literal notranslate"><span class="pre">W</span></code> object.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="o">.</span><span class="n">n</span>
+<span class="go">230</span>
+</pre></div>
+</div>
+<p>There are <code class="docutils literal notranslate"><span class="pre">8</span></code> units with <code class="docutils literal notranslate"><span class="pre">3</span></code> neighbors in the <code class="docutils literal notranslate"><span class="pre">W</span></code> object.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="o">.</span><span class="n">histogram</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="go">(8, 3)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="spaghetti.Network.enum_links_vertex">
+<code class="sig-name descname">enum_links_vertex</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">v0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.enum_links_vertex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.enum_links_vertex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the arcs (links) adjacent to vertices.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>v0</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The vertex ID.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>links</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#list" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">list</span></code></a></span></dt><dd><p>List of tuple arcs adjacent to the vertex.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Create an instance of a network.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">spaghetti</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">libpysal</span> <span class="kn">import</span> <span class="n">examples</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;streets.shp&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Enumerate the links/arcs that are adjacent to vertex <code class="docutils literal notranslate"><span class="pre">24</span></code>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span><span class="o">.</span><span class="n">enum_links_vertex</span><span class="p">(</span><span class="mi">24</span><span class="p">)</span>
+<span class="go">[(24, 48), (24, 25), (24, 26)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="spaghetti.Network.extract_components">
+<code class="sig-name descname">extract_components</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">w</em>, <em class="sig-param">graph=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.extract_components"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.extract_components" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract connected component information from a
+<code class="docutils literal notranslate"><span class="pre">libpysal.weights.W</span></code> object</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>w</strong><span class="classifier"><a class="reference external" href="https://pysal.org/libpysal/generated/libpysal.weights.W.html#libpysal.weights.W" title="(in libpysal v4.2.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">libpysal.weights.W</span></code></a></span></dt><dd><p>Weights object created from the network segments (either
+raw or graph-theoretic).</p>
+</dd>
+<dt><strong>graph</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.7)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>Flag for a raw network (<code class="docutils literal notranslate"><span class="pre">False</span></code>) or graph-theoretic network
+(<code class="docutils literal notranslate"><span class="pre">True</span></code>). Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="spaghetti.Network.extractgraph">
+<code class="sig-name descname">extractgraph</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.extractgraph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.extractgraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Using the existing network representation, create a
+graph-theoretic representation by removing all vertices with a
+neighbor incidence of two (non-articulation points). That is, we
+assume these vertices are bridges between vertices with higher
+or lower incidence.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="spaghetti.Network.full_distance_matrix">
+<code class="sig-name descname">full_distance_matrix</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">n_processes</em>, <em class="sig-param">gen_tree=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.full_distance_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.full_distance_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>All vertex-to-vertex distances on a network. This method
+is called from within <code class="docutils literal notranslate"><span class="pre">allneighbordistances()</span></code>,
+<code class="docutils literal notranslate"><span class="pre">nearestneighbordistances()</span></code>, and <code class="docutils literal notranslate"><span class="pre">distancebandweights()</span></code>.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>n_processes</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>Specify the number of cores to utilize. Default is 1 core.
+Use <code class="docutils literal notranslate"><span class="pre">&quot;all&quot;</span></code> to request all available cores.
+Specify the exact number of cores with an integer.</p>
+</dd>
+<dt><strong>gen_tree</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.7)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>Rebuild shortest path <code class="docutils literal notranslate"><span class="pre">True</span></code>, or skip <code class="docutils literal notranslate"><span class="pre">False</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Based on <a class="bibtex reference internal" href="../references.html#dijkstra1959a" id="id23">[Dij59]</a> and <a class="bibtex reference internal" href="../references.html#doi-10-1002-9781119967101-ch3" id="id24">[OS12a]</a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="spaghetti.Network.loadnetwork">
+<em class="property">static </em><code class="sig-name descname">loadnetwork</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.loadnetwork"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.loadnetwork" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a network from a binary file saved on disk.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>filename</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>The filename where the network is saved.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>self</strong><span class="classifier"><a class="reference internal" href="#spaghetti.Network" title="spaghetti.Network"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network</span></code></a></span></dt><dd><p>A pre-computed <code class="docutils literal notranslate"><span class="pre">spaghetti</span></code> network object.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="spaghetti.Network.nearestneighbordistances">
+<code class="sig-name descname">nearestneighbordistances</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">sourcepattern</em>, <em class="sig-param">destpattern=None</em>, <em class="sig-param">n_processes=1</em>, <em class="sig-param">gen_tree=False</em>, <em class="sig-param">all_dists=None</em>, <em class="sig-param">snap_dist=False</em>, <em class="sig-param">keep_zero_dist=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.nearestneighbordistances"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.nearestneighbordistances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the interpattern nearest neighbor distances or the
+intrapattern nearest neighbor distances between a source
+pattern and a destination pattern.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>sourcepattern</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>The key of a point pattern snapped to the network.</p>
+</dd>
+<dt><strong>destpattern</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>(Optional) The key of a point pattern snapped to the
+network.</p>
+</dd>
+<dt><strong>n_processes</strong><span class="classifier">{<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a>}</span></dt><dd><p>Specify the number of cores to utilize. Default is 1 core.
+Use <code class="docutils literal notranslate"><span class="pre">&quot;all&quot;</span></code> to request all available cores.
+Specify the exact number of cores with an integer.</p>
+</dd>
+<dt><strong>gen_tree</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.7)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>Rebuild shortest path <code class="docutils literal notranslate"><span class="pre">True</span></code>, or skip <code class="docutils literal notranslate"><span class="pre">False</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+<dt><strong>all_dists</strong><span class="classifier"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></span></dt><dd><p>An array of shape (n,n) storing distances between all
+points.</p>
+</dd>
+<dt><strong>snap_dist</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.7)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>Flag as <code class="docutils literal notranslate"><span class="pre">True</span></code> to include the distance from the original
+location to the snapped location along the network. Default
+is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+<dt><strong>keep_zero_dist</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.7)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>Include zero values in minimum distance <code class="docutils literal notranslate"><span class="pre">True</span></code> or exclude
+<code class="docutils literal notranslate"><span class="pre">False</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>. If the source pattern is the
+same as the destination pattern the diagonal is filled with
+<code class="docutils literal notranslate"><span class="pre">numpy.nan</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>nearest</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Nearest neighbor distances keyed by the source point id with
+the value as as tuple of lists containing
+nearest destination point ids and distance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Instantiate a network.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">spaghetti</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">libpysal</span> <span class="kn">import</span> <span class="n">examples</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;streets.shp&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Snap observations to the network.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;crimes.shp&quot;</span><span class="p">),</span> <span class="s2">&quot;crimes&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Fetch nearest neighbor distances while (potentially) 
+keeping neighbors that have been geocoded directly on top of
+each other. Here it is demonstrated that observation <code class="docutils literal notranslate"><span class="pre">11</span></code>
+has two neighbors (<code class="docutils literal notranslate"><span class="pre">18</span></code> and <code class="docutils literal notranslate"><span class="pre">19</span></code>) at an exactly equal distance.
+However, observation <code class="docutils literal notranslate"><span class="pre">18</span></code> is shown to have only one neighbor
+(<code class="docutils literal notranslate"><span class="pre">18</span></code>) with no distance between them.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nn</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">nearestneighbordistances</span><span class="p">(</span><span class="s2">&quot;crimes&quot;</span><span class="p">,</span> <span class="n">keep_zero_dist</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nn</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="n">nn</span><span class="p">[</span><span class="mi">18</span><span class="p">]</span>
+<span class="go">(([18, 19], 165.33982412719126), ([19], 0.0))</span>
+</pre></div>
+</div>
+<p>This may be remedied by setting the <code class="docutils literal notranslate"><span class="pre">keep_zero_dist</span></code> keyword
+argument to <code class="docutils literal notranslate"><span class="pre">False</span></code>. With this parameter set, observation <code class="docutils literal notranslate"><span class="pre">11</span></code>
+still has the same neighbor/distance values, but 
+observation <code class="docutils literal notranslate"><span class="pre">18</span></code> now has a single nearest neighbor (<code class="docutils literal notranslate"><span class="pre">11</span></code>)
+with a non-zero, postive distance.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nn</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">nearestneighbordistances</span><span class="p">(</span><span class="s2">&quot;crimes&quot;</span><span class="p">,</span> <span class="n">keep_zero_dist</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nn</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="n">nn</span><span class="p">[</span><span class="mi">18</span><span class="p">]</span>
+<span class="go">(([18, 19], 165.33982412719126), ([11], 165.33982412719126))</span>
+</pre></div>
+</div>
+<p>There are valid reasons for both retaining or masking zero distance
+neighbors. When conducting analysis, thought must be given as to
+which model more accurately represents the specific scenario.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="spaghetti.Network.savenetwork">
+<code class="sig-name descname">savenetwork</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">filename</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.savenetwork"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.savenetwork" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save a network to disk as a binary file.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>filename</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>The filename where the network should be saved. This should
+be a full path or it will be saved in the current directory.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Create a network instance.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">spaghetti</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">libpysal</span> <span class="kn">import</span> <span class="n">examples</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;streets.shp&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Save out the network instance.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span><span class="o">.</span><span class="n">savenetwork</span><span class="p">(</span><span class="s2">&quot;mynetwork.pkl&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="spaghetti.Network.simulate_observations">
+<code class="sig-name descname">simulate_observations</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">count</em>, <em class="sig-param">distribution='uniform'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.simulate_observations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.simulate_observations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a simulated point pattern on the network.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>count</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of points to create or mean of the distribution
+if not <code class="docutils literal notranslate"><span class="pre">&quot;uniform&quot;</span></code>.</p>
+</dd>
+<dt><strong>distribution</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>Either a <code class="docutils literal notranslate"><span class="pre">&quot;uniform&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;poisson&quot;</span></code> distribution of
+random points. If <code class="docutils literal notranslate"><span class="pre">&quot;poisson&quot;</span></code>, the distribution is
+calculated from half the total network length.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>random_pts</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are the edge tuple. Values are lists of new
+point coordinates.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Instantiate a network.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">spaghetti</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">libpysal</span> <span class="kn">import</span> <span class="n">examples</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;streets.shp&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Snap observations to the network.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;crimes.shp&quot;</span><span class="p">),</span> <span class="s2">&quot;crimes&quot;</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">True</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Isolate the number of points in the dataset.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">npts</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;crimes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">npoints</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">npts</span>
+<span class="go">287</span>
+</pre></div>
+</div>
+<p>Simulate <code class="docutils literal notranslate"><span class="pre">npts</span></code> number of points along the network 
+in a <cite>uniform</cite> distribution.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">simulate_observations</span><span class="p">(</span><span class="n">npts</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">SimulatedPointPattern</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span><span class="o">.</span><span class="n">npoints</span>
+<span class="go">287</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="spaghetti.Network.snapobservations">
+<code class="sig-name descname">snapobservations</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">in_data</em>, <em class="sig-param">name</em>, <em class="sig-param">idvariable=None</em>, <em class="sig-param">attribute=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.snapobservations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.snapobservations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Snap a point pattern shapefile to a network object. The
+point pattern is stored in the <code class="docutils literal notranslate"><span class="pre">network.pointpattern</span></code>
+attribute of the network object.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>in_data</strong><span class="classifier">{<a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.6.1+30.g0da3a7d)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a>}</span></dt><dd><p>The input geographic data. Either (1) a path to a
+shapefile (str); or (2) a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code>.</p>
+</dd>
+<dt><strong>name</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>Name to be assigned to the point dataset.</p>
+</dd>
+<dt><strong>idvariable</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>Column name to be used as the ID variable.</p>
+</dd>
+<dt><strong>attribute</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.7)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>Defines whether attributes should be extracted. <code class="docutils literal notranslate"><span class="pre">True</span></code> for
+attribute extraction. <code class="docutils literal notranslate"><span class="pre">False</span></code> for no attribute extraction.
+Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>See <a class="bibtex reference internal" href="../references.html#doi-10-1111-gean-12211" id="id25">[GFH19]</a> for a detailed discussion on
+the modeling consequences of snapping points to spatial networks.</p>
+<p class="rubric">Examples</p>
+<p>Instantiate a network.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">spaghetti</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">libpysal</span> <span class="kn">import</span> <span class="n">examples</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">streets_file</span> <span class="o">=</span> <span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;streets.shp&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">in_data</span><span class="o">=</span><span class="n">streets_file</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Snap observations to the network.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pt_str</span> <span class="o">=</span> <span class="s2">&quot;crimes&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">in_data</span> <span class="o">=</span> <span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="n">pt_str</span><span class="o">+</span><span class="s2">&quot;.shp&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span><span class="n">in_data</span><span class="p">,</span> <span class="n">pt_str</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Isolate the number of points in the dataset.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="n">pt_str</span><span class="p">]</span><span class="o">.</span><span class="n">npoints</span>
+<span class="go">287</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="spaghetti.Network.split_arcs">
+<code class="sig-name descname">split_arcs</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">distance</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.split_arcs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.split_arcs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split all of the arcs in the network at a fixed distance.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>distance</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The distance at which arcs are split.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>split_network</strong><span class="classifier"><a class="reference internal" href="#spaghetti.Network" title="spaghetti.Network"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network</span></code></a></span></dt><dd><p>A newly instantiated <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Instantiate a network.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">spaghetti</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">libpysal</span> <span class="kn">import</span> <span class="n">examples</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;streets.shp&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Split the network into a segments of 200 distance units in length 
+(<a class="reference external" href="https://github.com/pysal/libpysal/blob/master/libpysal/examples/geodanet/streets.prj">US feet in this case</a>.).
+This will include “remainder” segments unless the network is
+comprised of arcs with lengths exactly divisible by <code class="docutils literal notranslate"><span class="pre">distance</span></code>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n200</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">split_arcs</span><span class="p">(</span><span class="mf">200.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">n200</span><span class="o">.</span><span class="n">arcs</span><span class="p">)</span>
+<span class="go">688</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+<div id="sourcelink">
+  <a href="../_sources/generated/spaghetti.Network.rst.txt"
+     rel="nofollow">Source</a>
+</div>
+      
+    </p>
+    <p>
+        &copy; Copyright 2018, pysal developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

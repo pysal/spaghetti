@@ -12,6 +12,9 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"TeX": {"equationNumbers": {"autoNumber": "AMS", "useLabelIds": true}}, "tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
@@ -19,8 +22,8 @@
     <link rel="shortcut icon" href="../_static/pysal_favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="References" href="../references.html" />
-    <link rel="prev" title="spaghetti.SimulatedPointPattern" href="spaghetti.SimulatedPointPattern.html" />
+    <link rel="next" title="spaghetti.Network.savenetwork" href="spaghetti.Network.savenetwork.html" />
+    <link rel="prev" title="spaghetti.PointPattern" href="spaghetti.PointPattern.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -46,6 +49,7 @@
           <ul class="nav navbar-nav">
             
                 <li><a href="../installation.html">Installation</a></li>
+                <li><a href="../tutorial.html">Tutorial</a></li>
                 <li><a href="../api.html">API</a></li>
                 <li><a href="../references.html">References</a></li>
             
@@ -66,11 +70,16 @@
 <li class="toctree-l2"><a class="reference internal" href="../installation.html#development-version">Development Version</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/Basic_spaghetti_tutorial.html">Basic <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/Advanced_spaghetti_tutorial.html">Advanced <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/Use_case-facility_location.html">Demostrating network-based optimal facility location modeling</a></li>
+</ul>
+</li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../api.html#spaghetti-network">spaghetti.Network</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api.html#spaghetti-pointpattern">spaghetti.PointPattern</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api.html#spaghetti-simulatedpointpattern">spaghetti.SimulatedPointPattern</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../api.html#spaghetti">spaghetti</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#network-feature-instantiation">Network feature instantiation</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#network-feature-extraction">Network feature extraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#save-and-load-a-network">Save and load a network</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
@@ -122,57 +131,82 @@
 <dl class="function">
 <dt id="spaghetti.element_as_gdf">
 <code class="sig-prename descclassname">spaghetti.</code><code class="sig-name descname">element_as_gdf</code><span class="sig-paren">(</span><em class="sig-param">net</em>, <em class="sig-param">vertices=False</em>, <em class="sig-param">arcs=False</em>, <em class="sig-param">pp_name=None</em>, <em class="sig-param">snapped=False</em>, <em class="sig-param">id_col='id'</em>, <em class="sig-param">geom_col='geometry'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#element_as_gdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.element_as_gdf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a <a class="reference external" href="http://geopandas.org/data_structures.html#geodataframe">geopandas.GeoDataFrame</a> of
-network elements. This can be (a) the vertices of a network; (b) the
-arcs of a network; (c) both the vertices and arcs of the network;
-(d) raw point pattern associated with the network; or (e) snapped
-point pattern of (d).</p>
-<dl class="field-list simple">
+<dd><p>Return a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> of network elements. This can be 
+(a) the vertices of a network; (b) the arcs of a network; (c) both the
+vertices and arcs of the network; (d) the raw point pattern associated
+with the network; or (e) the snapped point pattern of (d).</p>
+<dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>net</strong><span class="classifier">spaghetti.Network</span></dt><dd><p>network object</p>
+<dd class="field-odd"><dl>
+<dt><strong>net</strong><span class="classifier"><a class="reference internal" href="spaghetti.Network.html#spaghetti.Network" title="spaghetti.Network"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network</span></code></a></span></dt><dd><p>A <cite>spaghetti</cite> network object.</p>
 </dd>
-<dt><strong>vertices</strong><span class="classifier">bool</span></dt><dd><p>Extract the network vertices. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<dt><strong>vertices</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.7)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>Extract the network vertices (<code class="docutils literal notranslate"><span class="pre">True</span></code>). Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 </dd>
-<dt><strong>arcs</strong><span class="classifier">bool</span></dt><dd><p>Extract the network arcs. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<dt><strong>arcs</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.7)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>Extract the network arcs (<code class="docutils literal notranslate"><span class="pre">True</span></code>). Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 </dd>
-<dt><strong>pp_name</strong><span class="classifier">str</span></dt><dd><p>Name of the network <code class="docutils literal notranslate"><span class="pre">PointPattern</span></code> to extract.
+<dt><strong>pp_name</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>Name of the <code class="docutils literal notranslate"><span class="pre">network.PointPattern</span></code> to extract.
 Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 </dd>
-<dt><strong>snapped</strong><span class="classifier">bool</span></dt><dd><p>If extracting a network <code class="docutils literal notranslate"><span class="pre">PointPattern</span></code>, set to <code class="docutils literal notranslate"><span class="pre">True</span></code> for
+<dt><strong>snapped</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.7)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>If extracting a <code class="docutils literal notranslate"><span class="pre">network.PointPattern</span></code>, set to <code class="docutils literal notranslate"><span class="pre">True</span></code> for
 snapped point locations along the network. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 </dd>
-<dt><strong>id_col</strong><span class="classifier">str</span></dt><dd><p>GeoDataFrame column name for IDs. Default is <code class="docutils literal notranslate"><span class="pre">'id'</span></code>.</p>
+<dt><strong>id_col</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> column name for IDs. Default is <code class="docutils literal notranslate"><span class="pre">&quot;id&quot;</span></code>.</p>
 </dd>
-<dt><strong>geom_col</strong><span class="classifier">str</span></dt><dd><p>GeoDataFrame column name for geometry. Default is
-<code class="docutils literal notranslate"><span class="pre">'geometry'</span></code>.</p>
+<dt><strong>geom_col</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> column name for geometry. Default is
+<code class="docutils literal notranslate"><span class="pre">&quot;geometry&quot;</span></code>.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>points</strong><span class="classifier">geopandas.GeoDataFrame</span></dt><dd><p>Network point elements (either vertices or <code class="docutils literal notranslate"><span class="pre">PointPattern</span></code>
-points) as a <cite>geopandas.GeoDataFrame</cite> of <code class="docutils literal notranslate"><span class="pre">shapely.Point</span></code>
+<dd class="field-even"><dl>
+<dt><strong>points</strong><span class="classifier"><a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.6.1+30.g0da3a7d)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a></span></dt><dd><p>Network point elements (either vertices or <code class="docutils literal notranslate"><span class="pre">network.PointPattern</span></code>
+points) as a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> of <code class="docutils literal notranslate"><span class="pre">shapely.geometry.Point</span></code>
 objects with an <code class="docutils literal notranslate"><span class="pre">id</span></code> column and <code class="docutils literal notranslate"><span class="pre">geometry</span></code> column.</p>
 </dd>
-<dt><strong>lines</strong><span class="classifier">geopandas.GeoDataFrame</span></dt><dd><p>Network arc elements as a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> of
-<code class="docutils literal notranslate"><span class="pre">shapely.LineString</span></code> objects with an <code class="docutils literal notranslate"><span class="pre">id</span></code> column and
+<dt><strong>lines</strong><span class="classifier"><a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.6.1+30.g0da3a7d)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a></span></dt><dd><p>Network arc elements as a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> of
+<code class="docutils literal notranslate"><span class="pre">shapely.geometry.LineString</span></code> objects with an <code class="docutils literal notranslate"><span class="pre">id</span></code> column and
 <code class="docutils literal notranslate"><span class="pre">geometry</span></code> column.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-odd">Raises</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>KeyError</strong></dt><dd><p>In order to extract a <code class="docutils literal notranslate"><span class="pre">PointPattern</span></code> it must already be a part
-of the <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object. This exception is raised
-when a <code class="docutils literal notranslate"><span class="pre">PointPattern</span></code> is being extracted that does not exist
-within the <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object.</p>
+<dt><a class="reference external" href="https://docs.python.org/3.7/library/exceptions.html#KeyError" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KeyError</span></code></a></dt><dd><p>In order to extract a <code class="docutils literal notranslate"><span class="pre">network.PointPattern</span></code> it must already
+be a part of the network object. This exception is raised
+when a <code class="docutils literal notranslate"><span class="pre">network.PointPattern</span></code> is being extracted that does
+not exist within the network object.</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>This function requires <a class="reference external" href="http://geopandas.org">geopandas</a>.</p>
+<p>This function requires <code class="docutils literal notranslate"><span class="pre">geopandas</span></code>.</p>
+<p class="rubric">Examples</p>
+<p>Instantiate a network object.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">spaghetti</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">libpysal</span> <span class="kn">import</span> <span class="n">examples</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;streets.shp&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Extract the network elements (vertices and arcs) as
+<code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> objects.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">vertices_df</span><span class="p">,</span> <span class="n">arcs_df</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">ntw</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">arcs</span><span class="o">=</span><span class="kc">True</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Examine the first vertex.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">vertices_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">id                                          0</span>
+<span class="go">geometry    POINT (728368.04762 877125.89535)</span>
+<span class="go">Name: 0, dtype: object</span>
+</pre></div>
+</div>
+<p>Calculate the total length of the network.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">arcs_df</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="go">104414.09200823458</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -197,7 +231,7 @@ within the <code class="docutils literal notranslate"><span class="pre">spaghett
     </p>
     <p>
         &copy; Copyright 2018, pysal developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.<br/>
     </p>
   </div>
 </footer>

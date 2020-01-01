@@ -1,11 +1,12 @@
 from collections import defaultdict, OrderedDict
 import copy, os, pickle
 
-import numpy as np
+import numpy
 
 from .analysis import NetworkG, NetworkK, NetworkF
 from . import util
 from libpysal import cg, examples, weights
+from libpysal.common import requires
 
 try:
     from libpysal import open
@@ -30,8 +31,7 @@ class Network:
     
     in_data : {geopandas.GeoDataFrame, str}
         The input geographic data. Either (1) a path to a shapefile
-        (str); or (2) a `geopandas.GeoDataFrame 
-        <http://geopandas.org/data_structures.html#geodataframe>`_.
+        (str); or (2) a ``geopandas.GeoDataFrame``.
     
     vertex_sig : int
         Round the x and y coordinates of all vertices to ``vertex_sig``
@@ -49,16 +49,12 @@ class Network:
     
     w_components : bool
         Set to ``False`` to not record connected components from a
-        `libpysal.weights.weights.W 
-        <https://libpysal.readthedocs.io/en/latest/generated/
-        libpysal.weights.W.html#libpysal.weights.W>`_
-        object. Default is True.
-        
+        ``libpysal.weights.W`` object. Default is ``True``.
         
     weightings : {dict, bool}
-        If ``dict``, lists of weightings for each arc. If ``bool``,
+        If dict, lists of weightings for each arc. If bool,
         ``True`` flags ``self.arc_lengths`` as the weightings,
-        ``False`` sets to no weightings. Default is ``False``.
+        ``False`` sets no weightings. Default is ``False``.
     
     Attributes
     ----------
@@ -89,80 +85,141 @@ class Network:
         ``PointPattern`` class instances.
     
     alldistances : dict
-        Keys are the vertex IDs (``int``). Values are tuples with two
+        Keys are the vertex IDs (int). Values are tuples with two
         elements as follows (1) a list of the shortest path distances;
         (2) a dict with the key being the id of the destination vertex
         and the value being a list of the shortest path.
     
-    distancematrix : `numpy.ndarray <https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html>`_
-        all network vertices (non-observations) distance matrix.
+    distancematrix : numpy.ndarray
+        All network vertices (non-observations) distance matrix.
     
     edges : list
-        tuples of graph edge ids.
+        Tuples of graph edge ids.
     
     edge_lengths : dict
         Keys are the graph edge ids (tuple). Values are the graph edge
-        length (``float``).
+        length (float).
     
     non_articulation_points : list
         All vertices with degree 2 that are not in an isolated
-        island ring (loop) component
+        island ring (loop) component.
     
-    w_network : `libpysal.weights.weights.W <https://libpysal.readthedocs.io/en/latest/generated/libpysal.weights.W.html#libpysal.weights.W>`_
-        Weights object created from the network arcs
+    w_network : libpysal.weights.W
+        Weights object created from the network arcs.
     
     network_n_components : int
         Count of connected components in the network.
-    
-    network_component_labels : `numpy.ndarray <https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html>`_
-        Component labels for networks arc
+
+    network_component_labels : numpy.ndarray
+        Component labels for network arcs.
     
     network_component2arc : dict
-        Lookup ``{int: list}`` for arcs comprising network
+        Lookup in the form {int: list} for arcs comprising network
         connected components keyed by component labels with arcs in
-        a ``list`` as values.
+        a list as values.
     
     network_component_is_ring : dict
-        Lookup ``{int: bool}`` keyed by component labels with values
-        as ``True`` if the component is a closed ring, otherwise
-        ``False``.
+        Lookup in the form {int: bool} keyed by component labels with values
+        as ``True`` if the component is a closed ring, otherwise ``False``.
     
-    w_graph : `libpysal.weights.weights.W <https://libpysal.readthedocs.io/en/latest/generated/libpysal.weights.W.html#libpysal.weights.W>`_
-        Weights object created from the graph edges
+    w_graph : libpysal.weights.W
+        Weights object created from the graph edges.
     
     graph_n_components : int
         Count of connected components in the network.
     
-    graph_component_labels : `numpy.ndarray <https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html>`_
-        Component labels for graph edges
+    graph_component_labels : numpy.ndarray
+        Component labels for graph edges.
     
     graph_component2edge : dict
-        Lookup ``{int: list}`` for edges comprising graph connected
+        Lookup in the form {int: list} for edges comprising graph connected
         components keyed by component labels with edges in a list
         as values.
     
     graph_component_is_ring : dict
-        Lookup ``{int: bool}`` keyed by component labels with values as
+        Lookup in the form {int: bool} keyed by component labels with values as
         ``True`` if the component is a closed ring, otherwise ``False``.
+    
+    Notes
+    -----
+    
+    See :cite:`Cliff1981`, :cite:`Tansel1983a`,
+    :cite:`AhujaRavindraK`, :cite:`Labbe1995`,
+    :cite:`Kuby2009`, :cite:`Barthelemy2011`, 
+    :cite:`daskin2013`, :cite:`Okabe2012`,
+    :cite:`Ducruet2014`, :cite:`Weber2016`, for more in-depth discussion on
+    spatial networks, graph theory, and location along networks. 
+    For related network-centric software see
+    `SANET <http://sanet.csis.u-tokyo.ac.jp>`_ :cite:`Okabe2006a`,
+    `NetworkX <https://networkx.github.io>`_ :cite:`Hagberg2008`, 
+    `Pandana <http://udst.github.io/pandana/>`_ :cite:`Foti2012`,
+    and `OSMnx <https://osmnx.readthedocs.io/en/stable/>`_ :cite:`Boeing2017`.
     
     Examples
     --------
     
-    Instantiate an instance of a network.
+    Create an instance of a network.
     
-    >>> import spaghetti as spgh
-    >>> streets_file = examples.get_path('streets.shp')
-    >>> ntw = spgh.Network(in_data=streets_file)
+    >>> import spaghetti
+    >>> from libpysal import examples
+    >>> streets_file = examples.get_path("streets.shp")
+    >>> ntw = spaghetti.Network(in_data=streets_file)
+    
+    Fetch the number connected components in the network.
+    
+    >>> ntw.network_n_components
+    1
+    
+    Unique component labels in the network.
+    
+    >>> import numpy
+    >>> numpy.unique(ntw.network_component_labels)
+    array([0], dtype=int32)
+    
+    Show whether each component of the network is an isolated ring (or not).
+    
+    >>> ntw.network_component_is_ring
+    {0: False}
+    
+    Show how many network arcs are associated with the component.
+    
+    >>> arcs = len(ntw.network_component2arc[ntw.network_component_labels[0]])
+    >>> arcs
+    303
+    
+    Do the same as above, but for the graph-theoretic representation
+    of the network object.
+    
+    >>> ntw.graph_n_components
+    1
+    >>> numpy.unique(ntw.graph_component_labels)
+    array([0], dtype=int32)
+    >>> ntw.graph_component_is_ring
+    {0: False}
+    >>> edges = len(ntw.graph_component2edge[ntw.graph_component_labels[0]])
+    >>> edges
+    179
+    
+    The number of arcs in the network is always greater than or equal
+    to the number of edges in the graph-theoretic representation.
+    
+    >>> arcs >= edges
+    True
     
     Snap point observations to the network with attribute information.
     
-    >>> crimes_file = examples.get_path('crimes.shp')
-    >>> ntw.snapobservations(crimes_file, 'crimes', attribute=True)
+    >>> crimes_file = examples.get_path("crimes.shp")
+    >>> ntw.snapobservations(crimes_file, "crimes", attribute=True)
    
     And without attribute information.
    
-    >>> schools_file = examples.get_path('schools.shp')
-    >>> ntw.snapobservations(schools_file, 'schools', attribute=False)
+    >>> schools_file = examples.get_path("schools.shp")
+    >>> ntw.snapobservations(schools_file, "schools", attribute=False)
+    
+    Show the point patterns associated with the network.
+    
+    >>> ntw.pointpatterns.keys()
+    dict_keys(['crimes', 'schools'])
     
     """
 
@@ -249,7 +306,7 @@ class Network:
         ----------
         
         v : tuple
-            X,Y coordinate of the vertex
+            Coordinate (x,y) of the vertex.
         
         """
 
@@ -269,7 +326,7 @@ class Network:
         out_v = [
             val
             if val == 0
-            else round(val, -int(np.floor(np.log10(np.fabs(val)))) + (sig - 1))
+            else round(val, -int(numpy.floor(numpy.log10(numpy.fabs(val)))) + (sig - 1))
             for val in v
         ]
 
@@ -277,18 +334,18 @@ class Network:
 
     def extract_components(self, w, graph=False):
         """Extract connected component information from a
-        ``libpysal.weights.weights.W`` object
+        ``libpysal.weights.W`` object
         
         Parameters
         ----------
         
-        w : `libpysal.weights.weights.W <https://libpysal.readthedocs.io/en/latest/generated/libpysal.weights.W.html#libpysal.weights.W>`_
+        w : libpysal.weights.W
             Weights object created from the network segments (either
-            raw or graph-theoretic)
+            raw or graph-theoretic).
         
         graph : bool
-            Flag for raw network [False] or graph-theoretic network
-            ``True``. Default is ``False``.
+            Flag for a raw network (``False``) or graph-theoretic network
+            (``True``). Default is ``False``.
         
         """
 
@@ -567,7 +624,7 @@ class Network:
         -------
         
         napts : list
-            non-articulation points on a graph representation
+            Non-articulation points on a graph representation.
         
         """
 
@@ -594,15 +651,15 @@ class Network:
 
     def _evaluate_napts(self, napts, unvisited, component_id, ring):
         """Evaluate one connected component in a network for
-        non-articulation points (napts) and return an updated set of
-        napts and unvisted vertices.
+        non-articulation points (``napts``) and return an updated set of
+        ``napts`` and unvisted vertices.
         
         Parameters
         ----------
         
         napts : set
-            Non-articulation points (napts) in the network. The
-            'napts' here do not include those within an isolated
+            Non-articulation points (``napts``) in the network. The
+            ``napts`` here do not include those within an isolated
             loop island.
         
         unvisited : set
@@ -620,10 +677,10 @@ class Network:
         -------
         
         napts : set
-            Updated 'napts' object.
+            Updated ``napts`` object.
         
         unvisited : set
-            Updated 'napts' object.
+            Updated ``napts`` object.
         
         """
 
@@ -658,11 +715,11 @@ class Network:
         ----------
         
         vtx : int
-            vertex id
+            The vertex ID.
         
         arc_vertices : list
-            All non-articulation points in the network. These are
-            referred to as degree-2 vertices.
+            All non-articulation points (``napts``) in the network.
+            These are referred to as degree-2 vertices.
         
         bridge : list
             Inital bridge list containing only ``vtx``.
@@ -671,8 +728,9 @@ class Network:
         -------
         
         nodes : list
-            Vertices to keep (articulation points). These elements are 
+            Vertices to keep (articulation points). These elements are
             referred to as nodes.
+        
         """
 
         # instantiate empty lis to fill with network articulation
@@ -690,73 +748,85 @@ class Network:
         return nodes
 
     def contiguityweights(self, graph=True, weightings=None):
-        """Create a contiguity-based libpysal W object.
+        """Create a contiguity-based ``libpysal.weights.W`` object.
         
         Parameters
         ----------
         
         graph : bool
-            ``{True, False}`` controls whether the W is generated using
-            the spatial representation or the graph representation.
-            Default is ``True``.
+            Controls whether the ``libpysal.weights.W`` is generated
+            using the spatial representation (``False``) or the graph
+            representation (``True``). Default is ``True``.
         
         weightings : dict
-            dictionary of lists of weightings for each arc/edge.
+            Dictionary of lists of weightings for each arc/edge.
         
         Returns
         -------
         
-         W : `libpysal.weights.weights.W <https://libpysal.readthedocs.io/en/latest/generated/libpysal.weights.W.html#libpysal.weights.W>`_
-            A ``pysal`` W Object representing the binary adjacency of
-            the network.
+         W : libpysal.weights.W
+            A ``W`` representing the binary adjacency of the network.
         
         Examples
         --------
         
-        Instantiate an instance of a network.
+        Instantiate a network.
         
-        >>> import spaghetti as spgh
+        >>> import spaghetti
         >>> from libpysal import examples
         >>> import esda
-        >>> import numpy as np
-        >>> ntw = spgh.Network(examples.get_path('streets.shp'))
+        >>> import numpy
+        >>> ntw = spaghetti.Network(examples.get_path("streets.shp"))
         
-        Snap point observations to the network with
-        attribute information.
+        Snap point observations to the network with attribute information.
         
-        >>> ntw.snapobservations(examples.get_path('crimes.shp'),
-        ...                      'crimes', attribute=True)
+        >>> ntw.snapobservations(
+        ...     examples.get_path("crimes.shp"), "crimes", attribute=True
+        ... )
         
         Find counts per network arc.
         
-        >>> counts = ntw.count_per_link(ntw.pointpatterns['crimes']
-        ...                             .obs_to_arc, graph=False)
+        >>> counts = ntw.count_per_link(
+        ...     ntw.pointpatterns["crimes"].obs_to_arc, graph=False
+        ... )
         >>> counts[(50, 165)]
         4
         
-        Create a contiguity based W object.
+        Create a contiguity-based ``W`` object.
         
         >>> w = ntw.contiguityweights(graph=False)
         
-        Using the W object, access to ESDA functionality is provided.
-        First, a vector of attributes is created for all edges
-        with observations.
+        Using the ``W`` object, access to 
+        `esda <https://esda.readthedocs.io/en/latest/index.html>`_ 
+        functionality is provided. First, a vector of attributes is
+        created for all edges with observations.
         
         >>> w = ntw.contiguityweights(graph=False)
         >>> arcs = w.neighbors.keys()
-        >>> y = np.zeros(len(arcs))
+        >>> y = numpy.zeros(len(arcs))
         >>> for i, e in enumerate(arcs):
         ...     if e in counts.keys():
         ...         y[i] = counts[e]
+        
+        Fetch the number of observations associated with arc ``3``, 
+        where ``3`` is the basic 0-indexed ID of ``w.neighbors.keys()``
+        created through ``enumerate(arcs)``.
+        
         >>> y[3]
         3.0
         
-        Next, a standard call ot Moran is made and the
-        result placed into ``res``.
+        Next, a standard call to 
+        `esda.Moran <https://esda.readthedocs.io/en/latest/generated/esda.Moran.html#esda.Moran>`_ 
+        is made and the result placed into ``res``.
         
         >>> res = esda.moran.Moran(y, w, permutations=99)
         >>> type(res)
         <class 'esda.moran.Moran'>
+        
+        Notes
+        -----
+        
+        See :cite:`pysal2007` and :cite:`esda:_2019` for more details.
         
         """
 
@@ -824,8 +894,8 @@ class Network:
 
         return w
 
-    def distancebandweights(self, threshold, n_proccess=None, gen_tree=False):
-        """Create distance based weights.
+    def distancebandweights(self, threshold, n_processes=1, gen_tree=False):
+        """Create distance-based weights.
         
         Parameters
         ----------
@@ -834,29 +904,49 @@ class Network:
             Distance threshold value.
         
         n_processes : {int, str}
-            (Optional) Specify the number of cores to utilize. Default
-            is 1 core. Use ``int`` to specify an exact number or cores.
+            Specify the number of cores to utilize. Default is 1 core.
             Use ``"all"`` to request all available cores.
+            Specify the exact number of cores with an integer.
         
         gen_tree : bool
             Rebuild shortest path with ``True``, or skip with ``False``.
+            Default is ``False``.
         
         Returns
         -------
         
-        w : `libpysal.weights.weights.W <https://libpysal.readthedocs.io/en/latest/generated/libpysal.weights.W.html#libpysal.weights.W>`_
-            A ``pysal`` W Object representing the binary adjacency of
+        w : libpysal.weights.W
+            A ``W`` object representing the binary adjacency of
             the network.
+        
+        Notes
+        -----
+        
+        See cite:`AnselinRey2014` and cite:`rey_open_2015` for more details
+        regarding spatial weights.
         
         Examples
         --------
         
-        >>> import spaghetti as spgh
-        >>> streets_file = examples.get_path('streets.shp')
-        >>> ntw = spgh.Network(in_data=streets_file)
+        Instantiate an instance of a network.
+        
+        >>> import spaghetti
+        >>> from libpysal import examples
+        >>> streets_file = examples.get_path("streets.shp")
+        >>> ntw = spaghetti.Network(in_data=streets_file)
+        
+        Create a contiguity-based ``W`` object based on network distance, ``500`` 
+        `US feet in this case <https://github.com/pysal/libpysal/blob/master/libpysal/examples/geodanet/streets.prj>`_.
+        
         >>> w = ntw.distancebandweights(threshold=500)
+        
+        Show the number of units in the ``W`` object.
+        
         >>> w.n
         230
+        
+        There are ``8`` units with ``3`` neighbors in the ``W`` object.
+        
         >>> w.histogram[-1]
         (8, 3)
         
@@ -866,11 +956,11 @@ class Network:
         # not present in the `network.Network` object; calculate
         # one at this point
         if not hasattr(self, "alldistances"):
-            self.full_distance_matrix(n_proccess, gen_tree=gen_tree)
+            self.full_distance_matrix(n_processes, gen_tree=gen_tree)
 
         # identify all network vertices which are within the
         # `threshold` parameter
-        neighbor_query = np.where(self.distancematrix < threshold)
+        neighbor_query = numpy.where(self.distancematrix < threshold)
 
         # create an instance for recording neighbors which
         # inserts a new key if not present in object
@@ -889,9 +979,9 @@ class Network:
 
         return w
 
-    def snapobservations(self, in_data, name, idvariable=None, attribute=None):
-        """Snap a point pattern shapefile to network object. The
-        point pattern is stored in the ``network.pointpattern['key']``
+    def snapobservations(self, in_data, name, idvariable=None, attribute=False):
+        """Snap a point pattern shapefile to a network object. The
+        point pattern is stored in the ``network.pointpattern``
         attribute of the network object.
         
         Parameters
@@ -899,27 +989,43 @@ class Network:
         
         in_data : {geopandas.GeoDataFrame, str}
             The input geographic data. Either (1) a path to a
-            shapefile (``str``); or (2) a ``geopandas.GeoDataFrame``.
+            shapefile (str); or (2) a ``geopandas.GeoDataFrame``.
         
         name : str
             Name to be assigned to the point dataset.
         
         idvariable : str
-            Column name to be used as ID variable.
+            Column name to be used as the ID variable.
         
         attribute : bool
             Defines whether attributes should be extracted. ``True`` for
             attribute extraction. ``False`` for no attribute extraction.
+            Default is ``False``.
+        
+        Notes
+        -----
+        
+        See :cite:`doi:10.1111/gean.12211` for a detailed discussion on
+        the modeling consequences of snapping points to spatial networks.
         
         Examples
         --------
         
-        >>> import spaghetti as spgh
-        >>> streets_file = examples.get_path('streets.shp')
-        >>> ntw = spgh.Network(in_data=streets_file)
-        >>> pt_str = 'crimes'
-        >>> in_data = examples.get_path('{}.shp'.format(pt_str))
+        Instantiate a network.
+        
+        >>> import spaghetti
+        >>> from libpysal import examples
+        >>> streets_file = examples.get_path("streets.shp")
+        >>> ntw = spaghetti.Network(in_data=streets_file)
+        
+        Snap observations to the network.
+        
+        >>> pt_str = "crimes"
+        >>> in_data = examples.get_path(pt_str+".shp")
         >>> ntw.snapobservations(in_data, pt_str, attribute=True)
+        
+        Isolate the number of points in the dataset.
+        
         >>> ntw.pointpatterns[pt_str].npoints
         287
         
@@ -942,13 +1048,13 @@ class Network:
         ----------
         
         x : float
-            x-coordinate of the snapped point.
+            The x-coordinate of the snapped point.
         
         y : float
-            y-coordinate of the snapped point.
+            The y-coordinate of the snapped point.
         
         arc : tuple
-            (vtx0, vtx1) representation of the network arc.
+            The (vtx0, vtx1) representation of the network arc.
         
         Returns
         -------
@@ -976,17 +1082,19 @@ class Network:
         Parameters
         -----------
         
-        pattern : spaghetti.network.PointPattern
-            point pattern object
+        pattern : spaghetti.PointPattern
+            The point pattern object.
         
         idx : int
-            point id
+            The point id.
         
         Returns
         -------
+        
         dist : float
-            euclidean distance from original location to snapped
+            The euclidean distance from original location to the snapped
             location.
+        
         """
 
         # set of original (x,y) point coordinates
@@ -1007,8 +1115,8 @@ class Network:
         Parameters
         -----------
         
-        pointpattern : spaghetti.network.PointPattern
-            point pattern object
+        pointpattern : spaghetti.PointPattern
+            The point pattern object.
         
         Returns
         -------
@@ -1020,13 +1128,13 @@ class Network:
             Dictionary with point ids as keys and arc tuples as values.
         
         dist_to_vertex : dict
-            Dictionary with point ids as keys and values as dicts
+            Dictionary with point ids as keys and values as dictionaries
             with keys for vertex ids and values as distances from point
             to vertex.
         
         dist_snapped : dict
             Dictionary with point ids as keys and distance from point
-            to the network arc which it is snapped.
+            to the network arc that it is snapped.
         
         """
 
@@ -1122,30 +1230,35 @@ class Network:
         Parameters
         ----------
         
-        obs_on_network : dict
+        obs_on : dict
             Dictionary of observations on the network.
-            Either {(link):{pt_id:(coords)}} or 
-            {link:[(coord),(coord),(coord)]}
-        
+            Either in the form {(<LINK>):{<POINT_ID>:(<COORDS>)}} or 
+            {<LINK>:[(<COORD>),(<COORD>)]}.
+            
         Returns
         -------
         counts : dict
-            {(link):count}
+            Counts per network link in the form {(<LINK>):<COUNT>}.
         
         Examples
         --------
         
-        Note that this passes the obs_to_arc or obs_to_edge attribute
+        Note that this passes the ``obs_to_arc`` or ``obs_to_edge`` attribute
         of a point pattern snapped to the network.
         
-        >>> import spaghetti as spgh
-        >>> ntw = spgh.Network(examples.get_path('streets.shp'))
-        >>> ntw.snapobservations(examples.get_path('crimes.shp'),
-        ...                                        'crimes',
-        ...                                         attribute=True)
+        >>> import spaghetti
+        >>> from libpysal import examples
+        >>> ntw = spaghetti.Network(examples.get_path("streets.shp"))
         
-        >>> counts = ntw.count_per_link(ntw.pointpatterns['crimes']
-        ...                             .obs_to_arc, graph=False)
+        Snap observations to the network.
+        
+        >>> ntw.snapobservations(
+        ...     examples.get_path("crimes.shp"), "crimes", attribute=True
+        ... )
+        
+        >>> counts = ntw.count_per_link(
+        ...     ntw.pointpatterns["crimes"].obs_to_arc, graph=False
+        ... )
         >>> counts[(140, 142)]
         10
         
@@ -1188,8 +1301,7 @@ class Network:
         return counts
 
     def _newpoint_coords(self, arc, distance):
-        """Used internally to compute new point
-        coordinates during snapping.
+        """Used internally to compute new point coordinates during snapping.
         """
 
         # extract coordinates for vertex 1 of arc
@@ -1228,12 +1340,12 @@ class Network:
         # if the horizontal direction is negative from
         # vertex 1 to vertex 2 on the euclidean plane
         if x1 > x2:
-            x0 = x1 - distance / np.sqrt(1 + m ** 2)
+            x0 = x1 - distance / numpy.sqrt(1 + m ** 2)
 
         # if the horizontal direction is positive from
         # vertex 1 to vertex 2 on the euclidean plane
         elif x1 < x2:
-            x0 = x1 + distance / np.sqrt(1 + m ** 2)
+            x0 = x1 + distance / numpy.sqrt(1 + m ** 2)
 
         # calculate the (y) coordinate
         y0 = m * (x0 - x1) + y1
@@ -1249,12 +1361,12 @@ class Network:
         
         count : int
             The number of points to create or mean of the distribution
-            if not 'uniform'.
+            if not ``"uniform"``.
         
         distribution : str
-            ``{'uniform', 'poisson'}`` distribution of random points.
-            If ``"poisson"``, the distribution is calculated from half
-            the total network length.
+            Either a ``"uniform"`` or ``"poisson"`` distribution of
+            random points. If ``"poisson"``, the distribution is
+            calculated from half the total network length.
         
         Returns
         -------
@@ -1265,17 +1377,33 @@ class Network:
         
         Examples
         --------
-       
-        >>> import spaghetti as spgh
-        >>> ntw = spgh.Network(examples.get_path('streets.shp'))
-        >>> ntw.snapobservations(examples.get_path('crimes.shp'),
-        ...                                        'crimes',
-        ...                                         attribute=True)
-       
-        >>> npts = ntw.pointpatterns['crimes'].npoints
+        
+        Instantiate a network.
+        
+        >>> import spaghetti
+        >>> from libpysal import examples
+        >>> ntw = spaghetti.Network(examples.get_path("streets.shp"))
+        
+        Snap observations to the network.
+        
+        >>> ntw.snapobservations(
+        ...     examples.get_path("crimes.shp"), "crimes", attribute=True
+        ... )
+        
+        Isolate the number of points in the dataset.
+        
+        >>> npts = ntw.pointpatterns["crimes"].npoints
+        >>> npts
+        287
+        
+        Simulate ``npts`` number of points along the network 
+        in a `uniform` distribution.
+        
         >>> sim = ntw.simulate_observations(npts)
-        >>> isinstance(sim, spgh.network.SimulatedPointPattern)
+        >>> isinstance(sim, spaghetti.network.SimulatedPointPattern)
         True
+        >>> sim.npoints
+        287
         
         """
 
@@ -1286,24 +1414,24 @@ class Network:
         arcs_ = []
 
         # create array and fill each entry as length of network arc
-        lengths = np.zeros(len(self.arc_lengths))
+        lengths = numpy.zeros(len(self.arc_lengths))
         for i, key in enumerate(self.arc_lengths.keys()):
             arcs_.append(key)
             lengths[i] = self.arc_lengths[key]
 
         # cumulative network length
-        stops = np.cumsum(lengths)
+        stops = numpy.cumsum(lengths)
         totallength = stops[-1]
 
         # create lengths with a uniform distribution
         if distribution is "uniform":
-            nrandompts = np.random.uniform(0, totallength, size=(count,))
+            nrandompts = numpy.random.uniform(0, totallength, size=(count,))
 
         # create lengths with a poisson distribution
         elif distribution is "poisson":
             # calculate poisson from half the network length
             mid_length = totallength / 2.0
-            nrandompts = np.random.poisson(mid_length, size=(count,))
+            nrandompts = numpy.random.poisson(mid_length, size=(count,))
 
         # iterate over random distances created above
         for i, r in enumerate(nrandompts):
@@ -1311,7 +1439,7 @@ class Network:
             # take the first element of the index array (arc id)
             # where the random distance is less than that that of
             # its value in `stops`
-            idx = np.where(r < stops)[0][0]
+            idx = numpy.where(r < stops)[0][0]
 
             # assign the simulated point to the ar
             assignment_arc = arcs_[idx]
@@ -1343,13 +1471,13 @@ class Network:
         return simpts
 
     def enum_links_vertex(self, v0):
-        """Returns the arcs (links) around vertices.
+        """Returns the arcs (links) adjacent to vertices.
         
         Parameters
         -----------
         
         v0 : int
-            vertex id
+            The vertex ID.
         
         Returns
         -------
@@ -1360,8 +1488,14 @@ class Network:
         Examples
         --------
         
-        >>> import spaghetti as spgh
-        >>> ntw = spgh.Network(examples.get_path('streets.shp'))
+        Create an instance of a network.
+        
+        >>> import spaghetti
+        >>> from libpysal import examples
+        >>> ntw = spaghetti.Network(examples.get_path("streets.shp"))
+        
+        Enumerate the links/arcs that are adjacent to vertex ``24``.
+        
         >>> ntw.enum_links_vertex(24)
         [(24, 48), (24, 25), (24, 26)]
         
@@ -1379,7 +1513,7 @@ class Network:
         return links
 
     def full_distance_matrix(self, n_processes, gen_tree=False):
-        """All vertex-to-vertex distances on a network. This function
+        """All vertex-to-vertex distances on a network. This method
         is called from within ``allneighbordistances()``,
         ``nearestneighbordistances()``, and ``distancebandweights()``.
         
@@ -1387,15 +1521,18 @@ class Network:
         -----------
         
         n_processes : int
-            Cpu cores for multiprocessing.
+            Specify the number of cores to utilize. Default is 1 core.
+            Use ``"all"`` to request all available cores.
+            Specify the exact number of cores with an integer.
        
         gen_tree : bool
             Rebuild shortest path ``True``, or skip ``False``.
+            Default is ``False``.
         
         Notes
         -----
         
-        Based on :cite:`Dijkstra1959a`.
+        Based on :cite:`Dijkstra1959a` and :cite:`doi:10.1002/9781119967101.ch3`.
         
         """
 
@@ -1405,10 +1542,10 @@ class Network:
 
         # create an empty matrix which will store shortest path distance
         nvtx = len(self.vertex_list)
-        self.distancematrix = np.empty((nvtx, nvtx))
+        self.distancematrix = numpy.empty((nvtx, nvtx))
 
         # single-core processing
-        if not n_processes:
+        if n_processes == 1:
 
             # iterate over each network vertex
             for vtx in self.vertex_list:
@@ -1416,7 +1553,7 @@ class Network:
                 # calculate the shortest path and preceding
                 # vertices for traversal route
                 distance, pred = util.dijkstra(self, vtx)
-                pred = np.array(pred)
+                pred = numpy.array(pred)
 
                 # generate the shortest path tree
                 if gen_tree:
@@ -1429,7 +1566,7 @@ class Network:
                 self.distancematrix[vtx] = distance
 
         # multiprocessing
-        if n_processes:
+        else:
 
             # set up multiprocessing schema
             import multiprocessing as mp
@@ -1452,7 +1589,7 @@ class Network:
             distance = [distance_pred[itr][0] for itr in iterations]
 
             # fill preceding vertices
-            pred = np.array([distance_pred[itr][1] for itr in iterations])
+            pred = numpy.array([distance_pred[itr][1] for itr in iterations])
 
             # iterate of network vertices and generate
             # the shortest path tree for each
@@ -1471,7 +1608,7 @@ class Network:
         sourcepattern,
         destpattern=None,
         fill_diagonal=None,
-        n_processes=None,
+        n_processes=1,
         gen_tree=False,
         snap_dist=False,
     ):
@@ -1482,13 +1619,13 @@ class Network:
         Parameters
         ----------
         
-        sourcepattern : {str, spaghetti.network.PointPattern}
-            The key of a point pattern snapped to the network OR
-            the full ``spaghetti.network.PointPattern`` object.
+        sourcepattern : {str, spaghetti.PointPattern}
+            The key of a point pattern snapped to the network or
+            the full ``spaghetti.PointPattern`` object.
         
         destpattern : str
             (Optional) The key of a point pattern snapped to the network
-            OR the full ``spaghetti.network.PointPattern`` object.
+            or the full ``spaghetti.PointPattern`` object.
         
         fill_diagonal : {float, int}
             (Optional) Fill the diagonal of the cost matrix. Default is
@@ -1497,12 +1634,13 @@ class Network:
             ``fill_diagonal``.
         
         n_processes : {int, str}
-            (Optional) Specify the number of cores to utilize. Default
-            is 1 core. Use ``int`` to specify an exact number or cores.
+            Specify the number of cores to utilize. Default is 1 core.
             Use ``"all"`` to request all available cores.
+            Specify the exact number of cores with an integer.
         
         gen_tree : bool
             Rebuild shortest path ``True``, or skip ``False``.
+            Default is ``False``.
         
         snap_dist : bool
             Flag as ``True`` to include the distance from the original
@@ -1512,14 +1650,14 @@ class Network:
         Returns
         -------
         
-        nearest : `numpy.ndarray <https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html>`_
-            An array of shape (n,n) storing distances between all
-            points.
+        nearest : numpy.ndarray
+            An array of shape (n,m) storing distances between all
+            source and destination points.
         
         tree_nearest : dict
             Nearest network node to point pattern vertex shortest
-            path lookup. The values of the dictionary are a ``tuple``
-            of the nearest source vertex and the near destination
+            path lookup. The values of the dictionary are a tuple
+            of the nearest source vertex and the nearest destination
             vertex to query the lookup tree. If two observations are
             snapped to the same network arc a flag of -.1 is set for
             both the source and destination network vertex
@@ -1529,33 +1667,51 @@ class Network:
         Examples
         --------
         
-        >>> import spaghetti as spgh
-        >>> ntw = spgh.Network(examples.get_path('streets.shp'))
-        >>> ntw.snapobservations(examples.get_path('crimes.shp'),
-        ...                                        'crimes',
-        ...                                         attribute=True)
+        Create a network instance.
         
+        >>> import spaghetti
+        >>> from libpysal import examples
+        >>> ntw = spaghetti.Network(examples.get_path("streets.shp"))
         
-        >>> s2s_dist = ntw.allneighbordistances('crimes')
+        Snap observations to the network.
+        
+        >>> ntw.snapobservations(
+        ...     examples.get_path("crimes.shp"), "crimes", attribute=True
+        ... )
+        
+        Calculate all distances between observations in the ``crimes`` dataset.
+        
+        >>> s2s_dist = ntw.allneighbordistances("crimes")
+        
+        If calculating a ``type-a`` to ``type-a`` distance matrix
+        the distance between an observation and itself is ``nan`` and
+        the distance between one observation and another will be positive value.
+        
         >>> s2s_dist[0,0], s2s_dist[1,0]
         (nan, 3105.189475447081)
         
+        If calculating a ``type-a`` to ``type-b`` distance matrix
+        the distance between all observations will likely be positive
+        values, may be zero (or approximately zero), but will never be negative.
         
-        >>> ntw.snapobservations(examples.get_path('schools.shp'),
-        ...                                        'schools',
-        ...                                        attribute=False)
-        
-        
-        >>> s2d_dist = ntw.allneighbordistances('crimes',
-        ...                                     destpattern='schools')
+        >>> ntw.snapobservations(
+        ...     examples.get_path("schools.shp"), "schools", attribute=False
+        ... )
+        >>> s2d_dist = ntw.allneighbordistances("crimes", destpattern="schools")
         >>> s2d_dist[0,0], s2d_dist[1,0]
         (4520.72353741989, 6340.422971967315)
         
+        Shortest paths can also be reconstructed when desired by
+        setting the ``gen_tree`` keyword argument to ``True``. Here
+        it is shown that the shortest path between school ``6`` and
+        school ``7`` flows along network arcs through network
+        vertices ``173`` and ``64``. The ``ntw.alldistances`` attribute
+        may then be queried for the network elements comprising that path.
         
-        >>> s2d_dist, tree = ntw.allneighbordistances('schools',
-        ...                                           gen_tree=True)
+        >>> d2d_dist, tree = ntw.allneighbordistances("schools", gen_tree=True)
         >>> tree[(6, 7)]
         (173, 64)
+        
         """
 
         # calculate the network vertex to vertex distance matrix
@@ -1621,8 +1777,8 @@ class Network:
         # output setup
         # create empty source x destination array
         # and fill with infinity values
-        nearest = np.empty((nsource_pts, ndest_pts))
-        nearest[:] = np.inf
+        nearest = numpy.empty((nsource_pts, ndest_pts))
+        nearest[:] = numpy.inf
         # create empty dictionary to store path trees
         tree_nearest = {}
 
@@ -1729,11 +1885,11 @@ class Network:
             # fill the matrix diagonal with NaN values is no fill
             # value is specified
             if fill_diagonal is None:
-                np.fill_diagonal(nearest, np.nan)
+                numpy.fill_diagonal(nearest, numpy.nan)
 
             # otherwise fill with specified value
             else:
-                np.fill_diagonal(nearest, fill_diagonal)
+                numpy.fill_diagonal(nearest, fill_diagonal)
 
         # if the nearest path tree is desired return it along
         # with the cost matrix
@@ -1747,7 +1903,7 @@ class Network:
         self,
         sourcepattern,
         destpattern=None,
-        n_processes=None,
+        n_processes=1,
         gen_tree=False,
         all_dists=None,
         snap_dist=False,
@@ -1768,14 +1924,15 @@ class Network:
             network.
         
         n_processes : {int, str}
-            (Optional) Specify the number of cores to utilize. Default
-            is 1 core. Use ``int`` to specify an exact number or cores.
+            Specify the number of cores to utilize. Default is 1 core.
             Use ``"all"`` to request all available cores.
+            Specify the exact number of cores with an integer.
         
         gen_tree : bool
             Rebuild shortest path ``True``, or skip ``False``.
+            Default is ``False``.
         
-        all_dists : `numpy.ndarray <https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html>`_
+        all_dists : numpy.ndarray
             An array of shape (n,n) storing distances between all
             points.
         
@@ -1793,25 +1950,47 @@ class Network:
         Returns
         -------
         nearest : dict
-            key is source point id, value is tuple of list containing
+            Nearest neighbor distances keyed by the source point id with
+            the value as as tuple of lists containing
             nearest destination point ids and distance.
         
         Examples
         --------
         
-        >>> import spaghetti as spgh
-        >>> ntw = spgh.Network(examples.get_path('streets.shp'))
-        >>> ntw.snapobservations(examples.get_path('crimes.shp'),
-        ...                      'crimes')
-        >>> nn = ntw.nearestneighbordistances('crimes',
-        ...                                   keep_zero_dist=True)
+        Instantiate a network.
+        
+        >>> import spaghetti
+        >>> from libpysal import examples
+        >>> ntw = spaghetti.Network(examples.get_path("streets.shp"))
+        
+        Snap observations to the network.
+        
+        >>> ntw.snapobservations(examples.get_path("crimes.shp"), "crimes")
+        
+        Fetch nearest neighbor distances while (potentially) 
+        keeping neighbors that have been geocoded directly on top of
+        each other. Here it is demonstrated that observation ``11``
+        has two neighbors (``18`` and ``19``) at an exactly equal distance.
+        However, observation ``18`` is shown to have only one neighbor
+        (``18``) with no distance between them.
+        
+        >>> nn = ntw.nearestneighbordistances("crimes", keep_zero_dist=True)
         >>> nn[11], nn[18]
         (([18, 19], 165.33982412719126), ([19], 0.0))
         
-        >>> nn = ntw.nearestneighbordistances('crimes',
-        ...                                   keep_zero_dist=False)
+        This may be remedied by setting the ``keep_zero_dist`` keyword
+        argument to ``False``. With this parameter set, observation ``11``
+        still has the same neighbor/distance values, but 
+        observation ``18`` now has a single nearest neighbor (``11``)
+        with a non-zero, postive distance.
+        
+        >>> nn = ntw.nearestneighbordistances("crimes", keep_zero_dist=False)
         >>> nn[11], nn[18]
         (([18, 19], 165.33982412719126), ([11], 165.33982412719126))
+        
+        There are valid reasons for both retaining or masking zero distance
+        neighbors. When conducting analysis, thought must be given as to
+        which model more accurately represents the specific scenario.
         
         """
 
@@ -1865,249 +2044,24 @@ class Network:
 
             # this considers all zero-distance neighbors
             if keep_zero_dist and symmetric:
-                val = np.nanmin(all_dists[source_index, :])
+                val = numpy.nanmin(all_dists[source_index, :])
 
             # this does not consider zero-distance neighbors
             else:
-                val = np.min(
-                    all_dists[source_index, :][np.nonzero(all_dists[source_index, :])]
+                val = numpy.min(
+                    all_dists[source_index, :][
+                        numpy.nonzero(all_dists[source_index, :])
+                    ]
                 )
 
             # nearest destination (may be more than one if
             # observations are equal distances away)
-            dest_idxs = np.where(all_dists[source_index, :] == val)[0].tolist()
+            dest_idxs = numpy.where(all_dists[source_index, :] == val)[0].tolist()
 
             # set nearest destination point(s) and distance
             nearest[source_index] = (dest_idxs, val)
 
         return nearest
-
-    def NetworkF(
-        self,
-        pointpattern,
-        nsteps=10,
-        permutations=99,
-        threshold=0.2,
-        distribution="uniform",
-        lowerbound=None,
-        upperbound=None,
-    ):
-        """Computes a network constrained F-Function
-        
-        Parameters
-        ----------
-        
-        pointpattern : spaghetti.network.PointPattern
-            A spaghetti point pattern object.
-        
-        nsteps : int
-            The number of steps at which the count of the nearest
-            neighbors is computed.
-        
-        permutations : int
-            The number of permutations to perform. Default 99.
-        
-        threshold : float
-            The level at which significance is computed.
-            (0.5 would be 97.5% and 2.5%).
-        
-        distribution : str
-            The distribution from which random points are sampled.
-            Either ``"uniform"`` or ``"poisson"``.
-        
-        lowerbound : float
-            The lower bound at which the F-function is computed.
-            Default 0.
-        
-        upperbound : float
-            The upper bound at which the F-function is computed.
-            Defaults to the maximum observed nearest neighbor distance.
-        
-        Returns
-        -------
-        
-        NetworkF : spaghetti.analysis.NetworkF
-            A network F class instance.
-        
-        Examples
-        --------
-        
-        >>> import spaghetti as spgh
-        >>> ntw = spgh.Network(in_data=examples.get_path('streets.shp'))
-        >>> pt_str = 'crimes'
-        >>> in_data = examples.get_path('{}.shp'.format(pt_str))
-        >>> ntw.snapobservations(in_data, pt_str, attribute=True)
-        >>> crimes = ntw.pointpatterns['crimes']
-        >>> sim = ntw.simulate_observations(crimes.npoints)
-        >>> fres = ntw.NetworkF(crimes, permutations=5, nsteps=10)
-        >>> fres.lowerenvelope.shape[0]
-        10
-        """
-
-        # call analysis.NetworkF
-        return NetworkF(
-            self,
-            pointpattern,
-            nsteps=nsteps,
-            permutations=permutations,
-            threshold=threshold,
-            distribution=distribution,
-            lowerbound=lowerbound,
-            upperbound=upperbound,
-        )
-
-    def NetworkG(
-        self,
-        pointpattern,
-        nsteps=10,
-        permutations=99,
-        threshold=0.5,
-        distribution="uniform",
-        lowerbound=None,
-        upperbound=None,
-    ):
-        """Computes a network constrained G-Function
-        
-        Parameters
-        ----------
-        
-        pointpattern : spaghetti.network.PointPattern
-            A spaghetti point pattern object.
-        
-        nsteps : int
-            The number of steps at which the count of the nearest
-            neighbors is computed.
-        
-        permutations : int
-            The number of permutations to perform. Default 99.
-        
-        threshold : float
-            The level at which significance is computed.
-            (0.5 would be 97.5% and 2.5%).
-        
-        distribution : str
-            The distribution from which random points are sampled
-            Either ``"uniform"`` or ``"poisson"``.
-        
-        lowerbound : float
-            The lower bound at which the G-function is computed.
-            Default 0.
-        
-        upperbound : float
-            The upper bound at which the G-function is computed.
-            Defaults to the maximum observed nearest neighbor distance.
-        
-        Returns
-        -------
-        
-        NetworkG : spaghetti.analysis.NetworkG
-            A network G class instance.
-        
-        Examples
-        --------
-        
-        >>> import spaghetti as spgh
-        >>> ntw = spgh.Network(in_data=examples.get_path('streets.shp'))
-        >>> pt_str = 'crimes'
-        >>> in_data = examples.get_path('{}.shp'.format(pt_str))
-        >>> ntw.snapobservations(in_data, pt_str, attribute=True)
-        >>> crimes = ntw.pointpatterns['crimes']
-        >>> sim = ntw.simulate_observations(crimes.npoints)
-        >>> gres = ntw.NetworkG(crimes, permutations=5, nsteps=10)
-        >>> gres.lowerenvelope.shape[0]
-        10
-        """
-
-        # call analysis.NetworkG
-        return NetworkG(
-            self,
-            pointpattern,
-            nsteps=nsteps,
-            permutations=permutations,
-            threshold=threshold,
-            distribution=distribution,
-            lowerbound=lowerbound,
-            upperbound=upperbound,
-        )
-
-    def NetworkK(
-        self,
-        pointpattern,
-        nsteps=10,
-        permutations=99,
-        threshold=0.5,
-        distribution="uniform",
-        lowerbound=None,
-        upperbound=None,
-    ):
-        """Computes a network constrained K-Function
-        
-        Parameters
-        ----------
-        
-        pointpattern : spaghetti.network.PointPattern
-            A spaghetti point pattern object.
-        
-        nsteps : int
-            The number of steps at which the count of the nearest
-            neighbors is computed.
-        
-        permutations : int
-            The number of permutations to perform. Default is 99.
-        
-        threshold : float
-            The level at which significance is computed.
-            (0.5 would be 97.5% and 2.5%).
-        
-        distribution : str
-            The distribution from which random points are sampled
-            Either ``"uniform"`` or ``"poisson"``.
-        
-        lowerbound : float
-            The lower bound at which the K-function is computed.
-            Default is 0.
-        
-        upperbound : float
-            The upper bound at which the K-function is computed.
-            Defaults to the maximum observed nearest neighbor distance.
-        
-        Returns
-        -------
-        
-        NetworkK : spaghetti.analysis.NetworkK
-            A network K class instance.
-        
-        Notes
-        -----
-        
-        Based on :cite:`Okabe2001`.
-        
-        Examples
-        --------
-        
-        >>> import spaghetti as spgh
-        >>> ntw = spgh.Network(in_data=examples.get_path('streets.shp'))
-        >>> pt_str = 'crimes'
-        >>> in_data = examples.get_path('{}.shp'.format(pt_str))
-        >>> ntw.snapobservations(in_data, pt_str, attribute=True)
-        >>> crimes = ntw.pointpatterns['crimes']
-        >>> sim = ntw.simulate_observations(crimes.npoints)
-        >>> kres = ntw.NetworkK(crimes, permutations=5, nsteps=10)
-        >>> kres.lowerenvelope.shape[0]
-        10
-        """
-
-        # call analysis.NetworkK
-        return NetworkK(
-            self,
-            pointpattern,
-            nsteps=nsteps,
-            permutations=permutations,
-            threshold=threshold,
-            distribution=distribution,
-            lowerbound=lowerbound,
-            upperbound=upperbound,
-        )
 
     def split_arcs(self, distance):
         """Split all of the arcs in the network at a fixed distance.
@@ -2122,13 +2076,22 @@ class Network:
         -------
         
         split_network : spaghetti.Network
-            newly instantiated ``spaghetti.Network`` object.
+            A newly instantiated ``spaghetti.Network`` object.
         
        Examples
         --------
-       
-        >>> import spaghetti as spgh
-        >>> ntw = spgh.Network(examples.get_path('streets.shp'))
+        
+        Instantiate a network.
+        
+        >>> import spaghetti
+        >>> from libpysal import examples
+        >>> ntw = spaghetti.Network(examples.get_path("streets.shp"))
+        
+        Split the network into a segments of 200 distance units in length 
+        (`US feet in this case <https://github.com/pysal/libpysal/blob/master/libpysal/examples/geodanet/streets.prj>`_.).
+        This will include "remainder" segments unless the network is
+        comprised of arcs with lengths exactly divisible by ``distance``.
+        
         >>> n200 = ntw.split_arcs(200.0)
         >>> len(n200.arcs)
         688
@@ -2197,7 +2160,7 @@ class Network:
                 # set/update the current vertex id
                 currentstop = current_vertex_id
 
-                # once an can not be split further
+                # once an arc can not be split further
                 if totallength + interval > length:
                     # record the ending vertex
                     currentstop = end_vertex
@@ -2255,6 +2218,298 @@ class Network:
 
         return split_network
 
+    def NetworkF(
+        self,
+        pointpattern,
+        nsteps=10,
+        permutations=99,
+        threshold=0.2,
+        distribution="uniform",
+        lowerbound=None,
+        upperbound=None,
+    ):
+        """Compute a network constrained `F`-function.
+        
+        Parameters
+        ----------
+        
+        pointpattern : spaghetti.PointPattern
+            A ``spaghetti`` point pattern object.
+        
+        nsteps : int
+            The number of steps at which the count of the nearest
+            neighbors is computed.
+        
+        permutations : int
+            The number of permutations to perform. Default 99.
+        
+        threshold : float
+            The level at which significance is computed.
+            (0.5 would be 97.5% and 2.5%).
+        
+        distribution : str
+            The distribution from which random points are sampled.
+            Either ``"uniform"`` or ``"poisson"``.
+        
+        lowerbound : float
+            The lower bound at which the `F`-function is computed.
+            Default 0.
+        
+        upperbound : float
+            The upper bound at which the `F`-function is computed.
+            Defaults to the maximum observed nearest neighbor distance.
+        
+        Returns
+        -------
+        
+        NetworkF : spaghetti.analysis.NetworkF
+            A network `F` class instance.
+        
+        Notes
+        -----
+        
+        Based on :cite:`doi:10.1002/9780470549094.ch5` and mentioned in
+        :cite:`doi:10.1002/9781119967101.ch5`.
+        
+        Examples
+        --------
+        
+        Create a network instance.
+        
+        >>> import spaghetti
+        >>> from libpysal import examples
+        >>> ntw = spaghetti.Network(in_data=examples.get_path("streets.shp"))
+        
+        Snap observation points onto the network.
+        
+        >>> pt_str = "crimes"
+        >>> in_data = examples.get_path(pt_str+".shp")
+        >>> ntw.snapobservations(in_data, pt_str, attribute=True)
+        
+        Simulate observations along the network.
+        
+        >>> crimes = ntw.pointpatterns[pt_str]
+        >>> sim = ntw.simulate_observations(crimes.npoints)
+        
+        Compute a network constrained `F`-function of crimes 
+        with ``5`` ``permutations`` and ``10`` ``nsteps``.
+        
+        >>> fres = ntw.NetworkF(crimes, permutations=5, nsteps=10)
+        >>> fres.lowerenvelope.shape[0]
+        10
+        
+        """
+
+        # call analysis.NetworkF
+        return NetworkF(
+            self,
+            pointpattern,
+            nsteps=nsteps,
+            permutations=permutations,
+            threshold=threshold,
+            distribution=distribution,
+            lowerbound=lowerbound,
+            upperbound=upperbound,
+        )
+
+    def NetworkG(
+        self,
+        pointpattern,
+        nsteps=10,
+        permutations=99,
+        threshold=0.5,
+        distribution="uniform",
+        lowerbound=None,
+        upperbound=None,
+    ):
+        """Compute a network constrained `G`-function.
+        
+        Parameters
+        ----------
+        
+        pointpattern : spaghetti.PointPattern
+            A ``spaghetti`` point pattern object.
+        
+        nsteps : int
+            The number of steps at which the count of the nearest
+            neighbors is computed.
+        
+        permutations : int
+            The number of permutations to perform. Default 99.
+        
+        threshold : float
+            The level at which significance is computed.
+            (0.5 would be 97.5% and 2.5%).
+        
+        distribution : str
+            The distribution from which random points are sampled
+            Either ``"uniform"`` or ``"poisson"``.
+        
+        lowerbound : float
+            The lower bound at which the `G`-function is computed.
+            Default 0.
+        
+        upperbound : float
+            The upper bound at which the `G`-function is computed.
+            Defaults to the maximum observed nearest neighbor distance.
+        
+        Returns
+        -------
+        
+        NetworkG : spaghetti.analysis.NetworkG
+            A network `G` class instance.
+        
+        Notes
+        -----
+        
+        Based on :cite:`doi:10.1002/9780470549094.ch5` and mentioned in
+        :cite:`doi:10.1002/9781119967101.ch5`.
+        
+        [note from `jlaura`] Both the `G` and `K` functions generate a
+        full distance matrix.  This is because, I know that the full 
+        generation is correct and I believe that the truncated generated, 
+        e.g. nearest neighbor, has a bug.
+        
+        Examples
+        --------
+        
+        Create a network instance.
+        
+        >>> import spaghetti
+        >>> from libpysal import examples
+        >>> ntw = spaghetti.Network(in_data=examples.get_path("streets.shp"))
+        
+        Snap observation points onto the network.
+        
+        >>> pt_str = "crimes"
+        >>> in_data = examples.get_path(pt_str+".shp")
+        >>> ntw.snapobservations(in_data, pt_str, attribute=True)
+        
+        Simulate observations along the network.
+        
+        >>> crimes = ntw.pointpatterns[pt_str]
+        >>> sim = ntw.simulate_observations(crimes.npoints)
+        
+        Compute a network constrained `G`-function of crimes 
+        with ``5`` ``permutations`` and ``10`` ``nsteps``.
+        
+        >>> gres = ntw.NetworkG(crimes, permutations=5, nsteps=10)
+        >>> gres.lowerenvelope.shape[0]
+        10
+        
+        """
+
+        # call analysis.NetworkG
+        return NetworkG(
+            self,
+            pointpattern,
+            nsteps=nsteps,
+            permutations=permutations,
+            threshold=threshold,
+            distribution=distribution,
+            lowerbound=lowerbound,
+            upperbound=upperbound,
+        )
+
+    def NetworkK(
+        self,
+        pointpattern,
+        nsteps=10,
+        permutations=99,
+        threshold=0.5,
+        distribution="uniform",
+        lowerbound=None,
+        upperbound=None,
+    ):
+        """Compute a network constrained `K`-function.
+        
+        Parameters
+        ----------
+        
+        pointpattern : spaghetti.PointPattern
+            A ``spaghetti`` point pattern object.
+        
+        nsteps : int
+            The number of steps at which the count of the nearest
+            neighbors is computed.
+        
+        permutations : int
+            The number of permutations to perform. Default is 99.
+        
+        threshold : float
+            The level at which significance is computed.
+            (0.5 would be 97.5% and 2.5%).
+        
+        distribution : str
+            The distribution from which random points are sampled
+            Either ``"uniform"`` or ``"poisson"``.
+        
+        lowerbound : float
+            The lower bound at which the `K`-function is computed.
+            Default is 0.
+        
+        upperbound : float
+            The upper bound at which the `K`-function is computed.
+            Defaults to the maximum observed nearest neighbor distance.
+        
+        Returns
+        -------
+        
+        NetworkK : spaghetti.analysis.NetworkK
+            A network `K` class instance.
+        
+        Notes
+        -----
+        
+        Based on :cite:`doi:10.1111/j.1538-4632.2001.tb00448.x` 
+        and :cite:`doi:10.1002/9781119967101.ch6`.
+        
+        [note from `jlaura`] Both the `G` and `K` functions generate a
+        full distance matrix.  This is because, I know that the full 
+        generation is correct and I believe that the truncated generated, 
+        e.g. nearest neighbor, has a bug.
+        
+        Examples
+        --------
+        
+        Create a network instance.
+        
+        >>> import spaghetti
+        >>> from libpysal import examples
+        >>> ntw = spaghetti.Network(in_data=examples.get_path("streets.shp"))
+        
+        Snap observation points onto the network.
+        
+        >>> pt_str = "crimes"
+        >>> in_data = examples.get_path(pt_str+".shp")
+        >>> ntw.snapobservations(in_data, pt_str, attribute=True)
+        
+        Simulate observations along the network.
+        
+        >>> crimes = ntw.pointpatterns[pt_str]
+        >>> sim = ntw.simulate_observations(crimes.npoints)
+        
+        Compute a network constrained `K`-function of crimes 
+        with ``5`` ``permutations`` and ``10`` ``nsteps``.
+        
+        >>> kres = ntw.NetworkK(crimes, permutations=5, nsteps=10)
+        >>> kres.lowerenvelope.shape[0]
+        10
+        
+        """
+
+        # call analysis.NetworkK
+        return NetworkK(
+            self,
+            pointpattern,
+            nsteps=nsteps,
+            permutations=permutations,
+            threshold=threshold,
+            distribution=distribution,
+            lowerbound=lowerbound,
+            upperbound=upperbound,
+        )
+
     def savenetwork(self, filename):
         """Save a network to disk as a binary file.
         
@@ -2263,14 +2518,21 @@ class Network:
         
         filename : str
             The filename where the network should be saved. This should
-            be a full path or it will be save in the current directory.
+            be a full path or it will be saved in the current directory.
         
         Examples
         --------
         
-        >>> import spaghetti as spgh
-        >>> ntw = spgh.Network(examples.get_path('streets.shp'))
-        >>> ntw.savenetwork('mynetwork.pkl')
+        Create a network instance.
+        
+        >>> import spaghetti
+        >>> from libpysal import examples
+        >>> ntw = spaghetti.Network(examples.get_path("streets.shp"))
+        
+        Save out the network instance.
+        
+        >>> ntw.savenetwork("mynetwork.pkl")
+        
         """
 
         with open(filename, "wb") as networkout:
@@ -2284,13 +2546,13 @@ class Network:
         ----------
         
         filename : str
-            The filename where the network should be saved.
+            The filename where the network is saved.
         
         Returns
         -------
         
         self : spaghetti.Network
-            spaghetti Network object
+            A pre-computed ``spaghetti`` network object.
             
         """
 
@@ -2300,6 +2562,7 @@ class Network:
         return self
 
 
+@requires("geopandas", "shapely")
 def element_as_gdf(
     net,
     vertices=False,
@@ -2309,66 +2572,93 @@ def element_as_gdf(
     id_col="id",
     geom_col="geometry",
 ):
-    """Return a `geopandas.GeoDataFrame 
-    <http://geopandas.org/data_structures.html#geodataframe>`_ of
-    network elements. This can be (a) the vertices of a network; (b) the
-    arcs of a network; (c) both the vertices and arcs of the network;
-    (d) raw point pattern associated with the network; or (e) snapped
-    point pattern of (d).
+    """Return a ``geopandas.GeoDataFrame`` of network elements. This can be 
+    (a) the vertices of a network; (b) the arcs of a network; (c) both the
+    vertices and arcs of the network; (d) the raw point pattern associated
+    with the network; or (e) the snapped point pattern of (d).
     
     Parameters
     ----------
     
     net : spaghetti.Network
-        network object
+        A `spaghetti` network object.
     
     vertices : bool
-        Extract the network vertices. Default is ``False``.
+        Extract the network vertices (``True``). Default is ``False``.
     
     arcs : bool
-        Extract the network arcs. Default is ``False``.
+        Extract the network arcs (``True``). Default is ``False``.
     
     pp_name : str
-        Name of the network ``PointPattern`` to extract.
+        Name of the ``network.PointPattern`` to extract.
         Default is ``None``.
     
     snapped : bool
-        If extracting a network ``PointPattern``, set to ``True`` for
+        If extracting a ``network.PointPattern``, set to ``True`` for
         snapped point locations along the network. Default is ``False``.
     
     id_col : str
-        GeoDataFrame column name for IDs. Default is ``'id'``.
+        ``geopandas.GeoDataFrame`` column name for IDs. Default is ``"id"``.
     
     geom_col : str
-        GeoDataFrame column name for geometry. Default is
-        ``'geometry'``.
+        ``geopandas.GeoDataFrame`` column name for geometry. Default is
+        ``"geometry"``.
     
     Raises
     ------
     
     KeyError
-        In order to extract a ``PointPattern`` it must already be a part
-        of the ``spaghetti.Network`` object. This exception is raised
-        when a ``PointPattern`` is being extracted that does not exist
-        within the ``spaghetti.Network`` object.
+        In order to extract a ``network.PointPattern`` it must already
+        be a part of the network object. This exception is raised
+        when a ``network.PointPattern`` is being extracted that does
+        not exist within the network object.
     
     Returns
     -------
     
     points : geopandas.GeoDataFrame
-        Network point elements (either vertices or ``PointPattern``
-        points) as a `geopandas.GeoDataFrame` of ``shapely.Point``
+        Network point elements (either vertices or ``network.PointPattern``
+        points) as a ``geopandas.GeoDataFrame`` of ``shapely.geometry.Point``
         objects with an ``id`` column and ``geometry`` column.
     
     lines : geopandas.GeoDataFrame
         Network arc elements as a ``geopandas.GeoDataFrame`` of
-        ``shapely.LineString`` objects with an ``id`` column and
+        ``shapely.geometry.LineString`` objects with an ``id`` column and
         ``geometry`` column.
     
     Notes
     -----
     
-    This function requires `geopandas <http://geopandas.org>`_.
+    This function requires ``geopandas``.
+    
+    
+    Examples
+    --------
+    
+    Instantiate a network object.
+    
+    >>> import spaghetti
+    >>> from libpysal import examples
+    >>> ntw = spaghetti.Network(examples.get_path("streets.shp"))
+    
+    Extract the network elements (vertices and arcs) as
+    ``geopandas.GeoDataFrame`` objects.
+    
+    >>> vertices_df, arcs_df = spaghetti.element_as_gdf(
+    ...     ntw, vertices=True, arcs=True
+    ... )
+    
+    Examine the first vertex.
+    
+    >>> vertices_df.loc[0]
+    id                                          0
+    geometry    POINT (728368.04762 877125.89535)
+    Name: 0, dtype: object
+    
+    Calculate the total length of the network.
+    
+    >>> arcs_df.geometry.length.sum()
+    104414.09200823458
     
     """
 
@@ -2406,8 +2696,10 @@ def element_as_gdf(
 
 
 class PointPattern:
-    """A stub point pattern class used to store a point pattern. This
-    class is monkey patched with network specific attributes when the
+    """A stub point pattern class used to store a point pattern.
+    
+    Note from the original author of ``pysal.network``: 
+    This class is monkey patched with network specific attributes when the
     points are snapped to a network. In the future this class may be
     replaced with a generic point pattern class.
     
@@ -2416,11 +2708,10 @@ class PointPattern:
     
     in_data : {geopandas.GeoDataFrame, str}
         The input geographic data. Either (1) a path to a shapefile
-        ``str``; or (2) a `geopandas.GeoDataFrame 
-        <http://geopandas.org/data_structures.html#geodataframe>`_.
+        ``str``; or (2) a ``geopandas.GeoDataFrame``.
         
     idvariable : str
-        Field in the shapefile to use as an id variable.
+        Field in the shapefile to use as an ID variable.
     
     attribute :  bool
         A flag to indicate whether all attributes are tagged to this
@@ -2457,7 +2748,7 @@ class PointPattern:
         those arcs.
     
     snapped_coordinates : dict
-        Keys are the point ids (``int``). Values are the snapped x,y
+        Keys are the point ids (int). Values are the snapped x,y
         coordinates (tuple).
     
     snap_dist : bool
@@ -2539,10 +2830,11 @@ class PointPattern:
 
 
 class SimulatedPointPattern:
-    """Struct style class to mirror the ``PointPattern`` class. If the
-    ``PointPattern`` class has methods, it might make sense to make this
-    a child of that class. This class is not intended to be used by the
-    external user.
+    """Note from the original author of ``pysal.network``:
+    Struct style class to mirror the ``PointPattern`` class.
+    If the ``PointPattern`` class has methods, it might make
+    sense to make this a child of that class. This class is not intended
+    to be used by the external user.
     
     Attributes
     ----------
@@ -2552,26 +2844,26 @@ class SimulatedPointPattern:
     
     obs_to_arc : dict
         Keys are arc ids (tuple). Values are snapped point information
-        (``dict``).  Within the snapped point information (``dict``)
-        keys are observation ids (``int``), and values are snapped
+        (dict).  Within the snapped point information (dict)
+        keys are observation ids (int), and values are snapped
         coordinates.
     
     obs_to_vertex : list
        List of incident network vertices to snapped observation points
-       converted from a ``default_dict``. Originally in the form of
+       converted from a default_dict. Originally in the form of
        paired left/right nearest network vertices {netvtx1: obs_id1,
        netvtx2: obs_id1, netvtx1: obs_id2... netvtx1: obs_idn}, then
        simplified to a list in the form
        [netvtx1, netvtx2, netvtx1, netvtx2, ...].
        
     dist_to_vertex : dict
-        Keys are observations ids (``int``). Values are distance lookup
-        (``dict``). Within distance lookup (``dict``) keys are the two
+        Keys are observations ids (int). Values are distance lookup
+        (dict). Within distance lookup (dict) keys are the two
         incident vertices of the arc and values are distance to each of
         those arcs.
     
     snapped_coordinates : dict
-        Keys are the point ids (``int``). Values are the snapped x,y
+        Keys are the point ids (int). Values are the snapped x,y
         coordinates (tuple).
     
     snap_dist : bool

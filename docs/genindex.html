@@ -13,6 +13,9 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"TeX": {"equationNumbers": {"autoNumber": "AMS", "useLabelIds": true}}, "tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
@@ -45,6 +48,7 @@
           <ul class="nav navbar-nav">
             
                 <li><a href="installation.html">Installation</a></li>
+                <li><a href="tutorial.html">Tutorial</a></li>
                 <li><a href="api.html">API</a></li>
                 <li><a href="references.html">References</a></li>
             
@@ -65,11 +69,16 @@
 <li class="toctree-l2"><a class="reference internal" href="installation.html#development-version">Development Version</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/Basic_spaghetti_tutorial.html">Basic <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/Advanced_spaghetti_tutorial.html">Advanced <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/Use_case-facility_location.html">Demostrating network-based optimal facility location modeling</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="api.html#spaghetti-network">spaghetti.Network</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#spaghetti-pointpattern">spaghetti.PointPattern</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#spaghetti-simulatedpointpattern">spaghetti.SimulatedPointPattern</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#spaghetti">spaghetti</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#network-feature-instantiation">Network feature instantiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#network-feature-extraction">Network feature extraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#save-and-load-a-network">Save and load a network</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
@@ -132,35 +141,19 @@
 <h2 id="_">_</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="generated/spaghetti.PointPattern.html#spaghetti.PointPattern.__init__">__init__() (spaghetti.PointPattern method)</a>
+      <li><a href="generated/spaghetti.Network.html#spaghetti.Network.__init__">__init__() (spaghetti.Network method)</a>
 
       <ul>
-        <li><a href="generated/spaghetti.SimulatedPointPattern.html#spaghetti.SimulatedPointPattern.__init__">(spaghetti.SimulatedPointPattern method)</a>
+        <li><a href="generated/spaghetti.PointPattern.html#spaghetti.PointPattern.__init__">(spaghetti.PointPattern method)</a>
 </li>
       </ul></li>
-      <li><a href="generated/spaghetti.Network._evaluate_napts.html#spaghetti.Network._evaluate_napts">_evaluate_napts() (spaghetti.Network method)</a>
-</li>
-      <li><a href="generated/spaghetti.Network._extractnetwork.html#spaghetti.Network._extractnetwork">_extractnetwork() (spaghetti.Network method)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="generated/spaghetti.Network._newpoint_coords.html#spaghetti.Network._newpoint_coords">_newpoint_coords() (spaghetti.Network method)</a>
-</li>
-      <li><a href="generated/spaghetti.Network._round_sig.html#spaghetti.Network._round_sig">_round_sig() (spaghetti.Network method)</a>
-</li>
-      <li><a href="generated/spaghetti.Network._snap_to_link.html#spaghetti.Network._snap_to_link">_snap_to_link() (spaghetti.Network method)</a>
-</li>
-      <li><a href="generated/spaghetti.Network._yield_napts.html#spaghetti.Network._yield_napts">_yield_napts() (spaghetti.Network method)</a>
-</li>
-      <li><a href="generated/spaghetti.Network._yieldneighbor.html#spaghetti.Network._yieldneighbor">_yieldneighbor() (spaghetti.Network method)</a>
-</li>
   </ul></td>
 </tr></table>
 
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="generated/spaghetti.Network.allneighbordistances.html#spaghetti.Network.allneighbordistances">allneighbordistances() (spaghetti.Network method)</a>
+      <li><a href="generated/spaghetti.Network.html#spaghetti.Network.allneighbordistances">allneighbordistances() (spaghetti.Network method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -168,15 +161,15 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="generated/spaghetti.Network.compute_distance_to_vertices.html#spaghetti.Network.compute_distance_to_vertices">compute_distance_to_vertices() (spaghetti.Network method)</a>
+      <li><a href="generated/spaghetti.Network.html#spaghetti.Network.compute_distance_to_vertices">compute_distance_to_vertices() (spaghetti.Network method)</a>
 </li>
-      <li><a href="generated/spaghetti.Network.compute_snap_dist.html#spaghetti.Network.compute_snap_dist">compute_snap_dist() (spaghetti.Network method)</a>
+      <li><a href="generated/spaghetti.Network.html#spaghetti.Network.compute_snap_dist">compute_snap_dist() (spaghetti.Network method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="generated/spaghetti.Network.contiguityweights.html#spaghetti.Network.contiguityweights">contiguityweights() (spaghetti.Network method)</a>
+      <li><a href="generated/spaghetti.Network.html#spaghetti.Network.contiguityweights">contiguityweights() (spaghetti.Network method)</a>
 </li>
-      <li><a href="generated/spaghetti.Network.count_per_link.html#spaghetti.Network.count_per_link">count_per_link() (spaghetti.Network method)</a>
+      <li><a href="generated/spaghetti.Network.html#spaghetti.Network.count_per_link">count_per_link() (spaghetti.Network method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -184,7 +177,7 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="generated/spaghetti.Network.distancebandweights.html#spaghetti.Network.distancebandweights">distancebandweights() (spaghetti.Network method)</a>
+      <li><a href="generated/spaghetti.Network.html#spaghetti.Network.distancebandweights">distancebandweights() (spaghetti.Network method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -194,13 +187,13 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="generated/spaghetti.element_as_gdf.html#spaghetti.element_as_gdf">element_as_gdf() (in module spaghetti)</a>
 </li>
-      <li><a href="generated/spaghetti.Network.enum_links_vertex.html#spaghetti.Network.enum_links_vertex">enum_links_vertex() (spaghetti.Network method)</a>
+      <li><a href="generated/spaghetti.Network.html#spaghetti.Network.enum_links_vertex">enum_links_vertex() (spaghetti.Network method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="generated/spaghetti.Network.extract_components.html#spaghetti.Network.extract_components">extract_components() (spaghetti.Network method)</a>
+      <li><a href="generated/spaghetti.Network.html#spaghetti.Network.extract_components">extract_components() (spaghetti.Network method)</a>
 </li>
-      <li><a href="generated/spaghetti.Network.extractgraph.html#spaghetti.Network.extractgraph">extractgraph() (spaghetti.Network method)</a>
+      <li><a href="generated/spaghetti.Network.html#spaghetti.Network.extractgraph">extractgraph() (spaghetti.Network method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -208,7 +201,7 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="generated/spaghetti.Network.full_distance_matrix.html#spaghetti.Network.full_distance_matrix">full_distance_matrix() (spaghetti.Network method)</a>
+      <li><a href="generated/spaghetti.Network.html#spaghetti.Network.full_distance_matrix">full_distance_matrix() (spaghetti.Network method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -216,7 +209,7 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="generated/spaghetti.Network.loadnetwork.html#spaghetti.Network.loadnetwork">loadnetwork() (spaghetti.Network static method)</a>
+      <li><a href="generated/spaghetti.Network.html#spaghetti.Network.loadnetwork">loadnetwork() (spaghetti.Network static method)</a>, <a href="generated/spaghetti.Network.loadnetwork.html#spaghetti.Network.loadnetwork">[1]</a>
 </li>
   </ul></td>
 </tr></table>
@@ -224,15 +217,17 @@
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="generated/spaghetti.Network.nearestneighbordistances.html#spaghetti.Network.nearestneighbordistances">nearestneighbordistances() (spaghetti.Network method)</a>
+      <li><a href="generated/spaghetti.Network.html#spaghetti.Network.nearestneighbordistances">nearestneighbordistances() (spaghetti.Network method)</a>
 </li>
-      <li><a href="generated/spaghetti.Network.NetworkF.html#spaghetti.Network.NetworkF">NetworkF() (spaghetti.Network method)</a>
+      <li><a href="generated/spaghetti.Network.html#spaghetti.Network">Network (class in spaghetti)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="generated/spaghetti.Network.NetworkG.html#spaghetti.Network.NetworkG">NetworkG() (spaghetti.Network method)</a>
+      <li><a href="generated/spaghetti.Network.html#spaghetti.Network.NetworkF">NetworkF() (spaghetti.Network method)</a>
 </li>
-      <li><a href="generated/spaghetti.Network.NetworkK.html#spaghetti.Network.NetworkK">NetworkK() (spaghetti.Network method)</a>
+      <li><a href="generated/spaghetti.Network.html#spaghetti.Network.NetworkG">NetworkG() (spaghetti.Network method)</a>
+</li>
+      <li><a href="generated/spaghetti.Network.html#spaghetti.Network.NetworkK">NetworkK() (spaghetti.Network method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -248,17 +243,15 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="generated/spaghetti.Network.savenetwork.html#spaghetti.Network.savenetwork">savenetwork() (spaghetti.Network method)</a>
+      <li><a href="generated/spaghetti.Network.html#spaghetti.Network.savenetwork">savenetwork() (spaghetti.Network method)</a>, <a href="generated/spaghetti.Network.savenetwork.html#spaghetti.Network.savenetwork">[1]</a>
 </li>
-      <li><a href="generated/spaghetti.Network.simulate_observations.html#spaghetti.Network.simulate_observations">simulate_observations() (spaghetti.Network method)</a>
+      <li><a href="generated/spaghetti.Network.html#spaghetti.Network.simulate_observations">simulate_observations() (spaghetti.Network method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="generated/spaghetti.SimulatedPointPattern.html#spaghetti.SimulatedPointPattern">SimulatedPointPattern (class in spaghetti)</a>
+      <li><a href="generated/spaghetti.Network.html#spaghetti.Network.snapobservations">snapobservations() (spaghetti.Network method)</a>
 </li>
-      <li><a href="generated/spaghetti.Network.snapobservations.html#spaghetti.Network.snapobservations">snapobservations() (spaghetti.Network method)</a>
-</li>
-      <li><a href="generated/spaghetti.Network.split_arcs.html#spaghetti.Network.split_arcs">split_arcs() (spaghetti.Network method)</a>
+      <li><a href="generated/spaghetti.Network.html#spaghetti.Network.split_arcs">split_arcs() (spaghetti.Network method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -280,7 +273,7 @@
     </p>
     <p>
         &copy; Copyright 2018, pysal developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.<br/>
     </p>
   </div>
 </footer>
