@@ -2365,6 +2365,11 @@ class Network:
         Based on :cite:`doi:10.1002/9780470549094.ch5` and mentioned in
         :cite:`doi:10.1002/9781119967101.ch5`.
         
+        [note from `jlaura`] Both the `G` and `K` functions generate a
+        full distance matrix.  This is because, I know that the full 
+        generation is correct and I believe that the truncated generated, 
+        e.g. nearest neighbor, has a bug.
+        
         Examples
         --------
         
@@ -2458,6 +2463,11 @@ class Network:
         
         Based on :cite:`doi:10.1111/j.1538-4632.2001.tb00448.x` 
         and :cite:`doi:10.1002/9781119967101.ch6`.
+        
+        [note from `jlaura`] Both the `G` and `K` functions generate a
+        full distance matrix.  This is because, I know that the full 
+        generation is correct and I believe that the truncated generated, 
+        e.g. nearest neighbor, has a bug.
         
         Examples
         --------
