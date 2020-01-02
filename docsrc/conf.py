@@ -268,7 +268,8 @@ intersphinx_mapping = {
 
 # This is processed by Jinja2 and inserted before each notebook
 nbsphinx_prolog = r"""
-{% set docname = env.doc2path(env.docname, base='tree/master/docsrc/') %}
+{% set docname = env.doc2path(env.docname, base='docsrc/') %}
+{% set fullpath = env.doc2path(env.docname, base='tree/master/docsrc/') %}
 
 .. only:: html
 
@@ -281,7 +282,7 @@ nbsphinx_prolog = r"""
         Interactive online version:
         :raw-html:`<a href="https://mybinder.org/v2/gh/pysal/spaghetti/master?filepath={{ docname }}"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a>`
 
-    __ https://github.com/pysal/spaghetti/{{ docname }}
+    __ https://github.com/pysal/spaghetti/{{ fullpath }}
 
 .. raw:: latex
 
