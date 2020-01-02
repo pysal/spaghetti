@@ -1,9 +1,10 @@
-name: test-environment
+name: notebooks-environment
 channels:
   - conda-forge
 dependencies:
   - python=3.7
   - geopandas
+  - descartes
   - rtree
   - libspatialindex
   - pulp
