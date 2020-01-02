@@ -13,4 +13,4 @@ dependencies:
   - seaborn
   - pip:
     - ortools
-    - "--editable=git+https://github.com/pysal/spaghetti.git@master"
+    - git+https://github.com/pysal/spaghetti.git@master
