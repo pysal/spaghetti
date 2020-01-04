@@ -87,17 +87,22 @@ class Network:
     alldistances : dict
         Keys are the vertex IDs (int). Values are tuples with two
         elements as follows (1) a list of the shortest path distances;
-        (2) a dict with the key being the id of the destination vertex
+        (2) a dict with the key being the ID of the destination vertex
         and the value being a list of the shortest path.
     
-    distancematrix : numpy.ndarray
+    distance_matrix : numpy.ndarray
         All network vertices (non-observations) distance matrix.
     
+    network_trees : dict
+        Keys are the vertex IDs (int). Values are dictionaries
+        with the key being the ID of the destination vertex
+        and the value being a list of the shortest path.
+    
     edges : list
-        Tuples of graph edge ids.
+        Tuples of graph edge IDs.
     
     edge_lengths : dict
-        Keys are the graph edge ids (tuple). Values are the graph edge
+        Keys are the graph edge IDs (tuple). Values are the graph edge
         length (float).
     
     non_articulation_points : list
@@ -292,7 +297,7 @@ class Network:
                     )
                     self.extract_components(self.w_graph, graph=as_graph)
 
-            # sorted list of vertex ids
+            # sorted list of vertex IDs
             self.vertex_list = sorted(self.vertices.values())
 
     def _round_sig(self, v):
@@ -831,7 +836,7 @@ class Network:
         """
 
         # instantiate OrderedDict to record network link
-        # adjacency which will be keyed by the link id (a tuple)
+        # adjacency which will be keyed by the link ID (a tuple)
         # with values being lists of tuples (contiguous links)
         neighbors = OrderedDict()
 
@@ -960,7 +965,7 @@ class Network:
 
         # identify all network vertices which are within the
         # `threshold` parameter
-        neighbor_query = numpy.where(self.distancematrix < threshold)
+        neighbor_query = numpy.where(self.distance_matrix < threshold)
 
         # create an instance for recording neighbors which
         # inserts a new key if not present in object
@@ -1060,10 +1065,10 @@ class Network:
         -------
         
         d1 : float
-            The distance to vtx0. Always the vertex with the lesser id.
+            The distance to vtx0. Always the vertex with the lesser ID.
         
         d2 : float
-            The distance to vtx1. Always the vertex with the greater id.
+            The distance to vtx1. Always the vertex with the greater ID.
         
         """
 
@@ -1086,7 +1091,7 @@ class Network:
             The point pattern object.
         
         idx : int
-            The point id.
+            The point ID.
         
         Returns
         -------
@@ -1125,15 +1130,15 @@ class Network:
             Dictionary with arcs as keys and lists of points as values.
         
         arc_to_obs : dict
-            Dictionary with point ids as keys and arc tuples as values.
+            Dictionary with point IDs as keys and arc tuples as values.
         
         dist_to_vertex : dict
-            Dictionary with point ids as keys and values as dictionaries
-            with keys for vertex ids and values as distances from point
+            Dictionary with point IDs as keys and values as dictionaries
+            with keys for vertex IDs and values as distances from point
             to vertex.
         
         dist_snapped : dict
-            Dictionary with point ids as keys and distance from point
+            Dictionary with point IDs as keys and distance from point
             to the network arc that it is snapped.
         
         """
@@ -1147,7 +1152,7 @@ class Network:
         # snapped(point)-to-arc lookup
         s2a = {}
 
-        # iterate over network arc ids
+        # iterate over network arc IDs
         for arc in self.arcs:
 
             # record the start and end of the arc
@@ -1162,12 +1167,12 @@ class Network:
             s2a[(head, tail)] = arc
 
         # instantiate crosswalks
-        points = {}  # point id to coordinates lookup
+        points = {}  # point ID to coordinates lookup
         obs_to_arc = {}  # observations to arcs lookup
         dist_to_vertex = {}  # distance to vertices lookup
         dist_snapped = {}  # snapped distance lookup
 
-        # fetch and records point coordinates keyed by id
+        # fetch and records point coordinates keyed by ID
         for point_idx, point in pointpattern.points.items():
             points[point_idx] = point["coordinates"]
 
@@ -1436,7 +1441,7 @@ class Network:
         # iterate over random distances created above
         for i, r in enumerate(nrandompts):
 
-            # take the first element of the index array (arc id)
+            # take the first element of the index array (arc ID)
             # where the random distance is less than that that of
             # its value in `stops`
             idx = numpy.where(r < stops)[0][0]
@@ -1536,14 +1541,18 @@ class Network:
         
         """
 
-        # create `alldistances` attribute which will store
-        # the distance cost matrix and path tree
-        self.alldistances = {}
+        # create `alldistances` attribute which will store#################################################
+        # the distance cost matrix and path tree#########################################################
+        #self.alldistances = {}#####################################################################
 
         # create an empty matrix which will store shortest path distance
         nvtx = len(self.vertex_list)
-        self.distancematrix = numpy.empty((nvtx, nvtx))
-
+        self.distance_matrix = numpy.empty((nvtx, nvtx))#############################################
+        
+        # create `network_trees` attribute that stores 
+        # all network path trees (if desired)
+        self.network_trees = {}
+        
         # single-core processing
         if n_processes == 1:
 
@@ -1562,9 +1571,10 @@ class Network:
                     tree = None
 
                 # populate distances and paths
-                self.alldistances[vtx] = (distance, tree)
-                self.distancematrix[vtx] = distance
-
+                #self.alldistances[vtx] = (distance, tree)#############################################
+                self.distance_matrix[vtx] = distance#####################################################
+                self.network_trees[vtx] = tree
+                
         # multiprocessing
         else:
 
@@ -1600,8 +1610,10 @@ class Network:
                     tree = None
 
                 # populate distances and paths
-                self.alldistances[vtx] = (distance[vtx], tree)
-                self.distancematrix[vtx] = distance[vtx]
+                #self.alldistances[vtx] = (distance[vtx], tree)################################################
+                self.distance_matrix[vtx] = distance[vtx]########################################
+                self.network_trees[vtx] = tree
+                
 
     def allneighbordistances(
         self,
@@ -1716,7 +1728,7 @@ class Network:
 
         # calculate the network vertex to vertex distance matrix
         # if it is not already an attribute
-        if not hasattr(self, "alldistances"):
+        if not hasattr(self, "distance_matrix"):
             self.full_distance_matrix(n_processes, gen_tree=gen_tree)
 
         # set the source and destination observation point patterns
@@ -1823,7 +1835,7 @@ class Network:
                     tree_nearest[p1, p2] = (-0.1, -0.1)
 
                 # otherwise lookup distance between the source and
-                # destination vertex from the `distancematrix`
+                # destination vertex
                 else:
 
                     # distance from destination vertex1 to point and
@@ -1832,10 +1844,10 @@ class Network:
 
                     # set the four possible combinations of
                     # source to destination shortest path traversal
-                    d11 = self.distancematrix[source1][dest1]
-                    d21 = self.distancematrix[source2][dest1]
-                    d12 = self.distancematrix[source1][dest2]
-                    d22 = self.distancematrix[source2][dest2]
+                    d11 = self.distance_matrix[source1][dest1]
+                    d21 = self.distance_matrix[source2][dest1]
+                    d12 = self.distance_matrix[source1][dest2]
+                    d22 = self.distance_matrix[source2][dest2]
 
                     # find the shortest distance from the path passing
                     # through each of the two origin vertices to the
@@ -1950,9 +1962,9 @@ class Network:
         Returns
         -------
         nearest : dict
-            Nearest neighbor distances keyed by the source point id with
+            Nearest neighbor distances keyed by the source point ID with
             the value as as tuple of lists containing
-            nearest destination point ids and distance.
+            nearest destination point ID(s) and distance.
         
         Examples
         --------
@@ -2001,7 +2013,7 @@ class Network:
 
         # calculate the network vertex to vertex distance matrix
         # if it is not already an attribute
-        if not hasattr(self, "alldistances"):
+        if not hasattr(self, "distance_matrix"):
             self.full_distance_matrix(n_processes, gen_tree=gen_tree)
 
         # determine if the source and destination patterns are equal
@@ -2111,7 +2123,7 @@ class Network:
         split_network.pointpatterns = copy.deepcopy(self.pointpatterns)
         split_network.in_data = self.in_data
 
-        # set vertex id to start iterations
+        # set vertex ID to start iterations
         current_vertex_id = max(self.vertices.values())
 
         # instantiate sets for newly created network arcs and
@@ -2157,7 +2169,7 @@ class Network:
             # traverse the length of the arc
             while totallength < length:
 
-                # set/update the current vertex id
+                # set/update the current vertex ID
                 currentstop = current_vertex_id
 
                 # once an arc can not be split further
@@ -2170,9 +2182,9 @@ class Network:
                     totallength = length
 
                 else:
-                    # set the current vertex id
+                    # set the current vertex ID
                     current_vertex_id += 1
-                    # set the current stopping id
+                    # set the current stopping ID
                     currentstop = current_vertex_id
                     # add the interval distance to the traversed length
                     totallength += interval
@@ -2184,7 +2196,7 @@ class Network:
                     if currentstop not in split_network.vertex_list:
                         split_network.vertex_list.append(currentstop)
 
-                    # update vertex coordinates and vertex id
+                    # update vertex coordinates and vertex ID
                     split_network.vertex_coords[currentstop] = newx, newy
                     split_network.vertices[(newx, newy)] = currentstop
 
@@ -2619,12 +2631,12 @@ def element_as_gdf(
     points : geopandas.GeoDataFrame
         Network point elements (either vertices or ``network.PointPattern``
         points) as a ``geopandas.GeoDataFrame`` of ``shapely.geometry.Point``
-        objects with an ``id`` column and ``geometry`` column.
+        objects with an ``"id"`` column and ``"geometry""`` column.
     
     lines : geopandas.GeoDataFrame
         Network arc elements as a ``geopandas.GeoDataFrame`` of
-        ``shapely.geometry.LineString`` objects with an ``id`` column and
-        ``geometry`` column.
+        ``shapely.geometry.LineString`` objects with an ``"id"``
+        column and ``"geometry"`` column.
     
     Notes
     -----
@@ -2721,16 +2733,16 @@ class PointPattern:
     ----------
     
     points : dict
-        Keys are the point ids (int). Values are the x,y
+        Keys are the point IDs (int). Values are the x,y
         coordinates (tuple).
     
     npoints : int
         The number of points.
     
     obs_to_arc : dict
-        Keys are arc ids (tuple). Values are snapped point information
+        Keys are arc IDs (tuple). Values are snapped point information
         (``dict``).  Within the snapped point information (``dict``)
-        keys are observation ids (``int``), and values are snapped
+        keys are observation IDs (``int``), and values are snapped
         coordinates.
     
     obs_to_vertex : list
@@ -2742,13 +2754,13 @@ class PointPattern:
        [netvtx1, netvtx2, netvtx1, netvtx2, ...].
        
     dist_to_vertex : dict
-        Keys are observations ids (``int``). Values are distance lookup
+        Keys are observations IDs (``int``). Values are distance lookup
         (``dict``). Within distance lookup (``dict``) keys are the two
         incident vertices of the arc and values are distance to each of
         those arcs.
     
     snapped_coordinates : dict
-        Keys are the point ids (int). Values are the snapped x,y
+        Keys are the point IDs (int). Values are the snapped x,y
         coordinates (tuple).
     
     snap_dist : bool
@@ -2770,7 +2782,7 @@ class PointPattern:
         else:
             from_shp = False
 
-        # either set native point id from dataset or create new ids
+        # either set native point ID from dataset or create new IDs
         if idvariable:
             ids = weights.util.get_ids(in_data, idvariable)
         else:
@@ -2802,19 +2814,19 @@ class PointPattern:
         # iterate over all points
         for i, pt in enumerate(pts):
 
-            # ids, attributes
+            # IDs, attributes
             if ids and db is not None:
                 self.points[ids[i]] = {"coordinates": pt, "properties": db[i]}
 
-            # ids, no attributes
+            # IDs, no attributes
             elif ids and db is None:
                 self.points[ids[i]] = {"coordinates": pt, "properties": None}
 
-            # no ids, attributes
+            # no IDs, attributes
             elif not ids and db is not None:
                 self.points[i] = {"coordinates": pt, "properties": db[i]}
 
-            # no ids, no attributes
+            # no IDs, no attributes
             else:
                 self.points[i] = {"coordinates": pt, "properties": None}
 
@@ -2843,9 +2855,9 @@ class SimulatedPointPattern:
         The number of points.
     
     obs_to_arc : dict
-        Keys are arc ids (tuple). Values are snapped point information
+        Keys are arc IDs (tuple). Values are snapped point information
         (dict).  Within the snapped point information (dict)
-        keys are observation ids (int), and values are snapped
+        keys are observation IDs (int), and values are snapped
         coordinates.
     
     obs_to_vertex : list
@@ -2857,13 +2869,13 @@ class SimulatedPointPattern:
        [netvtx1, netvtx2, netvtx1, netvtx2, ...].
        
     dist_to_vertex : dict
-        Keys are observations ids (int). Values are distance lookup
+        Keys are observations IDs (int). Values are distance lookup
         (dict). Within distance lookup (dict) keys are the two
         incident vertices of the arc and values are distance to each of
         those arcs.
     
     snapped_coordinates : dict
-        Keys are the point ids (int). Values are the snapped x,y
+        Keys are the point IDs (int). Values are the snapped x,y
         coordinates (tuple).
     
     snap_dist : bool
