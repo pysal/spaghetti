@@ -260,16 +260,15 @@ values are the length.</p>
 <dt><strong>pointpatterns</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are a string name of the pattern and values are
 <code class="docutils literal notranslate"><span class="pre">PointPattern</span></code> class instances.</p>
 </dd>
-<dt><strong>alldistances</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are the vertex IDs (int). Values are tuples with two
-elements as follows (1) a list of the shortest path distances;
-(2) a dict with the key being the id of the destination vertex
+<dt><strong>distance_matrix</strong><span class="classifier"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></span></dt><dd><p>All network vertices (non-observations) distance matrix.</p>
+</dd>
+<dt><strong>network_trees</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are the vertex IDs (int). Values are dictionaries
+with the keys being the IDs of the destination vertex
 and the value being a list of the shortest path.</p>
 </dd>
-<dt><strong>distancematrix</strong><span class="classifier"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></span></dt><dd><p>All network vertices (non-observations) distance matrix.</p>
+<dt><strong>edges</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#list" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">list</span></code></a></span></dt><dd><p>Tuples of graph edge IDs.</p>
 </dd>
-<dt><strong>edges</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#list" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">list</span></code></a></span></dt><dd><p>Tuples of graph edge ids.</p>
-</dd>
-<dt><strong>edge_lengths</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are the graph edge ids (tuple). Values are the graph edge
+<dt><strong>edge_lengths</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are the graph edge IDs (tuple). Values are the graph edge
 length (float).</p>
 </dd>
 <dt><strong>non_articulation_points</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#list" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">list</span></code></a></span></dt><dd><p>All vertices with degree 2 that are not in an isolated
@@ -636,6 +635,7 @@ indicating the same arc is used while also raising an
 <p>Create a network instance.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">spaghetti</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">libpysal</span> <span class="kn">import</span> <span class="n">examples</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;streets.shp&quot;</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -663,15 +663,15 @@ values, may be zero (or approximately zero), but will never be negative.</p>
 <span class="gp">... </span>    <span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;schools.shp&quot;</span><span class="p">),</span> <span class="s2">&quot;schools&quot;</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">False</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">s2d_dist</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">allneighbordistances</span><span class="p">(</span><span class="s2">&quot;crimes&quot;</span><span class="p">,</span> <span class="n">destpattern</span><span class="o">=</span><span class="s2">&quot;schools&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s2d_dist</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">s2d_dist</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
-<span class="go">(4520.72353741989, 6340.422971967315)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">numpy</span><span class="o">.</span><span class="n">round</span><span class="p">((</span><span class="n">s2d_dist</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">s2d_dist</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]),</span> <span class="mi">5</span><span class="p">)</span>
+<span class="go">array([4520.72354, 6340.42297])</span>
 </pre></div>
 </div>
 <p>Shortest paths can also be reconstructed when desired by
 setting the <code class="docutils literal notranslate"><span class="pre">gen_tree</span></code> keyword argument to <code class="docutils literal notranslate"><span class="pre">True</span></code>. Here
 it is shown that the shortest path between school <code class="docutils literal notranslate"><span class="pre">6</span></code> and
 school <code class="docutils literal notranslate"><span class="pre">7</span></code> flows along network arcs through network
-vertices <code class="docutils literal notranslate"><span class="pre">173</span></code> and <code class="docutils literal notranslate"><span class="pre">64</span></code>. The <code class="docutils literal notranslate"><span class="pre">ntw.alldistances</span></code> attribute
+vertices <code class="docutils literal notranslate"><span class="pre">173</span></code> and <code class="docutils literal notranslate"><span class="pre">64</span></code>. The <code class="docutils literal notranslate"><span class="pre">ntw.network_trees</span></code> attribute
 may then be queried for the network elements comprising that path.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d2d_dist</span><span class="p">,</span> <span class="n">tree</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">allneighbordistances</span><span class="p">(</span><span class="s2">&quot;schools&quot;</span><span class="p">,</span> <span class="n">gen_tree</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span><span class="p">[(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">)]</span>
@@ -698,9 +698,9 @@ to the two vertices that bound that end.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl>
-<dt><strong>d1</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The distance to vtx0. Always the vertex with the lesser id.</p>
+<dt><strong>d1</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The distance to vtx0. Always the vertex with the lesser ID.</p>
 </dd>
-<dt><strong>d2</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The distance to vtx1. Always the vertex with the greater id.</p>
+<dt><strong>d2</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#float" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The distance to vtx1. Always the vertex with the greater ID.</p>
 </dd>
 </dl>
 </dd>
@@ -717,7 +717,7 @@ distance from the original location to the snapped location.</p>
 <dd class="field-odd"><dl>
 <dt><strong>pattern</strong><span class="classifier"><a class="reference internal" href="spaghetti.PointPattern.html#spaghetti.PointPattern" title="spaghetti.PointPattern"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.PointPattern</span></code></a></span></dt><dd><p>The point pattern object.</p>
 </dd>
-<dt><strong>idx</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The point id.</p>
+<dt><strong>idx</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The point ID.</p>
 </dd>
 </dl>
 </dd>
@@ -1054,9 +1054,9 @@ same as the destination pattern the diagonal is filled with
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl>
-<dt><strong>nearest</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Nearest neighbor distances keyed by the source point id with
+<dt><strong>nearest</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Nearest neighbor distances keyed by the source point ID with
 the value as as tuple of lists containing
-nearest destination point ids and distance.</p>
+nearest destination point ID(s) and distance.</p>
 </dd>
 </dl>
 </dd>

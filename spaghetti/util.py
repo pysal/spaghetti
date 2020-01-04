@@ -59,7 +59,7 @@ def get_neighbor_distances(ntw, v0, l):
         A spaghetti network object.
     
     v0 : int
-        The vertex id.
+        The vertex ID.
     
     l : dict
         The key is a tuple (start vertex, end vertex); value is ``float``.
@@ -69,7 +69,7 @@ def get_neighbor_distances(ntw, v0, l):
     -------
     
     neighbors : dict
-       The key is an integer (vertex id); value is ``float`` (distance).
+       The key is an integer (vertex ID); value is ``float`` (distance).
     
     Examples
     --------
@@ -389,7 +389,7 @@ def snap_points_to_links(points, links):
     ----------
     
     points : dict
-        Point id as key and (x,y) coordinate as value.
+        Point ID as key and (x,y) coordinate as value.
     
     links : list
         Elements are of type ``libpysal.cg.shapes.Chain``
@@ -400,7 +400,7 @@ def snap_points_to_links(points, links):
     -------
     
     point2link : dict
-        Key [point id (see points in arguments)]; value [a 2-tuple 
+        Key [point ID (see points in arguments)]; value [a 2-tuple 
         ((head, tail), point) where (head, tail) is the target link,
         and point is the snapped location on the link.
     
@@ -521,8 +521,8 @@ def _points_as_gdf(
     points : geopandas.GeoDataFrame
         Network point elements (either vertices or ``network.PointPattern``
         points) as a simple ``geopandas.GeoDataFrame`` of
-        ``shapely.geometry.Point`` objects with an ``id`` column and
-        ``geometry`` column.
+        ``shapely.geometry.Point`` objects with an ``"id"`` column and
+        ``"geometry"`` column.
     
     Notes
     -----
@@ -570,7 +570,7 @@ def _arcs_as_gdf(net, points, id_col=None, geom_col=None):
     points : geopandas.GeoDataFrame
         Network point elements (either vertices or ``network.PointPattern``
         points) as a simple ``geopandas.GeoDataFrame`` of
-        ``shapely.geometry.Point`` objects with an `id` column and
+        ``shapely.geometry.Point`` objects with an ``"id"`` column and
         ``geometry`` column.
     
     Notes
