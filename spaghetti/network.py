@@ -1537,16 +1537,18 @@ class Network:
 
         # create `alldistances` attribute which will store#################################################
         # the distance cost matrix and path tree#########################################################
-        #self.alldistances = {}#####################################################################
+        # self.alldistances = {}#####################################################################
 
         # create an empty matrix which will store shortest path distance
         nvtx = len(self.vertex_list)
-        self.distance_matrix = numpy.empty((nvtx, nvtx))#############################################
-        
-        # create `network_trees` attribute that stores 
+        self.distance_matrix = numpy.empty(
+            (nvtx, nvtx)
+        )  #############################################
+
+        # create `network_trees` attribute that stores
         # all network path trees (if desired)
         self.network_trees = {}
-        
+
         # single-core processing
         if n_processes == 1:
 
@@ -1565,10 +1567,12 @@ class Network:
                     tree = None
 
                 # populate distances and paths
-                #self.alldistances[vtx] = (distance, tree)#############################################
-                self.distance_matrix[vtx] = distance#####################################################
+                # self.alldistances[vtx] = (distance, tree)#############################################
+                self.distance_matrix[
+                    vtx
+                ] = distance  #####################################################
                 self.network_trees[vtx] = tree
-                
+
         # multiprocessing
         else:
 
@@ -1604,10 +1608,11 @@ class Network:
                     tree = None
 
                 # populate distances and paths
-                #self.alldistances[vtx] = (distance[vtx], tree)################################################
-                self.distance_matrix[vtx] = distance[vtx]########################################
+                # self.alldistances[vtx] = (distance[vtx], tree)################################################
+                self.distance_matrix[vtx] = distance[
+                    vtx
+                ]  ########################################
                 self.network_trees[vtx] = tree
-                
 
     def allneighbordistances(
         self,
@@ -1677,6 +1682,7 @@ class Network:
         
         >>> import spaghetti
         >>> from libpysal import examples
+        >>> import numpy
         >>> ntw = spaghetti.Network(examples.get_path("streets.shp"))
         
         Snap observations to the network.
@@ -1704,8 +1710,9 @@ class Network:
         ...     examples.get_path("schools.shp"), "schools", attribute=False
         ... )
         >>> s2d_dist = ntw.allneighbordistances("crimes", destpattern="schools")
-        >>> s2d_dist[0,0], s2d_dist[1,0]
-        (4520.72353741989, 6340.422971967315)
+        >>> numpy.round((s2d_dist[0,0], s2d_dist[1,0]), 5)
+        array([4520.72354, 6340.42297])
+        
         
         Shortest paths can also be reconstructed when desired by
         setting the ``gen_tree`` keyword argument to ``True``. Here

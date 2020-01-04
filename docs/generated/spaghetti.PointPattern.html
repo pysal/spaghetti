@@ -151,14 +151,14 @@ class (<code class="docutils literal notranslate"><span class="pre">True</span><
 </dd>
 <dt class="field-even">Attributes</dt>
 <dd class="field-even"><dl>
-<dt><strong>points</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are the point ids (int). Values are the x,y
+<dt><strong>points</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are the point IDs (int). Values are the x,y
 coordinates (tuple).</p>
 </dd>
 <dt><strong>npoints</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of points.</p>
 </dd>
-<dt><strong>obs_to_arc</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are arc ids (tuple). Values are snapped point information
+<dt><strong>obs_to_arc</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are arc IDs (tuple). Values are snapped point information
 (<code class="docutils literal notranslate"><span class="pre">dict</span></code>).  Within the snapped point information (<code class="docutils literal notranslate"><span class="pre">dict</span></code>)
-keys are observation ids (<code class="docutils literal notranslate"><span class="pre">int</span></code>), and values are snapped
+keys are observation IDs (<code class="docutils literal notranslate"><span class="pre">int</span></code>), and values are snapped
 coordinates.</p>
 </dd>
 <dt><strong>obs_to_vertex</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#list" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">list</span></code></a></span></dt><dd><p>List of incident network vertices to snapped observation points
@@ -168,12 +168,12 @@ netvtx2: obs_id1, netvtx1: obs_id2… netvtx1: obs_idn}, then
 simplified to a list in the form
 [netvtx1, netvtx2, netvtx1, netvtx2, …].</p>
 </dd>
-<dt><strong>dist_to_vertex</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are observations ids (<code class="docutils literal notranslate"><span class="pre">int</span></code>). Values are distance lookup
+<dt><strong>dist_to_vertex</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are observations IDs (<code class="docutils literal notranslate"><span class="pre">int</span></code>). Values are distance lookup
 (<code class="docutils literal notranslate"><span class="pre">dict</span></code>). Within distance lookup (<code class="docutils literal notranslate"><span class="pre">dict</span></code>) keys are the two
 incident vertices of the arc and values are distance to each of
 those arcs.</p>
 </dd>
-<dt><strong>snapped_coordinates</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are the point ids (int). Values are the snapped x,y
+<dt><strong>snapped_coordinates</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are the point IDs (int). Values are the snapped x,y
 coordinates (tuple).</p>
 </dd>
 <dt><strong>snap_dist</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.7)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>Flag as <code class="docutils literal notranslate"><span class="pre">True</span></code> to include the distance from the original
