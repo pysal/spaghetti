@@ -84,18 +84,12 @@ class Network:
         Keys are a string name of the pattern and values are
         ``PointPattern`` class instances.
     
-    alldistances : dict
-        Keys are the vertex IDs (int). Values are tuples with two
-        elements as follows (1) a list of the shortest path distances;
-        (2) a dict with the key being the ID of the destination vertex
-        and the value being a list of the shortest path.
-    
     distance_matrix : numpy.ndarray
         All network vertices (non-observations) distance matrix.
     
     network_trees : dict
         Keys are the vertex IDs (int). Values are dictionaries
-        with the key being the ID of the destination vertex
+        with the keys being the IDs of the destination vertex
         and the value being a list of the shortest path.
     
     edges : list
@@ -960,7 +954,7 @@ class Network:
         # if the a vertex-to-vertex network distance matrix is
         # not present in the `network.Network` object; calculate
         # one at this point
-        if not hasattr(self, "alldistances"):
+        if not hasattr(self, "distance_matrix"):
             self.full_distance_matrix(n_processes, gen_tree=gen_tree)
 
         # identify all network vertices which are within the
@@ -1717,7 +1711,7 @@ class Network:
         setting the ``gen_tree`` keyword argument to ``True``. Here
         it is shown that the shortest path between school ``6`` and
         school ``7`` flows along network arcs through network
-        vertices ``173`` and ``64``. The ``ntw.alldistances`` attribute
+        vertices ``173`` and ``64``. The ``ntw.network_trees`` attribute
         may then be queried for the network elements comprising that path.
         
         >>> d2d_dist, tree = ntw.allneighbordistances("schools", gen_tree=True)
