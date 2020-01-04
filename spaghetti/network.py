@@ -1535,15 +1535,9 @@ class Network:
         
         """
 
-        # create `alldistances` attribute which will store#################################################
-        # the distance cost matrix and path tree#########################################################
-        # self.alldistances = {}#####################################################################
-
         # create an empty matrix which will store shortest path distance
         nvtx = len(self.vertex_list)
-        self.distance_matrix = numpy.empty(
-            (nvtx, nvtx)
-        )  #############################################
+        self.distance_matrix = numpy.empty((nvtx, nvtx))
 
         # create `network_trees` attribute that stores
         # all network path trees (if desired)
@@ -1567,10 +1561,7 @@ class Network:
                     tree = None
 
                 # populate distances and paths
-                # self.alldistances[vtx] = (distance, tree)#############################################
-                self.distance_matrix[
-                    vtx
-                ] = distance  #####################################################
+                self.distance_matrix[vtx] = distance
                 self.network_trees[vtx] = tree
 
         # multiprocessing
@@ -1608,10 +1599,7 @@ class Network:
                     tree = None
 
                 # populate distances and paths
-                # self.alldistances[vtx] = (distance[vtx], tree)################################################
-                self.distance_matrix[vtx] = distance[
-                    vtx
-                ]  ########################################
+                self.distance_matrix[vtx] = distance[vtx]
                 self.network_trees[vtx] = tree
 
     def allneighbordistances(
