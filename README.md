@@ -31,7 +31,7 @@ The following examples can be launched individually as interactive binders from 
 Installation
 ------------
 
-As of version 1.3, `spaghetti` officially supports Python [`3.6`](https://docs.python.org/3.6/) and [`3.7`](https://docs.python.org/3.7/) only. Please make sure that you are operating in a Python >= 3.6 environment.
+As of version 1.3, `spaghetti` officially supports Python [3.6](https://docs.python.org/3.6/) and [3.7](https://docs.python.org/3.7/) only. Please make sure that you are operating in a Python >= 3.6 environment.
 
 **Installing with `conda` via [`conda-forge`](https://github.com/conda-forge/spaghetti-feedstock) (highly recommended)**
 
@@ -82,7 +82,7 @@ Contribute
 
 PySAL-spaghetti is under active development and contributors are welcome.
 
-If you have any suggestion, feature request, or bug report, please open a new [issue](https://github.com/pysal/spaghetti/issues) on GitHub. To submit patches, please follow the PySAL development [guidelines](https://github.com/pysal/pysal/wiki) and open a [pull request](https://github.com/pysal/spaghetti). Once your changes get merged, you’ll automatically be added to the [Contributors List](https://github.com/pysal/spaghetti/graphs/contributors).
+If you have any suggestion, feature request, or bug report, please open a new [issue](https://github.com/pysal/spaghetti/issues) on GitHub. To submit patches, please review [PySAL: Getting Started](http://pysal.org/getting_started#for-developers), the PySAL [development guidelines](https://github.com/pysal/pysal/wiki), the `spaghetti` [contributing guidelines](https://github.com/pysal/spaghetti/blob/master/.github/CONTRIBUTING.md) before  opening a [pull request](https://github.com/pysal/spaghetti/pulls). Once your changes get merged, you’ll automatically be added to the [Contributors List](https://github.com/pysal/spaghetti/graphs/contributors).
 
 Support
 -------
