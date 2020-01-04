@@ -42,8 +42,7 @@ extensions = [  #'sphinx_gallery.gen_gallery',
     "sphinx.ext.doctest",
     "sphinx.ext.intersphinx",
     "numpydoc",
-    "matplotlib.sphinxext.plot_directive",
-    "nbsphinx"
+    "nbsphinx",
 ]
 
 
@@ -173,7 +172,7 @@ html_static_path = ["_static"]
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename =  project + "doc"
+htmlhelp_basename = project + "doc"
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -211,7 +210,7 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [(master_doc, "%s"  % project, u"%s Documentation"  % project, [author], 1)]
+man_pages = [(master_doc, "%s" % project, u"%s Documentation" % project, [author], 1)]
 
 
 # -- Options for Texinfo output -------------------------------------------
@@ -252,18 +251,20 @@ autodoc_default_options = {"members": True, "undoc-members": True}
 # display the source code for Plot directive
 plot_include_source = True
 
+
 def setup(app):
     app.add_stylesheet("pysal-styles.css")
+
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
     "esda": ("https://esda.readthedocs.io/en/latest/", None),
     "geopandas": ("https://geopandas.readthedocs.io/en/latest/", None),
     "libpysal": ("https://pysal.org/libpysal/", None),
-    "matplotlib":("https://matplotlib.org/", None),
+    "matplotlib": ("https://matplotlib.org/", None),
     "numpy": ("https://docs.scipy.org/doc/numpy", None),
     "pandas": ("https://pandas.pydata.org/pandas-docs/stable/", None),
-    "python": ("https://docs.python.org/3.7/", None)
+    "python": ("https://docs.python.org/3.7/", None),
 }
 
 # This is processed by Jinja2 and inserted before each notebook
@@ -307,6 +308,5 @@ nbsphinx_execute_arguments = [
 ]
 
 mathjax_config = {
-    'TeX': {'equationNumbers': {'autoNumber': 'AMS', 'useLabelIds': True}},
+    "TeX": {"equationNumbers": {"autoNumber": "AMS", "useLabelIds": True}},
 }
-

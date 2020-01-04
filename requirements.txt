@@ -1,5 +1,6 @@
-scipy>=0.11
+esda
 numpy>=1.3
 pandas
-esda
 rtree
+scipy>=0.11
+watermark
