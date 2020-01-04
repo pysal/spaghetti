@@ -69,12 +69,16 @@
 
 
 /* Table with a scrollbar */
-.bodycontainer { max-height: 800px; width: 100%; margin: 0; overflow-y: auto; }
+.bodycontainer { max-height: 800px; width: 100%; margin: 0; padding: 0; overflow-y: auto; }
 .table-scrollable { margin: 0; padding: 0; }
   
    .label {
-      color: #222222;
+      color: #E74C3C;
       font-size: 100%;
+      font-weight: bold;
+      width: 125px;
+      text-align: left;
+      vertical-align: middle;
 }
 
   div.body {
