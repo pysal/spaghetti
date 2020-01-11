@@ -400,27 +400,39 @@ class Network:
             setattr(self, obj_type + attr_str, attr)
 
     def _extractnetwork(self):
-        """Used internally to extract a network from a polyline
-        shapefile of a ``geopandas.GeoDataFrame``.
+        """Used internally to extract a network.
         """
 
         # initialize vertex count
         vertex_count = 0
 
-        # determine if input network data is coming from
-        # shapefile or a geopandas.GeoDataFrame
-        if isinstance(self.in_data, str):
+        # determine input network data type
+        in_dtype = str(type(self.in_data)).split("'")[1]
+        is_libpysal_chains = False
+        # set appropriate
+        if in_dtype == "str":
             shps = open(self.in_data)
-        else:
+        elif in_dtype == "list" or in_dtype == "numpy.ndarray":
+            shps = self.in_data
+            shp_type = str(type(shps[0])).split("'")[1]
+            if shp_type == "libpysal.cg.shapes.Chain":
+                is_libpysal_chains = True
+        elif in_dtype == "geopandas.geodataframe.GeoDataFrame":
             shps = self.in_data.geometry
+        else:
+            msg = "'%s' not supported for network instantiation." % in_dtype
+            raise TypeError(msg)
 
         # iterate over each record of the network lines
         for shp in shps:
 
-            # fetch all vertices between euclidean segments
-            # in the line record -- these vertices are
-            # coordinates in an (x, y) tuple.
-            vertices = weights._contW_lists._get_verts(shp)
+            if is_libpysal_chains:
+                vertices = shp.vertices
+            else:
+                # fetch all vertices between euclidean segments
+                # in the line record -- these vertices are
+                # coordinates in an (x, y) tuple.
+                vertices = weights._contW_lists._get_verts(shp)
 
             # iterate over each vertex (v)
             for i, v in enumerate(vertices[:-1]):
