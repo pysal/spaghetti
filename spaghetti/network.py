@@ -29,7 +29,7 @@ class Network:
     Parameters
     ----------
     
-    in_data : {geopandas.GeoDataFrame, str}
+    in_data : {str, geopandas.GeoDataFrame}
         The input geographic data. Either (1) a path to a shapefile
         (str); or (2) a ``geopandas.GeoDataFrame``.
     
@@ -149,6 +149,7 @@ class Network:
     :cite:`Ducruet2014`, :cite:`Weber2016`, for more in-depth discussion on
     spatial networks, graph theory, and location along networks. 
     For related network-centric software see
+    `Snkit` <https://github.com/tomalrussell/snkit>`_ :cite:`tom_russell_2019_3379659`,
     `SANET <http://sanet.csis.u-tokyo.ac.jp>`_ :cite:`Okabe2006a`,
     `NetworkX <https://networkx.github.io>`_ :cite:`Hagberg2008`, 
     `Pandana <http://udst.github.io/pandana/>`_ :cite:`Foti2012`,
