@@ -29,9 +29,10 @@ class Network:
     Parameters
     ----------
     
-    in_data : {str, geopandas.GeoDataFrame}
+    in_data : {str, list, tuple, numpy.ndarray, geopandas.GeoDataFrame}
         The input geographic data. Either (1) a path to a shapefile
-        (str); or (2) a ``geopandas.GeoDataFrame``.
+        (str); (2) an iterable containing libpysal.cg.Chain
+        objects; or (3) a ``geopandas.GeoDataFrame``.
     
     vertex_sig : int
         Round the x and y coordinates of all vertices to ``vertex_sig``
@@ -409,10 +410,11 @@ class Network:
         # determine input network data type
         in_dtype = str(type(self.in_data)).split("'")[1]
         is_libpysal_chains = False
-        # set appropriate
+        supported_iterables = ["list", "tuple", "numpy.ndarray"]
+        # set appropriate geometries
         if in_dtype == "str":
             shps = open(self.in_data)
-        elif in_dtype == "list" or in_dtype == "numpy.ndarray":
+        elif in_dtype in supported_iterables:
             shps = self.in_data
             shp_type = str(type(shps[0])).split("'")[1]
             if shp_type == "libpysal.cg.shapes.Chain":
@@ -426,6 +428,7 @@ class Network:
         # iterate over each record of the network lines
         for shp in shps:
 
+            # if the segments are native pysal geometries
             if is_libpysal_chains:
                 vertices = shp.vertices
             else:
