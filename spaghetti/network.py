@@ -2723,7 +2723,7 @@ class PointPattern:
     Parameters
     ----------
     
-    in_data : {geopandas.GeoDataFrame, str}
+    in_data : {str, geopandas.GeoDataFrame}
         The input geographic data. Either (1) a path to a shapefile
         ``str``; or (2) a ``geopandas.GeoDataFrame``.
         
