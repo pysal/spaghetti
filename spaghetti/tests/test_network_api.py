@@ -62,9 +62,13 @@ class TestNetwork(unittest.TestCase):
         self.ntw_from_chain = spaghetti.Network(in_data=chain)
         self.assertEqual(self.ntw_from_chain.arcs, self.ntw_from_chain.edges)
 
-    def test_network_failure(self):
+    def test_network_failures(self):
+        # try instantiating network with single point
         with self.assertRaises(TypeError):
             spaghetti.Network(in_data=cg.Point((0, 0)))
+        # try instantiating network with list of single point
+        with self.assertRaises(TypeError):
+            spaghetti.Network(in_data=[cg.Point((0, 0))])
 
     @unittest.skipIf(GEOPANDAS_EXTINCT, "Missing Geopandas")
     def test_network_from_geopandas(self):
@@ -171,6 +175,37 @@ class TestNetworkPointPattern(unittest.TestCase):
 
     def tearDown(self):
         pass
+
+    def test_pp_from_libpysal_points(self):
+        # known
+        crimes = self.ntw.pointpatterns["crimes"]
+        known_snapped = set(crimes.snapped_coordinates.values())
+        # points from pysal geometries
+        points = [cg.Point(crimes.points[i]["coordinates"]) for i in crimes.points]
+        self.ntw.snapobservations(points, "cg_crimes")
+        observed = self.ntw.pointpatterns["cg_crimes"]
+        observed_snapped = set(observed.snapped_coordinates.values())
+        self.assertEqual(observed_snapped, known_snapped)
+
+    def test_pp_from_single_libpysal_point(self):
+        # network instantiated from a single libpysal.cg.Chain
+        chain = cg.Chain([cg.Point((1, 1)), cg.Point((2, 2))])
+        known_dist = 1.4142135623730951
+        self.ntw_from_chain = spaghetti.Network(in_data=chain)
+        self.ntw_from_chain.snapobservations(cg.Point((0, 0)), "synth_obs")
+        snap_dist = self.ntw_from_chain.pointpatterns["synth_obs"].dist_snapped[0]
+        self.assertAlmostEqual(snap_dist, known_dist, places=10)
+
+    def test_pp_failures(self):
+        # network instantiated from a single libpysal.cg.Chain
+        chain = cg.Chain([cg.Point((1, 1)), cg.Point((2, 2))])
+        self.ntw_from_chain = spaghetti.Network(in_data=chain)
+        # try snapping chain
+        with self.assertRaises(TypeError):
+            self.ntw_from_chain.snapobservations(chain, "chain")
+        # try snapping list of chain
+        with self.assertRaises(TypeError):
+            self.ntw_from_chain.snapobservations([chain], "chain")
 
     @unittest.skipIf(GEOPANDAS_EXTINCT, "Missing Geopandas")
     def test_pp_from_geopandas(self):
