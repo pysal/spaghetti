@@ -50,11 +50,15 @@ class TestNetwork(unittest.TestCase):
         known_components = self.ntw_from_shp.network_n_components
         known_length = sum(self.ntw_from_shp.arc_lengths.values())
         # network instantiated from libpysal.cg.Chain objects
-        self.ntw_from_chains = spaghetti.Network(in_data=self.chains)
-        self.assertEqual(self.ntw_from_chains.network_n_components, known_components)
-        self.assertAlmostEqual(
-            sum(self.ntw_from_chains.arc_lengths.values()), known_length, places=3
-        )
+        for dtype in (list, tuple, numpy.array):
+            ntw_data = dtype(self.chains)
+            self.ntw_from_chains = spaghetti.Network(in_data=ntw_data)
+            self.assertEqual(
+                self.ntw_from_chains.network_n_components, known_components
+            )
+            self.assertAlmostEqual(
+                sum(self.ntw_from_chains.arc_lengths.values()), known_length, places=3
+            )
 
     def test_network_from_single_libpysal_chain(self):
         # network instantiated from a single libpysal.cg.Chain
