@@ -412,6 +412,9 @@ class Network:
         in_dtype = str(type(self.in_data)).split("'")[1]
         is_libpysal_chains = False
         supported_iterables = ["list", "tuple", "numpy.ndarray"]
+        # type error message
+        msg = "'%s' not supported for point pattern instantiation."
+
         # set appropriate geometries
         if in_dtype == "str":
             shps = open(self.in_data)
@@ -420,14 +423,15 @@ class Network:
             shp_type = str(type(shps[0])).split("'")[1]
             if shp_type == "libpysal.cg.shapes.Chain":
                 is_libpysal_chains = True
+            else:
+                raise TypeError(msg % shp_type)
         elif in_dtype == "libpysal.cg.shapes.Chain":
             shps = [self.in_data]
             is_libpysal_chains = True
         elif in_dtype == "geopandas.geodataframe.GeoDataFrame":
             shps = self.in_data.geometry
         else:
-            msg = "'%s' not supported for network instantiation." % in_dtype
-            raise TypeError(msg)
+            raise TypeError(msg % in_dtype)
 
         # iterate over each record of the network lines
         for shp in shps:
@@ -2729,9 +2733,11 @@ class PointPattern:
     Parameters
     ----------
     
-    in_data : {str, geopandas.GeoDataFrame}
+    in_data : {str, list, tuple, numpy.ndarray, libpysal.cg.Point, geopandas.GeoDataFrame}
         The input geographic data. Either (1) a path to a shapefile
-        ``str``; or (2) a ``geopandas.GeoDataFrame``.
+        (str); (2) an iterable containing libpysal.cg.Point
+        objects; (3) a single libpysal.cg.Point; or
+        (4) a ``geopandas.GeoDataFrame``.
         
     idvariable : str
         Field in the shapefile to use as an ID variable.
@@ -2794,18 +2800,25 @@ class PointPattern:
         # flag for points as libpysal.cg.Point objects
         is_libpysal_points = False
         supported_iterables = ["list", "tuple", "numpy.ndarray"]
+        # type error message
+        msg = "'%s' not supported for point pattern instantiation."
+
         # set appropriate geometries
         if in_dtype == "str":
             from_shp = True
         elif in_dtype in supported_iterables:
             dtype = str(type(in_data[0])).split("'")[1]
-            if dtype == "libpysal.cg.shapes.Pointw":
-                is_libpysal_chains = True
+            if dtype == "libpysal.cg.shapes.Point":
+                is_libpysal_points = True
+            else:
+                raise TypeError(msg % dtype)
+        elif in_dtype == "libpysal.cg.shapes.Point":
+            in_data = [in_data]
+            is_libpysal_points = True
         elif in_dtype == "geopandas.geodataframe.GeoDataFrame":
             from_shp = False
         else:
-            msg = "'%s' not supported for point pattern instantiation." % in_dtype
-            raise TypeError(msg)
+            raise TypeError(msg % in_dtype)
 
         # either set native point ID from dataset or create new IDs
         if idvariable and not is_libpysal_points:
