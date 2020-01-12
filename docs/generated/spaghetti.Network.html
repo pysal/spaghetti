@@ -139,8 +139,10 @@ refer to a network arc or a graph edge.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>in_data</strong><span class="classifier">{<a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.6.1+30.g0da3a7d)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a>}</span></dt><dd><p>The input geographic data. Either (1) a path to a shapefile
-(str); or (2) a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code>.</p>
+<dt><strong>in_data</strong><span class="classifier">{<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#list" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#tuple" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">tuple</span></code></a>, <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>, <a class="reference external" href="https://pysal.org/libpysal/generated/libpysal.cg.Chain.html#libpysal.cg.Chain" title="(in libpysal v4.2.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">libpysal.cg.Chain</span></code></a>, <a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.6.1+33.gadd5fe9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a>}</span></dt><dd><p>The input geographic data. Either (1) a path to a shapefile
+(str); (2) an iterable containing <code class="docutils literal notranslate"><span class="pre">libpysal.cg.Chain</span></code>
+objects; (3) a single <code class="docutils literal notranslate"><span class="pre">libpysal.cg.Chain</span></code>; or
+(4) a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code>.</p>
 </dd>
 <dt><strong>vertex_sig</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>Round the x and y coordinates of all vertices to <code class="docutils literal notranslate"><span class="pre">vertex_sig</span></code>
 significant digits (combined significant digits on the left and
@@ -171,10 +173,11 @@ nodes. Default is <code class="docutils literal notranslate"><span class="pre">T
 <a class="bibtex reference internal" href="../references.html#ducruet2014" id="id9">[DB14]</a>, <a class="bibtex reference internal" href="../references.html#weber2016" id="id10">[Web16]</a>, for more in-depth discussion on
 spatial networks, graph theory, and location along networks. 
 For related network-centric software see
-<a class="reference external" href="http://sanet.csis.u-tokyo.ac.jp">SANET</a> <a class="bibtex reference internal" href="../references.html#okabe2006a" id="id11">[OOS06]</a>,
-<a class="reference external" href="https://networkx.github.io">NetworkX</a> <a class="bibtex reference internal" href="../references.html#hagberg2008" id="id12">[HSS08]</a>, 
-<a class="reference external" href="http://udst.github.io/pandana/">Pandana</a> <a class="bibtex reference internal" href="../references.html#foti2012" id="id13">[FWL12]</a>,
-and <a class="reference external" href="https://osmnx.readthedocs.io/en/stable/">OSMnx</a> <a class="bibtex reference internal" href="../references.html#boeing2017" id="id14">[Boe17]</a>.</p>
+<a class="reference external" href="https://github.com/tomalrussell/snkit">Snkit</a> <a class="bibtex reference internal" href="../references.html#tom-russell-2019-3379659" id="id11">[RK19]</a>,
+<a class="reference external" href="http://sanet.csis.u-tokyo.ac.jp">SANET</a> <a class="bibtex reference internal" href="../references.html#okabe2006a" id="id12">[OOS06]</a>,
+<a class="reference external" href="https://networkx.github.io">NetworkX</a> <a class="bibtex reference internal" href="../references.html#hagberg2008" id="id13">[HSS08]</a>, 
+<a class="reference external" href="http://udst.github.io/pandana/">Pandana</a> <a class="bibtex reference internal" href="../references.html#foti2012" id="id14">[FWL12]</a>,
+and <a class="reference external" href="https://osmnx.readthedocs.io/en/stable/">OSMnx</a> <a class="bibtex reference internal" href="../references.html#boeing2017" id="id15">[Boe17]</a>.</p>
 <p class="rubric">Examples</p>
 <p>Create an instance of a network.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">spaghetti</span>
@@ -414,8 +417,8 @@ Defaults to the maximum observed nearest neighbor distance.</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>Based on <a class="bibtex reference internal" href="../references.html#doi-10-1002-9780470549094-ch5" id="id15">[OSullivanU10]</a> and mentioned in
-<a class="bibtex reference internal" href="../references.html#doi-10-1002-9781119967101-ch5" id="id16">[OS12c]</a>.</p>
+<p>Based on <a class="bibtex reference internal" href="../references.html#doi-10-1002-9780470549094-ch5" id="id16">[OSullivanU10]</a> and mentioned in
+<a class="bibtex reference internal" href="../references.html#doi-10-1002-9781119967101-ch5" id="id17">[OS12c]</a>.</p>
 <p class="rubric">Examples</p>
 <p>Create a network instance.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">spaghetti</span>
@@ -479,8 +482,8 @@ Defaults to the maximum observed nearest neighbor distance.</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>Based on <a class="bibtex reference internal" href="../references.html#doi-10-1002-9780470549094-ch5" id="id17">[OSullivanU10]</a> and mentioned in
-<a class="bibtex reference internal" href="../references.html#doi-10-1002-9781119967101-ch5" id="id18">[OS12c]</a>.</p>
+<p>Based on <a class="bibtex reference internal" href="../references.html#doi-10-1002-9780470549094-ch5" id="id18">[OSullivanU10]</a> and mentioned in
+<a class="bibtex reference internal" href="../references.html#doi-10-1002-9781119967101-ch5" id="id19">[OS12c]</a>.</p>
 <p>[note from <cite>jlaura</cite>] Both the <cite>G</cite> and <cite>K</cite> functions generate a
 full distance matrix.  This is because, I know that the full 
 generation is correct and I believe that the truncated generated, 
@@ -548,8 +551,8 @@ Defaults to the maximum observed nearest neighbor distance.</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>Based on <a class="bibtex reference internal" href="../references.html#doi-10-1111-j-1538-4632-2001-tb00448-x" id="id19">[OY01]</a> 
-and <a class="bibtex reference internal" href="../references.html#doi-10-1002-9781119967101-ch6" id="id20">[OS12b]</a>.</p>
+<p>Based on <a class="bibtex reference internal" href="../references.html#doi-10-1111-j-1538-4632-2001-tb00448-x" id="id20">[OY01]</a> 
+and <a class="bibtex reference internal" href="../references.html#doi-10-1002-9781119967101-ch6" id="id21">[OS12b]</a>.</p>
 <p>[note from <cite>jlaura</cite>] Both the <cite>G</cite> and <cite>K</cite> functions generate a
 full distance matrix.  This is because, I know that the full 
 generation is correct and I believe that the truncated generated, 
@@ -754,7 +757,7 @@ representation (<code class="docutils literal notranslate"><span class="pre">Tru
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>See <a class="bibtex reference internal" href="../references.html#pysal2007" id="id21">[RA07]</a> and <a class="bibtex reference internal" href="../references.html#esda-2019" id="id22">[RWK+19]</a> for more details.</p>
+<p>See <a class="bibtex reference internal" href="../references.html#pysal2007" id="id22">[RA07]</a> and <a class="bibtex reference internal" href="../references.html#esda-2019" id="id23">[RWK+19]</a> for more details.</p>
 <p class="rubric">Examples</p>
 <p>Instantiate a network.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">spaghetti</span>
@@ -886,7 +889,7 @@ the network.</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>See <a class="bibtex reference internal" href="../references.html#anselinrey2014" id="id23">[AR14]</a> and <a class="bibtex reference internal" href="../references.html#rey-open-2015" id="id24">[RAL+15]</a> for more details
+<p>See <a class="bibtex reference internal" href="../references.html#anselinrey2014" id="id24">[AR14]</a> and <a class="bibtex reference internal" href="../references.html#rey-open-2015" id="id25">[RAL+15]</a> for more details
 regarding spatial weights.</p>
 <p class="rubric">Examples</p>
 <p>Instantiate an instance of a network.</p>
@@ -994,7 +997,7 @@ Default is <code class="docutils literal notranslate"><span class="pre">False</s
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>Based on <a class="bibtex reference internal" href="../references.html#dijkstra1959a" id="id25">[Dij59]</a> and <a class="bibtex reference internal" href="../references.html#doi-10-1002-9781119967101-ch3" id="id26">[OS12a]</a>.</p>
+<p>Based on <a class="bibtex reference internal" href="../references.html#dijkstra1959a" id="id26">[Dij59]</a> and <a class="bibtex reference internal" href="../references.html#doi-10-1002-9781119967101-ch3" id="id27">[OS12a]</a>.</p>
 </dd></dl>
 
 <dl class="method">
@@ -1187,7 +1190,7 @@ attribute of the network object.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>in_data</strong><span class="classifier">{<a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.6.1+30.g0da3a7d)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a>}</span></dt><dd><p>The input geographic data. Either (1) a path to a
+<dt><strong>in_data</strong><span class="classifier">{<a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.6.1+33.gadd5fe9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a>}</span></dt><dd><p>The input geographic data. Either (1) a path to a
 shapefile (str); or (2) a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code>.</p>
 </dd>
 <dt><strong>name</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>Name to be assigned to the point dataset.</p>
@@ -1202,7 +1205,7 @@ Default is <code class="docutils literal notranslate"><span class="pre">False</s
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>See <a class="bibtex reference internal" href="../references.html#doi-10-1111-gean-12211" id="id27">[GFH19]</a> for a detailed discussion on
+<p>See <a class="bibtex reference internal" href="../references.html#doi-10-1111-gean-12211" id="id28">[GFH19]</a> for a detailed discussion on
 the modeling consequences of snapping points to spatial networks.</p>
 <p class="rubric">Examples</p>
 <p>Instantiate a network.</p>

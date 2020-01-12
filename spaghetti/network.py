@@ -29,9 +29,11 @@ class Network:
     Parameters
     ----------
     
-    in_data : {geopandas.GeoDataFrame, str}
+    in_data : {str, list, tuple, numpy.ndarray, libpysal.cg.Chain, geopandas.GeoDataFrame}
         The input geographic data. Either (1) a path to a shapefile
-        (str); or (2) a ``geopandas.GeoDataFrame``.
+        (str); (2) an iterable containing ``libpysal.cg.Chain``
+        objects; (3) a single ``libpysal.cg.Chain``; or
+        (4) a ``geopandas.GeoDataFrame``.
     
     vertex_sig : int
         Round the x and y coordinates of all vertices to ``vertex_sig``
@@ -149,6 +151,7 @@ class Network:
     :cite:`Ducruet2014`, :cite:`Weber2016`, for more in-depth discussion on
     spatial networks, graph theory, and location along networks. 
     For related network-centric software see
+    `Snkit <https://github.com/tomalrussell/snkit>`_ :cite:`tom_russell_2019_3379659`,
     `SANET <http://sanet.csis.u-tokyo.ac.jp>`_ :cite:`Okabe2006a`,
     `NetworkX <https://networkx.github.io>`_ :cite:`Hagberg2008`, 
     `Pandana <http://udst.github.io/pandana/>`_ :cite:`Foti2012`,
@@ -399,27 +402,48 @@ class Network:
             setattr(self, obj_type + attr_str, attr)
 
     def _extractnetwork(self):
-        """Used internally to extract a network from a polyline
-        shapefile of a ``geopandas.GeoDataFrame``.
+        """Used internally to extract a network.
         """
 
         # initialize vertex count
         vertex_count = 0
 
-        # determine if input network data is coming from
-        # shapefile or a geopandas.GeoDataFrame
-        if isinstance(self.in_data, str):
+        # determine input network data type
+        in_dtype = str(type(self.in_data)).split("'")[1]
+        is_libpysal_chains = False
+        supported_iterables = ["list", "tuple", "numpy.ndarray"]
+        # type error message
+        msg = "'%s' not supported for point pattern instantiation."
+
+        # set appropriate geometries
+        if in_dtype == "str":
             shps = open(self.in_data)
-        else:
+        elif in_dtype in supported_iterables:
+            shps = self.in_data
+            shp_type = str(type(shps[0])).split("'")[1]
+            if shp_type == "libpysal.cg.shapes.Chain":
+                is_libpysal_chains = True
+            else:
+                raise TypeError(msg % shp_type)
+        elif in_dtype == "libpysal.cg.shapes.Chain":
+            shps = [self.in_data]
+            is_libpysal_chains = True
+        elif in_dtype == "geopandas.geodataframe.GeoDataFrame":
             shps = self.in_data.geometry
+        else:
+            raise TypeError(msg % in_dtype)
 
         # iterate over each record of the network lines
         for shp in shps:
 
-            # fetch all vertices between euclidean segments
-            # in the line record -- these vertices are
-            # coordinates in an (x, y) tuple.
-            vertices = weights._contW_lists._get_verts(shp)
+            # if the segments are native pysal geometries
+            if is_libpysal_chains:
+                vertices = shp.vertices
+            else:
+                # fetch all vertices between euclidean segments
+                # in the line record -- these vertices are
+                # coordinates in an (x, y) tuple.
+                vertices = weights._contW_lists._get_verts(shp)
 
             # iterate over each vertex (v)
             for i, v in enumerate(vertices[:-1]):
@@ -863,7 +887,6 @@ class Network:
 
                 # for each network link (2)
                 for neigh in links:
-
                     # skip if comparing link to itself
                     if key == neigh:
                         continue
@@ -887,6 +910,9 @@ class Network:
                     # stepped beyond a possible neighbor
                     if key[1] > neigh[1]:
                         working = False
+
+            if len(links) == 1:
+                working = False
 
         # call libpysal for `W` instance
         w = weights.W(neighbors, weights=_weights)
@@ -2707,9 +2733,11 @@ class PointPattern:
     Parameters
     ----------
     
-    in_data : {geopandas.GeoDataFrame, str}
+    in_data : {str, list, tuple, numpy.ndarray, libpysal.cg.Point, geopandas.GeoDataFrame}
         The input geographic data. Either (1) a path to a shapefile
-        ``str``; or (2) a ``geopandas.GeoDataFrame``.
+        (str); (2) an iterable containing ``libpysal.cg.Point``
+        objects; (3) a single ``libpysal.cg.Point``; or
+        (4) a ``geopandas.GeoDataFrame``.
         
     idvariable : str
         Field in the shapefile to use as an ID variable.
@@ -2765,27 +2793,51 @@ class PointPattern:
         self.points = {}
         self.npoints = 0
 
+        # determine input point data type
+        in_dtype = str(type(in_data)).split("'")[1]
         # flag for points from a shapefile
-        if isinstance(in_data, str):
+        from_shp = False
+        # flag for points as libpysal.cg.Point objects
+        is_libpysal_points = False
+        supported_iterables = ["list", "tuple", "numpy.ndarray"]
+        # type error message
+        msg = "'%s' not supported for point pattern instantiation."
+
+        # set appropriate geometries
+        if in_dtype == "str":
             from_shp = True
-        else:
+        elif in_dtype in supported_iterables:
+            dtype = str(type(in_data[0])).split("'")[1]
+            if dtype == "libpysal.cg.shapes.Point":
+                is_libpysal_points = True
+            else:
+                raise TypeError(msg % dtype)
+        elif in_dtype == "libpysal.cg.shapes.Point":
+            in_data = [in_data]
+            is_libpysal_points = True
+        elif in_dtype == "geopandas.geodataframe.GeoDataFrame":
             from_shp = False
+        else:
+            raise TypeError(msg % in_dtype)
 
         # either set native point ID from dataset or create new IDs
-        if idvariable:
+        if idvariable and not is_libpysal_points:
             ids = weights.util.get_ids(in_data, idvariable)
         else:
             ids = None
 
         # extract the point geometries
-        if from_shp:
-            pts = open(in_data)
+        if not is_libpysal_points:
+            if from_shp:
+                pts = open(in_data)
+            else:
+                pts_objs = list(in_data.geometry)
+                pts = [cg.shapes.Point((p.x, p.y)) for p in pts_objs]
         else:
-            pts_objs = list(in_data.geometry)
-            pts = [cg.shapes.Point((p.x, p.y)) for p in pts_objs]
+            pts = in_data
 
         # fetch attributes if requested
-        if attribute:
+        if attribute and not is_libpysal_points:
 
             # open the database file if data is from shapefile
             if from_shp:
