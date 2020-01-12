@@ -23,6 +23,14 @@ class TestNetwork(unittest.TestCase):
         )
         self.n_known_arcs, self.n_known_vertices = 303, 230
 
+        # native pysal geometries
+        self.chains = chains = [
+            cg.Chain(
+                [cg.Point(self.ntw_from_shp.vertex_coords[vertex]) for vertex in arc]
+            )
+            for arc in self.ntw_from_shp.arcs
+        ]
+
     def tearDown(self):
         pass
 
@@ -37,6 +45,20 @@ class TestNetwork(unittest.TestCase):
         self.assertIn(0, self.ntw_from_shp.adjacencylist[1])
         self.assertIn(0, self.ntw_from_shp.adjacencylist[2])
         self.assertNotIn(0, self.ntw_from_shp.adjacencylist[3])
+
+    def test_network_from_libpysal_chains(self):
+        known_components = self.ntw_from_shp.network_n_components
+        known_length = sum(self.ntw_from_shp.arc_lengths.values())
+        # network instantiated from libpysal.cg.Chain objects
+        self.ntw_from_chains = spaghetti.Network(in_data=self.chains, w_components=True)
+        self.assertEqual(self.ntw_from_chains.network_n_components, known_components)
+        self.assertAlmostEqual(
+            sum(self.ntw_from_chains.arc_lengths.values()), known_length, places=3
+        )
+
+    def test_network_failure(self):
+        with self.assertRaises(TypeError):
+            spaghetti.Network(in_data=cg.Point((0, 0)))
 
     @unittest.skipIf(GEOPANDAS_EXTINCT, "Missing Geopandas")
     def test_network_from_geopandas(self):
