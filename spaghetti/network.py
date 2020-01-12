@@ -2733,7 +2733,7 @@ class PointPattern:
     Parameters
     ----------
     
-    in_data : {str, list, tuple, numpy.ndarray, libpysal.cg.Point, geopandas.GeoDataFrame}
+    in_data : {str, list, tuple, libpysal.cg.Point, geopandas.GeoDataFrame}
         The input geographic data. Either (1) a path to a shapefile
         (str); (2) an iterable containing ``libpysal.cg.Point``
         objects; (3) a single ``libpysal.cg.Point``; or
@@ -2799,7 +2799,7 @@ class PointPattern:
         from_shp = False
         # flag for points as libpysal.cg.Point objects
         is_libpysal_points = False
-        supported_iterables = ["list", "tuple", "numpy.ndarray"]
+        supported_iterables = ["list", "tuple"]
         # type error message
         msg = "'%s' not supported for point pattern instantiation."
 

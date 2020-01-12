@@ -50,11 +50,15 @@ class TestNetwork(unittest.TestCase):
         known_components = self.ntw_from_shp.network_n_components
         known_length = sum(self.ntw_from_shp.arc_lengths.values())
         # network instantiated from libpysal.cg.Chain objects
-        self.ntw_from_chains = spaghetti.Network(in_data=self.chains)
-        self.assertEqual(self.ntw_from_chains.network_n_components, known_components)
-        self.assertAlmostEqual(
-            sum(self.ntw_from_chains.arc_lengths.values()), known_length, places=3
-        )
+        for dtype in (list, tuple, numpy.array):
+            ntw_data = dtype(self.chains)
+            self.ntw_from_chains = spaghetti.Network(in_data=ntw_data)
+            self.assertEqual(
+                self.ntw_from_chains.network_n_components, known_components
+            )
+            self.assertAlmostEqual(
+                sum(self.ntw_from_chains.arc_lengths.values()), known_length, places=3
+            )
 
     def test_network_from_single_libpysal_chain(self):
         # network instantiated from a single libpysal.cg.Chain
@@ -182,10 +186,12 @@ class TestNetworkPointPattern(unittest.TestCase):
         known_snapped = set(crimes.snapped_coordinates.values())
         # points from pysal geometries
         points = [cg.Point(crimes.points[i]["coordinates"]) for i in crimes.points]
-        self.ntw.snapobservations(points, "cg_crimes")
-        observed = self.ntw.pointpatterns["cg_crimes"]
-        observed_snapped = set(observed.snapped_coordinates.values())
-        self.assertEqual(observed_snapped, known_snapped)
+        for dtype in (list, tuple):
+            point_data = dtype(points)
+            self.ntw.snapobservations(point_data, "cg_crimes")
+            observed = self.ntw.pointpatterns["cg_crimes"]
+            observed_snapped = set(observed.snapped_coordinates.values())
+            self.assertEqual(observed_snapped, known_snapped)
 
     def test_pp_from_single_libpysal_point(self):
         # network instantiated from a single libpysal.cg.Chain
