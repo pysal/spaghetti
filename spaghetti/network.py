@@ -31,8 +31,8 @@ class Network:
     
     in_data : {str, list, tuple, numpy.ndarray, libpysal.cg.Chain, geopandas.GeoDataFrame}
         The input geographic data. Either (1) a path to a shapefile
-        (str); (2) an iterable containing libpysal.cg.Chain
-        objects; (3) a single libpysal.cg.Chain; or
+        (str); (2) an iterable containing ``libpysal.cg.Chain``
+        objects; (3) a single ``libpysal.cg.Chain``; or
         (4) a ``geopandas.GeoDataFrame``.
     
     vertex_sig : int
@@ -151,7 +151,7 @@ class Network:
     :cite:`Ducruet2014`, :cite:`Weber2016`, for more in-depth discussion on
     spatial networks, graph theory, and location along networks. 
     For related network-centric software see
-    `Snkit` <https://github.com/tomalrussell/snkit>`_ :cite:`tom_russell_2019_3379659`,
+    `Snkit <https://github.com/tomalrussell/snkit>`_ :cite:`tom_russell_2019_3379659`,
     `SANET <http://sanet.csis.u-tokyo.ac.jp>`_ :cite:`Okabe2006a`,
     `NetworkX <https://networkx.github.io>`_ :cite:`Hagberg2008`, 
     `Pandana <http://udst.github.io/pandana/>`_ :cite:`Foti2012`,
@@ -2735,8 +2735,8 @@ class PointPattern:
     
     in_data : {str, list, tuple, numpy.ndarray, libpysal.cg.Point, geopandas.GeoDataFrame}
         The input geographic data. Either (1) a path to a shapefile
-        (str); (2) an iterable containing libpysal.cg.Point
-        objects; (3) a single libpysal.cg.Point; or
+        (str); (2) an iterable containing ``libpysal.cg.Point``
+        objects; (3) a single ``libpysal.cg.Point``; or
         (4) a ``geopandas.GeoDataFrame``.
         
     idvariable : str
