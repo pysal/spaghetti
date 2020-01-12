@@ -153,9 +153,11 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    </span>
-<span class="sd">    in_data : {geopandas.GeoDataFrame, str}</span>
+<span class="sd">    in_data : {str, list, tuple, numpy.ndarray, libpysal.cg.Chain, geopandas.GeoDataFrame}</span>
 <span class="sd">        The input geographic data. Either (1) a path to a shapefile</span>
-<span class="sd">        (str); or (2) a ``geopandas.GeoDataFrame``.</span>
+<span class="sd">        (str); (2) an iterable containing ``libpysal.cg.Chain``</span>
+<span class="sd">        objects; (3) a single ``libpysal.cg.Chain``; or</span>
+<span class="sd">        (4) a ``geopandas.GeoDataFrame``.</span>
 <span class="sd">    </span>
 <span class="sd">    vertex_sig : int</span>
 <span class="sd">        Round the x and y coordinates of all vertices to ``vertex_sig``</span>
@@ -273,6 +275,7 @@
 <span class="sd">    :cite:`Ducruet2014`, :cite:`Weber2016`, for more in-depth discussion on</span>
 <span class="sd">    spatial networks, graph theory, and location along networks. </span>
 <span class="sd">    For related network-centric software see</span>
+<span class="sd">    `Snkit &lt;https://github.com/tomalrussell/snkit&gt;`_ :cite:`tom_russell_2019_3379659`,</span>
 <span class="sd">    `SANET &lt;http://sanet.csis.u-tokyo.ac.jp&gt;`_ :cite:`Okabe2006a`,</span>
 <span class="sd">    `NetworkX &lt;https://networkx.github.io&gt;`_ :cite:`Hagberg2008`, </span>
 <span class="sd">    `Pandana &lt;http://udst.github.io/pandana/&gt;`_ :cite:`Foti2012`,</span>
@@ -523,27 +526,48 @@
             <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj_type</span> <span class="o">+</span> <span class="n">attr_str</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_extractnetwork</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Used internally to extract a network from a polyline</span>
-<span class="sd">        shapefile of a ``geopandas.GeoDataFrame``.</span>
+        <span class="sd">&quot;&quot;&quot;Used internally to extract a network.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># initialize vertex count</span>
         <span class="n">vertex_count</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="c1"># determine if input network data is coming from</span>
-        <span class="c1"># shapefile or a geopandas.GeoDataFrame</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_data</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="c1"># determine input network data type</span>
+        <span class="n">in_dtype</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_data</span><span class="p">))</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">is_libpysal_chains</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">supported_iterables</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;list&quot;</span><span class="p">,</span> <span class="s2">&quot;tuple&quot;</span><span class="p">,</span> <span class="s2">&quot;numpy.ndarray&quot;</span><span class="p">]</span>
+        <span class="c1"># type error message</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;&#39;</span><span class="si">%s</span><span class="s2">&#39; not supported for point pattern instantiation.&quot;</span>
+
+        <span class="c1"># set appropriate geometries</span>
+        <span class="k">if</span> <span class="n">in_dtype</span> <span class="o">==</span> <span class="s2">&quot;str&quot;</span><span class="p">:</span>
             <span class="n">shps</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_data</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">in_dtype</span> <span class="ow">in</span> <span class="n">supported_iterables</span><span class="p">:</span>
+            <span class="n">shps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_data</span>
+            <span class="n">shp_type</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">shps</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">shp_type</span> <span class="o">==</span> <span class="s2">&quot;libpysal.cg.shapes.Chain&quot;</span><span class="p">:</span>
+                <span class="n">is_libpysal_chains</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span> <span class="o">%</span> <span class="n">shp_type</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">in_dtype</span> <span class="o">==</span> <span class="s2">&quot;libpysal.cg.shapes.Chain&quot;</span><span class="p">:</span>
+            <span class="n">shps</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">in_data</span><span class="p">]</span>
+            <span class="n">is_libpysal_chains</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">in_dtype</span> <span class="o">==</span> <span class="s2">&quot;geopandas.geodataframe.GeoDataFrame&quot;</span><span class="p">:</span>
             <span class="n">shps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_data</span><span class="o">.</span><span class="n">geometry</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span> <span class="o">%</span> <span class="n">in_dtype</span><span class="p">)</span>
 
         <span class="c1"># iterate over each record of the network lines</span>
         <span class="k">for</span> <span class="n">shp</span> <span class="ow">in</span> <span class="n">shps</span><span class="p">:</span>
 
-            <span class="c1"># fetch all vertices between euclidean segments</span>
-            <span class="c1"># in the line record -- these vertices are</span>
-            <span class="c1"># coordinates in an (x, y) tuple.</span>
-            <span class="n">vertices</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">_contW_lists</span><span class="o">.</span><span class="n">_get_verts</span><span class="p">(</span><span class="n">shp</span><span class="p">)</span>
+            <span class="c1"># if the segments are native pysal geometries</span>
+            <span class="k">if</span> <span class="n">is_libpysal_chains</span><span class="p">:</span>
+                <span class="n">vertices</span> <span class="o">=</span> <span class="n">shp</span><span class="o">.</span><span class="n">vertices</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># fetch all vertices between euclidean segments</span>
+                <span class="c1"># in the line record -- these vertices are</span>
+                <span class="c1"># coordinates in an (x, y) tuple.</span>
+                <span class="n">vertices</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">_contW_lists</span><span class="o">.</span><span class="n">_get_verts</span><span class="p">(</span><span class="n">shp</span><span class="p">)</span>
 
             <span class="c1"># iterate over each vertex (v)</span>
             <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">vertices</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
@@ -987,7 +1011,6 @@
 
                 <span class="c1"># for each network link (2)</span>
                 <span class="k">for</span> <span class="n">neigh</span> <span class="ow">in</span> <span class="n">links</span><span class="p">:</span>
-
                     <span class="c1"># skip if comparing link to itself</span>
                     <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="n">neigh</span><span class="p">:</span>
                         <span class="k">continue</span>
@@ -1011,6 +1034,9 @@
                     <span class="c1"># stepped beyond a possible neighbor</span>
                     <span class="k">if</span> <span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">neigh</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
                         <span class="n">working</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">links</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">working</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="c1"># call libpysal for `W` instance</span>
         <span class="n">w</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">W</span><span class="p">(</span><span class="n">neighbors</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">_weights</span><span class="p">)</span>
@@ -2831,9 +2857,11 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    </span>
-<span class="sd">    in_data : {geopandas.GeoDataFrame, str}</span>
+<span class="sd">    in_data : {str, list, tuple, numpy.ndarray, libpysal.cg.Point, geopandas.GeoDataFrame}</span>
 <span class="sd">        The input geographic data. Either (1) a path to a shapefile</span>
-<span class="sd">        ``str``; or (2) a ``geopandas.GeoDataFrame``.</span>
+<span class="sd">        (str); (2) an iterable containing ``libpysal.cg.Point``</span>
+<span class="sd">        objects; (3) a single ``libpysal.cg.Point``; or</span>
+<span class="sd">        (4) a ``geopandas.GeoDataFrame``.</span>
 <span class="sd">        </span>
 <span class="sd">    idvariable : str</span>
 <span class="sd">        Field in the shapefile to use as an ID variable.</span>
@@ -2889,27 +2917,51 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">npoints</span> <span class="o">=</span> <span class="mi">0</span>
 
+        <span class="c1"># determine input point data type</span>
+        <span class="n">in_dtype</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">in_data</span><span class="p">))</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
         <span class="c1"># flag for points from a shapefile</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">in_data</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">from_shp</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1"># flag for points as libpysal.cg.Point objects</span>
+        <span class="n">is_libpysal_points</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">supported_iterables</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;list&quot;</span><span class="p">,</span> <span class="s2">&quot;tuple&quot;</span><span class="p">,</span> <span class="s2">&quot;numpy.ndarray&quot;</span><span class="p">]</span>
+        <span class="c1"># type error message</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;&#39;</span><span class="si">%s</span><span class="s2">&#39; not supported for point pattern instantiation.&quot;</span>
+
+        <span class="c1"># set appropriate geometries</span>
+        <span class="k">if</span> <span class="n">in_dtype</span> <span class="o">==</span> <span class="s2">&quot;str&quot;</span><span class="p">:</span>
             <span class="n">from_shp</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="k">else</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">in_dtype</span> <span class="ow">in</span> <span class="n">supported_iterables</span><span class="p">:</span>
+            <span class="n">dtype</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">in_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">dtype</span> <span class="o">==</span> <span class="s2">&quot;libpysal.cg.shapes.Point&quot;</span><span class="p">:</span>
+                <span class="n">is_libpysal_points</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span> <span class="o">%</span> <span class="n">dtype</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">in_dtype</span> <span class="o">==</span> <span class="s2">&quot;libpysal.cg.shapes.Point&quot;</span><span class="p">:</span>
+            <span class="n">in_data</span> <span class="o">=</span> <span class="p">[</span><span class="n">in_data</span><span class="p">]</span>
+            <span class="n">is_libpysal_points</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">in_dtype</span> <span class="o">==</span> <span class="s2">&quot;geopandas.geodataframe.GeoDataFrame&quot;</span><span class="p">:</span>
             <span class="n">from_shp</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span> <span class="o">%</span> <span class="n">in_dtype</span><span class="p">)</span>
 
         <span class="c1"># either set native point ID from dataset or create new IDs</span>
-        <span class="k">if</span> <span class="n">idvariable</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">idvariable</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_libpysal_points</span><span class="p">:</span>
             <span class="n">ids</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">get_ids</span><span class="p">(</span><span class="n">in_data</span><span class="p">,</span> <span class="n">idvariable</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">ids</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># extract the point geometries</span>
-        <span class="k">if</span> <span class="n">from_shp</span><span class="p">:</span>
-            <span class="n">pts</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">in_data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_libpysal_points</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">from_shp</span><span class="p">:</span>
+                <span class="n">pts</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">in_data</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">pts_objs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">in_data</span><span class="o">.</span><span class="n">geometry</span><span class="p">)</span>
+                <span class="n">pts</span> <span class="o">=</span> <span class="p">[</span><span class="n">cg</span><span class="o">.</span><span class="n">shapes</span><span class="o">.</span><span class="n">Point</span><span class="p">((</span><span class="n">p</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span><span class="p">))</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pts_objs</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">pts_objs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">in_data</span><span class="o">.</span><span class="n">geometry</span><span class="p">)</span>
-            <span class="n">pts</span> <span class="o">=</span> <span class="p">[</span><span class="n">cg</span><span class="o">.</span><span class="n">shapes</span><span class="o">.</span><span class="n">Point</span><span class="p">((</span><span class="n">p</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span><span class="p">))</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pts_objs</span><span class="p">]</span>
+            <span class="n">pts</span> <span class="o">=</span> <span class="n">in_data</span>
 
         <span class="c1"># fetch attributes if requested</span>
-        <span class="k">if</span> <span class="n">attribute</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">attribute</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_libpysal_points</span><span class="p">:</span>
 
             <span class="c1"># open the database file if data is from shapefile</span>
             <span class="k">if</span> <span class="n">from_shp</span><span class="p">:</span>
