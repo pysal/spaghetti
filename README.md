@@ -104,6 +104,8 @@ The project is licensed under the [BSD license](https://github.com/pysal/spaghet
 BibTeX Citation
 ---------------
 
+If you use PySAL-spaghetti in a scientific publication, we would appreciate using the following citation:
+
 ```
 @misc{Gaboardi2018,
     author    = {Gaboardi, James D. and Laura, Jay and Rey, Sergio and Wolf, Levi John and Folch, David C. and Kang, Wei and Stephens, Philip and Schmidt, Charles},
