@@ -77,7 +77,7 @@ If you use PySAL-spaghetti in a scientific publication, we would appreciate usin
    :caption: Contents:
 
    Installation <installation>
-   Tutorial <tutorial>
+   Tutorials <tutorials>
    API <api>
    References <references>
 
