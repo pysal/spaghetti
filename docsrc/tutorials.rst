@@ -1,14 +1,20 @@
-.. tutorial
+.. tutorials
 
 
-Tutorial
-========
+Tutorials
+=========
 
 .. toctree::
     :maxdepth: 1
-    :caption: Contents:
+    :caption: Basic:
 
     notebooks/Basic_spaghetti_tutorial.ipynb
+    notebooks/Connected-Components.ipynb
+    
+.. toctree::
+    :maxdepth: 1
+    :caption: Advanced:
+
     notebooks/Advanced_spaghetti_tutorial.ipynb
     notebooks/Use_case-facility_location.ipynb
 
