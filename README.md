@@ -1,9 +1,9 @@
 
 [pysal/spaghetti](http://pysal.org/spaghetti/)
-=========================================================
+=================================
 
 SPAtial GrapHs: nETworks, Topology, & Inference
-===============================================
+=====================================
 
 Spaghetti is an open-source Python library for the analysis of network-based spatial data. Originating from the `network` module in [PySAL (Python Spatial Analysis Library)](http://pysal.org), it is under active development for the inclusion of newly proposed methods for building graph-theoretic networks and the analysis of network events. This package is part of a [refactoring of PySAL](https://github.com/pysal/pysal/wiki/PEP-13:-Refactor-PySAL-Using-Submodules).
 
@@ -21,8 +21,8 @@ Spaghetti is an open-source Python library for the analysis of network-based spa
 
 
 Examples
---------
-The following examples can be launched individually as interactive binders from the links on their respective pages.
+-----------
+The following examples can be launched individually as interactive binders from the links on their respective pages. Additional examples can be found in the [Tutorials](https://pysal.org/spaghetti/tutorials.html) section of the documentation.
 * [Network Representation](https://pysal.org/spaghetti/notebooks/Basic_spaghetti_tutorial.html)
 * [Spatial Network Analysis](https://pysal.org/spaghetti/notebooks/Advanced_spaghetti_tutorial.html)
 * [Optimal Facility Location](https://pysal.org/spaghetti/notebooks/Use_case-facility_location.html)
@@ -65,7 +65,7 @@ $ pip install git+https://github.com/pysal/spaghetti
 
 
 Requirements
-------------
+----------------
 - [`esda`](https://esda.readthedocs.io/en/latest/)
 - [`libspatialindex`](https://libspatialindex.org/index.html)
 - [`numpy`](https://numpy.org/devdocs/)
@@ -73,36 +73,36 @@ Requirements
 - [`scipy`](http://scipy.github.io/devdocs/)
 
 Soft Dependencies
------------------
+----------------------
 - [`geopandas`](http://geopandas.org/install.html)
 - [`shapely`](https://shapely.readthedocs.io/en/latest/)
 
 Contribute
-----------
+------------
 
 PySAL-spaghetti is under active development and contributors are welcome.
 
 If you have any suggestion, feature request, or bug report, please open a new [issue](https://github.com/pysal/spaghetti/issues) on GitHub. To submit patches, please review [PySAL: Getting Started](http://pysal.org/getting_started#for-developers), the PySAL [development guidelines](https://github.com/pysal/pysal/wiki), the `spaghetti` [contributing guidelines](https://github.com/pysal/spaghetti/blob/master/.github/CONTRIBUTING.md) before  opening a [pull request](https://github.com/pysal/spaghetti/pulls). Once your changes get merged, you’ll automatically be added to the [Contributors List](https://github.com/pysal/spaghetti/graphs/contributors).
 
 Support
--------
+---------
 
 If you are having issues, please [create an issue](https://github.com/pysal/spaghetti/issues) or talk to us in the [gitter room](https://gitter.im/pysal/spaghetti).
 
 
 Code of Conduct
----------------
+--------------------
 
 As a PySAL-federated project, `spaghetti` follows the [Code of Conduct](https://github.com/pysal/governance/blob/master/conduct/code_of_conduct.rst) under the [PySAL governance model](https://github.com/pysal/governance).
 
 
 License
--------
+---------
 
 The project is licensed under the [BSD license](https://github.com/pysal/spaghetti/blob/master/LICENSE.txt).
 
 BibTeX Citation
----------------
+------------------
 
 If you use PySAL-spaghetti in a scientific publication, we would appreciate using the following citation:
 
@@ -117,5 +117,3 @@ If you use PySAL-spaghetti in a scientific publication, we would appreciate usin
     keywords  = {graph-theory,network-analysis,python,spatial-networks,topology}
 }
 ```
-
-
