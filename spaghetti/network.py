@@ -2656,6 +2656,8 @@ def element_as_gdf(
     Notes
     -----
     
+    When both network vertices and arcs are desired, the variable 
+    declaration must be in the order: <vertices>, <arcs>. 
     This function requires ``geopandas``.
     
     
