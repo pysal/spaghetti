@@ -413,7 +413,7 @@ class Network:
         is_libpysal_chains = False
         supported_iterables = ["list", "tuple", "numpy.ndarray"]
         # type error message
-        msg = "'%s' not supported for point pattern instantiation."
+        msg = "'%s' not supported for network instantiation."
 
         # set appropriate geometries
         if in_dtype == "str":
