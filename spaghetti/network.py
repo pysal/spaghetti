@@ -2090,6 +2090,10 @@ class Network:
 
         return nearest
 
+    def shortest_paths():
+        """
+        """
+
     def split_arcs(self, distance):
         """Split all of the arcs in the network at a fixed distance.
         
