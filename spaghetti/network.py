@@ -2757,15 +2757,15 @@ def regular_lattice(nlines, exterior=True):
     Create a 4x4 regular lattice with the exterior
     
     >>> import spaghetti
-    >>> lattice = regular_lattice(4, exterior=True)
+    >>> lattice = spaghetti.regular_lattice(4, exterior=True)
     >>> lattice[0].vertices
     [(0.0, 0.0), (0.0, 1.0)]
     
     Create a 5x5 regular lattice without the exterior
     
-    >>> lattice = regular_lattice(5, exterior=True)
+    >>> lattice = spaghetti.regular_lattice(5, exterior=False)
     >>> lattice[-1].vertices
-    [(3.0, 4.0), (4.0, 4.0)]
+    [(3.0, 3.0), (4.0, 3.0)]
     
     """
 
@@ -2809,7 +2809,7 @@ def regular_lattice(nlines, exterior=True):
             ):
                 continue
 
-            _lattice_segments.append([(x1, y1), (x2, y2)])
+            _lattice_segments.append([cg.Point((x1, y1)), cg.Point((x2, y2))])
 
         lattice_segments = _lattice_segments
 

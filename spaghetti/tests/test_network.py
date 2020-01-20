@@ -164,6 +164,21 @@ class TestNetwork(unittest.TestCase):
         obs_xy_roundNone = self.ntw_from_shp._round_sig((1215, 1865))
         self.assertEqual(obs_xy_roundNone, (x_roundNone, y_roundNone))
 
+    def test_regular_lattice(self):
+        # 4x4 regular lattice with the exterior
+        known = [cg.Point((0.0, 0.0)), cg.Point((0.0, 1.0))]
+        lattice = spaghetti.regular_lattice(4, exterior=True)
+        observed = lattice[0].vertices
+        self.assertEqual(observed, known)
+        # 5 x5 regular lattice without the exterior
+        known = [cg.Point((3.0, 3.0)), cg.Point((4.0, 3.0))]
+        lattice = spaghetti.regular_lattice(5, exterior=False)
+        observed = lattice[-1].vertices
+        self.assertEqual(observed, known)
+        # test for Type Error
+        with self.assertRaises(TypeError):
+            spaghetti.regular_lattice([4])
+
 
 class TestNetworkPointPattern(unittest.TestCase):
     def setUp(self):
