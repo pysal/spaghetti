@@ -8,15 +8,16 @@ Tutorials
     :maxdepth: 1
     :caption: Basic:
 
-    notebooks/Basic_spaghetti_tutorial.ipynb
-    notebooks/Connected-Components.ipynb
+    notebooks/Basic-spaghetti-tutorial.ipynb
+    notebooks/Connected-components.ipynb
+    notebooks/Shortest-path-visualization.ipynb
     
 .. toctree::
     :maxdepth: 1
     :caption: Advanced:
 
-    notebooks/Advanced_spaghetti_tutorial.ipynb
-    notebooks/Use_case-facility_location.ipynb
+    notebooks/Advanced-spaghetti-tutorial.ipynb
+    notebooks/Use-case-facility-location.ipynb
 
 Citations:
 

@@ -30,6 +30,7 @@ spaghetti.Network
       ~Network.loadnetwork
       ~Network.nearestneighbordistances
       ~Network.savenetwork
+      ~Network.shortest_paths
       ~Network.simulate_observations
       ~Network.snapobservations
       ~Network.split_arcs

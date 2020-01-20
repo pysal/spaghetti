@@ -71,10 +71,11 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../notebooks/Basic_spaghetti_tutorial.html">Basic <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../notebooks/Connected-Components.html">Connected components in a spatial network</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../notebooks/Advanced_spaghetti_tutorial.html">Advanced <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../notebooks/Use_case-facility_location.html">Demostrating network-based optimal facility location modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/Basic-spaghetti-tutorial.html">Basic <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/Connected-components.html">Connected components in a spatial network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/Shortest-path-visualization.html">Generating regular lattices and visualizing shortest paths</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/Advanced-spaghetti-tutorial.html">Advanced <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/Use-case-facility-location.html">Demostrating network-based optimal facility location modeling</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
@@ -131,11 +132,12 @@
 <h1>spaghetti.element_as_gdf<a class="headerlink" href="#spaghetti-element-as-gdf" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="spaghetti.element_as_gdf">
-<code class="sig-prename descclassname">spaghetti.</code><code class="sig-name descname">element_as_gdf</code><span class="sig-paren">(</span><em class="sig-param">net</em>, <em class="sig-param">vertices=False</em>, <em class="sig-param">arcs=False</em>, <em class="sig-param">pp_name=None</em>, <em class="sig-param">snapped=False</em>, <em class="sig-param">id_col='id'</em>, <em class="sig-param">geom_col='geometry'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#element_as_gdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.element_as_gdf" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">spaghetti.</code><code class="sig-name descname">element_as_gdf</code><span class="sig-paren">(</span><em class="sig-param">net</em>, <em class="sig-param">vertices=False</em>, <em class="sig-param">arcs=False</em>, <em class="sig-param">pp_name=None</em>, <em class="sig-param">snapped=False</em>, <em class="sig-param">routes=None</em>, <em class="sig-param">id_col='id'</em>, <em class="sig-param">geom_col='geometry'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#element_as_gdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.element_as_gdf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> of network elements. This can be 
 (a) the vertices of a network; (b) the arcs of a network; (c) both the
 vertices and arcs of the network; (d) the raw point pattern associated
-with the network; or (e) the snapped point pattern of (d).</p>
+with the network; (e) the snapped point pattern of (d); or (f) the
+shortest path routes between point observations.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
@@ -150,6 +152,9 @@ Default is <code class="docutils literal notranslate"><span class="pre">None</sp
 </dd>
 <dt><strong>snapped</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.7)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>If extracting a <code class="docutils literal notranslate"><span class="pre">network.PointPattern</span></code>, set to <code class="docutils literal notranslate"><span class="pre">True</span></code> for
 snapped point locations along the network. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+<dt><strong>routes</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>See <code class="docutils literal notranslate"><span class="pre">paths</span></code> from <code class="docutils literal notranslate"><span class="pre">spaghetti.Network.shortest_paths</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 </dd>
 <dt><strong>id_col</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> column name for IDs. Default is <code class="docutils literal notranslate"><span class="pre">&quot;id&quot;</span></code>.</p>
 </dd>
@@ -166,8 +171,11 @@ objects with an <code class="docutils literal notranslate"><span class="pre">&qu
 </dd>
 <dt><strong>lines</strong><span class="classifier"><a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.6.1+33.gadd5fe9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a></span></dt><dd><p>Network arc elements as a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> of
 <code class="docutils literal notranslate"><span class="pre">shapely.geometry.LineString</span></code> objects with an <code class="docutils literal notranslate"><span class="pre">&quot;id&quot;</span></code>
-column and <code class="docutils literal notranslate"><span class="pre">&quot;geometry&quot;</span></code> column.</p>
+column and <code class="docutils literal notranslate"><span class="pre">&quot;geometry&quot;</span></code> column. If the network object has 
+a <code class="docutils literal notranslate"><span class="pre">network_component_labels</span></code> attribute, then component labels
+are also added in a column,</p>
 </dd>
+<dt><strong>paths</strong><span class="classifier"><a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.6.1+33.gadd5fe9)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a></span></dt><dd></dd>
 </dl>
 </dd>
 <dt class="field-odd">Raises</dt>

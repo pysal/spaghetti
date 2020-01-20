@@ -69,10 +69,11 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials.html">Tutorials</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../notebooks/Basic_spaghetti_tutorial.html">Basic <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../notebooks/Connected-Components.html">Connected components in a spatial network</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../notebooks/Advanced_spaghetti_tutorial.html">Advanced <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../notebooks/Use_case-facility_location.html">Demostrating network-based optimal facility location modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../notebooks/Basic-spaghetti-tutorial.html">Basic <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../notebooks/Connected-components.html">Connected components in a spatial network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../notebooks/Shortest-path-visualization.html">Generating regular lattices and visualizing shortest paths</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../notebooks/Advanced-spaghetti-tutorial.html">Advanced <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../notebooks/Use-case-facility-location.html">Demostrating network-based optimal facility location modeling</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../api.html">API</a><ul>
@@ -124,6 +125,7 @@
       
   <h1>Source code for spaghetti.network</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span><span class="p">,</span> <span class="n">OrderedDict</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">islice</span>
 <span class="kn">import</span> <span class="nn">copy</span><span class="o">,</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">pickle</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span>
@@ -142,6 +144,8 @@
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Network&quot;</span><span class="p">,</span> <span class="s2">&quot;PointPattern&quot;</span><span class="p">,</span> <span class="s2">&quot;NetworkG&quot;</span><span class="p">,</span> <span class="s2">&quot;NetworkK&quot;</span><span class="p">,</span> <span class="s2">&quot;NetworkF&quot;</span><span class="p">]</span>
+
+<span class="n">SAME_SEGMENT</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="Network"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network">[docs]</a><span class="k">class</span> <span class="nc">Network</span><span class="p">:</span>
@@ -1972,7 +1976,7 @@
                     <span class="c1"># set the nearest network vertices to a flag of -.1</span>
                     <span class="c1"># indicating the same arc is used while also raising</span>
                     <span class="c1"># and indexing error when rebuilding the path</span>
-                    <span class="n">tree_nearest</span><span class="p">[</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">)</span>
+                    <span class="n">tree_nearest</span><span class="p">[</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">]</span> <span class="o">=</span> <span class="n">SAME_SEGMENT</span>
 
                 <span class="c1"># otherwise lookup distance between the source and</span>
                 <span class="c1"># destination vertex</span>
@@ -2215,9 +2219,143 @@
 
         <span class="k">return</span> <span class="n">nearest</span></div>
 
-<div class="viewcode-block" id="Network.shortest_paths"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.shortest_paths">[docs]</a>    <span class="k">def</span> <span class="nf">shortest_paths</span><span class="p">():</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        &quot;&quot;&quot;</span></div>
+<div class="viewcode-block" id="Network.shortest_paths"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.shortest_paths">[docs]</a>    <span class="k">def</span> <span class="nf">shortest_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tree</span><span class="p">,</span> <span class="n">pp_name</span><span class="p">,</span> <span class="n">n_processes</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the shortest paths between observation points as</span>
+<span class="sd">        ``libpysal.cg.Chain`` objects.</span>
+<span class="sd">    </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        </span>
+<span class="sd">        tree : dict</span>
+<span class="sd">            See ``tree_nearest`` in </span>
+<span class="sd">            ``spaghetti.Network.allneighbordistances()``.</span>
+<span class="sd">        </span>
+<span class="sd">        pp_name : str</span>
+<span class="sd">            See ``name`` in ``spaghetti.Network.snapobservations()``.</span>
+<span class="sd">        </span>
+<span class="sd">        n_processes : int</span>
+<span class="sd">            See ``n_processes`` in ``spaghetti.Network.full_distance_matrix()``.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        </span>
+<span class="sd">        paths : dict</span>
+<span class="sd">            The shortest paths between observations as geometric objects.</span>
+<span class="sd">        </span>
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">    </span>
+<span class="sd">        AttributeError</span>
+<span class="sd">            This exception is raised when an attempt to extract shortest</span>
+<span class="sd">            path geometries is being made that but the ``network_trees``</span>
+<span class="sd">            attribute does not exist within the network object.</span>
+<span class="sd">        </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        </span>
+<span class="sd">        Instantiate a network.</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; import spaghetti</span>
+<span class="sd">        &gt;&gt;&gt; from libpysal import examples</span>
+<span class="sd">        &gt;&gt;&gt; ntw = spaghetti.Network(examples.get_path(&quot;streets.shp&quot;))</span>
+<span class="sd">        </span>
+<span class="sd">        Snap observations to the network.</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; ntw.snapobservations(examples.get_path(&quot;schools.shp&quot;), &quot;schools&quot;)</span>
+<span class="sd">        </span>
+<span class="sd">        Create shortest path trees between observations.</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; _, tree = ntw.allneighbordistances(&quot;schools&quot;, gen_tree=True)</span>
+<span class="sd">        </span>
+<span class="sd">        Generate geometric objects from trees.</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; paths = ntw.shortest_paths(tree, &quot;schools&quot;)</span>
+<span class="sd">        </span>
+<span class="sd">        The are `n` vertices in the path between observation </span>
+<span class="sd">        ``0`` and ``1``.</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; n = len(paths[(0, 1)])</span>
+<span class="sd">        &gt;&gt;&gt; n</span>
+<span class="sd">        10</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># build the network trees object if it is not already an attribute</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;network_trees&quot;</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;The &#39;network_trees&#39; attribute has not been created. &quot;</span>
+            <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot;Rerun &#39;spaghetti.Network.allneighbordistances()&#39; &quot;</span>
+            <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot;with the &#39;gen_tree&#39; parameter set to &#39;True&#39;.&quot;</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="c1"># isolate network attributes</span>
+        <span class="n">pp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="n">pp_name</span><span class="p">]</span>
+        <span class="n">vtx_coords</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertex_coords</span>
+        <span class="n">net_trees</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_trees</span>
+
+        <span class="c1"># instantiate a dictionary to store paths</span>
+        <span class="n">paths</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># iterate over each path in the tree</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="p">((</span><span class="n">obs0</span><span class="p">,</span> <span class="n">obs1</span><span class="p">),</span> <span class="p">(</span><span class="n">v0</span><span class="p">,</span> <span class="n">v1</span><span class="p">))</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+
+            <span class="c1"># if the observations share the same segment</span>
+            <span class="c1"># create a partial segment path</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">v0</span><span class="p">,</span> <span class="n">v1</span><span class="p">)</span> <span class="o">==</span> <span class="n">SAME_SEGMENT</span><span class="p">:</span>
+                <span class="c1"># isolate the snapped coordinates and put in a list</span>
+                <span class="n">partial_segment_verts</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">cg</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">pp</span><span class="o">.</span><span class="n">snapped_coordinates</span><span class="p">[</span><span class="n">obs0</span><span class="p">]),</span>
+                    <span class="n">cg</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">pp</span><span class="o">.</span><span class="n">snapped_coordinates</span><span class="p">[</span><span class="n">obs1</span><span class="p">]),</span>
+                <span class="p">]</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="n">partial_segment_verts</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># source and destination network vertices</span>
+                <span class="n">svtx</span><span class="p">,</span> <span class="n">dvtx</span> <span class="o">=</span> <span class="n">tree</span><span class="p">[</span><span class="n">obs0</span><span class="p">,</span> <span class="n">obs1</span><span class="p">]</span>
+
+                <span class="c1"># path passes through these nodes</span>
+                <span class="c1"># (source and destination inclusive)</span>
+                <span class="n">thru_nodes</span> <span class="o">=</span> <span class="n">net_trees</span><span class="p">[</span><span class="n">svtx</span><span class="p">][</span><span class="n">dvtx</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">dvtx</span><span class="p">]</span>
+
+                <span class="c1"># full-length network segments along path</span>
+                <span class="n">full_segs_path</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">iter_limit</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">thru_nodes</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+                <span class="k">for</span> <span class="n">_idx</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">islice</span><span class="p">(</span><span class="n">thru_nodes</span><span class="p">,</span> <span class="n">iter_limit</span><span class="p">)):</span>
+                    <span class="n">full_segs_path</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">item</span><span class="p">,</span> <span class="n">thru_nodes</span><span class="p">[</span><span class="n">_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]))</span>
+
+                <span class="c1"># create copy of arc paths dataframe</span>
+                <span class="n">full_segments</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">_v0</span><span class="p">,</span> <span class="n">_v1</span> <span class="ow">in</span> <span class="n">full_segs_path</span><span class="p">:</span>
+                    <span class="n">full_segments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">cg</span><span class="o">.</span><span class="n">Chain</span><span class="p">([</span><span class="n">cg</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">vtx_coords</span><span class="p">[</span><span class="n">_v0</span><span class="p">]),</span> <span class="n">cg</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">vtx_coords</span><span class="p">[</span><span class="n">_v1</span><span class="p">])])</span>
+                    <span class="p">)</span>
+                <span class="c1"># unpack the vertices containers</span>
+                <span class="n">segm_verts</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">fs</span> <span class="ow">in</span> <span class="n">full_segments</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">fs</span><span class="o">.</span><span class="n">vertices</span><span class="p">]</span>
+
+                <span class="c1"># remove duplicate vertices</span>
+                <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">segm_verts</span><span class="p">):</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="n">segm_verts</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]:</span>
+                            <span class="n">segm_verts</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="ne">IndexError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;list index out of range&quot;</span><span class="p">:</span>
+                            <span class="k">continue</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">raise</span>
+
+                <span class="c1"># partial-length network segments along path</span>
+                <span class="n">partial_segment_verts</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">cg</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">pp</span><span class="o">.</span><span class="n">snapped_coordinates</span><span class="p">[</span><span class="n">obs0</span><span class="p">]),</span>
+                    <span class="n">cg</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">pp</span><span class="o">.</span><span class="n">snapped_coordinates</span><span class="p">[</span><span class="n">obs1</span><span class="p">]),</span>
+                <span class="p">]</span>
+
+                <span class="c1"># combine the full and partial segments into a single list</span>
+                <span class="n">first_vtx</span><span class="p">,</span> <span class="n">last_vtx</span> <span class="o">=</span> <span class="n">partial_segment_verts</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="p">[</span><span class="n">first_vtx</span><span class="p">]</span> <span class="o">+</span> <span class="n">segm_verts</span> <span class="o">+</span> <span class="p">[</span><span class="n">last_vtx</span><span class="p">]</span>
+
+            <span class="c1"># populate the ``paths`` dataframe</span>
+            <span class="n">paths</span><span class="p">[(</span><span class="n">obs0</span><span class="p">,</span> <span class="n">obs1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">path</span>
+
+        <span class="k">return</span> <span class="n">paths</span></div>
 
 <div class="viewcode-block" id="Network.split_arcs"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.split_arcs">[docs]</a>    <span class="k">def</span> <span class="nf">split_arcs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Split all of the arcs in the network at a fixed distance.</span>
@@ -2234,7 +2372,7 @@
 <span class="sd">        split_network : spaghetti.Network</span>
 <span class="sd">            A newly instantiated ``spaghetti.Network`` object.</span>
 <span class="sd">        </span>
-<span class="sd">       Examples</span>
+<span class="sd">        Examples</span>
 <span class="sd">        --------</span>
 <span class="sd">        </span>
 <span class="sd">        Instantiate a network.</span>
@@ -2725,13 +2863,15 @@
     <span class="n">arcs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">pp_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">snapped</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">routes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">id_col</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span>
     <span class="n">geom_col</span><span class="o">=</span><span class="s2">&quot;geometry&quot;</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Return a ``geopandas.GeoDataFrame`` of network elements. This can be </span>
 <span class="sd">    (a) the vertices of a network; (b) the arcs of a network; (c) both the</span>
 <span class="sd">    vertices and arcs of the network; (d) the raw point pattern associated</span>
-<span class="sd">    with the network; or (e) the snapped point pattern of (d).</span>
+<span class="sd">    with the network; (e) the snapped point pattern of (d); or (f) the</span>
+<span class="sd">    shortest path routes between point observations.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -2752,6 +2892,10 @@
 <span class="sd">    snapped : bool</span>
 <span class="sd">        If extracting a ``network.PointPattern``, set to ``True`` for</span>
 <span class="sd">        snapped point locations along the network. Default is ``False``.</span>
+<span class="sd">    </span>
+<span class="sd">    routes : dict</span>
+<span class="sd">        See ``paths`` from ``spaghetti.Network.shortest_paths``.</span>
+<span class="sd">        Default is ``None``.</span>
 <span class="sd">    </span>
 <span class="sd">    id_col : str</span>
 <span class="sd">        ``geopandas.GeoDataFrame`` column name for IDs. Default is ``&quot;id&quot;``.</span>
@@ -2780,7 +2924,16 @@
 <span class="sd">    lines : geopandas.GeoDataFrame</span>
 <span class="sd">        Network arc elements as a ``geopandas.GeoDataFrame`` of</span>
 <span class="sd">        ``shapely.geometry.LineString`` objects with an ``&quot;id&quot;``</span>
-<span class="sd">        column and ``&quot;geometry&quot;`` column.</span>
+<span class="sd">        column and ``&quot;geometry&quot;`` column. If the network object has </span>
+<span class="sd">        a ``network_component_labels`` attribute, then component labels</span>
+<span class="sd">        are also added in a column,</span>
+<span class="sd">    </span>
+<span class="sd">    paths :  geopandas.GeoDataFrame</span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">        </span>
+<span class="sd">        </span>
 <span class="sd">    </span>
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
@@ -2819,6 +2972,11 @@
 <span class="sd">    104414.09200823458</span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># shortest path routes between observations</span>
+    <span class="k">if</span> <span class="n">routes</span><span class="p">:</span>
+        <span class="n">paths</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">_routes_as_gdf</span><span class="p">(</span><span class="n">routes</span><span class="p">,</span> <span class="n">id_col</span><span class="o">=</span><span class="n">id_col</span><span class="p">,</span> <span class="n">geom_col</span><span class="o">=</span><span class="n">geom_col</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">paths</span>
 
     <span class="c1"># need vertices place holder to create network segment LineStrings</span>
     <span class="c1"># even if only network edges are desired.</span>
