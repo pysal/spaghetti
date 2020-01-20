@@ -561,17 +561,16 @@ def _points_as_gdf(
 
 @requires("geopandas", "shapely")
 def _arcs_as_gdf(net, points, id_col=None, geom_col=None):
-    """Internal function for returning a edges ``geopandas.GeoDataFrame``
+    """Internal function for returning an arc ``geopandas.GeoDataFrame``
     called from within ``spaghetti.element_as_gdf()``.
     
     Returns
     -------
     
-    points : geopandas.GeoDataFrame
-        Network point elements (either vertices or ``network.PointPattern``
-        points) as a simple ``geopandas.GeoDataFrame`` of
-        ``shapely.geometry.Point`` objects with an ``"id"`` column and
-        ``geometry`` column.
+    arcs : geopandas.GeoDataFrame
+        Network arc elements as a ``geopandas.GeoDataFrame`` of
+        ``shapely.geometry.LineString`` objects with an ``"id"``
+        column and ``geometry`` column.
     
     Notes
     -----
@@ -603,3 +602,33 @@ def _arcs_as_gdf(net, points, id_col=None, geom_col=None):
         arcs["comp_label"] = net.network_component_labels
 
     return arcs
+
+
+@requires("geopandas", "shapely")
+def _routes_as_gdf(paths, id_col=None, geom_col=None):
+    """Internal function for returning a shortest paths
+    ``geopandas.GeoDataFrame`` called from within
+    ``spaghetti.element_as_gdf()``.
+    
+    Returns
+    -------
+    
+    paths : geopandas.GeoDataFrame
+        Network shortest paths as a ``geopandas.GeoDataFrame`` of
+        ``shapely.geometry.LineString`` objects with an ``"id"``
+        column and ``geometry`` column.
+    
+    Notes
+    -----
+    
+    1. See ``spaghetti.element_as_gdf()`` for description of arguments.
+    2. This function requires ``geopandas``.
+    
+    """
+
+    paths = {k: [LineString(v)] for k, v in paths.items()}
+    paths = geopandas.GeoDataFrame.from_dict(paths, orient="index")
+    paths.reset_index(inplace=True)
+    paths.rename(columns={"index": id_col, 0: geom_col}, inplace=True)
+
+    return paths

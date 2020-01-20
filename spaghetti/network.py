@@ -1,4 +1,5 @@
 from collections import defaultdict, OrderedDict
+from itertools import islice
 import copy, os, pickle
 
 import numpy
@@ -17,6 +18,8 @@ except ImportError:
 
 
 __all__ = ["Network", "PointPattern", "NetworkG", "NetworkK", "NetworkF"]
+
+SAME_SEGMENT = (-0.1, -0.1)
 
 
 class Network:
@@ -1847,7 +1850,7 @@ class Network:
                     # set the nearest network vertices to a flag of -.1
                     # indicating the same arc is used while also raising
                     # and indexing error when rebuilding the path
-                    tree_nearest[p1, p2] = (-0.1, -0.1)
+                    tree_nearest[p1, p2] = SAME_SEGMENT
 
                 # otherwise lookup distance between the source and
                 # destination vertex
@@ -2090,6 +2093,144 @@ class Network:
 
         return nearest
 
+    def shortest_paths(self, tree, pp_name, n_processes=1):
+        """Return the shortest paths between observation points as
+        ``libpysal.cg.Chain`` objects.
+    
+        Parameters
+        ----------
+        
+        tree : dict
+            See ``tree_nearest`` in 
+            ``spaghetti.Network.allneighbordistances()``.
+        
+        pp_name : str
+            See ``name`` in ``spaghetti.Network.snapobservations()``.
+        
+        n_processes : int
+            See ``n_processes`` in ``spaghetti.Network.full_distance_matrix()``.
+        
+        Returns
+        -------
+        
+        paths : dict
+            The shortest paths between observations as geometric objects.
+        
+        Raises
+        ------
+    
+        AttributeError
+            This exception is raised when an attempt to extract shortest
+            path geometries is being made that but the ``network_trees``
+            attribute does not exist within the network object.
+        
+        Examples
+        --------
+        
+        Instantiate a network.
+        
+        >>> import spaghetti
+        >>> from libpysal import examples
+        >>> ntw = spaghetti.Network(examples.get_path("streets.shp"))
+        
+        Snap observations to the network.
+        
+        >>> ntw.snapobservations(examples.get_path("schools.shp"), "schools")
+        
+        Create shortest path trees between observations.
+        
+        >>> _, tree = ntw.allneighbordistances("schools", gen_tree=True)
+        
+        Generate geometric objects from trees.
+        
+        >>> paths = ntw.shortest_paths(tree, "schools")
+        
+        The are `n` vertices in the path between observation 
+        ``0`` and ``1``.
+        
+        >>> n = len(paths[(0, 1)])
+        >>> n
+        10
+        
+        """
+
+        # build the network trees object if it is not already an attribute
+        if not hasattr(self, "network_trees"):
+            msg = "The 'network_trees' attribute has not been created. "
+            msg += "Rerun 'spaghetti.Network.allneighbordistances()' "
+            msg += "with the 'gen_tree' parameter set to 'True'."
+            raise AttributeError(msg)
+
+        # isolate network attributes
+        pp = self.pointpatterns[pp_name]
+        vtx_coords = self.vertex_coords
+        net_trees = self.network_trees
+
+        # instantiate a dictionary to store paths
+        paths = {}
+
+        # iterate over each path in the tree
+        for idx, ((obs0, obs1), (v0, v1)) in enumerate(tree.items()):
+
+            # if the observations share the same segment
+            # create a partial segment path
+            if (v0, v1) == SAME_SEGMENT:
+                # isolate the snapped coordinates and put in a list
+                partial_segment_verts = [
+                    cg.Point(pp.snapped_coordinates[obs0]),
+                    cg.Point(pp.snapped_coordinates[obs1]),
+                ]
+                path = partial_segment_verts
+
+            else:
+                # source and destination network vertices
+                svtx, dvtx = tree[obs0, obs1]
+
+                # path passes through these nodes
+                # (source and destination inclusive)
+                thru_nodes = net_trees[svtx][dvtx][::-1] + [dvtx]
+
+                # full-length network segments along path
+                full_segs_path = []
+                iter_limit = len(thru_nodes) - 1
+                for _idx, item in enumerate(islice(thru_nodes, iter_limit)):
+                    full_segs_path.append((item, thru_nodes[_idx + 1]))
+
+                # create copy of arc paths dataframe
+                full_segments = []
+                for _v0, _v1 in full_segs_path:
+                    full_segments.append(
+                        cg.Chain([cg.Point(vtx_coords[_v0]), cg.Point(vtx_coords[_v1])])
+                    )
+                # unpack the vertices containers
+                segm_verts = [v for fs in full_segments for v in fs.vertices]
+
+                # remove duplicate vertices
+                for idx, v in enumerate(segm_verts):
+                    try:
+                        if v == segm_verts[idx + 1]:
+                            segm_verts.remove(v)
+                    except IndexError as e:
+                        if e.args[0] == "list index out of range":
+                            continue
+                        else:
+                            raise
+
+                # partial-length network segments along path
+                partial_segment_verts = [
+                    cg.Point(pp.snapped_coordinates[obs0]),
+                    cg.Point(pp.snapped_coordinates[obs1]),
+                ]
+
+                # combine the full and partial segments into a single list
+                first_vtx, last_vtx = partial_segment_verts
+                path = [first_vtx] + segm_verts + [last_vtx]
+
+            # populate the ``paths`` dataframe
+            paths[(obs0, obs1)] = path
+
+        return paths
+
     def split_arcs(self, distance):
         """Split all of the arcs in the network at a fixed distance.
         
@@ -2105,7 +2246,7 @@ class Network:
         split_network : spaghetti.Network
             A newly instantiated ``spaghetti.Network`` object.
         
-       Examples
+        Examples
         --------
         
         Instantiate a network.
@@ -2596,13 +2737,15 @@ def element_as_gdf(
     arcs=False,
     pp_name=None,
     snapped=False,
+    routes=None,
     id_col="id",
     geom_col="geometry",
 ):
     """Return a ``geopandas.GeoDataFrame`` of network elements. This can be 
     (a) the vertices of a network; (b) the arcs of a network; (c) both the
     vertices and arcs of the network; (d) the raw point pattern associated
-    with the network; or (e) the snapped point pattern of (d).
+    with the network; (e) the snapped point pattern of (d); or (f) the
+    shortest path routes between point observations.
     
     Parameters
     ----------
@@ -2623,6 +2766,10 @@ def element_as_gdf(
     snapped : bool
         If extracting a ``network.PointPattern``, set to ``True`` for
         snapped point locations along the network. Default is ``False``.
+    
+    routes : dict
+        See ``paths`` from ``spaghetti.Network.shortest_paths``.
+        Default is ``None``.
     
     id_col : str
         ``geopandas.GeoDataFrame`` column name for IDs. Default is ``"id"``.
@@ -2651,11 +2798,22 @@ def element_as_gdf(
     lines : geopandas.GeoDataFrame
         Network arc elements as a ``geopandas.GeoDataFrame`` of
         ``shapely.geometry.LineString`` objects with an ``"id"``
-        column and ``"geometry"`` column.
+        column and ``"geometry"`` column. If the network object has 
+        a ``network_component_labels`` attribute, then component labels
+        are also added in a column,
+    
+    paths :  geopandas.GeoDataFrame
+        
+        
+        
+        
+        
     
     Notes
     -----
     
+    When both network vertices and arcs are desired, the variable 
+    declaration must be in the order: <vertices>, <arcs>. 
     This function requires ``geopandas``.
     
     
@@ -2689,6 +2847,11 @@ def element_as_gdf(
     
     """
 
+    # shortest path routes between observations
+    if routes:
+        paths = util._routes_as_gdf(routes, id_col=id_col, geom_col=geom_col)
+        return paths
+
     # need vertices place holder to create network segment LineStrings
     # even if only network edges are desired.
     vertices_for_arcs = False
@@ -2720,6 +2883,97 @@ def element_as_gdf(
 
     else:
         return points, arcs
+
+
+def regular_lattice(nlines, exterior=True):
+    """Generate a regular lattice of line segments 
+    (`libpysal.cg.Chain objects <https://pysal.org/libpysal/generated/libpysal.cg.Chain.html#libpysal.cg.Chain>`_).
+    
+    
+    Parameters
+    ----------
+    
+    nlines : int
+        The number of lines on one dimension of the lattice. For
+        example, setting ``nlines`` to 4 would create a 4x4 regular
+        lattice.
+        
+    exterior : bool
+        Flag for returning the full regular lattice (``True``) or
+        a tic-tac-toe style grid (``False``). Default is ``True``.
+        
+    Returns
+    -------
+    
+    lattice : list
+        libpysal.cg.Chain objects forming a regular lattice
+    
+    Examples
+    --------
+    
+    Create a 4x4 regular lattice with the exterior
+    
+    >>> import spaghetti
+    >>> lattice = spaghetti.regular_lattice(4, exterior=True)
+    >>> lattice[0].vertices
+    [(0.0, 0.0), (0.0, 1.0)]
+    
+    Create a 5x5 regular lattice without the exterior
+    
+    >>> lattice = spaghetti.regular_lattice(5, exterior=False)
+    >>> lattice[-1].vertices
+    [(3.0, 3.0), (4.0, 3.0)]
+    
+    """
+
+    try:
+        nlines = int(nlines)
+    except TypeError:
+        nlines_type = type(nlines)
+        msg = "The 'nlines' parameter of type %s " % nlines_type
+        msg += "could not be converted to an integer."
+        raise TypeError(msg)
+
+    # create vertical line segments for a regular lattice
+    vstack = []
+    for idx1 in range(nlines):
+        for idx2 in range(nlines):
+            _idx2 = idx2 + 1
+            if _idx2 == nlines:
+                continue
+            vstack.append([cg.Point((idx1, idx2)), cg.Point((idx1, _idx2))])
+
+    # rotate vertical lines for horizontal lines in a regular lattice
+    hstack = [[c[::-1] for c in line] for line in vstack]
+
+    # combine line lists
+    lattice_segments = [[line for line in vs] for vs in vstack] + hstack
+
+    # remove lattice exterior if not desired
+    if not exterior:
+
+        lower_exterior_condition = 0
+        upper_exterior_condition = nlines - 1
+
+        _lattice_segments = []
+
+        for (x1, y1), (x2, y2) in lattice_segments:
+            if (
+                (x1 == x2 and x1 == lower_exterior_condition)
+                or (y1 == y2 and y1 == lower_exterior_condition)
+                or (x1 == x2 and x1 == upper_exterior_condition)
+                or (y1 == y2 and y1 == upper_exterior_condition)
+            ):
+                continue
+
+            _lattice_segments.append([cg.Point((x1, y1)), cg.Point((x2, y2))])
+
+        lattice_segments = _lattice_segments
+
+    # convert to coordinates to libpysal.cg.Chain
+    lattice = [cg.Chain(l) for l in lattice_segments]
+
+    return lattice
 
 
 class PointPattern:

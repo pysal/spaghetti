@@ -125,6 +125,21 @@ class TestNetwork(unittest.TestCase):
         coincident = self.ntw_from_shp.enum_links_vertex(24)
         self.assertIn((24, 48), coincident)
 
+    def test_shortest_paths(self):
+
+        known_vertices = 10
+        self.ntw_from_shp.snapobservations(examples.get_path("schools.shp"), "schools")
+        _, tree = self.ntw_from_shp.allneighbordistances("schools", gen_tree=True)
+        observed_paths = self.ntw_from_shp.shortest_paths(tree, "schools")
+        observed_vertices = len(observed_paths[(0, 1)])
+        self.assertEqual(observed_vertices, known_vertices)
+
+        # test error
+        with self.assertRaises(AttributeError):
+            lattice = spaghetti.regular_lattice(4)
+            ntw = spaghetti.Network(in_data=lattice)
+            paths = ntw.shortest_paths([], "synth_obs")
+
     @unittest.skipIf(GEOPANDAS_EXTINCT, "Missing Geopandas")
     def test_element_as_gdf(self):
         vertices, arcs = spaghetti.element_as_gdf(
@@ -151,6 +166,18 @@ class TestNetwork(unittest.TestCase):
         obs_arc_wkt = obs_arc.wkt
         self.assertEqual(obs_arc_wkt, known_arc_wkt)
 
+        # routes
+        known_length = 0.3999999999999999
+        lattice = spaghetti.regular_lattice(4)
+        ntw = spaghetti.Network(in_data=lattice)
+        synth_obs = [cg.Point([0.2, 1.3]), cg.Point([0.2, 1.7]), cg.Point([2.8, 1.5])]
+        ntw.snapobservations(synth_obs, "synth_obs")
+        _, tree = ntw.allneighbordistances("synth_obs", gen_tree=True)
+        paths = ntw.shortest_paths(tree, "synth_obs")
+        paths_gdf = spaghetti.element_as_gdf(ntw, routes=paths)
+        observed_length = paths_gdf.loc[0, "geometry"].length
+        self.assertAlmostEqual(observed_length, known_length, places=5)
+
     def test_round_sig(self):
         # round to 2 significant digits test
         x_round2, y_round2 = 1200, 1900
@@ -163,6 +190,21 @@ class TestNetwork(unittest.TestCase):
         self.ntw_from_shp.vertex_sig = None
         obs_xy_roundNone = self.ntw_from_shp._round_sig((1215, 1865))
         self.assertEqual(obs_xy_roundNone, (x_roundNone, y_roundNone))
+
+    def test_regular_lattice(self):
+        # 4x4 regular lattice with the exterior
+        known = [cg.Point((0.0, 0.0)), cg.Point((0.0, 1.0))]
+        lattice = spaghetti.regular_lattice(4, exterior=True)
+        observed = lattice[0].vertices
+        self.assertEqual(observed, known)
+        # 5 x5 regular lattice without the exterior
+        known = [cg.Point((3.0, 3.0)), cg.Point((4.0, 3.0))]
+        lattice = spaghetti.regular_lattice(5, exterior=False)
+        observed = lattice[-1].vertices
+        self.assertEqual(observed, known)
+        # test for Type Error
+        with self.assertRaises(TypeError):
+            spaghetti.regular_lattice([4])
 
 
 class TestNetworkPointPattern(unittest.TestCase):

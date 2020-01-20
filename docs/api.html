@@ -23,7 +23,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="spaghetti.Network" href="generated/spaghetti.Network.html" />
-    <link rel="prev" title="Demostrating network-based optimal facility location modeling" href="notebooks/Use_case-facility_location.html" />
+    <link rel="prev" title="Demostrating network-based optimal facility location modeling" href="notebooks/Use-case-facility-location.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -71,15 +71,16 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="notebooks/Basic_spaghetti_tutorial.html">Basic <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
-<li class="toctree-l2"><a class="reference internal" href="notebooks/Connected-Components.html">Connected components in a spatial network</a></li>
-<li class="toctree-l2"><a class="reference internal" href="notebooks/Advanced_spaghetti_tutorial.html">Advanced <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
-<li class="toctree-l2"><a class="reference internal" href="notebooks/Use_case-facility_location.html">Demostrating network-based optimal facility location modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/Basic-spaghetti-tutorial.html">Basic <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/Connected-components.html">Connected components in a spatial network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/Shortest-path-visualization.html">Generating regular lattices and visualizing shortest paths</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/Advanced-spaghetti-tutorial.html">Advanced <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/Use-case-facility-location.html">Demostrating network-based optimal facility location modeling</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#network-feature-instantiation">Network feature instantiation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#network-feature-extraction">Network feature extraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#network-feature-extraction-and-creation">Network feature extraction and creation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#save-and-load-a-network">Save and load a network</a></li>
 </ul>
 </li>
@@ -99,7 +100,7 @@
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">API reference</a><ul>
 <li><a class="reference internal" href="#network-feature-instantiation">Network feature instantiation</a></li>
-<li><a class="reference internal" href="#network-feature-extraction">Network feature extraction</a></li>
+<li><a class="reference internal" href="#network-feature-extraction-and-creation">Network feature extraction and creation</a></li>
 <li><a class="reference internal" href="#save-and-load-a-network">Save and load a network</a></li>
 </ul>
 </li>
@@ -151,8 +152,8 @@
 </tbody>
 </table>
 </div>
-<div class="section" id="network-feature-extraction">
-<h2>Network feature extraction<a class="headerlink" href="#network-feature-extraction" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="network-feature-extraction-and-creation">
+<h2>Network feature extraction and creation<a class="headerlink" href="#network-feature-extraction-and-creation" title="Permalink to this headline">¶</a></h2>
 <table class="longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
@@ -161,6 +162,9 @@
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/spaghetti.element_as_gdf.html#spaghetti.element_as_gdf" title="spaghetti.element_as_gdf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.element_as_gdf</span></code></a>(net[, vertices, …])</p></td>
 <td><p>Return a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> of network elements.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/spaghetti.regular_lattice.html#spaghetti.regular_lattice" title="spaghetti.regular_lattice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.regular_lattice</span></code></a>(nlines[, exterior])</p></td>
+<td><p>Generate a regular lattice of line segments  (<a class="reference external" href="https://pysal.org/libpysal/generated/libpysal.cg.Chain.html#libpysal.cg.Chain">libpysal.cg.Chain objects</a>).</p></td>
 </tr>
 </tbody>
 </table>
