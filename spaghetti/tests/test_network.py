@@ -125,6 +125,21 @@ class TestNetwork(unittest.TestCase):
         coincident = self.ntw_from_shp.enum_links_vertex(24)
         self.assertIn((24, 48), coincident)
 
+    def test_shortest_paths(self):
+
+        known_vertices = 10
+        self.ntw_from_shp.snapobservations(examples.get_path("schools.shp"), "schools")
+        _, tree = self.ntw_from_shp.allneighbordistances("schools", gen_tree=True)
+        observed_paths = self.ntw_from_shp.shortest_paths(tree, "schools")
+        observed_vertices = len(observed_paths[(0, 1)])
+        self.assertEqual(observed_vertices, known_vertices)
+
+        # test error
+        with self.assertRaises(AttributeError):
+            lattice = spaghetti.regular_lattice(4)
+            ntw = spaghetti.Network(in_data=lattice)
+            paths = ntw.shortest_paths([], "synth_obs")
+
     @unittest.skipIf(GEOPANDAS_EXTINCT, "Missing Geopandas")
     def test_element_as_gdf(self):
         vertices, arcs = spaghetti.element_as_gdf(
@@ -150,6 +165,18 @@ class TestNetwork(unittest.TestCase):
         obs_arc = arcs.loc[(arcs["id"] == (0, 1)), "geometry"].squeeze()
         obs_arc_wkt = obs_arc.wkt
         self.assertEqual(obs_arc_wkt, known_arc_wkt)
+
+        # routes
+        known_length = 0.3999999999999999
+        lattice = spaghetti.regular_lattice(4)
+        ntw = spaghetti.Network(in_data=lattice)
+        synth_obs = [cg.Point([0.2, 1.3]), cg.Point([0.2, 1.7]), cg.Point([2.8, 1.5])]
+        ntw.snapobservations(synth_obs, "synth_obs")
+        _, tree = ntw.allneighbordistances("synth_obs", gen_tree=True)
+        paths = ntw.shortest_paths(tree, "synth_obs")
+        paths_gdf = spaghetti.element_as_gdf(ntw, routes=paths)
+        observed_length = paths_gdf.loc[0, "geometry"].length
+        self.assertAlmostEqual(observed_length, known_length, places=5)
 
     def test_round_sig(self):
         # round to 2 significant digits test
