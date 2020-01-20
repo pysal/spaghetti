@@ -5,4 +5,4 @@ __version__ = "1.4.0"
 
 """
 from .network import Network, PointPattern, SimulatedPointPattern
-from .network import element_as_gdf
+from .network import element_as_gdf, regular_lattice

@@ -2728,6 +2728,97 @@ def element_as_gdf(
         return points, arcs
 
 
+def regular_lattice(nlines, exterior=True):
+    """Generate a regular lattice of line segments 
+    (`libpysal.cg.Chain objects <https://pysal.org/libpysal/generated/libpysal.cg.Chain.html#libpysal.cg.Chain>`_).
+    
+    
+    Parameters
+    ----------
+    
+    nlines : int
+        The number of lines on one dimension of the lattice. For
+        example, setting ``nlines`` to 4 would create a 4x4 regular
+        lattice.
+        
+    exterior : bool
+        Flag for returning the full regular lattice (``True``) or
+        a tic-tac-toe style grid (``False``). Default is ``True``.
+        
+    Returns
+    -------
+    
+    lattice : list
+        libpysal.cg.Chain objects forming a regular lattice
+    
+    Examples
+    --------
+    
+    Create a 4x4 regular lattice with the exterior
+    
+    >>> import spaghetti
+    >>> lattice = regular_lattice(4, exterior=True)
+    >>> lattice[0].vertices
+    [(0.0, 0.0), (0.0, 1.0)]
+    
+    Create a 5x5 regular lattice without the exterior
+    
+    >>> lattice = regular_lattice(5, exterior=True)
+    >>> lattice[-1].vertices
+    [(3.0, 4.0), (4.0, 4.0)]
+    
+    """
+
+    try:
+        nlines = int(nlines)
+    except TypeError:
+        nlines_type = type(nlines)
+        msg = "The 'nlines' parameter of type %s " % nlines_type
+        msg += "could not be converted to an integer."
+        raise TypeError(msg)
+
+    # create vertical line segments for a regular lattice
+    vstack = []
+    for idx1 in range(nlines):
+        for idx2 in range(nlines):
+            _idx2 = idx2 + 1
+            if _idx2 == nlines:
+                continue
+            vstack.append([cg.Point((idx1, idx2)), cg.Point((idx1, _idx2))])
+
+    # rotate vertical lines for horizontal lines in a regular lattice
+    hstack = [[c[::-1] for c in line] for line in vstack]
+
+    # combine line lists
+    lattice_segments = [[line for line in vs] for vs in vstack] + hstack
+
+    # remove lattice exterior if not desired
+    if not exterior:
+
+        lower_exterior_condition = 0
+        upper_exterior_condition = nlines - 1
+
+        _lattice_segments = []
+
+        for (x1, y1), (x2, y2) in lattice_segments:
+            if (
+                (x1 == x2 and x1 == lower_exterior_condition)
+                or (y1 == y2 and y1 == lower_exterior_condition)
+                or (x1 == x2 and x1 == upper_exterior_condition)
+                or (y1 == y2 and y1 == upper_exterior_condition)
+            ):
+                continue
+
+            _lattice_segments.append([(x1, y1), (x2, y2)])
+
+        lattice_segments = _lattice_segments
+
+    # convert to coordinates to libpysal.cg.Chain
+    lattice = [cg.Chain(l) for l in lattice_segments]
+
+    return lattice
+
+
 class PointPattern:
     """A stub point pattern class used to store a point pattern.
     
