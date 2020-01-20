@@ -2745,7 +2745,7 @@ def element_as_gdf(
     (a) the vertices of a network; (b) the arcs of a network; (c) both the
     vertices and arcs of the network; (d) the raw point pattern associated
     with the network; (e) the snapped point pattern of (d); or (f) the
-    shortest paths routes between point observations.
+    shortest path routes between point observations.
     
     Parameters
     ----------
