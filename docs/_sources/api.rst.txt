@@ -18,13 +18,14 @@ Network feature instantiation
     spaghetti.PointPattern
 
 
-Network feature extraction
---------------------------
+Network feature extraction and creation
+---------------------------------------
 
 .. autosummary::
    :toctree: generated/
     
     spaghetti.element_as_gdf
+    spaghetti.regular_lattice
 
 
 Save and load a network
