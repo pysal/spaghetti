@@ -21,7 +21,7 @@ and usage tutorials are provided here through the links above.
         <div class="col-sm-.5 col-xs-hidden">
         </div>
         <div class="col-md-4 col-xs-15">
-            <a href="https://pysal.org/spaghetti/notebooks/Basic_spaghetti_tutorial.html" class="thumbnail">
+            <a href="https://pysal.org/spaghetti/notebooks/Basic-spaghetti-tutorial.html" class="thumbnail">
                 <img src="_static/images/net_rep.png" class="img-responsive center-block">
                 <div class="caption text-center">
                 <h6>Network Representation</h6>
@@ -29,7 +29,7 @@ and usage tutorials are provided here through the links above.
             </a>
         </div>
         <div class="col-sm-4 col-xs-15">
-            <a href="https://pysal.org/spaghetti/notebooks/Advanced_spaghetti_tutorial.html" class="thumbnail">
+            <a href="https://pysal.org/spaghetti/notebooks/Advanced-spaghetti-tutorial.html" class="thumbnail">
                 <img src="_static/images/network_k.png" class="img-responsive center-block">
                 <div class="caption text-center">
                 <h6>Spatial Network Analysis</h6>
@@ -37,7 +37,7 @@ and usage tutorials are provided here through the links above.
             </a>
         </div>
         <div class="col-sm-4 col-xs-15">
-            <a href="https://pysal.org/spaghetti/notebooks/Use_case-facility_location.html" class="thumbnail">
+            <a href="https://pysal.org/spaghetti/notebooks/Use-case-facility-location.html" class="thumbnail">
                 <img src="_static/images/facility_location.png"
                 class="img-responsive center-block">
                 <div class="caption text-center">
