@@ -10,7 +10,7 @@
     "\n",
     "\n",
     "----------------\n",
-    "## Basic `pysal.spaghetti` tutorial\n",
+    "## Quickstart\n",
     "### Creating and visualizing a `spaghetti.Network` object\n",
     "\n",
     "**Author: James D. Gaboardi** **<jgaboardi@gmail.com>**\n",

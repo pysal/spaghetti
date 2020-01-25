@@ -22,8 +22,8 @@
     <link rel="shortcut icon" href="../_static/pysal_favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="API reference" href="../api.html" />
-    <link rel="prev" title="Advanced pysal.spaghetti tutorial" href="Advanced-spaghetti-tutorial.html" />
+    <link rel="next" title="The Traveling Sales(man)(person) Problem — TSP" href="tsp.html" />
+    <link rel="prev" title="Spatial network analysis" href="network-analysis.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -71,11 +71,12 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="Basic-spaghetti-tutorial.html">Basic <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Connected-components.html">Connected components in a spatial network</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Shortest-path-visualization.html">Generating regular lattices and visualizing shortest paths</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Advanced-spaghetti-tutorial.html">Advanced <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="connected-components.html">Connected components in a spatial network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shortest-path-visualization.html">Generating regular lattices and visualizing shortest paths</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network-analysis.html">Spatial network analysis</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Demostrating network-based optimal facility location modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tsp.html">The Traveling Sales(man)(person) Problem — TSP</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../api.html">API</a><ul>
@@ -359,9 +360,9 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <div class="admonition note">
-<p>This page was generated from <a class="reference external" href="https://github.com/pysal/spaghetti/tree/master/docsrc/notebooks/Use-case-facility-location.ipynb">docsrc/notebooks/Use-case-facility-location.ipynb</a>.
+<p>This page was generated from <a class="reference external" href="https://github.com/pysal/spaghetti/tree/master/docsrc/notebooks/facility-location.ipynb">docsrc/notebooks/facility-location.ipynb</a>.
 Interactive online version:
-<span class="raw-html"><a href="https://mybinder.org/v2/gh/pysal/spaghetti/master?filepath=docsrc/notebooks/Use-case-facility-location.ipynb"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a></span></p>
+<span class="raw-html"><a href="https://mybinder.org/v2/gh/pysal/spaghetti/master?filepath=docsrc/notebooks/facility-location.ipynb"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a></span></p>
 </div>
 <hr class="docutils" />
 <p><strong>If any part of this notebook is used in your research, please cite with the reference found in</strong> <a class="reference external" href="https://github.com/pysal/spaghetti#bibtex-citation">README.md</a><strong>.</strong></p>
@@ -1963,7 +1964,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_Use-case-facility-location_26_0.png"><img alt="../_images/notebooks_Use-case-facility-location_26_0.png" src="../_images/notebooks_Use-case-facility-location_26_0.png" style="width: 704px; height: 596px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_facility-location_26_0.png"><img alt="../_images/notebooks_facility-location_26_0.png" src="../_images/notebooks_facility-location_26_0.png" style="width: 704px; height: 596px;" /></a>
 </div>
 </div>
 </div>
@@ -2031,7 +2032,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_Use-case-facility-location_31_0.png"><img alt="../_images/notebooks_Use-case-facility-location_31_0.png" src="../_images/notebooks_Use-case-facility-location_31_0.png" style="width: 793px; height: 596px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_facility-location_31_0.png"><img alt="../_images/notebooks_facility-location_31_0.png" src="../_images/notebooks_facility-location_31_0.png" style="width: 793px; height: 596px;" /></a>
 </div>
 </div>
 <p><strong>Generate synthetic client points and synthetic facility points</strong></p>
@@ -2080,7 +2081,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_Use-case-facility-location_37_0.png"><img alt="../_images/notebooks_Use-case-facility-location_37_0.png" src="../_images/notebooks_Use-case-facility-location_37_0.png" style="width: 920px; height: 577px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_facility-location_37_0.png"><img alt="../_images/notebooks_facility-location_37_0.png" src="../_images/notebooks_facility-location_37_0.png" style="width: 920px; height: 577px;" /></a>
 </div>
 </div>
 </div>
@@ -2213,7 +2214,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_Use-case-facility-location_45_0.png"><img alt="../_images/notebooks_Use-case-facility-location_45_0.png" src="../_images/notebooks_Use-case-facility-location_45_0.png" style="width: 920px; height: 577px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_facility-location_45_0.png"><img alt="../_images/notebooks_facility-location_45_0.png" src="../_images/notebooks_facility-location_45_0.png" style="width: 920px; height: 577px;" /></a>
 </div>
 </div>
 </div>
@@ -2297,7 +2298,7 @@ Obj. Value: 4.0 facilities needed for total coverage within a 1000.000000 meter 
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_Use-case-facility-location_51_0.png"><img alt="../_images/notebooks_Use-case-facility-location_51_0.png" src="../_images/notebooks_Use-case-facility-location_51_0.png" style="width: 913px; height: 596px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_facility-location_51_0.png"><img alt="../_images/notebooks_facility-location_51_0.png" src="../_images/notebooks_facility-location_51_0.png" style="width: 913px; height: 596px;" /></a>
 </div>
 </div>
 </div>
@@ -2348,7 +2349,7 @@ Mean weighted distance per person: 562.527647
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_Use-case-facility-location_55_0.png"><img alt="../_images/notebooks_Use-case-facility-location_55_0.png" src="../_images/notebooks_Use-case-facility-location_55_0.png" style="width: 918px; height: 596px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_facility-location_55_0.png"><img alt="../_images/notebooks_facility-location_55_0.png" src="../_images/notebooks_facility-location_55_0.png" style="width: 918px; height: 596px;" /></a>
 </div>
 </div>
 </div>
@@ -2396,7 +2397,7 @@ Obj. Value: 1024.6199825236833 worst case distance with 3 selected facilities
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_Use-case-facility-location_59_0.png"><img alt="../_images/notebooks_Use-case-facility-location_59_0.png" src="../_images/notebooks_Use-case-facility-location_59_0.png" style="width: 915px; height: 596px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_facility-location_59_0.png"><img alt="../_images/notebooks_facility-location_59_0.png" src="../_images/notebooks_facility-location_59_0.png" style="width: 915px; height: 596px;" /></a>
 </div>
 </div>
 </div>
@@ -2450,7 +2451,7 @@ Percent of 1598 clients covered: 82.102628
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_Use-case-facility-location_63_0.png"><img alt="../_images/notebooks_Use-case-facility-location_63_0.png" src="../_images/notebooks_Use-case-facility-location_63_0.png" style="width: 920px; height: 596px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_facility-location_63_0.png"><img alt="../_images/notebooks_facility-location_63_0.png" src="../_images/notebooks_facility-location_63_0.png" style="width: 920px; height: 596px;" /></a>
 </div>
 </div>
 </div>
@@ -2900,7 +2901,7 @@ Percent of 1598 clients covered: 82.102628
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_Use-case-facility-location_72_0.png"><img alt="../_images/notebooks_Use-case-facility-location_72_0.png" src="../_images/notebooks_Use-case-facility-location_72_0.png" style="width: 1005px; height: 892px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_facility-location_72_0.png"><img alt="../_images/notebooks_facility-location_72_0.png" src="../_images/notebooks_facility-location_72_0.png" style="width: 1005px; height: 892px;" /></a>
 </div>
 </div>
 </div>
@@ -3009,7 +3010,7 @@ to their respective houses….</p></li>
         <br/>
         
 <div id="sourcelink">
-  <a href="../_sources/notebooks/Use-case-facility-location.ipynb.txt"
+  <a href="../_sources/notebooks/facility-location.ipynb.txt"
      rel="nofollow">Source</a>
 </div>
       

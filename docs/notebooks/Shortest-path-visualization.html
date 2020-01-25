@@ -22,8 +22,8 @@
     <link rel="shortcut icon" href="../_static/pysal_favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Advanced pysal.spaghetti tutorial" href="Advanced-spaghetti-tutorial.html" />
-    <link rel="prev" title="Connected components in a spatial network" href="Connected-components.html" />
+    <link rel="next" title="Spatial network analysis" href="network-analysis.html" />
+    <link rel="prev" title="Connected components in a spatial network" href="connected-components.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -71,11 +71,12 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="Basic-spaghetti-tutorial.html">Basic <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Connected-components.html">Connected components in a spatial network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="connected-components.html">Connected components in a spatial network</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Generating regular lattices and visualizing shortest paths</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Advanced-spaghetti-tutorial.html">Advanced <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Use-case-facility-location.html">Demostrating network-based optimal facility location modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network-analysis.html">Spatial network analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="facility-location.html">Demostrating network-based optimal facility location modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tsp.html">The Traveling Sales(man)(person) Problem — TSP</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../api.html">API</a><ul>
@@ -358,9 +359,9 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <div class="admonition note">
-<p>This page was generated from <a class="reference external" href="https://github.com/pysal/spaghetti/tree/master/docsrc/notebooks/Shortest-path-visualization.ipynb">docsrc/notebooks/Shortest-path-visualization.ipynb</a>.
+<p>This page was generated from <a class="reference external" href="https://github.com/pysal/spaghetti/tree/master/docsrc/notebooks/shortest-path-visualization.ipynb">docsrc/notebooks/shortest-path-visualization.ipynb</a>.
 Interactive online version:
-<span class="raw-html"><a href="https://mybinder.org/v2/gh/pysal/spaghetti/master?filepath=docsrc/notebooks/Shortest-path-visualization.ipynb"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a></span></p>
+<span class="raw-html"><a href="https://mybinder.org/v2/gh/pysal/spaghetti/master?filepath=docsrc/notebooks/shortest-path-visualization.ipynb"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a></span></p>
 </div>
 <hr class="docutils" />
 <p><strong>If any part of this notebook is used in your research, please cite with the reference found in</strong> <a class="reference external" href="https://github.com/pysal/spaghetti#bibtex-citation">README.md</a><strong>.</strong></p>
@@ -494,7 +495,7 @@ spaghetti  1.4.0
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_Shortest-path-visualization_8_0.png"><img alt="../_images/notebooks_Shortest-path-visualization_8_0.png" src="../_images/notebooks_Shortest-path-visualization_8_0.png" style="width: 580px; height: 574px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_shortest-path-visualization_8_0.png"><img alt="../_images/notebooks_shortest-path-visualization_8_0.png" src="../_images/notebooks_shortest-path-visualization_8_0.png" style="width: 580px; height: 574px;" /></a>
 </div>
 </div>
 </div>
@@ -570,7 +571,7 @@ spaghetti  1.4.0
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_Shortest-path-visualization_13_0.png"><img alt="../_images/notebooks_Shortest-path-visualization_13_0.png" src="../_images/notebooks_Shortest-path-visualization_13_0.png" style="width: 580px; height: 574px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_shortest-path-visualization_13_0.png"><img alt="../_images/notebooks_shortest-path-visualization_13_0.png" src="../_images/notebooks_shortest-path-visualization_13_0.png" style="width: 580px; height: 574px;" /></a>
 </div>
 </div>
 </div>
@@ -726,7 +727,7 @@ array([[nan, 0.4, 3.8],
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_Shortest-path-visualization_22_0.png"><img alt="../_images/notebooks_Shortest-path-visualization_22_0.png" src="../_images/notebooks_Shortest-path-visualization_22_0.png" style="width: 427px; height: 161px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_shortest-path-visualization_22_0.png"><img alt="../_images/notebooks_shortest-path-visualization_22_0.png" src="../_images/notebooks_shortest-path-visualization_22_0.png" style="width: 427px; height: 161px;" /></a>
 </div>
 </div>
 </div>
@@ -776,7 +777,7 @@ array([[nan, 0.4, 3.8],
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_Shortest-path-visualization_24_0.png"><img alt="../_images/notebooks_Shortest-path-visualization_24_0.png" src="../_images/notebooks_Shortest-path-visualization_24_0.png" style="width: 580px; height: 574px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_shortest-path-visualization_24_0.png"><img alt="../_images/notebooks_shortest-path-visualization_24_0.png" src="../_images/notebooks_shortest-path-visualization_24_0.png" style="width: 580px; height: 574px;" /></a>
 </div>
 </div>
 </div>
@@ -810,7 +811,7 @@ array([[nan, 0.4, 3.8],
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_Shortest-path-visualization_27_0.png"><img alt="../_images/notebooks_Shortest-path-visualization_27_0.png" src="../_images/notebooks_Shortest-path-visualization_27_0.png" style="width: 591px; height: 574px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_shortest-path-visualization_27_0.png"><img alt="../_images/notebooks_shortest-path-visualization_27_0.png" src="../_images/notebooks_shortest-path-visualization_27_0.png" style="width: 591px; height: 574px;" /></a>
 </div>
 </div>
 </div>
@@ -873,7 +874,7 @@ array([[nan, 0.4, 3.8],
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_Shortest-path-visualization_31_0.png"><img alt="../_images/notebooks_Shortest-path-visualization_31_0.png" src="../_images/notebooks_Shortest-path-visualization_31_0.png" style="width: 879px; height: 846px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_shortest-path-visualization_31_0.png"><img alt="../_images/notebooks_shortest-path-visualization_31_0.png" src="../_images/notebooks_shortest-path-visualization_31_0.png" style="width: 879px; height: 846px;" /></a>
 </div>
 </div>
 </div>
@@ -964,7 +965,7 @@ array([[nan, 0.4, 3.8],
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_Shortest-path-visualization_35_0.png"><img alt="../_images/notebooks_Shortest-path-visualization_35_0.png" src="../_images/notebooks_Shortest-path-visualization_35_0.png" style="width: 464px; height: 348px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_shortest-path-visualization_35_0.png"><img alt="../_images/notebooks_shortest-path-visualization_35_0.png" src="../_images/notebooks_shortest-path-visualization_35_0.png" style="width: 464px; height: 348px;" /></a>
 </div>
 </div>
 </div>
@@ -986,7 +987,7 @@ array([[nan, 0.4, 3.8],
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_Shortest-path-visualization_37_0.png"><img alt="../_images/notebooks_Shortest-path-visualization_37_0.png" src="../_images/notebooks_Shortest-path-visualization_37_0.png" style="width: 718px; height: 683px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_shortest-path-visualization_37_0.png"><img alt="../_images/notebooks_shortest-path-visualization_37_0.png" src="../_images/notebooks_shortest-path-visualization_37_0.png" style="width: 718px; height: 683px;" /></a>
 </div>
 </div>
 </div>
@@ -1007,7 +1008,7 @@ array([[nan, 0.4, 3.8],
         <br/>
         
 <div id="sourcelink">
-  <a href="../_sources/notebooks/Shortest-path-visualization.ipynb.txt"
+  <a href="../_sources/notebooks/shortest-path-visualization.ipynb.txt"
      rel="nofollow">Source</a>
 </div>
       

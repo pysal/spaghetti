@@ -71,11 +71,12 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../notebooks/Basic-spaghetti-tutorial.html">Basic <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../notebooks/Connected-components.html">Connected components in a spatial network</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../notebooks/Shortest-path-visualization.html">Generating regular lattices and visualizing shortest paths</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../notebooks/Advanced-spaghetti-tutorial.html">Advanced <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../notebooks/Use-case-facility-location.html">Demostrating network-based optimal facility location modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/quickstart.html">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/connected-components.html">Connected components in a spatial network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/shortest-path-visualization.html">Generating regular lattices and visualizing shortest paths</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/network-analysis.html">Spatial network analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/facility-location.html">Demostrating network-based optimal facility location modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/tsp.html">The Traveling Sales(man)(person) Problem — TSP</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
@@ -165,17 +166,17 @@ Default is <code class="docutils literal notranslate"><span class="pre">None</sp
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl>
-<dt><strong>points</strong><span class="classifier"><a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.6.1+36.g86e01dc)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a></span></dt><dd><p>Network point elements (either vertices or <code class="docutils literal notranslate"><span class="pre">network.PointPattern</span></code>
+<dt><strong>points</strong><span class="classifier"><a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.6.1+37.g1d212b2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a></span></dt><dd><p>Network point elements (either vertices or <code class="docutils literal notranslate"><span class="pre">network.PointPattern</span></code>
 points) as a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> of <code class="docutils literal notranslate"><span class="pre">shapely.geometry.Point</span></code>
 objects with an <code class="docutils literal notranslate"><span class="pre">&quot;id&quot;</span></code> column and <code class="docutils literal notranslate"><span class="pre">&quot;geometry&quot;&quot;</span></code> column.</p>
 </dd>
-<dt><strong>lines</strong><span class="classifier"><a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.6.1+36.g86e01dc)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a></span></dt><dd><p>Network arc elements as a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> of
+<dt><strong>lines</strong><span class="classifier"><a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.6.1+37.g1d212b2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a></span></dt><dd><p>Network arc elements as a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> of
 <code class="docutils literal notranslate"><span class="pre">shapely.geometry.LineString</span></code> objects with an <code class="docutils literal notranslate"><span class="pre">&quot;id&quot;</span></code>
 column and <code class="docutils literal notranslate"><span class="pre">&quot;geometry&quot;</span></code> column. If the network object has 
 a <code class="docutils literal notranslate"><span class="pre">network_component_labels</span></code> attribute, then component labels
 are also added in a column.</p>
 </dd>
-<dt><strong>paths</strong><span class="classifier"><a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.6.1+36.g86e01dc)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a></span></dt><dd><p>Shortest path routes along network arc elements as a 
+<dt><strong>paths</strong><span class="classifier"><a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.6.1+37.g1d212b2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a></span></dt><dd><p>Shortest path routes along network arc elements as a 
 <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> of <code class="docutils literal notranslate"><span class="pre">shapely.geometry.LineString</span></code>
 objects with an <code class="docutils literal notranslate"><span class="pre">&quot;id&quot;</span></code> (see <code class="docutils literal notranslate"><span class="pre">spaghetti.Network.shortest_paths()</span></code>)
 column and <code class="docutils literal notranslate"><span class="pre">&quot;geometry&quot;</span></code> column.</p>

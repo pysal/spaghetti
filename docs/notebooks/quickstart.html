@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Basic pysal.spaghetti tutorial &#8212; spaghetti v1.4.0 Manual</title>
+    <title>Quickstart &#8212; spaghetti v1.4.0 Manual</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/pysal-styles.css" />
@@ -22,7 +22,7 @@
     <link rel="shortcut icon" href="../_static/pysal_favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Connected components in a spatial network" href="Connected-components.html" />
+    <link rel="next" title="Connected components in a spatial network" href="connected-components.html" />
     <link rel="prev" title="Tutorials" href="../tutorials.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -71,11 +71,12 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Basic <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Connected-components.html">Connected components in a spatial network</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Shortest-path-visualization.html">Generating regular lattices and visualizing shortest paths</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Advanced-spaghetti-tutorial.html">Advanced <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Use-case-facility-location.html">Demostrating network-based optimal facility location modeling</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="connected-components.html">Connected components in a spatial network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shortest-path-visualization.html">Generating regular lattices and visualizing shortest paths</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network-analysis.html">Spatial network analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="facility-location.html">Demostrating network-based optimal facility location modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tsp.html">The Traveling Sales(man)(person) Problem — TSP</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../api.html">API</a><ul>
@@ -98,7 +99,7 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Basic <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial</a><ul>
+<li><a class="reference internal" href="#">Quickstart</a><ul>
 <li><a class="reference internal" href="#Creating-and-visualizing-a-spaghetti.Network-object">Creating and visualizing a <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object</a></li>
 <li><a class="reference internal" href="#1.-Instantiating-a-spaghetti.Network-object">1. Instantiating a <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object</a><ul>
 <li><a class="reference internal" href="#Instantiate-the-network-from-a-.shp-file">Instantiate the network from a <code class="docutils literal notranslate"><span class="pre">.shp</span></code> file</a></li>
@@ -353,15 +354,15 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <div class="admonition note">
-<p>This page was generated from <a class="reference external" href="https://github.com/pysal/spaghetti/tree/master/docsrc/notebooks/Basic-spaghetti-tutorial.ipynb">docsrc/notebooks/Basic-spaghetti-tutorial.ipynb</a>.
+<p>This page was generated from <a class="reference external" href="https://github.com/pysal/spaghetti/tree/master/docsrc/notebooks/quickstart.ipynb">docsrc/notebooks/quickstart.ipynb</a>.
 Interactive online version:
-<span class="raw-html"><a href="https://mybinder.org/v2/gh/pysal/spaghetti/master?filepath=docsrc/notebooks/Basic-spaghetti-tutorial.ipynb"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a></span></p>
+<span class="raw-html"><a href="https://mybinder.org/v2/gh/pysal/spaghetti/master?filepath=docsrc/notebooks/quickstart.ipynb"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a></span></p>
 </div>
 <hr class="docutils" />
 <p><strong>If any part of this notebook is used in your research, please cite with the reference found in</strong> <a class="reference external" href="https://github.com/pysal/spaghetti#bibtex-citation">README.md</a><strong>.</strong></p>
 <hr class="docutils" />
-<div class="section" id="Basic-pysal.spaghetti-tutorial">
-<h1>Basic <code class="docutils literal notranslate"><span class="pre">pysal.spaghetti</span></code> tutorial<a class="headerlink" href="#Basic-pysal.spaghetti-tutorial" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="Quickstart">
+<h1>Quickstart<a class="headerlink" href="#Quickstart" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="Creating-and-visualizing-a-spaghetti.Network-object">
 <h2>Creating and visualizing a <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object<a class="headerlink" href="#Creating-and-visualizing-a-spaghetti.Network-object" title="Permalink to this headline">¶</a></h2>
 <p><strong>Author: James D. Gaboardi</strong> <a class="reference external" href="mailto:jgaboardi&#37;&#52;&#48;gmail&#46;com">jgaboardi<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
@@ -764,7 +765,7 @@ snapped coords: (727919.2473619275, 875942.4986759046)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_Basic-spaghetti-tutorial_30_0.png"><img alt="../_images/notebooks_Basic-spaghetti-tutorial_30_0.png" src="../_images/notebooks_Basic-spaghetti-tutorial_30_0.png" style="width: 955px; height: 683px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_quickstart_30_0.png"><img alt="../_images/notebooks_quickstart_30_0.png" src="../_images/notebooks_quickstart_30_0.png" style="width: 955px; height: 683px;" /></a>
 </div>
 </div>
 </div>
@@ -785,7 +786,7 @@ snapped coords: (727919.2473619275, 875942.4986759046)
         <br/>
         
 <div id="sourcelink">
-  <a href="../_sources/notebooks/Basic-spaghetti-tutorial.ipynb.txt"
+  <a href="../_sources/notebooks/quickstart.ipynb.txt"
      rel="nofollow">Source</a>
 </div>
       
