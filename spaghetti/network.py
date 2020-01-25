@@ -2800,14 +2800,13 @@ def element_as_gdf(
         ``shapely.geometry.LineString`` objects with an ``"id"``
         column and ``"geometry"`` column. If the network object has 
         a ``network_component_labels`` attribute, then component labels
-        are also added in a column,
+        are also added in a column.
     
     paths :  geopandas.GeoDataFrame
-        
-        
-        
-        
-        
+        Shortest path routes along network arc elements as a 
+        ``geopandas.GeoDataFrame`` of ``shapely.geometry.LineString``
+        objects with an ``"id"`` (see ``spaghetti.Network.shortest_paths()``)
+        column and ``"geometry"`` column.
     
     Notes
     -----
