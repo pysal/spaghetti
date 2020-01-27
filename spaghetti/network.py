@@ -2884,10 +2884,9 @@ def element_as_gdf(
         return points, arcs
 
 
-def regular_lattice(nlines, exterior=True):
+def regular_lattice(nlines, exterior=True, origin=0):
     """Generate a regular lattice of line segments 
     (`libpysal.cg.Chain objects <https://pysal.org/libpysal/generated/libpysal.cg.Chain.html#libpysal.cg.Chain>`_).
-    
     
     Parameters
     ----------
@@ -2900,7 +2899,11 @@ def regular_lattice(nlines, exterior=True):
     exterior : bool
         Flag for returning the full regular lattice (``True``) or
         a tic-tac-toe style grid (``False``). Default is ``True``.
-        
+    
+    origin : int
+        Absolute starting point. Default is 0, which equates to
+        a (0,0) Cartesian coordinate.
+    
     Returns
     -------
     
@@ -2940,7 +2943,8 @@ def regular_lattice(nlines, exterior=True):
             _idx2 = idx2 + 1
             if _idx2 == nlines:
                 continue
-            vstack.append([cg.Point((idx1, idx2)), cg.Point((idx1, _idx2))])
+            p1, p2 = (idx1 + origin, idx2 + origin), (idx1 + origin, _idx2 + origin)
+            vstack.append([cg.Point(p1), cg.Point((p2))])
 
     # rotate vertical lines for horizontal lines in a regular lattice
     hstack = [[c[::-1] for c in line] for line in vstack]
@@ -2951,8 +2955,8 @@ def regular_lattice(nlines, exterior=True):
     # remove lattice exterior if not desired
     if not exterior:
 
-        lower_exterior_condition = 0
-        upper_exterior_condition = nlines - 1
+        lower_exterior_condition = origin
+        upper_exterior_condition = nlines + origin - 1
 
         _lattice_segments = []
 
