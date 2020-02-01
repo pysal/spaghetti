@@ -78,9 +78,8 @@ def get_neighbor_distances(ntw, v0, l):
     >>> from libpysal import examples
     >>> ntw = spaghetti.Network(examples.get_path("streets.shp"))
     >>> neighs = spaghetti.util.get_neighbor_distances(ntw, 0, ntw.arc_lengths)
-    >>> neighs[1]
-    102.62353453439829
-    
+    >>> numpy.round(neighs[1], 10)
+    102.6235345344
     """
 
     # fetch links associated with vertices
