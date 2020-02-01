@@ -16,7 +16,7 @@ matrix:
     - name: "python-3.8-pypi-plus"
       env: PY=3.8 PYSAL_PYPI=true PYSAL_PLUS=true
     - name: "tarball-pypi"
-      env: PY=3.7 PYSAL_PYPI=true PYSAL_PLUS=false
+      env: PY=3.8 PYSAL_PYPI=true PYSAL_PLUS=false
     - name: "python-3.6"
       env: PY=3.6 PYSAL_PYPI=false PYSAL_PLUS=false
     - name: "python-3.6-plus"
