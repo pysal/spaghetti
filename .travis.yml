@@ -11,6 +11,10 @@ matrix:
       env: PY=3.7 PYSAL_PYPI=true PYSAL_PLUS=false
     - name: "python-3.7-pypi-plus"
       env: PY=3.7 PYSAL_PYPI=true PYSAL_PLUS=true
+    - name: "python-3.8-pypi"
+      env: PY=3.8 PYSAL_PYPI=true PYSAL_PLUS=false
+    - name: "python-3.8-pypi-plus"
+      env: PY=3.8 PYSAL_PYPI=true PYSAL_PLUS=true
     - name: "tarball-pypi"
       env: PY=3.7 PYSAL_PYPI=true PYSAL_PLUS=false
     - name: "python-3.6"
@@ -21,6 +25,10 @@ matrix:
       env: PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=false
     - name: "python-3.7-plus"
       env: PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=true
+    - name: "python-3.8"
+      env: PY=3.8 PYSAL_PYPI=false PYSAL_PLUS=false
+    - name: "python-3.8-plus"
+      env: PY=3.8 PYSAL_PYPI=false PYSAL_PLUS=true
   allow_failures:
     - name: "python-3.6"
       env: PY=3.6 PYSAL_PYPI=false PYSAL_PLUS=false
@@ -30,6 +38,10 @@ matrix:
       env: PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=false
     - name: "python-3.7-plus"
       env: PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=true
+    - name: "python-3.8"
+      env: PY=3.8 PYSAL_PYPI=false PYSAL_PLUS=false
+    - name: "python-3.8-plus"
+      env: PY=3.8 PYSAL_PYPI=false PYSAL_PLUS=true
 
 before_install:
   - |
