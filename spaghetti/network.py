@@ -1452,11 +1452,11 @@ class Network:
         totallength = stops[-1]
 
         # create lengths with a uniform distribution
-        if distribution is "uniform":
+        if distribution == "uniform":
             nrandompts = numpy.random.uniform(0, totallength, size=(count,))
 
         # create lengths with a poisson distribution
-        elif distribution is "poisson":
+        elif distribution == "poisson":
             # calculate poisson from half the network length
             mid_length = totallength / 2.0
             nrandompts = numpy.random.poisson(mid_length, size=(count,))
