@@ -472,10 +472,10 @@ def kfunction(nearest, upperbound, intensity, nsteps=10):
     for i, r in enumerate(x):
 
         # slice out and count neighbors within radius
-        y[i] = len(nearest[nearest <= r])
+        with numpy.errstate(invalid="ignore"):
+            y[i] = len(nearest[nearest <= r])
 
     # compute k for y-axis vector
     y *= intensity ** -1
 
     return x, y
-
