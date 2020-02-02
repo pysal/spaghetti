@@ -1,0 +1,1185 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "---------------\n",
+    "\n",
+    "**If any part of this notebook is used in your research, please cite with the reference found in** **[README.md](https://github.com/pysal/spaghetti#bibtex-citation).**\n",
+    "\n",
+    "\n",
+    "----------------\n",
+    "\n",
+    "## Connected components in a spatial network\n",
+    "### Identifying and visualizing the parts of a network\n",
+    "\n",
+    "**Author: James D. Gaboardi** **<jgaboardi@gmail.com>**\n",
+    "\n",
+    "**This notebook is a walk-through for:**\n",
+    "\n",
+    "1. Instantiating a simple network with `libpysal.cg.Chain` objects\n",
+    "2. Working with the network components\n",
+    "3. Visualizing the components and (non)articulation vertices"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2020-02-02T18:43:34.618361Z",
+     "start_time": "2020-02-02T18:43:34.366284Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "2020-02-02T13:43:34-05:00\n",
+      "\n",
+      "CPython 3.7.3\n",
+      "IPython 7.10.2\n",
+      "\n",
+      "compiler   : Clang 9.0.0 (tags/RELEASE_900/final)\n",
+      "system     : Darwin\n",
+      "release    : 19.3.0\n",
+      "machine    : x86_64\n",
+      "processor  : i386\n",
+      "CPU cores  : 4\n",
+      "interpreter: 64bit\n"
+     ]
+    }
+   ],
+   "source": [
+    "%load_ext watermark\n",
+    "%watermark"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "**In addtion to the base** **[spaghetti requirements](https://github.com/pysal/spaghetti/blob/master/requirements.txt)** **(and their dependecies), this notebook requires installations of:**\n",
+    "\n",
+    "* [geopandas](http://geopandas.org)\n",
+    "    * `$ conda install -c conda-forge geopandas`\n",
+    "* [matplotlib](https://matplotlib.org)\n",
+    "    * `$ conda install matplotlib`\n",
+    "    \n",
+    "-----------------------"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2020-02-02T18:43:36.221374Z",
+     "start_time": "2020-02-02T18:43:34.623037Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "watermark 2.0.2\n",
+      "geopandas  0.6.2\n",
+      "libpysal   4.2.0\n",
+      "spaghetti  1.4.1\n",
+      "matplotlib 3.1.2\n",
+      "\n"
+     ]
+    }
+   ],
+   "source": [
+    "import spaghetti\n",
+    "import geopandas\n",
+    "import libpysal\n",
+    "from libpysal.cg import Point, Chain\n",
+    "import matplotlib\n",
+    "try:\n",
+    "    from IPython.display import set_matplotlib_formats\n",
+    "    set_matplotlib_formats(\"retina\")\n",
+    "except ImportError:\n",
+    "    pass\n",
+    "%matplotlib inline\n",
+    "%watermark -w\n",
+    "%watermark -iv"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "----------------\n",
+    "\n",
+    "### 1. Instantiate a network from two collections of `libpysal.cg.Chain` objects"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2020-02-02T18:43:36.235680Z",
+     "start_time": "2020-02-02T18:43:36.227075Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "plus1 = [\n",
+    "    Chain([Point([1, 2]), Point([0, 2])]),\n",
+    "    Chain([Point([1, 2]), Point([1, 1])]),\n",
+    "    Chain([Point([1, 2]), Point([1, 3])]),\n",
+    "]\n",
+    "plus2 = [\n",
+    "    Chain([Point([2, 1]), Point([2, 0])]),\n",
+    "    Chain([Point([2, 1]), Point([3, 1])]),\n",
+    "    Chain([Point([2, 1]), Point([2, 2])]),\n",
+    "]\n",
+    "lines = plus1 + plus2"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2020-02-02T18:43:36.257058Z",
+     "start_time": "2020-02-02T18:43:36.241069Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "/Users/jgaboardi/miniconda3/envs/py3_spgh_dev/lib/python3.7/site-packages/libpysal/weights/weights.py:167: UserWarning: The weights matrix is not fully connected: \n",
+      " There are 2 disconnected components.\n",
+      "  warnings.warn(message)\n"
+     ]
+    }
+   ],
+   "source": [
+    "ntw = spaghetti.Network(in_data=lines)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Here we get a warning because the network we created has 2 connected components"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2020-02-02T18:43:36.278053Z",
+     "start_time": "2020-02-02T18:43:36.264259Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "2"
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "ntw.network_n_components"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### The network components can be inspected through the `network_component2arc` attribute"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2020-02-02T18:43:36.299088Z",
+     "start_time": "2020-02-02T18:43:36.284658Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "{0: [(0, 1), (0, 2), (0, 3)], 1: [(4, 5), (4, 6), (4, 7)]}"
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "ntw.network_component2arc"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Extract the network arc and vertices as `geopandas.GeoDataFrame` objects"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2020-02-02T18:43:36.344157Z",
+     "start_time": "2020-02-02T18:43:36.309793Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "# network vertices and arcs\n",
+    "vertices_df, arcs_df = spaghetti.element_as_gdf(ntw, vertices=True, arcs=True)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Network component labels are found in the `\"comp_label\"` field"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2020-02-02T18:43:36.373998Z",
+     "start_time": "2020-02-02T18:43:36.354478Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>id</th>\n",
+       "      <th>geometry</th>\n",
+       "      <th>comp_label</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>(0, 1)</td>\n",
+       "      <td>LINESTRING (1.00000 2.00000, 0.00000 2.00000)</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>(0, 2)</td>\n",
+       "      <td>LINESTRING (1.00000 2.00000, 1.00000 1.00000)</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>(0, 3)</td>\n",
+       "      <td>LINESTRING (1.00000 2.00000, 1.00000 3.00000)</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>(4, 5)</td>\n",
+       "      <td>LINESTRING (2.00000 1.00000, 2.00000 0.00000)</td>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>(4, 6)</td>\n",
+       "      <td>LINESTRING (2.00000 1.00000, 3.00000 1.00000)</td>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>5</th>\n",
+       "      <td>(4, 7)</td>\n",
+       "      <td>LINESTRING (2.00000 1.00000, 2.00000 2.00000)</td>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "       id                                       geometry  comp_label\n",
+       "0  (0, 1)  LINESTRING (1.00000 2.00000, 0.00000 2.00000)           0\n",
+       "1  (0, 2)  LINESTRING (1.00000 2.00000, 1.00000 1.00000)           0\n",
+       "2  (0, 3)  LINESTRING (1.00000 2.00000, 1.00000 3.00000)           0\n",
+       "3  (4, 5)  LINESTRING (2.00000 1.00000, 2.00000 0.00000)           1\n",
+       "4  (4, 6)  LINESTRING (2.00000 1.00000, 3.00000 1.00000)           1\n",
+       "5  (4, 7)  LINESTRING (2.00000 1.00000, 2.00000 2.00000)           1"
+      ]
+     },
+     "execution_count": 8,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "arcs_df"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Plot the disconnected network and symbolize the arcs bases on the value of `\"comp_label\"`"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2020-02-02T18:43:36.687295Z",
+     "start_time": "2020-02-02T18:43:36.379489Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "image/png": "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\n",
+      "text/plain": [
+       "<Figure size 504x504 with 1 Axes>"
+      ]
+     },
+     "metadata": {
+      "needs_background": "light"
+     },
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "base = arcs_df.plot(column=\"comp_label\", cmap=\"Set2\", linewidth=5, figsize=(7, 7))\n",
+    "vertices_df.plot(ax=base, color=\"k\", markersize=100, zorder=2);"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2020-01-17T02:24:00.431130Z",
+     "start_time": "2020-01-17T02:24:00.414100Z"
+    }
+   },
+   "source": [
+    "\n",
+    "----------------\n",
+    "\n",
+    "### 2. Add to the network created above"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2020-02-02T18:43:36.701111Z",
+     "start_time": "2020-02-02T18:43:36.691399Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "new_lines = [\n",
+    "    Chain([Point([1, 1]), Point([2, 2])]),\n",
+    "    Chain([Point([0.5, 1]), Point([0.5, 0.5])]),\n",
+    "    Chain([Point([0.5, 0.5]), Point([1, 0.5])]),\n",
+    "    Chain([Point([2, 2.5]), Point([2.5, 2.5])]),\n",
+    "    Chain([Point([2.5, 2.5]), Point([2.5, 2])]),\n",
+    "]\n",
+    "lines += new_lines"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2020-02-02T18:43:36.724039Z",
+     "start_time": "2020-02-02T18:43:36.707667Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "/Users/jgaboardi/miniconda3/envs/py3_spgh_dev/lib/python3.7/site-packages/libpysal/weights/weights.py:167: UserWarning: The weights matrix is not fully connected: \n",
+      " There are 3 disconnected components.\n",
+      "  warnings.warn(message)\n",
+      "/Users/jgaboardi/miniconda3/envs/py3_spgh_dev/lib/python3.7/site-packages/libpysal/weights/weights.py:167: UserWarning: The weights matrix is not fully connected: \n",
+      " There are 3 disconnected components.\n",
+      " There are 2 islands with ids: (8, 10), (11, 13).\n",
+      "  warnings.warn(message)\n"
+     ]
+    }
+   ],
+   "source": [
+    "ntw = spaghetti.Network(in_data=lines)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Now there are 3 connected components in the network"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2020-02-02T18:43:36.741142Z",
+     "start_time": "2020-02-02T18:43:36.728921Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "3"
+      ]
+     },
+     "execution_count": 12,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "ntw.network_n_components"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2020-02-02T18:43:36.764405Z",
+     "start_time": "2020-02-02T18:43:36.747001Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "{0: [(0, 1), (0, 2), (0, 3), (2, 7), (4, 5), (4, 6), (4, 7)],\n",
+       " 1: [(8, 9), (9, 10)],\n",
+       " 2: [(11, 12), (12, 13)]}"
+      ]
+     },
+     "execution_count": 13,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "ntw.network_component2arc"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2020-02-02T18:43:36.826347Z",
+     "start_time": "2020-02-02T18:43:36.773479Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "# network vertices and arcs\n",
+    "vertices_df, arcs_df = spaghetti.element_as_gdf(ntw, vertices=True, arcs=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2020-02-02T18:43:36.853058Z",
+     "start_time": "2020-02-02T18:43:36.828745Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>id</th>\n",
+       "      <th>geometry</th>\n",
+       "      <th>comp_label</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>(0, 1)</td>\n",
+       "      <td>LINESTRING (1.00000 2.00000, 0.00000 2.00000)</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>(0, 2)</td>\n",
+       "      <td>LINESTRING (1.00000 2.00000, 1.00000 1.00000)</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>(0, 3)</td>\n",
+       "      <td>LINESTRING (1.00000 2.00000, 1.00000 3.00000)</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>(2, 7)</td>\n",
+       "      <td>LINESTRING (1.00000 1.00000, 2.00000 2.00000)</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>(4, 5)</td>\n",
+       "      <td>LINESTRING (2.00000 1.00000, 2.00000 0.00000)</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>5</th>\n",
+       "      <td>(4, 6)</td>\n",
+       "      <td>LINESTRING (2.00000 1.00000, 3.00000 1.00000)</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>6</th>\n",
+       "      <td>(4, 7)</td>\n",
+       "      <td>LINESTRING (2.00000 1.00000, 2.00000 2.00000)</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>7</th>\n",
+       "      <td>(8, 9)</td>\n",
+       "      <td>LINESTRING (0.50000 1.00000, 0.50000 0.50000)</td>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>8</th>\n",
+       "      <td>(9, 10)</td>\n",
+       "      <td>LINESTRING (0.50000 0.50000, 1.00000 0.50000)</td>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>9</th>\n",
+       "      <td>(11, 12)</td>\n",
+       "      <td>LINESTRING (2.00000 2.50000, 2.50000 2.50000)</td>\n",
+       "      <td>2</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>10</th>\n",
+       "      <td>(12, 13)</td>\n",
+       "      <td>LINESTRING (2.50000 2.50000, 2.50000 2.00000)</td>\n",
+       "      <td>2</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "          id                                       geometry  comp_label\n",
+       "0     (0, 1)  LINESTRING (1.00000 2.00000, 0.00000 2.00000)           0\n",
+       "1     (0, 2)  LINESTRING (1.00000 2.00000, 1.00000 1.00000)           0\n",
+       "2     (0, 3)  LINESTRING (1.00000 2.00000, 1.00000 3.00000)           0\n",
+       "3     (2, 7)  LINESTRING (1.00000 1.00000, 2.00000 2.00000)           0\n",
+       "4     (4, 5)  LINESTRING (2.00000 1.00000, 2.00000 0.00000)           0\n",
+       "5     (4, 6)  LINESTRING (2.00000 1.00000, 3.00000 1.00000)           0\n",
+       "6     (4, 7)  LINESTRING (2.00000 1.00000, 2.00000 2.00000)           0\n",
+       "7     (8, 9)  LINESTRING (0.50000 1.00000, 0.50000 0.50000)           1\n",
+       "8    (9, 10)  LINESTRING (0.50000 0.50000, 1.00000 0.50000)           1\n",
+       "9   (11, 12)  LINESTRING (2.00000 2.50000, 2.50000 2.50000)           2\n",
+       "10  (12, 13)  LINESTRING (2.50000 2.50000, 2.50000 2.00000)           2"
+      ]
+     },
+     "execution_count": 15,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "arcs_df"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### We can also inspect the non-articulation points in the network. Non-articulation points are vertices in a network that are degree-2. A vertex is degree-2 if, and only if, it is directly connected to only 2 other vertices."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2020-02-02T18:43:36.865142Z",
+     "start_time": "2020-02-02T18:43:36.857187Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[9, 2, 12, 7]"
+      ]
+     },
+     "execution_count": 16,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "ntw.non_articulation_points"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Slice out the articulation points and non-articulation points"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2020-02-02T18:43:36.892094Z",
+     "start_time": "2020-02-02T18:43:36.872050Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "napts = ntw.non_articulation_points\n",
+    "articulation_vertices = vertices_df[~vertices_df[\"id\"].isin(napts)]\n",
+    "non_articulation_vertices = vertices_df[vertices_df[\"id\"].isin(napts)]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Plot the connected components while making a distinction between articulation points and non-articulation points"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2020-02-02T18:43:37.271371Z",
+     "start_time": "2020-02-02T18:43:36.895703Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "image/png": "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\n",
+      "text/plain": [
+       "<Figure size 504x504 with 1 Axes>"
+      ]
+     },
+     "metadata": {
+      "needs_background": "light"
+     },
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "base = arcs_df.plot(column=\"comp_label\", cmap=\"Set2\", linewidth=5, figsize=(7, 7))\n",
+    "articulation_vertices.plot(ax=base, color=\"k\", markersize=100, zorder=2)\n",
+    "non_articulation_vertices.plot(ax=base, marker=\"s\", color=\"k\", markersize=20, zorder=2);"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "----------------\n",
+    "\n",
+    "### 3. Add a loop of `libpysal.cg.Chain` objects"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2020-02-02T18:43:37.286388Z",
+     "start_time": "2020-02-02T18:43:37.275641Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "new_lines = [\n",
+    "    Chain([Point([3, 1]), Point([3.25, 1.25])]),\n",
+    "    Chain([Point([3.25, 1.25]), Point([3.5, 1.25])]),\n",
+    "    Chain([Point([3.5, 1.25]), Point([3.75, 1])]),\n",
+    "    Chain([Point([3.75, 1]), Point([3.5, .75])]),\n",
+    "    Chain([Point([3.5, .75]), Point([3.25, .75])]),\n",
+    "    Chain([Point([3.25, .75]), Point([3, 1])]),\n",
+    "]\n",
+    "lines += new_lines"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2020-02-02T18:43:37.305052Z",
+     "start_time": "2020-02-02T18:43:37.289359Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "/Users/jgaboardi/miniconda3/envs/py3_spgh_dev/lib/python3.7/site-packages/libpysal/weights/weights.py:167: UserWarning: The weights matrix is not fully connected: \n",
+      " There are 3 disconnected components.\n",
+      "  warnings.warn(message)\n",
+      "/Users/jgaboardi/miniconda3/envs/py3_spgh_dev/lib/python3.7/site-packages/libpysal/weights/weights.py:167: UserWarning: The weights matrix is not fully connected: \n",
+      " There are 3 disconnected components.\n",
+      " There are 2 islands with ids: (8, 10), (11, 13).\n",
+      "  warnings.warn(message)\n"
+     ]
+    }
+   ],
+   "source": [
+    "ntw = spaghetti.Network(in_data=lines)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2020-02-02T18:43:37.322724Z",
+     "start_time": "2020-02-02T18:43:37.309762Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "3"
+      ]
+     },
+     "execution_count": 21,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "ntw.network_n_components"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2020-02-02T18:43:37.342056Z",
+     "start_time": "2020-02-02T18:43:37.327105Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "{0: [(0, 1),\n",
+       "  (0, 2),\n",
+       "  (0, 3),\n",
+       "  (2, 7),\n",
+       "  (4, 5),\n",
+       "  (4, 6),\n",
+       "  (4, 7),\n",
+       "  (6, 14),\n",
+       "  (6, 18),\n",
+       "  (14, 15),\n",
+       "  (15, 16),\n",
+       "  (16, 17),\n",
+       "  (17, 18)],\n",
+       " 1: [(8, 9), (9, 10)],\n",
+       " 2: [(11, 12), (12, 13)]}"
+      ]
+     },
+     "execution_count": 22,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "ntw.network_component2arc"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2020-02-02T18:43:37.389280Z",
+     "start_time": "2020-02-02T18:43:37.353195Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "# network vertices and arcs\n",
+    "vertices_df, arcs_df = spaghetti.element_as_gdf(ntw, vertices=True, arcs=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2020-02-02T18:43:37.416291Z",
+     "start_time": "2020-02-02T18:43:37.392739Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>id</th>\n",
+       "      <th>geometry</th>\n",
+       "      <th>comp_label</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>(0, 1)</td>\n",
+       "      <td>LINESTRING (1.00000 2.00000, 0.00000 2.00000)</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>(0, 2)</td>\n",
+       "      <td>LINESTRING (1.00000 2.00000, 1.00000 1.00000)</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>(0, 3)</td>\n",
+       "      <td>LINESTRING (1.00000 2.00000, 1.00000 3.00000)</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>(2, 7)</td>\n",
+       "      <td>LINESTRING (1.00000 1.00000, 2.00000 2.00000)</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>(4, 5)</td>\n",
+       "      <td>LINESTRING (2.00000 1.00000, 2.00000 0.00000)</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>5</th>\n",
+       "      <td>(4, 6)</td>\n",
+       "      <td>LINESTRING (2.00000 1.00000, 3.00000 1.00000)</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>6</th>\n",
+       "      <td>(4, 7)</td>\n",
+       "      <td>LINESTRING (2.00000 1.00000, 2.00000 2.00000)</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>7</th>\n",
+       "      <td>(6, 14)</td>\n",
+       "      <td>LINESTRING (3.00000 1.00000, 3.25000 1.25000)</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>8</th>\n",
+       "      <td>(6, 18)</td>\n",
+       "      <td>LINESTRING (3.00000 1.00000, 3.25000 0.75000)</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>9</th>\n",
+       "      <td>(8, 9)</td>\n",
+       "      <td>LINESTRING (0.50000 1.00000, 0.50000 0.50000)</td>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>10</th>\n",
+       "      <td>(9, 10)</td>\n",
+       "      <td>LINESTRING (0.50000 0.50000, 1.00000 0.50000)</td>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>11</th>\n",
+       "      <td>(11, 12)</td>\n",
+       "      <td>LINESTRING (2.00000 2.50000, 2.50000 2.50000)</td>\n",
+       "      <td>2</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>12</th>\n",
+       "      <td>(12, 13)</td>\n",
+       "      <td>LINESTRING (2.50000 2.50000, 2.50000 2.00000)</td>\n",
+       "      <td>2</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>13</th>\n",
+       "      <td>(14, 15)</td>\n",
+       "      <td>LINESTRING (3.25000 1.25000, 3.50000 1.25000)</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>14</th>\n",
+       "      <td>(15, 16)</td>\n",
+       "      <td>LINESTRING (3.50000 1.25000, 3.75000 1.00000)</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>15</th>\n",
+       "      <td>(16, 17)</td>\n",
+       "      <td>LINESTRING (3.75000 1.00000, 3.50000 0.75000)</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>16</th>\n",
+       "      <td>(17, 18)</td>\n",
+       "      <td>LINESTRING (3.50000 0.75000, 3.25000 0.75000)</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "          id                                       geometry  comp_label\n",
+       "0     (0, 1)  LINESTRING (1.00000 2.00000, 0.00000 2.00000)           0\n",
+       "1     (0, 2)  LINESTRING (1.00000 2.00000, 1.00000 1.00000)           0\n",
+       "2     (0, 3)  LINESTRING (1.00000 2.00000, 1.00000 3.00000)           0\n",
+       "3     (2, 7)  LINESTRING (1.00000 1.00000, 2.00000 2.00000)           0\n",
+       "4     (4, 5)  LINESTRING (2.00000 1.00000, 2.00000 0.00000)           0\n",
+       "5     (4, 6)  LINESTRING (2.00000 1.00000, 3.00000 1.00000)           0\n",
+       "6     (4, 7)  LINESTRING (2.00000 1.00000, 2.00000 2.00000)           0\n",
+       "7    (6, 14)  LINESTRING (3.00000 1.00000, 3.25000 1.25000)           0\n",
+       "8    (6, 18)  LINESTRING (3.00000 1.00000, 3.25000 0.75000)           0\n",
+       "9     (8, 9)  LINESTRING (0.50000 1.00000, 0.50000 0.50000)           1\n",
+       "10   (9, 10)  LINESTRING (0.50000 0.50000, 1.00000 0.50000)           1\n",
+       "11  (11, 12)  LINESTRING (2.00000 2.50000, 2.50000 2.50000)           2\n",
+       "12  (12, 13)  LINESTRING (2.50000 2.50000, 2.50000 2.00000)           2\n",
+       "13  (14, 15)  LINESTRING (3.25000 1.25000, 3.50000 1.25000)           0\n",
+       "14  (15, 16)  LINESTRING (3.50000 1.25000, 3.75000 1.00000)           0\n",
+       "15  (16, 17)  LINESTRING (3.75000 1.00000, 3.50000 0.75000)           0\n",
+       "16  (17, 18)  LINESTRING (3.50000 0.75000, 3.25000 0.75000)           0"
+      ]
+     },
+     "execution_count": 24,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "arcs_df"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Here we can see that all the new network vertices are non-articulation point"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2020-02-02T18:43:37.436654Z",
+     "start_time": "2020-02-02T18:43:37.428136Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[2, 7, 9, 12, 14, 15, 16, 17, 18]"
+      ]
+     },
+     "execution_count": 25,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "ntw.non_articulation_points"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Slice out the articulation points and non-articulation points"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2020-02-02T18:43:37.456759Z",
+     "start_time": "2020-02-02T18:43:37.441246Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "napts = ntw.non_articulation_points\n",
+    "articulation_vertices = vertices_df[~vertices_df[\"id\"].isin(napts)]\n",
+    "non_articulation_vertices = vertices_df[vertices_df[\"id\"].isin(napts)]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### The new network vertices are non-articulation points because they form a closed ring"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2020-02-02T18:43:37.817549Z",
+     "start_time": "2020-02-02T18:43:37.464378Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "image/png": "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\n",
+      "text/plain": [
+       "<Figure size 504x504 with 1 Axes>"
+      ]
+     },
+     "metadata": {
+      "needs_background": "light"
+     },
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "base = arcs_df.plot(column=\"comp_label\", cmap=\"Set2\", linewidth=5, figsize=(7, 7))\n",
+    "articulation_vertices.plot(ax=base, color=\"k\", markersize=100, zorder=2)\n",
+    "non_articulation_vertices.plot(ax=base, marker=\"s\", color=\"k\", markersize=20, zorder=2);"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "-----------------------------------------------------"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python [conda env:py3_spgh_dev]",
+   "language": "python",
+   "name": "conda-env-py3_spgh_dev-py"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
