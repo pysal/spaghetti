@@ -74,6 +74,7 @@ install:
     fi;
 
 script:
+  - python -c 'import libpysal; libpysal.examples.load_example("newHaven")'
   - if [[ $TRAVIS_JOB_NAME == python-* ]]; then
       travis_wait 45 nosetests --verbose --with-coverage --with-doctest --cover-package=spaghetti;
     fi
