@@ -1,6 +1,6 @@
 import unittest
 import numpy
-from libpysal import cg, examples
+from libpysal import cg, examples, io
 
 # api import structure
 import spaghetti
@@ -135,7 +135,7 @@ class TestNetwork(unittest.TestCase):
 
         # test error
         with self.assertRaises(AttributeError):
-            lattice = spaghetti.regular_lattice(4)
+            lattice = spaghetti.regular_lattice((0, 0, 4, 4), 4)
             ntw = spaghetti.Network(in_data=lattice)
             paths = ntw.shortest_paths([], "synth_obs")
 
@@ -166,8 +166,9 @@ class TestNetwork(unittest.TestCase):
         self.assertEqual(obs_arc_wkt, known_arc_wkt)
 
         # routes
-        known_length = 0.3999999999999999
-        lattice = spaghetti.regular_lattice(4)
+        known_length = 2.6
+        bounds = (0, 0, 3, 3)
+        lattice = spaghetti.regular_lattice(bounds, 2, nv=2, exterior=False)
         ntw = spaghetti.Network(in_data=lattice)
         synth_obs = [cg.Point([0.2, 1.3]), cg.Point([0.2, 1.7]), cg.Point([2.8, 1.5])]
         ntw.snapobservations(synth_obs, "synth_obs")
@@ -175,7 +176,7 @@ class TestNetwork(unittest.TestCase):
         paths = ntw.shortest_paths(tree, "synth_obs")
         paths_gdf = spaghetti.element_as_gdf(ntw, routes=paths)
         observed_length = paths_gdf.loc[0, "geometry"].length
-        self.assertAlmostEqual(observed_length, known_length, places=5)
+        self.assertEqual(observed_length, known_length)
 
     def test_round_sig(self):
         # round to 2 significant digits test
@@ -192,18 +193,33 @@ class TestNetwork(unittest.TestCase):
 
     def test_regular_lattice(self):
         # 4x4 regular lattice with the exterior
-        known = [cg.Point((0.0, 0.0)), cg.Point((0.0, 1.0))]
-        lattice = spaghetti.regular_lattice(4, exterior=True)
+        known = [cg.Point((0.0, 0.0)), cg.Point((1.0, 0.0))]
+        bounds = (0, 0, 3, 3)
+        lattice = spaghetti.regular_lattice(bounds, 2, nv=2, exterior=True)
         observed = lattice[0].vertices
         self.assertEqual(observed, known)
-        # 5 x5 regular lattice without the exterior
-        known = [cg.Point((3.0, 3.0)), cg.Point((4.0, 3.0))]
-        lattice = spaghetti.regular_lattice(5, exterior=False)
+
+        # 5x5 regular lattice without the exterior
+        known = [cg.Point((3.0, 3.0)), cg.Point((3.0, 4.0))]
+        bounds = (0, 0, 4, 4)
+        lattice = spaghetti.regular_lattice(bounds, 3, exterior=False)
         observed = lattice[-1].vertices
         self.assertEqual(observed, known)
+
+        # 7x9 regular lattice from shapefile bounds
+        path = examples.get_path("newhaven_nework.shp")
+        shp = io.open(path)
+        lattice = spaghetti.regular_lattice(shp.bbox, 5, nv=7, exterior=True)
+        lattice[0].vertices
+        [(-72.99783297382338, 41.247205), (-72.97499854017013, 41.247205)]
+
         # test for Type Error
         with self.assertRaises(TypeError):
-            spaghetti.regular_lattice([4])
+            spaghetti.regular_lattice(bounds, [[4]])
+
+        # test for Runtime Error
+        with self.assertRaises(RuntimeError):
+            spaghetti.regular_lattice((0, 0, 1), 1)
 
 
 class TestNetworkPointPattern(unittest.TestCase):

@@ -136,7 +136,7 @@ class TestNetwork(unittest.TestCase):
 
         # test error
         with self.assertRaises(AttributeError):
-            lattice = spaghetti.regular_lattice(4)
+            lattice = spaghetti.regular_lattice((0, 0, 4, 4), 4)
             ntw = spaghetti.Network(in_data=lattice)
             paths = ntw.shortest_paths([], "synth_obs")
 
@@ -177,7 +177,7 @@ class TestNetwork(unittest.TestCase):
         paths = ntw.shortest_paths(tree, "synth_obs")
         paths_gdf = spaghetti.element_as_gdf(ntw, routes=paths)
         observed_length = paths_gdf.loc[0, "geometry"].length
-        self.assertAlmostEqual(observed_length, known_length, places=5)
+        self.assertEqual(observed_length, known_length)
 
     def test_round_sig(self):
         # round to 2 significant digits test
