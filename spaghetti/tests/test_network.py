@@ -265,6 +265,22 @@ class TestNetworkPointPattern(unittest.TestCase):
         snap_dist = self.ntw_from_chain.pointpatterns["synth_obs"].dist_snapped[0]
         self.assertAlmostEqual(snap_dist, known_dist, places=10)
 
+        # network instantiated from a single vertical (up) libpysal.cg.Chain
+        chain = cg.Chain([cg.Point((1, 1)), cg.Point((1, 2))])
+        known_dist = 1.0
+        self.ntw_from_chain = spaghetti.Network(in_data=chain)
+        self.ntw_from_chain.snapobservations(cg.Point((0, 1.5)), "synth_obs")
+        snap_dist = self.ntw_from_chain.pointpatterns["synth_obs"].dist_snapped[0]
+        self.assertEqual(snap_dist, known_dist)
+
+        # network instantiated from a single vertical (down) libpysal.cg.Chain
+        chain = cg.Chain([cg.Point((5, 5)), cg.Point((5, 4))])
+        known_dist = 1.5
+        self.ntw_from_chain = spaghetti.Network(in_data=chain)
+        self.ntw_from_chain.snapobservations(cg.Point((6.5, 4.5)), "synth_obs")
+        snap_dist = self.ntw_from_chain.pointpatterns["synth_obs"].dist_snapped[0]
+        self.assertEqual(snap_dist, known_dist)
+
     def test_pp_failures(self):
         # network instantiated from a single libpysal.cg.Chain
         chain = cg.Chain([cg.Point((1, 1)), cg.Point((2, 2))])
