@@ -1340,7 +1340,7 @@ class Network:
         x2 = self.vertex_coords[arc[1]][0]
         y2 = self.vertex_coords[arc[1]][1]
 
-        # if the network are is vertical set the (x) coordinate
+        # if the network arc is vertical set the (x) coordinate
         # and proceed to calculating the (y) coordinate
         if x1 == x2:
             x0 = x1
