@@ -1340,7 +1340,7 @@ class Network:
         x2 = self.vertex_coords[arc[1]][0]
         y2 = self.vertex_coords[arc[1]][1]
 
-        # if the network are is vertical set the (x) coordinate
+        # if the network arc is vertical set the (x) coordinate
         # and proceed to calculating the (y) coordinate
         if x1 == x2:
             x0 = x1
@@ -2884,93 +2884,101 @@ def element_as_gdf(
         return points, arcs
 
 
-def regular_lattice(nlines, exterior=True):
+def regular_lattice(bounds, nh, nv=None, exterior=False):
     """Generate a regular lattice of line segments 
     (`libpysal.cg.Chain objects <https://pysal.org/libpysal/generated/libpysal.cg.Chain.html#libpysal.cg.Chain>`_).
-    
     
     Parameters
     ----------
     
-    nlines : int
-        The number of lines on one dimension of the lattice. For
-        example, setting ``nlines`` to 4 would create a 4x4 regular
-        lattice.
-        
+    bounds : {tuple, list}
+        Area bounds in the form - <minx,miny,maxx,maxy>.
+    
+    nh : int
+        The number of internal horizontal lines of the lattice.
+    
+    nv : int
+        The number of internal vertical lines of the lattice. Defaults to
+        ``nh`` if left as None.
+
     exterior : bool
-        Flag for returning the full regular lattice (``True``) or
-        a tic-tac-toe style grid (``False``). Default is ``True``.
-        
+        Flag for including the outer bounding box segments. Default is False.
+    
+    
     Returns
     -------
     
     lattice : list
         libpysal.cg.Chain objects forming a regular lattice
     
+    Notes
+    -----
+    
+    The ``nh`` and ``nv`` parameters do not include the external 
+    line segments. For example, setting ``nh=3, nv=2, exterior=True``
+    will result in 5 horizontal line sets and 4 vertical line sets.
+    
     Examples
     --------
     
-    Create a 4x4 regular lattice with the exterior
+    Create a 5x5 regular lattice with an exterior
     
     >>> import spaghetti
-    >>> lattice = spaghetti.regular_lattice(4, exterior=True)
+    >>> lattice = spaghetti.regular_lattice((0,0,4,4), 3, exterior=True)
     >>> lattice[0].vertices
-    [(0.0, 0.0), (0.0, 1.0)]
+    [(0.0, 0.0), (1.0, 0.0)]
     
-    Create a 5x5 regular lattice without the exterior
+    Create a 5x5 regular lattice without an exterior
     
-    >>> lattice = spaghetti.regular_lattice(5, exterior=False)
+    >>> lattice = spaghetti.regular_lattice((0,0,5,5), 3, exterior=False)
     >>> lattice[-1].vertices
-    [(3.0, 3.0), (4.0, 3.0)]
+    [(3.75, 3.75), (3.75, 5.0)]
+    
+    Create a 7x9 regular lattice with an exterior from the 
+    bounds of ``newhaven_nework.shp``.
+    
+    >>> path = libpysal.examples.get_path("newhaven_nework.shp")
+    >>> shp = libpysal.io.open(path)
+    >>> lattice = spaghetti.regular_lattice(shp.bbox, 5, nv=7, exterior=True)
+    >>> lattice[0].vertices
+    [(-72.99783297382338, 41.247205), (-72.97499854017013, 41.247205)]
     
     """
 
+    # check for bounds validity
+    if len(bounds) != 4:
+        bounds_len = len(bounds)
+        msg = "The 'bounds' parameter is %s elements " % bounds_len
+        msg += "but should be exactly 4 - <minx,miny,maxx,maxy>."
+        raise RuntimeError(msg)
+
+    # check for bounds validity
+    if not nv:
+        nv = nh
     try:
-        nlines = int(nlines)
+        nh, nv = int(nh), int(nv)
     except TypeError:
-        nlines_type = type(nlines)
-        msg = "The 'nlines' parameter of type %s " % nlines_type
-        msg += "could not be converted to an integer."
+        nlines_types = type(nh), type(nv)
+        msg = "The 'nh' and 'nv' parameters (%s, %s) " % nlines_types
+        msg += "could not be converted to integers."
         raise TypeError(msg)
 
-    # create vertical line segments for a regular lattice
-    vstack = []
-    for idx1 in range(nlines):
-        for idx2 in range(nlines):
-            _idx2 = idx2 + 1
-            if _idx2 == nlines:
-                continue
-            vstack.append([cg.Point((idx1, idx2)), cg.Point((idx1, _idx2))])
+    # bounding box line lengths
+    len_h, len_v = bounds[2] - bounds[0], bounds[3] - bounds[1]
 
-    # rotate vertical lines for horizontal lines in a regular lattice
-    hstack = [[c[::-1] for c in line] for line in vstack]
+    # horizontal and vertical increments
+    incr_h, incr_v = len_h / float(nh + 1), len_v / float(nv + 1)
 
-    # combine line lists
-    lattice_segments = [[line for line in vs] for vs in vstack] + hstack
+    # define the horizontal and vertical space
+    space_h = [incr_h * slot for slot in range(nv + 2)]
+    space_v = [incr_v * slot for slot in range(nh + 2)]
 
-    # remove lattice exterior if not desired
-    if not exterior:
+    # create vertical and horizontal lines
+    lines_h = util.build_chains(space_h, space_v, exterior, bounds)
+    lines_v = util.build_chains(space_h, space_v, exterior, bounds, h=False)
 
-        lower_exterior_condition = 0
-        upper_exterior_condition = nlines - 1
-
-        _lattice_segments = []
-
-        for (x1, y1), (x2, y2) in lattice_segments:
-            if (
-                (x1 == x2 and x1 == lower_exterior_condition)
-                or (y1 == y2 and y1 == lower_exterior_condition)
-                or (x1 == x2 and x1 == upper_exterior_condition)
-                or (y1 == y2 and y1 == upper_exterior_condition)
-            ):
-                continue
-
-            _lattice_segments.append([cg.Point((x1, y1)), cg.Point((x2, y2))])
-
-        lattice_segments = _lattice_segments
-
-    # convert to coordinates to libpysal.cg.Chain
-    lattice = [cg.Chain(l) for l in lattice_segments]
+    # combine into one list
+    lattice = lines_h + lines_v
 
     return lattice
 

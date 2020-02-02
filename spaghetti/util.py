@@ -558,6 +558,85 @@ def _points_as_gdf(
     return points
 
 
+def build_chains(space_h, space_v, exterior, bounds, h=True):
+    """Generate line segments for a lattice.
+    
+    Parameters
+    ----------
+    
+    space_h : list
+        Horizontal spacing.
+    
+    space_v : list
+        Vertical spacing.
+    
+    exterior : bool
+        Flag for including the outer bounding box segments.
+    
+    bounds : list
+        Area bounds in the form - <minx,miny,maxx,maxy>.
+    
+    h : bool
+        Generate horizontal line segments.
+        Default is ``True``. ``False`` generates vertical segments.
+    
+    Returns
+    -------
+    
+    chains : list
+        All horizontal or vertical line segments in the lattice.
+    
+    """
+
+    # Initialize starting and ending indices
+    start_h, end_h, start_v, end_v = 0, len(space_h), 0, len(space_v)
+
+    # set inital index track back to 0
+    minus_y, minus_x = 0, 0
+
+    if h:  # start track back at 1 for horizontal lines
+        minus_x = 1
+        if not exterior:  # do not include borders
+            start_v += 1
+            end_v -= 1
+
+    else:  # start track back at 1 for vertical lines
+        minus_y = 1
+        if not exterior:  # do not include borders
+            start_h += 1
+            end_h -= 1
+
+    # Create empty line list and fill
+    chains = []
+
+    # for element in the horizontal index
+    for plus_h in range(start_h, end_h):
+
+        # for element in the vertical index
+        for plus_v in range(start_v, end_v):
+
+            # ignore if a -1 index
+            if plus_h - minus_x == -1 or plus_v - minus_y == -1:
+                continue
+            else:
+                # Point 1 (start point + previous slot in
+                #          horizontal or vertical space index)
+                p1x = bounds[0] + space_h[plus_h - minus_x]
+                p1y = bounds[1] + space_v[plus_v - minus_y]
+                p1 = cg.Point((p1x, p1y))
+
+                # Point 2 (start point + current slot in
+                #          horizontal or vertical space index)
+                p2x = bounds[0] + space_h[plus_h]
+                p2y = bounds[1] + space_v[plus_v]
+                p2 = cg.Point((p2x, p2y))
+
+                # libpysal.cg.Chain
+                chains.append(cg.Chain([p1, p2]))
+
+    return chains
+
+
 @requires("geopandas", "shapely")
 def _arcs_as_gdf(net, points, id_col=None, geom_col=None):
     """Internal function for returning an arc ``geopandas.GeoDataFrame``
