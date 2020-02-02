@@ -1579,11 +1579,11 @@
         <span class="n">totallength</span> <span class="o">=</span> <span class="n">stops</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="c1"># create lengths with a uniform distribution</span>
-        <span class="k">if</span> <span class="n">distribution</span> <span class="ow">is</span> <span class="s2">&quot;uniform&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">distribution</span> <span class="o">==</span> <span class="s2">&quot;uniform&quot;</span><span class="p">:</span>
             <span class="n">nrandompts</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">totallength</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">count</span><span class="p">,))</span>
 
         <span class="c1"># create lengths with a poisson distribution</span>
-        <span class="k">elif</span> <span class="n">distribution</span> <span class="ow">is</span> <span class="s2">&quot;poisson&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">distribution</span> <span class="o">==</span> <span class="s2">&quot;poisson&quot;</span><span class="p">:</span>
             <span class="c1"># calculate poisson from half the network length</span>
             <span class="n">mid_length</span> <span class="o">=</span> <span class="n">totallength</span> <span class="o">/</span> <span class="mf">2.0</span>
             <span class="n">nrandompts</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">poisson</span><span class="p">(</span><span class="n">mid_length</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">count</span><span class="p">,))</span>
@@ -3011,93 +3011,101 @@
         <span class="k">return</span> <span class="n">points</span><span class="p">,</span> <span class="n">arcs</span></div>
 
 
-<div class="viewcode-block" id="regular_lattice"><a class="viewcode-back" href="../../generated/spaghetti.regular_lattice.html#spaghetti.regular_lattice">[docs]</a><span class="k">def</span> <span class="nf">regular_lattice</span><span class="p">(</span><span class="n">nlines</span><span class="p">,</span> <span class="n">exterior</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="regular_lattice"><a class="viewcode-back" href="../../generated/spaghetti.regular_lattice.html#spaghetti.regular_lattice">[docs]</a><span class="k">def</span> <span class="nf">regular_lattice</span><span class="p">(</span><span class="n">bounds</span><span class="p">,</span> <span class="n">nh</span><span class="p">,</span> <span class="n">nv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exterior</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Generate a regular lattice of line segments </span>
 <span class="sd">    (`libpysal.cg.Chain objects &lt;https://pysal.org/libpysal/generated/libpysal.cg.Chain.html#libpysal.cg.Chain&gt;`_).</span>
-<span class="sd">    </span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    </span>
-<span class="sd">    nlines : int</span>
-<span class="sd">        The number of lines on one dimension of the lattice. For</span>
-<span class="sd">        example, setting ``nlines`` to 4 would create a 4x4 regular</span>
-<span class="sd">        lattice.</span>
-<span class="sd">        </span>
+<span class="sd">    bounds : {tuple, list}</span>
+<span class="sd">        Area bounds in the form - &lt;minx,miny,maxx,maxy&gt;.</span>
+<span class="sd">    </span>
+<span class="sd">    nh : int</span>
+<span class="sd">        The number of internal horizontal lines of the lattice.</span>
+<span class="sd">    </span>
+<span class="sd">    nv : int</span>
+<span class="sd">        The number of internal vertical lines of the lattice. Defaults to</span>
+<span class="sd">        ``nh`` if left as None.</span>
+
 <span class="sd">    exterior : bool</span>
-<span class="sd">        Flag for returning the full regular lattice (``True``) or</span>
-<span class="sd">        a tic-tac-toe style grid (``False``). Default is ``True``.</span>
-<span class="sd">        </span>
+<span class="sd">        Flag for including the outer bounding box segments. Default is False.</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    </span>
 <span class="sd">    lattice : list</span>
 <span class="sd">        libpysal.cg.Chain objects forming a regular lattice</span>
 <span class="sd">    </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    </span>
+<span class="sd">    The ``nh`` and ``nv`` parameters do not include the external </span>
+<span class="sd">    line segments. For example, setting ``nh=3, nv=2, exterior=True``</span>
+<span class="sd">    will result in 5 horizontal line sets and 4 vertical line sets.</span>
+<span class="sd">    </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    </span>
-<span class="sd">    Create a 4x4 regular lattice with the exterior</span>
+<span class="sd">    Create a 5x5 regular lattice with an exterior</span>
 <span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; import spaghetti</span>
-<span class="sd">    &gt;&gt;&gt; lattice = spaghetti.regular_lattice(4, exterior=True)</span>
+<span class="sd">    &gt;&gt;&gt; lattice = spaghetti.regular_lattice((0,0,4,4), 3, exterior=True)</span>
 <span class="sd">    &gt;&gt;&gt; lattice[0].vertices</span>
-<span class="sd">    [(0.0, 0.0), (0.0, 1.0)]</span>
+<span class="sd">    [(0.0, 0.0), (1.0, 0.0)]</span>
 <span class="sd">    </span>
-<span class="sd">    Create a 5x5 regular lattice without the exterior</span>
+<span class="sd">    Create a 5x5 regular lattice without an exterior</span>
 <span class="sd">    </span>
-<span class="sd">    &gt;&gt;&gt; lattice = spaghetti.regular_lattice(5, exterior=False)</span>
+<span class="sd">    &gt;&gt;&gt; lattice = spaghetti.regular_lattice((0,0,5,5), 3, exterior=False)</span>
 <span class="sd">    &gt;&gt;&gt; lattice[-1].vertices</span>
-<span class="sd">    [(3.0, 3.0), (4.0, 3.0)]</span>
+<span class="sd">    [(3.75, 3.75), (3.75, 5.0)]</span>
+<span class="sd">    </span>
+<span class="sd">    Create a 7x9 regular lattice with an exterior from the </span>
+<span class="sd">    bounds of ``newhaven_nework.shp``.</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; path = libpysal.examples.get_path(&quot;newhaven_nework.shp&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; shp = libpysal.io.open(path)</span>
+<span class="sd">    &gt;&gt;&gt; lattice = spaghetti.regular_lattice(shp.bbox, 5, nv=7, exterior=True)</span>
+<span class="sd">    &gt;&gt;&gt; lattice[0].vertices</span>
+<span class="sd">    [(-72.99783297382338, 41.247205), (-72.97499854017013, 41.247205)]</span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="c1"># check for bounds validity</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">bounds</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="n">bounds_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">bounds</span><span class="p">)</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;The &#39;bounds&#39; parameter is </span><span class="si">%s</span><span class="s2"> elements &quot;</span> <span class="o">%</span> <span class="n">bounds_len</span>
+        <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot;but should be exactly 4 - &lt;minx,miny,maxx,maxy&gt;.&quot;</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="c1"># check for bounds validity</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">nv</span><span class="p">:</span>
+        <span class="n">nv</span> <span class="o">=</span> <span class="n">nh</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">nlines</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">nlines</span><span class="p">)</span>
+        <span class="n">nh</span><span class="p">,</span> <span class="n">nv</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">nh</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">nv</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
-        <span class="n">nlines_type</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">nlines</span><span class="p">)</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;The &#39;nlines&#39; parameter of type </span><span class="si">%s</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="n">nlines_type</span>
-        <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot;could not be converted to an integer.&quot;</span>
+        <span class="n">nlines_types</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">nh</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">nv</span><span class="p">)</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;The &#39;nh&#39; and &#39;nv&#39; parameters (</span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">) &quot;</span> <span class="o">%</span> <span class="n">nlines_types</span>
+        <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot;could not be converted to integers.&quot;</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
-    <span class="c1"># create vertical line segments for a regular lattice</span>
-    <span class="n">vstack</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">idx1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nlines</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">idx2</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nlines</span><span class="p">):</span>
-            <span class="n">_idx2</span> <span class="o">=</span> <span class="n">idx2</span> <span class="o">+</span> <span class="mi">1</span>
-            <span class="k">if</span> <span class="n">_idx2</span> <span class="o">==</span> <span class="n">nlines</span><span class="p">:</span>
-                <span class="k">continue</span>
-            <span class="n">vstack</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">cg</span><span class="o">.</span><span class="n">Point</span><span class="p">((</span><span class="n">idx1</span><span class="p">,</span> <span class="n">idx2</span><span class="p">)),</span> <span class="n">cg</span><span class="o">.</span><span class="n">Point</span><span class="p">((</span><span class="n">idx1</span><span class="p">,</span> <span class="n">_idx2</span><span class="p">))])</span>
+    <span class="c1"># bounding box line lengths</span>
+    <span class="n">len_h</span><span class="p">,</span> <span class="n">len_v</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">bounds</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
-    <span class="c1"># rotate vertical lines for horizontal lines in a regular lattice</span>
-    <span class="n">hstack</span> <span class="o">=</span> <span class="p">[[</span><span class="n">c</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">line</span><span class="p">]</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">vstack</span><span class="p">]</span>
+    <span class="c1"># horizontal and vertical increments</span>
+    <span class="n">incr_h</span><span class="p">,</span> <span class="n">incr_v</span> <span class="o">=</span> <span class="n">len_h</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">nh</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">len_v</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">nv</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
 
-    <span class="c1"># combine line lists</span>
-    <span class="n">lattice_segments</span> <span class="o">=</span> <span class="p">[[</span><span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">vs</span><span class="p">]</span> <span class="k">for</span> <span class="n">vs</span> <span class="ow">in</span> <span class="n">vstack</span><span class="p">]</span> <span class="o">+</span> <span class="n">hstack</span>
+    <span class="c1"># define the horizontal and vertical space</span>
+    <span class="n">space_h</span> <span class="o">=</span> <span class="p">[</span><span class="n">incr_h</span> <span class="o">*</span> <span class="n">slot</span> <span class="k">for</span> <span class="n">slot</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nv</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)]</span>
+    <span class="n">space_v</span> <span class="o">=</span> <span class="p">[</span><span class="n">incr_v</span> <span class="o">*</span> <span class="n">slot</span> <span class="k">for</span> <span class="n">slot</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nh</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)]</span>
 
-    <span class="c1"># remove lattice exterior if not desired</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">exterior</span><span class="p">:</span>
+    <span class="c1"># create vertical and horizontal lines</span>
+    <span class="n">lines_h</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">build_chains</span><span class="p">(</span><span class="n">space_h</span><span class="p">,</span> <span class="n">space_v</span><span class="p">,</span> <span class="n">exterior</span><span class="p">,</span> <span class="n">bounds</span><span class="p">)</span>
+    <span class="n">lines_v</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">build_chains</span><span class="p">(</span><span class="n">space_h</span><span class="p">,</span> <span class="n">space_v</span><span class="p">,</span> <span class="n">exterior</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-        <span class="n">lower_exterior_condition</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">upper_exterior_condition</span> <span class="o">=</span> <span class="n">nlines</span> <span class="o">-</span> <span class="mi">1</span>
-
-        <span class="n">_lattice_segments</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="k">for</span> <span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">),</span> <span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">)</span> <span class="ow">in</span> <span class="n">lattice_segments</span><span class="p">:</span>
-            <span class="k">if</span> <span class="p">(</span>
-                <span class="p">(</span><span class="n">x1</span> <span class="o">==</span> <span class="n">x2</span> <span class="ow">and</span> <span class="n">x1</span> <span class="o">==</span> <span class="n">lower_exterior_condition</span><span class="p">)</span>
-                <span class="ow">or</span> <span class="p">(</span><span class="n">y1</span> <span class="o">==</span> <span class="n">y2</span> <span class="ow">and</span> <span class="n">y1</span> <span class="o">==</span> <span class="n">lower_exterior_condition</span><span class="p">)</span>
-                <span class="ow">or</span> <span class="p">(</span><span class="n">x1</span> <span class="o">==</span> <span class="n">x2</span> <span class="ow">and</span> <span class="n">x1</span> <span class="o">==</span> <span class="n">upper_exterior_condition</span><span class="p">)</span>
-                <span class="ow">or</span> <span class="p">(</span><span class="n">y1</span> <span class="o">==</span> <span class="n">y2</span> <span class="ow">and</span> <span class="n">y1</span> <span class="o">==</span> <span class="n">upper_exterior_condition</span><span class="p">)</span>
-            <span class="p">):</span>
-                <span class="k">continue</span>
-
-            <span class="n">_lattice_segments</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">cg</span><span class="o">.</span><span class="n">Point</span><span class="p">((</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">)),</span> <span class="n">cg</span><span class="o">.</span><span class="n">Point</span><span class="p">((</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">))])</span>
-
-        <span class="n">lattice_segments</span> <span class="o">=</span> <span class="n">_lattice_segments</span>
-
-    <span class="c1"># convert to coordinates to libpysal.cg.Chain</span>
-    <span class="n">lattice</span> <span class="o">=</span> <span class="p">[</span><span class="n">cg</span><span class="o">.</span><span class="n">Chain</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">lattice_segments</span><span class="p">]</span>
+    <span class="c1"># combine into one list</span>
+    <span class="n">lattice</span> <span class="o">=</span> <span class="n">lines_h</span> <span class="o">+</span> <span class="n">lines_v</span>
 
     <span class="k">return</span> <span class="n">lattice</span></div>
 

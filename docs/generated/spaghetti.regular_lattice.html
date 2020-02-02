@@ -133,18 +133,20 @@
 <h1>spaghetti.regular_lattice<a class="headerlink" href="#spaghetti-regular-lattice" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="spaghetti.regular_lattice">
-<code class="sig-prename descclassname">spaghetti.</code><code class="sig-name descname">regular_lattice</code><span class="sig-paren">(</span><em class="sig-param">nlines</em>, <em class="sig-param">exterior=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#regular_lattice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.regular_lattice" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">spaghetti.</code><code class="sig-name descname">regular_lattice</code><span class="sig-paren">(</span><em class="sig-param">bounds</em>, <em class="sig-param">nh</em>, <em class="sig-param">nv=None</em>, <em class="sig-param">exterior=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#regular_lattice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.regular_lattice" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a regular lattice of line segments 
 (<a class="reference external" href="https://pysal.org/libpysal/generated/libpysal.cg.Chain.html#libpysal.cg.Chain">libpysal.cg.Chain objects</a>).</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>nlines</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of lines on one dimension of the lattice. For
-example, setting <code class="docutils literal notranslate"><span class="pre">nlines</span></code> to 4 would create a 4x4 regular
-lattice.</p>
+<dt><strong>bounds</strong><span class="classifier">{<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#tuple" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">tuple</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#list" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">list</span></code></a>}</span></dt><dd><p>Area bounds in the form - &lt;minx,miny,maxx,maxy&gt;.</p>
 </dd>
-<dt><strong>exterior</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.7)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>Flag for returning the full regular lattice (<code class="docutils literal notranslate"><span class="pre">True</span></code>) or
-a tic-tac-toe style grid (<code class="docutils literal notranslate"><span class="pre">False</span></code>). Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<dt><strong>nh</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of internal horizontal lines of the lattice.</p>
+</dd>
+<dt><strong>nv</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of internal vertical lines of the lattice. Defaults to
+<code class="docutils literal notranslate"><span class="pre">nh</span></code> if left as None.</p>
+</dd>
+<dt><strong>exterior</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.7)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>Flag for including the outer bounding box segments. Default is False.</p>
 </dd>
 </dl>
 </dd>
@@ -155,18 +157,31 @@ a tic-tac-toe style grid (<code class="docutils literal notranslate"><span class
 </dl>
 </dd>
 </dl>
+<p class="rubric">Notes</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">nh</span></code> and <code class="docutils literal notranslate"><span class="pre">nv</span></code> parameters do not include the external 
+line segments. For example, setting <code class="docutils literal notranslate"><span class="pre">nh=3,</span> <span class="pre">nv=2,</span> <span class="pre">exterior=True</span></code>
+will result in 5 horizontal line sets and 4 vertical line sets.</p>
 <p class="rubric">Examples</p>
-<p>Create a 4x4 regular lattice with the exterior</p>
+<p>Create a 5x5 regular lattice with an exterior</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">spaghetti</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">lattice</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">regular_lattice</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">exterior</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lattice</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">regular_lattice</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span> <span class="n">exterior</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">lattice</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">vertices</span>
-<span class="go">[(0.0, 0.0), (0.0, 1.0)]</span>
+<span class="go">[(0.0, 0.0), (1.0, 0.0)]</span>
 </pre></div>
 </div>
-<p>Create a 5x5 regular lattice without the exterior</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lattice</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">regular_lattice</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">exterior</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<p>Create a 5x5 regular lattice without an exterior</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lattice</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">regular_lattice</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span> <span class="n">exterior</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">lattice</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">vertices</span>
-<span class="go">[(3.0, 3.0), (4.0, 3.0)]</span>
+<span class="go">[(3.75, 3.75), (3.75, 5.0)]</span>
+</pre></div>
+</div>
+<p>Create a 7x9 regular lattice with an exterior from the 
+bounds of <code class="docutils literal notranslate"><span class="pre">newhaven_nework.shp</span></code>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">path</span> <span class="o">=</span> <span class="n">libpysal</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;newhaven_nework.shp&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">shp</span> <span class="o">=</span> <span class="n">libpysal</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lattice</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">regular_lattice</span><span class="p">(</span><span class="n">shp</span><span class="o">.</span><span class="n">bbox</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">nv</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">exterior</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lattice</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">vertices</span>
+<span class="go">[(-72.99783297382338, 41.247205), (-72.97499854017013, 41.247205)]</span>
 </pre></div>
 </div>
 </dd></dl>
