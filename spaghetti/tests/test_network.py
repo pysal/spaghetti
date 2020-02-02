@@ -64,16 +64,20 @@ class TestNetwork(unittest.TestCase):
     def test_network_from_single_libpysal_chain(self):
         # network instantiated from a single libpysal.cg.Chain
         chain = cg.Chain([cg.Point((1, 1)), cg.Point((2, 2))])
-        self.ntw_from_chain = spaghetti.Network(in_data=chain)
-        self.assertEqual(self.ntw_from_chain.arcs, self.ntw_from_chain.edges)
+        self.ntw_chain_out = spaghetti.Network(in_data=chain)
+        # test save and load network
+        self.ntw_chain_out.savenetwork("test_network.pkl")
+        self.ntw_chain_in = spaghetti.Network.loadnetwork("test_network.pkl")
+        self.assertEqual(self.ntw_chain_in.arcs, self.ntw_chain_in.edges)
 
-    def test_network_failures(self):
-        # try instantiating network with single point
-        with self.assertRaises(TypeError):
-            spaghetti.Network(in_data=cg.Point((0, 0)))
-        # try instantiating network with list of single point
-        with self.assertRaises(TypeError):
-            spaghetti.Network(in_data=[cg.Point((0, 0))])
+    def test_network_from_vertical_libpysal_chains(self):
+        vert_up = cg.Chain([cg.Point((1, 1)), cg.Point((1, 2))])
+        self.ntw_up_chain = spaghetti.Network(in_data=vert_up)
+        self.assertEqual(len(self.ntw_up_chain.arcs), len(vert_up.segments))
+
+        vert_down = cg.Chain([cg.Point((5, 5)), cg.Point((5, 3))])
+        self.ntw_down_chain = spaghetti.Network(in_data=vert_down)
+        self.assertEqual(len(self.ntw_down_chain.arcs), len(vert_down.segments))
 
     @unittest.skipIf(GEOPANDAS_EXTINCT, "Missing Geopandas")
     def test_network_from_geopandas(self):
