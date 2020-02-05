@@ -2758,7 +2758,6 @@ def element_as_gdf(
     pp_name=None,
     snapped=False,
     routes=None,
-    symmetric_routes=True,
     id_col="id",
     geom_col="geometry",
 ):
@@ -2791,11 +2790,6 @@ def element_as_gdf(
     routes : dict
         See ``paths`` from ``spaghetti.Network.shortest_paths``.
         Default is ``None``.
-    
-    symmetric_routes : bool
-        Default is ``True``, which indicated a symmetric relationship
-        (``type-a`` to ``type-a`` observations; see ``allneighbordistances``)
-        Set to ``False`` for ``type-a`` to ``type-b`` observations.
     
     id_col : str
         ``geopandas.GeoDataFrame`` column name for IDs. Default is ``"id"``.
@@ -2875,7 +2869,7 @@ def element_as_gdf(
 
     # shortest path routes between observations
     if routes:
-        paths = util._routes_as_gdf(routes, id_col, geom_col, symmetric_routes)
+        paths = util._routes_as_gdf(routes, id_col, geom_col)
         return paths
 
     # need vertices place holder to create network segment LineStrings

@@ -683,7 +683,7 @@ def _arcs_as_gdf(net, points, id_col=None, geom_col=None):
 
 
 @requires("geopandas", "shapely")
-def _routes_as_gdf(paths, id_col, geom_col, symmetric):
+def _routes_as_gdf(paths, id_col, geom_col):
     """Internal function for returning a shortest paths
     ``geopandas.GeoDataFrame`` called from within
     ``spaghetti.element_as_gdf()``.
@@ -709,23 +709,6 @@ def _routes_as_gdf(paths, id_col, geom_col, symmetric):
     origs = [o for (o, d), g in paths]
     dests = [d for (o, d), g in paths]
     geoms = [LineString(g.vertices) for (o, d), g in paths]
-
-    # if the observation relationship is symmetric, remove redundancies
-    if symmetric:
-        path_set = []
-        for idx, (o, d, g) in enumerate(zip(origs, dests, geoms)):
-            if o != d:
-                path = [o, d]
-                path.sort()
-                path = tuple(path)
-                if path not in path_set:
-                    path_set.append(path)
-                else:
-                    geoms.pop(idx)
-            else:
-                geoms.pop(idx)
-        origs = [o for o, d in path_set]
-        dests = [d for o, d in path_set]
 
     # instantiate as a geodataframe
     paths = geopandas.GeoDataFrame(geometry=geoms)
