@@ -490,74 +490,6 @@ def snap_points_to_links(points, links):
     return point2link
 
 
-@requires("geopandas", "shapely")
-def _points_as_gdf(
-    net, vertices, vertices_for_arcs, pp_name, snapped, id_col=None, geom_col=None
-):
-    """Internal function for returning a point ``geopandas.GeoDataFrame``
-    called from within ``spaghetti.element_as_gdf()``.
-    
-    Parameters
-    ----------
-    
-    vertices_for_arcs : bool
-        Flag for points being an object returned (``False``) or for merely
-        creating network arcs (``True``). Set from within the parent
-        function (``spaghetti.element_as_gdf()``).
-    
-    Raises
-    ------
-    
-    KeyError
-        In order to extract a ``network.PointPattern`` it must already
-        be a part of the network object. This exception is raised
-        when a ``network.PointPattern`` is being extracted that does not
-        exist within the network object.
-    
-    Returns
-    -------
-    
-    points : geopandas.GeoDataFrame
-        Network point elements (either vertices or ``network.PointPattern``
-        points) as a simple ``geopandas.GeoDataFrame`` of
-        ``shapely.geometry.Point`` objects with an ``"id"`` column and
-        ``"geometry"`` column.
-    
-    Notes
-    -----
-    
-    1. See ``spaghetti.element_as_gdf()`` for description of arguments.
-    2. This function requires ``geopandas``.
-    
-    """
-
-    # vertices / nodes
-    if vertices or vertices_for_arcs:
-        pts_dict = net.vertex_coords
-
-    # raw point pattern
-    if pp_name and not snapped:
-        try:
-            pp_pts = net.pointpatterns[pp_name].points
-        except KeyError:
-            err_msg = "Available point patterns are {}"
-            raise KeyError(err_msg.format(list(net.pointpatterns.keys())))
-
-        n_pp_pts = range(len(pp_pts))
-        pts_dict = {point: pp_pts[point]["coordinates"] for point in n_pp_pts}
-
-    # snapped point pattern
-    elif pp_name and snapped:
-        pts_dict = net.pointpatterns[pp_name].snapped_coordinates
-
-    # instantiate geopandas.GeoDataFrame
-    pts_list = list(pts_dict.items())
-    points = geopandas.GeoDataFrame(pts_list, columns=[id_col, geom_col])
-    points.geometry = points.geometry.apply(lambda p: Point(p))
-
-    return points
-
-
 def build_chains(space_h, space_v, exterior, bounds, h=True):
     """Generate line segments for a lattice.
     
@@ -638,6 +570,74 @@ def build_chains(space_h, space_v, exterior, bounds, h=True):
 
 
 @requires("geopandas", "shapely")
+def _points_as_gdf(
+    net, vertices, vertices_for_arcs, pp_name, snapped, id_col=None, geom_col=None
+):
+    """Internal function for returning a point ``geopandas.GeoDataFrame``
+    called from within ``spaghetti.element_as_gdf()``.
+    
+    Parameters
+    ----------
+    
+    vertices_for_arcs : bool
+        Flag for points being an object returned (``False``) or for merely
+        creating network arcs (``True``). Set from within the parent
+        function (``spaghetti.element_as_gdf()``).
+    
+    Raises
+    ------
+    
+    KeyError
+        In order to extract a ``network.PointPattern`` it must already
+        be a part of the network object. This exception is raised
+        when a ``network.PointPattern`` is being extracted that does not
+        exist within the network object.
+    
+    Returns
+    -------
+    
+    points : geopandas.GeoDataFrame
+        Network point elements (either vertices or ``network.PointPattern``
+        points) as a simple ``geopandas.GeoDataFrame`` of
+        ``shapely.geometry.Point`` objects with an ``"id"`` column and
+        ``"geometry"`` column.
+    
+    Notes
+    -----
+    
+    1. See ``spaghetti.element_as_gdf()`` for description of arguments.
+    2. This function requires ``geopandas``.
+    
+    """
+
+    # vertices / nodes
+    if vertices or vertices_for_arcs:
+        pts_dict = net.vertex_coords
+
+    # raw point pattern
+    if pp_name and not snapped:
+        try:
+            pp_pts = net.pointpatterns[pp_name].points
+        except KeyError:
+            err_msg = "Available point patterns are {}"
+            raise KeyError(err_msg.format(list(net.pointpatterns.keys())))
+
+        n_pp_pts = range(len(pp_pts))
+        pts_dict = {point: pp_pts[point]["coordinates"] for point in n_pp_pts}
+
+    # snapped point pattern
+    elif pp_name and snapped:
+        pts_dict = net.pointpatterns[pp_name].snapped_coordinates
+
+    # instantiate geopandas.GeoDataFrame
+    pts_list = list(pts_dict.items())
+    points = geopandas.GeoDataFrame(pts_list, columns=[id_col, geom_col])
+    points.geometry = points.geometry.apply(lambda p: Point(p))
+
+    return points
+
+
+@requires("geopandas", "shapely")
 def _arcs_as_gdf(net, points, id_col=None, geom_col=None):
     """Internal function for returning an arc ``geopandas.GeoDataFrame``
     called from within ``spaghetti.element_as_gdf()``.
@@ -683,7 +683,7 @@ def _arcs_as_gdf(net, points, id_col=None, geom_col=None):
 
 
 @requires("geopandas", "shapely")
-def _routes_as_gdf(paths, id_col=None, geom_col=None):
+def _routes_as_gdf(paths, id_col, geom_col, symmetric):
     """Internal function for returning a shortest paths
     ``geopandas.GeoDataFrame`` called from within
     ``spaghetti.element_as_gdf()``.
@@ -693,8 +693,8 @@ def _routes_as_gdf(paths, id_col=None, geom_col=None):
     
     paths : geopandas.GeoDataFrame
         Network shortest paths as a ``geopandas.GeoDataFrame`` of
-        ``shapely.geometry.LineString`` objects with an ``"id"``
-        column and ``geometry`` column.
+        ``shapely.geometry.LineString`` objects with an ``"O"`` (origin),
+        ``D`` (destination), and ``geometry`` column.
     
     Notes
     -----
@@ -704,9 +704,31 @@ def _routes_as_gdf(paths, id_col=None, geom_col=None):
     
     """
 
-    paths = {k: [LineString(v)] for k, v in paths.items()}
-    paths = geopandas.GeoDataFrame.from_dict(paths, orient="index")
-    paths.reset_index(inplace=True)
-    paths.rename(columns={"index": id_col, 0: geom_col}, inplace=True)
+    # isolate the origins, destinations, and geometries
+    origs = [o for (o, d), g in paths]
+    dests = [d for (o, d), g in paths]
+    geoms = [LineString(g) for (o, d), g in paths]
+
+    # if the observation relationship is symmetric, remove redundancies
+    if symmetric:
+        path_set = []
+        for idx, (o, d, g) in enumerate(zip(origs, dests, geoms)):
+            if o != d:
+                path = [o, d]
+                path.sort()
+                path = tuple(path)
+                if path not in path_set:
+                    path_set.append(path)
+                else:
+                    geoms.pop(idx)
+            else:
+                geoms.pop(idx)
+        origs = [o for o, d in path_set]
+        dests = [d for o, d in path_set]
+
+    # instantiate as a geodataframe
+    paths = geopandas.GeoDataFrame(geometry=geoms)
+    paths["O"] = origs
+    paths["D"] = dests
 
     return paths
