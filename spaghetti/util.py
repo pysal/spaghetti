@@ -694,7 +694,8 @@ def _routes_as_gdf(paths, id_col, geom_col, symmetric):
     paths : geopandas.GeoDataFrame
         Network shortest paths as a ``geopandas.GeoDataFrame`` of
         ``shapely.geometry.LineString`` objects with an ``"O"`` (origin),
-        ``D`` (destination), and ``geometry`` column.
+        ``D`` (destination), and ``geometry`` column. An additional
+        column storing the ID as a tuple is available.
     
     Notes
     -----
@@ -730,5 +731,8 @@ def _routes_as_gdf(paths, id_col, geom_col, symmetric):
     paths = geopandas.GeoDataFrame(geometry=geoms)
     paths["O"] = origs
     paths["D"] = dests
+
+    if id_col:
+        paths[id_col] = paths.apply(lambda x: (x["O"], x["D"]), axis=1)
 
     return paths

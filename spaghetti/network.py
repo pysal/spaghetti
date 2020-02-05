@@ -2799,6 +2799,7 @@ def element_as_gdf(
     
     id_col : str
         ``geopandas.GeoDataFrame`` column name for IDs. Default is ``"id"``.
+        When extracting routes this creates an (origin, destination) tuple.
     
     geom_col : str
         ``geopandas.GeoDataFrame`` column name for geometry. Default is
