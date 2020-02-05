@@ -2164,7 +2164,7 @@ class Network:
         The are ``n`` vertices in the path between observations 
         ``0`` and ``1``.
         
-        >>> n = len(path[1])
+        >>> n = len(path[1].vertices)
         >>> n
         10
         
@@ -2247,7 +2247,7 @@ class Network:
                 path = [first_vtx] + segm_verts + [last_vtx]
 
             # populate the ``paths`` dataframe
-            paths.append([(obs0, obs1), path])
+            paths.append([(obs0, obs1), cg.Chain(path)])
 
         return paths
 

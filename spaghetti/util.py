@@ -708,7 +708,7 @@ def _routes_as_gdf(paths, id_col, geom_col, symmetric):
     # isolate the origins, destinations, and geometries
     origs = [o for (o, d), g in paths]
     dests = [d for (o, d), g in paths]
-    geoms = [LineString(g) for (o, d), g in paths]
+    geoms = [LineString(g.vertices) for (o, d), g in paths]
 
     # if the observation relationship is symmetric, remove redundancies
     if symmetric:
