@@ -76,6 +76,7 @@
 <li class="toctree-l2"><a class="reference internal" href="shortest-path-visualization.html">Generating regular lattices and visualizing shortest paths</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Spatial network analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="facility-location.html">Demostrating network-based optimal facility location modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transportation-problem.html">The Transportation Problem</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tsp.html">The Traveling Sales(man)(person) Problem — TSP</a></li>
 </ul>
 </li>
@@ -391,7 +392,7 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-02-02T13:48:34-05:00
+2020-02-05T14:15:00-05:00
 
 CPython 3.7.3
 IPython 7.10.2
@@ -426,11 +427,6 @@ interpreter: 64bit
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">set_matplotlib_formats</span>
-    <span class="n">set_matplotlib_formats</span><span class="p">(</span><span class="s2">&quot;retina&quot;</span><span class="p">)</span>
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="k">pass</span>
 <span class="o">%</span><span class="k">matplotlib</span> inline
 <span class="o">%</span><span class="k">watermark</span> -w
 <span class="o">%</span><span class="k">watermark</span> -iv
@@ -443,13 +439,26 @@ interpreter: 64bit
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 watermark 2.0.2
-spaghetti  1.4.1
-esda       2.1.1
-matplotlib 3.1.2
 libpysal   4.2.0
 numpy      1.17.3
+matplotlib 3.1.2
+spaghetti  1.4.1
+esda       2.1.1
 
 </pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">set_matplotlib_formats</span>
+    <span class="n">set_matplotlib_formats</span><span class="p">(</span><span class="s2">&quot;retina&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
 </div>
 </div>
 <hr class="docutils" />
@@ -458,7 +467,7 @@ numpy      1.17.3
 <div class="section" id="Instantiate-the-network-from-a-.shp-file">
 <h3>Instantiate the network from a <code class="docutils literal notranslate"><span class="pre">.shp</span></code> file<a class="headerlink" href="#Instantiate-the-network-from-a-.shp-file" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -473,7 +482,7 @@ numpy      1.17.3
 <h2>2. Allocating observations (snapping points) to a network:<a class="headerlink" href="#2.-Allocating-observations-(snapping-points)-to-a-network:" title="Permalink to this headline">¶</a></h2>
 <p><strong>A network is composed of a single topological representation of network elements (arcs and vertices) to which point patterns may be snapped.</strong></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -490,13 +499,13 @@ numpy      1.17.3
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x10bfdf320&gt;,
- &#39;schools&#39;: &lt;spaghetti.network.PointPattern at 0x126136908&gt;}
+{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x107a51128&gt;,
+ &#39;schools&#39;: &lt;spaghetti.network.PointPattern at 0x121093048&gt;}
 </pre></div></div>
 </div>
 <p><strong>Attributes for every point pattern</strong></p>
@@ -504,7 +513,7 @@ numpy      1.17.3
 <li><p><code class="docutils literal notranslate"><span class="pre">dist_snapped</span></code> dict keyed by point id with the value as snapped distance from observation to network arc</p></li>
 </ol>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -513,7 +522,7 @@ numpy      1.17.3
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -525,7 +534,7 @@ numpy      1.17.3
 <li><p><code class="docutils literal notranslate"><span class="pre">dist_to_vertex</span></code> dict keyed by pointid with the value being a dict in the form {node: distance to vertex, node: distance to vertex}</p></li>
 </ol>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -534,7 +543,7 @@ numpy      1.17.3
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -546,7 +555,7 @@ numpy      1.17.3
 <li><p><code class="docutils literal notranslate"><span class="pre">npoints</span></code> point observations in set</p></li>
 </ol>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -555,7 +564,7 @@ numpy      1.17.3
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -567,7 +576,7 @@ numpy      1.17.3
 <li><p><code class="docutils literal notranslate"><span class="pre">obs_to_arc</span></code> dict keyed by arc with the value being a dict in the form {pointID:(x-coord, y-coord), pointID:(x-coord, y-coord), … }</p></li>
 </ol>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -576,7 +585,7 @@ numpy      1.17.3
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -588,7 +597,7 @@ numpy      1.17.3
 <li><p><code class="docutils literal notranslate"><span class="pre">obs_to_vertex</span></code> list of incident network vertices to snapped observation points</p></li>
 </ol>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -597,7 +606,7 @@ numpy      1.17.3
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -609,7 +618,7 @@ numpy      1.17.3
 <li><p><code class="docutils literal notranslate"><span class="pre">points</span></code> geojson like representation of the point pattern. Includes properties if read with attributes=<code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
 </ol>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -618,7 +627,7 @@ numpy      1.17.3
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -630,7 +639,7 @@ numpy      1.17.3
 <li><p><code class="docutils literal notranslate"><span class="pre">snapped_coordinates</span></code> dict keyed by pointid with the value being (x-coord, y-coord)</p></li>
 </ol>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -639,7 +648,7 @@ numpy      1.17.3
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -649,7 +658,7 @@ numpy      1.17.3
 </div>
 <p><strong>Counts per link (arc or edge) are important, but should not be precomputed since we have different representations of the network (spatial and graph currently). (Relatively) Uniform segmentation still needs to be done.</strong></p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -658,7 +667,7 @@ numpy      1.17.3
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -668,7 +677,7 @@ numpy      1.17.3
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -683,7 +692,7 @@ numpy      1.17.3
 <div class="section" id="Split-network-arcs-into-segments-of-200-(US-feet-is-this-case)">
 <h3>Split network arcs into segments of 200 (<a class="reference external" href="https://github.com/pysal/libpysal/blob/master/libpysal/examples/geodanet/streets.prj">US feet is this case</a>)<a class="headerlink" href="#Split-network-arcs-into-segments-of-200-(US-feet-is-this-case)" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -695,7 +704,7 @@ numpy      1.17.3
 <div class="section" id="Calculate-observations-per-link-on-the-segmented-network">
 <h3>Calculate observations per link on the segmented network<a class="headerlink" href="#Calculate-observations-per-link-on-the-segmented-network" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -706,7 +715,7 @@ numpy      1.17.3
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -720,7 +729,7 @@ numpy      1.17.3
 <div class="section" id="4.-Extract-geopandas.GeoDataFrame-objects-of-the-vertices-and-arcs">
 <h2>4. Extract <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> objects of the vertices and arcs<a class="headerlink" href="#4.-Extract-geopandas.GeoDataFrame-objects-of-the-vertices-and-arcs" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -744,7 +753,7 @@ numpy      1.17.3
 <li><p>distance segmented network with small, red, fully opaque vertices</p></li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -758,7 +767,7 @@ numpy      1.17.3
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_network-analysis_32_0.png"><img alt="../_images/notebooks_network-analysis_32_0.png" src="../_images/notebooks_network-analysis_32_0.png" style="width: 698px; height: 683px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_network-analysis_33_0.png"><img alt="../_images/notebooks_network-analysis_33_0.png" src="../_images/notebooks_network-analysis_33_0.png" style="width: 698px; height: 683px;" /></a>
 </div>
 </div>
 </div>
@@ -768,7 +777,7 @@ numpy      1.17.3
 <div class="section" id="6.1-Moran’s-I-using-the-digitized-network">
 <h3>6.1 Moran’s <em>I</em> using the digitized network<a class="headerlink" href="#6.1-Moran’s-I-using-the-digitized-network" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -807,7 +816,7 @@ numpy      1.17.3
 <li><p>Note that we have to regenerate the counts per arc, since the graph will have less edges.</p></li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -844,7 +853,7 @@ numpy      1.17.3
 <div class="section" id="6.3-Moran’s-I-using-the-segmented-network-and-intensities-instead-of-counts">
 <h3>6.3 Moran’s <em>I</em> using the segmented network and intensities instead of counts<a class="headerlink" href="#6.3-Moran’s-I-using-the-segmented-network-and-intensities-instead-of-counts" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -887,7 +896,7 @@ numpy      1.17.3
 <li><p>Need to supply a count of the number of points and a distirbution (default is uniform). Generally, this will not be called by the user, since the simulation will be used for Monte Carlo permutation.</p></li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -912,7 +921,7 @@ numpy      1.17.3
 <div class="section" id="F-function">
 <h3><em>F</em>-function<a class="headerlink" href="#F-function" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -921,7 +930,7 @@ numpy      1.17.3
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -939,14 +948,14 @@ numpy      1.17.3
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_network-analysis_43_0.png"><img alt="../_images/notebooks_network-analysis_43_0.png" src="../_images/notebooks_network-analysis_43_0.png" style="width: 483px; height: 484px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_network-analysis_44_0.png"><img alt="../_images/notebooks_network-analysis_44_0.png" src="../_images/notebooks_network-analysis_44_0.png" style="width: 483px; height: 484px;" /></a>
 </div>
 </div>
 </div>
 <div class="section" id="G-function">
 <h3><em>G</em>-function<a class="headerlink" href="#G-function" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -955,7 +964,7 @@ numpy      1.17.3
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -973,14 +982,14 @@ numpy      1.17.3
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_network-analysis_46_0.png"><img alt="../_images/notebooks_network-analysis_46_0.png" src="../_images/notebooks_network-analysis_46_0.png" style="width: 483px; height: 484px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_network-analysis_47_0.png"><img alt="../_images/notebooks_network-analysis_47_0.png" src="../_images/notebooks_network-analysis_47_0.png" style="width: 483px; height: 484px;" /></a>
 </div>
 </div>
 </div>
 <div class="section" id="K-function">
 <h3><em>K</em>-function<a class="headerlink" href="#K-function" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -989,7 +998,7 @@ numpy      1.17.3
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1007,7 +1016,7 @@ numpy      1.17.3
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_network-analysis_49_0.png"><img alt="../_images/notebooks_network-analysis_49_0.png" src="../_images/notebooks_network-analysis_49_0.png" style="width: 483px; height: 484px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_network-analysis_50_0.png"><img alt="../_images/notebooks_network-analysis_50_0.png" src="../_images/notebooks_network-analysis_50_0.png" style="width: 483px; height: 484px;" /></a>
 </div>
 </div>
 </div>

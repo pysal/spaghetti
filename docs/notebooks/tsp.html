@@ -23,7 +23,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="API reference" href="../api.html" />
-    <link rel="prev" title="Demostrating network-based optimal facility location modeling" href="facility-location.html" />
+    <link rel="prev" title="The Transportation Problem" href="transportation-problem.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -76,6 +76,7 @@
 <li class="toctree-l2"><a class="reference internal" href="shortest-path-visualization.html">Generating regular lattices and visualizing shortest paths</a></li>
 <li class="toctree-l2"><a class="reference internal" href="network-analysis.html">Spatial network analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="facility-location.html">Demostrating network-based optimal facility location modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transportation-problem.html">The Transportation Problem</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">The Traveling Sales(man)(person) Problem — TSP</a></li>
 </ul>
 </li>
@@ -372,7 +373,7 @@ Interactive online version:
 <p><strong>This notebook provides a use case for:</strong></p>
 <ol class="arabic simple">
 <li><p>Introducing the TSP</p></li>
-<li><p>Declaration or a solution class and model parameters</p></li>
+<li><p>Declaration of a solution class and model parameters</p></li>
 <li><p>Solving the TSP for an optimal tour</p></li>
 </ol>
 <div class="nbinput docutils container">
@@ -390,7 +391,7 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-02-02T13:48:48-05:00
+2020-02-07T08:57:23-05:00
 
 CPython 3.7.3
 IPython 7.10.2
@@ -434,12 +435,6 @@ interpreter: 64bit
 <span class="kn">import</span> <span class="nn">matplotlib</span>
 <span class="kn">import</span> <span class="nn">numpy</span>
 <span class="kn">import</span> <span class="nn">pulp</span>
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">set_matplotlib_formats</span>
-
-    <span class="n">set_matplotlib_formats</span><span class="p">(</span><span class="s2">&quot;retina&quot;</span><span class="p">)</span>
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="k">pass</span>
 <span class="o">%</span><span class="k">matplotlib</span> inline
 <span class="o">%</span><span class="k">watermark</span> -w
 <span class="o">%</span><span class="k">watermark</span> -iv
@@ -452,13 +447,26 @@ interpreter: 64bit
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 watermark 2.0.2
-pulp       1.6.8
 numpy      1.17.3
 geopandas  0.6.2
-matplotlib 3.1.2
 spaghetti  1.4.1
+pulp       1.6.8
+matplotlib 3.1.2
 
 </pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">set_matplotlib_formats</span>
+    <span class="n">set_matplotlib_formats</span><span class="p">(</span><span class="s2">&quot;retina&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
 </div>
 </div>
 <hr class="docutils" />
@@ -493,12 +501,12 @@ calculating an optimal route so that he can visit all <strong>14</strong> crime 
 <div class="section" id="Solution-class">
 <h3>Solution class<a class="headerlink" href="#Solution-class" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="k">class</span> <span class="nc">MTZ_TSP</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">cij</span><span class="p">,</span> <span class="n">xij_tag</span><span class="o">=</span><span class="s2">&quot;x_</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">ui_tag</span><span class="o">=</span><span class="s2">&quot;u_</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">cij</span><span class="p">,</span> <span class="n">xij_tag</span><span class="o">=</span><span class="s2">&quot;x_</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">ui_tag</span><span class="o">=</span><span class="s2">&quot;u_</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Instantiate and solve the Traveling Salesperson Problem (TSP)</span>
 <span class="sd">        based the formulation from Miller, Tucker, and Zemlin (1960).</span>
 
@@ -514,6 +522,8 @@ calculating an optimal route so that he can visit all <strong>14</strong> crime 
 <span class="sd">        ui_tag : str</span>
 <span class="sd">            Arbitrary real number decision variable names within the model.</span>
 <span class="sd">            Default is &#39;u_%s&#39; where %s indicates string formatting.</span>
+<span class="sd">        display : bool</span>
+<span class="sd">            Print out solution results.</span>
 
 <span class="sd">        Attributes</span>
 <span class="sd">        ----------</span>
@@ -671,7 +681,7 @@ calculating an optimal route so that he can visit all <strong>14</strong> crime 
                 <span class="n">tour_pairs</span><span class="p">[</span><span class="n">origin</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">origin</span><span class="p">)</span>
                 <span class="n">tour_pairs</span><span class="p">[</span><span class="n">origin</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">next_origin</span><span class="p">)</span>
 
-        <span class="n">tour_pairs</span> <span class="o">=</span> <span class="p">{</span><span class="n">idx</span><span class="p">:</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">cp</span><span class="p">)</span> <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">cp</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tour_pairs</span><span class="p">)}</span>
+        <span class="n">tour_pairs</span> <span class="o">=</span> <span class="p">{</span><span class="n">idx</span><span class="p">:</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">tp</span><span class="p">)</span> <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">tp</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tour_pairs</span><span class="p">)}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tour_pairs</span> <span class="o">=</span> <span class="n">tour_pairs</span>
 
     <span class="k">def</span> <span class="nf">extract_tour</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">paths</span><span class="p">,</span> <span class="n">id_col</span><span class="p">,</span> <span class="n">leg_label</span><span class="o">=</span><span class="s2">&quot;leg&quot;</span><span class="p">):</span>
@@ -690,12 +700,15 @@ calculating an optimal route so that he can visit all <strong>14</strong> crime 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        tour : geopandas.GeoDataFrame</span>
-<span class="sd">            Optimal tour of ``self.nodes`` squenced by ``leg_label``.</span>
+<span class="sd">            Optimal tour of ``self.nodes`` sequenced by ``leg_label`` that</span>
+<span class="sd">            retains the original index of ``paths``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">paths</span><span class="p">[</span><span class="n">leg_label</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span>
         <span class="c1"># set label of journey leg for each OD pair.</span>
-        <span class="k">for</span> <span class="n">leg</span><span class="p">,</span> <span class="n">cp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tour_pairs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">paths</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">paths</span><span class="p">[</span><span class="n">id_col</span><span class="p">]</span> <span class="o">==</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">cp</span><span class="p">)),</span> <span class="n">leg_label</span><span class="p">]</span> <span class="o">=</span> <span class="n">leg</span>
+        <span class="k">for</span> <span class="n">leg</span><span class="p">,</span> <span class="n">tp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tour_pairs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">paths</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">paths</span><span class="p">[</span><span class="n">id_col</span><span class="p">]</span> <span class="o">==</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">tp</span><span class="p">),</span> <span class="n">leg_label</span><span class="p">]</span> <span class="o">=</span> <span class="n">leg</span>
+
         <span class="c1"># extract only paths in the tour</span>
         <span class="n">tour</span> <span class="o">=</span> <span class="n">paths</span><span class="p">[</span><span class="n">paths</span><span class="p">[</span><span class="n">leg_label</span><span class="p">]</span> <span class="o">!=</span> <span class="nb">int</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">tour</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="n">leg_label</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -707,36 +720,164 @@ calculating an optimal route so that he can visit all <strong>14</strong> crime 
 </div>
 <div class="section" id="Streets">
 <h3>Streets<a class="headerlink" href="#Streets" title="Permalink to this headline">¶</a></h3>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">streets</span> <span class="o">=</span> <span class="n">geopandas</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;streets.shp&quot;</span><span class="p">))</span>
 <span class="n">streets</span><span class="o">.</span><span class="n">crs</span> <span class="o">=</span> <span class="s2">&quot;epsg:2223&quot;</span>
 <span class="n">streets</span> <span class="o">=</span> <span class="n">streets</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s2">&quot;epsg:2762&quot;</span><span class="p">)</span>
+<span class="n">streets</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ID</th>
+      <th>Length</th>
+      <th>geometry</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1.0</td>
+      <td>244.116229</td>
+      <td>LINESTRING (222006.581 267347.973, 222006.609 ...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2.0</td>
+      <td>375.974828</td>
+      <td>LINESTRING (222006.401 267549.141, 222006.581 ...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3.0</td>
+      <td>400.353405</td>
+      <td>LINESTRING (221419.878 267804.150, 221410.853 ...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4.0</td>
+      <td>660.000000</td>
+      <td>LINESTRING (220874.568 268352.647, 220803.400 ...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5.0</td>
+      <td>660.000000</td>
+      <td>LINESTRING (220801.878 268398.082, 220916.451 ...</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
 </div>
 </div>
 <div class="section" id="Crimes">
 <h3>Crimes<a class="headerlink" href="#Crimes" title="Permalink to this headline">¶</a></h3>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">all_crimes</span> <span class="o">=</span> <span class="n">geopandas</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;crimes.shp&quot;</span><span class="p">))</span>
 <span class="n">all_crimes</span><span class="o">.</span><span class="n">crs</span> <span class="o">=</span> <span class="s2">&quot;epsg:2223&quot;</span>
 <span class="n">all_crimes</span> <span class="o">=</span> <span class="n">all_crimes</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s2">&quot;epsg:2762&quot;</span><span class="p">)</span>
+<span class="n">all_crimes</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>POLYID2</th>
+      <th>POLYID</th>
+      <th>geometry</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>1</td>
+      <td>POINT (221867.882 266919.761)</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>2</td>
+      <td>POINT (220922.698 266932.562)</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>3</td>
+      <td>POINT (221708.777 266959.994)</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>4</td>
+      <td>POINT (221899.582 266961.518)</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>5</td>
+      <td>POINT (221749.620 266962.128)</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
 </div>
 </div>
 <div class="section" id="Detective-Königsberg’s-cases">
 <h3>Detective Königsberg’s cases<a class="headerlink" href="#Detective-Königsberg’s-cases" title="Permalink to this headline">¶</a></h3>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -744,100 +885,433 @@ calculating an optimal route so that he can visit all <strong>14</strong> crime 
 <span class="n">koenigsberg_cases</span> <span class="o">=</span> <span class="mi">7</span> <span class="o">*</span> <span class="mi">2</span>
 <span class="n">subset_idx</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">all_crimes</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">koenigsberg_cases</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">crimes_scenes</span> <span class="o">=</span> <span class="n">all_crimes</span><span class="p">[</span><span class="n">all_crimes</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">subset_idx</span><span class="p">)]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">crimes_scenes</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>POLYID2</th>
+      <th>POLYID</th>
+      <th>geometry</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>5</th>
+      <td>6</td>
+      <td>6</td>
+      <td>POINT (221651.779 266962.433)</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>12</td>
+      <td>12</td>
+      <td>POINT (220774.565 266967.614)</td>
+    </tr>
+    <tr>
+      <th>48</th>
+      <td>49</td>
+      <td>49</td>
+      <td>POINT (220962.017 267280.644)</td>
+    </tr>
+    <tr>
+      <th>62</th>
+      <td>63</td>
+      <td>63</td>
+      <td>POINT (220772.431 267386.410)</td>
+    </tr>
+    <tr>
+      <th>88</th>
+      <td>89</td>
+      <td>89</td>
+      <td>POINT (220796.815 267545.820)</td>
+    </tr>
+    <tr>
+      <th>114</th>
+      <td>115</td>
+      <td>115</td>
+      <td>POINT (221500.903 267697.915)</td>
+    </tr>
+    <tr>
+      <th>120</th>
+      <td>121</td>
+      <td>121</td>
+      <td>POINT (220474.032 267730.529)</td>
+    </tr>
+    <tr>
+      <th>132</th>
+      <td>133</td>
+      <td>133</td>
+      <td>POINT (221677.382 267761.314)</td>
+    </tr>
+    <tr>
+      <th>169</th>
+      <td>170</td>
+      <td>170</td>
+      <td>POINT (221154.041 267919.810)</td>
+    </tr>
+    <tr>
+      <th>184</th>
+      <td>185</td>
+      <td>185</td>
+      <td>POINT (221852.947 268049.045)</td>
+    </tr>
+    <tr>
+      <th>211</th>
+      <td>212</td>
+      <td>212</td>
+      <td>POINT (220775.174 268149.629)</td>
+    </tr>
+    <tr>
+      <th>234</th>
+      <td>235</td>
+      <td>235</td>
+      <td>POINT (220472.813 268197.482)</td>
+    </tr>
+    <tr>
+      <th>269</th>
+      <td>270</td>
+      <td>270</td>
+      <td>POINT (220514.875 268478.203)</td>
+    </tr>
+    <tr>
+      <th>279</th>
+      <td>280</td>
+      <td>280</td>
+      <td>POINT (222083.681 268590.979)</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
 </div>
 </div>
 <div class="section" id="Instantiate-a-network-object">
 <h3>Instantiate a network object<a class="headerlink" href="#Instantiate-a-network-object" title="Permalink to this headline">¶</a></h3>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">in_data</span><span class="o">=</span><span class="n">streets</span><span class="p">)</span>
 <span class="n">vertices</span><span class="p">,</span> <span class="n">arcs</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">arcs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">vertices</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>geometry</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>POINT (222006.581 267347.973)</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>POINT (222006.609 267316.693)</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>POINT (222006.401 267549.141)</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>POINT (221419.878 267804.150)</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>POINT (221410.853 267921.253)</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">arcs</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>geometry</th>
+      <th>comp_label</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>(0, 1)</td>
+      <td>LINESTRING (222006.581 267347.973, 222006.609 ...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>(0, 2)</td>
+      <td>LINESTRING (222006.581 267347.973, 222006.401 ...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>(1, 110)</td>
+      <td>LINESTRING (222006.609 267316.693, 222081.015 ...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>(1, 127)</td>
+      <td>LINESTRING (222006.609 267316.693, 221805.441 ...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>(1, 213)</td>
+      <td>LINESTRING (222006.609 267316.693, 222006.789 ...</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
 </div>
 </div>
 <div class="section" id="Plot">
 <h3>Plot<a class="headerlink" href="#Plot" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">base</span> <span class="o">=</span> <span class="n">arcs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
 <span class="n">vertices</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">all_crimes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">crimes_scenes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">crimes_scenes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">);</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-&lt;matplotlib.axes._subplots.AxesSubplot at 0x10a3195f8&gt;
-</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_tsp_15_1.png" src="../_images/notebooks_tsp_15_1.png" />
+<a class="reference internal image-reference" href="../_images/notebooks_tsp_17_0.png"><img alt="../_images/notebooks_tsp_17_0.png" src="../_images/notebooks_tsp_17_0.png" style="width: 602px; height: 574px;" /></a>
 </div>
 </div>
 </div>
 <div class="section" id="Associate-Detective-Königsberg’s-cases-with-the-network-and-plot">
 <h3>Associate Detective Königsberg’s cases with the network and plot<a class="headerlink" href="#Associate-Detective-Königsberg’s-cases-with-the-network-and-plot" title="Permalink to this headline">¶</a></h3>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span><span class="n">crimes_scenes</span><span class="p">,</span> <span class="s2">&quot;crime_scenes&quot;</span><span class="p">)</span>
 <span class="n">pp_obs</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="o">=</span><span class="s2">&quot;crime_scenes&quot;</span><span class="p">)</span>
 <span class="n">pp_obs_snapped</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="o">=</span><span class="s2">&quot;crime_scenes&quot;</span><span class="p">,</span> <span class="n">snapped</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">pp_obs_snapped</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>geometry</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>POINT (221652.388 266992.490)</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>POINT (220775.021 267000.303)</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>POINT (220961.989 267315.817)</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>POINT (220807.120 267386.436)</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>POINT (220796.691 267553.295)</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5</td>
+      <td>POINT (221500.239 267683.152)</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>6</td>
+      <td>POINT (220508.266 267730.098)</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>7</td>
+      <td>POINT (221677.346 267804.368)</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>8</td>
+      <td>POINT (221154.251 267929.448)</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>9</td>
+      <td>POINT (221852.953 268042.291)</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>10</td>
+      <td>POINT (220806.533 268149.653)</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>11</td>
+      <td>POINT (220503.164 268197.759)</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>12</td>
+      <td>POINT (220499.316 268477.839)</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>13</td>
+      <td>POINT (222088.795 268590.984)</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">base</span> <span class="o">=</span> <span class="n">arcs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
 <span class="n">vertices</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">pp_obs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">pp_obs_snapped</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">pp_obs_snapped</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">);</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-&lt;matplotlib.axes._subplots.AxesSubplot at 0x115d3ec50&gt;
-</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_tsp_18_1.png" src="../_images/notebooks_tsp_18_1.png" />
+<a class="reference internal image-reference" href="../_images/notebooks_tsp_20_0.png"><img alt="../_images/notebooks_tsp_20_0.png" src="../_images/notebooks_tsp_20_0.png" style="width: 593px; height: 574px;" /></a>
 </div>
 </div>
 </div>
 <div class="section" id="Calculate-distance-matrix-while-generating-shortest-path-trees">
 <h3>Calculate distance matrix while generating shortest path trees<a class="headerlink" href="#Calculate-distance-matrix-while-generating-shortest-path-trees" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -847,7 +1321,7 @@ calculating an optimal route so that he can visit all <strong>14</strong> crime 
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -858,7 +1332,7 @@ array([[          nan,  877.47164862, 1012.61083447],
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -867,7 +1341,7 @@ array([[          nan,  877.47164862, 1012.61083447],
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -890,7 +1364,7 @@ array([[          nan,  877.47164862, 1012.61083447],
 <div class="section" id="Create-decision-variables-for-the-crime-scene-locations">
 <h3>Create decision variables for the crime scene locations<a class="headerlink" href="#Create-decision-variables-for-the-crime-scene-locations" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -900,7 +1374,7 @@ array([[          nan,  877.47164862, 1012.61083447],
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1020,7 +1494,7 @@ array([[          nan,  877.47164862, 1012.61083447],
 <div class="section" id="Solve-the-TSP">
 <h3>Solve the TSP<a class="headerlink" href="#Solve-the-TSP" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1054,7 +1528,7 @@ Status: Optimal
 <div class="section" id="Extract-all-network-shortest-paths">
 <h3>Extract all network shortest paths<a class="headerlink" href="#Extract-all-network-shortest-paths" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1065,7 +1539,7 @@ Status: Optimal
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1087,35 +1561,47 @@ Status: Optimal
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>id</th>
       <th>geometry</th>
+      <th>O</th>
+      <th>D</th>
+      <th>id</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>(0, 1)</td>
       <td>LINESTRING (221652.388 266992.490, 221523.237 ...</td>
+      <td>0</td>
+      <td>1</td>
+      <td>(0, 1)</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>(0, 2)</td>
       <td>LINESTRING (221652.388 266992.490, 221523.237 ...</td>
+      <td>0</td>
+      <td>2</td>
+      <td>(0, 2)</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>(0, 3)</td>
       <td>LINESTRING (221652.388 266992.490, 221523.237 ...</td>
+      <td>0</td>
+      <td>3</td>
+      <td>(0, 3)</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>(0, 4)</td>
       <td>LINESTRING (221652.388 266992.490, 221523.237 ...</td>
+      <td>0</td>
+      <td>4</td>
+      <td>(0, 4)</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>(0, 5)</td>
       <td>LINESTRING (221652.388 266992.490, 221523.237 ...</td>
+      <td>0</td>
+      <td>5</td>
+      <td>(0, 5)</td>
     </tr>
   </tbody>
 </table>
@@ -1125,17 +1611,17 @@ Status: Optimal
 <div class="section" id="Extract-the-tour">
 <h3>Extract the tour<a class="headerlink" href="#Extract-the-tour" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">tour</span> <span class="o">=</span> <span class="n">mtz_tsp</span><span class="o">.</span><span class="n">extract_tour</span><span class="p">(</span><span class="n">paths_gdf</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">)</span>
+<span></span><span class="n">tour</span> <span class="o">=</span> <span class="n">mtz_tsp</span><span class="o">.</span><span class="n">extract_tour</span><span class="p">(</span><span class="n">paths_gdf</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="s2">&quot;id&quot;</span><span class="p">)</span>
 <span class="n">tour</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1157,40 +1643,52 @@ Status: Optimal
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>id</th>
       <th>geometry</th>
+      <th>O</th>
+      <th>D</th>
+      <th>id</th>
       <th>leg</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>(0, 1)</td>
       <td>LINESTRING (221652.388 266992.490, 221523.237 ...</td>
+      <td>0</td>
+      <td>1</td>
+      <td>(0, 1)</td>
       <td>0</td>
     </tr>
     <tr>
       <th>13</th>
-      <td>(1, 2)</td>
       <td>LINESTRING (220775.021 267000.303, 220807.418 ...</td>
+      <td>1</td>
+      <td>2</td>
+      <td>(1, 2)</td>
       <td>1</td>
     </tr>
     <tr>
       <th>25</th>
-      <td>(2, 3)</td>
       <td>LINESTRING (220961.989 267315.817, 220853.037 ...</td>
+      <td>2</td>
+      <td>3</td>
+      <td>(2, 3)</td>
       <td>2</td>
     </tr>
     <tr>
       <th>36</th>
-      <td>(3, 4)</td>
       <td>LINESTRING (220807.120 267386.436, 220806.992 ...</td>
+      <td>3</td>
+      <td>4</td>
+      <td>(3, 4)</td>
       <td>3</td>
     </tr>
     <tr>
       <th>47</th>
-      <td>(4, 6)</td>
       <td>LINESTRING (220796.691 267553.295, 220695.386 ...</td>
+      <td>4</td>
+      <td>6</td>
+      <td>(4, 6)</td>
       <td>4</td>
     </tr>
   </tbody>
@@ -1201,7 +1699,7 @@ Status: Optimal
 <div class="section" id="Define-label-helper-functions-and-plot-Det.-Königsberg’s-optimal-tour">
 <h3>Define label helper functions and plot Det. Königsberg’s optimal tour<a class="headerlink" href="#Define-label-helper-functions-and-plot-Det.-Königsberg’s-optimal-tour" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1229,12 +1727,12 @@ Status: Optimal
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">base</span> <span class="o">=</span> <span class="n">arcs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">tour</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;tab20&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.50</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">tour</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s2">&quot;leg&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;tab20&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.50</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">vertices</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">pp_obs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">pp_obs_snapped</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
@@ -1249,7 +1747,7 @@ Status: Optimal
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_tsp_32_0.png" src="../_images/notebooks_tsp_32_0.png" />
+<a class="reference internal image-reference" href="../_images/notebooks_tsp_34_0.png"><img alt="../_images/notebooks_tsp_34_0.png" src="../_images/notebooks_tsp_34_0.png" style="width: 593px; height: 574px;" /></a>
 </div>
 </div>
 </div>
