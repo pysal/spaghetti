@@ -2093,7 +2093,7 @@ class Network:
 
         return nearest
 
-    def shortest_paths(self, tree, pp_name, n_processes=1):
+    def shortest_paths(self, tree, pp_orig, pp_dest=None, n_processes=1):
         """Return the shortest paths between observation points as
         ``libpysal.cg.Chain`` objects.
     
@@ -2104,8 +2104,14 @@ class Network:
             See ``tree_nearest`` in 
             ``spaghetti.Network.allneighbordistances()``.
         
-        pp_name : str
+        pp_orig : str
+            Origin point pattern for shortest paths. 
             See ``name`` in ``spaghetti.Network.snapobservations()``.
+        
+        pp_dest : str
+            Destination point pattern for shortest paths. 
+            See ``name`` in ``spaghetti.Network.snapobservations()``.
+            Defaults ``pp_orig`` if not declared.
         
         n_processes : int
             See ``n_processes`` in ``spaghetti.Network.full_distance_matrix()``.
@@ -2113,8 +2119,11 @@ class Network:
         Returns
         -------
         
-        paths : dict
+        paths : list
             The shortest paths between observations as geometric objects.
+            Each element of the list is a list where the first element
+            is an origin-destination pair tuple and the second
+            element is a ``libpysal.cg.Chain``.
         
         Raises
         ------
@@ -2145,10 +2154,17 @@ class Network:
         
         >>> paths = ntw.shortest_paths(tree, "schools")
         
-        The are `n` vertices in the path between observation 
+        Extract the first path, which is between observations
         ``0`` and ``1``.
         
-        >>> n = len(paths[(0, 1)])
+        >>> path = paths[0]
+        >>> path[0]
+        (0, 1)
+        
+        The are ``n`` vertices in the path between observations 
+        ``0`` and ``1``.
+        
+        >>> n = len(path[1].vertices)
         >>> n
         10
         
@@ -2162,12 +2178,16 @@ class Network:
             raise AttributeError(msg)
 
         # isolate network attributes
-        pp = self.pointpatterns[pp_name]
+        pp_orig = self.pointpatterns[pp_orig]
+        if pp_dest:
+            pp_dest = self.pointpatterns[pp_dest]
+        else:
+            pp_dest = pp_orig
         vtx_coords = self.vertex_coords
         net_trees = self.network_trees
 
-        # instantiate a dictionary to store paths
-        paths = {}
+        # instantiate a list to store paths
+        paths = []
 
         # iterate over each path in the tree
         for idx, ((obs0, obs1), (v0, v1)) in enumerate(tree.items()):
@@ -2177,8 +2197,8 @@ class Network:
             if (v0, v1) == SAME_SEGMENT:
                 # isolate the snapped coordinates and put in a list
                 partial_segment_verts = [
-                    cg.Point(pp.snapped_coordinates[obs0]),
-                    cg.Point(pp.snapped_coordinates[obs1]),
+                    cg.Point(pp_orig.snapped_coordinates[obs0]),
+                    cg.Point(pp_dest.snapped_coordinates[obs1]),
                 ]
                 path = partial_segment_verts
 
@@ -2218,8 +2238,8 @@ class Network:
 
                 # partial-length network segments along path
                 partial_segment_verts = [
-                    cg.Point(pp.snapped_coordinates[obs0]),
-                    cg.Point(pp.snapped_coordinates[obs1]),
+                    cg.Point(pp_orig.snapped_coordinates[obs0]),
+                    cg.Point(pp_dest.snapped_coordinates[obs1]),
                 ]
 
                 # combine the full and partial segments into a single list
@@ -2227,7 +2247,7 @@ class Network:
                 path = [first_vtx] + segm_verts + [last_vtx]
 
             # populate the ``paths`` dataframe
-            paths[(obs0, obs1)] = path
+            paths.append([(obs0, obs1), cg.Chain(path)])
 
         return paths
 
@@ -2773,6 +2793,7 @@ def element_as_gdf(
     
     id_col : str
         ``geopandas.GeoDataFrame`` column name for IDs. Default is ``"id"``.
+        When extracting routes this creates an (origin, destination) tuple.
     
     geom_col : str
         ``geopandas.GeoDataFrame`` column name for geometry. Default is
@@ -2848,7 +2869,7 @@ def element_as_gdf(
 
     # shortest path routes between observations
     if routes:
-        paths = util._routes_as_gdf(routes, id_col=id_col, geom_col=geom_col)
+        paths = util._routes_as_gdf(routes, id_col, geom_col)
         return paths
 
     # need vertices place holder to create network segment LineStrings

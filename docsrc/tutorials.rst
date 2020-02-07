@@ -23,6 +23,7 @@ Tutorials
     :caption: Integrations & Applications:
 
     notebooks/facility-location.ipynb
+    notebooks/transportation-problem.ipynb
     notebooks/tsp.ipynb
 
 Citations:
@@ -34,7 +35,10 @@ Citations:
     * Facility Location:
       :cite:`Hakimi1964`, :cite:`ReVelle1970`, :cite:`Toregas1971`, :cite:`Toregas1972`, :cite:`Church1974`, :cite:`ReVelle2005`
     
-    * Traveling Salesperson Problem:
-      :cite:`Dantzig1954`, :cite:`Flood1956`, :cite:`Miller1960`, :cite:`Cummings2000`, :cite:`Miller2001`, :cite:`Gass2005`, :cite:`Bektas2014`
+    * The Transportation Problem:
+      :cite:`Hitchcock1941`, :cite:`Koopmans1949`, :cite:`Phillips1981a`, :cite:`Gass2005`, :cite:`Church2009`, :cite:`daskin2013`
+    
+    * The Traveling Salesperson Problem:
+      :cite:`Dantzig1954`, :cite:`Flood1956`, :cite:`Miller1960`, :cite:`Cummings2000`, :cite:`Miller2001`, :cite:`Bektas2014`
 
 

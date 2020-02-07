@@ -22,7 +22,7 @@
     <link rel="shortcut icon" href="../_static/pysal_favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="The Traveling Sales(man)(person) Problem — TSP" href="tsp.html" />
+    <link rel="next" title="The Transportation Problem" href="transportation-problem.html" />
     <link rel="prev" title="Spatial network analysis" href="network-analysis.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -76,6 +76,7 @@
 <li class="toctree-l2"><a class="reference internal" href="shortest-path-visualization.html">Generating regular lattices and visualizing shortest paths</a></li>
 <li class="toctree-l2"><a class="reference internal" href="network-analysis.html">Spatial network analysis</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Demostrating network-based optimal facility location modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transportation-problem.html">The Transportation Problem</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tsp.html">The Traveling Sales(man)(person) Problem — TSP</a></li>
 </ul>
 </li>
@@ -393,7 +394,7 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-02-02T13:47:09-05:00
+2020-02-05T14:14:48-05:00
 
 CPython 3.7.3
 IPython 7.10.2
@@ -458,12 +459,6 @@ interpreter: 64bit
 <span class="kn">import</span> <span class="nn">seaborn</span>
 <span class="kn">import</span> <span class="nn">shapely</span>
 <span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="kn">import</span> <span class="n">Point</span>
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Markdown</span> <span class="k">as</span> <span class="n">md</span>
-    <span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">set_matplotlib_formats</span>
-    <span class="n">set_matplotlib_formats</span><span class="p">(</span><span class="s2">&quot;retina&quot;</span><span class="p">)</span>
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="k">pass</span>
 <span class="o">%</span><span class="k">matplotlib</span> inline
 <span class="o">%</span><span class="k">watermark</span> -w
 <span class="o">%</span><span class="k">watermark</span> -iv
@@ -476,16 +471,30 @@ interpreter: 64bit
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 watermark 2.0.2
-matplotlib 3.1.2
 numpy      1.17.3
 shapely    1.7.0
-spaghetti  1.4.1
-ortools    7.4.7247
 geopandas  0.6.2
 libpysal   4.2.0
+ortools    7.4.7247
+matplotlib 3.1.2
+spaghetti  1.4.1
 seaborn    0.9.0
 
 </pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Markdown</span> <span class="k">as</span> <span class="n">md</span>
+    <span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">set_matplotlib_formats</span>
+    <span class="n">set_matplotlib_formats</span><span class="p">(</span><span class="s2">&quot;retina&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="1.1-Scenario:">
@@ -524,7 +533,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 <div class="section" id="1.2-Set-parameters-as-per-the-scenario-layed-out-above">
 <h2>1.2 Set parameters as per the scenario layed out above<a class="headerlink" href="#1.2-Set-parameters-as-per-the-scenario-layed-out-above" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -550,7 +559,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 <div class="section" id="1.3.-Define-a-class-and-functions-for-solving-the-models-and-analyzing-the-results">
 <h2>1.3. Define a class and functions for solving the models and analyzing the results<a class="headerlink" href="#1.3.-Define-a-class-and-functions-for-solving-the-models-and-analyzing-the-results" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1023,7 +1032,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1061,7 +1070,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1272,7 +1281,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1344,7 +1353,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1371,7 +1380,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1393,7 +1402,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1576,7 +1585,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1605,7 +1614,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1643,7 +1652,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1671,7 +1680,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 <div class="section" id="Utilizing-libpysal.cg.alpha_shapes">
 <h3>Utilizing <a class="reference external" href="https://pysal.org/libpysal/api.html#alpha-shapes">libpysal.cg.alpha_shapes</a><a class="headerlink" href="#Utilizing-libpysal.cg.alpha_shapes" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1711,7 +1720,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1755,7 +1764,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1815,7 +1824,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1875,7 +1884,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 <div class="section" id="2.1-Streets-as-empirical-data">
 <h2>2.1 Streets as empirical data<a class="headerlink" href="#2.1-Streets-as-empirical-data" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1887,7 +1896,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1951,7 +1960,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 </div>
 <p><strong>Plot</strong></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1964,7 +1973,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_facility-location_26_0.png"><img alt="../_images/notebooks_facility-location_26_0.png" src="../_images/notebooks_facility-location_26_0.png" style="width: 704px; height: 596px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_facility-location_27_0.png"><img alt="../_images/notebooks_facility-location_27_0.png" src="../_images/notebooks_facility-location_27_0.png" style="width: 704px; height: 596px;" /></a>
 </div>
 </div>
 </div>
@@ -1972,7 +1981,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 <h2>2.2. Generate synthetic, random “houses” near the network<a class="headerlink" href="#2.2.-Generate-synthetic,-random-“houses”-near-the-network" title="Permalink to this headline">¶</a></h2>
 <p><strong>Buffer streets</strong></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1983,7 +1992,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -2019,7 +2028,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 </div>
 <p><strong>Plot</strong></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2032,12 +2041,12 @@ Little Free Libraries acording to objective functions and specific sets of contr
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_facility-location_31_0.png"><img alt="../_images/notebooks_facility-location_31_0.png" src="../_images/notebooks_facility-location_31_0.png" style="width: 793px; height: 596px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_facility-location_32_0.png"><img alt="../_images/notebooks_facility-location_32_0.png" src="../_images/notebooks_facility-location_32_0.png" style="width: 793px; height: 596px;" /></a>
 </div>
 </div>
 <p><strong>Generate synthetic client points and synthetic facility points</strong></p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2052,7 +2061,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 </div>
 <p><strong>Add decision variables to each dataset</strong></p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2063,7 +2072,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 </div>
 <p><strong>Plot</strong></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2081,14 +2090,14 @@ Little Free Libraries acording to objective functions and specific sets of contr
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_facility-location_37_0.png"><img alt="../_images/notebooks_facility-location_37_0.png" src="../_images/notebooks_facility-location_37_0.png" style="width: 920px; height: 577px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_facility-location_38_0.png"><img alt="../_images/notebooks_facility-location_38_0.png" src="../_images/notebooks_facility-location_38_0.png" style="width: 920px; height: 577px;" /></a>
 </div>
 </div>
 </div>
 <div class="section" id="2.3-Synthetic-client-demand-(weights)">
 <h2>2.3 Synthetic client demand (weights)<a class="headerlink" href="#2.3-Synthetic-client-demand-(weights)" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2099,7 +2108,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -2165,7 +2174,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 <div class="section" id="2.4-Create-a-network-instance">
 <h2>2.4 Create a network instance<a class="headerlink" href="#2.4-Create-a-network-instance" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2177,7 +2186,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 <div class="section" id="2.5-Snap-points-to-the-network-and-fetch-their-dataframes">
 <h2>2.5 Snap points to the network and fetch their dataframes<a class="headerlink" href="#2.5-Snap-points-to-the-network-and-fetch-their-dataframes" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2194,7 +2203,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 </div>
 <p><strong>Plot</strong></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2214,14 +2223,14 @@ Little Free Libraries acording to objective functions and specific sets of contr
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_facility-location_45_0.png"><img alt="../_images/notebooks_facility-location_45_0.png" src="../_images/notebooks_facility-location_45_0.png" style="width: 920px; height: 577px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_facility-location_46_0.png"><img alt="../_images/notebooks_facility-location_46_0.png" src="../_images/notebooks_facility-location_46_0.png" style="width: 920px; height: 577px;" /></a>
 </div>
 </div>
 </div>
 <div class="section" id="2.6-Calculate-distance-matrix-from-all-clients-to-all-candidate-facilities">
 <h2>2.6 Calculate distance matrix from all clients to all candidate facilities<a class="headerlink" href="#2.6-Calculate-distance-matrix-from-all-clients-to-all-candidate-facilities" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2234,7 +2243,7 @@ Little Free Libraries acording to objective functions and specific sets of contr
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -2252,7 +2261,7 @@ array([[1471.53181612, 1283.3690228 , 1703.75520358],
 <div class="section" id="3.1-Location-Set-Covering-Problem">
 <h2>3.1 Location Set Covering Problem<a class="headerlink" href="#3.1-Location-Set-Covering-Problem" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2266,7 +2275,7 @@ array([[1471.53181612, 1283.3690228 , 1703.75520358],
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Solve Time: 0.0029500059 minutes
+Solve Time: 0.007983349300000001 minutes
 Obj. Value: 4.0 facilities needed for total coverage within a 1000.000000 meter service radius
 --- 0 clients are not covered
 --- 400 clients are covered by 1 facility
@@ -2277,7 +2286,7 @@ Obj. Value: 4.0 facilities needed for total coverage within a 1000.000000 meter 
 </div>
 <p><strong>Plot</strong></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2298,14 +2307,14 @@ Obj. Value: 4.0 facilities needed for total coverage within a 1000.000000 meter 
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_facility-location_51_0.png"><img alt="../_images/notebooks_facility-location_51_0.png" src="../_images/notebooks_facility-location_51_0.png" style="width: 913px; height: 596px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_facility-location_52_0.png"><img alt="../_images/notebooks_facility-location_52_0.png" src="../_images/notebooks_facility-location_52_0.png" style="width: 913px; height: 596px;" /></a>
 </div>
 </div>
 </div>
 <div class="section" id="3.2-p-median-Problem">
 <h2>3.2 <em>p</em>-median Problem<a class="headerlink" href="#3.2-p-median-Problem" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2321,14 +2330,14 @@ Obj. Value: 4.0 facilities needed for total coverage within a 1000.000000 meter 
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Solve Time: 0.0139500279 minutes
+Solve Time: 0.0159166985 minutes
 Obj. Value: 898919.1804203619 total weighted distance with 3 selected facilities
 Mean weighted distance per person: 562.527647
 </pre></div></div>
 </div>
 <p><strong>Plot</strong></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2349,14 +2358,14 @@ Mean weighted distance per person: 562.527647
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_facility-location_55_0.png"><img alt="../_images/notebooks_facility-location_55_0.png" src="../_images/notebooks_facility-location_55_0.png" style="width: 918px; height: 596px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_facility-location_56_0.png"><img alt="../_images/notebooks_facility-location_56_0.png" src="../_images/notebooks_facility-location_56_0.png" style="width: 918px; height: 596px;" /></a>
 </div>
 </div>
 </div>
 <div class="section" id="3.3-p-center-Problem">
 <h2>3.3 <em>p</em>-center Problem<a class="headerlink" href="#3.3-p-center-Problem" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2370,13 +2379,13 @@ Mean weighted distance per person: 562.527647
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Solve Time: 0.0584501169 minutes
+Solve Time: 0.1098168863 minutes
 Obj. Value: 1024.6199825236833 worst case distance with 3 selected facilities
 </pre></div></div>
 </div>
 <p><strong>Plot</strong></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2397,14 +2406,14 @@ Obj. Value: 1024.6199825236833 worst case distance with 3 selected facilities
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_facility-location_59_0.png"><img alt="../_images/notebooks_facility-location_59_0.png" src="../_images/notebooks_facility-location_59_0.png" style="width: 915px; height: 596px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_facility-location_60_0.png"><img alt="../_images/notebooks_facility-location_60_0.png" src="../_images/notebooks_facility-location_60_0.png" style="width: 915px; height: 596px;" /></a>
 </div>
 </div>
 </div>
 <div class="section" id="3.4-Maximal-Covering-Location-Problem">
 <h2>3.4 Maximal Covering Location Problem<a class="headerlink" href="#3.4-Maximal-Covering-Location-Problem" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2420,7 +2429,7 @@ Obj. Value: 1024.6199825236833 worst case distance with 3 selected facilities
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Solve Time: 0.004383342100000001 minutes
+Solve Time: 0.0052000104 minutes
 Obj. Value: 1312.0 residents within 800.000000 meters of 3 selected facilities
 Percent of 1598 clients covered: 82.102628
 --- 73 clients are not covered
@@ -2430,7 +2439,7 @@ Percent of 1598 clients covered: 82.102628
 </div>
 <p><strong>Plot</strong></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2451,14 +2460,14 @@ Percent of 1598 clients covered: 82.102628
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_facility-location_63_0.png"><img alt="../_images/notebooks_facility-location_63_0.png" src="../_images/notebooks_facility-location_63_0.png" style="width: 920px; height: 596px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_facility-location_64_0.png"><img alt="../_images/notebooks_facility-location_64_0.png" src="../_images/notebooks_facility-location_64_0.png" style="width: 920px; height: 596px;" /></a>
 </div>
 </div>
 </div>
 <div class="section" id="3.5-Solved-models-objects">
 <h2>3.5 Solved models objects<a class="headerlink" href="#3.5-Solved-models-objects" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2471,7 +2480,7 @@ Percent of 1598 clients covered: 82.102628
 <h2>3.6 Distance analytics matrix<a class="headerlink" href="#3.6-Distance-analytics-matrix" title="Permalink to this headline">¶</a></h2>
 <p><span class="math notranslate nohighlight">\(\Longrightarrow\)</span> Results may vary due to the random seed being set on local machines <span class="math notranslate nohighlight">\(\Longleftarrow\)</span></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2481,96 +2490,96 @@ Percent of 1598 clients covered: 82.102628
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
 <style  type="text/css" >
-    #T_78884294_45ec_11ea_8376_a45e60bb335brow0_col1 {
+    #T_da24c3c2_484b_11ea_9330_a45e60bb335brow0_col1 {
             background-color:  #008000;
             color:  #f1f1f1;
-        }    #T_78884294_45ec_11ea_8376_a45e60bb335brow0_col2 {
+        }    #T_da24c3c2_484b_11ea_9330_a45e60bb335brow0_col2 {
             background-color:  #008000;
             color:  #f1f1f1;
-        }    #T_78884294_45ec_11ea_8376_a45e60bb335brow0_col3 {
+        }    #T_da24c3c2_484b_11ea_9330_a45e60bb335brow0_col3 {
             background-color:  #e5ffe5;
             color:  #000000;
-        }    #T_78884294_45ec_11ea_8376_a45e60bb335brow0_col4 {
+        }    #T_da24c3c2_484b_11ea_9330_a45e60bb335brow0_col4 {
             background-color:  #008000;
             color:  #f1f1f1;
-        }    #T_78884294_45ec_11ea_8376_a45e60bb335brow1_col1 {
+        }    #T_da24c3c2_484b_11ea_9330_a45e60bb335brow1_col1 {
             background-color:  #6cbc6c;
             color:  #000000;
-        }    #T_78884294_45ec_11ea_8376_a45e60bb335brow1_col2 {
+        }    #T_da24c3c2_484b_11ea_9330_a45e60bb335brow1_col2 {
             background-color:  #e5ffe5;
             color:  #000000;
-        }    #T_78884294_45ec_11ea_8376_a45e60bb335brow1_col3 {
+        }    #T_da24c3c2_484b_11ea_9330_a45e60bb335brow1_col3 {
             background-color:  #7ac37a;
             color:  #000000;
-        }    #T_78884294_45ec_11ea_8376_a45e60bb335brow1_col4 {
+        }    #T_da24c3c2_484b_11ea_9330_a45e60bb335brow1_col4 {
             background-color:  #008000;
             color:  #f1f1f1;
-        }    #T_78884294_45ec_11ea_8376_a45e60bb335brow2_col1 {
+        }    #T_da24c3c2_484b_11ea_9330_a45e60bb335brow2_col1 {
             background-color:  #e5ffe5;
             color:  #000000;
-        }    #T_78884294_45ec_11ea_8376_a45e60bb335brow2_col2 {
+        }    #T_da24c3c2_484b_11ea_9330_a45e60bb335brow2_col2 {
             background-color:  #69ba69;
             color:  #000000;
-        }    #T_78884294_45ec_11ea_8376_a45e60bb335brow2_col3 {
+        }    #T_da24c3c2_484b_11ea_9330_a45e60bb335brow2_col3 {
             background-color:  #92d192;
             color:  #000000;
-        }    #T_78884294_45ec_11ea_8376_a45e60bb335brow2_col4 {
+        }    #T_da24c3c2_484b_11ea_9330_a45e60bb335brow2_col4 {
             background-color:  #008000;
             color:  #f1f1f1;
-        }    #T_78884294_45ec_11ea_8376_a45e60bb335brow3_col1 {
+        }    #T_da24c3c2_484b_11ea_9330_a45e60bb335brow3_col1 {
             background-color:  #90d090;
             color:  #000000;
-        }    #T_78884294_45ec_11ea_8376_a45e60bb335brow3_col2 {
+        }    #T_da24c3c2_484b_11ea_9330_a45e60bb335brow3_col2 {
             background-color:  #e5ffe5;
             color:  #000000;
-        }    #T_78884294_45ec_11ea_8376_a45e60bb335brow3_col3 {
+        }    #T_da24c3c2_484b_11ea_9330_a45e60bb335brow3_col3 {
             background-color:  #8cce8c;
             color:  #000000;
-        }    #T_78884294_45ec_11ea_8376_a45e60bb335brow3_col4 {
+        }    #T_da24c3c2_484b_11ea_9330_a45e60bb335brow3_col4 {
             background-color:  #008000;
             color:  #f1f1f1;
-        }</style><table id="T_78884294_45ec_11ea_8376_a45e60bb335b" ><caption>{'abs_min': 'Absolute min dist to assigned facility', 'abs_max': 'Absolute max dist to assigned facility', 'mean_means': 'Mean of mean dists per client to assigned facility', 'mean_stds': 'Mean of StD dists per client to assigned facility'}</caption><thead>    <tr>        <th class="blank level0" ></th>        <th class="col_heading level0 col0" >stats</th>        <th class="col_heading level0 col1" >lscp</th>        <th class="col_heading level0 col2" >pmp</th>        <th class="col_heading level0 col3" >pcp</th>        <th class="col_heading level0 col4" >mclp</th>    </tr></thead><tbody>
+        }</style><table id="T_da24c3c2_484b_11ea_9330_a45e60bb335b" ><caption>{'abs_min': 'Absolute min dist to assigned facility', 'abs_max': 'Absolute max dist to assigned facility', 'mean_means': 'Mean of mean dists per client to assigned facility', 'mean_stds': 'Mean of StD dists per client to assigned facility'}</caption><thead>    <tr>        <th class="blank level0" ></th>        <th class="col_heading level0 col0" >stats</th>        <th class="col_heading level0 col1" >lscp</th>        <th class="col_heading level0 col2" >pmp</th>        <th class="col_heading level0 col3" >pcp</th>        <th class="col_heading level0 col4" >mclp</th>    </tr></thead><tbody>
                 <tr>
-                        <th id="T_78884294_45ec_11ea_8376_a45e60bb335blevel0_row0" class="row_heading level0 row0" >0</th>
-                        <td id="T_78884294_45ec_11ea_8376_a45e60bb335brow0_col0" class="data row0 col0" >abs_min</td>
-                        <td id="T_78884294_45ec_11ea_8376_a45e60bb335brow0_col1" class="data row0 col1" >0.918922</td>
-                        <td id="T_78884294_45ec_11ea_8376_a45e60bb335brow0_col2" class="data row0 col2" >0.918922</td>
-                        <td id="T_78884294_45ec_11ea_8376_a45e60bb335brow0_col3" class="data row0 col3" >12.7455</td>
-                        <td id="T_78884294_45ec_11ea_8376_a45e60bb335brow0_col4" class="data row0 col4" >0.918922</td>
+                        <th id="T_da24c3c2_484b_11ea_9330_a45e60bb335blevel0_row0" class="row_heading level0 row0" >0</th>
+                        <td id="T_da24c3c2_484b_11ea_9330_a45e60bb335brow0_col0" class="data row0 col0" >abs_min</td>
+                        <td id="T_da24c3c2_484b_11ea_9330_a45e60bb335brow0_col1" class="data row0 col1" >0.918922</td>
+                        <td id="T_da24c3c2_484b_11ea_9330_a45e60bb335brow0_col2" class="data row0 col2" >0.918922</td>
+                        <td id="T_da24c3c2_484b_11ea_9330_a45e60bb335brow0_col3" class="data row0 col3" >12.7455</td>
+                        <td id="T_da24c3c2_484b_11ea_9330_a45e60bb335brow0_col4" class="data row0 col4" >0.918922</td>
             </tr>
             <tr>
-                        <th id="T_78884294_45ec_11ea_8376_a45e60bb335blevel0_row1" class="row_heading level0 row1" >1</th>
-                        <td id="T_78884294_45ec_11ea_8376_a45e60bb335brow1_col0" class="data row1 col0" >abs_max</td>
-                        <td id="T_78884294_45ec_11ea_8376_a45e60bb335brow1_col1" class="data row1 col1" >998.526</td>
-                        <td id="T_78884294_45ec_11ea_8376_a45e60bb335brow1_col2" class="data row1 col2" >1224.28</td>
-                        <td id="T_78884294_45ec_11ea_8376_a45e60bb335brow1_col3" class="data row1 col3" >1024.62</td>
-                        <td id="T_78884294_45ec_11ea_8376_a45e60bb335brow1_col4" class="data row1 col4" >799.228</td>
+                        <th id="T_da24c3c2_484b_11ea_9330_a45e60bb335blevel0_row1" class="row_heading level0 row1" >1</th>
+                        <td id="T_da24c3c2_484b_11ea_9330_a45e60bb335brow1_col0" class="data row1 col0" >abs_max</td>
+                        <td id="T_da24c3c2_484b_11ea_9330_a45e60bb335brow1_col1" class="data row1 col1" >998.526</td>
+                        <td id="T_da24c3c2_484b_11ea_9330_a45e60bb335brow1_col2" class="data row1 col2" >1224.28</td>
+                        <td id="T_da24c3c2_484b_11ea_9330_a45e60bb335brow1_col3" class="data row1 col3" >1024.62</td>
+                        <td id="T_da24c3c2_484b_11ea_9330_a45e60bb335brow1_col4" class="data row1 col4" >799.228</td>
             </tr>
             <tr>
-                        <th id="T_78884294_45ec_11ea_8376_a45e60bb335blevel0_row2" class="row_heading level0 row2" >2</th>
-                        <td id="T_78884294_45ec_11ea_8376_a45e60bb335brow2_col0" class="data row2 col0" >mean_means</td>
-                        <td id="T_78884294_45ec_11ea_8376_a45e60bb335brow2_col1" class="data row2 col1" >645.324</td>
-                        <td id="T_78884294_45ec_11ea_8376_a45e60bb335brow2_col2" class="data row2 col2" >565.138</td>
-                        <td id="T_78884294_45ec_11ea_8376_a45e60bb335brow2_col3" class="data row2 col3" >591.621</td>
-                        <td id="T_78884294_45ec_11ea_8376_a45e60bb335brow2_col4" class="data row2 col4" >497.517</td>
+                        <th id="T_da24c3c2_484b_11ea_9330_a45e60bb335blevel0_row2" class="row_heading level0 row2" >2</th>
+                        <td id="T_da24c3c2_484b_11ea_9330_a45e60bb335brow2_col0" class="data row2 col0" >mean_means</td>
+                        <td id="T_da24c3c2_484b_11ea_9330_a45e60bb335brow2_col1" class="data row2 col1" >645.324</td>
+                        <td id="T_da24c3c2_484b_11ea_9330_a45e60bb335brow2_col2" class="data row2 col2" >565.138</td>
+                        <td id="T_da24c3c2_484b_11ea_9330_a45e60bb335brow2_col3" class="data row2 col3" >591.621</td>
+                        <td id="T_da24c3c2_484b_11ea_9330_a45e60bb335brow2_col4" class="data row2 col4" >497.517</td>
             </tr>
             <tr>
-                        <th id="T_78884294_45ec_11ea_8376_a45e60bb335blevel0_row3" class="row_heading level0 row3" >3</th>
-                        <td id="T_78884294_45ec_11ea_8376_a45e60bb335brow3_col0" class="data row3 col0" >mean_stds</td>
-                        <td id="T_78884294_45ec_11ea_8376_a45e60bb335brow3_col1" class="data row3 col1" >245.521</td>
-                        <td id="T_78884294_45ec_11ea_8376_a45e60bb335brow3_col2" class="data row3 col2" >263.8</td>
-                        <td id="T_78884294_45ec_11ea_8376_a45e60bb335brow3_col3" class="data row3 col3" >244.652</td>
-                        <td id="T_78884294_45ec_11ea_8376_a45e60bb335brow3_col4" class="data row3 col4" >214.708</td>
+                        <th id="T_da24c3c2_484b_11ea_9330_a45e60bb335blevel0_row3" class="row_heading level0 row3" >3</th>
+                        <td id="T_da24c3c2_484b_11ea_9330_a45e60bb335brow3_col0" class="data row3 col0" >mean_stds</td>
+                        <td id="T_da24c3c2_484b_11ea_9330_a45e60bb335brow3_col1" class="data row3 col1" >245.521</td>
+                        <td id="T_da24c3c2_484b_11ea_9330_a45e60bb335brow3_col2" class="data row3 col2" >263.8</td>
+                        <td id="T_da24c3c2_484b_11ea_9330_a45e60bb335brow3_col3" class="data row3 col3" >244.652</td>
+                        <td id="T_da24c3c2_484b_11ea_9330_a45e60bb335brow3_col4" class="data row3 col4" >214.708</td>
             </tr>
     </tbody></table></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2579,7 +2588,7 @@ Percent of 1598 clients covered: 82.102628
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -2590,7 +2599,7 @@ Percent of 1598 clients covered: 82.102628
 <div class="section" id="3.7-Selection-matrix">
 <h2>3.7 Selection matrix<a class="headerlink" href="#3.7-Selection-matrix" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2600,275 +2609,275 @@ Percent of 1598 clients covered: 82.102628
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
 <style  type="text/css" >
-    #T_789e520a_45ec_11ea_8376_a45e60bb335brow0_col4 {
+    #T_da5a119e_484b_11ea_9330_a45e60bb335brow0_col4 {
             : ;
             background-color:  #e5ffe5;
             color:  #000000;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow0_col5 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow0_col5 {
             : ;
             background-color:  #e5ffe5;
             color:  #000000;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow1_col2 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow1_col2 {
             background-color:  limegreen;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow1_col4 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow1_col4 {
             : ;
             background-color:  #acdfac;
             color:  #000000;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow1_col5 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow1_col5 {
             : ;
             background-color:  #acdfac;
             color:  #000000;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow2_col4 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow2_col4 {
             : ;
             background-color:  #e5ffe5;
             color:  #000000;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow2_col5 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow2_col5 {
             : ;
             background-color:  #e5ffe5;
             color:  #000000;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow3_col0 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow3_col0 {
             background-color:  limegreen;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow3_col2 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow3_col2 {
             background-color:  limegreen;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow3_col4 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow3_col4 {
             : ;
             background-color:  #72bf72;
             color:  #000000;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow3_col5 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow3_col5 {
             : ;
             background-color:  #72bf72;
             color:  #000000;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow4_col0 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow4_col0 {
             background-color:  limegreen;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow4_col1 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow4_col1 {
             background-color:  limegreen;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow4_col3 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow4_col3 {
             background-color:  limegreen;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow4_col4 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow4_col4 {
             : ;
             background-color:  #399f39;
             color:  #000000;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow4_col5 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow4_col5 {
             : ;
             background-color:  #399f39;
             color:  #000000;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow5_col4 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow5_col4 {
             : ;
             background-color:  #e5ffe5;
             color:  #000000;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow5_col5 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow5_col5 {
             : ;
             background-color:  #e5ffe5;
             color:  #000000;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow6_col0 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow6_col0 {
             background-color:  limegreen;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow6_col1 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow6_col1 {
             background-color:  limegreen;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow6_col2 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow6_col2 {
             background-color:  limegreen;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow6_col3 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow6_col3 {
             background-color:  limegreen;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow6_col4 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow6_col4 {
             : ;
             background-color:  #008000;
             color:  #f1f1f1;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow6_col5 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow6_col5 {
             : ;
             background-color:  #008000;
             color:  #f1f1f1;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow7_col4 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow7_col4 {
             : ;
             background-color:  #e5ffe5;
             color:  #000000;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow7_col5 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow7_col5 {
             : ;
             background-color:  #e5ffe5;
             color:  #000000;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow8_col4 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow8_col4 {
             : ;
             background-color:  #e5ffe5;
             color:  #000000;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow8_col5 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow8_col5 {
             : ;
             background-color:  #e5ffe5;
             color:  #000000;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow9_col0 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow9_col0 {
             background-color:  limegreen;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow9_col4 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow9_col4 {
             : ;
             background-color:  #acdfac;
             color:  #000000;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow9_col5 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow9_col5 {
             : ;
             background-color:  #acdfac;
             color:  #000000;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow10_col4 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow10_col4 {
             : ;
             background-color:  #e5ffe5;
             color:  #000000;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow10_col5 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow10_col5 {
             : ;
             background-color:  #e5ffe5;
             color:  #000000;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow11_col4 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow11_col4 {
             : ;
             background-color:  #e5ffe5;
             color:  #000000;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow11_col5 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow11_col5 {
             : ;
             background-color:  #e5ffe5;
             color:  #000000;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow12_col1 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow12_col1 {
             background-color:  limegreen;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow12_col3 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow12_col3 {
             background-color:  limegreen;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow12_col4 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow12_col4 {
             : ;
             background-color:  #72bf72;
             color:  #000000;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow12_col5 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow12_col5 {
             : ;
             background-color:  #72bf72;
             color:  #000000;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow13_col4 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow13_col4 {
             : ;
             background-color:  #e5ffe5;
             color:  #000000;
-        }    #T_789e520a_45ec_11ea_8376_a45e60bb335brow13_col5 {
+        }    #T_da5a119e_484b_11ea_9330_a45e60bb335brow13_col5 {
             : ;
             background-color:  #e5ffe5;
             color:  #000000;
-        }</style><table id="T_789e520a_45ec_11ea_8376_a45e60bb335b" ><thead>    <tr>        <th class="blank level0" ></th>        <th class="col_heading level0 col0" >lscp</th>        <th class="col_heading level0 col1" >pmp</th>        <th class="col_heading level0 col2" >pcp</th>        <th class="col_heading level0 col3" >mclp</th>        <th class="col_heading level0 col4" >$\sum$</th>        <th class="col_heading level0 col5" >$\%$</th>    </tr></thead><tbody>
+        }</style><table id="T_da5a119e_484b_11ea_9330_a45e60bb335b" ><thead>    <tr>        <th class="blank level0" ></th>        <th class="col_heading level0 col0" >lscp</th>        <th class="col_heading level0 col1" >pmp</th>        <th class="col_heading level0 col2" >pcp</th>        <th class="col_heading level0 col3" >mclp</th>        <th class="col_heading level0 col4" >$\sum$</th>        <th class="col_heading level0 col5" >$\%$</th>    </tr></thead><tbody>
                 <tr>
-                        <th id="T_789e520a_45ec_11ea_8376_a45e60bb335blevel0_row0" class="row_heading level0 row0" >y[0]</th>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow0_col0" class="data row0 col0" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow0_col1" class="data row0 col1" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow0_col2" class="data row0 col2" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow0_col3" class="data row0 col3" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow0_col4" class="data row0 col4" >0</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow0_col5" class="data row0 col5" >0</td>
+                        <th id="T_da5a119e_484b_11ea_9330_a45e60bb335blevel0_row0" class="row_heading level0 row0" >y[0]</th>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow0_col0" class="data row0 col0" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow0_col1" class="data row0 col1" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow0_col2" class="data row0 col2" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow0_col3" class="data row0 col3" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow0_col4" class="data row0 col4" >0</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow0_col5" class="data row0 col5" >0</td>
             </tr>
             <tr>
-                        <th id="T_789e520a_45ec_11ea_8376_a45e60bb335blevel0_row1" class="row_heading level0 row1" >y[1]</th>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow1_col0" class="data row1 col0" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow1_col1" class="data row1 col1" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow1_col2" class="data row1 col2" >$\in$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow1_col3" class="data row1 col3" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow1_col4" class="data row1 col4" >1</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow1_col5" class="data row1 col5" >25</td>
+                        <th id="T_da5a119e_484b_11ea_9330_a45e60bb335blevel0_row1" class="row_heading level0 row1" >y[1]</th>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow1_col0" class="data row1 col0" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow1_col1" class="data row1 col1" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow1_col2" class="data row1 col2" >$\in$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow1_col3" class="data row1 col3" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow1_col4" class="data row1 col4" >1</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow1_col5" class="data row1 col5" >25</td>
             </tr>
             <tr>
-                        <th id="T_789e520a_45ec_11ea_8376_a45e60bb335blevel0_row2" class="row_heading level0 row2" >y[2]</th>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow2_col0" class="data row2 col0" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow2_col1" class="data row2 col1" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow2_col2" class="data row2 col2" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow2_col3" class="data row2 col3" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow2_col4" class="data row2 col4" >0</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow2_col5" class="data row2 col5" >0</td>
+                        <th id="T_da5a119e_484b_11ea_9330_a45e60bb335blevel0_row2" class="row_heading level0 row2" >y[2]</th>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow2_col0" class="data row2 col0" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow2_col1" class="data row2 col1" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow2_col2" class="data row2 col2" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow2_col3" class="data row2 col3" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow2_col4" class="data row2 col4" >0</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow2_col5" class="data row2 col5" >0</td>
             </tr>
             <tr>
-                        <th id="T_789e520a_45ec_11ea_8376_a45e60bb335blevel0_row3" class="row_heading level0 row3" >y[3]</th>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow3_col0" class="data row3 col0" >$\in$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow3_col1" class="data row3 col1" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow3_col2" class="data row3 col2" >$\in$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow3_col3" class="data row3 col3" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow3_col4" class="data row3 col4" >2</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow3_col5" class="data row3 col5" >50</td>
+                        <th id="T_da5a119e_484b_11ea_9330_a45e60bb335blevel0_row3" class="row_heading level0 row3" >y[3]</th>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow3_col0" class="data row3 col0" >$\in$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow3_col1" class="data row3 col1" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow3_col2" class="data row3 col2" >$\in$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow3_col3" class="data row3 col3" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow3_col4" class="data row3 col4" >2</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow3_col5" class="data row3 col5" >50</td>
             </tr>
             <tr>
-                        <th id="T_789e520a_45ec_11ea_8376_a45e60bb335blevel0_row4" class="row_heading level0 row4" >y[4]</th>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow4_col0" class="data row4 col0" >$\in$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow4_col1" class="data row4 col1" >$\in$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow4_col2" class="data row4 col2" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow4_col3" class="data row4 col3" >$\in$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow4_col4" class="data row4 col4" >3</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow4_col5" class="data row4 col5" >75</td>
+                        <th id="T_da5a119e_484b_11ea_9330_a45e60bb335blevel0_row4" class="row_heading level0 row4" >y[4]</th>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow4_col0" class="data row4 col0" >$\in$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow4_col1" class="data row4 col1" >$\in$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow4_col2" class="data row4 col2" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow4_col3" class="data row4 col3" >$\in$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow4_col4" class="data row4 col4" >3</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow4_col5" class="data row4 col5" >75</td>
             </tr>
             <tr>
-                        <th id="T_789e520a_45ec_11ea_8376_a45e60bb335blevel0_row5" class="row_heading level0 row5" >y[5]</th>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow5_col0" class="data row5 col0" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow5_col1" class="data row5 col1" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow5_col2" class="data row5 col2" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow5_col3" class="data row5 col3" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow5_col4" class="data row5 col4" >0</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow5_col5" class="data row5 col5" >0</td>
+                        <th id="T_da5a119e_484b_11ea_9330_a45e60bb335blevel0_row5" class="row_heading level0 row5" >y[5]</th>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow5_col0" class="data row5 col0" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow5_col1" class="data row5 col1" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow5_col2" class="data row5 col2" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow5_col3" class="data row5 col3" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow5_col4" class="data row5 col4" >0</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow5_col5" class="data row5 col5" >0</td>
             </tr>
             <tr>
-                        <th id="T_789e520a_45ec_11ea_8376_a45e60bb335blevel0_row6" class="row_heading level0 row6" >y[6]</th>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow6_col0" class="data row6 col0" >$\in$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow6_col1" class="data row6 col1" >$\in$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow6_col2" class="data row6 col2" >$\in$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow6_col3" class="data row6 col3" >$\in$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow6_col4" class="data row6 col4" >4</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow6_col5" class="data row6 col5" >100</td>
+                        <th id="T_da5a119e_484b_11ea_9330_a45e60bb335blevel0_row6" class="row_heading level0 row6" >y[6]</th>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow6_col0" class="data row6 col0" >$\in$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow6_col1" class="data row6 col1" >$\in$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow6_col2" class="data row6 col2" >$\in$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow6_col3" class="data row6 col3" >$\in$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow6_col4" class="data row6 col4" >4</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow6_col5" class="data row6 col5" >100</td>
             </tr>
             <tr>
-                        <th id="T_789e520a_45ec_11ea_8376_a45e60bb335blevel0_row7" class="row_heading level0 row7" >y[7]</th>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow7_col0" class="data row7 col0" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow7_col1" class="data row7 col1" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow7_col2" class="data row7 col2" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow7_col3" class="data row7 col3" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow7_col4" class="data row7 col4" >0</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow7_col5" class="data row7 col5" >0</td>
+                        <th id="T_da5a119e_484b_11ea_9330_a45e60bb335blevel0_row7" class="row_heading level0 row7" >y[7]</th>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow7_col0" class="data row7 col0" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow7_col1" class="data row7 col1" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow7_col2" class="data row7 col2" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow7_col3" class="data row7 col3" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow7_col4" class="data row7 col4" >0</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow7_col5" class="data row7 col5" >0</td>
             </tr>
             <tr>
-                        <th id="T_789e520a_45ec_11ea_8376_a45e60bb335blevel0_row8" class="row_heading level0 row8" >y[8]</th>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow8_col0" class="data row8 col0" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow8_col1" class="data row8 col1" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow8_col2" class="data row8 col2" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow8_col3" class="data row8 col3" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow8_col4" class="data row8 col4" >0</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow8_col5" class="data row8 col5" >0</td>
+                        <th id="T_da5a119e_484b_11ea_9330_a45e60bb335blevel0_row8" class="row_heading level0 row8" >y[8]</th>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow8_col0" class="data row8 col0" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow8_col1" class="data row8 col1" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow8_col2" class="data row8 col2" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow8_col3" class="data row8 col3" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow8_col4" class="data row8 col4" >0</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow8_col5" class="data row8 col5" >0</td>
             </tr>
             <tr>
-                        <th id="T_789e520a_45ec_11ea_8376_a45e60bb335blevel0_row9" class="row_heading level0 row9" >y[9]</th>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow9_col0" class="data row9 col0" >$\in$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow9_col1" class="data row9 col1" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow9_col2" class="data row9 col2" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow9_col3" class="data row9 col3" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow9_col4" class="data row9 col4" >1</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow9_col5" class="data row9 col5" >25</td>
+                        <th id="T_da5a119e_484b_11ea_9330_a45e60bb335blevel0_row9" class="row_heading level0 row9" >y[9]</th>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow9_col0" class="data row9 col0" >$\in$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow9_col1" class="data row9 col1" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow9_col2" class="data row9 col2" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow9_col3" class="data row9 col3" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow9_col4" class="data row9 col4" >1</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow9_col5" class="data row9 col5" >25</td>
             </tr>
             <tr>
-                        <th id="T_789e520a_45ec_11ea_8376_a45e60bb335blevel0_row10" class="row_heading level0 row10" >y[10]</th>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow10_col0" class="data row10 col0" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow10_col1" class="data row10 col1" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow10_col2" class="data row10 col2" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow10_col3" class="data row10 col3" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow10_col4" class="data row10 col4" >0</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow10_col5" class="data row10 col5" >0</td>
+                        <th id="T_da5a119e_484b_11ea_9330_a45e60bb335blevel0_row10" class="row_heading level0 row10" >y[10]</th>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow10_col0" class="data row10 col0" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow10_col1" class="data row10 col1" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow10_col2" class="data row10 col2" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow10_col3" class="data row10 col3" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow10_col4" class="data row10 col4" >0</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow10_col5" class="data row10 col5" >0</td>
             </tr>
             <tr>
-                        <th id="T_789e520a_45ec_11ea_8376_a45e60bb335blevel0_row11" class="row_heading level0 row11" >y[11]</th>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow11_col0" class="data row11 col0" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow11_col1" class="data row11 col1" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow11_col2" class="data row11 col2" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow11_col3" class="data row11 col3" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow11_col4" class="data row11 col4" >0</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow11_col5" class="data row11 col5" >0</td>
+                        <th id="T_da5a119e_484b_11ea_9330_a45e60bb335blevel0_row11" class="row_heading level0 row11" >y[11]</th>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow11_col0" class="data row11 col0" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow11_col1" class="data row11 col1" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow11_col2" class="data row11 col2" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow11_col3" class="data row11 col3" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow11_col4" class="data row11 col4" >0</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow11_col5" class="data row11 col5" >0</td>
             </tr>
             <tr>
-                        <th id="T_789e520a_45ec_11ea_8376_a45e60bb335blevel0_row12" class="row_heading level0 row12" >y[12]</th>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow12_col0" class="data row12 col0" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow12_col1" class="data row12 col1" >$\in$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow12_col2" class="data row12 col2" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow12_col3" class="data row12 col3" >$\in$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow12_col4" class="data row12 col4" >2</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow12_col5" class="data row12 col5" >50</td>
+                        <th id="T_da5a119e_484b_11ea_9330_a45e60bb335blevel0_row12" class="row_heading level0 row12" >y[12]</th>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow12_col0" class="data row12 col0" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow12_col1" class="data row12 col1" >$\in$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow12_col2" class="data row12 col2" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow12_col3" class="data row12 col3" >$\in$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow12_col4" class="data row12 col4" >2</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow12_col5" class="data row12 col5" >50</td>
             </tr>
             <tr>
-                        <th id="T_789e520a_45ec_11ea_8376_a45e60bb335blevel0_row13" class="row_heading level0 row13" >y[13]</th>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow13_col0" class="data row13 col0" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow13_col1" class="data row13 col1" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow13_col2" class="data row13 col2" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow13_col3" class="data row13 col3" >$\notin$</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow13_col4" class="data row13 col4" >0</td>
-                        <td id="T_789e520a_45ec_11ea_8376_a45e60bb335brow13_col5" class="data row13 col5" >0</td>
+                        <th id="T_da5a119e_484b_11ea_9330_a45e60bb335blevel0_row13" class="row_heading level0 row13" >y[13]</th>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow13_col0" class="data row13 col0" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow13_col1" class="data row13 col1" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow13_col2" class="data row13 col2" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow13_col3" class="data row13 col3" >$\notin$</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow13_col4" class="data row13 col4" >0</td>
+                        <td id="T_da5a119e_484b_11ea_9330_a45e60bb335brow13_col5" class="data row13 col5" >0</td>
             </tr>
     </tbody></table></div>
 </div>
@@ -2876,7 +2885,7 @@ Percent of 1598 clients covered: 82.102628
 <div class="section" id="3.8-Plot-all-solutions-for-a-spatial-comparision">
 <h2>3.8 Plot all solutions for a spatial comparision<a class="headerlink" href="#3.8-Plot-all-solutions-for-a-spatial-comparision" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2901,14 +2910,14 @@ Percent of 1598 clients covered: 82.102628
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_facility-location_72_0.png"><img alt="../_images/notebooks_facility-location_72_0.png" src="../_images/notebooks_facility-location_72_0.png" style="width: 1005px; height: 892px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_facility-location_73_0.png"><img alt="../_images/notebooks_facility-location_73_0.png" src="../_images/notebooks_facility-location_73_0.png" style="width: 1005px; height: 892px;" /></a>
 </div>
 </div>
 </div>
 <div class="section" id="3.9-Dr. Minimax-recommendation:">
 <h2>3.9 Dr. Minimax recommendation:<a class="headerlink" href="#3.9-Dr. Minimax-recommendation:" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2922,7 +2931,7 @@ Percent of 1598 clients covered: 82.102628
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -2935,7 +2944,7 @@ to their respective houses….</p></li>
 </div>
 <p><strong>The open (selected) Little Free Library Locations.</strong></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -2944,7 +2953,7 @@ to their respective houses….</p></li>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">

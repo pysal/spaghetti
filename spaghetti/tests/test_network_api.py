@@ -138,11 +138,26 @@ class TestNetwork(unittest.TestCase):
 
     def test_shortest_paths(self):
 
+        # symmetric point pattern
         known_vertices = 10
         self.ntw_from_shp.snapobservations(examples.get_path("schools.shp"), "schools")
         _, tree = self.ntw_from_shp.allneighbordistances("schools", gen_tree=True)
         observed_paths = self.ntw_from_shp.shortest_paths(tree, "schools")
-        observed_vertices = len(observed_paths[(0, 1)])
+        observed_vertices = len(observed_paths[0][1].vertices)
+        self.assertEqual(observed_vertices, known_vertices)
+
+        # asymmetric point pattern
+        known_vertices = 4
+        bounds, h, v = (0, 0, 3, 3), 2, 2
+        lattice = spaghetti.regular_lattice(bounds, h, nv=v, exterior=False)
+        ntw = spaghetti.Network(in_data=lattice)
+        points1 = [cg.Point((0.5, 0.5)), cg.Point((2.5, 2.5))]
+        points2 = [cg.Point((0.5, 2.5)), cg.Point((2.5, 0.5))]
+        ntw.snapobservations(points1, "points1")
+        ntw.snapobservations(points2, "points2")
+        _, tree = ntw.allneighbordistances("points1", "points2", gen_tree=True)
+        observed_paths = ntw.shortest_paths(tree, "points1", pp_dest="points2")
+        observed_vertices = len(observed_paths[3][1].vertices)
         self.assertEqual(observed_vertices, known_vertices)
 
         # test error
@@ -177,10 +192,9 @@ class TestNetwork(unittest.TestCase):
         obs_arc_wkt = obs_arc.wkt
         self.assertEqual(obs_arc_wkt, known_arc_wkt)
 
-        # routes
-        known_length = 2.6
-        bounds = (0, 0, 3, 3)
-        lattice = spaghetti.regular_lattice(bounds, 2, nv=2, exterior=False)
+        # symmetric routes
+        known_length, bounds, h, v = 2.6, (0, 0, 3, 3), 2, 2
+        lattice = spaghetti.regular_lattice(bounds, h, nv=v, exterior=False)
         ntw = spaghetti.Network(in_data=lattice)
         synth_obs = [cg.Point([0.2, 1.3]), cg.Point([0.2, 1.7]), cg.Point([2.8, 1.5])]
         ntw.snapobservations(synth_obs, "synth_obs")
@@ -189,6 +203,20 @@ class TestNetwork(unittest.TestCase):
         paths_gdf = spaghetti.element_as_gdf(ntw, routes=paths)
         observed_length = paths_gdf.loc[0, "geometry"].length
         self.assertEqual(observed_length, known_length)
+
+        # asymmetric routes
+        known_origins, bounds, h, v = 2, (0, 0, 3, 3), 2, 2
+        lattice = spaghetti.regular_lattice(bounds, h, nv=v, exterior=False)
+        ntw = spaghetti.Network(in_data=lattice)
+        points1 = [cg.Point((0.5, 0.5)), cg.Point((2.5, 2.5))]
+        points2 = [cg.Point((0.5, 2.5)), cg.Point((2.5, 0.5))]
+        ntw.snapobservations(points1, "points1")
+        ntw.snapobservations(points2, "points2")
+        _, tree = ntw.allneighbordistances("points1", "points2", gen_tree=True)
+        paths = ntw.shortest_paths(tree, "points1", pp_dest="points2")
+        paths_gdf = spaghetti.element_as_gdf(ntw, routes=paths)
+        observed_origins = paths_gdf["O"].nunique()
+        self.assertEqual(observed_origins, known_origins)
 
     def test_round_sig(self):
         # round to 2 significant digits test
