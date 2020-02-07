@@ -14,5 +14,6 @@ dependencies:
   - seaborn
   - pip
   - pip:
+    - mip
     - ortools
     - git+https://github.com/pysal/spaghetti.git@master
