@@ -60,7 +60,7 @@ install:
 
 script:
   - python -c 'import libpysal; libpysal.examples.load_example("newHaven")'
-  - py.test spaghetti --cov spaghetti -v --doctest-modules --cov-report term-missing;
+  - py.test -v --cov=spaghetti tests -v --doctest-modules --cov-report term-missing --cov-config .coveragerc;
 
 notifications:
     email:
@@ -72,4 +72,4 @@ notifications:
         on_failure: change
 
 after_success:
-  - coveralls
+  - codecov
