@@ -1,4 +1,6 @@
-nose
+pytest
+pytest-cov
+codecov
 coverage
 coveralls
 twine

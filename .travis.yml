@@ -38,7 +38,7 @@ before_install:
     conda config --add channels conda-forge --force
     conda config --set channel_priority strict
     conda config --set safety_checks disabled
-    conda create --name TEST python=$PY --file requirements.txt --file requirements_dev.txt --file requirements_tests.txt
+    conda create --name TEST python=$TRAVIS_PYTHON_VERSION --file requirements.txt --file requirements_dev.txt --file requirements_tests.txt
     source activate TEST
     conda info --all
 
@@ -60,7 +60,7 @@ install:
 
 script:
   - python -c 'import libpysal; libpysal.examples.load_example("newHaven")'
-  - py.test spaghetti --cov spaghetti -v --cov-report --doctest-modules term-missing;
+  - py.test spaghetti --cov spaghetti -v --doctest-modules --cov-report term-missing;
 
 notifications:
     email:
