@@ -1,47 +1,31 @@
 language: minimal
 sudo: false
 
+python:
+  - 3.6
+  - 3.7
+  - 3.8
+
+env:
+    - PYSAL_PYPI=true PYSAL_PLUS=true
+    - PYSAL_PYPI=true PYSAL_PLUS=false
+    - PYSAL_PYPI=false PYSAL_PLUS=true
+    - PYSAL_PYPI=false PYSAL_PLUS=false
+
 matrix:
-  include:
-    - name: "python-3.6-pypi"
-      env: PY=3.6 PYSAL_PYPI=true PYSAL_PLUS=false
-    - name: "python-3.6-pypi-plus"
-      env: PY=3.6 PYSAL_PYPI=true PYSAL_PLUS=true
-    - name: "python-3.7-pypi"
-      env: PY=3.7 PYSAL_PYPI=true PYSAL_PLUS=false
-    - name: "python-3.7-pypi-plus"
-      env: PY=3.7 PYSAL_PYPI=true PYSAL_PLUS=true
-    - name: "python-3.8-pypi"
-      env: PY=3.8 PYSAL_PYPI=true PYSAL_PLUS=false
-    - name: "python-3.8-pypi-plus"
-      env: PY=3.8 PYSAL_PYPI=true PYSAL_PLUS=true
-    - name: "tarball-pypi"
-      env: PY=3.8 PYSAL_PYPI=true PYSAL_PLUS=false
-    - name: "python-3.6"
-      env: PY=3.6 PYSAL_PYPI=false PYSAL_PLUS=false
-    - name: "python-3.6-plus"
-      env: PY=3.6 PYSAL_PYPI=false PYSAL_PLUS=true
-    - name: "python-3.7"
-      env: PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=false
-    - name: "python-3.7-plus"
-      env: PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=true
-    - name: "python-3.8"
-      env: PY=3.8 PYSAL_PYPI=false PYSAL_PLUS=false
-    - name: "python-3.8-plus"
-      env: PY=3.8 PYSAL_PYPI=false PYSAL_PLUS=true
   allow_failures:
-    - name: "python-3.6"
-      env: PY=3.6 PYSAL_PYPI=false PYSAL_PLUS=false
-    - name: "python-3.6-plus"
-      env: PY=3.6 PYSAL_PYPI=false PYSAL_PLUS=true
-    - name: "python-3.7"
-      env: PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=false
-    - name: "python-3.7-plus"
-      env: PY=3.7 PYSAL_PYPI=false PYSAL_PLUS=true
-    - name: "python-3.8"
-      env: PY=3.8 PYSAL_PYPI=false PYSAL_PLUS=false
-    - name: "python-3.8-plus"
-      env: PY=3.8 PYSAL_PYPI=false PYSAL_PLUS=true
+    - python: 3.6
+      env: PYSAL_PYPI=false PYSAL_PLUS=false
+    - python: 3.6
+      env: PYSAL_PYPI=false PYSAL_PLUS=true
+    - python: 3.7
+      env: PYSAL_PYPI=false PYSAL_PLUS=false
+    - python: 3.7
+      env: PYSAL_PYPI=false PYSAL_PLUS=true
+    - python: 3.8
+      env: PYSAL_PYPI=false PYSAL_PLUS=false
+    - python: 3.8
+      env: PYSAL_PYPI=false PYSAL_PLUS=true
 
 before_install:
   - |
@@ -75,14 +59,7 @@ install:
 
 script:
   - python -c 'import libpysal; libpysal.examples.load_example("newHaven")'
-  - if [[ $TRAVIS_JOB_NAME == python-* ]]; then
-      travis_wait 45 nosetests --verbose --with-coverage --with-doctest --cover-package=spaghetti;
-    fi
-
-  - if [[ $TRAVIS_JOB_NAME == tarball* ]]; then
-      pip wheel . -w dist --no-deps;
-      twine check dist/*;
-    fi
+  - py.test spaghetti --cov spaghetti -v --cov-report --doctest-modules term-missing;
 
 notifications:
     email:
