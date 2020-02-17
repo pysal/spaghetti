@@ -1,5 +1,6 @@
-language: minimal
-sudo: false
+dist: xenial
+language: python
+sudo: true
 
 python:
   - 3.6
