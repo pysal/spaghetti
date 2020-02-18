@@ -13,6 +13,9 @@ try:
 except ImportError:
     GEOPANDAS_EXTINCT = True
 
+# fetch the New Haven dataset
+examples.load_example("newHaven")
+
 
 class TestNetwork(unittest.TestCase):
     def setUp(self):
