@@ -46,7 +46,6 @@ script:
   - python setup.py sdist >/dev/null
   - echo "check_stable=False" >spaghetti/config.py
   - python setup.py install
-  - python -c 'import libpysal; libpysal.examples.load_example("newHaven")'
   - py.test -v spaghetti --cov=spaghetti -v --doctest-modules --cov-report term-missing;
 
 notifications:
