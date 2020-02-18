@@ -49,8 +49,8 @@ def setup_package():
         "docs": "requirements_docs.txt",
         "plus": "requirements_plus.txt",
         "tests": "requirements_tests.txt",
-        "nb_pypi": "requirements_notebook_pypi.txt",
-        "nb_conda": "requirements_notebook_conda.txt",
+        "nb_pypi": "requirements_notebooks_pypi.txt",
+        "nb_conda": "requirements_notebooks_conda.txt",
     }
     reqs = _get_requirements_from_files(_groups_files)
     install_reqs = reqs.pop("base")
