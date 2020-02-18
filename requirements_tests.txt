@@ -1,5 +1,5 @@
-nose
-coverage
-coveralls
+pytest
+pytest-cov
+codecov
 twine
 wheel
