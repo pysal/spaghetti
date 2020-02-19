@@ -392,7 +392,7 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-02-05T14:15:00-05:00
+2020-02-18T21:01:44-05:00
 
 CPython 3.7.3
 IPython 7.10.2
@@ -406,26 +406,19 @@ CPU cores  : 4
 interpreter: 64bit
 </pre></div></div>
 </div>
-<p><strong>In addtion to the base</strong> <a class="reference external" href="https://github.com/pysal/spaghetti/blob/master/requirements.txt">spaghetti requirements</a> <strong>(and their dependecies), this notebook requires installations of:</strong></p>
-<ul class="simple">
-<li><p><a class="reference external" href="https://matplotlib.org">matplotlib</a></p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">conda</span> <span class="pre">install</span> <span class="pre">matplotlib</span></code></p></li>
-</ul>
-</li>
-</ul>
-<hr class="docutils" />
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">spaghetti</span>
-<span class="kn">import</span> <span class="nn">esda</span>
+<span></span><span class="kn">import</span> <span class="nn">esda</span>
 <span class="kn">import</span> <span class="nn">libpysal</span>
 <span class="kn">import</span> <span class="nn">matplotlib</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib_scalebar</span>
+<span class="kn">from</span> <span class="nn">matplotlib_scalebar.scalebar</span> <span class="kn">import</span> <span class="n">ScaleBar</span>
 <span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">spaghetti</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="o">%</span><span class="k">matplotlib</span> inline
 <span class="o">%</span><span class="k">watermark</span> -w
@@ -439,11 +432,12 @@ interpreter: 64bit
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 watermark 2.0.2
-libpysal   4.2.0
-numpy      1.17.3
-matplotlib 3.1.2
-spaghetti  1.4.1
-esda       2.1.1
+matplotlib_scalebar 0.6.1
+esda                2.1.1
+spaghetti           1.4.1
+matplotlib          3.1.2
+libpysal            4.2.0
+numpy               1.17.3
 
 </pre></div></div>
 </div>
@@ -504,8 +498,8 @@ esda       2.1.1
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x107a51128&gt;,
- &#39;schools&#39;: &lt;spaghetti.network.PointPattern at 0x121093048&gt;}
+{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x1245ea240&gt;,
+ &#39;schools&#39;: &lt;spaghetti.network.PointPattern at 0x1246402b0&gt;}
 </pre></div></div>
 </div>
 <p><strong>Attributes for every point pattern</strong></p>
@@ -759,7 +753,10 @@ esda       2.1.1
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">base</span> <span class="o">=</span> <span class="n">arcs_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
 <span class="n">vertices_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
-<span class="n">vertices200_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">);</span>
+<span class="n">vertices200_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="c1"># add scale bar</span>
+<span class="n">scalebar</span> <span class="o">=</span> <span class="n">ScaleBar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
+<span class="n">base</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">scalebar</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -767,7 +764,7 @@ esda       2.1.1
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_network-analysis_33_0.png"><img alt="../_images/notebooks_network-analysis_33_0.png" src="../_images/notebooks_network-analysis_33_0.png" style="width: 698px; height: 683px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_network-analysis_32_0.png"><img alt="../_images/notebooks_network-analysis_32_0.png" src="../_images/notebooks_network-analysis_32_0.png" style="width: 698px; height: 683px;" /></a>
 </div>
 </div>
 </div>
@@ -948,7 +945,7 @@ esda       2.1.1
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_network-analysis_44_0.png"><img alt="../_images/notebooks_network-analysis_44_0.png" src="../_images/notebooks_network-analysis_44_0.png" style="width: 483px; height: 484px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_network-analysis_43_0.png"><img alt="../_images/notebooks_network-analysis_43_0.png" src="../_images/notebooks_network-analysis_43_0.png" style="width: 483px; height: 484px;" /></a>
 </div>
 </div>
 </div>
@@ -982,7 +979,7 @@ esda       2.1.1
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_network-analysis_47_0.png"><img alt="../_images/notebooks_network-analysis_47_0.png" src="../_images/notebooks_network-analysis_47_0.png" style="width: 483px; height: 484px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_network-analysis_46_0.png"><img alt="../_images/notebooks_network-analysis_46_0.png" src="../_images/notebooks_network-analysis_46_0.png" style="width: 483px; height: 484px;" /></a>
 </div>
 </div>
 </div>
@@ -1016,7 +1013,7 @@ esda       2.1.1
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_network-analysis_50_0.png"><img alt="../_images/notebooks_network-analysis_50_0.png" src="../_images/notebooks_network-analysis_50_0.png" style="width: 483px; height: 484px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_network-analysis_49_0.png"><img alt="../_images/notebooks_network-analysis_49_0.png" src="../_images/notebooks_network-analysis_49_0.png" style="width: 483px; height: 484px;" /></a>
 </div>
 </div>
 </div>

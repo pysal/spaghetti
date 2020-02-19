@@ -28,8 +28,8 @@
    "execution_count": 1,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-05T19:36:18.337490Z",
-     "start_time": "2020-02-05T19:36:17.965297Z"
+     "end_time": "2020-02-19T01:40:46.188214Z",
+     "start_time": "2020-02-19T01:40:45.932260Z"
     }
    },
    "outputs": [
@@ -37,7 +37,7 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "2020-02-05T14:36:18-05:00\n",
+      "2020-02-18T20:40:46-05:00\n",
       "\n",
       "CPython 3.7.3\n",
       "IPython 7.10.2\n",
@@ -58,26 +58,12 @@
    ]
   },
   {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "**In addtion to the base** **[spaghetti requirements](https://github.com/pysal/spaghetti/blob/master/requirements.txt)** **(and their dependecies), this notebook requires installations of:**\n",
-    "\n",
-    "* [geopandas](http://geopandas.org)\n",
-    "    * `$ conda install -c conda-forge geopandas`\n",
-    "* [matplotlib](https://matplotlib.org)\n",
-    "    * `$ conda install matplotlib`\n",
-    "    \n",
-    "-----------------------"
-   ]
-  },
-  {
    "cell_type": "code",
    "execution_count": 2,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-05T19:36:20.562251Z",
-     "start_time": "2020-02-05T19:36:18.346790Z"
+     "end_time": "2020-02-19T01:40:47.879245Z",
+     "start_time": "2020-02-19T01:40:46.192214Z"
     },
     "scrolled": true
    },
@@ -87,19 +73,20 @@
      "output_type": "stream",
      "text": [
       "watermark 2.0.2\n",
-      "libpysal   4.2.0\n",
       "matplotlib 3.1.2\n",
+      "libpysal   4.2.0\n",
       "spaghetti  1.4.1\n",
       "\n"
      ]
     }
    ],
    "source": [
-    "import spaghetti\n",
-    "import matplotlib\n",
-    "import matplotlib.pyplot as plt\n",
     "import libpysal\n",
     "from libpysal.cg import Point\n",
+    "import matplotlib\n",
+    "import matplotlib.pyplot as plt\n",
+    "import spaghetti\n",
+    "\n",
     "%matplotlib inline\n",
     "%watermark -w\n",
     "%watermark -iv"
@@ -110,8 +97,8 @@
    "execution_count": 3,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-05T19:36:20.580457Z",
-     "start_time": "2020-02-05T19:36:20.571594Z"
+     "end_time": "2020-02-19T01:40:47.888909Z",
+     "start_time": "2020-02-19T01:40:47.884413Z"
     }
    },
    "outputs": [],
@@ -137,8 +124,8 @@
    "execution_count": 4,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-05T19:36:20.612815Z",
-     "start_time": "2020-02-05T19:36:20.586921Z"
+     "end_time": "2020-02-19T01:40:47.906808Z",
+     "start_time": "2020-02-19T01:40:47.895103Z"
     }
    },
    "outputs": [],
@@ -164,8 +151,8 @@
    "execution_count": 5,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-05T19:36:20.676618Z",
-     "start_time": "2020-02-05T19:36:20.618366Z"
+     "end_time": "2020-02-19T01:40:47.972099Z",
+     "start_time": "2020-02-19T01:40:47.914463Z"
     }
    },
    "outputs": [],
@@ -178,8 +165,8 @@
    "execution_count": 6,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-05T19:36:21.160912Z",
-     "start_time": "2020-02-05T19:36:20.679204Z"
+     "end_time": "2020-02-19T01:40:48.427596Z",
+     "start_time": "2020-02-19T01:40:47.974657Z"
     }
    },
    "outputs": [
@@ -217,8 +204,8 @@
    "execution_count": 7,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-05T19:36:21.194471Z",
-     "start_time": "2020-02-05T19:36:21.167610Z"
+     "end_time": "2020-02-19T01:40:48.446347Z",
+     "start_time": "2020-02-19T01:40:48.433462Z"
     }
    },
    "outputs": [],
@@ -245,8 +232,8 @@
    "execution_count": 8,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-05T19:36:21.223186Z",
-     "start_time": "2020-02-05T19:36:21.205868Z"
+     "end_time": "2020-02-19T01:40:48.472557Z",
+     "start_time": "2020-02-19T01:40:48.454221Z"
     }
    },
    "outputs": [],
@@ -269,8 +256,8 @@
    "execution_count": 9,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-05T19:36:21.250621Z",
-     "start_time": "2020-02-05T19:36:21.234463Z"
+     "end_time": "2020-02-19T01:40:48.489115Z",
+     "start_time": "2020-02-19T01:40:48.477095Z"
     }
    },
    "outputs": [],
@@ -305,8 +292,8 @@
    "execution_count": 10,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-05T19:36:22.008871Z",
-     "start_time": "2020-02-05T19:36:21.256249Z"
+     "end_time": "2020-02-19T01:40:49.215467Z",
+     "start_time": "2020-02-19T01:40:48.503304Z"
     }
    },
    "outputs": [
@@ -352,8 +339,8 @@
    "execution_count": 11,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-05T19:36:22.057650Z",
-     "start_time": "2020-02-05T19:36:22.019170Z"
+     "end_time": "2020-02-19T01:40:49.232655Z",
+     "start_time": "2020-02-19T01:40:49.220612Z"
     }
    },
    "outputs": [
@@ -387,8 +374,8 @@
    "execution_count": 12,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-05T19:36:22.088810Z",
-     "start_time": "2020-02-05T19:36:22.075229Z"
+     "end_time": "2020-02-19T01:40:49.252596Z",
+     "start_time": "2020-02-19T01:40:49.239236Z"
     }
    },
    "outputs": [
@@ -419,17 +406,17 @@
    "execution_count": 13,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-05T19:36:22.123441Z",
-     "start_time": "2020-02-05T19:36:22.098422Z"
+     "end_time": "2020-02-19T01:40:49.280644Z",
+     "start_time": "2020-02-19T01:40:49.257892Z"
     }
    },
    "outputs": [
     {
      "data": {
       "text/plain": [
-       "[[(0, 1), <libpysal.cg.shapes.Chain at 0x1240dd128>],\n",
-       " [(0, 2), <libpysal.cg.shapes.Chain at 0x1039b8780>],\n",
-       " [(1, 2), <libpysal.cg.shapes.Chain at 0x1039b8128>]]"
+       "[[(0, 1), <libpysal.cg.shapes.Chain at 0x1235e9f28>],\n",
+       " [(0, 2), <libpysal.cg.shapes.Chain at 0x123621c88>],\n",
+       " [(1, 2), <libpysal.cg.shapes.Chain at 0x123621eb8>]]"
       ]
      },
      "execution_count": 13,
@@ -454,8 +441,8 @@
    "execution_count": 14,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-05T19:36:22.171046Z",
-     "start_time": "2020-02-05T19:36:22.141442Z"
+     "end_time": "2020-02-19T01:40:49.326157Z",
+     "start_time": "2020-02-19T01:40:49.286637Z"
     }
    },
    "outputs": [
@@ -534,8 +521,8 @@
    "execution_count": 15,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-05T19:36:22.487980Z",
-     "start_time": "2020-02-05T19:36:22.185519Z"
+     "end_time": "2020-02-19T01:40:49.619273Z",
+     "start_time": "2020-02-19T01:40:49.329658Z"
     }
    },
    "outputs": [
@@ -572,8 +559,8 @@
    "execution_count": 16,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-05T19:36:23.226736Z",
-     "start_time": "2020-02-05T19:36:22.495470Z"
+     "end_time": "2020-02-19T01:40:50.339290Z",
+     "start_time": "2020-02-19T01:40:49.622653Z"
     }
    },
    "outputs": [
@@ -622,8 +609,8 @@
    "execution_count": 17,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-05T19:36:23.825066Z",
-     "start_time": "2020-02-05T19:36:23.237088Z"
+     "end_time": "2020-02-19T01:40:50.896296Z",
+     "start_time": "2020-02-19T01:40:50.346370Z"
     }
    },
    "outputs": [],
@@ -637,8 +624,8 @@
    "execution_count": 18,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-05T19:36:24.388097Z",
-     "start_time": "2020-02-05T19:36:23.828411Z"
+     "end_time": "2020-02-19T01:40:51.408844Z",
+     "start_time": "2020-02-19T01:40:50.898616Z"
     }
    },
    "outputs": [
@@ -676,8 +663,8 @@
    "execution_count": 19,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-05T19:36:24.510526Z",
-     "start_time": "2020-02-05T19:36:24.396607Z"
+     "end_time": "2020-02-19T01:40:51.519046Z",
+     "start_time": "2020-02-19T01:40:51.411305Z"
     }
    },
    "outputs": [],
@@ -704,8 +691,8 @@
    "execution_count": 20,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-05T19:36:28.649333Z",
-     "start_time": "2020-02-05T19:36:24.515567Z"
+     "end_time": "2020-02-19T01:40:55.488493Z",
+     "start_time": "2020-02-19T01:40:51.521449Z"
     }
    },
    "outputs": [
@@ -751,8 +738,8 @@
    "execution_count": 21,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-05T19:36:29.395294Z",
-     "start_time": "2020-02-05T19:36:28.652499Z"
+     "end_time": "2020-02-19T01:40:56.223618Z",
+     "start_time": "2020-02-19T01:40:55.490944Z"
     }
    },
    "outputs": [
@@ -861,8 +848,8 @@
    "execution_count": 22,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-05T19:36:29.860647Z",
-     "start_time": "2020-02-05T19:36:29.403755Z"
+     "end_time": "2020-02-19T01:40:56.565897Z",
+     "start_time": "2020-02-19T01:40:56.229545Z"
     }
    },
    "outputs": [
@@ -899,8 +886,8 @@
    "execution_count": 23,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-05T19:36:30.944805Z",
-     "start_time": "2020-02-05T19:36:29.893388Z"
+     "end_time": "2020-02-19T01:40:57.249947Z",
+     "start_time": "2020-02-19T01:40:56.578635Z"
     }
    },
    "outputs": [
@@ -942,8 +929,8 @@
    "execution_count": 24,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-05T19:36:30.993178Z",
-     "start_time": "2020-02-05T19:36:30.973635Z"
+     "end_time": "2020-02-19T01:40:57.279921Z",
+     "start_time": "2020-02-19T01:40:57.259898Z"
     }
    },
    "outputs": [],
@@ -959,8 +946,8 @@
    "execution_count": 25,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-05T19:36:31.826220Z",
-     "start_time": "2020-02-05T19:36:30.998032Z"
+     "end_time": "2020-02-19T01:40:58.063371Z",
+     "start_time": "2020-02-19T01:40:57.289411Z"
     }
    },
    "outputs": [
@@ -1007,8 +994,8 @@
    "execution_count": 26,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-05T19:36:31.859219Z",
-     "start_time": "2020-02-05T19:36:31.836676Z"
+     "end_time": "2020-02-19T01:40:58.090791Z",
+     "start_time": "2020-02-19T01:40:58.066143Z"
     }
    },
    "outputs": [],
@@ -1024,8 +1011,8 @@
    "execution_count": 27,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-05T19:36:32.827334Z",
-     "start_time": "2020-02-05T19:36:31.862108Z"
+     "end_time": "2020-02-19T01:40:58.976367Z",
+     "start_time": "2020-02-19T01:40:58.106703Z"
     }
    },
    "outputs": [
