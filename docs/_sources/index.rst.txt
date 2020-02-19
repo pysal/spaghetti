@@ -3,8 +3,8 @@
 `spaghetti`
 ===========
 
-SPAtial GrapHs: nETworks, Topology, & Inference
------------------------------------------------
+**SPA**\ tial **G**\ rap\ **H**\ s: n\ **ET**\ works, **T**\ opology, & **I**\ nference
+---------------------------------------------------------------------------------------
 
 `Spaghetti` is an open-source Python library for the analysis of network-based
 spatial data. Originating from the `network` module in `PySAL (Python Spatial 
