@@ -51,6 +51,12 @@ and usage tutorials are provided here through the links above.
     </div>
 
 
+Development
+-----------
+
+Development of `spaghetti` is hosted on GitHub_.
+
+
 Citing `spaghetti`
 ------------------
 
@@ -83,3 +89,4 @@ If you use PySAL-spaghetti in a scientific publication, we would appreciate usin
 
 
 .. _PySAL: https://github.com/pysal/pysal
+.. _GitHub: https://github.com/pysal/spaghetti
