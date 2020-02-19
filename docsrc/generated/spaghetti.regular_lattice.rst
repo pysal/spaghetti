@@ -1,0 +1,6 @@
+spaghetti.regular\_lattice
+==========================
+
+.. currentmodule:: spaghetti
+
+.. autofunction:: regular_lattice
