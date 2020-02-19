@@ -398,7 +398,7 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-02-07T08:59:42-05:00
+2020-02-18T20:54:04-05:00
 
 CPython 3.7.3
 IPython 7.10.2
@@ -412,37 +412,21 @@ CPU cores  : 4
 interpreter: 64bit
 </pre></div></div>
 </div>
-<p><strong>In addtion to the base</strong> <a class="reference external" href="https://github.com/pysal/spaghetti/blob/master/requirements.txt">spaghetti requirements</a> <strong>(and their dependecies), this notebook requires installations of:</strong></p>
-<ul class="simple">
-<li><p><a class="reference external" href="http://geopandas.org">geopandas</a></p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">conda</span> <span class="pre">install</span> <span class="pre">-c</span> <span class="pre">conda-forge</span> <span class="pre">geopandas</span></code></p></li>
-</ul>
-</li>
-<li><p><a class="reference external" href="https://matplotlib.org">matplotlib</a></p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">conda</span> <span class="pre">install</span> <span class="pre">matplotlib</span></code></p></li>
-</ul>
-</li>
-<li><p><a class="reference external" href="https://python-mip.com">mip</a></p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">mip</span></code></p></li>
-</ul>
-</li>
-</ul>
-<hr class="docutils" />
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">spaghetti</span>
-<span class="kn">import</span> <span class="nn">geopandas</span>
+<span></span><span class="kn">import</span> <span class="nn">geopandas</span>
 <span class="kn">from</span> <span class="nn">libpysal</span> <span class="kn">import</span> <span class="n">examples</span>
 <span class="kn">import</span> <span class="nn">matplotlib</span>
 <span class="kn">import</span> <span class="nn">mip</span>
 <span class="kn">import</span> <span class="nn">numpy</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">spaghetti</span>
+<span class="kn">import</span> <span class="nn">matplotlib_scalebar</span>
+<span class="kn">from</span> <span class="nn">matplotlib_scalebar.scalebar</span> <span class="kn">import</span> <span class="n">ScaleBar</span>
+
 <span class="o">%</span><span class="k">matplotlib</span> inline
 <span class="o">%</span><span class="k">watermark</span> -w
 <span class="o">%</span><span class="k">watermark</span> -iv
@@ -456,11 +440,12 @@ interpreter: 64bit
 <div class="highlight"><pre>
 Using Python-MIP package version 1.6.8
 watermark 2.0.2
-mip        1.6.8
-geopandas  0.6.2
-matplotlib 3.1.2
-spaghetti  1.4.1
-numpy      1.17.3
+matplotlib_scalebar 0.6.1
+geopandas           0.6.2
+spaghetti           1.4.1
+matplotlib          3.1.2
+numpy               1.17.3
+mip                 1.6.8
 
 </pre></div></div>
 </div>
@@ -794,7 +779,6 @@ to utilize a mathematical programming model to solve the microscope discrepency.
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="k">def</span> <span class="nf">make_patches</span><span class="p">(</span><span class="n">objects</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Create patches for legend&quot;&quot;&quot;</span>
-    <span class="n">spacer</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">patches</span><span class="o">.</span><span class="n">Patch</span><span class="p">(</span><span class="n">ec</span><span class="o">=</span><span class="s2">&quot;None&quot;</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s2">&quot;None&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
     <span class="n">patches</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">_object</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
@@ -814,15 +798,14 @@ to utilize a mathematical programming model to solve the microscope discrepency.
             <span class="n">_kws</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;lw&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="n">c</span><span class="p">,</span> <span class="s2">&quot;marker&quot;</span><span class="p">:</span> <span class="n">m</span><span class="p">,</span> <span class="s2">&quot;ms&quot;</span><span class="p">:</span> <span class="n">ms</span><span class="p">,</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="n">a</span><span class="p">}</span>
             <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> — </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">oname</span><span class="o">.</span><span class="n">capitalize</span><span class="p">(),</span> <span class="nb">int</span><span class="p">(</span><span class="n">ovalue</span><span class="p">))</span>
             <span class="n">p</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">Line2D</span><span class="p">([],</span> <span class="p">[],</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">_kws</span><span class="p">)</span>
-            <span class="n">patches</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">spacer</span><span class="p">,</span> <span class="n">p</span><span class="p">])</span>
+            <span class="n">patches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">patch_info</span> <span class="o">=</span> <span class="n">plot_shipments</span><span class="p">(</span><span class="n">_object</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">for_legend</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">lw</span><span class="p">,</span> <span class="n">lwsc</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="ow">in</span> <span class="n">patch_info</span><span class="p">:</span>
                 <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;s</span><span class="si">%s</span><span class="s2">$</span><span class="se">\\</span><span class="s2">rightarrow$d</span><span class="si">%s</span><span class="s2"> — </span><span class="si">%s</span><span class="s2"> microscopes&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">lw</span><span class="p">)</span>
                 <span class="n">_kws</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mf">0.75</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="n">c</span><span class="p">,</span> <span class="s2">&quot;lw&quot;</span><span class="p">:</span> <span class="n">lwsc</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="n">label</span><span class="p">}</span>
-                <span class="n">p</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">Line2D</span><span class="p">([],</span> <span class="p">[],</span> <span class="o">**</span><span class="n">_kws</span><span class="p">)</span>
-                <span class="n">patches</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">spacer</span><span class="p">,</span> <span class="n">p</span><span class="p">])</span>
-    <span class="n">patches</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">spacer</span><span class="p">])</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">Line2D</span><span class="p">([],</span> <span class="p">[],</span> <span class="n">solid_capstyle</span><span class="o">=</span><span class="s2">&quot;round&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">_kws</span><span class="p">)</span>
+                <span class="n">patches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">patches</span>
 </pre></div>
 </div>
@@ -836,7 +819,8 @@ to utilize a mathematical programming model to solve the microscope discrepency.
     <span class="sd">&quot;&quot;&quot;Add a legend to a plot&quot;&quot;&quot;</span>
     <span class="n">patches</span> <span class="o">=</span> <span class="n">make_patches</span><span class="p">(</span><span class="n">objects</span><span class="p">)</span>
     <span class="n">kws</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;fancybox&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;framealpha&quot;</span><span class="p">:</span> <span class="mf">0.85</span><span class="p">,</span> <span class="s2">&quot;fontsize&quot;</span><span class="p">:</span> <span class="s2">&quot;x-large&quot;</span><span class="p">}</span>
-    <span class="n">legend</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="o">=</span><span class="n">patches</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="n">anchor</span><span class="p">,</span> <span class="o">**</span><span class="n">kws</span><span class="p">)</span>
+    <span class="n">kws</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;bbox_to_anchor&quot;</span><span class="p">:</span><span class="n">anchor</span><span class="p">,</span> <span class="s2">&quot;labelspacing&quot;</span><span class="p">:</span><span class="mf">2.</span><span class="p">,</span> <span class="s2">&quot;borderpad&quot;</span><span class="p">:</span><span class="mf">2.</span><span class="p">})</span>
+    <span class="n">legend</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="o">=</span><span class="n">patches</span><span class="p">,</span> <span class="o">**</span><span class="n">kws</span><span class="p">)</span>
     <span class="n">legend</span><span class="o">.</span><span class="n">get_frame</span><span class="p">()</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -846,16 +830,17 @@ to utilize a mathematical programming model to solve the microscope discrepency.
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">def</span> <span class="nf">plot_shipments</span><span class="p">(</span><span class="n">sd</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">scaled</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span> <span class="n">for_legend</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span></span><span class="k">def</span> <span class="nf">plot_shipments</span><span class="p">(</span><span class="n">sd</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">scaled</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">for_legend</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Helper for plotting shipments based on OD and magnitude&quot;&quot;&quot;</span>
     <span class="n">_patches</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">_plot_kws</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;alpha&quot;</span><span class="p">:</span><span class="mf">0.75</span><span class="p">,</span> <span class="s2">&quot;zorder&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;capstyle&quot;</span><span class="p">:</span><span class="s2">&quot;round&quot;</span><span class="p">}</span>
     <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">gdf</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">shipping_colors</span><span class="p">,</span> <span class="n">sd</span><span class="p">):</span>
         <span class="n">lw</span><span class="p">,</span> <span class="n">lw_scaled</span><span class="p">,</span> <span class="n">ids</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="s2">&quot;ship&quot;</span><span class="p">],</span> <span class="n">gdf</span><span class="p">[</span><span class="s2">&quot;ship&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">scaled</span><span class="p">,</span> <span class="n">gdf</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">for_legend</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">_lw</span><span class="p">,</span> <span class="n">_lwsc</span><span class="p">,</span> <span class="n">_id</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">lw</span><span class="p">,</span> <span class="n">lw_scaled</span><span class="p">,</span> <span class="n">ids</span><span class="p">):</span>
                 <span class="n">_patches</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">c</span><span class="p">,</span> <span class="n">_lw</span><span class="p">,</span> <span class="n">_lwsc</span><span class="p">,</span> <span class="n">_id</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">gdf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="n">lw_scaled</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">gdf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="n">lw_scaled</span><span class="p">,</span> <span class="o">**</span><span class="n">_plot_kws</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">for_legend</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">_patches</span>
 </pre></div>
@@ -1066,6 +1051,9 @@ to utilize a mathematical programming model to solve the microscope discrepency.
 <span class="c1"># add legend</span>
 <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span><span class="n">schools</span><span class="p">,</span> <span class="n">schools_supply</span><span class="p">,</span> <span class="n">schools_demand</span><span class="p">]</span>
 <span class="n">legend</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span>
+<span class="c1"># add scale bar</span>
+<span class="n">scalebar</span> <span class="o">=</span> <span class="n">ScaleBar</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
+<span class="n">base</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">scalebar</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -1073,7 +1061,7 @@ to utilize a mathematical programming model to solve the microscope discrepency.
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_transportation-problem_28_0.png"><img alt="../_images/notebooks_transportation-problem_28_0.png" src="../_images/notebooks_transportation-problem_28_0.png" style="width: 766px; height: 575px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_transportation-problem_27_0.png"><img alt="../_images/notebooks_transportation-problem_27_0.png" src="../_images/notebooks_transportation-problem_27_0.png" style="width: 812px; height: 575px;" /></a>
 </div>
 </div>
 </div>
@@ -1241,6 +1229,9 @@ to utilize a mathematical programming model to solve the microscope discrepency.
 <span class="c1"># add legend</span>
 <span class="n">elements</span> <span class="o">+=</span> <span class="p">[</span><span class="n">supply_snapped</span><span class="p">,</span> <span class="n">demand_snapped</span><span class="p">]</span>
 <span class="n">legend</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span>
+<span class="c1"># add scale bar</span>
+<span class="n">scalebar</span> <span class="o">=</span> <span class="n">ScaleBar</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
+<span class="n">base</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">scalebar</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -1248,7 +1239,7 @@ to utilize a mathematical programming model to solve the microscope discrepency.
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_transportation-problem_32_0.png"><img alt="../_images/notebooks_transportation-problem_32_0.png" src="../_images/notebooks_transportation-problem_32_0.png" style="width: 832px; height: 575px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_transportation-problem_31_0.png"><img alt="../_images/notebooks_transportation-problem_31_0.png" src="../_images/notebooks_transportation-problem_31_0.png" style="width: 878px; height: 575px;" /></a>
 </div>
 </div>
 </div>
@@ -1741,6 +1732,9 @@ End
 <span class="c1"># add legend</span>
 <span class="n">elements</span> <span class="o">+=</span> <span class="p">[</span><span class="n">shipments</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;O&quot;</span><span class="p">)]</span>
 <span class="n">legend</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span>
+<span class="c1"># add scale bar</span>
+<span class="n">scalebar</span> <span class="o">=</span> <span class="n">ScaleBar</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
+<span class="n">base</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">scalebar</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -1748,7 +1742,7 @@ End
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_transportation-problem_49_0.png"><img alt="../_images/notebooks_transportation-problem_49_0.png" src="../_images/notebooks_transportation-problem_49_0.png" style="width: 862px; height: 575px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_transportation-problem_48_0.png"><img alt="../_images/notebooks_transportation-problem_48_0.png" src="../_images/notebooks_transportation-problem_48_0.png" style="width: 908px; height: 575px;" /></a>
 </div>
 </div>
 </div>

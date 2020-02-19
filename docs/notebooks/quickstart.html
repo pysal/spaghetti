@@ -388,7 +388,7 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-02-05T14:15:19-05:00
+2020-02-18T20:17:05-05:00
 
 CPython 3.7.3
 IPython 7.10.2
@@ -402,36 +402,19 @@ CPU cores  : 4
 interpreter: 64bit
 </pre></div></div>
 </div>
-<p><strong>In addtion to the base</strong> <a class="reference external" href="https://github.com/pysal/spaghetti/blob/master/requirements.txt">spaghetti requirements</a> <strong>(and their dependecies), this notebook requires installations of:</strong></p>
-<ul class="simple">
-<li><p><a class="reference external" href="https://pypi.org/project/descartes/">descartes</a></p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">conda</span> <span class="pre">install</span> <span class="pre">-c</span> <span class="pre">conda-forge</span> <span class="pre">descartes</span></code></p></li>
-</ul>
-</li>
-<li><p><a class="reference external" href="http://geopandas.org">geopandas</a></p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">conda</span> <span class="pre">install</span> <span class="pre">-c</span> <span class="pre">conda-forge</span> <span class="pre">geopandas</span></code></p></li>
-</ul>
-</li>
-<li><p><a class="reference external" href="https://matplotlib.org">matplotlib</a></p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">conda</span> <span class="pre">install</span> <span class="pre">matplotlib</span></code></p></li>
-</ul>
-</li>
-</ul>
-<hr class="docutils" />
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">spaghetti</span>
-<span class="kn">import</span> <span class="nn">geopandas</span>
+<span></span><span class="kn">import</span> <span class="nn">geopandas</span>
 <span class="kn">import</span> <span class="nn">libpysal</span>
 <span class="kn">import</span> <span class="nn">matplotlib</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">matplotlib.lines</span> <span class="k">as</span> <span class="nn">mlines</span>
+<span class="kn">import</span> <span class="nn">matplotlib_scalebar</span>
+<span class="kn">from</span> <span class="nn">matplotlib_scalebar.scalebar</span> <span class="kn">import</span> <span class="n">ScaleBar</span>
+<span class="kn">import</span> <span class="nn">spaghetti</span>
 <span class="o">%</span><span class="k">matplotlib</span> inline
 <span class="o">%</span><span class="k">watermark</span> -w
 <span class="o">%</span><span class="k">watermark</span> -iv
@@ -444,10 +427,11 @@ interpreter: 64bit
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 watermark 2.0.2
-libpysal   4.2.0
-matplotlib 3.1.2
-spaghetti  1.4.1
-geopandas  0.6.2
+geopandas           0.6.2
+matplotlib          3.1.2
+spaghetti           1.4.1
+libpysal            4.2.0
+matplotlib_scalebar 0.6.1
 
 </pre></div></div>
 </div>
@@ -758,6 +742,10 @@ snapped coords: (727919.2473619275, 875942.4986759046)
 <span class="n">true_schools_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">marker</span><span class="o">=</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 <span class="n">snapped_schools_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">markersize</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
+<span class="c1"># add scale bar</span>
+<span class="n">scalebar</span> <span class="o">=</span> <span class="n">ScaleBar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
+<span class="n">base</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">scalebar</span><span class="p">)</span>
+
 <span class="c1"># add legend</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span>
     <span class="n">handles</span><span class="o">=</span><span class="n">patches</span><span class="p">,</span>
@@ -765,7 +753,9 @@ snapped coords: (727919.2473619275, 875942.4986759046)
     <span class="n">framealpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
     <span class="n">scatterpoints</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;xx-large&quot;</span><span class="p">,</span>
-    <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.04</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">),</span>
+    <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.04</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">),</span>
+    <span class="n">borderpad</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span>
+    <span class="n">labelspacing</span><span class="o">=</span><span class="mf">2.</span>
 <span class="p">);</span>
 </pre></div>
 </div>
@@ -774,7 +764,7 @@ snapped coords: (727919.2473619275, 875942.4986759046)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_quickstart_31_0.png"><img alt="../_images/notebooks_quickstart_31_0.png" src="../_images/notebooks_quickstart_31_0.png" style="width: 955px; height: 683px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_quickstart_30_0.png"><img alt="../_images/notebooks_quickstart_30_0.png" src="../_images/notebooks_quickstart_30_0.png" style="width: 1010px; height: 683px;" /></a>
 </div>
 </div>
 </div>

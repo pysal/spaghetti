@@ -396,7 +396,7 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-02-05T14:36:18-05:00
+2020-02-18T20:40:46-05:00
 
 CPython 3.7.3
 IPython 7.10.2
@@ -410,30 +410,17 @@ CPU cores  : 4
 interpreter: 64bit
 </pre></div></div>
 </div>
-<p><strong>In addtion to the base</strong> <a class="reference external" href="https://github.com/pysal/spaghetti/blob/master/requirements.txt">spaghetti requirements</a> <strong>(and their dependecies), this notebook requires installations of:</strong></p>
-<ul class="simple">
-<li><p><a class="reference external" href="http://geopandas.org">geopandas</a></p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">conda</span> <span class="pre">install</span> <span class="pre">-c</span> <span class="pre">conda-forge</span> <span class="pre">geopandas</span></code></p></li>
-</ul>
-</li>
-<li><p><a class="reference external" href="https://matplotlib.org">matplotlib</a></p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">conda</span> <span class="pre">install</span> <span class="pre">matplotlib</span></code></p></li>
-</ul>
-</li>
-</ul>
-<hr class="docutils" />
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">spaghetti</span>
+<span></span><span class="kn">import</span> <span class="nn">libpysal</span>
+<span class="kn">from</span> <span class="nn">libpysal.cg</span> <span class="kn">import</span> <span class="n">Point</span>
 <span class="kn">import</span> <span class="nn">matplotlib</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">libpysal</span>
-<span class="kn">from</span> <span class="nn">libpysal.cg</span> <span class="kn">import</span> <span class="n">Point</span>
+<span class="kn">import</span> <span class="nn">spaghetti</span>
+
 <span class="o">%</span><span class="k">matplotlib</span> inline
 <span class="o">%</span><span class="k">watermark</span> -w
 <span class="o">%</span><span class="k">watermark</span> -iv
@@ -446,8 +433,8 @@ interpreter: 64bit
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 watermark 2.0.2
-libpysal   4.2.0
 matplotlib 3.1.2
+libpysal   4.2.0
 spaghetti  1.4.1
 
 </pre></div></div>
@@ -507,7 +494,7 @@ spaghetti  1.4.1
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_shortest-path-visualization_9_0.png"><img alt="../_images/notebooks_shortest-path-visualization_9_0.png" src="../_images/notebooks_shortest-path-visualization_9_0.png" style="width: 580px; height: 574px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_shortest-path-visualization_8_0.png"><img alt="../_images/notebooks_shortest-path-visualization_8_0.png" src="../_images/notebooks_shortest-path-visualization_8_0.png" style="width: 580px; height: 574px;" /></a>
 </div>
 </div>
 </div>
@@ -597,7 +584,7 @@ spaghetti  1.4.1
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_shortest-path-visualization_16_0.png"><img alt="../_images/notebooks_shortest-path-visualization_16_0.png" src="../_images/notebooks_shortest-path-visualization_16_0.png" style="width: 580px; height: 574px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_shortest-path-visualization_15_0.png"><img alt="../_images/notebooks_shortest-path-visualization_15_0.png" src="../_images/notebooks_shortest-path-visualization_15_0.png" style="width: 580px; height: 574px;" /></a>
 </div>
 </div>
 </div>
@@ -664,9 +651,9 @@ array([[nan, 0.4, 3.8],
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[(0, 1), &lt;libpysal.cg.shapes.Chain at 0x1240dd128&gt;],
- [(0, 2), &lt;libpysal.cg.shapes.Chain at 0x1039b8780&gt;],
- [(1, 2), &lt;libpysal.cg.shapes.Chain at 0x1039b8128&gt;]]
+[[(0, 1), &lt;libpysal.cg.shapes.Chain at 0x1235e9f28&gt;],
+ [(0, 2), &lt;libpysal.cg.shapes.Chain at 0x123621c88&gt;],
+ [(1, 2), &lt;libpysal.cg.shapes.Chain at 0x123621eb8&gt;]]
 </pre></div></div>
 </div>
 </div>
@@ -750,7 +737,7 @@ array([[nan, 0.4, 3.8],
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_shortest-path-visualization_25_0.png"><img alt="../_images/notebooks_shortest-path-visualization_25_0.png" src="../_images/notebooks_shortest-path-visualization_25_0.png" style="width: 427px; height: 161px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_shortest-path-visualization_24_0.png"><img alt="../_images/notebooks_shortest-path-visualization_24_0.png" src="../_images/notebooks_shortest-path-visualization_24_0.png" style="width: 427px; height: 161px;" /></a>
 </div>
 </div>
 </div>
@@ -779,7 +766,7 @@ array([[nan, 0.4, 3.8],
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_shortest-path-visualization_27_0.png"><img alt="../_images/notebooks_shortest-path-visualization_27_0.png" src="../_images/notebooks_shortest-path-visualization_27_0.png" style="width: 580px; height: 574px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_shortest-path-visualization_26_0.png"><img alt="../_images/notebooks_shortest-path-visualization_26_0.png" src="../_images/notebooks_shortest-path-visualization_26_0.png" style="width: 580px; height: 574px;" /></a>
 </div>
 </div>
 </div>
@@ -813,7 +800,7 @@ array([[nan, 0.4, 3.8],
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_shortest-path-visualization_30_0.png"><img alt="../_images/notebooks_shortest-path-visualization_30_0.png" src="../_images/notebooks_shortest-path-visualization_30_0.png" style="width: 591px; height: 574px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_shortest-path-visualization_29_0.png"><img alt="../_images/notebooks_shortest-path-visualization_29_0.png" src="../_images/notebooks_shortest-path-visualization_29_0.png" style="width: 591px; height: 574px;" /></a>
 </div>
 </div>
 </div>
@@ -855,7 +842,7 @@ array([[nan, 0.4, 3.8],
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_shortest-path-visualization_34_0.png"><img alt="../_images/notebooks_shortest-path-visualization_34_0.png" src="../_images/notebooks_shortest-path-visualization_34_0.png" style="width: 879px; height: 846px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_shortest-path-visualization_33_0.png"><img alt="../_images/notebooks_shortest-path-visualization_33_0.png" src="../_images/notebooks_shortest-path-visualization_33_0.png" style="width: 879px; height: 846px;" /></a>
 </div>
 </div>
 </div>
@@ -958,7 +945,7 @@ array([[nan, 0.4, 3.8],
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_shortest-path-visualization_38_0.png"><img alt="../_images/notebooks_shortest-path-visualization_38_0.png" src="../_images/notebooks_shortest-path-visualization_38_0.png" style="width: 464px; height: 348px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_shortest-path-visualization_37_0.png"><img alt="../_images/notebooks_shortest-path-visualization_37_0.png" src="../_images/notebooks_shortest-path-visualization_37_0.png" style="width: 464px; height: 348px;" /></a>
 </div>
 </div>
 </div>
@@ -982,7 +969,7 @@ array([[nan, 0.4, 3.8],
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_shortest-path-visualization_40_0.png"><img alt="../_images/notebooks_shortest-path-visualization_40_0.png" src="../_images/notebooks_shortest-path-visualization_40_0.png" style="width: 609px; height: 574px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_shortest-path-visualization_39_0.png"><img alt="../_images/notebooks_shortest-path-visualization_39_0.png" src="../_images/notebooks_shortest-path-visualization_39_0.png" style="width: 609px; height: 574px;" /></a>
 </div>
 </div>
 </div>
@@ -1022,7 +1009,7 @@ array([[nan, 0.4, 3.8],
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_shortest-path-visualization_43_0.png"><img alt="../_images/notebooks_shortest-path-visualization_43_0.png" src="../_images/notebooks_shortest-path-visualization_43_0.png" style="width: 609px; height: 574px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_shortest-path-visualization_42_0.png"><img alt="../_images/notebooks_shortest-path-visualization_42_0.png" src="../_images/notebooks_shortest-path-visualization_42_0.png" style="width: 609px; height: 574px;" /></a>
 </div>
 </div>
 </div>
@@ -1063,7 +1050,7 @@ array([[nan, 0.4, 3.8],
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_shortest-path-visualization_46_0.png"><img alt="../_images/notebooks_shortest-path-visualization_46_0.png" src="../_images/notebooks_shortest-path-visualization_46_0.png" style="width: 609px; height: 574px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_shortest-path-visualization_45_0.png"><img alt="../_images/notebooks_shortest-path-visualization_45_0.png" src="../_images/notebooks_shortest-path-visualization_45_0.png" style="width: 609px; height: 574px;" /></a>
 </div>
 </div>
 </div>
