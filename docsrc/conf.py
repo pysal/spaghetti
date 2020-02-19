@@ -258,13 +258,13 @@ def setup(app):
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
-    "esda": ("https://esda.readthedocs.io/en/latest/", None),
+    "esda": ("https://pysal.org/esda/", None),
     "geopandas": ("https://geopandas.readthedocs.io/en/latest/", None),
     "libpysal": ("https://pysal.org/libpysal/", None),
     "matplotlib": ("https://matplotlib.org/", None),
     "numpy": ("https://docs.scipy.org/doc/numpy", None),
     "pandas": ("https://pandas.pydata.org/pandas-docs/stable/", None),
-    "python": ("https://docs.python.org/3.7/", None),
+    "python": ("https://docs.python.org/3.8/", None),
     "pulp": ("https://pythonhosted.org/PuLP/", None),
 }
 
