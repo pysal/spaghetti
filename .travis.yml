@@ -16,6 +16,7 @@ env:
   - ENV_FILE="ci/travis/38-latest-conda-forge-GIT-PLUS.yaml"
   
 matrix:
+  fast_finish: true
   allow_failures:
     - env: ENV_FILE="ci/travis/36-latest-conda-forge-PYPI-PLUS.yaml"
     - env: ENV_FILE="ci/travis/36-latest-conda-forge-GIT-PLUS.yaml"
