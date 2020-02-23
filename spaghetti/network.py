@@ -378,11 +378,19 @@ class Network:
 
         # component ID to links lookup ###################################################### this was where longest, largest, compoment lenght, comp vertex count?
         component2link = {}
-        cp_labs = set(w.component_labels)
-        for cpl in cp_labs:
-            component2link[cpl] = sorted(
-                [k for k, v in link2component.items() if v == cpl]
-            )
+        component_lengths = {}
+        component_vertices = {}
+        component_vertex_count = {}
+
+        cp_labs_ = set(w.component_labels)
+        l2c_ = link2component.items()
+        for cpl in cp_labs_:
+            component2link[cpl] = sorted([k for k, v in l2c_ if v == cpl])
+            c2l_ = component2link[cpl]
+            arclens_ = self.arc_lengths.items()
+            component_lengths[cpl] = sum([v for k, v in arclens_ if k in c2l_])
+            component_vertices[cpl] = set([v for l in c2l_ for v in l])
+            component_vertex_count[cpl] = len(component_vertices[cpl])
 
         # component to ring lookup ####################################################### ring should checkout adjacencylist, not W
         component_is_ring = {}
