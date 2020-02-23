@@ -2853,10 +2853,30 @@ def extract_component(net, component_id, weightings=None):
     Examples
     --------
     
-    xxxxxxxx
+    Instantiate a network object.
     
     >>>
     
+    
+    The network is not fully connected.
+    
+    >>> ntw.network_fully_connected
+    False
+    
+    Examine the number of network components.
+    
+    >>> ntw.network_n_components
+    ###
+    >>> ntw.network_component_lengths
+    ###
+    
+    Extract the longest component.
+    
+    >>> longest = spaghetti.extract_component(ntw, ntw.network_largest_component)
+    >>> longest.network_n_components
+    ###
+    >>> ntw.network_component_lengths
+    ###
     
     """
 
@@ -2907,7 +2927,9 @@ def extract_component(net, component_id, weightings=None):
             attr = [attr]
         elif attr == "_component2":
             # reassigns both network and graph _component2 attributes
-            supp = [_n + "_component2" + _a, _g + "_component2" + _e]
+            supp = [_n + "_component2" + _a]
+            if hasgraph:
+                supp += [_g + "_component2" + _e]
             _val = [{cid: getattr(cnet, s)[cid]} for s in supp]
             attr = supp
         elif attr in ["arcs", "edges"]:
@@ -2939,7 +2961,7 @@ def extract_component(net, component_id, weightings=None):
             setattr(cnet, a, av)
 
     # provide warning (for now) if the network contains a point pattern
-    if hasattr(net, "pointpatterns"):
+    if getattr(net, "pointpatterns"):
         msg = "There is a least one point pattern associated with the network."
         msg += " Component extraction should be performed prior to snapping"
         msg += " point patterns to the network object; failing to do so may"
@@ -2981,14 +3003,14 @@ def extract_component(net, component_id, weightings=None):
         "_component_vertex_count",
         "adjacencylist",
         "_component_is_ring",
-        "non_articulation_points",
         "_component2",
         "arcs",
-        "edges",
         "_component_lengths",
         "_lengths",
         "_component_labels",
     ]
+    if hasgraph:
+        update_attributes += ["non_articulation_points", "edges"]
 
     # reassign attributes
     for attribute in update_attributes:
