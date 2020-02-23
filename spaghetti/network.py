@@ -68,8 +68,7 @@ class Network:
         List of lists storing vertex adjacency.
     
     vertex_coords : dict
-        Keys are the vertex ID and values are the (x,y) coordinates
-        inverse to vertices.
+        Keys are vertex IDs and values are (x,y) coordinates of the vertices.
     
     vertex_list : list
         List of vertex IDs.
@@ -2824,7 +2823,7 @@ class Network:
         return self
 
 
-def extract_component(net, component_id, weighting=None):
+def extract_component(net, component_id, weightings=None):
     """Extract a single component from a network object.
     
     Parameters
@@ -2833,7 +2832,7 @@ def extract_component(net, component_id, weighting=None):
         Full network object.
     component_id : int
         The ID of the desired network component.
-    weighting : 
+    weightings : 
         See the ``weightings`` keyword argument in ``spaghetti.Network``.
     
     Returns
@@ -2847,12 +2846,75 @@ def extract_component(net, component_id, weighting=None):
         """Helper for reassigning attributes."""
 
         # set for each attribute(s)
-
-        if attr == "non_articulation_points":
-
+        if attr == "_fully_connected":
+            _val = [True for objt in obj_type]
+            attr = [objt + attr for objt in obj_type]
+        elif attr == "_n_components":
+            _val = [1 for objt in obj_type]
+            attr = [objt + attr for objt in obj_type]
+        elif attr in ["_longest_component", "_largest_component"]:
+            _val = [cid for objt in obj_type]
+            attr = [objt + attr for objt in obj_type]
+        elif attr == "vertex_list":
+            # reassigns vertex list + network, graph component vertices
+            supp = [objt + "_component_vertices" for objt in obj_type]
+            _val = [getattr(cnet, supp[0])[cid]]
+            _val += [{cid: getattr(cnet, s)[cid]} for s in supp]
+            attr = [attr] + supp
+        elif attr == "vertex_coords":
+            # reassigns both vertex_coords and vertices
+            supp = getattr(cnet, "vertex_list")
+            _val = [{k: v for k, v in getattr(cnet, attr).items() if k in supp}]
+            _val += [{v: k for k, v in _val[0].items()}]
+            attr = [attr, "vertices"]
+        elif attr == "_component_vertex_count":
+            # reassigns both network and graph _component_vertex_count
+            supp = len(getattr(cnet, "vertex_list"))
+            _val = [{cid: supp} for objt in obj_type]
+            attr = [objt + attr for objt in obj_type]
+        elif attr == "adjacencylist":
+            supp_adj = copy.deepcopy(list(getattr(cnet, attr).keys()))
+            supp_vtx = getattr(cnet, "vertex_list")
+            supp_rmv = [v for v in supp_adj if v not in supp_vtx]
+            [getattr(cnet, attr).pop(s) for s in supp_rmv]
             return
-
-        # resassing others...
+        elif attr == "_component_is_ring":
+            # reassigns both network and graph _component_is_ring
+            supp = [getattr(cnet, objt + attr) for objt in obj_type]
+            _val = [{cid: s[cid]} for s in supp]
+            attr = [objt + attr for objt in obj_type]
+        elif attr == "non_articulation_points":
+            supp_vtx = getattr(cnet, "vertex_list")
+            _val = [[s for s in getattr(cnet, attr) if s in supp_vtx]]
+            attr = [attr]
+        elif attr == "_component2":
+            # reassigns both network and graph _component2 attributes
+            supp = [_n + "_component2" + _a, _g + "_component2" + _e]
+            _val = [{cid: getattr(cnet, s)[cid]} for s in supp]
+            attr = supp
+        elif attr in ["arcs", "edges"]:
+            c2 = "_component2"
+            supp = _g + c2 + _e if attr == "edges" else _n + c2 + _a
+            _val = [getattr(cnet, supp)[cid]]
+            attr = [attr]
+        elif attr == "_component_labels":
+            # reassigns both network and graph _component_labels
+            supp = [len(getattr(cnet, o + "s")) for o in obj]
+            _val = [numpy.array([cid] * s) for s in supp]
+            attr = [objt + attr for objt in obj_type]
+        elif attr == "_component_lengths":
+            # reassigns both network and graph _component_lengths
+            supp = [objt + attr for objt in obj_type]
+            _val = [{cid: getattr(cnet, s)[cid]} for s in supp]
+            attr = supp
+        elif attr == "_lengths":
+            # reassigns both arc and edge _lengths
+            supp_name = [o + attr for o in obj]
+            supp_lens = [getattr(cnet, s) for s in supp_name]
+            supp_link = [getattr(cnet, o + "s") for o in obj]
+            supp_ll = list(zip(supp_lens, supp_link))
+            _val = [{k: v for k, v in l1.items() if k in l2} for l1, l2 in supp_ll]
+            attr = supp_name
 
         # reassign attributes
         for a, av in zip(attr, _val):
@@ -2880,37 +2942,25 @@ def extract_component(net, component_id, weighting=None):
 
     # attributes to reassign
     update_attributes = [
-        "network_fully_connected",
-        "graph_fully_connected",
-        "network_n_components",
-        "graph_n_components",
-        "network_largest_component",
-        "network_longest_component",
-        "graph_largest_component",
-        "graph_longest_component",
+        "_fully_connected",
+        "_n_components",
+        "_longest_component",
+        "_largest_component",
         "vertex_list",
         "vertex_coords",
-        "vertices",
-        "network_component_vertices",
+        "_component_vertex_count",
         "adjacencylist",
+        "_component_is_ring",
         "non_articulation_points",
-        "network_component2arc",
+        "_component2",
         "arcs",
-        "arc_lengths",
         "edges",
-        "edge_lengths",
-        "network_component_is_ring",
-        "graph_component_is_ring",
-        "network_component_labels",
-        "graph_component_labels",
-        "network_component_lengths",
-        "graph_component_lengths",
-        "network_component_vertex_count",
-        "graph_component_vertex_count",
-        "w_network",
-        "w_graph",
+        "_component_lengths",
+        "_lengths",
+        "_component_labels",
     ]
 
+    # reassign attributes
     for attribute in update_attributes:
         _reassign(attribute, component_id)
 
