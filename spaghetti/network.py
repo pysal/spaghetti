@@ -2914,8 +2914,12 @@ def extract_component(net, component_id, weighting=None):
     for attribute in update_attributes:
         _reassign(attribute, component_id)
 
-    # spatial weights...
-    # contiguityweights...
+    # recreate spatial weights
+    cnet.w_network = cnet.contiguityweights(graph=False, weightings=weightings)
+    if hasgraph:
+        cnet.w_graph = cnet.contiguityweights(graph=True, weightings=weightings)
+
+    return cnet
 
 
 @requires("geopandas", "shapely")
