@@ -115,7 +115,8 @@ class Network:
         Count of connected components in the network.
     
     network_fully_connected : bool
-        ..........................................................................
+        ``True`` if the network representation is a single connected
+        component, otherwise ``False``.
     
     network_component_labels : numpy.ndarray
         Component labels for network arcs.
@@ -126,19 +127,25 @@ class Network:
         a list as values.
     
     network_component_lengths : dict
-        ..........................................................................
+        Length of each network component (keyed by component label).
         
     network_longest_component : int
-        ..........................................................................
+        The ID of the longest component in the network. This is not
+        necessarily equal to ``network_largest_component``.
         
     network_component_vertices : dict
-        ..........................................................................
+        Lookup in the form {int: list} for vertices comprising network
+        connected components keyed by component labels with vertices in
+        a list as values.
     
     network_component_vertex_count : dict
-        ..........................................................................
+        The number of vertices in each network component
+        (keyed by component label).
     
     network_largest_component : int
-        ..........................................................................
+        The ID of the largest component in the network. Within ``spaghetti``
+        the largest component is the one with the most vertices. This is not
+        necessarily equal to ``network_longest_component``.
     
     network_component_is_ring : dict
         Lookup in the form {int: bool} keyed by component labels with values
@@ -151,7 +158,8 @@ class Network:
         Count of connected components in the network.
     
     graph_fully_connected : bool
-        ..........................................................................
+        ``True`` if the graph representation is a single connected
+        component, otherwise ``False``.
     
     graph_component_labels : numpy.ndarray
         Component labels for graph edges.
@@ -162,19 +170,25 @@ class Network:
         as values.
     
     graph_component_lengths : dict
-        ..........................................................................
+        Length of each graph component (keyed by component label).
         
     graph_longest_component : int
-        ..........................................................................
+        The ID of the longest component in the graph. This is not
+        necessarily equal to ``graph_largest_component``.
         
     graph_component_vertices : dict
-        ..........................................................................
+        Lookup in the form {int: list} for vertices comprising graph
+        connected components keyed by component labels with vertices in
+        a list as values.
     
     graph_component_vertex_count : dict
-        ..........................................................................
+        The number of vertices in each graph component
+        (keyed by component label).
     
     graph_largest_component : int
-        ..........................................................................
+        The ID of the largest component in the graph. Within ``spaghetti``
+        the largest component is the one with the most vertices. This is not
+        necessarily equal to ``graph_longest_component``.
     
     graph_component_is_ring : dict
         Lookup in the form {int: bool} keyed by component labels with values as
