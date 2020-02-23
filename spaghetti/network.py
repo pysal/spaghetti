@@ -114,12 +114,8 @@ class Network:
     network_n_components : int
         Count of connected components in the network.
     
-    
-    
-    attrivutes.............................................................................................
-    
-    
-    
+    network_fully_connected : bool
+        ..........................................................................
     
     network_component_labels : numpy.ndarray
         Component labels for network arcs.
@@ -128,6 +124,21 @@ class Network:
         Lookup in the form {int: list} for arcs comprising network
         connected components keyed by component labels with arcs in
         a list as values.
+    
+    network_component_lengths : dict
+        ..........................................................................
+        
+    network_longest_component : int
+        ..........................................................................
+        
+    network_component_vertices : dict
+        ..........................................................................
+    
+    network_component_vertex_count : dict
+        ..........................................................................
+    
+    network_largest_component : int
+        ..........................................................................
     
     network_component_is_ring : dict
         Lookup in the form {int: bool} keyed by component labels with values
@@ -139,6 +150,9 @@ class Network:
     graph_n_components : int
         Count of connected components in the network.
     
+    graph_fully_connected : bool
+        ..........................................................................
+    
     graph_component_labels : numpy.ndarray
         Component labels for graph edges.
     
@@ -146,6 +160,21 @@ class Network:
         Lookup in the form {int: list} for edges comprising graph connected
         components keyed by component labels with edges in a list
         as values.
+    
+    graph_component_lengths : dict
+        ..........................................................................
+        
+    graph_longest_component : int
+        ..........................................................................
+        
+    graph_component_vertices : dict
+        ..........................................................................
+    
+    graph_component_vertex_count : dict
+        ..........................................................................
+    
+    graph_largest_component : int
+        ..........................................................................
     
     graph_component_is_ring : dict
         Lookup in the form {int: bool} keyed by component labels with values as
@@ -373,6 +402,7 @@ class Network:
         n_components = w.n_components
         component_labels = w.component_labels
 
+        # is the network a single, fully-connected component?
         if n_components == 1:
             fully_connected = True  ################################# TEST
         else:
@@ -386,7 +416,6 @@ class Network:
         component_lengths = {}  ######################################### TEST
         component_vertices = {}  ######################################### TEST
         component_vertex_count = {}  ###################################### TEST
-
         cp_labs_ = set(w.component_labels)
         l2c_ = link2component.items()
         for cpl in cp_labs_:
@@ -398,10 +427,7 @@ class Network:
             component_vertex_count[cpl] = len(component_vertices[cpl])
 
         # longest and largest components ############################################################### TEST
-        # cpls = component_lengths
         longest_component = max(component_lengths, key=component_lengths.get)
-        # )  ############################################################### TEST
-        # cpvc = component_vertex_count
         largest_component = max(component_vertex_count, key=component_vertex_count.get)
 
         # component to ring lookup
