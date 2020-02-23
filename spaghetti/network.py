@@ -2830,11 +2830,11 @@ def extract_component(net, component_id, weighting=None):
     Parameters
     ----------
     net : spaghetti.Network
-        .......................
+        Full network object.
     component_id : int
-        ............................
+        The ID of the desired network component.
     weighting : 
-        ................................
+        See the ``weightings`` keyword argument in ``spaghetti.Network``.
     
     Returns
     -------
@@ -2844,7 +2844,7 @@ def extract_component(net, component_id, weighting=None):
     """
 
     def _reassign(attr, cid):
-        """"""
+        """Helper for reassigning attributes."""
 
         # set for each attribute(s)
 
