@@ -1,6 +1,6 @@
 from collections import defaultdict, OrderedDict
 from itertools import islice
-import copy, os, pickle
+import copy, os, pickle, warnings
 
 import numpy
 
@@ -113,7 +113,14 @@ class Network:
     
     network_n_components : int
         Count of connected components in the network.
-
+    
+    
+    
+    attrivutes.............................................................................................
+    
+    
+    
+    
     network_component_labels : numpy.ndarray
         Component labels for network arcs.
     
@@ -278,8 +285,8 @@ class Network:
                 self.w_network = self.contiguityweights(
                     graph=as_graph, weightings=weightings
                 )
-                # extract connected components from the `w_network`
-                self.extract_components(self.w_network, graph=as_graph)
+                # identify connected components from the `w_network`
+                self.identify_components(self.w_network, graph=as_graph)
 
             # extract the graph -- repeat similar as above
             # for extracting the network
@@ -295,7 +302,7 @@ class Network:
                     self.w_graph = self.contiguityweights(
                         graph=as_graph, weightings=weightings
                     )
-                    self.extract_components(self.w_graph, graph=as_graph)
+                    self.identify_components(self.w_graph, graph=as_graph)
 
             # sorted list of vertex IDs
             self.vertex_list = sorted(self.vertices.values())
@@ -337,8 +344,8 @@ class Network:
 
         return tuple(out_v)
 
-    def extract_components(self, w, graph=False):
-        """Extract connected component information from a
+    def identify_components(self, w, graph=False):
+        """Identify connected component information from a
         ``libpysal.weights.W`` object
         
         Parameters
@@ -369,7 +376,7 @@ class Network:
         # link to component lookup
         link2component = dict(zip(links, component_labels))
 
-        # component ID to links lookup
+        # component ID to links lookup ###################################################### this was where longest, largest, compoment lenght, comp vertex count?
         component2link = {}
         cp_labs = set(w.component_labels)
         for cpl in cp_labs:
@@ -377,7 +384,7 @@ class Network:
                 [k for k, v in link2component.items() if v == cpl]
             )
 
-        # component to ring lookup
+        # component to ring lookup ####################################################### ring should checkout adjacencylist, not W
         component_is_ring = {}
         for k, vs in component2link.items():
             component_is_ring[k] = True
@@ -391,7 +398,7 @@ class Network:
         else:
             c2l_attr_name = "component2arc"
 
-        # set all new variables into list
+        # set all new variables into list ################################################### more attributes here?
         extracted_attrs = [
             ["n_components", n_components],
             ["component_labels", component_labels],
@@ -2750,6 +2757,100 @@ class Network:
         return self
 
 
+def extract_component(net, component_id, weighting=None):
+    """Extract a single component from a network object.
+    
+    Parameters
+    ----------
+    net : spaghetti.Network
+        .......................
+    component_id : int
+        ............................
+    weighting : 
+        ................................
+    
+    Returns
+    -------
+    cnet : spaghetti.Network
+        The pruned network containing the component specified in
+        ``component_id``.
+    """
+
+    def _reassign(attr, cid):
+        """"""
+
+        # set for each attribute(s)
+
+        if attr == "non_articulation_points":
+
+            return
+
+        # resassing others...
+
+        # reassign attributes
+        for a, av in zip(attr, _val):
+            setattr(cnet, a, av)
+
+    # provide warning (for now) if the network contains a point pattern
+    if hasattr(net, "pointpattern"):
+        msg = "There is a least one point pattern associated with the network."
+        msg += " Component extraction should be performed prior to snapping"
+        msg += " point patterns to the network object; failing to do so may"
+        msg += " lead to unexpected results."
+        warnings.warn()
+
+    cnet = copy.deepcopy(net)
+
+    # set labels
+    _n, _a, _g, _e = "network", "arc", "graph", "edge"
+    obj_type = [_n]
+    obj = [_a]
+    hasgraph = False
+    if hasattr(cnet, "w_graph"):
+        obj_type += [_g]
+        obj += [_e]
+        hasgraph = True
+
+    # attributes to reassign
+    update_attributes = [
+        "network_fully_connected",
+        "graph_fully_connected",
+        "network_n_components",
+        "graph_n_components",
+        "network_largest_component",
+        "network_longest_component",
+        "graph_largest_component",
+        "graph_longest_component",
+        "vertex_list",
+        "vertex_coords",
+        "vertices",
+        "network_component_vertices",
+        "adjacencylist",
+        "non_articulation_points",
+        "network_component2arc",
+        "arcs",
+        "arc_lengths",
+        "edges",
+        "edge_lengths",
+        "network_component_is_ring",
+        "graph_component_is_ring",
+        "network_component_labels",
+        "graph_component_labels",
+        "network_component_lengths",
+        "graph_component_lengths",
+        "network_component_vertex_count",
+        "graph_component_vertex_count",
+        "w_network",
+        "w_graph",
+    ]
+
+    for attribute in update_attributes:
+        _reassign(attribute, component_id)
+
+    # spatial weights...
+    # contiguityweights...
+
+
 @requires("geopandas", "shapely")
 def element_as_gdf(
     net,
@@ -2815,6 +2916,8 @@ def element_as_gdf(
         Network point elements (either vertices or ``network.PointPattern``
         points) as a ``geopandas.GeoDataFrame`` of ``shapely.geometry.Point``
         objects with an ``"id"`` column and ``"geometry""`` column.
+        If the network object has a ``network_component_vertices`` attribute,
+        then component labels are also added in a column.
     
     lines : geopandas.GeoDataFrame
         Network arc elements as a ``geopandas.GeoDataFrame`` of

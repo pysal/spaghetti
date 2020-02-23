@@ -634,7 +634,18 @@ def _points_as_gdf(
     points = geopandas.GeoDataFrame(pts_list, columns=[id_col, geom_col])
     points.geometry = points.geometry.apply(lambda p: Point(p))
 
-    return points
+    # add extra column for component vertex
+    #
+    #
+    # if hasattr(net, "network_component_labels"):##################################### mapper
+    #
+    # k,v for v,k if mmmmmm in...... ?
+    #
+    #    arcs["comp_label"] = net.network_component_labels
+    #
+    # .......................
+    #
+    # return points
 
 
 @requires("geopandas", "shapely")
