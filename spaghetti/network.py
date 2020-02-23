@@ -373,14 +373,27 @@ class Network:
         n_components = w.n_components
         component_labels = w.component_labels
 
+        if (
+            n_components == 1
+        ):  ############################################################### TEST
+            fully_connected = True  ############################################################### TEST
+        else:
+            fully_connected = False  ############################################################### TEST
+
         # link to component lookup
         link2component = dict(zip(links, component_labels))
 
-        # component ID to links lookup ###################################################### this was where longest, largest, compoment lenght, comp vertex count?
+        # component ID lookups: links, lengths, vertices, vertex counts
         component2link = {}
-        component_lengths = {}
-        component_vertices = {}
-        component_vertex_count = {}
+        component_lengths = (
+            {}
+        )  ############################################################### TEST
+        component_vertices = (
+            {}
+        )  ############################################################### TEST
+        component_vertex_count = (
+            {}
+        )  ############################################################### TEST
 
         cp_labs_ = set(w.component_labels)
         l2c_ = link2component.items()
@@ -389,16 +402,29 @@ class Network:
             c2l_ = component2link[cpl]
             arclens_ = self.arc_lengths.items()
             component_lengths[cpl] = sum([v for k, v in arclens_ if k in c2l_])
-            component_vertices[cpl] = set([v for l in c2l_ for v in l])
+            component_vertices[cpl] = list(set([v for l in c2l_ for v in l]))
             component_vertex_count[cpl] = len(component_vertices[cpl])
 
-        # component to ring lookup ####################################################### ring should checkout adjacencylist, not W
-        component_is_ring = {}
-        for k, vs in component2link.items():
-            component_is_ring[k] = True
-            for v in vs:
-                if len(w.neighbors[v]) != 2:
-                    component_is_ring[k] = False
+        # longest and largest components
+        cpls = component_lengths
+        longest_component = max(
+            cpls.keys(), key=(lambda k: cpls[k])
+        )  ############################################################### TEST
+        cpvc = component_vertex_count
+        largest_component = max(
+            cpvc.keys(), key=(lambda k: cpvc[k])
+        )  ############################################################### TEST
+
+        # component to ring lookup
+        component_is_ring = (
+            {}
+        )  ############################################################### TEST
+        adj_ = self.adjacencylist.items()
+        for comp, verts in component_vertices.items():
+            component_is_ring[comp] = False
+            _2neighs = [len(neighs) == 2 for v, neighs in adj_ if v in verts]
+            if all(_2neighs):
+                component_is_ring[comp] = True
 
         # attribute label name depends on object type
         if graph:
@@ -406,11 +432,17 @@ class Network:
         else:
             c2l_attr_name = "component2arc"
 
-        # set all new variables into list ################################################### more attributes here?
+        # set all new variables into list
         extracted_attrs = [
+            ["fully_connected", fully_connected],
             ["n_components", n_components],
             ["component_labels", component_labels],
             [c2l_attr_name, component2link],
+            ["component_lengths", component_lengths],
+            ["component_vertices", component_vertices],
+            ["component_vertex_count", component_vertex_count],
+            ["longest_component", longest_component],
+            ["largest_component", largest_component],
             ["component_is_ring", component_is_ring],
         ]
 

@@ -645,7 +645,8 @@ def _points_as_gdf(
     #
     # .......................
     #
-    # return points
+
+    return points
 
 
 @requires("geopandas", "shapely")
