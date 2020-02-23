@@ -2840,6 +2840,24 @@ def extract_component(net, component_id, weightings=None):
     cnet : spaghetti.Network
         The pruned network containing the component specified in
         ``component_id``.
+    
+    Notes
+    -----
+    
+    Point patterns are not reassigned when extracting a component. Therefore,
+    component extraction should be performed prior to snapping any point
+    sets onto the network. Also, if the ``spaghetti.Network`` object
+    has ``distance_matrix`` or ``network_trees`` attributes, they are
+    deleted and must be computed again on the single component.
+    
+    Examples
+    --------
+    
+    xxxxxxxx
+    
+    >>>
+    
+    
     """
 
     def _reassign(attr, cid):
@@ -2921,13 +2939,25 @@ def extract_component(net, component_id, weightings=None):
             setattr(cnet, a, av)
 
     # provide warning (for now) if the network contains a point pattern
-    if hasattr(net, "pointpattern"):
+    if hasattr(net, "pointpatterns"):
         msg = "There is a least one point pattern associated with the network."
         msg += " Component extraction should be performed prior to snapping"
         msg += " point patterns to the network object; failing to do so may"
         msg += " lead to unexpected results."
-        warnings.warn()
+        warnings.warn(msg)
+    # provide warning (for now) if the network contains a point pattern
+    dm, nt = "distance_matrix", "network_trees"
+    if hasattr(net, dm) or hasattr(net, nt):
+        msg = "Either one or both (%s, %s) attributes" % (dm, nt)
+        msg += " are present and will be deleted. These must be"
+        msg += " recalculated following component extraction."
+        warnings.warn(msg)
+        for attr in [dm, nt]:
+            if hasattr(net, attr):
+                _attr = getattr(net, attr)
+                del _attr
 
+    # make initial copy of the network
     cnet = copy.deepcopy(net)
 
     # set labels
