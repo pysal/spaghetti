@@ -1,5 +1,6 @@
 .. documentation master file
 
+
 `spaghetti`
 ===========
 
@@ -21,25 +22,42 @@ and usage tutorials are provided here through the links above.
         <div class="col-sm-.5 col-xs-hidden">
         </div>
         <div class="col-md-4 col-xs-15">
-            <a href="https://pysal.org/spaghetti/notebooks/quickstart.html" class="thumbnail">
-                <img src="_static/images/net_rep.png" class="img-responsive center-block">
+            <a 
+                href="https://pysal.org/spaghetti/notebooks/quickstart.html" 
+                class="thumbnail"
+            >
+                <img 
+                    src="_static/images/net_rep.png" 
+                    class="img-responsive center-block"
+                >
                 <div class="caption text-center">
                 <h6>Network Representation</h6>
                 </div>
             </a>
         </div>
         <div class="col-sm-4 col-xs-15">
-            <a href="https://pysal.org/spaghetti/notebooks/network-analysis.html" class="thumbnail">
-                <img src="_static/images/network_k.png" class="img-responsive center-block">
+            <a 
+                href="https://pysal.org/spaghetti/notebooks/network-analysis.html" 
+                class="thumbnail"
+            >
+                <img 
+                    src="_static/images/network_k.png" 
+                    class="img-responsive center-block"
+                >
                 <div class="caption text-center">
                 <h6>Spatial Network Analysis</h6>
                 </div>
             </a>
         </div>
         <div class="col-sm-4 col-xs-15">
-            <a href="https://pysal.org/spaghetti/notebooks/facility-location.html" class="thumbnail">
-                <img src="_static/images/facility_location.png"
-                class="img-responsive center-block">
+            <a 
+                href="https://pysal.org/spaghetti/notebooks/facility-location.html" 
+                class="thumbnail"
+            >
+                <img 
+                    src="_static/images/facility_location.png"
+                    class="img-responsive center-block"
+                >
                 <div class="caption text-center">
                 <h6>Optimal Facility Location</h6>
                 </div>
@@ -75,6 +93,17 @@ If you use PySAL-spaghetti in a scientific publication, we would appreciate usin
         doi      = {10.5281/zenodo.1343650},
         keywords = {graph-theory,network-analysis,python,spatial-networks,topology}
       }
+
+
+.. raw:: html
+
+    <img 
+        src="_static/images/pysal_logo.png" 
+        class="img-responsive center-block" 
+        alt="PySAL Logo" 
+        width="400" 
+        height="400"
+    >
 
 
 .. toctree::

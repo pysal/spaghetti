@@ -2832,7 +2832,7 @@ def extract_component(net, component_id, weightings=None):
         Full network object.
     component_id : int
         The ID of the desired network component.
-    weightings : 
+    weightings : {dict, bool}
         See the ``weightings`` keyword argument in ``spaghetti.Network``.
     
     Returns
