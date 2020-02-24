@@ -1,6 +1,20 @@
 
 # Changes
 
+## Version 1.4.2.post2 (2020-02-24)
+
+We closed a total of 0 issues (enhancements and bug fixes) through 1 pull requests, since our last release on 2020-02-24.
+
+## Pull Requests
+  - Docs for v1.4.2.post1 were not rebuilt (#434)
+
+The following individuals contributed to this release:
+
+  - James Gaboardi
+
+------------------------------------
+
+
 ## Version 1.4.2post1 (2020-02-24)
 
 We closed a total of 0 issues (enhancements and bug fixes) through 2 pull requests, since our last release on 2020-02-24.
