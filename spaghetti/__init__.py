@@ -1,4 +1,4 @@
-__version__ = "1.4.2post1"
+__version__ = "1.4.2.post2"
 """
 :mod:`spaghetti` --- Spatial Graphs: Networks, Topology, & Inference
 ====================================================================
