@@ -2855,8 +2855,10 @@ def extract_component(net, component_id, weightings=None):
     
     Instantiate a network object.
     
-    >>>
-    
+    >>> from libpysal import examples
+    >>> import spaghetti
+    >>> snow_net = examples.get_path("Soho_Network.shp")
+    >>> ntw = spaghetti.Network(in_data=snow_net, extractgraph=False)
     
     The network is not fully connected.
     
@@ -2866,17 +2868,15 @@ def extract_component(net, component_id, weightings=None):
     Examine the number of network components.
     
     >>> ntw.network_n_components
-    ###
-    >>> ntw.network_component_lengths
-    ###
+    45
     
     Extract the longest component.
     
-    >>> longest = spaghetti.extract_component(ntw, ntw.network_largest_component)
+    >>> longest = spaghetti.extract_component(ntw, ntw.network_longest_component)
     >>> longest.network_n_components
-    ###
-    >>> ntw.network_component_lengths
-    ###
+    1
+    >>> longest.network_component_lengths
+    {0: 13508.169276875526}
     
     """
 
@@ -2932,11 +2932,16 @@ def extract_component(net, component_id, weightings=None):
                 supp += [_g + "_component2" + _e]
             _val = [{cid: getattr(cnet, s)[cid]} for s in supp]
             attr = supp
-        elif attr in ["arcs", "edges"]:
+        elif attr == "arcs":
+            # reassigns both arcs and edges
             c2 = "_component2"
-            supp = _g + c2 + _e if attr == "edges" else _n + c2 + _a
-            _val = [getattr(cnet, supp)[cid]]
+            supp = [_n + c2 + _a]
+            if hasgraph:
+                supp += [_g + c2 + _e]
+            _val = [getattr(cnet, s)[cid] for s in supp]
             attr = [attr]
+            if hasgraph:
+                attr += ["edges"]
         elif attr == "_component_labels":
             # reassigns both network and graph _component_labels
             supp = [len(getattr(cnet, o + "s")) for o in obj]
@@ -3010,7 +3015,7 @@ def extract_component(net, component_id, weightings=None):
         "_component_labels",
     ]
     if hasgraph:
-        update_attributes += ["non_articulation_points", "edges"]
+        update_attributes.append("non_articulation_points")
 
     # reassign attributes
     for attribute in update_attributes:
@@ -3129,11 +3134,12 @@ def element_as_gdf(
     ...     ntw, vertices=True, arcs=True
     ... )
     
-    Examine the first vertex.
+    Examine the first vertex. It is a member of the component labeled ``0``.
     
     >>> vertices_df.loc[0]
-    id                                          0
-    geometry    POINT (728368.04762 877125.89535)
+    id                                            0
+    geometry      POINT (728368.04762 877125.89535)
+    comp_label                                    0
     Name: 0, dtype: object
     
     Calculate the total length of the network.
