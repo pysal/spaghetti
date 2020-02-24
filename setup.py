@@ -4,6 +4,12 @@ from distutils.command.build_py import build_py
 
 package = "spaghetti"
 
+# This check resolves conda-forge build failures
+# See the link below for original solution
+# https://github.com/pydata/xarray/pull/2643/files#diff-2eeaed663bd0d25b7e608891384b7298R29-R30
+needs_pytest = {"pytest", "test", "ptr"}.intersection(sys.argv)
+setup_requires = ["pytest-runner"] if needs_pytest else []
+
 # Get __version__ from package/__init__.py
 with open(package + "/__init__.py", "r") as f:
     exec(f.readline())
@@ -66,7 +72,7 @@ def setup_package():
         download_url="https://pypi.org/project/" + package,
         maintainer="James D. Gaboardi",
         maintainer_email="jgaboardi@gmail.com",
-        setup_requires=["pytest-runner"],
+        setup_requires=setup_requires,
         tests_require=["pytest"],
         keywords="spatial statistics, networks, graphs",
         classifiers=[
