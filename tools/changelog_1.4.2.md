@@ -1,0 +1,71 @@
+# Changes
+
+Version 1.4.2 (2020-02-24)
+
+We closed a total of 57 issues (enhancements and bug fixes) through 18 pull requests, since our last release on 2020-01-25.
+
+## Issues Closed
+  - updating README (#429)
+  - [WIP][ENH] longest and largest network components (#424)
+  - Add a fully connected attribute (#425)
+  - [ENH] longest/largest connected component (#414)
+  - add logos to website (#345)
+  - attempting fast finish again (#428)
+  - pushing fix for environment.yml (#423)
+  - Add 3.8 as a supported Python version in docs (#422)
+  - [ENH] matplotlib-scalebar for notebooks/binders (#416)
+  - using a true scalebar in notebook plots (#421)
+  - [REQ] requirements for notebooks/binders? (#413)
+  - adding notebook reqs files (#420)
+  - support multiplatform testing (#407)
+  - make sure data set is downloaded for appveyor.yml (#419)
+  - Migrate testing functionality from nose to pytest (#417)
+  - [ENH] moving towards multi-platform testing (#418)
+  - [On Hold] too many emails from Travis CI (#322)
+  - origin-destination point patterns for shortest_paths() (#412)
+  - The Transportation Problem notebook (#103)
+  - transportation problem ipynb and type-a to type-b shortest paths (#415)
+  - [WIP][ENH] origin for lattice (#405)
+  - add testing for Python 3.8 (#408)
+  - [BUG] typo in Travis CI badge URL (#410)
+  - silently hands RuntimeWarning in NetworkK (#411)
+  - adding py3.8 to travis (#409)
+  - [DOC] notebook doc pngs (#406)
+  - release v1.4.1 (#365)
+  - rebuilding docs for version bump (#402)
+  - Version bump to v1.4.1 (#401)
+  - Binder is broken for network-analysis (#399)
+  - Some tutorial links giving 404 (#400)
+  - Fix links 2 (#398)
+  - Fix links for notebooks (#397)
+  - [DOC] Reorg for tutorials page (#396)
+  - Traveling Salesperson Notebook (#110)
+  - create new TSP notebook with pulp (#100)
+  - [WIP] TSP notebook (#386)
+  - [DOC] paths docstring missing (#394)
+  - correcting routes doc (#395)
+
+## Pull Requests
+  - updating README (#429)
+  - [WIP][ENH] longest and largest network components (#424)
+  - pushing fix for environment.yml (#423)
+  - Add 3.8 as a supported Python version in docs (#422)
+  - using a true scalebar in notebook plots (#421)
+  - adding notebook reqs files (#420)
+  - make sure data set is downloaded for appveyor.yml (#419)
+  - [ENH] moving towards multi-platform testing (#418)
+  - transportation problem ipynb and type-a to type-b shortest paths (#415)
+  - [WIP][ENH] origin for lattice (#405)
+  - adding py3.8 to travis (#409)
+  - [DOC] notebook doc pngs (#406)
+  - rebuilding docs for version bump (#402)
+  - Version bump to v1.4.1 (#401)
+  - Fix links 2 (#398)
+  - Fix links for notebooks (#397)
+  - [WIP] TSP notebook (#386)
+  - correcting routes doc (#395)
+
+The following individuals contributed to this release:
+
+  - James Gaboardi
+  - Serge Rey
