@@ -23,8 +23,8 @@ exclude_lines =
 
 ignore_errors = True
 omit =
-    tests/*
-    __init__.py
+    */tests/*
+    *__init__.py
 
 [html]
 directory = coverage_html_report
