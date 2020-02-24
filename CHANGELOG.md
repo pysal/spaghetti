@@ -1,6 +1,21 @@
 
 # Changes
 
+## Version 1.4.2post1 (2020-02-24)
+
+We closed a total of 0 issues (enhancements and bug fixes) through 2 pull requests, since our last release on 2020-02-24.
+
+## Pull Requests
+  - version bump v1.4.2 --> 1.4.2post1 (#432)
+  - fixing conda-forge failure (#431)
+
+The following individuals contributed to this release:
+
+  - James Gaboardi
+
+------------------------------------
+
+
 ## Version 1.4.2 (2020-02-24)
 
 We closed a total of 57 issues (enhancements and bug fixes) through 18 pull requests, since our last release on 2020-01-25.
@@ -57,6 +72,7 @@ We closed a total of 57 issues (enhancements and bug fixes) through 18 pull requ
   - correcting routes doc (#395)
 
 ## Pull Requests
+  - final PR before v1.4.2 release — updating CHANGELOG.md (#430)
   - updating README (#429)
   - [WIP][ENH] longest and largest network components (#424)
   - pushing fix for environment.yml (#423)
