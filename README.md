@@ -1,3 +1,6 @@
+<p align="center">
+<img src="figs/pysal_logo.png" width="200" height="200" />
+</p>
 
 [pysal/spaghetti](http://pysal.org/spaghetti/)
 =================================
@@ -7,9 +10,9 @@
 
 Spaghetti is an open-source Python library for the analysis of network-based spatial data. Originating from the `network` module in [PySAL (Python Spatial Analysis Library)](http://pysal.org), it is under active development for the inclusion of newly proposed methods for building graph-theoretic networks and the analysis of network events. This package is part of a [refactoring of PySAL](https://github.com/pysal/pysal/wiki/PEP-13:-Refactor-PySAL-Using-Submodules).
 
-*An example of snapping observation points to a network and plotting:*
+*An example of shortest path plotting, routes originating from observation 0:*
 <p align="center">
-<img src="figs/snap_plot.png" width="520" height="360" />
+<img src="figs/shortest_path_plot.png" width="360" height="360" />
 </p>
 
 
