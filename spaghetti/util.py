@@ -634,6 +634,13 @@ def _points_as_gdf(
     points = geopandas.GeoDataFrame(pts_list, columns=[id_col, geom_col])
     points.geometry = points.geometry.apply(lambda p: Point(p))
 
+    # additional columns
+    ncv_tag = "network_component_vertices"
+    if hasattr(net, ncv_tag):
+        ncv = getattr(net, ncv_tag)
+        ncv_map = {v: k for k, verts in ncv.items() for v in verts}
+        points["comp_label"] = points[id_col].map(ncv_map)
+
     return points
 
 

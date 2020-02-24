@@ -150,18 +150,24 @@ class TestNetwork(unittest.TestCase):
         self.assertEqual(observed_vertices, known_vertices)
 
         # asymmetric point pattern
-        known_vertices = 4
         bounds, h, v = (0, 0, 3, 3), 2, 2
         lattice = spaghetti.regular_lattice(bounds, h, nv=v, exterior=False)
         ntw = spaghetti.Network(in_data=lattice)
         points1 = [cg.Point((0.5, 0.5)), cg.Point((2.5, 2.5))]
-        points2 = [cg.Point((0.5, 2.5)), cg.Point((2.5, 0.5))]
+        points2 = [cg.Point((0.5, 2.5)), cg.Point((2.5, 0.5)), cg.Point((0.75, 0.6))]
         ntw.snapobservations(points1, "points1")
         ntw.snapobservations(points2, "points2")
         _, tree = ntw.allneighbordistances("points1", "points2", gen_tree=True)
         observed_paths = ntw.shortest_paths(tree, "points1", pp_dest="points2")
-        observed_vertices = len(observed_paths[3][1].vertices)
-        self.assertEqual(observed_vertices, known_vertices)
+
+        # observed values
+        observed_vertices1 = observed_paths[2][1].vertices
+        observed_vertices2 = len(observed_paths[3][1].vertices)
+        # known values
+        known_vertices1 = [(1.0, 0.5), (1.0, 0.6)]
+        known_vertices2 = 4
+        self.assertEqual(observed_vertices1, observed_vertices1)
+        self.assertEqual(observed_vertices2, known_vertices2)
 
         # test error
         with self.assertRaises(AttributeError):
@@ -233,6 +239,128 @@ class TestNetwork(unittest.TestCase):
         self.ntw_from_shp.vertex_sig = None
         obs_xy_roundNone = self.ntw_from_shp._round_sig((1215, 1865))
         self.assertEqual(obs_xy_roundNone, (x_roundNone, y_roundNone))
+
+    def test_connected_components(self):
+
+        bounds = (0, 0, 2, 2)
+        h, v = 1, 1
+        lattice = spaghetti.regular_lattice(bounds, h, nv=v, exterior=False)
+        ring = [
+            cg.Chain([cg.Point([3, 1]), cg.Point([3.25, 1.25])]),
+            cg.Chain([cg.Point([3.25, 1.25]), cg.Point([3.375, 1.25])]),
+            cg.Chain([cg.Point([3.375, 1.25]), cg.Point([3.5, 1.25])]),
+            cg.Chain([cg.Point([3.5, 1.25]), cg.Point([3.75, 1])]),
+            cg.Chain([cg.Point([3.75, 1]), cg.Point([3.5, 0.75])]),
+            cg.Chain([cg.Point([3.5, 0.75]), cg.Point([3.375, 0.75])]),
+            cg.Chain([cg.Point([3.375, 0.75]), cg.Point([3.25, 0.75])]),
+            cg.Chain([cg.Point([3.25, 0.75]), cg.Point([3, 1])]),
+        ]
+        extension = [cg.Chain([cg.Point([1, 2]), cg.Point([2, 2]), cg.Point([2, 1])])]
+        lines = lattice + ring + extension
+        ntw = spaghetti.Network(in_data=lines)
+        # test warnings
+        ntw.snapobservations(
+            [cg.Point([0.5, 0.5]), cg.Point([0.5, 2.0])], "point", attribute=False
+        )
+        s2s, tree = ntw.allneighbordistances("point", gen_tree=True)
+
+        # observed values
+        observed_connected = ntw.network_fully_connected
+        # known values
+        known_connected = False
+        self.assertEqual(observed_connected, known_connected)
+
+        # observed values
+        observed_component_vertices = ntw.network_component_vertices
+        # known values
+        known_component_vertices = {
+            0: [0, 1, 2, 3, 4, 13],
+            1: [5, 6, 7, 8, 9, 10, 11, 12],
+        }
+        self.assertEqual(observed_component_vertices, known_component_vertices)
+
+        # observed values
+        observed_network_vtx = ntw.network_component_vertex_count
+        observed_graph_vtx = ntw.graph_component_vertex_count
+        # known values
+        known_network_vtx = {0: 6, 1: 8}
+        known_graph_vtx = {0: 3, 1: 8}
+        self.assertEqual(observed_network_vtx, known_network_vtx)
+        self.assertEqual(observed_graph_vtx, known_graph_vtx)
+
+        # observed values
+        observed_edge_lengths = ntw.edge_lengths[(0, 1)]
+        # known values
+        known_edge_lengths = 1.0
+        self.assertEqual(observed_edge_lengths, known_edge_lengths)
+
+        # observed values
+        observed_largest_net = ntw.network_largest_component
+        observed_longest_graph = ntw.graph_longest_component
+        # known values
+        known_largest = 1
+        known_longest = 0
+        self.assertEqual(observed_largest_net, known_largest)
+        self.assertEqual(observed_longest_graph, known_longest)
+
+        # observed values
+        observed_lengths = ntw.network_component_lengths
+        # known values
+        known_lengths = {0: 6.0, 1: 1.914213562373095}
+        self.assertEqual(observed_lengths, known_lengths)
+
+    def test_extract_component(self):
+
+        bounds = (0, 0, 2, 2)
+        h, v = 1, 1
+        lattice = spaghetti.regular_lattice(bounds, h, nv=v, exterior=False)
+        ring = [
+            cg.Chain([cg.Point([3, 1]), cg.Point([3.25, 1.25])]),
+            cg.Chain([cg.Point([3.25, 1.25]), cg.Point([3.375, 1.25])]),
+            cg.Chain([cg.Point([3.375, 1.25]), cg.Point([3.5, 1.25])]),
+            cg.Chain([cg.Point([3.5, 1.25]), cg.Point([3.75, 1])]),
+            cg.Chain([cg.Point([3.75, 1]), cg.Point([3.5, 0.75])]),
+            cg.Chain([cg.Point([3.5, 0.75]), cg.Point([3.375, 0.75])]),
+            cg.Chain([cg.Point([3.375, 0.75]), cg.Point([3.25, 0.75])]),
+            cg.Chain([cg.Point([3.25, 0.75]), cg.Point([3, 1])]),
+        ]
+        extension = [cg.Chain([cg.Point([1, 2]), cg.Point([2, 2]), cg.Point([2, 1])])]
+        lines = lattice + ring + extension
+        ntw = spaghetti.Network(in_data=lines)
+        # test warnings
+        ntw.snapobservations(
+            [cg.Point([0.5, 0.5]), cg.Point([0.5, 2.0])], "point", attribute=False
+        )
+        s2s, tree = ntw.allneighbordistances("point", gen_tree=True)
+
+        # test longest component
+        longest = spaghetti.extract_component(ntw, ntw.network_longest_component)
+        # observed values
+        observed_napts = longest.non_articulation_points
+        # known values
+        known_napts = [2, 4, 13]
+        self.assertEqual(observed_napts, known_napts)
+
+        # test largest component
+        largest = spaghetti.extract_component(ntw, ntw.network_largest_component)
+        # observed values
+        observed_arcs, observed_edges = largest.arcs, largest.edges
+        # known values
+        known_arcs = [
+            (5, 6),
+            (5, 12),
+            (6, 7),
+            (7, 8),
+            (8, 9),
+            (9, 10),
+            (10, 11),
+            (11, 12),
+        ]
+        known_edges = known_arcs
+        self.assertEqual(observed_arcs, known_arcs)
+        self.assertEqual(observed_arcs, known_edges)
+        self.assertEqual(observed_edges, known_arcs)
+        self.assertEqual(observed_edges, known_edges)
 
     def test_regular_lattice(self):
         # 4x4 regular lattice with the exterior

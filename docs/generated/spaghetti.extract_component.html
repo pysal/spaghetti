@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>spaghetti.extract_component &#8212; spaghetti v1.4.2 Manual</title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pysal-styles.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"TeX": {"equationNumbers": {"autoNumber": "AMS", "useLabelIds": true}}, "tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="shortcut icon" href="../_static/pysal_favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="spaghetti.element_as_gdf" href="spaghetti.element_as_gdf.html" />
+    <link rel="prev" title="spaghetti.PointPattern" href="spaghetti.PointPattern.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          spaghetti</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.4.2</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../installation.html">Installation</a></li>
+                <li><a href="../tutorials.html">Tutorials</a></li>
+                <li><a href="../api.html">API</a></li>
+                <li><a href="../references.html">References</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#installing-with-conda-via-spaghetti-feedstock-highly-recommended">Installing with <code class="docutils literal notranslate"><span class="pre">conda</span></code> via spaghetti-feedstock (highly recommended)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#installing-with-python-package-index">Installing with Python Package Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#development-version">Development Version</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/quickstart.html">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/connected-components.html">Connected components in a spatial network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/shortest-path-visualization.html">Generating regular lattices and visualizing shortest paths</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/network-analysis.html">Spatial network analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/facility-location.html">Demostrating network-based optimal facility location modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/transportation-problem.html">The Transportation Problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/tsp.html">The Traveling Sales(man)(person) Problem — TSP</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../api.html#network-feature-instantiation">Network feature instantiation</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#network-feature-extraction-and-creation">Network feature extraction and creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#save-and-load-a-network">Save and load a network</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">spaghetti.extract_component</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="spaghetti-extract-component">
+<h1>spaghetti.extract_component<a class="headerlink" href="#spaghetti-extract-component" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="spaghetti.extract_component">
+<code class="sig-prename descclassname">spaghetti.</code><code class="sig-name descname">extract_component</code><span class="sig-paren">(</span><em class="sig-param">net</em>, <em class="sig-param">component_id</em>, <em class="sig-param">weightings=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#extract_component"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.extract_component" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract a single component from a network object.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>net</strong><span class="classifier"><a class="reference internal" href="spaghetti.Network.html#spaghetti.Network" title="spaghetti.Network"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network</span></code></a></span></dt><dd><p>Full network object.</p>
+</dd>
+<dt><strong>component_id</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The ID of the desired network component.</p>
+</dd>
+<dt><strong>weightings</strong><span class="classifier">{<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a>, <a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.8)"><span class="xref std std-ref">bool</span></a>}</span></dt><dd><p>See the <code class="docutils literal notranslate"><span class="pre">weightings</span></code> keyword argument in <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>cnet</strong><span class="classifier"><a class="reference internal" href="spaghetti.Network.html#spaghetti.Network" title="spaghetti.Network"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.Network</span></code></a></span></dt><dd><p>The pruned network containing the component specified in
+<code class="docutils literal notranslate"><span class="pre">component_id</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Point patterns are not reassigned when extracting a component. Therefore,
+component extraction should be performed prior to snapping any point
+sets onto the network. Also, if the <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object
+has <code class="docutils literal notranslate"><span class="pre">distance_matrix</span></code> or <code class="docutils literal notranslate"><span class="pre">network_trees</span></code> attributes, they are
+deleted and must be computed again on the single component.</p>
+<p class="rubric">Examples</p>
+<p>Instantiate a network object.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">libpysal</span> <span class="kn">import</span> <span class="n">examples</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">spaghetti</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">snow_net</span> <span class="o">=</span> <span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;Soho_Network.shp&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">in_data</span><span class="o">=</span><span class="n">snow_net</span><span class="p">,</span> <span class="n">extractgraph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The network is not fully connected.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span><span class="o">.</span><span class="n">network_fully_connected</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>Examine the number of network components.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span><span class="o">.</span><span class="n">network_n_components</span>
+<span class="go">45</span>
+</pre></div>
+</div>
+<p>Extract the longest component.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">longest</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">extract_component</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">ntw</span><span class="o">.</span><span class="n">network_longest_component</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">longest</span><span class="o">.</span><span class="n">network_n_components</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">longest</span><span class="o">.</span><span class="n">network_component_lengths</span>
+<span class="go">{0: 13508.169276875526}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+<div id="sourcelink">
+  <a href="../_sources/generated/spaghetti.extract_component.rst.txt"
+     rel="nofollow">Source</a>
+</div>
+      
+    </p>
+    <p>
+        &copy; Copyright 2018, pysal developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

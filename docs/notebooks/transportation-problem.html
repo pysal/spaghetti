@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>The Transportation Problem &#8212; spaghetti v1.4.1 Manual</title>
+    <title>The Transportation Problem &#8212; spaghetti v1.4.2 Manual</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/pysal-styles.css" />
@@ -42,7 +42,7 @@
         </button>
         <a class="navbar-brand" href="../index.html">
           spaghetti</a>
-        <span class="navbar-text navbar-version pull-left"><b>1.4.1</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>1.4.2</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -398,7 +398,7 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-02-18T20:54:04-05:00
+2020-02-23T16:43:34-05:00
 
 CPython 3.7.3
 IPython 7.10.2
@@ -440,12 +440,12 @@ interpreter: 64bit
 <div class="highlight"><pre>
 Using Python-MIP package version 1.6.8
 watermark 2.0.2
+matplotlib          3.1.2
+mip                 1.6.8
+numpy               1.17.3
 matplotlib_scalebar 0.6.1
 geopandas           0.6.2
-spaghetti           1.4.1
-matplotlib          3.1.2
-numpy               1.17.3
-mip                 1.6.8
+spaghetti           1.4.2
 
 </pre></div></div>
 </div>
@@ -1106,9 +1106,11 @@ to utilize a mathematical programming model to solve the microscope discrepency.
       <th></th>
       <th>id</th>
       <th>geometry</th>
+      <th>comp_label</th>
     </tr>
     <tr>
       <th>supply snapped</th>
+      <th></th>
       <th></th>
       <th></th>
     </tr>
@@ -1118,21 +1120,25 @@ to utilize a mathematical programming model to solve the microscope discrepency.
       <th>0</th>
       <td>0</td>
       <td>POINT (221677.280 268183.579)</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>1</th>
       <td>1</td>
       <td>POINT (221538.890 268184.326)</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>2</th>
       <td>2</td>
       <td>POINT (221847.381 267926.950)</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>3</th>
       <td>3</td>
       <td>POINT (221406.647 268046.397)</td>
+      <td>0</td>
     </tr>
   </tbody>
 </table>
@@ -1177,9 +1183,11 @@ to utilize a mathematical programming model to solve the microscope discrepency.
       <th></th>
       <th>id</th>
       <th>geometry</th>
+      <th>comp_label</th>
     </tr>
     <tr>
       <th>demand snapped</th>
+      <th></th>
       <th></th>
       <th></th>
     </tr>
@@ -1189,21 +1197,25 @@ to utilize a mathematical programming model to solve the microscope discrepency.
       <th>0</th>
       <td>0</td>
       <td>POINT (221052.520 268129.805)</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>1</th>
       <td>1</td>
       <td>POINT (221525.970 267187.138)</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>2</th>
       <td>2</td>
       <td>POINT (220504.172 268087.247)</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>3</th>
       <td>3</td>
       <td>POINT (221292.004 267684.336)</td>
+      <td>0</td>
     </tr>
   </tbody>
 </table>
@@ -1334,11 +1346,13 @@ array([[ 849.03214874, 1141.07882307, 1355.96894348],
       <th></th>
       <th>id</th>
       <th>geometry</th>
+      <th>comp_label</th>
       <th>dv</th>
       <th>s_i</th>
     </tr>
     <tr>
       <th>supply</th>
+      <th></th>
       <th></th>
       <th></th>
       <th></th>
@@ -1350,6 +1364,7 @@ array([[ 849.03214874, 1141.07882307, 1355.96894348],
       <th>0</th>
       <td>0</td>
       <td>POINT (221614.608 268182.322)</td>
+      <td>0</td>
       <td>s_0</td>
       <td>20</td>
     </tr>
@@ -1357,6 +1372,7 @@ array([[ 849.03214874, 1141.07882307, 1355.96894348],
       <th>1</th>
       <td>1</td>
       <td>POINT (221542.156 268184.287)</td>
+      <td>0</td>
       <td>s_1</td>
       <td>30</td>
     </tr>
@@ -1364,6 +1380,7 @@ array([[ 849.03214874, 1141.07882307, 1355.96894348],
       <th>2</th>
       <td>2</td>
       <td>POINT (221847.332 267982.491)</td>
+      <td>0</td>
       <td>s_2</td>
       <td>15</td>
     </tr>
@@ -1371,6 +1388,7 @@ array([[ 849.03214874, 1141.07882307, 1355.96894348],
       <th>3</th>
       <td>3</td>
       <td>POINT (221406.289 267990.060)</td>
+      <td>0</td>
       <td>s_3</td>
       <td>35</td>
     </tr>
@@ -1417,11 +1435,13 @@ array([[ 849.03214874, 1141.07882307, 1355.96894348],
       <th></th>
       <th>id</th>
       <th>geometry</th>
+      <th>comp_label</th>
       <th>dv</th>
       <th>d_j</th>
     </tr>
     <tr>
       <th>demand</th>
+      <th></th>
       <th></th>
       <th></th>
       <th></th>
@@ -1433,6 +1453,7 @@ array([[ 849.03214874, 1141.07882307, 1355.96894348],
       <th>0</th>
       <td>0</td>
       <td>POINT (221121.722 268130.726)</td>
+      <td>0</td>
       <td>d_0</td>
       <td>5</td>
     </tr>
@@ -1440,6 +1461,7 @@ array([[ 849.03214874, 1141.07882307, 1355.96894348],
       <th>1</th>
       <td>1</td>
       <td>POINT (221474.120 267187.725)</td>
+      <td>0</td>
       <td>d_1</td>
       <td>45</td>
     </tr>
@@ -1447,6 +1469,7 @@ array([[ 849.03214874, 1141.07882307, 1355.96894348],
       <th>2</th>
       <td>2</td>
       <td>POINT (220452.594 268086.776)</td>
+      <td>0</td>
       <td>d_2</td>
       <td>10</td>
     </tr>
@@ -1454,6 +1477,7 @@ array([[ 849.03214874, 1141.07882307, 1355.96894348],
       <th>3</th>
       <td>3</td>
       <td>POINT (221235.286 267684.289)</td>
+      <td>0</td>
       <td>d_3</td>
       <td>40</td>
     </tr>

@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>spaghetti.network &#8212; spaghetti v1.4.1 Manual</title>
+    <title>spaghetti.network &#8212; spaghetti v1.4.2 Manual</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/pysal-styles.css" />
@@ -40,7 +40,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           spaghetti</a>
-        <span class="navbar-text navbar-version pull-left"><b>1.4.1</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>1.4.2</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -128,7 +128,7 @@
   <h1>Source code for spaghetti.network</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span><span class="p">,</span> <span class="n">OrderedDict</span>
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">islice</span>
-<span class="kn">import</span> <span class="nn">copy</span><span class="o">,</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">copy</span><span class="o">,</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">pickle</span><span class="o">,</span> <span class="nn">warnings</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span>
 
@@ -196,8 +196,7 @@
 <span class="sd">        List of lists storing vertex adjacency.</span>
 <span class="sd">    </span>
 <span class="sd">    vertex_coords : dict</span>
-<span class="sd">        Keys are the vertex ID and values are the (x,y) coordinates</span>
-<span class="sd">        inverse to vertices.</span>
+<span class="sd">        Keys are vertex IDs and values are (x,y) coordinates of the vertices.</span>
 <span class="sd">    </span>
 <span class="sd">    vertex_list : list</span>
 <span class="sd">        List of vertex IDs.</span>
@@ -241,7 +240,11 @@
 <span class="sd">    </span>
 <span class="sd">    network_n_components : int</span>
 <span class="sd">        Count of connected components in the network.</span>
-
+<span class="sd">    </span>
+<span class="sd">    network_fully_connected : bool</span>
+<span class="sd">        ``True`` if the network representation is a single connected</span>
+<span class="sd">        component, otherwise ``False``.</span>
+<span class="sd">    </span>
 <span class="sd">    network_component_labels : numpy.ndarray</span>
 <span class="sd">        Component labels for network arcs.</span>
 <span class="sd">    </span>
@@ -249,6 +252,27 @@
 <span class="sd">        Lookup in the form {int: list} for arcs comprising network</span>
 <span class="sd">        connected components keyed by component labels with arcs in</span>
 <span class="sd">        a list as values.</span>
+<span class="sd">    </span>
+<span class="sd">    network_component_lengths : dict</span>
+<span class="sd">        Length of each network component (keyed by component label).</span>
+<span class="sd">        </span>
+<span class="sd">    network_longest_component : int</span>
+<span class="sd">        The ID of the longest component in the network. This is not</span>
+<span class="sd">        necessarily equal to ``network_largest_component``.</span>
+<span class="sd">        </span>
+<span class="sd">    network_component_vertices : dict</span>
+<span class="sd">        Lookup in the form {int: list} for vertices comprising network</span>
+<span class="sd">        connected components keyed by component labels with vertices in</span>
+<span class="sd">        a list as values.</span>
+<span class="sd">    </span>
+<span class="sd">    network_component_vertex_count : dict</span>
+<span class="sd">        The number of vertices in each network component</span>
+<span class="sd">        (keyed by component label).</span>
+<span class="sd">    </span>
+<span class="sd">    network_largest_component : int</span>
+<span class="sd">        The ID of the largest component in the network. Within ``spaghetti``</span>
+<span class="sd">        the largest component is the one with the most vertices. This is not</span>
+<span class="sd">        necessarily equal to ``network_longest_component``.</span>
 <span class="sd">    </span>
 <span class="sd">    network_component_is_ring : dict</span>
 <span class="sd">        Lookup in the form {int: bool} keyed by component labels with values</span>
@@ -260,6 +284,10 @@
 <span class="sd">    graph_n_components : int</span>
 <span class="sd">        Count of connected components in the network.</span>
 <span class="sd">    </span>
+<span class="sd">    graph_fully_connected : bool</span>
+<span class="sd">        ``True`` if the graph representation is a single connected</span>
+<span class="sd">        component, otherwise ``False``.</span>
+<span class="sd">    </span>
 <span class="sd">    graph_component_labels : numpy.ndarray</span>
 <span class="sd">        Component labels for graph edges.</span>
 <span class="sd">    </span>
@@ -267,6 +295,27 @@
 <span class="sd">        Lookup in the form {int: list} for edges comprising graph connected</span>
 <span class="sd">        components keyed by component labels with edges in a list</span>
 <span class="sd">        as values.</span>
+<span class="sd">    </span>
+<span class="sd">    graph_component_lengths : dict</span>
+<span class="sd">        Length of each graph component (keyed by component label).</span>
+<span class="sd">        </span>
+<span class="sd">    graph_longest_component : int</span>
+<span class="sd">        The ID of the longest component in the graph. This is not</span>
+<span class="sd">        necessarily equal to ``graph_largest_component``.</span>
+<span class="sd">        </span>
+<span class="sd">    graph_component_vertices : dict</span>
+<span class="sd">        Lookup in the form {int: list} for vertices comprising graph</span>
+<span class="sd">        connected components keyed by component labels with vertices in</span>
+<span class="sd">        a list as values.</span>
+<span class="sd">    </span>
+<span class="sd">    graph_component_vertex_count : dict</span>
+<span class="sd">        The number of vertices in each graph component</span>
+<span class="sd">        (keyed by component label).</span>
+<span class="sd">    </span>
+<span class="sd">    graph_largest_component : int</span>
+<span class="sd">        The ID of the largest component in the graph. Within ``spaghetti``</span>
+<span class="sd">        the largest component is the one with the most vertices. This is not</span>
+<span class="sd">        necessarily equal to ``graph_longest_component``.</span>
 <span class="sd">    </span>
 <span class="sd">    graph_component_is_ring : dict</span>
 <span class="sd">        Lookup in the form {int: bool} keyed by component labels with values as</span>
@@ -406,8 +455,8 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">w_network</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">contiguityweights</span><span class="p">(</span>
                     <span class="n">graph</span><span class="o">=</span><span class="n">as_graph</span><span class="p">,</span> <span class="n">weightings</span><span class="o">=</span><span class="n">weightings</span>
                 <span class="p">)</span>
-                <span class="c1"># extract connected components from the `w_network`</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">extract_components</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w_network</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="n">as_graph</span><span class="p">)</span>
+                <span class="c1"># identify connected components from the `w_network`</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">identify_components</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w_network</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="n">as_graph</span><span class="p">)</span>
 
             <span class="c1"># extract the graph -- repeat similar as above</span>
             <span class="c1"># for extracting the network</span>
@@ -423,7 +472,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">w_graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">contiguityweights</span><span class="p">(</span>
                         <span class="n">graph</span><span class="o">=</span><span class="n">as_graph</span><span class="p">,</span> <span class="n">weightings</span><span class="o">=</span><span class="n">weightings</span>
                     <span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">extract_components</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w_graph</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="n">as_graph</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">identify_components</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w_graph</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="n">as_graph</span><span class="p">)</span>
 
             <span class="c1"># sorted list of vertex IDs</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">vertex_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">values</span><span class="p">())</span></div>
@@ -465,8 +514,8 @@
 
         <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">out_v</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Network.extract_components"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.extract_components">[docs]</a>    <span class="k">def</span> <span class="nf">extract_components</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Extract connected component information from a</span>
+<div class="viewcode-block" id="Network.identify_components"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.identify_components">[docs]</a>    <span class="k">def</span> <span class="nf">identify_components</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Identify connected component information from a</span>
 <span class="sd">        ``libpysal.weights.W`` object</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
@@ -494,24 +543,42 @@
         <span class="n">n_components</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">n_components</span>
         <span class="n">component_labels</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">component_labels</span>
 
+        <span class="c1"># is the network a single, fully-connected component?</span>
+        <span class="k">if</span> <span class="n">n_components</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">fully_connected</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1">################################# TEST</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fully_connected</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1">################################## TEST</span>
+
         <span class="c1"># link to component lookup</span>
         <span class="n">link2component</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">links</span><span class="p">,</span> <span class="n">component_labels</span><span class="p">))</span>
 
-        <span class="c1"># component ID to links lookup</span>
+        <span class="c1"># component ID lookups: links, lengths, vertices, vertex counts</span>
         <span class="n">component2link</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">cp_labs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">component_labels</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">cpl</span> <span class="ow">in</span> <span class="n">cp_labs</span><span class="p">:</span>
-            <span class="n">component2link</span><span class="p">[</span><span class="n">cpl</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
-                <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">link2component</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="n">cpl</span><span class="p">]</span>
-            <span class="p">)</span>
+        <span class="n">component_lengths</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1">######################################### TEST</span>
+        <span class="n">component_vertices</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1">######################################### TEST</span>
+        <span class="n">component_vertex_count</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1">###################################### TEST</span>
+        <span class="n">cp_labs_</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">component_labels</span><span class="p">)</span>
+        <span class="n">l2c_</span> <span class="o">=</span> <span class="n">link2component</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">cpl</span> <span class="ow">in</span> <span class="n">cp_labs_</span><span class="p">:</span>
+            <span class="n">component2link</span><span class="p">[</span><span class="n">cpl</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">l2c_</span> <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="n">cpl</span><span class="p">])</span>
+            <span class="n">c2l_</span> <span class="o">=</span> <span class="n">component2link</span><span class="p">[</span><span class="n">cpl</span><span class="p">]</span>
+            <span class="n">arclens_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arc_lengths</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="n">component_lengths</span><span class="p">[</span><span class="n">cpl</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">arclens_</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">c2l_</span><span class="p">])</span>
+            <span class="n">component_vertices</span><span class="p">[</span><span class="n">cpl</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">([</span><span class="n">v</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">c2l_</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">l</span><span class="p">]))</span>
+            <span class="n">component_vertex_count</span><span class="p">[</span><span class="n">cpl</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">component_vertices</span><span class="p">[</span><span class="n">cpl</span><span class="p">])</span>
+
+        <span class="c1"># longest and largest components ############################################################### TEST</span>
+        <span class="n">longest_component</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">component_lengths</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">component_lengths</span><span class="o">.</span><span class="n">get</span><span class="p">)</span>
+        <span class="n">largest_component</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">component_vertex_count</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">component_vertex_count</span><span class="o">.</span><span class="n">get</span><span class="p">)</span>
 
         <span class="c1"># component to ring lookup</span>
-        <span class="n">component_is_ring</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">vs</span> <span class="ow">in</span> <span class="n">component2link</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">component_is_ring</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vs</span><span class="p">:</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">neighbors</span><span class="p">[</span><span class="n">v</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-                    <span class="n">component_is_ring</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">component_is_ring</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1">###################################### TEST</span>
+        <span class="n">adj_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">adjacencylist</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">comp</span><span class="p">,</span> <span class="n">verts</span> <span class="ow">in</span> <span class="n">component_vertices</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">component_is_ring</span><span class="p">[</span><span class="n">comp</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">_2neighs</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">neighs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">v</span><span class="p">,</span> <span class="n">neighs</span> <span class="ow">in</span> <span class="n">adj_</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">verts</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">_2neighs</span><span class="p">):</span>
+                <span class="n">component_is_ring</span><span class="p">[</span><span class="n">comp</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="c1"># attribute label name depends on object type</span>
         <span class="k">if</span> <span class="n">graph</span><span class="p">:</span>
@@ -521,9 +588,15 @@
 
         <span class="c1"># set all new variables into list</span>
         <span class="n">extracted_attrs</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">[</span><span class="s2">&quot;fully_connected&quot;</span><span class="p">,</span> <span class="n">fully_connected</span><span class="p">],</span>
             <span class="p">[</span><span class="s2">&quot;n_components&quot;</span><span class="p">,</span> <span class="n">n_components</span><span class="p">],</span>
             <span class="p">[</span><span class="s2">&quot;component_labels&quot;</span><span class="p">,</span> <span class="n">component_labels</span><span class="p">],</span>
             <span class="p">[</span><span class="n">c2l_attr_name</span><span class="p">,</span> <span class="n">component2link</span><span class="p">],</span>
+            <span class="p">[</span><span class="s2">&quot;component_lengths&quot;</span><span class="p">,</span> <span class="n">component_lengths</span><span class="p">],</span>
+            <span class="p">[</span><span class="s2">&quot;component_vertices&quot;</span><span class="p">,</span> <span class="n">component_vertices</span><span class="p">],</span>
+            <span class="p">[</span><span class="s2">&quot;component_vertex_count&quot;</span><span class="p">,</span> <span class="n">component_vertex_count</span><span class="p">],</span>
+            <span class="p">[</span><span class="s2">&quot;longest_component&quot;</span><span class="p">,</span> <span class="n">longest_component</span><span class="p">],</span>
+            <span class="p">[</span><span class="s2">&quot;largest_component&quot;</span><span class="p">,</span> <span class="n">largest_component</span><span class="p">],</span>
             <span class="p">[</span><span class="s2">&quot;component_is_ring&quot;</span><span class="p">,</span> <span class="n">component_is_ring</span><span class="p">],</span>
         <span class="p">]</span>
 
@@ -2878,6 +2951,212 @@
         <span class="k">return</span> <span class="bp">self</span></div></div>
 
 
+<div class="viewcode-block" id="extract_component"><a class="viewcode-back" href="../../generated/spaghetti.extract_component.html#spaghetti.extract_component">[docs]</a><span class="k">def</span> <span class="nf">extract_component</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">component_id</span><span class="p">,</span> <span class="n">weightings</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extract a single component from a network object.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    net : spaghetti.Network</span>
+<span class="sd">        Full network object.</span>
+<span class="sd">    component_id : int</span>
+<span class="sd">        The ID of the desired network component.</span>
+<span class="sd">    weightings : {dict, bool}</span>
+<span class="sd">        See the ``weightings`` keyword argument in ``spaghetti.Network``.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    cnet : spaghetti.Network</span>
+<span class="sd">        The pruned network containing the component specified in</span>
+<span class="sd">        ``component_id``.</span>
+<span class="sd">    </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    </span>
+<span class="sd">    Point patterns are not reassigned when extracting a component. Therefore,</span>
+<span class="sd">    component extraction should be performed prior to snapping any point</span>
+<span class="sd">    sets onto the network. Also, if the ``spaghetti.Network`` object</span>
+<span class="sd">    has ``distance_matrix`` or ``network_trees`` attributes, they are</span>
+<span class="sd">    deleted and must be computed again on the single component.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    </span>
+<span class="sd">    Instantiate a network object.</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; from libpysal import examples</span>
+<span class="sd">    &gt;&gt;&gt; import spaghetti</span>
+<span class="sd">    &gt;&gt;&gt; snow_net = examples.get_path(&quot;Soho_Network.shp&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; ntw = spaghetti.Network(in_data=snow_net, extractgraph=False)</span>
+<span class="sd">    </span>
+<span class="sd">    The network is not fully connected.</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; ntw.network_fully_connected</span>
+<span class="sd">    False</span>
+<span class="sd">    </span>
+<span class="sd">    Examine the number of network components.</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; ntw.network_n_components</span>
+<span class="sd">    45</span>
+<span class="sd">    </span>
+<span class="sd">    Extract the longest component.</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; longest = spaghetti.extract_component(ntw, ntw.network_longest_component)</span>
+<span class="sd">    &gt;&gt;&gt; longest.network_n_components</span>
+<span class="sd">    1</span>
+<span class="sd">    &gt;&gt;&gt; longest.network_component_lengths</span>
+<span class="sd">    {0: 13508.169276875526}</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_reassign</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">cid</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Helper for reassigning attributes.&quot;&quot;&quot;</span>
+
+        <span class="c1"># set for each attribute(s)</span>
+        <span class="k">if</span> <span class="n">attr</span> <span class="o">==</span> <span class="s2">&quot;_fully_connected&quot;</span><span class="p">:</span>
+            <span class="n">_val</span> <span class="o">=</span> <span class="p">[</span><span class="kc">True</span> <span class="k">for</span> <span class="n">objt</span> <span class="ow">in</span> <span class="n">obj_type</span><span class="p">]</span>
+            <span class="n">attr</span> <span class="o">=</span> <span class="p">[</span><span class="n">objt</span> <span class="o">+</span> <span class="n">attr</span> <span class="k">for</span> <span class="n">objt</span> <span class="ow">in</span> <span class="n">obj_type</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">attr</span> <span class="o">==</span> <span class="s2">&quot;_n_components&quot;</span><span class="p">:</span>
+            <span class="n">_val</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span> <span class="k">for</span> <span class="n">objt</span> <span class="ow">in</span> <span class="n">obj_type</span><span class="p">]</span>
+            <span class="n">attr</span> <span class="o">=</span> <span class="p">[</span><span class="n">objt</span> <span class="o">+</span> <span class="n">attr</span> <span class="k">for</span> <span class="n">objt</span> <span class="ow">in</span> <span class="n">obj_type</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">attr</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;_longest_component&quot;</span><span class="p">,</span> <span class="s2">&quot;_largest_component&quot;</span><span class="p">]:</span>
+            <span class="n">_val</span> <span class="o">=</span> <span class="p">[</span><span class="n">cid</span> <span class="k">for</span> <span class="n">objt</span> <span class="ow">in</span> <span class="n">obj_type</span><span class="p">]</span>
+            <span class="n">attr</span> <span class="o">=</span> <span class="p">[</span><span class="n">objt</span> <span class="o">+</span> <span class="n">attr</span> <span class="k">for</span> <span class="n">objt</span> <span class="ow">in</span> <span class="n">obj_type</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">attr</span> <span class="o">==</span> <span class="s2">&quot;vertex_list&quot;</span><span class="p">:</span>
+            <span class="c1"># reassigns vertex list + network, graph component vertices</span>
+            <span class="n">supp</span> <span class="o">=</span> <span class="p">[</span><span class="n">objt</span> <span class="o">+</span> <span class="s2">&quot;_component_vertices&quot;</span> <span class="k">for</span> <span class="n">objt</span> <span class="ow">in</span> <span class="n">obj_type</span><span class="p">]</span>
+            <span class="n">_val</span> <span class="o">=</span> <span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="n">cnet</span><span class="p">,</span> <span class="n">supp</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="n">cid</span><span class="p">]]</span>
+            <span class="n">_val</span> <span class="o">+=</span> <span class="p">[{</span><span class="n">cid</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">cnet</span><span class="p">,</span> <span class="n">s</span><span class="p">)[</span><span class="n">cid</span><span class="p">]}</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">supp</span><span class="p">]</span>
+            <span class="n">attr</span> <span class="o">=</span> <span class="p">[</span><span class="n">attr</span><span class="p">]</span> <span class="o">+</span> <span class="n">supp</span>
+        <span class="k">elif</span> <span class="n">attr</span> <span class="o">==</span> <span class="s2">&quot;vertex_coords&quot;</span><span class="p">:</span>
+            <span class="c1"># reassigns both vertex_coords and vertices</span>
+            <span class="n">supp</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">cnet</span><span class="p">,</span> <span class="s2">&quot;vertex_list&quot;</span><span class="p">)</span>
+            <span class="n">_val</span> <span class="o">=</span> <span class="p">[{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">cnet</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">supp</span><span class="p">}]</span>
+            <span class="n">_val</span> <span class="o">+=</span> <span class="p">[{</span><span class="n">v</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">_val</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()}]</span>
+            <span class="n">attr</span> <span class="o">=</span> <span class="p">[</span><span class="n">attr</span><span class="p">,</span> <span class="s2">&quot;vertices&quot;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">attr</span> <span class="o">==</span> <span class="s2">&quot;_component_vertex_count&quot;</span><span class="p">:</span>
+            <span class="c1"># reassigns both network and graph _component_vertex_count</span>
+            <span class="n">supp</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">cnet</span><span class="p">,</span> <span class="s2">&quot;vertex_list&quot;</span><span class="p">))</span>
+            <span class="n">_val</span> <span class="o">=</span> <span class="p">[{</span><span class="n">cid</span><span class="p">:</span> <span class="n">supp</span><span class="p">}</span> <span class="k">for</span> <span class="n">objt</span> <span class="ow">in</span> <span class="n">obj_type</span><span class="p">]</span>
+            <span class="n">attr</span> <span class="o">=</span> <span class="p">[</span><span class="n">objt</span> <span class="o">+</span> <span class="n">attr</span> <span class="k">for</span> <span class="n">objt</span> <span class="ow">in</span> <span class="n">obj_type</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">attr</span> <span class="o">==</span> <span class="s2">&quot;adjacencylist&quot;</span><span class="p">:</span>
+            <span class="n">supp_adj</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">cnet</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+            <span class="n">supp_vtx</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">cnet</span><span class="p">,</span> <span class="s2">&quot;vertex_list&quot;</span><span class="p">)</span>
+            <span class="n">supp_rmv</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">supp_adj</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">supp_vtx</span><span class="p">]</span>
+            <span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="n">cnet</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">supp_rmv</span><span class="p">]</span>
+            <span class="k">return</span>
+        <span class="k">elif</span> <span class="n">attr</span> <span class="o">==</span> <span class="s2">&quot;_component_is_ring&quot;</span><span class="p">:</span>
+            <span class="c1"># reassigns both network and graph _component_is_ring</span>
+            <span class="n">supp</span> <span class="o">=</span> <span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="n">cnet</span><span class="p">,</span> <span class="n">objt</span> <span class="o">+</span> <span class="n">attr</span><span class="p">)</span> <span class="k">for</span> <span class="n">objt</span> <span class="ow">in</span> <span class="n">obj_type</span><span class="p">]</span>
+            <span class="n">_val</span> <span class="o">=</span> <span class="p">[{</span><span class="n">cid</span><span class="p">:</span> <span class="n">s</span><span class="p">[</span><span class="n">cid</span><span class="p">]}</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">supp</span><span class="p">]</span>
+            <span class="n">attr</span> <span class="o">=</span> <span class="p">[</span><span class="n">objt</span> <span class="o">+</span> <span class="n">attr</span> <span class="k">for</span> <span class="n">objt</span> <span class="ow">in</span> <span class="n">obj_type</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">attr</span> <span class="o">==</span> <span class="s2">&quot;non_articulation_points&quot;</span><span class="p">:</span>
+            <span class="n">supp_vtx</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">cnet</span><span class="p">,</span> <span class="s2">&quot;vertex_list&quot;</span><span class="p">)</span>
+            <span class="n">_val</span> <span class="o">=</span> <span class="p">[[</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">cnet</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span> <span class="k">if</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">supp_vtx</span><span class="p">]]</span>
+            <span class="n">attr</span> <span class="o">=</span> <span class="p">[</span><span class="n">attr</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">attr</span> <span class="o">==</span> <span class="s2">&quot;_component2&quot;</span><span class="p">:</span>
+            <span class="c1"># reassigns both network and graph _component2 attributes</span>
+            <span class="n">supp</span> <span class="o">=</span> <span class="p">[</span><span class="n">_n</span> <span class="o">+</span> <span class="s2">&quot;_component2&quot;</span> <span class="o">+</span> <span class="n">_a</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">hasgraph</span><span class="p">:</span>
+                <span class="n">supp</span> <span class="o">+=</span> <span class="p">[</span><span class="n">_g</span> <span class="o">+</span> <span class="s2">&quot;_component2&quot;</span> <span class="o">+</span> <span class="n">_e</span><span class="p">]</span>
+            <span class="n">_val</span> <span class="o">=</span> <span class="p">[{</span><span class="n">cid</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">cnet</span><span class="p">,</span> <span class="n">s</span><span class="p">)[</span><span class="n">cid</span><span class="p">]}</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">supp</span><span class="p">]</span>
+            <span class="n">attr</span> <span class="o">=</span> <span class="n">supp</span>
+        <span class="k">elif</span> <span class="n">attr</span> <span class="o">==</span> <span class="s2">&quot;arcs&quot;</span><span class="p">:</span>
+            <span class="c1"># reassigns both arcs and edges</span>
+            <span class="n">c2</span> <span class="o">=</span> <span class="s2">&quot;_component2&quot;</span>
+            <span class="n">supp</span> <span class="o">=</span> <span class="p">[</span><span class="n">_n</span> <span class="o">+</span> <span class="n">c2</span> <span class="o">+</span> <span class="n">_a</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">hasgraph</span><span class="p">:</span>
+                <span class="n">supp</span> <span class="o">+=</span> <span class="p">[</span><span class="n">_g</span> <span class="o">+</span> <span class="n">c2</span> <span class="o">+</span> <span class="n">_e</span><span class="p">]</span>
+            <span class="n">_val</span> <span class="o">=</span> <span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="n">cnet</span><span class="p">,</span> <span class="n">s</span><span class="p">)[</span><span class="n">cid</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">supp</span><span class="p">]</span>
+            <span class="n">attr</span> <span class="o">=</span> <span class="p">[</span><span class="n">attr</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">hasgraph</span><span class="p">:</span>
+                <span class="n">attr</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;edges&quot;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">attr</span> <span class="o">==</span> <span class="s2">&quot;_component_labels&quot;</span><span class="p">:</span>
+            <span class="c1"># reassigns both network and graph _component_labels</span>
+            <span class="n">supp</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">cnet</span><span class="p">,</span> <span class="n">o</span> <span class="o">+</span> <span class="s2">&quot;s&quot;</span><span class="p">))</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">]</span>
+            <span class="n">_val</span> <span class="o">=</span> <span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">cid</span><span class="p">]</span> <span class="o">*</span> <span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">supp</span><span class="p">]</span>
+            <span class="n">attr</span> <span class="o">=</span> <span class="p">[</span><span class="n">objt</span> <span class="o">+</span> <span class="n">attr</span> <span class="k">for</span> <span class="n">objt</span> <span class="ow">in</span> <span class="n">obj_type</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">attr</span> <span class="o">==</span> <span class="s2">&quot;_component_lengths&quot;</span><span class="p">:</span>
+            <span class="c1"># reassigns both network and graph _component_lengths</span>
+            <span class="n">supp</span> <span class="o">=</span> <span class="p">[</span><span class="n">objt</span> <span class="o">+</span> <span class="n">attr</span> <span class="k">for</span> <span class="n">objt</span> <span class="ow">in</span> <span class="n">obj_type</span><span class="p">]</span>
+            <span class="n">_val</span> <span class="o">=</span> <span class="p">[{</span><span class="n">cid</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">cnet</span><span class="p">,</span> <span class="n">s</span><span class="p">)[</span><span class="n">cid</span><span class="p">]}</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">supp</span><span class="p">]</span>
+            <span class="n">attr</span> <span class="o">=</span> <span class="n">supp</span>
+        <span class="k">elif</span> <span class="n">attr</span> <span class="o">==</span> <span class="s2">&quot;_lengths&quot;</span><span class="p">:</span>
+            <span class="c1"># reassigns both arc and edge _lengths</span>
+            <span class="n">supp_name</span> <span class="o">=</span> <span class="p">[</span><span class="n">o</span> <span class="o">+</span> <span class="n">attr</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">]</span>
+            <span class="n">supp_lens</span> <span class="o">=</span> <span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="n">cnet</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">supp_name</span><span class="p">]</span>
+            <span class="n">supp_link</span> <span class="o">=</span> <span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="n">cnet</span><span class="p">,</span> <span class="n">o</span> <span class="o">+</span> <span class="s2">&quot;s&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">]</span>
+            <span class="n">supp_ll</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">supp_lens</span><span class="p">,</span> <span class="n">supp_link</span><span class="p">))</span>
+            <span class="n">_val</span> <span class="o">=</span> <span class="p">[{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">l1</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">l2</span><span class="p">}</span> <span class="k">for</span> <span class="n">l1</span><span class="p">,</span> <span class="n">l2</span> <span class="ow">in</span> <span class="n">supp_ll</span><span class="p">]</span>
+            <span class="n">attr</span> <span class="o">=</span> <span class="n">supp_name</span>
+
+        <span class="c1"># reassign attributes</span>
+        <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">av</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">_val</span><span class="p">):</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">cnet</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">av</span><span class="p">)</span>
+
+    <span class="c1"># provide warning (for now) if the network contains a point pattern</span>
+    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="s2">&quot;pointpatterns&quot;</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;There is a least one point pattern associated with the network.&quot;</span>
+        <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot; Component extraction should be performed prior to snapping&quot;</span>
+        <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot; point patterns to the network object; failing to do so may&quot;</span>
+        <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot; lead to unexpected results.&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="c1"># provide warning (for now) if the network contains a point pattern</span>
+    <span class="n">dm</span><span class="p">,</span> <span class="n">nt</span> <span class="o">=</span> <span class="s2">&quot;distance_matrix&quot;</span><span class="p">,</span> <span class="s2">&quot;network_trees&quot;</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">dm</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">nt</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Either one or both (</span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">) attributes&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">dm</span><span class="p">,</span> <span class="n">nt</span><span class="p">)</span>
+        <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot; are present and will be deleted. These must be&quot;</span>
+        <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot; recalculated following component extraction.&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="p">[</span><span class="n">dm</span><span class="p">,</span> <span class="n">nt</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
+                <span class="n">_attr</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
+                <span class="k">del</span> <span class="n">_attr</span>
+
+    <span class="c1"># make initial copy of the network</span>
+    <span class="n">cnet</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">net</span><span class="p">)</span>
+
+    <span class="c1"># set labels</span>
+    <span class="n">_n</span><span class="p">,</span> <span class="n">_a</span><span class="p">,</span> <span class="n">_g</span><span class="p">,</span> <span class="n">_e</span> <span class="o">=</span> <span class="s2">&quot;network&quot;</span><span class="p">,</span> <span class="s2">&quot;arc&quot;</span><span class="p">,</span> <span class="s2">&quot;graph&quot;</span><span class="p">,</span> <span class="s2">&quot;edge&quot;</span>
+    <span class="n">obj_type</span> <span class="o">=</span> <span class="p">[</span><span class="n">_n</span><span class="p">]</span>
+    <span class="n">obj</span> <span class="o">=</span> <span class="p">[</span><span class="n">_a</span><span class="p">]</span>
+    <span class="n">hasgraph</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">cnet</span><span class="p">,</span> <span class="s2">&quot;w_graph&quot;</span><span class="p">):</span>
+        <span class="n">obj_type</span> <span class="o">+=</span> <span class="p">[</span><span class="n">_g</span><span class="p">]</span>
+        <span class="n">obj</span> <span class="o">+=</span> <span class="p">[</span><span class="n">_e</span><span class="p">]</span>
+        <span class="n">hasgraph</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="c1"># attributes to reassign</span>
+    <span class="n">update_attributes</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;_fully_connected&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;_n_components&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;_longest_component&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;_largest_component&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;vertex_list&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;vertex_coords&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;_component_vertex_count&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;adjacencylist&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;_component_is_ring&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;_component2&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;arcs&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;_component_lengths&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;_lengths&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;_component_labels&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="k">if</span> <span class="n">hasgraph</span><span class="p">:</span>
+        <span class="n">update_attributes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;non_articulation_points&quot;</span><span class="p">)</span>
+
+    <span class="c1"># reassign attributes</span>
+    <span class="k">for</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="n">update_attributes</span><span class="p">:</span>
+        <span class="n">_reassign</span><span class="p">(</span><span class="n">attribute</span><span class="p">,</span> <span class="n">component_id</span><span class="p">)</span>
+
+    <span class="c1"># recreate spatial weights</span>
+    <span class="n">cnet</span><span class="o">.</span><span class="n">w_network</span> <span class="o">=</span> <span class="n">cnet</span><span class="o">.</span><span class="n">contiguityweights</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">weightings</span><span class="o">=</span><span class="n">weightings</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">hasgraph</span><span class="p">:</span>
+        <span class="n">cnet</span><span class="o">.</span><span class="n">w_graph</span> <span class="o">=</span> <span class="n">cnet</span><span class="o">.</span><span class="n">contiguityweights</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">weightings</span><span class="o">=</span><span class="n">weightings</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">cnet</span></div>
+
+
 <div class="viewcode-block" id="element_as_gdf"><a class="viewcode-back" href="../../generated/spaghetti.element_as_gdf.html#spaghetti.element_as_gdf">[docs]</a><span class="nd">@requires</span><span class="p">(</span><span class="s2">&quot;geopandas&quot;</span><span class="p">,</span> <span class="s2">&quot;shapely&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">element_as_gdf</span><span class="p">(</span>
     <span class="n">net</span><span class="p">,</span>
@@ -2943,6 +3222,8 @@
 <span class="sd">        Network point elements (either vertices or ``network.PointPattern``</span>
 <span class="sd">        points) as a ``geopandas.GeoDataFrame`` of ``shapely.geometry.Point``</span>
 <span class="sd">        objects with an ``&quot;id&quot;`` column and ``&quot;geometry&quot;&quot;`` column.</span>
+<span class="sd">        If the network object has a ``network_component_vertices`` attribute,</span>
+<span class="sd">        then component labels are also added in a column.</span>
 <span class="sd">    </span>
 <span class="sd">    lines : geopandas.GeoDataFrame</span>
 <span class="sd">        Network arc elements as a ``geopandas.GeoDataFrame`` of</span>
@@ -2981,11 +3262,12 @@
 <span class="sd">    ...     ntw, vertices=True, arcs=True</span>
 <span class="sd">    ... )</span>
 <span class="sd">    </span>
-<span class="sd">    Examine the first vertex.</span>
+<span class="sd">    Examine the first vertex. It is a member of the component labeled ``0``.</span>
 <span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; vertices_df.loc[0]</span>
-<span class="sd">    id                                          0</span>
-<span class="sd">    geometry    POINT (728368.04762 877125.89535)</span>
+<span class="sd">    id                                            0</span>
+<span class="sd">    geometry      POINT (728368.04762 877125.89535)</span>
+<span class="sd">    comp_label                                    0</span>
 <span class="sd">    Name: 0, dtype: object</span>
 <span class="sd">    </span>
 <span class="sd">    Calculate the total length of the network.</span>

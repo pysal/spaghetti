@@ -1,6 +1,6 @@
 from collections import defaultdict, OrderedDict
 from itertools import islice
-import copy, os, pickle
+import copy, os, pickle, warnings
 
 import numpy
 
@@ -68,8 +68,7 @@ class Network:
         List of lists storing vertex adjacency.
     
     vertex_coords : dict
-        Keys are the vertex ID and values are the (x,y) coordinates
-        inverse to vertices.
+        Keys are vertex IDs and values are (x,y) coordinates of the vertices.
     
     vertex_list : list
         List of vertex IDs.
@@ -113,7 +112,11 @@ class Network:
     
     network_n_components : int
         Count of connected components in the network.
-
+    
+    network_fully_connected : bool
+        ``True`` if the network representation is a single connected
+        component, otherwise ``False``.
+    
     network_component_labels : numpy.ndarray
         Component labels for network arcs.
     
@@ -121,6 +124,27 @@ class Network:
         Lookup in the form {int: list} for arcs comprising network
         connected components keyed by component labels with arcs in
         a list as values.
+    
+    network_component_lengths : dict
+        Length of each network component (keyed by component label).
+        
+    network_longest_component : int
+        The ID of the longest component in the network. This is not
+        necessarily equal to ``network_largest_component``.
+        
+    network_component_vertices : dict
+        Lookup in the form {int: list} for vertices comprising network
+        connected components keyed by component labels with vertices in
+        a list as values.
+    
+    network_component_vertex_count : dict
+        The number of vertices in each network component
+        (keyed by component label).
+    
+    network_largest_component : int
+        The ID of the largest component in the network. Within ``spaghetti``
+        the largest component is the one with the most vertices. This is not
+        necessarily equal to ``network_longest_component``.
     
     network_component_is_ring : dict
         Lookup in the form {int: bool} keyed by component labels with values
@@ -132,6 +156,10 @@ class Network:
     graph_n_components : int
         Count of connected components in the network.
     
+    graph_fully_connected : bool
+        ``True`` if the graph representation is a single connected
+        component, otherwise ``False``.
+    
     graph_component_labels : numpy.ndarray
         Component labels for graph edges.
     
@@ -139,6 +167,27 @@ class Network:
         Lookup in the form {int: list} for edges comprising graph connected
         components keyed by component labels with edges in a list
         as values.
+    
+    graph_component_lengths : dict
+        Length of each graph component (keyed by component label).
+        
+    graph_longest_component : int
+        The ID of the longest component in the graph. This is not
+        necessarily equal to ``graph_largest_component``.
+        
+    graph_component_vertices : dict
+        Lookup in the form {int: list} for vertices comprising graph
+        connected components keyed by component labels with vertices in
+        a list as values.
+    
+    graph_component_vertex_count : dict
+        The number of vertices in each graph component
+        (keyed by component label).
+    
+    graph_largest_component : int
+        The ID of the largest component in the graph. Within ``spaghetti``
+        the largest component is the one with the most vertices. This is not
+        necessarily equal to ``graph_longest_component``.
     
     graph_component_is_ring : dict
         Lookup in the form {int: bool} keyed by component labels with values as
@@ -278,8 +327,8 @@ class Network:
                 self.w_network = self.contiguityweights(
                     graph=as_graph, weightings=weightings
                 )
-                # extract connected components from the `w_network`
-                self.extract_components(self.w_network, graph=as_graph)
+                # identify connected components from the `w_network`
+                self.identify_components(self.w_network, graph=as_graph)
 
             # extract the graph -- repeat similar as above
             # for extracting the network
@@ -295,7 +344,7 @@ class Network:
                     self.w_graph = self.contiguityweights(
                         graph=as_graph, weightings=weightings
                     )
-                    self.extract_components(self.w_graph, graph=as_graph)
+                    self.identify_components(self.w_graph, graph=as_graph)
 
             # sorted list of vertex IDs
             self.vertex_list = sorted(self.vertices.values())
@@ -337,8 +386,8 @@ class Network:
 
         return tuple(out_v)
 
-    def extract_components(self, w, graph=False):
-        """Extract connected component information from a
+    def identify_components(self, w, graph=False):
+        """Identify connected component information from a
         ``libpysal.weights.W`` object
         
         Parameters
@@ -366,24 +415,42 @@ class Network:
         n_components = w.n_components
         component_labels = w.component_labels
 
+        # is the network a single, fully-connected component?
+        if n_components == 1:
+            fully_connected = True  ################################# TEST
+        else:
+            fully_connected = False  ################################## TEST
+
         # link to component lookup
         link2component = dict(zip(links, component_labels))
 
-        # component ID to links lookup
+        # component ID lookups: links, lengths, vertices, vertex counts
         component2link = {}
-        cp_labs = set(w.component_labels)
-        for cpl in cp_labs:
-            component2link[cpl] = sorted(
-                [k for k, v in link2component.items() if v == cpl]
-            )
+        component_lengths = {}  ######################################### TEST
+        component_vertices = {}  ######################################### TEST
+        component_vertex_count = {}  ###################################### TEST
+        cp_labs_ = set(w.component_labels)
+        l2c_ = link2component.items()
+        for cpl in cp_labs_:
+            component2link[cpl] = sorted([k for k, v in l2c_ if v == cpl])
+            c2l_ = component2link[cpl]
+            arclens_ = self.arc_lengths.items()
+            component_lengths[cpl] = sum([v for k, v in arclens_ if k in c2l_])
+            component_vertices[cpl] = list(set([v for l in c2l_ for v in l]))
+            component_vertex_count[cpl] = len(component_vertices[cpl])
+
+        # longest and largest components ############################################################### TEST
+        longest_component = max(component_lengths, key=component_lengths.get)
+        largest_component = max(component_vertex_count, key=component_vertex_count.get)
 
         # component to ring lookup
-        component_is_ring = {}
-        for k, vs in component2link.items():
-            component_is_ring[k] = True
-            for v in vs:
-                if len(w.neighbors[v]) != 2:
-                    component_is_ring[k] = False
+        component_is_ring = {}  ###################################### TEST
+        adj_ = self.adjacencylist.items()
+        for comp, verts in component_vertices.items():
+            component_is_ring[comp] = False
+            _2neighs = [len(neighs) == 2 for v, neighs in adj_ if v in verts]
+            if all(_2neighs):
+                component_is_ring[comp] = True
 
         # attribute label name depends on object type
         if graph:
@@ -393,9 +460,15 @@ class Network:
 
         # set all new variables into list
         extracted_attrs = [
+            ["fully_connected", fully_connected],
             ["n_components", n_components],
             ["component_labels", component_labels],
             [c2l_attr_name, component2link],
+            ["component_lengths", component_lengths],
+            ["component_vertices", component_vertices],
+            ["component_vertex_count", component_vertex_count],
+            ["longest_component", longest_component],
+            ["largest_component", largest_component],
             ["component_is_ring", component_is_ring],
         ]
 
@@ -2750,6 +2823,212 @@ class Network:
         return self
 
 
+def extract_component(net, component_id, weightings=None):
+    """Extract a single component from a network object.
+    
+    Parameters
+    ----------
+    net : spaghetti.Network
+        Full network object.
+    component_id : int
+        The ID of the desired network component.
+    weightings : {dict, bool}
+        See the ``weightings`` keyword argument in ``spaghetti.Network``.
+    
+    Returns
+    -------
+    cnet : spaghetti.Network
+        The pruned network containing the component specified in
+        ``component_id``.
+    
+    Notes
+    -----
+    
+    Point patterns are not reassigned when extracting a component. Therefore,
+    component extraction should be performed prior to snapping any point
+    sets onto the network. Also, if the ``spaghetti.Network`` object
+    has ``distance_matrix`` or ``network_trees`` attributes, they are
+    deleted and must be computed again on the single component.
+    
+    Examples
+    --------
+    
+    Instantiate a network object.
+    
+    >>> from libpysal import examples
+    >>> import spaghetti
+    >>> snow_net = examples.get_path("Soho_Network.shp")
+    >>> ntw = spaghetti.Network(in_data=snow_net, extractgraph=False)
+    
+    The network is not fully connected.
+    
+    >>> ntw.network_fully_connected
+    False
+    
+    Examine the number of network components.
+    
+    >>> ntw.network_n_components
+    45
+    
+    Extract the longest component.
+    
+    >>> longest = spaghetti.extract_component(ntw, ntw.network_longest_component)
+    >>> longest.network_n_components
+    1
+    >>> longest.network_component_lengths
+    {0: 13508.169276875526}
+    
+    """
+
+    def _reassign(attr, cid):
+        """Helper for reassigning attributes."""
+
+        # set for each attribute(s)
+        if attr == "_fully_connected":
+            _val = [True for objt in obj_type]
+            attr = [objt + attr for objt in obj_type]
+        elif attr == "_n_components":
+            _val = [1 for objt in obj_type]
+            attr = [objt + attr for objt in obj_type]
+        elif attr in ["_longest_component", "_largest_component"]:
+            _val = [cid for objt in obj_type]
+            attr = [objt + attr for objt in obj_type]
+        elif attr == "vertex_list":
+            # reassigns vertex list + network, graph component vertices
+            supp = [objt + "_component_vertices" for objt in obj_type]
+            _val = [getattr(cnet, supp[0])[cid]]
+            _val += [{cid: getattr(cnet, s)[cid]} for s in supp]
+            attr = [attr] + supp
+        elif attr == "vertex_coords":
+            # reassigns both vertex_coords and vertices
+            supp = getattr(cnet, "vertex_list")
+            _val = [{k: v for k, v in getattr(cnet, attr).items() if k in supp}]
+            _val += [{v: k for k, v in _val[0].items()}]
+            attr = [attr, "vertices"]
+        elif attr == "_component_vertex_count":
+            # reassigns both network and graph _component_vertex_count
+            supp = len(getattr(cnet, "vertex_list"))
+            _val = [{cid: supp} for objt in obj_type]
+            attr = [objt + attr for objt in obj_type]
+        elif attr == "adjacencylist":
+            supp_adj = copy.deepcopy(list(getattr(cnet, attr).keys()))
+            supp_vtx = getattr(cnet, "vertex_list")
+            supp_rmv = [v for v in supp_adj if v not in supp_vtx]
+            [getattr(cnet, attr).pop(s) for s in supp_rmv]
+            return
+        elif attr == "_component_is_ring":
+            # reassigns both network and graph _component_is_ring
+            supp = [getattr(cnet, objt + attr) for objt in obj_type]
+            _val = [{cid: s[cid]} for s in supp]
+            attr = [objt + attr for objt in obj_type]
+        elif attr == "non_articulation_points":
+            supp_vtx = getattr(cnet, "vertex_list")
+            _val = [[s for s in getattr(cnet, attr) if s in supp_vtx]]
+            attr = [attr]
+        elif attr == "_component2":
+            # reassigns both network and graph _component2 attributes
+            supp = [_n + "_component2" + _a]
+            if hasgraph:
+                supp += [_g + "_component2" + _e]
+            _val = [{cid: getattr(cnet, s)[cid]} for s in supp]
+            attr = supp
+        elif attr == "arcs":
+            # reassigns both arcs and edges
+            c2 = "_component2"
+            supp = [_n + c2 + _a]
+            if hasgraph:
+                supp += [_g + c2 + _e]
+            _val = [getattr(cnet, s)[cid] for s in supp]
+            attr = [attr]
+            if hasgraph:
+                attr += ["edges"]
+        elif attr == "_component_labels":
+            # reassigns both network and graph _component_labels
+            supp = [len(getattr(cnet, o + "s")) for o in obj]
+            _val = [numpy.array([cid] * s) for s in supp]
+            attr = [objt + attr for objt in obj_type]
+        elif attr == "_component_lengths":
+            # reassigns both network and graph _component_lengths
+            supp = [objt + attr for objt in obj_type]
+            _val = [{cid: getattr(cnet, s)[cid]} for s in supp]
+            attr = supp
+        elif attr == "_lengths":
+            # reassigns both arc and edge _lengths
+            supp_name = [o + attr for o in obj]
+            supp_lens = [getattr(cnet, s) for s in supp_name]
+            supp_link = [getattr(cnet, o + "s") for o in obj]
+            supp_ll = list(zip(supp_lens, supp_link))
+            _val = [{k: v for k, v in l1.items() if k in l2} for l1, l2 in supp_ll]
+            attr = supp_name
+
+        # reassign attributes
+        for a, av in zip(attr, _val):
+            setattr(cnet, a, av)
+
+    # provide warning (for now) if the network contains a point pattern
+    if getattr(net, "pointpatterns"):
+        msg = "There is a least one point pattern associated with the network."
+        msg += " Component extraction should be performed prior to snapping"
+        msg += " point patterns to the network object; failing to do so may"
+        msg += " lead to unexpected results."
+        warnings.warn(msg)
+    # provide warning (for now) if the network contains a point pattern
+    dm, nt = "distance_matrix", "network_trees"
+    if hasattr(net, dm) or hasattr(net, nt):
+        msg = "Either one or both (%s, %s) attributes" % (dm, nt)
+        msg += " are present and will be deleted. These must be"
+        msg += " recalculated following component extraction."
+        warnings.warn(msg)
+        for attr in [dm, nt]:
+            if hasattr(net, attr):
+                _attr = getattr(net, attr)
+                del _attr
+
+    # make initial copy of the network
+    cnet = copy.deepcopy(net)
+
+    # set labels
+    _n, _a, _g, _e = "network", "arc", "graph", "edge"
+    obj_type = [_n]
+    obj = [_a]
+    hasgraph = False
+    if hasattr(cnet, "w_graph"):
+        obj_type += [_g]
+        obj += [_e]
+        hasgraph = True
+
+    # attributes to reassign
+    update_attributes = [
+        "_fully_connected",
+        "_n_components",
+        "_longest_component",
+        "_largest_component",
+        "vertex_list",
+        "vertex_coords",
+        "_component_vertex_count",
+        "adjacencylist",
+        "_component_is_ring",
+        "_component2",
+        "arcs",
+        "_component_lengths",
+        "_lengths",
+        "_component_labels",
+    ]
+    if hasgraph:
+        update_attributes.append("non_articulation_points")
+
+    # reassign attributes
+    for attribute in update_attributes:
+        _reassign(attribute, component_id)
+
+    # recreate spatial weights
+    cnet.w_network = cnet.contiguityweights(graph=False, weightings=weightings)
+    if hasgraph:
+        cnet.w_graph = cnet.contiguityweights(graph=True, weightings=weightings)
+
+    return cnet
+
+
 @requires("geopandas", "shapely")
 def element_as_gdf(
     net,
@@ -2815,6 +3094,8 @@ def element_as_gdf(
         Network point elements (either vertices or ``network.PointPattern``
         points) as a ``geopandas.GeoDataFrame`` of ``shapely.geometry.Point``
         objects with an ``"id"`` column and ``"geometry""`` column.
+        If the network object has a ``network_component_vertices`` attribute,
+        then component labels are also added in a column.
     
     lines : geopandas.GeoDataFrame
         Network arc elements as a ``geopandas.GeoDataFrame`` of
@@ -2853,11 +3134,12 @@ def element_as_gdf(
     ...     ntw, vertices=True, arcs=True
     ... )
     
-    Examine the first vertex.
+    Examine the first vertex. It is a member of the component labeled ``0``.
     
     >>> vertices_df.loc[0]
-    id                                          0
-    geometry    POINT (728368.04762 877125.89535)
+    id                                            0
+    geometry      POINT (728368.04762 877125.89535)
+    comp_label                                    0
     Name: 0, dtype: object
     
     Calculate the total length of the network.

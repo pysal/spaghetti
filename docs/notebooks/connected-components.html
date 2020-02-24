@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Connected components in a spatial network &#8212; spaghetti v1.4.1 Manual</title>
+    <title>Connected components in a spatial network &#8212; spaghetti v1.4.2 Manual</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/pysal-styles.css" />
@@ -42,7 +42,7 @@
         </button>
         <a class="navbar-brand" href="../index.html">
           spaghetti</a>
-        <span class="navbar-text navbar-version pull-left"><b>1.4.1</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>1.4.2</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -103,8 +103,24 @@
 <li><a class="reference internal" href="#">Connected components in a spatial network</a><ul>
 <li><a class="reference internal" href="#Identifying-and-visualizing-the-parts-of-a-network">Identifying and visualizing the parts of a network</a></li>
 <li><a class="reference internal" href="#1.-Instantiate-a-network-from-two-collections-of-libpysal.cg.Chain-objects">1. Instantiate a network from two collections of <code class="docutils literal notranslate"><span class="pre">libpysal.cg.Chain</span></code> objects</a><ul>
-<li><a class="reference internal" href="#Here-we-get-a-warning-because-the-network-we-created-has-2-connected-components">Here we get a warning because the network we created has 2 connected components</a></li>
-<li><a class="reference internal" href="#The-network-components-can-be-inspected-through-the-network_component2arc-attribute">The network components can be inspected through the <code class="docutils literal notranslate"><span class="pre">network_component2arc</span></code> attribute</a></li>
+<li><a class="reference internal" href="#Here-we-get-a-warning-because-the-network-we-created-is-not-fully-connected">Here we get a warning because the network we created is not fully connected</a></li>
+<li><a class="reference internal" href="#It-has-2-connected-components">It has 2 connected components</a></li>
+<li><a class="reference internal" href="#The-network-components-can-be-inspected-through-the-following-attributes">The network components can be inspected through the following attributes</a><ul>
+<li><a class="reference internal" href="#network_component_labels"><code class="docutils literal notranslate"><span class="pre">network_component_labels</span></code></a></li>
+<li><a class="reference internal" href="#network_component2arc"><code class="docutils literal notranslate"><span class="pre">network_component2arc</span></code></a></li>
+<li><a class="reference internal" href="#network_component_lengths"><code class="docutils literal notranslate"><span class="pre">network_component_lengths</span></code></a></li>
+<li><a class="reference internal" href="#network_longest_component"><code class="docutils literal notranslate"><span class="pre">network_longest_component</span></code></a></li>
+<li><a class="reference internal" href="#network_component_vertices"><code class="docutils literal notranslate"><span class="pre">network_component_vertices</span></code></a></li>
+<li><a class="reference internal" href="#network_component_vertex_count"><code class="docutils literal notranslate"><span class="pre">network_component_vertex_count</span></code></a></li>
+<li><a class="reference internal" href="#network_largest_component"><code class="docutils literal notranslate"><span class="pre">network_largest_component</span></code></a></li>
+<li><a class="reference internal" href="#network_component_is_ring"><code class="docutils literal notranslate"><span class="pre">network_component_is_ring</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#The-same-can-be-performed-for-graph-representations,-for-example:">The same can be performed for graph representations, for example:</a><ul>
+<li><a class="reference internal" href="#graph_component_labels"><code class="docutils literal notranslate"><span class="pre">graph_component_labels</span></code></a></li>
+<li><a class="reference internal" href="#graph_component2edge"><code class="docutils literal notranslate"><span class="pre">graph_component2edge</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#Extract-the-network-arc-and-vertices-as-geopandas.GeoDataFrame-objects">Extract the network arc and vertices as <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> objects</a></li>
 <li><a class="reference internal" href="#Network-component-labels-are-found-in-the-&quot;comp_label&quot;-field">Network component labels are found in the <code class="docutils literal notranslate"><span class="pre">&quot;comp_label&quot;</span></code> field</a></li>
 <li><a class="reference internal" href="#Plot-the-disconnected-network-and-symbolize-the-arcs-bases-on-the-value-of-&quot;comp_label&quot;">Plot the disconnected network and symbolize the arcs bases on the value of <code class="docutils literal notranslate"><span class="pre">&quot;comp_label&quot;</span></code></a></li>
@@ -121,6 +137,22 @@
 <li><a class="reference internal" href="#Here-we-can-see-that-all-the-new-network-vertices-are-non-articulation-point">Here we can see that all the new network vertices are non-articulation point</a></li>
 <li><a class="reference internal" href="#Slice-out-the-articulation-points-and-non-articulation-points">Slice out the articulation points and non-articulation points</a></li>
 <li><a class="reference internal" href="#The-new-network-vertices-are-non-articulation-points-because-they-form-a-closed-ring">The new network vertices are non-articulation points because they form a closed ring</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#4.-Longest-vs. largest-components-—-cross-vs. hexagon">4. Longest vs. largest components — cross vs. hexagon</a><ul>
+<li><a class="reference internal" href="#The-longest-component-is-not-necessarily-the-largest">The longest component is not necessarily the largest</a><ul>
+<li><a class="reference internal" href="#This-is-because-in-spaghetti-the-largest-compnent-equates-to-the-most-vertices">This is because in <code class="docutils literal notranslate"><span class="pre">spaghetti</span></code> the largest compnent equates to the most vertices</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#5.-Extracting-components">5. Extracting components</a><ul>
+<li><a class="reference internal" href="#Extract-the-longest-component">Extract the longest component</a></li>
+<li><a class="reference internal" href="#Extract-the-largest-component-and-plot">Extract the largest component and plot</a></li>
+<li><a class="reference internal" href="#Empirical-Example-—-New-Haven,-Connecticut">Empirical Example — New Haven, Connecticut</a></li>
+<li><a class="reference internal" href="#Extract-the-longest-component">Extract the longest component</a></li>
+<li><a class="reference internal" href="#Filter-non-longest-component-arcs">Filter non-longest component arcs</a></li>
+<li><a class="reference internal" href="#Plot-network-arcs">Plot network arcs</a></li>
 </ul>
 </li>
 </ul>
@@ -370,8 +402,10 @@ Interactive online version:
 <p><strong>This notebook is a walk-through for:</strong></p>
 <ol class="arabic simple">
 <li><p>Instantiating a simple network with <code class="docutils literal notranslate"><span class="pre">libpysal.cg.Chain</span></code> objects</p></li>
-<li><p>Working with the network components</p></li>
+<li><p>Working with the network components and isolated rings</p></li>
 <li><p>Visualizing the components and (non)articulation vertices</p></li>
+<li><p>Longest vs. Largest components</p></li>
+<li><p>Extracting network components</p></li>
 </ol>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -388,7 +422,7 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-02-18T20:29:45-05:00
+2020-02-23T16:33:25-05:00
 
 CPython 3.7.3
 IPython 7.10.2
@@ -409,9 +443,13 @@ interpreter: 64bit
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">geopandas</span>
 <span class="kn">import</span> <span class="nn">libpysal</span>
+<span class="kn">from</span> <span class="nn">libpysal</span> <span class="kn">import</span> <span class="n">examples</span>
 <span class="kn">from</span> <span class="nn">libpysal.cg</span> <span class="kn">import</span> <span class="n">Point</span><span class="p">,</span> <span class="n">Chain</span>
 <span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="kn">import</span> <span class="nn">matplotlib_scalebar</span>
+<span class="kn">from</span> <span class="nn">matplotlib_scalebar.scalebar</span> <span class="kn">import</span> <span class="n">ScaleBar</span>
 <span class="kn">import</span> <span class="nn">spaghetti</span>
+
 <span class="o">%</span><span class="k">matplotlib</span> inline
 <span class="o">%</span><span class="k">watermark</span> -w
 <span class="o">%</span><span class="k">watermark</span> -iv
@@ -424,10 +462,11 @@ interpreter: 64bit
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 watermark 2.0.2
-matplotlib 3.1.2
-spaghetti  1.4.1
-libpysal   4.2.0
-geopandas  0.6.2
+libpysal            4.2.0
+matplotlib          3.1.2
+spaghetti           1.4.2
+geopandas           0.6.2
+matplotlib_scalebar 0.6.1
 
 </pre></div></div>
 </div>
@@ -438,6 +477,7 @@ geopandas  0.6.2
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">set_matplotlib_formats</span>
+
     <span class="n">set_matplotlib_formats</span><span class="p">(</span><span class="s2">&quot;retina&quot;</span><span class="p">)</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="k">pass</span>
@@ -486,10 +526,31 @@ geopandas  0.6.2
   warnings.warn(message)
 </pre></div></div>
 </div>
-<div class="section" id="Here-we-get-a-warning-because-the-network-we-created-has-2-connected-components">
-<h3>Here we get a warning because the network we created has 2 connected components<a class="headerlink" href="#Here-we-get-a-warning-because-the-network-we-created-has-2-connected-components" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="Here-we-get-a-warning-because-the-network-we-created-is-not-fully-connected">
+<h3>Here we get a warning because the network we created is not fully connected<a class="headerlink" href="#Here-we-get-a-warning-because-the-network-we-created-is-not-fully-connected" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ntw</span><span class="o">.</span><span class="n">network_fully_connected</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+False
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="It-has-2-connected-components">
+<h3>It has 2 connected components<a class="headerlink" href="#It-has-2-connected-components" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -498,7 +559,7 @@ geopandas  0.6.2
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -507,10 +568,33 @@ geopandas  0.6.2
 </pre></div></div>
 </div>
 </div>
-<div class="section" id="The-network-components-can-be-inspected-through-the-network_component2arc-attribute">
-<h3>The network components can be inspected through the <code class="docutils literal notranslate"><span class="pre">network_component2arc</span></code> attribute<a class="headerlink" href="#The-network-components-can-be-inspected-through-the-network_component2arc-attribute" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="The-network-components-can-be-inspected-through-the-following-attributes">
+<h3>The network components can be inspected through the following attributes<a class="headerlink" href="#The-network-components-can-be-inspected-through-the-following-attributes" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="network_component_labels">
+<h4><code class="docutils literal notranslate"><span class="pre">network_component_labels</span></code><a class="headerlink" href="#network_component_labels" title="Permalink to this headline">¶</a></h4>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ntw</span><span class="o">.</span><span class="n">network_component_labels</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([0, 0, 0, 1, 1, 1], dtype=int32)
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="network_component2arc">
+<h4><code class="docutils literal notranslate"><span class="pre">network_component2arc</span></code><a class="headerlink" href="#network_component2arc" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -519,7 +603,7 @@ geopandas  0.6.2
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -528,10 +612,182 @@ geopandas  0.6.2
 </pre></div></div>
 </div>
 </div>
+<div class="section" id="network_component_lengths">
+<h4><code class="docutils literal notranslate"><span class="pre">network_component_lengths</span></code><a class="headerlink" href="#network_component_lengths" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ntw</span><span class="o">.</span><span class="n">network_component_lengths</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{0: 3.0, 1: 3.0}
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="network_longest_component">
+<h4><code class="docutils literal notranslate"><span class="pre">network_longest_component</span></code><a class="headerlink" href="#network_longest_component" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ntw</span><span class="o">.</span><span class="n">network_longest_component</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="network_component_vertices">
+<h4><code class="docutils literal notranslate"><span class="pre">network_component_vertices</span></code><a class="headerlink" href="#network_component_vertices" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ntw</span><span class="o">.</span><span class="n">network_component_vertices</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{0: [0, 1, 2, 3], 1: [4, 5, 6, 7]}
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="network_component_vertex_count">
+<h4><code class="docutils literal notranslate"><span class="pre">network_component_vertex_count</span></code><a class="headerlink" href="#network_component_vertex_count" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ntw</span><span class="o">.</span><span class="n">network_component_vertex_count</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{0: 4, 1: 4}
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="network_largest_component">
+<h4><code class="docutils literal notranslate"><span class="pre">network_largest_component</span></code><a class="headerlink" href="#network_largest_component" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ntw</span><span class="o">.</span><span class="n">network_largest_component</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="network_component_is_ring">
+<h4><code class="docutils literal notranslate"><span class="pre">network_component_is_ring</span></code><a class="headerlink" href="#network_component_is_ring" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ntw</span><span class="o">.</span><span class="n">network_component_is_ring</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{0: False, 1: False}
+</pre></div></div>
+</div>
+</div>
+</div>
+<div class="section" id="The-same-can-be-performed-for-graph-representations,-for-example:">
+<h3>The same can be performed for graph representations, for example:<a class="headerlink" href="#The-same-can-be-performed-for-graph-representations,-for-example:" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="graph_component_labels">
+<h4><code class="docutils literal notranslate"><span class="pre">graph_component_labels</span></code><a class="headerlink" href="#graph_component_labels" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ntw</span><span class="o">.</span><span class="n">graph_component_labels</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([0, 0, 0, 1, 1, 1], dtype=int32)
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="graph_component2edge">
+<h4><code class="docutils literal notranslate"><span class="pre">graph_component2edge</span></code><a class="headerlink" href="#graph_component2edge" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ntw</span><span class="o">.</span><span class="n">graph_component2edge</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{0: [(0, 1), (0, 2), (0, 3)], 1: [(4, 5), (4, 6), (4, 7)]}
+</pre></div></div>
+</div>
+</div>
+</div>
 <div class="section" id="Extract-the-network-arc-and-vertices-as-geopandas.GeoDataFrame-objects">
 <h3>Extract the network arc and vertices as <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> objects<a class="headerlink" href="#Extract-the-network-arc-and-vertices-as-geopandas.GeoDataFrame-objects" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -544,7 +800,97 @@ geopandas  0.6.2
 <div class="section" id="Network-component-labels-are-found-in-the-&quot;comp_label&quot;-field">
 <h3>Network component labels are found in the <code class="docutils literal notranslate"><span class="pre">&quot;comp_label&quot;</span></code> field<a class="headerlink" href="#Network-component-labels-are-found-in-the-"comp_label"-field" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">vertices_df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>geometry</th>
+      <th>comp_label</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>POINT (1.00000 2.00000)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>POINT (0.00000 2.00000)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>POINT (1.00000 1.00000)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>POINT (1.00000 3.00000)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>POINT (2.00000 1.00000)</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5</td>
+      <td>POINT (2.00000 0.00000)</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>6</td>
+      <td>POINT (3.00000 1.00000)</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>7</td>
+      <td>POINT (2.00000 2.00000)</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -553,7 +899,7 @@ geopandas  0.6.2
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -625,20 +971,29 @@ geopandas  0.6.2
 <div class="section" id="Plot-the-disconnected-network-and-symbolize-the-arcs-bases-on-the-value-of-&quot;comp_label&quot;">
 <h3>Plot the disconnected network and symbolize the arcs bases on the value of <code class="docutils literal notranslate"><span class="pre">&quot;comp_label&quot;</span></code><a class="headerlink" href="#Plot-the-disconnected-network-and-symbolize-the-arcs-bases-on-the-value-of-"comp_label"" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">base</span> <span class="o">=</span> <span class="n">arcs_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s2">&quot;comp_label&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Set2&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
-<span class="n">vertices_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">);</span>
+<span class="n">vertices_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.axes._subplots.AxesSubplot at 0x10c9c4320&gt;
+</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_connected-components_16_0.png"><img alt="../_images/notebooks_connected-components_16_0.png" src="../_images/notebooks_connected-components_16_0.png" style="width: 417px; height: 411px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_connected-components_37_1.png"><img alt="../_images/notebooks_connected-components_37_1.png" src="../_images/notebooks_connected-components_37_1.png" style="width: 417px; height: 411px;" /></a>
 </div>
 </div>
 </div>
@@ -647,7 +1002,7 @@ geopandas  0.6.2
 <div class="section" id="2.-Add-to-the-network-created-above">
 <h2>2. Add to the network created above<a class="headerlink" href="#2.-Add-to-the-network-created-above" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -663,7 +1018,7 @@ geopandas  0.6.2
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -688,7 +1043,7 @@ geopandas  0.6.2
 <div class="section" id="Now-there-are-3-connected-components-in-the-network">
 <h3>Now there are 3 connected components in the network<a class="headerlink" href="#Now-there-are-3-connected-components-in-the-network" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -697,7 +1052,7 @@ geopandas  0.6.2
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -706,7 +1061,7 @@ geopandas  0.6.2
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -715,7 +1070,7 @@ geopandas  0.6.2
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -726,7 +1081,7 @@ geopandas  0.6.2
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -736,7 +1091,7 @@ geopandas  0.6.2
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -745,7 +1100,7 @@ geopandas  0.6.2
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -847,7 +1202,7 @@ geopandas  0.6.2
 <div class="section" id="We-can-also-inspect-the-non-articulation-points-in-the-network.-Non-articulation-points-are-vertices-in-a-network-that-are-degree-2.-A-vertex-is-degree-2-if,-and-only-if,-it-is-directly-connected-to-only-2-other-vertices.">
 <h3>We can also inspect the non-articulation points in the network. Non-articulation points are vertices in a network that are degree-2. A vertex is degree-2 if, and only if, it is directly connected to only 2 other vertices.<a class="headerlink" href="#We-can-also-inspect-the-non-articulation-points-in-the-network.-Non-articulation-points-are-vertices-in-a-network-that-are-degree-2.-A-vertex-is-degree-2-if,-and-only-if,-it-is-directly-connected-to-only-2-other-vertices." title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -856,7 +1211,7 @@ geopandas  0.6.2
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -868,7 +1223,7 @@ geopandas  0.6.2
 <div class="section" id="Slice-out-the-articulation-points-and-non-articulation-points">
 <h3>Slice out the articulation points and non-articulation points<a class="headerlink" href="#Slice-out-the-articulation-points-and-non-articulation-points" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -882,21 +1237,30 @@ geopandas  0.6.2
 <div class="section" id="Plot-the-connected-components-while-making-a-distinction-between-articulation-points-and-non-articulation-points">
 <h3>Plot the connected components while making a distinction between articulation points and non-articulation points<a class="headerlink" href="#Plot-the-connected-components-while-making-a-distinction-between-articulation-points-and-non-articulation-points" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">base</span> <span class="o">=</span> <span class="n">arcs_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s2">&quot;comp_label&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Set2&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
 <span class="n">articulation_vertices</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">non_articulation_vertices</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">);</span>
+<span class="n">non_articulation_vertices</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.axes._subplots.AxesSubplot at 0x12ce86ef0&gt;
+</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_connected-components_30_0.png"><img alt="../_images/notebooks_connected-components_30_0.png" src="../_images/notebooks_connected-components_30_0.png" style="width: 417px; height: 411px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_connected-components_51_1.png"><img alt="../_images/notebooks_connected-components_51_1.png" src="../_images/notebooks_connected-components_51_1.png" style="width: 417px; height: 411px;" /></a>
 </div>
 </div>
 </div>
@@ -905,7 +1269,7 @@ geopandas  0.6.2
 <div class="section" id="3.-Add-a-loop-of-libpysal.cg.Chain-objects">
 <h2>3. Add a loop of <code class="docutils literal notranslate"><span class="pre">libpysal.cg.Chain</span></code> objects<a class="headerlink" href="#3.-Add-a-loop-of-libpysal.cg.Chain-objects" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -913,16 +1277,16 @@ geopandas  0.6.2
     <span class="n">Chain</span><span class="p">([</span><span class="n">Point</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">Point</span><span class="p">([</span><span class="mf">3.25</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">])]),</span>
     <span class="n">Chain</span><span class="p">([</span><span class="n">Point</span><span class="p">([</span><span class="mf">3.25</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">]),</span> <span class="n">Point</span><span class="p">([</span><span class="mf">3.5</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">])]),</span>
     <span class="n">Chain</span><span class="p">([</span><span class="n">Point</span><span class="p">([</span><span class="mf">3.5</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">]),</span> <span class="n">Point</span><span class="p">([</span><span class="mf">3.75</span><span class="p">,</span> <span class="mi">1</span><span class="p">])]),</span>
-    <span class="n">Chain</span><span class="p">([</span><span class="n">Point</span><span class="p">([</span><span class="mf">3.75</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">Point</span><span class="p">([</span><span class="mf">3.5</span><span class="p">,</span> <span class="o">.</span><span class="mi">75</span><span class="p">])]),</span>
-    <span class="n">Chain</span><span class="p">([</span><span class="n">Point</span><span class="p">([</span><span class="mf">3.5</span><span class="p">,</span> <span class="o">.</span><span class="mi">75</span><span class="p">]),</span> <span class="n">Point</span><span class="p">([</span><span class="mf">3.25</span><span class="p">,</span> <span class="o">.</span><span class="mi">75</span><span class="p">])]),</span>
-    <span class="n">Chain</span><span class="p">([</span><span class="n">Point</span><span class="p">([</span><span class="mf">3.25</span><span class="p">,</span> <span class="o">.</span><span class="mi">75</span><span class="p">]),</span> <span class="n">Point</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">])]),</span>
+    <span class="n">Chain</span><span class="p">([</span><span class="n">Point</span><span class="p">([</span><span class="mf">3.75</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">Point</span><span class="p">([</span><span class="mf">3.5</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">])]),</span>
+    <span class="n">Chain</span><span class="p">([</span><span class="n">Point</span><span class="p">([</span><span class="mf">3.5</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">]),</span> <span class="n">Point</span><span class="p">([</span><span class="mf">3.25</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">])]),</span>
+    <span class="n">Chain</span><span class="p">([</span><span class="n">Point</span><span class="p">([</span><span class="mf">3.25</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">]),</span> <span class="n">Point</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">])]),</span>
 <span class="p">]</span>
 <span class="n">lines</span> <span class="o">+=</span> <span class="n">new_lines</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -945,7 +1309,7 @@ geopandas  0.6.2
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -954,7 +1318,7 @@ geopandas  0.6.2
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -963,7 +1327,7 @@ geopandas  0.6.2
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -972,7 +1336,7 @@ geopandas  0.6.2
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -995,7 +1359,7 @@ geopandas  0.6.2
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1005,7 +1369,7 @@ geopandas  0.6.2
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1014,7 +1378,7 @@ geopandas  0.6.2
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1151,7 +1515,7 @@ geopandas  0.6.2
 <div class="section" id="Here-we-can-see-that-all-the-new-network-vertices-are-non-articulation-point">
 <h3>Here we can see that all the new network vertices are non-articulation point<a class="headerlink" href="#Here-we-can-see-that-all-the-new-network-vertices-are-non-articulation-point" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1160,7 +1524,7 @@ geopandas  0.6.2
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1172,7 +1536,7 @@ geopandas  0.6.2
 <div class="section" id="Slice-out-the-articulation-points-and-non-articulation-points">
 <h3>Slice out the articulation points and non-articulation points<a class="headerlink" href="#Slice-out-the-articulation-points-and-non-articulation-points" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1186,13 +1550,133 @@ geopandas  0.6.2
 <div class="section" id="The-new-network-vertices-are-non-articulation-points-because-they-form-a-closed-ring">
 <h3>The new network vertices are non-articulation points because they form a closed ring<a class="headerlink" href="#The-new-network-vertices-are-non-articulation-points-because-they-form-a-closed-ring" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">base</span> <span class="o">=</span> <span class="n">arcs_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s2">&quot;comp_label&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Set2&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
 <span class="n">articulation_vertices</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">non_articulation_vertices</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">);</span>
+<span class="n">non_articulation_vertices</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.axes._subplots.AxesSubplot at 0x12d5e78d0&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<a class="reference internal image-reference" href="../_images/notebooks_connected-components_64_1.png"><img alt="../_images/notebooks_connected-components_64_1.png" src="../_images/notebooks_connected-components_64_1.png" style="width: 427px; height: 347px;" /></a>
+</div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="4.-Longest-vs. largest-components-—-cross-vs. hexagon">
+<h2>4. Longest vs. largest components — cross vs. hexagon<a class="headerlink" href="#4.-Longest-vs. largest-components-—-cross-vs. hexagon" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cross</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">Chain</span><span class="p">([</span><span class="n">Point</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">]),</span> <span class="n">Point</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">]),</span> <span class="n">Point</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">])]),</span>
+    <span class="n">Chain</span><span class="p">([</span><span class="n">Point</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">Point</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">]),</span> <span class="n">Point</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">])]),</span>
+<span class="p">]</span>
+<span class="n">hexagon</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">Chain</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="n">Point</span><span class="p">([</span><span class="mi">12</span><span class="p">,</span> <span class="mi">5</span><span class="p">]),</span>
+            <span class="n">Point</span><span class="p">([</span><span class="mi">13</span><span class="p">,</span> <span class="mi">6</span><span class="p">]),</span>
+            <span class="n">Point</span><span class="p">([</span><span class="mi">14</span><span class="p">,</span> <span class="mi">6</span><span class="p">]),</span>
+            <span class="n">Point</span><span class="p">([</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">]),</span>
+            <span class="n">Point</span><span class="p">([</span><span class="mi">14</span><span class="p">,</span> <span class="mi">4</span><span class="p">]),</span>
+            <span class="n">Point</span><span class="p">([</span><span class="mi">13</span><span class="p">,</span> <span class="mi">4</span><span class="p">]),</span>
+            <span class="n">Point</span><span class="p">([</span><span class="mi">12</span><span class="p">,</span> <span class="mi">5</span><span class="p">]),</span>
+        <span class="p">]</span>
+    <span class="p">),</span>
+<span class="p">]</span>
+<span class="n">lines</span> <span class="o">=</span> <span class="n">cross</span> <span class="o">+</span> <span class="n">hexagon</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">in_data</span><span class="o">=</span><span class="n">lines</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/jgaboardi/miniconda3/envs/py3_spgh_dev/lib/python3.7/site-packages/libpysal/weights/weights.py:167: UserWarning: The weights matrix is not fully connected:
+ There are 2 disconnected components.
+  warnings.warn(message)
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># network vertices and arcs</span>
+<span class="n">vertices_df</span><span class="p">,</span> <span class="n">arcs_df</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">arcs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">base</span> <span class="o">=</span> <span class="n">arcs_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s2">&quot;comp_label&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Set2&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+<span class="n">vertices_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.axes._subplots.AxesSubplot at 0x12d92c4a8&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<a class="reference internal image-reference" href="../_images/notebooks_connected-components_70_1.png"><img alt="../_images/notebooks_connected-components_70_1.png" src="../_images/notebooks_connected-components_70_1.png" style="width: 424px; height: 294px;" /></a>
+</div>
+</div>
+<div class="section" id="The-longest-component-is-not-necessarily-the-largest">
+<h3>The longest component is not necessarily the largest<a class="headerlink" href="#The-longest-component-is-not-necessarily-the-largest" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="This-is-because-in-spaghetti-the-largest-compnent-equates-to-the-most-vertices">
+<h4>This is because in <code class="docutils literal notranslate"><span class="pre">spaghetti</span></code> the largest compnent equates to the most vertices<a class="headerlink" href="#This-is-because-in-spaghetti-the-largest-compnent-equates-to-the-most-vertices" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">clongest</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">network_longest_component</span>
+<span class="n">clength</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">ntw</span><span class="o">.</span><span class="n">network_component_lengths</span><span class="p">[</span><span class="n">clongest</span><span class="p">],</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">clargest</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">network_largest_component</span>
+<span class="n">cverts</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">network_component_vertex_count</span><span class="p">[</span><span class="n">clargest</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The longest component is </span><span class="si">%s</span><span class="s2"> at </span><span class="si">%s</span><span class="s2"> units of distance.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">clongest</span><span class="p">,</span> <span class="n">clength</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The largest component is </span><span class="si">%s</span><span class="s2"> with </span><span class="si">%s</span><span class="s2"> vertices.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">clargest</span><span class="p">,</span> <span class="n">cverts</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -1200,7 +1684,308 @@ geopandas  0.6.2
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_connected-components_43_0.png"><img alt="../_images/notebooks_connected-components_43_0.png" src="../_images/notebooks_connected-components_43_0.png" style="width: 427px; height: 347px;" /></a>
+<div class="highlight"><pre>
+The longest component is 0 at 20.0 units of distance.
+The largest component is 1 with 6 vertices.
+</pre></div></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="5.-Extracting-components">
+<h2>5. Extracting components<a class="headerlink" href="#5.-Extracting-components" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="Extract-the-longest-component">
+<h3>Extract the longest component<a class="headerlink" href="#Extract-the-longest-component" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">longest</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">extract_component</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">ntw</span><span class="o">.</span><span class="n">network_longest_component</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># network vertices and arcs</span>
+<span class="n">vertices_df</span><span class="p">,</span> <span class="n">arcs_df</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">longest</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">arcs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">vertices_df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>geometry</th>
+      <th>comp_label</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>POINT (0.00000 5.00000)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>POINT (5.00000 5.00000)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>POINT (5.00000 10.00000)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>POINT (5.00000 0.00000)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>POINT (10.00000 5.00000)</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">base</span> <span class="o">=</span> <span class="n">arcs_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s2">&quot;comp_label&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Set2&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+<span class="n">vertices_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.axes._subplots.AxesSubplot at 0x12dbef128&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<a class="reference internal image-reference" href="../_images/notebooks_connected-components_77_1.png"><img alt="../_images/notebooks_connected-components_77_1.png" src="../_images/notebooks_connected-components_77_1.png" style="width: 414px; height: 411px;" /></a>
+</div>
+</div>
+</div>
+<div class="section" id="Extract-the-largest-component-and-plot">
+<h3>Extract the largest component and plot<a class="headerlink" href="#Extract-the-largest-component-and-plot" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">largest</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">extract_component</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">ntw</span><span class="o">.</span><span class="n">network_largest_component</span><span class="p">)</span>
+<span class="c1"># network vertices and arcs</span>
+<span class="n">vertices_df</span><span class="p">,</span> <span class="n">arcs_df</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">largest</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">arcs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">base</span> <span class="o">=</span> <span class="n">arcs_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s2">&quot;comp_label&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Set2&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+<span class="n">vertices_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.axes._subplots.AxesSubplot at 0x12de67da0&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<a class="reference internal image-reference" href="../_images/notebooks_connected-components_79_1.png"><img alt="../_images/notebooks_connected-components_79_1.png" src="../_images/notebooks_connected-components_79_1.png" style="width: 427px; height: 294px;" /></a>
+</div>
+</div>
+</div>
+<div class="section" id="Empirical-Example-—-New-Haven,-Connecticut">
+<h3>Empirical Example — New Haven, Connecticut<a class="headerlink" href="#Empirical-Example-—-New-Haven,-Connecticut" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">newhaven</span> <span class="o">=</span> <span class="n">libpysal</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;newhaven_nework.shp&quot;</span><span class="p">)</span>
+<span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">in_data</span><span class="o">=</span><span class="n">newhaven</span><span class="p">,</span> <span class="n">extractgraph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/jgaboardi/miniconda3/envs/py3_spgh_dev/lib/python3.7/site-packages/libpysal/weights/weights.py:167: UserWarning: The weights matrix is not fully connected:
+ There are 21 disconnected components.
+ There are 7 islands with ids: (1494, 1495), (2129, 2130), (3756, 3757), (8669, 8670), (9611, 9612), (11152, 11153), (11228, 11229).
+  warnings.warn(message)
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Extract-the-longest-component">
+<h3>Extract the longest component<a class="headerlink" href="#Extract-the-longest-component" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">longest</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">extract_component</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">ntw</span><span class="o">.</span><span class="n">network_longest_component</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># network vertices and arcs</span>
+<span class="n">vertices_df</span><span class="p">,</span> <span class="n">arcs_df</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">arcs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">arcs_df</span><span class="o">.</span><span class="n">crs</span> <span class="o">=</span> <span class="s2">&quot;epsg:4269&quot;</span>
+<span class="n">arcs_df</span> <span class="o">=</span> <span class="n">arcs_df</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s2">&quot;epsg:6433&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># longest vertices and arcs</span>
+<span class="n">lc_vertices</span><span class="p">,</span> <span class="n">lc_arcs</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">longest</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">arcs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">lc_arcs</span><span class="o">.</span><span class="n">crs</span> <span class="o">=</span> <span class="s2">&quot;epsg:4269&quot;</span>
+<span class="n">lc_arcs</span> <span class="o">=</span> <span class="n">lc_arcs</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s2">&quot;epsg:6433&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Filter-non-longest-component-arcs">
+<h3>Filter non-longest component arcs<a class="headerlink" href="#Filter-non-longest-component-arcs" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">nlc</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">network_longest_component</span>
+<span class="n">arcs_df</span> <span class="o">=</span> <span class="n">arcs_df</span><span class="p">[</span><span class="n">arcs_df</span><span class="o">.</span><span class="n">comp_label</span> <span class="o">!=</span> <span class="n">nlc</span><span class="p">]</span>
+<span class="n">ocomp</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">ntw</span><span class="o">.</span><span class="n">network_component_labels</span><span class="p">))</span>
+<span class="n">ocomp</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">nlc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Plot-network-arcs">
+<h3>Plot network arcs<a class="headerlink" href="#Plot-network-arcs" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">legend</span><span class="p">(</span><span class="n">objects</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Add a legend to a plot&quot;&quot;&quot;</span>
+    <span class="n">patches</span> <span class="o">=</span> <span class="n">make_patches</span><span class="p">(</span><span class="o">*</span><span class="n">objects</span><span class="p">)</span>
+    <span class="n">kws</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;fancybox&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;framealpha&quot;</span><span class="p">:</span> <span class="mf">0.85</span><span class="p">,</span> <span class="s2">&quot;fontsize&quot;</span><span class="p">:</span> <span class="s2">&quot;x-large&quot;</span><span class="p">}</span>
+    <span class="n">kws</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;loc&quot;</span><span class="p">:</span> <span class="s2">&quot;lower left&quot;</span><span class="p">,</span> <span class="s2">&quot;labelspacing&quot;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span> <span class="s2">&quot;borderpad&quot;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">})</span>
+    <span class="n">legend</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="o">=</span><span class="n">patches</span><span class="p">,</span> <span class="o">**</span><span class="n">kws</span><span class="p">)</span>
+    <span class="n">legend</span><span class="o">.</span><span class="n">get_frame</span><span class="p">()</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[56]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">make_patches</span><span class="p">(</span><span class="n">comp_type</span><span class="p">,</span> <span class="n">in_comp</span><span class="p">,</span> <span class="n">oc</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create patches for legend&quot;&quot;&quot;</span>
+    <span class="n">labels_colors_alpha</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">[</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> component: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">comp_type</span><span class="o">.</span><span class="n">capitalize</span><span class="p">(),</span> <span class="n">in_comp</span><span class="p">),</span> <span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">&quot;Other components: </span><span class="si">%s</span><span class="s2">-</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">oc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">oc</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="p">]</span>
+    <span class="n">patches</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">labels_colors_alpha</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">Line2D</span><span class="p">([],</span> <span class="p">[],</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">l</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">a</span><span class="p">)</span>
+        <span class="n">patches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">patches</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[57]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">base</span> <span class="o">=</span> <span class="n">arcs_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">lc_arcs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="c1"># add legend</span>
+<span class="n">legend</span><span class="p">((</span><span class="s2">&quot;longest&quot;</span><span class="p">,</span> <span class="n">nlc</span><span class="p">,</span> <span class="p">(</span><span class="n">ocomp</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ocomp</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])))</span>
+<span class="c1"># add scale bar</span>
+<span class="n">scalebar</span> <span class="o">=</span> <span class="n">ScaleBar</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">)</span>
+<span class="n">base</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">scalebar</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[57]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib_scalebar.scalebar.ScaleBar at 0x12fdc3d30&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<a class="reference internal image-reference" href="../_images/notebooks_connected-components_91_1.png"><img alt="../_images/notebooks_connected-components_91_1.png" src="../_images/notebooks_connected-components_91_1.png" style="width: 619px; height: 574px;" /></a>
 </div>
 </div>
 </div>

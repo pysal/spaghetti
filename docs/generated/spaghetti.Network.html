@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>spaghetti.Network &#8212; spaghetti v1.4.1 Manual</title>
+    <title>spaghetti.Network &#8212; spaghetti v1.4.2 Manual</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/pysal-styles.css" />
@@ -42,7 +42,7 @@
         </button>
         <a class="navbar-brand" href="../index.html">
           spaghetti</a>
-        <span class="navbar-text navbar-version pull-left"><b>1.4.1</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>1.4.2</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -251,8 +251,7 @@ to the number of edges in the graph-theoretic representation.</p>
 <dd class="field-odd"><dl>
 <dt><strong>adjacencylist</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#list" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">list</span></code></a></span></dt><dd><p>List of lists storing vertex adjacency.</p>
 </dd>
-<dt><strong>vertex_coords</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are the vertex ID and values are the (x,y) coordinates
-inverse to vertices.</p>
+<dt><strong>vertex_coords</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are vertex IDs and values are (x,y) coordinates of the vertices.</p>
 </dd>
 <dt><strong>vertex_list</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#list" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">list</span></code></a></span></dt><dd><p>List of vertex IDs.</p>
 </dd>
@@ -285,11 +284,30 @@ island ring (loop) component.</p>
 </dd>
 <dt><strong>network_n_components</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>Count of connected components in the network.</p>
 </dd>
+<dt><strong>network_fully_connected</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.8)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the network representation is a single connected
+component, otherwise <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
 <dt><strong>network_component_labels</strong><span class="classifier"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></span></dt><dd><p>Component labels for network arcs.</p>
 </dd>
 <dt><strong>network_component2arc</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Lookup in the form {int: list} for arcs comprising network
 connected components keyed by component labels with arcs in
 a list as values.</p>
+</dd>
+<dt><strong>network_component_lengths</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Length of each network component (keyed by component label).</p>
+</dd>
+<dt><strong>network_longest_component</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The ID of the longest component in the network. This is not
+necessarily equal to <code class="docutils literal notranslate"><span class="pre">network_largest_component</span></code>.</p>
+</dd>
+<dt><strong>network_component_vertices</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Lookup in the form {int: list} for vertices comprising network
+connected components keyed by component labels with vertices in
+a list as values.</p>
+</dd>
+<dt><strong>network_component_vertex_count</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>The number of vertices in each network component
+(keyed by component label).</p>
+</dd>
+<dt><strong>network_largest_component</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The ID of the largest component in the network. Within <code class="docutils literal notranslate"><span class="pre">spaghetti</span></code>
+the largest component is the one with the most vertices. This is not
+necessarily equal to <code class="docutils literal notranslate"><span class="pre">network_longest_component</span></code>.</p>
 </dd>
 <dt><strong>network_component_is_ring</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Lookup in the form {int: bool} keyed by component labels with values
 as <code class="docutils literal notranslate"><span class="pre">True</span></code> if the component is a closed ring, otherwise <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
@@ -298,11 +316,30 @@ as <code class="docutils literal notranslate"><span class="pre">True</span></cod
 </dd>
 <dt><strong>graph_n_components</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>Count of connected components in the network.</p>
 </dd>
+<dt><strong>graph_fully_connected</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.8)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the graph representation is a single connected
+component, otherwise <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
 <dt><strong>graph_component_labels</strong><span class="classifier"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></span></dt><dd><p>Component labels for graph edges.</p>
 </dd>
 <dt><strong>graph_component2edge</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Lookup in the form {int: list} for edges comprising graph connected
 components keyed by component labels with edges in a list
 as values.</p>
+</dd>
+<dt><strong>graph_component_lengths</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Length of each graph component (keyed by component label).</p>
+</dd>
+<dt><strong>graph_longest_component</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The ID of the longest component in the graph. This is not
+necessarily equal to <code class="docutils literal notranslate"><span class="pre">graph_largest_component</span></code>.</p>
+</dd>
+<dt><strong>graph_component_vertices</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Lookup in the form {int: list} for vertices comprising graph
+connected components keyed by component labels with vertices in
+a list as values.</p>
+</dd>
+<dt><strong>graph_component_vertex_count</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>The number of vertices in each graph component
+(keyed by component label).</p>
+</dd>
+<dt><strong>graph_largest_component</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The ID of the largest component in the graph. Within <code class="docutils literal notranslate"><span class="pre">spaghetti</span></code>
+the largest component is the one with the most vertices. This is not
+necessarily equal to <code class="docutils literal notranslate"><span class="pre">graph_longest_component</span></code>.</p>
 </dd>
 <dt><strong>graph_component_is_ring</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Lookup in the form {int: bool} keyed by component labels with values as
 <code class="docutils literal notranslate"><span class="pre">True</span></code> if the component is a closed ring, otherwise <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
@@ -356,14 +393,14 @@ as values.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#spaghetti.Network.enum_links_vertex" title="spaghetti.Network.enum_links_vertex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enum_links_vertex</span></code></a>(self, v0)</p></td>
 <td><p>Returns the arcs (links) adjacent to vertices.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#spaghetti.Network.extract_components" title="spaghetti.Network.extract_components"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_components</span></code></a>(self, w[, graph])</p></td>
-<td><p>Extract connected component information from a <code class="docutils literal notranslate"><span class="pre">libpysal.weights.W</span></code> object</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#spaghetti.Network.extractgraph" title="spaghetti.Network.extractgraph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extractgraph</span></code></a>(self)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#spaghetti.Network.extractgraph" title="spaghetti.Network.extractgraph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extractgraph</span></code></a>(self)</p></td>
 <td><p>Using the existing network representation, create a graph-theoretic representation by removing all vertices with a neighbor incidence of two (non-articulation points).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#spaghetti.Network.full_distance_matrix" title="spaghetti.Network.full_distance_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">full_distance_matrix</span></code></a>(self, n_processes[, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#spaghetti.Network.full_distance_matrix" title="spaghetti.Network.full_distance_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">full_distance_matrix</span></code></a>(self, n_processes[, …])</p></td>
 <td><p>All vertex-to-vertex distances on a network.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#spaghetti.Network.identify_components" title="spaghetti.Network.identify_components"><code class="xref py py-obj docutils literal notranslate"><span class="pre">identify_components</span></code></a>(self, w[, graph])</p></td>
+<td><p>Identify connected component information from a <code class="docutils literal notranslate"><span class="pre">libpysal.weights.W</span></code> object</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="spaghetti.Network.loadnetwork.html#spaghetti.Network.loadnetwork" title="spaghetti.Network.loadnetwork"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loadnetwork</span></code></a>(filename)</p></td>
 <td><p>Load a network from a binary file saved on disk.</p></td>
@@ -956,25 +993,6 @@ regarding spatial weights.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="spaghetti.Network.extract_components">
-<code class="sig-name descname">extract_components</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">w</em>, <em class="sig-param">graph=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.extract_components"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.extract_components" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extract connected component information from a
-<code class="docutils literal notranslate"><span class="pre">libpysal.weights.W</span></code> object</p>
-<dl class="field-list">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl>
-<dt><strong>w</strong><span class="classifier"><a class="reference external" href="https://pysal.org/libpysal/generated/libpysal.weights.W.html#libpysal.weights.W" title="(in libpysal v4.2.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">libpysal.weights.W</span></code></a></span></dt><dd><p>Weights object created from the network segments (either
-raw or graph-theoretic).</p>
-</dd>
-<dt><strong>graph</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.8)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>Flag for a raw network (<code class="docutils literal notranslate"><span class="pre">False</span></code>) or graph-theoretic network
-(<code class="docutils literal notranslate"><span class="pre">True</span></code>). Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
 <dt id="spaghetti.Network.extractgraph">
 <code class="sig-name descname">extractgraph</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.extractgraph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.extractgraph" title="Permalink to this definition">¶</a></dt>
 <dd><p>Using the existing network representation, create a
@@ -1005,6 +1023,25 @@ Default is <code class="docutils literal notranslate"><span class="pre">False</s
 </dl>
 <p class="rubric">Notes</p>
 <p>Based on <a class="bibtex reference internal" href="../references.html#dijkstra1959a" id="id26">[Dij59]</a> and <a class="bibtex reference internal" href="../references.html#doi-10-1002-9781119967101-ch3" id="id27">[OS12a]</a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="spaghetti.Network.identify_components">
+<code class="sig-name descname">identify_components</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">w</em>, <em class="sig-param">graph=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.identify_components"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.identify_components" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identify connected component information from a
+<code class="docutils literal notranslate"><span class="pre">libpysal.weights.W</span></code> object</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>w</strong><span class="classifier"><a class="reference external" href="https://pysal.org/libpysal/generated/libpysal.weights.W.html#libpysal.weights.W" title="(in libpysal v4.2.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">libpysal.weights.W</span></code></a></span></dt><dd><p>Weights object created from the network segments (either
+raw or graph-theoretic).</p>
+</dd>
+<dt><strong>graph</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.8)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>Flag for a raw network (<code class="docutils literal notranslate"><span class="pre">False</span></code>) or graph-theoretic network
+(<code class="docutils literal notranslate"><span class="pre">True</span></code>). Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
