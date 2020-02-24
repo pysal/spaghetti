@@ -3,7 +3,10 @@
 
 ## Version 1.4.2.post2 (2020-02-24)
 
-We closed a total of 0 issues (enhancements and bug fixes) through 1 pull requests, since our last release on 2020-02-24.
+We closed a total of 1 issues (enhancements and bug fixes) through 1 pull requests, since our last release on 2020-02-24.
+
+## Issues Closed
+ - rebuilding docs for post release (#435)
 
 ## Pull Requests
   - Docs for v1.4.2.post1 were not rebuilt (#434)
