@@ -5,13 +5,14 @@
 
 We closed a total of 57 issues (enhancements and bug fixes) through 18 pull requests, since our last release on 2020-01-25.
 
-### Highlights
+## Highlights
  * Python 3.8 support and Windows OS testing
  * Increased robustness of `regular_lattices()`, which now can create a lattice from any bounds, including bounding box of a shapefile or GeoDataFrame
  * Point type A to point type B shortest path extraction
  * Longest and largest network component identification
  * Network component extraction
- * New "Integrations and Applications" notebookGeneral cleanup, including bug and typo fixes
+ * New "Integrations and Applications" notebook
+ * General cleanup, including bug and typo fixes
 
 
 ## Issues Closed
