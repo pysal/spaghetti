@@ -7,11 +7,11 @@ environment:
   matrix:
 
     - PYTHON_VERSION: "3.6"
-      MINICONDA: C:\Miniconda36-x64
+      MINICONDA: C:\Miniconda37-x64
       ENV_FILE: "ci/travis/36-latest-conda-forge-PYPI.yaml"
     
     - PYTHON_VERSION: "3.6"
-      MINICONDA: C:\Miniconda36-x64
+      MINICONDA: C:\Miniconda37-x64
       ENV_FILE: "ci/travis/36-latest-conda-forge-GIT.yaml"
 
     - PYTHON_VERSION: "3.7"
