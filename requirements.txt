@@ -3,4 +3,3 @@ numpy>=1.3
 pandas
 rtree
 scipy>=0.11
-watermark

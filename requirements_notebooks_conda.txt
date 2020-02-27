@@ -2,3 +2,4 @@ descartes
 matplotlib
 pulp
 seaborn
+watermark
