@@ -1,6 +1,7 @@
 from libpysal import cg, examples, io
 import numpy
 import unittest
+import copy
 
 try:
     import geopandas
@@ -9,28 +10,59 @@ try:
 except ImportError:
     GEOPANDAS_EXTINCT = True
 
-# fetch the New Haven dataset
-examples.load_example("newHaven")
-
 
 class TestNetwork(unittest.TestCase):
     def setUp(self):
 
+        # empirical network instantiated from shapefile
         self.path_to_shp = examples.get_path("streets.shp")
-
-        # network instantiated from shapefile
         self.ntw_from_shp = self.spaghetti.Network(
             in_data=self.path_to_shp, weightings=True, w_components=True
         )
         self.n_known_arcs, self.n_known_vertices = 303, 230
 
         # native pysal geometries
-        self.chains = chains = [
+        self.chains_from_shp = chains = [
             cg.Chain(
                 [cg.Point(self.ntw_from_shp.vertex_coords[vertex]) for vertex in arc]
             )
             for arc in self.ntw_from_shp.arcs
         ]
+
+        # synthetic network instantiated from pysal geometries
+
+        #  single libpysal.cg.Chain
+        self.p11 = cg.Point((1, 1))
+        self.p11p22_chain = cg.Chain([self.p11, cg.Point((2, 2))])
+
+        # lattice and ring + extension
+        bounds = (0, 0, 2, 2)
+        h, v = 1, 1
+        self.lattice = self.spaghetti.regular_lattice(bounds, h, nv=v, exterior=False)
+        self.ring = [
+            cg.Chain([cg.Point([3, 1]), cg.Point([3.25, 1.25])]),
+            cg.Chain([cg.Point([3.25, 1.25]), cg.Point([3.375, 1.25])]),
+            cg.Chain([cg.Point([3.375, 1.25]), cg.Point([3.5, 1.25])]),
+            cg.Chain([cg.Point([3.5, 1.25]), cg.Point([3.75, 1])]),
+            cg.Chain([cg.Point([3.75, 1]), cg.Point([3.5, 0.75])]),
+            cg.Chain([cg.Point([3.5, 0.75]), cg.Point([3.375, 0.75])]),
+            cg.Chain([cg.Point([3.375, 0.75]), cg.Point([3.25, 0.75])]),
+            cg.Chain([cg.Point([3.25, 0.75]), cg.Point([3, 1])]),
+        ]
+        self.extension = [
+            cg.Chain([cg.Point([1, 2]), cg.Point([2, 2]), cg.Point([2, 1])])
+        ]
+
+        self.lines = self.lattice + self.ring + self.extension
+        self.ntw_from_lattice_ring = self.spaghetti.Network(in_data=self.lines)
+
+        self.p0505 = cg.Point([0.5, 0.5])
+        self.p052 = cg.Point([0.5, 2.0])
+        self.p0525 = cg.Point([0.5, 2.5])
+
+        self.ntw_from_lattice_ring.snapobservations(
+            [self.p0505, self.p052], "p", attribute=False
+        )
 
     def tearDown(self):
         pass
@@ -52,7 +84,7 @@ class TestNetwork(unittest.TestCase):
         known_length = sum(self.ntw_from_shp.arc_lengths.values())
         # network instantiated from libpysal.cg.Chain objects
         for dtype in (list, tuple, numpy.array):
-            ntw_data = dtype(self.chains)
+            ntw_data = dtype(self.chains_from_shp)
             self.ntw_from_chains = self.spaghetti.Network(in_data=ntw_data)
             self.assertEqual(
                 self.ntw_from_chains.network_n_components, known_components
@@ -62,30 +94,33 @@ class TestNetwork(unittest.TestCase):
             )
 
     def test_network_from_single_libpysal_chain(self):
-        # network instantiated from a single libpysal.cg.Chain
-        chain = cg.Chain([cg.Point((1, 1)), cg.Point((2, 2))])
-        self.ntw_chain_out = self.spaghetti.Network(in_data=chain)
+        ## network instantiated from a single libpysal.cg.Chain
+        self.ntw_chain_out = self.spaghetti.Network(in_data=self.p11p22_chain)
         # test save and load network
         self.ntw_chain_out.savenetwork("test_network.pkl")
         self.ntw_chain_in = self.spaghetti.Network.loadnetwork("test_network.pkl")
         self.assertEqual(self.ntw_chain_in.arcs, self.ntw_chain_in.edges)
 
     def test_network_from_vertical_libpysal_chains(self):
-        vert_up = cg.Chain([cg.Point((1, 1)), cg.Point((1, 2))])
+        vert_up = cg.Chain(
+            [self.p0505, self.p052]
+        )  ####################################### test vertical stuff...
         self.ntw_up_chain = self.spaghetti.Network(in_data=vert_up)
         self.assertEqual(len(self.ntw_up_chain.arcs), len(vert_up.segments))
 
-        vert_down = cg.Chain([cg.Point((5, 5)), cg.Point((5, 3))])
+        vert_down = cg.Chain(
+            [self.p052, self.p0505]
+        )  ##################################### same
         self.ntw_down_chain = self.spaghetti.Network(in_data=vert_down)
         self.assertEqual(len(self.ntw_down_chain.arcs), len(vert_down.segments))
 
     def test_network_failures(self):
         # try instantiating network with single point
         with self.assertRaises(TypeError):
-            self.spaghetti.Network(in_data=cg.Point((0, 0)))
+            self.spaghetti.Network(in_data=self.p11)
         # try instantiating network with list of single point
         with self.assertRaises(TypeError):
-            self.spaghetti.Network(in_data=[cg.Point((0, 0))])
+            self.spaghetti.Network(in_data=[self.p11])
 
     @unittest.skipIf(GEOPANDAS_EXTINCT, "Missing Geopandas")
     def test_network_from_geopandas(self):
@@ -151,8 +186,11 @@ class TestNetwork(unittest.TestCase):
         bounds, h, v = (0, 0, 3, 3), 2, 2
         lattice = self.spaghetti.regular_lattice(bounds, h, nv=v, exterior=False)
         ntw = self.spaghetti.Network(in_data=lattice)
-        points1 = [cg.Point((0.5, 0.5)), cg.Point((2.5, 2.5))]
-        points2 = [cg.Point((0.5, 2.5)), cg.Point((2.5, 0.5)), cg.Point((0.75, 0.6))]
+
+        self.p0505, self.p052
+
+        points1 = [self.p0505, cg.Point((2.5, 2.5))]
+        points2 = [self.p0525, cg.Point((2.5, 0.5)), cg.Point((0.75, 0.6))]
         ntw.snapobservations(points1, "points1")
         ntw.snapobservations(points2, "points2")
         _, tree = ntw.allneighbordistances("points1", "points2", gen_tree=True)
@@ -240,27 +278,8 @@ class TestNetwork(unittest.TestCase):
 
     def test_connected_components(self):
 
-        bounds = (0, 0, 2, 2)
-        h, v = 1, 1
-        lattice = self.spaghetti.regular_lattice(bounds, h, nv=v, exterior=False)
-        ring = [
-            cg.Chain([cg.Point([3, 1]), cg.Point([3.25, 1.25])]),
-            cg.Chain([cg.Point([3.25, 1.25]), cg.Point([3.375, 1.25])]),
-            cg.Chain([cg.Point([3.375, 1.25]), cg.Point([3.5, 1.25])]),
-            cg.Chain([cg.Point([3.5, 1.25]), cg.Point([3.75, 1])]),
-            cg.Chain([cg.Point([3.75, 1]), cg.Point([3.5, 0.75])]),
-            cg.Chain([cg.Point([3.5, 0.75]), cg.Point([3.375, 0.75])]),
-            cg.Chain([cg.Point([3.375, 0.75]), cg.Point([3.25, 0.75])]),
-            cg.Chain([cg.Point([3.25, 0.75]), cg.Point([3, 1])]),
-        ]
-        extension = [cg.Chain([cg.Point([1, 2]), cg.Point([2, 2]), cg.Point([2, 1])])]
-        lines = lattice + ring + extension
-        ntw = self.spaghetti.Network(in_data=lines)
-        # test warnings
-        ntw.snapobservations(
-            [cg.Point([0.5, 0.5]), cg.Point([0.5, 2.0])], "point", attribute=False
-        )
-        s2s, tree = ntw.allneighbordistances("point", gen_tree=True)
+        ## test warnings
+        ntw = copy.deepcopy(self.ntw_from_lattice_ring)
 
         # observed values
         observed_connected = ntw.network_fully_connected
@@ -309,27 +328,7 @@ class TestNetwork(unittest.TestCase):
 
     def test_extract_component(self):
 
-        bounds = (0, 0, 2, 2)
-        h, v = 1, 1
-        lattice = self.spaghetti.regular_lattice(bounds, h, nv=v, exterior=False)
-        ring = [
-            cg.Chain([cg.Point([3, 1]), cg.Point([3.25, 1.25])]),
-            cg.Chain([cg.Point([3.25, 1.25]), cg.Point([3.375, 1.25])]),
-            cg.Chain([cg.Point([3.375, 1.25]), cg.Point([3.5, 1.25])]),
-            cg.Chain([cg.Point([3.5, 1.25]), cg.Point([3.75, 1])]),
-            cg.Chain([cg.Point([3.75, 1]), cg.Point([3.5, 0.75])]),
-            cg.Chain([cg.Point([3.5, 0.75]), cg.Point([3.375, 0.75])]),
-            cg.Chain([cg.Point([3.375, 0.75]), cg.Point([3.25, 0.75])]),
-            cg.Chain([cg.Point([3.25, 0.75]), cg.Point([3, 1])]),
-        ]
-        extension = [cg.Chain([cg.Point([1, 2]), cg.Point([2, 2]), cg.Point([2, 1])])]
-        lines = lattice + ring + extension
-        ntw = self.spaghetti.Network(in_data=lines)
-        # test warnings
-        ntw.snapobservations(
-            [cg.Point([0.5, 0.5]), cg.Point([0.5, 2.0])], "point", attribute=False
-        )
-        s2s, tree = ntw.allneighbordistances("point", gen_tree=True)
+        ntw = copy.deepcopy(self.ntw_from_lattice_ring)
 
         # test longest component
         longest = self.spaghetti.extract_component(ntw, ntw.network_longest_component)
@@ -376,11 +375,15 @@ class TestNetwork(unittest.TestCase):
         self.assertEqual(observed, known)
 
         # 7x9 regular lattice from shapefile bounds
-        path = examples.get_path("newhaven_nework.shp")
-        shp = io.open(path)
+        known_vertices = [
+            (723414.3683108028, 875929.0396895551),
+            (724286.1381211297, 875929.0396895551),
+        ]
+        shp = io.open(self.path_to_shp)
         lattice = self.spaghetti.regular_lattice(shp.bbox, 5, nv=7, exterior=True)
-        lattice[0].vertices
-        [(-72.99783297382338, 41.247205), (-72.97499854017013, 41.247205)]
+        observed_vertices = lattice[0].vertices
+        for observed, known in zip(observed_vertices, known_vertices):
+            self.assertEqual((observed[0], observed[1]), known)
 
         # test for Type Error
         with self.assertRaises(TypeError):
