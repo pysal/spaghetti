@@ -19,7 +19,7 @@ class TestNetwork(unittest.TestCase):
         self.ntw_from_shp = self.spaghetti.Network(
             in_data=self.path_to_shp, weightings=True, w_components=True
         )
-        self.n_known_arcs, self.n_known_vertices = 303, 230
+        self.n_known_shp_arcs, self.n_known_shp_vertices = 303, 230
 
         # native pysal geometries
         self.chains_from_shp = chains = [
@@ -69,8 +69,8 @@ class TestNetwork(unittest.TestCase):
 
     def test_network_data_read(self):
         # shp test against known
-        self.assertEqual(len(self.ntw_from_shp.arcs), self.n_known_arcs)
-        self.assertEqual(len(self.ntw_from_shp.vertices), self.n_known_vertices)
+        self.assertEqual(len(self.ntw_from_shp.arcs), self.n_known_shp_arcs)
+        self.assertEqual(len(self.ntw_from_shp.vertices), self.n_known_shp_vertices)
 
         arc_lengths = self.ntw_from_shp.arc_lengths.values()
         self.assertAlmostEqual(sum(arc_lengths), 104414.0920159, places=5)
@@ -129,8 +129,8 @@ class TestNetwork(unittest.TestCase):
         self.ntw_from_gdf = self.spaghetti.Network(in_data=gdf, w_components=True)
 
         # gdf test against known
-        self.assertEqual(len(self.ntw_from_gdf.arcs), self.n_known_arcs)
-        self.assertEqual(len(self.ntw_from_gdf.vertices), self.n_known_vertices)
+        self.assertEqual(len(self.ntw_from_gdf.arcs), self.n_known_shp_arcs)
+        self.assertEqual(len(self.ntw_from_gdf.vertices), self.n_known_shp_vertices)
 
         # shp against gdf
         self.assertEqual(len(self.ntw_from_shp.arcs), len(self.ntw_from_gdf.arcs))
