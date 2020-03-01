@@ -11,29 +11,31 @@ except ImportError:
     GEOPANDAS_EXTINCT = True
 
 
+# empirical network shapefile
+STREETS = examples.get_path("streets.shp")
+
+# native pysal geometries ------------------------------------------------------
+# single libpysal.cg.Chain
+P00 = cg.Point((0, 0))
+P11 = cg.Point((1, 1))
+P22 = cg.Point((2, 2))
+P11P22_CHAIN = cg.Chain([P11, P22])
+
+
 class TestNetwork(unittest.TestCase):
     def setUp(self):
 
         # empirical network instantiated from shapefile
-        self.path_to_shp = examples.get_path("streets.shp")
-        self.ntw_from_shp = self.spaghetti.Network(
-            in_data=self.path_to_shp, weightings=True, w_components=True
-        )
+        self.ntw_shp = self.spaghetti.Network(in_data=STREETS, weightings=True)
         self.n_known_shp_arcs, self.n_known_shp_vertices = 303, 230
 
         # native pysal geometries
         self.chains_from_shp = chains = [
-            cg.Chain(
-                [cg.Point(self.ntw_from_shp.vertex_coords[vertex]) for vertex in arc]
-            )
-            for arc in self.ntw_from_shp.arcs
+            cg.Chain([cg.Point(self.ntw_shp.vertex_coords[vertex]) for vertex in arc])
+            for arc in self.ntw_shp.arcs
         ]
 
         # synthetic network instantiated from pysal geometries
-
-        #  single libpysal.cg.Chain
-        self.p11 = cg.Point((1, 1))
-        self.p11p22_chain = cg.Chain([self.p11, cg.Point((2, 2))])
 
         # lattice and ring + extension
         bounds = (0, 0, 2, 2)
@@ -69,19 +71,19 @@ class TestNetwork(unittest.TestCase):
 
     def test_network_data_read(self):
         # shp test against known
-        self.assertEqual(len(self.ntw_from_shp.arcs), self.n_known_shp_arcs)
-        self.assertEqual(len(self.ntw_from_shp.vertices), self.n_known_shp_vertices)
+        self.assertEqual(len(self.ntw_shp.arcs), self.n_known_shp_arcs)
+        self.assertEqual(len(self.ntw_shp.vertices), self.n_known_shp_vertices)
 
-        arc_lengths = self.ntw_from_shp.arc_lengths.values()
+        arc_lengths = self.ntw_shp.arc_lengths.values()
         self.assertAlmostEqual(sum(arc_lengths), 104414.0920159, places=5)
 
-        self.assertIn(0, self.ntw_from_shp.adjacencylist[1])
-        self.assertIn(0, self.ntw_from_shp.adjacencylist[2])
-        self.assertNotIn(0, self.ntw_from_shp.adjacencylist[3])
+        self.assertIn(0, self.ntw_shp.adjacencylist[1])
+        self.assertIn(0, self.ntw_shp.adjacencylist[2])
+        self.assertNotIn(0, self.ntw_shp.adjacencylist[3])
 
     def test_network_from_libpysal_chains(self):
-        known_components = self.ntw_from_shp.network_n_components
-        known_length = sum(self.ntw_from_shp.arc_lengths.values())
+        known_components = self.ntw_shp.network_n_components
+        known_length = sum(self.ntw_shp.arc_lengths.values())
         # network instantiated from libpysal.cg.Chain objects
         for dtype in (list, tuple, numpy.array):
             ntw_data = dtype(self.chains_from_shp)
@@ -95,7 +97,7 @@ class TestNetwork(unittest.TestCase):
 
     def test_network_from_single_libpysal_chain(self):
         ## network instantiated from a single libpysal.cg.Chain
-        self.ntw_chain_out = self.spaghetti.Network(in_data=self.p11p22_chain)
+        self.ntw_chain_out = self.spaghetti.Network(in_data=P11P22_CHAIN)
         # test save and load network
         self.ntw_chain_out.savenetwork("test_network.pkl")
         self.ntw_chain_in = self.spaghetti.Network.loadnetwork("test_network.pkl")
@@ -104,13 +106,13 @@ class TestNetwork(unittest.TestCase):
     def test_network_from_vertical_libpysal_chains(self):
         vert_up = cg.Chain(
             [self.p0505, self.p052]
-        )  ####################################### test vertical stuff...
+        )  ################################################################### test vertical stuff...
         self.ntw_up_chain = self.spaghetti.Network(in_data=vert_up)
         self.assertEqual(len(self.ntw_up_chain.arcs), len(vert_up.segments))
 
         vert_down = cg.Chain(
             [self.p052, self.p0505]
-        )  ##################################### same
+        )  ###################################################################### same
         self.ntw_down_chain = self.spaghetti.Network(in_data=vert_down)
         self.assertEqual(len(self.ntw_down_chain.arcs), len(vert_down.segments))
 
@@ -125,39 +127,37 @@ class TestNetwork(unittest.TestCase):
     @unittest.skipIf(GEOPANDAS_EXTINCT, "Missing Geopandas")
     def test_network_from_geopandas(self):
         # network instantiated from geodataframe
-        gdf = geopandas.read_file(self.path_to_shp)
-        self.ntw_from_gdf = self.spaghetti.Network(in_data=gdf, w_components=True)
+        gdf = geopandas.read_file(STREETS)
+        self.ntw_gdf = self.spaghetti.Network(in_data=gdf, w_components=True)
 
         # gdf test against known
-        self.assertEqual(len(self.ntw_from_gdf.arcs), self.n_known_shp_arcs)
-        self.assertEqual(len(self.ntw_from_gdf.vertices), self.n_known_shp_vertices)
+        self.assertEqual(len(self.ntw_gdf.arcs), self.n_known_shp_arcs)
+        self.assertEqual(len(self.ntw_gdf.vertices), self.n_known_shp_vertices)
 
         # shp against gdf
-        self.assertEqual(len(self.ntw_from_shp.arcs), len(self.ntw_from_gdf.arcs))
-        self.assertEqual(
-            len(self.ntw_from_shp.vertices), len(self.ntw_from_gdf.vertices)
-        )
+        self.assertEqual(len(self.ntw_shp.arcs), len(self.ntw_gdf.arcs))
+        self.assertEqual(len(self.ntw_shp.vertices), len(self.ntw_gdf.vertices))
 
     def test_contiguity_weights(self):
         known_network_histo = [(2, 35), (3, 89), (4, 105), (5, 61), (6, 13)]
-        observed_network_histo = self.ntw_from_shp.w_network.histogram
+        observed_network_histo = self.ntw_shp.w_network.histogram
         self.assertEqual(known_network_histo, observed_network_histo)
 
         known_graph_histo = [(2, 2), (3, 2), (4, 47), (5, 80), (6, 48)]
-        observed_graph_histo = self.ntw_from_shp.w_graph.histogram
+        observed_graph_histo = self.ntw_shp.w_graph.histogram
         self.assertEqual(observed_graph_histo, known_graph_histo)
 
     def test_components(self):
         known_network_arc = (225, 226)
-        observed_network_arc = self.ntw_from_shp.network_component2arc[0][-1]
+        observed_network_arc = self.ntw_shp.network_component2arc[0][-1]
         self.assertEqual(observed_network_arc, known_network_arc)
 
         known_graph_edge = (207, 208)
-        observed_graph_edge = self.ntw_from_shp.graph_component2edge[0][-1]
+        observed_graph_edge = self.ntw_shp.graph_component2edge[0][-1]
         self.assertEqual(observed_graph_edge, known_graph_edge)
 
     def test_distance_band_weights(self):
-        w = self.ntw_from_shp.distancebandweights(threshold=500)
+        w = self.ntw_shp.distancebandweights(threshold=500)
         self.assertEqual(w.n, 230)
         self.assertEqual(
             w.histogram,
@@ -165,20 +165,20 @@ class TestNetwork(unittest.TestCase):
         )
 
     def test_split_arcs_200(self):
-        n200 = self.ntw_from_shp.split_arcs(200.0)
+        n200 = self.ntw_shp.split_arcs(200.0)
         self.assertEqual(len(n200.arcs), 688)
 
     def test_enum_links_vertex(self):
-        coincident = self.ntw_from_shp.enum_links_vertex(24)
+        coincident = self.ntw_shp.enum_links_vertex(24)
         self.assertIn((24, 48), coincident)
 
     def test_shortest_paths(self):
 
         # symmetric point pattern
         known_vertices = 10
-        self.ntw_from_shp.snapobservations(examples.get_path("schools.shp"), "schools")
-        _, tree = self.ntw_from_shp.allneighbordistances("schools", gen_tree=True)
-        observed_paths = self.ntw_from_shp.shortest_paths(tree, "schools")
+        self.ntw_shp.snapobservations(examples.get_path("schools.shp"), "schools")
+        _, tree = self.ntw_shp.allneighbordistances("schools", gen_tree=True)
+        observed_paths = self.ntw_shp.shortest_paths(tree, "schools")
         observed_vertices = len(observed_paths[0][1].vertices)
         self.assertEqual(observed_vertices, known_vertices)
 
@@ -189,7 +189,10 @@ class TestNetwork(unittest.TestCase):
 
         self.p0505, self.p052
 
-        points1 = [self.p0505, cg.Point((2.5, 2.5))]
+        points1 = [
+            self.p0505,
+            cg.Point((2.5, 2.5)),
+        ]  ##############################################
         points2 = [self.p0525, cg.Point((2.5, 0.5)), cg.Point((0.75, 0.6))]
         ntw.snapobservations(points1, "points1")
         ntw.snapobservations(points2, "points2")
@@ -214,7 +217,7 @@ class TestNetwork(unittest.TestCase):
     @unittest.skipIf(GEOPANDAS_EXTINCT, "Missing Geopandas")
     def test_element_as_gdf(self):
         vertices, arcs = self.spaghetti.element_as_gdf(
-            self.ntw_from_shp, vertices=True, arcs=True
+            self.ntw_shp, vertices=True, arcs=True
         )
 
         known_vertex_wkt = "POINT (728368.04762 877125.89535)"
@@ -229,7 +232,7 @@ class TestNetwork(unittest.TestCase):
         obs_arc_wkt = obs_arc.wkt
         self.assertEqual(obs_arc_wkt, known_arc_wkt)
 
-        arcs = self.spaghetti.element_as_gdf(self.ntw_from_shp, arcs=True)
+        arcs = self.spaghetti.element_as_gdf(self.ntw_shp, arcs=True)
         known_arc_wkt = (
             "LINESTRING (728368.04762 877125.89535, " + "728368.13931 877023.27186)"
         )
@@ -253,8 +256,14 @@ class TestNetwork(unittest.TestCase):
         known_origins, bounds, h, v = 2, (0, 0, 3, 3), 2, 2
         lattice = self.spaghetti.regular_lattice(bounds, h, nv=v, exterior=False)
         ntw = self.spaghetti.Network(in_data=lattice)
-        points1 = [cg.Point((0.5, 0.5)), cg.Point((2.5, 2.5))]
-        points2 = [cg.Point((0.5, 2.5)), cg.Point((2.5, 0.5))]
+        points1 = [
+            cg.Point((0.5, 0.5)),
+            cg.Point((2.5, 2.5)),
+        ]  ######################################
+        points2 = [
+            cg.Point((0.5, 2.5)),
+            cg.Point((2.5, 0.5)),
+        ]  ####################################
         ntw.snapobservations(points1, "points1")
         ntw.snapobservations(points2, "points2")
         _, tree = ntw.allneighbordistances("points1", "points2", gen_tree=True)
@@ -266,14 +275,14 @@ class TestNetwork(unittest.TestCase):
     def test_round_sig(self):
         # round to 2 significant digits test
         x_round2, y_round2 = 1200, 1900
-        self.ntw_from_shp.vertex_sig = 2
-        obs_xy_round2 = self.ntw_from_shp._round_sig((1215, 1865))
+        self.ntw_shp.vertex_sig = 2
+        obs_xy_round2 = self.ntw_shp._round_sig((1215, 1865))
         self.assertEqual(obs_xy_round2, (x_round2, y_round2))
 
         # round to no significant digits test
         x_roundNone, y_roundNone = 1215, 1865
-        self.ntw_from_shp.vertex_sig = None
-        obs_xy_roundNone = self.ntw_from_shp._round_sig((1215, 1865))
+        self.ntw_shp.vertex_sig = None
+        obs_xy_roundNone = self.ntw_shp._round_sig((1215, 1865))
         self.assertEqual(obs_xy_roundNone, (x_roundNone, y_roundNone))
 
     def test_connected_components(self):
@@ -361,14 +370,20 @@ class TestNetwork(unittest.TestCase):
 
     def test_regular_lattice(self):
         # 4x4 regular lattice with the exterior
-        known = [cg.Point((0.0, 0.0)), cg.Point((1.0, 0.0))]
+        known = [
+            cg.Point((0.0, 0.0)),
+            cg.Point((1.0, 0.0)),
+        ]  ####################################
         bounds = (0, 0, 3, 3)
         lattice = self.spaghetti.regular_lattice(bounds, 2, nv=2, exterior=True)
         observed = lattice[0].vertices
         self.assertEqual(observed, known)
 
         # 5x5 regular lattice without the exterior
-        known = [cg.Point((3.0, 3.0)), cg.Point((3.0, 4.0))]
+        known = [
+            cg.Point((3.0, 3.0)),
+            cg.Point((3.0, 4.0)),
+        ]  #####################################
         bounds = (0, 0, 4, 4)
         lattice = self.spaghetti.regular_lattice(bounds, 3, exterior=False)
         observed = lattice[-1].vertices
@@ -379,7 +394,9 @@ class TestNetwork(unittest.TestCase):
             (723414.3683108028, 875929.0396895551),
             (724286.1381211297, 875929.0396895551),
         ]
-        shp = io.open(self.path_to_shp)
+        shp = io.open(
+            STREETS
+        )  ####################################################################
         lattice = self.spaghetti.regular_lattice(shp.bbox, 5, nv=7, exterior=True)
         observed_vertices = lattice[0].vertices
         for observed, known in zip(observed_vertices, known_vertices):
@@ -396,8 +413,8 @@ class TestNetwork(unittest.TestCase):
 
 class TestNetworkPointPattern(unittest.TestCase):
     def setUp(self):
-        path_to_shp = examples.get_path("streets.shp")
-        self.ntw = self.spaghetti.Network(in_data=path_to_shp)
+        # path_to_shp = examples.get_path("streets.shp")###################################
+        self.ntw = self.spaghetti.Network(in_data=STREETS)
         self.pp1_str = "schools"
         self.pp2_str = "crimes"
         iterator = [(self.pp1_str, "pp1"), (self.pp2_str, "pp2")]
@@ -425,9 +442,8 @@ class TestNetworkPointPattern(unittest.TestCase):
 
     def test_pp_from_single_libpysal_point(self):
         # network instantiated from a single libpysal.cg.Chain
-        chain = cg.Chain([cg.Point((1, 1)), cg.Point((2, 2))])
         known_dist = 1.4142135623730951
-        self.ntw_from_chain = self.spaghetti.Network(in_data=chain)
+        self.ntw_from_chain = self.spaghetti.Network(in_data=P11P22_CHAIN)
         self.ntw_from_chain.snapobservations(cg.Point((0, 0)), "synth_obs")
         snap_dist = self.ntw_from_chain.pointpatterns["synth_obs"].dist_snapped[0]
         self.assertAlmostEqual(snap_dist, known_dist, places=10)
@@ -450,8 +466,7 @@ class TestNetworkPointPattern(unittest.TestCase):
 
     def test_pp_failures(self):
         # network instantiated from a single libpysal.cg.Chain
-        chain = cg.Chain([cg.Point((1, 1)), cg.Point((2, 2))])
-        self.ntw_from_chain = self.spaghetti.Network(in_data=chain)
+        self.ntw_from_chain = self.spaghetti.Network(in_data=P11P22_CHAIN)
         # try snapping chain
         with self.assertRaises(TypeError):
             self.ntw_from_chain.snapobservations(chain, "chain")
@@ -628,8 +643,8 @@ class TestNetworkPointPattern(unittest.TestCase):
 
 class TestNetworkAnalysis(unittest.TestCase):
     def setUp(self):
-        path_to_shp = examples.get_path("streets.shp")
-        self.ntw = self.spaghetti.Network(in_data=path_to_shp)
+        # path_to_shp = examples.get_path("streets.shp")#####################################
+        self.ntw = self.spaghetti.Network(in_data=STREETS)
         self.pt_str = "schools"
         path_to_shp = examples.get_path("%s.shp" % self.pt_str)
         self.ntw.snapobservations(path_to_shp, self.pt_str, attribute=True)
@@ -668,8 +683,8 @@ class TestNetworkAnalysis(unittest.TestCase):
 
 class TestNetworkUtils(unittest.TestCase):
     def setUp(self):
-        path_to_shp = examples.get_path("streets.shp")
-        self.ntw = self.spaghetti.Network(in_data=path_to_shp)
+        # path_to_shp = examples.get_path("streets.shp")#####################################
+        self.ntw = self.spaghetti.Network(in_data=STREETS)
 
     def tearDown(self):
         pass
