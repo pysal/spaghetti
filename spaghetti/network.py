@@ -3238,13 +3238,13 @@ def regular_lattice(bounds, nh, nv=None, exterior=False):
     [(3.75, 3.75), (3.75, 5.0)]
     
     Create a 7x9 regular lattice with an exterior from the 
-    bounds of ``newhaven_nework.shp``.
+    bounds of ``streets.shp``.
     
-    >>> path = libpysal.examples.get_path("newhaven_nework.shp")
+    >>> path = libpysal.examples.get_path("streets.shp")
     >>> shp = libpysal.io.open(path)
     >>> lattice = spaghetti.regular_lattice(shp.bbox, 5, nv=7, exterior=True)
     >>> lattice[0].vertices
-    [(-72.99783297382338, 41.247205), (-72.97499854017013, 41.247205)]
+    [(723414.3683108028, 875929.0396895551), (724286.1381211297, 875929.0396895551)]
     
     """
 
