@@ -417,18 +417,18 @@ class Network:
 
         # is the network a single, fully-connected component?
         if n_components == 1:
-            fully_connected = True  ################################# TEST
+            fully_connected = True
         else:
-            fully_connected = False  ################################## TEST
+            fully_connected = False
 
         # link to component lookup
         link2component = dict(zip(links, component_labels))
 
         # component ID lookups: links, lengths, vertices, vertex counts
         component2link = {}
-        component_lengths = {}  ######################################### TEST
-        component_vertices = {}  ######################################### TEST
-        component_vertex_count = {}  ###################################### TEST
+        component_lengths = {}
+        component_vertices = {}
+        component_vertex_count = {}
         cp_labs_ = set(w.component_labels)
         l2c_ = link2component.items()
         for cpl in cp_labs_:
@@ -439,12 +439,12 @@ class Network:
             component_vertices[cpl] = list(set([v for l in c2l_ for v in l]))
             component_vertex_count[cpl] = len(component_vertices[cpl])
 
-        # longest and largest components ############################################################### TEST
+        # longest and largest components
         longest_component = max(component_lengths, key=component_lengths.get)
         largest_component = max(component_vertex_count, key=component_vertex_count.get)
 
         # component to ring lookup
-        component_is_ring = {}  ###################################### TEST
+        component_is_ring = {}
         adj_ = self.adjacencylist.items()
         for comp, verts in component_vertices.items():
             component_is_ring[comp] = False
