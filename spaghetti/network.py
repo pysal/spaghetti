@@ -2543,19 +2543,19 @@ class Network:
         
         Snap observation points onto the network.
         
-        >>> pt_str = "crimes"
+        >>> pt_str = "schools"
         >>> in_data = examples.get_path(pt_str+".shp")
         >>> ntw.snapobservations(in_data, pt_str, attribute=True)
         
         Simulate observations along the network.
         
-        >>> crimes = ntw.pointpatterns[pt_str]
-        >>> sim = ntw.simulate_observations(crimes.npoints)
+        >>> schools = ntw.pointpatterns[pt_str]
+        >>> sim = ntw.simulate_observations(schools.npoints)
         
-        Compute a network constrained `F`-function of crimes 
+        Compute a network constrained `F`-function of schools 
         with ``5`` ``permutations`` and ``10`` ``nsteps``.
         
-        >>> fres = ntw.NetworkF(crimes, permutations=5, nsteps=10)
+        >>> fres = ntw.NetworkF(schools, permutations=5, nsteps=10)
         >>> fres.lowerenvelope.shape[0]
         10
         
@@ -2642,19 +2642,19 @@ class Network:
         
         Snap observation points onto the network.
         
-        >>> pt_str = "crimes"
+        >>> pt_str = "schools"
         >>> in_data = examples.get_path(pt_str+".shp")
         >>> ntw.snapobservations(in_data, pt_str, attribute=True)
         
         Simulate observations along the network.
         
-        >>> crimes = ntw.pointpatterns[pt_str]
-        >>> sim = ntw.simulate_observations(crimes.npoints)
+        >>> schools = ntw.pointpatterns[pt_str]
+        >>> sim = ntw.simulate_observations(schools.npoints)
         
-        Compute a network constrained `G`-function of crimes 
+        Compute a network constrained `G`-function of schools 
         with ``5`` ``permutations`` and ``10`` ``nsteps``.
         
-        >>> gres = ntw.NetworkG(crimes, permutations=5, nsteps=10)
+        >>> gres = ntw.NetworkG(schools, permutations=5, nsteps=10)
         >>> gres.lowerenvelope.shape[0]
         10
         
@@ -2741,19 +2741,19 @@ class Network:
         
         Snap observation points onto the network.
         
-        >>> pt_str = "crimes"
+        >>> pt_str = "schools"
         >>> in_data = examples.get_path(pt_str+".shp")
         >>> ntw.snapobservations(in_data, pt_str, attribute=True)
         
         Simulate observations along the network.
         
-        >>> crimes = ntw.pointpatterns[pt_str]
-        >>> sim = ntw.simulate_observations(crimes.npoints)
+        >>> schools = ntw.pointpatterns[pt_str]
+        >>> sim = ntw.simulate_observations(schools.npoints)
         
-        Compute a network constrained `K`-function of crimes 
+        Compute a network constrained `K`-function of schools 
         with ``5`` ``permutations`` and ``10`` ``nsteps``.
         
-        >>> kres = ntw.NetworkK(crimes, permutations=5, nsteps=10)
+        >>> kres = ntw.NetworkK(schools, permutations=5, nsteps=10)
         >>> kres.lowerenvelope.shape[0]
         10
         
