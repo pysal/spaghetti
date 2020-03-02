@@ -2481,100 +2481,6 @@ class Network:
 
         return split_network
 
-    def NetworkF(
-        self,
-        pointpattern,
-        nsteps=10,
-        permutations=99,
-        threshold=0.2,
-        distribution="uniform",
-        lowerbound=None,
-        upperbound=None,
-    ):
-        """Compute a network constrained `F`-function.
-        
-        Parameters
-        ----------
-        
-        pointpattern : spaghetti.PointPattern
-            A ``spaghetti`` point pattern object.
-        
-        nsteps : int
-            The number of steps at which the count of the nearest
-            neighbors is computed.
-        
-        permutations : int
-            The number of permutations to perform. Default 99.
-        
-        threshold : float
-            The level at which significance is computed.
-            (0.5 would be 97.5% and 2.5%).
-        
-        distribution : str
-            The distribution from which random points are sampled.
-            Either ``"uniform"`` or ``"poisson"``.
-        
-        lowerbound : float
-            The lower bound at which the `F`-function is computed.
-            Default 0.
-        
-        upperbound : float
-            The upper bound at which the `F`-function is computed.
-            Defaults to the maximum observed nearest neighbor distance.
-        
-        Returns
-        -------
-        
-        NetworkF : spaghetti.analysis.NetworkF
-            A network `F` class instance.
-        
-        Notes
-        -----
-        
-        Based on :cite:`doi:10.1002/9780470549094.ch5` and mentioned in
-        :cite:`doi:10.1002/9781119967101.ch5`.
-        
-        Examples
-        --------
-        
-        Create a network instance.
-        
-        >>> import spaghetti
-        >>> from libpysal import examples
-        >>> ntw = spaghetti.Network(in_data=examples.get_path("streets.shp"))
-        
-        Snap observation points onto the network.
-        
-        >>> pt_str = "schools"
-        >>> in_data = examples.get_path(pt_str+".shp")
-        >>> ntw.snapobservations(in_data, pt_str, attribute=True)
-        
-        Simulate observations along the network.
-        
-        >>> schools = ntw.pointpatterns[pt_str]
-        >>> sim = ntw.simulate_observations(schools.npoints)
-        
-        Compute a network constrained `F`-function of schools 
-        with ``5`` ``permutations`` and ``10`` ``nsteps``.
-        
-        >>> fres = ntw.NetworkF(schools, permutations=5, nsteps=10)
-        >>> fres.lowerenvelope.shape[0]
-        10
-        
-        """
-
-        # call analysis.NetworkF
-        return NetworkF(
-            self,
-            pointpattern,
-            nsteps=nsteps,
-            permutations=permutations,
-            threshold=threshold,
-            distribution=distribution,
-            lowerbound=lowerbound,
-            upperbound=upperbound,
-        )
-
     def NetworkG(
         self,
         pointpattern,
@@ -2664,6 +2570,100 @@ class Network:
 
         # call analysis.NetworkG
         return NetworkG(
+            self,
+            pointpattern,
+            nsteps=nsteps,
+            permutations=permutations,
+            threshold=threshold,
+            distribution=distribution,
+            lowerbound=lowerbound,
+            upperbound=upperbound,
+        )
+
+    def NetworkF(
+        self,
+        pointpattern,
+        nsteps=10,
+        permutations=99,
+        threshold=0.2,
+        distribution="uniform",
+        lowerbound=None,
+        upperbound=None,
+    ):
+        """Compute a network constrained `F`-function.
+        
+        Parameters
+        ----------
+        
+        pointpattern : spaghetti.PointPattern
+            A ``spaghetti`` point pattern object.
+        
+        nsteps : int
+            The number of steps at which the count of the nearest
+            neighbors is computed.
+        
+        permutations : int
+            The number of permutations to perform. Default 99.
+        
+        threshold : float
+            The level at which significance is computed.
+            (0.5 would be 97.5% and 2.5%).
+        
+        distribution : str
+            The distribution from which random points are sampled.
+            Either ``"uniform"`` or ``"poisson"``.
+        
+        lowerbound : float
+            The lower bound at which the `F`-function is computed.
+            Default 0.
+        
+        upperbound : float
+            The upper bound at which the `F`-function is computed.
+            Defaults to the maximum observed nearest neighbor distance.
+        
+        Returns
+        -------
+        
+        NetworkF : spaghetti.analysis.NetworkF
+            A network `F` class instance.
+        
+        Notes
+        -----
+        
+        Based on :cite:`doi:10.1002/9780470549094.ch5` and mentioned in
+        :cite:`doi:10.1002/9781119967101.ch5`.
+        
+        Examples
+        --------
+        
+        Create a network instance.
+        
+        >>> import spaghetti
+        >>> from libpysal import examples
+        >>> ntw = spaghetti.Network(in_data=examples.get_path("streets.shp"))
+        
+        Snap observation points onto the network.
+        
+        >>> pt_str = "schools"
+        >>> in_data = examples.get_path(pt_str+".shp")
+        >>> ntw.snapobservations(in_data, pt_str, attribute=True)
+        
+        Simulate observations along the network.
+        
+        >>> schools = ntw.pointpatterns[pt_str]
+        >>> sim = ntw.simulate_observations(schools.npoints)
+        
+        Compute a network constrained `F`-function of schools 
+        with ``5`` ``permutations`` and ``10`` ``nsteps``.
+        
+        >>> fres = ntw.NetworkF(schools, permutations=5, nsteps=10)
+        >>> fres.lowerenvelope.shape[0]
+        10
+        
+        """
+
+        # call analysis.NetworkF
+        return NetworkF(
             self,
             pointpattern,
             nsteps=nsteps,

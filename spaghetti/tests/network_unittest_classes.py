@@ -664,6 +664,17 @@ class TestNetworkAnalysis(unittest.TestCase):
     def tearDown(self):
         pass
 
+    def test_network_g(self):
+        known_observed = numpy.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0])
+        numpy.random.seed(0)
+        obtained = self.ntw.NetworkG(
+            self.ntw.pointpatterns[self.mids],
+            permutations=self.test_permutations,
+            nsteps=self.test_steps,
+        )
+        self.assertEqual(obtained.lowerenvelope.shape[0], self.test_steps)
+        numpy.testing.assert_array_equal(obtained.observed, known_observed)
+
     def test_network_f(self):
         known_upperenvelope = numpy.array(
             [0.0, 0.2625, 0.375, 0.4875, 0.6, 0.6375, 0.75, 0.75, 0.825, 0.8625]
@@ -676,17 +687,6 @@ class TestNetworkAnalysis(unittest.TestCase):
         )
         self.assertEqual(obtained.lowerenvelope.shape[0], self.test_steps)
         numpy.testing.assert_allclose(obtained.upperenvelope, known_upperenvelope)
-
-    def test_network_g(self):
-        known_observed = numpy.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0])
-        numpy.random.seed(0)
-        obtained = self.ntw.NetworkG(
-            self.ntw.pointpatterns[self.mids],
-            permutations=self.test_permutations,
-            nsteps=self.test_steps,
-        )
-        self.assertEqual(obtained.lowerenvelope.shape[0], self.test_steps)
-        numpy.testing.assert_array_equal(obtained.observed, known_observed)
 
     def test_network_k(self):
         known_lowerenvelope = numpy.array(
