@@ -417,18 +417,18 @@ class Network:
 
         # is the network a single, fully-connected component?
         if n_components == 1:
-            fully_connected = True  ################################# TEST
+            fully_connected = True
         else:
-            fully_connected = False  ################################## TEST
+            fully_connected = False
 
         # link to component lookup
         link2component = dict(zip(links, component_labels))
 
         # component ID lookups: links, lengths, vertices, vertex counts
         component2link = {}
-        component_lengths = {}  ######################################### TEST
-        component_vertices = {}  ######################################### TEST
-        component_vertex_count = {}  ###################################### TEST
+        component_lengths = {}
+        component_vertices = {}
+        component_vertex_count = {}
         cp_labs_ = set(w.component_labels)
         l2c_ = link2component.items()
         for cpl in cp_labs_:
@@ -439,12 +439,12 @@ class Network:
             component_vertices[cpl] = list(set([v for l in c2l_ for v in l]))
             component_vertex_count[cpl] = len(component_vertices[cpl])
 
-        # longest and largest components ############################################################### TEST
+        # longest and largest components
         longest_component = max(component_lengths, key=component_lengths.get)
         largest_component = max(component_vertex_count, key=component_vertex_count.get)
 
         # component to ring lookup
-        component_is_ring = {}  ###################################### TEST
+        component_is_ring = {}
         adj_ = self.adjacencylist.items()
         for comp, verts in component_vertices.items():
             component_is_ring[comp] = False
@@ -1425,6 +1425,8 @@ class Network:
 
             # if the vertical direction is negative from
             # vertex 1 to vertex 2 on the euclidean plane
+            # -- this shouldn't happen due to vertex sorting in
+            # -- self._extractnetwork() and self.extractgraph()
             elif y1 > y2:
                 y0 = y2 + distance
 
@@ -2479,100 +2481,6 @@ class Network:
 
         return split_network
 
-    def NetworkF(
-        self,
-        pointpattern,
-        nsteps=10,
-        permutations=99,
-        threshold=0.2,
-        distribution="uniform",
-        lowerbound=None,
-        upperbound=None,
-    ):
-        """Compute a network constrained `F`-function.
-        
-        Parameters
-        ----------
-        
-        pointpattern : spaghetti.PointPattern
-            A ``spaghetti`` point pattern object.
-        
-        nsteps : int
-            The number of steps at which the count of the nearest
-            neighbors is computed.
-        
-        permutations : int
-            The number of permutations to perform. Default 99.
-        
-        threshold : float
-            The level at which significance is computed.
-            (0.5 would be 97.5% and 2.5%).
-        
-        distribution : str
-            The distribution from which random points are sampled.
-            Either ``"uniform"`` or ``"poisson"``.
-        
-        lowerbound : float
-            The lower bound at which the `F`-function is computed.
-            Default 0.
-        
-        upperbound : float
-            The upper bound at which the `F`-function is computed.
-            Defaults to the maximum observed nearest neighbor distance.
-        
-        Returns
-        -------
-        
-        NetworkF : spaghetti.analysis.NetworkF
-            A network `F` class instance.
-        
-        Notes
-        -----
-        
-        Based on :cite:`doi:10.1002/9780470549094.ch5` and mentioned in
-        :cite:`doi:10.1002/9781119967101.ch5`.
-        
-        Examples
-        --------
-        
-        Create a network instance.
-        
-        >>> import spaghetti
-        >>> from libpysal import examples
-        >>> ntw = spaghetti.Network(in_data=examples.get_path("streets.shp"))
-        
-        Snap observation points onto the network.
-        
-        >>> pt_str = "crimes"
-        >>> in_data = examples.get_path(pt_str+".shp")
-        >>> ntw.snapobservations(in_data, pt_str, attribute=True)
-        
-        Simulate observations along the network.
-        
-        >>> crimes = ntw.pointpatterns[pt_str]
-        >>> sim = ntw.simulate_observations(crimes.npoints)
-        
-        Compute a network constrained `F`-function of crimes 
-        with ``5`` ``permutations`` and ``10`` ``nsteps``.
-        
-        >>> fres = ntw.NetworkF(crimes, permutations=5, nsteps=10)
-        >>> fres.lowerenvelope.shape[0]
-        10
-        
-        """
-
-        # call analysis.NetworkF
-        return NetworkF(
-            self,
-            pointpattern,
-            nsteps=nsteps,
-            permutations=permutations,
-            threshold=threshold,
-            distribution=distribution,
-            lowerbound=lowerbound,
-            upperbound=upperbound,
-        )
-
     def NetworkG(
         self,
         pointpattern,
@@ -2642,19 +2550,19 @@ class Network:
         
         Snap observation points onto the network.
         
-        >>> pt_str = "crimes"
+        >>> pt_str = "schools"
         >>> in_data = examples.get_path(pt_str+".shp")
         >>> ntw.snapobservations(in_data, pt_str, attribute=True)
         
         Simulate observations along the network.
         
-        >>> crimes = ntw.pointpatterns[pt_str]
-        >>> sim = ntw.simulate_observations(crimes.npoints)
+        >>> schools = ntw.pointpatterns[pt_str]
+        >>> sim = ntw.simulate_observations(schools.npoints)
         
-        Compute a network constrained `G`-function of crimes 
+        Compute a network constrained `G`-function of schools 
         with ``5`` ``permutations`` and ``10`` ``nsteps``.
         
-        >>> gres = ntw.NetworkG(crimes, permutations=5, nsteps=10)
+        >>> gres = ntw.NetworkG(schools, permutations=5, nsteps=10)
         >>> gres.lowerenvelope.shape[0]
         10
         
@@ -2662,6 +2570,100 @@ class Network:
 
         # call analysis.NetworkG
         return NetworkG(
+            self,
+            pointpattern,
+            nsteps=nsteps,
+            permutations=permutations,
+            threshold=threshold,
+            distribution=distribution,
+            lowerbound=lowerbound,
+            upperbound=upperbound,
+        )
+
+    def NetworkF(
+        self,
+        pointpattern,
+        nsteps=10,
+        permutations=99,
+        threshold=0.2,
+        distribution="uniform",
+        lowerbound=None,
+        upperbound=None,
+    ):
+        """Compute a network constrained `F`-function.
+        
+        Parameters
+        ----------
+        
+        pointpattern : spaghetti.PointPattern
+            A ``spaghetti`` point pattern object.
+        
+        nsteps : int
+            The number of steps at which the count of the nearest
+            neighbors is computed.
+        
+        permutations : int
+            The number of permutations to perform. Default 99.
+        
+        threshold : float
+            The level at which significance is computed.
+            (0.5 would be 97.5% and 2.5%).
+        
+        distribution : str
+            The distribution from which random points are sampled.
+            Either ``"uniform"`` or ``"poisson"``.
+        
+        lowerbound : float
+            The lower bound at which the `F`-function is computed.
+            Default 0.
+        
+        upperbound : float
+            The upper bound at which the `F`-function is computed.
+            Defaults to the maximum observed nearest neighbor distance.
+        
+        Returns
+        -------
+        
+        NetworkF : spaghetti.analysis.NetworkF
+            A network `F` class instance.
+        
+        Notes
+        -----
+        
+        Based on :cite:`doi:10.1002/9780470549094.ch5` and mentioned in
+        :cite:`doi:10.1002/9781119967101.ch5`.
+        
+        Examples
+        --------
+        
+        Create a network instance.
+        
+        >>> import spaghetti
+        >>> from libpysal import examples
+        >>> ntw = spaghetti.Network(in_data=examples.get_path("streets.shp"))
+        
+        Snap observation points onto the network.
+        
+        >>> pt_str = "schools"
+        >>> in_data = examples.get_path(pt_str+".shp")
+        >>> ntw.snapobservations(in_data, pt_str, attribute=True)
+        
+        Simulate observations along the network.
+        
+        >>> schools = ntw.pointpatterns[pt_str]
+        >>> sim = ntw.simulate_observations(schools.npoints)
+        
+        Compute a network constrained `F`-function of schools 
+        with ``5`` ``permutations`` and ``10`` ``nsteps``.
+        
+        >>> fres = ntw.NetworkF(schools, permutations=5, nsteps=10)
+        >>> fres.lowerenvelope.shape[0]
+        10
+        
+        """
+
+        # call analysis.NetworkF
+        return NetworkF(
             self,
             pointpattern,
             nsteps=nsteps,
@@ -2741,19 +2743,19 @@ class Network:
         
         Snap observation points onto the network.
         
-        >>> pt_str = "crimes"
+        >>> pt_str = "schools"
         >>> in_data = examples.get_path(pt_str+".shp")
         >>> ntw.snapobservations(in_data, pt_str, attribute=True)
         
         Simulate observations along the network.
         
-        >>> crimes = ntw.pointpatterns[pt_str]
-        >>> sim = ntw.simulate_observations(crimes.npoints)
+        >>> schools = ntw.pointpatterns[pt_str]
+        >>> sim = ntw.simulate_observations(schools.npoints)
         
-        Compute a network constrained `K`-function of crimes 
+        Compute a network constrained `K`-function of schools 
         with ``5`` ``permutations`` and ``10`` ``nsteps``.
         
-        >>> kres = ntw.NetworkK(crimes, permutations=5, nsteps=10)
+        >>> kres = ntw.NetworkK(schools, permutations=5, nsteps=10)
         >>> kres.lowerenvelope.shape[0]
         10
         
@@ -3238,13 +3240,13 @@ def regular_lattice(bounds, nh, nv=None, exterior=False):
     [(3.75, 3.75), (3.75, 5.0)]
     
     Create a 7x9 regular lattice with an exterior from the 
-    bounds of ``newhaven_nework.shp``.
+    bounds of ``streets.shp``.
     
-    >>> path = libpysal.examples.get_path("newhaven_nework.shp")
+    >>> path = libpysal.examples.get_path("streets.shp")
     >>> shp = libpysal.io.open(path)
     >>> lattice = spaghetti.regular_lattice(shp.bbox, 5, nv=7, exterior=True)
     >>> lattice[0].vertices
-    [(-72.99783297382338, 41.247205), (-72.97499854017013, 41.247205)]
+    [(723414.3683108028, 875929.0396895551), (724286.1381211297, 875929.0396895551)]
     
     """
 
