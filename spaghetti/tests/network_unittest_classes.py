@@ -420,7 +420,7 @@ class TestNetworkPointPattern(unittest.TestCase):
         points = [cg.Point(cpp.points[i]["coordinates"]) for i in cpp.points]
         for dtype in (list, tuple):
             point_data = dtype(points)
-            self.ntw.snapobservations(point_data, cg_crimes)
+            self.ntw.snapobservations(point_data, cg_crimes, attribute=True)
             observed = self.ntw.pointpatterns[cg_crimes]
             observed_snapped = set(observed.snapped_coordinates.values())
             self.assertEqual(observed_snapped, known_snapped)
@@ -624,39 +624,70 @@ class TestNetworkPointPattern(unittest.TestCase):
 # -------------------------------------------------------------------------------
 class TestNetworkAnalysis(unittest.TestCase):
     def setUp(self):
-        self.ntw = self.spaghetti.Network(in_data=STREETS)
-        self.ntw.snapobservations(SCHOOLS, schools, attribute=True)
-        npts = self.ntw.pointpatterns[schools].npoints
+        bounds, h, v = (0, 0, 3, 3), 2, 2
+        lattice = self.spaghetti.regular_lattice(bounds, h, nv=v, exterior=True)
+        self.ntw = self.spaghetti.Network(in_data=lattice)
+        chains = [
+            cg.Chain(
+                [
+                    cg.Point(self.ntw.vertex_coords[p1]),
+                    cg.Point(self.ntw.vertex_coords[p2]),
+                ]
+            )
+            for (p1, p2) in self.ntw.arcs
+        ]
+        midpoints = []
+        for chain in chains:
+            (v1x, v1y), (v2x, v2y) = chain.vertices
+            mid = cg.Point(((v1x + v2x) / 2.0, (v1y + v2y) / 2.0))
+            midpoints.append(mid)
+        self.mids = "mids"
+        self.ntw.snapobservations(midpoints, self.mids)
+        npts = self.ntw.pointpatterns[self.mids].npoints
+        numpy.random.seed(0)
         self.ntw.simulate_observations(npts)
-        self.test_permutations = 3
-        self.test_steps = 5
+        self.test_permutations = 99
+        self.test_steps = 10
 
     def tearDown(self):
         pass
 
     def test_network_f(self):
+        known_upperenvelope = numpy.array(
+            [0.0, 0.2625, 0.375, 0.4875, 0.6, 0.6375, 0.75, 0.75, 0.825, 0.8625]
+        )
+        numpy.random.seed(0)
         obtained = self.ntw.NetworkF(
-            self.ntw.pointpatterns[schools],
+            self.ntw.pointpatterns[self.mids],
             permutations=self.test_permutations,
             nsteps=self.test_steps,
         )
         self.assertEqual(obtained.lowerenvelope.shape[0], self.test_steps)
+        numpy.testing.assert_allclose(obtained.upperenvelope, known_upperenvelope)
 
     def test_network_g(self):
+        known_observed = numpy.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0])
+        numpy.random.seed(0)
         obtained = self.ntw.NetworkG(
-            self.ntw.pointpatterns[schools],
+            self.ntw.pointpatterns[self.mids],
             permutations=self.test_permutations,
             nsteps=self.test_steps,
         )
         self.assertEqual(obtained.lowerenvelope.shape[0], self.test_steps)
+        numpy.testing.assert_array_equal(obtained.observed, known_observed)
 
     def test_network_k(self):
+        known_lowerenvelope = numpy.array(
+            [0.0, 4.5, 14.5, 29.5, 50.5, 68.5, 89.0, 113.0, 124.5, 130.0]
+        )
+        numpy.random.seed(0)
         obtained = self.ntw.NetworkK(
-            self.ntw.pointpatterns[schools],
+            self.ntw.pointpatterns[self.mids],
             permutations=self.test_permutations,
             nsteps=self.test_steps,
         )
         self.assertEqual(obtained.lowerenvelope.shape[0], self.test_steps)
+        numpy.testing.assert_allclose(obtained.lowerenvelope, known_lowerenvelope)
 
 
 # -------------------------------------------------------------------------------
