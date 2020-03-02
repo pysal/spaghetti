@@ -1425,6 +1425,8 @@ class Network:
 
             # if the vertical direction is negative from
             # vertex 1 to vertex 2 on the euclidean plane
+            # -- this shouldn't happen due to vertex sorting in
+            # -- self._extractnetwork() and self.extractgraph()
             elif y1 > y2:
                 y0 = y2 + distance
 
