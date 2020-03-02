@@ -3387,6 +3387,7 @@ class PointPattern:
         # either set native point ID from dataset or create new IDs
         if idvariable and not is_libpysal_points:
             ids = weights.util.get_ids(in_data, idvariable)
+            print(ids)
         else:
             ids = None
 
