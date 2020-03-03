@@ -304,70 +304,6 @@ class NetworkK(NetworkBase):
             self.sim[p] = simy
 
 
-def ffunction(nearest, lowerbound, upperbound, npts, nsteps=10):
-    """Compute an `F`-function.
-
-    Parameters
-    ----------
-    
-    nearest : numpy.ndarray
-        A vector of nearest neighbor distances.
-    
-    lowerbound : int or float
-        The starting value of the sequence.
-    
-    upperbound : int or float
-        The end value of the sequence.
-    
-    npts : int
-         The number of points (``pointpattern.npoints``).
-    
-    nsteps : int
-        The number of distance bands. Default is 10. Must be
-        non-negative.
-    
-    Returns
-    -------
-    
-    x : numpy.ndarray
-        The x-axis of values.
-    
-    y : numpy.ndarray
-        The y-axis of values.
-    
-    """
-
-    # set observation count
-    nobs = len(nearest)
-
-    # create interval for x-axis
-    x = numpy.linspace(lowerbound, upperbound, nsteps)
-
-    # sort nearest neighbor distances
-    nearest = numpy.sort(nearest)
-
-    # create empty y-axis vector
-    y = numpy.empty(len(x))
-
-    # iterate over x-axis interval
-    for i, r in enumerate(x):
-
-        # slice out and count neighbors within radius
-        cnt = len(nearest[nearest <= r])
-
-        # if there is one or more neighbors compute `f`
-        if cnt > 0:
-            f = cnt / float(npts)
-        # otherwise set `f` to zero
-        else:
-            f = 0
-
-        # label `f` on the y-axis
-        y[i] = f
-
-    return x, y
-
-
 def gfunction(nearest, lowerbound, upperbound, nsteps=10):
     """Compute a `G`-function.
 
@@ -425,6 +361,67 @@ def gfunction(nearest, lowerbound, upperbound, nsteps=10):
 
         # label `g` on the y-axis
         y[i] = g
+
+    return x, y
+
+
+def ffunction(nearest, lowerbound, upperbound, npts, nsteps=10):
+    """Compute an `F`-function.
+
+    Parameters
+    ----------
+    
+    nearest : numpy.ndarray
+        A vector of nearest neighbor distances.
+    
+    lowerbound : int or float
+        The starting value of the sequence.
+    
+    upperbound : int or float
+        The end value of the sequence.
+    
+    npts : int
+         The number of points (``pointpattern.npoints``).
+    
+    nsteps : int
+        The number of distance bands. Default is 10. Must be
+        non-negative.
+    
+    Returns
+    -------
+    
+    x : numpy.ndarray
+        The x-axis of values.
+    
+    y : numpy.ndarray
+        The y-axis of values.
+    
+    """
+
+    # create interval for x-axis
+    x = numpy.linspace(lowerbound, upperbound, nsteps)
+
+    # sort nearest neighbor distances
+    nearest = numpy.sort(nearest)
+
+    # create empty y-axis vector
+    y = numpy.empty(len(x))
+
+    # iterate over x-axis interval
+    for i, r in enumerate(x):
+
+        # slice out and count neighbors within radius
+        cnt = len(nearest[nearest <= r])
+
+        # if there is one or more neighbors compute `f`
+        if cnt > 0:
+            f = cnt / float(npts)
+        # otherwise set `f` to zero
+        else:
+            f = 0
+
+        # label `f` on the y-axis
+        y[i] = f
 
     return x, y
 
