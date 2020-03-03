@@ -337,9 +337,6 @@ def ffunction(nearest, lowerbound, upperbound, npts, nsteps=10):
     
     """
 
-    # set observation count
-    nobs = len(nearest)
-
     # create interval for x-axis
     x = numpy.linspace(lowerbound, upperbound, nsteps)
 

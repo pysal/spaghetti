@@ -143,7 +143,7 @@ refer to a network arc or a graph edge.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>in_data</strong><span class="classifier">{<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#list" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#tuple" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">tuple</span></code></a>, <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>, <a class="reference external" href="https://pysal.org/libpysal/generated/libpysal.cg.Chain.html#libpysal.cg.Chain" title="(in libpysal v4.2.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">libpysal.cg.Chain</span></code></a>, <a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.7.0+3.g74b1d95)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a>}</span></dt><dd><p>The input geographic data. Either (1) a path to a shapefile
+<dt><strong>in_data</strong><span class="classifier">{<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#list" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#tuple" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">tuple</span></code></a>, <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>, <a class="reference external" href="https://pysal.org/libpysal/generated/libpysal.cg.Chain.html#libpysal.cg.Chain" title="(in libpysal v4.2.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">libpysal.cg.Chain</span></code></a>, <a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.7.0+4.g7350b49)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a>}</span></dt><dd><p>The input geographic data. Either (1) a path to a shapefile
 (str); (2) an iterable containing <code class="docutils literal notranslate"><span class="pre">libpysal.cg.Chain</span></code>
 objects; (3) a single <code class="docutils literal notranslate"><span class="pre">libpysal.cg.Chain</span></code>; or
 (4) a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code>.</p>
@@ -361,10 +361,10 @@ necessarily equal to <code class="docutils literal notranslate"><span class="pre
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#spaghetti.Network.NetworkF" title="spaghetti.Network.NetworkF"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NetworkF</span></code></a>(self, pointpattern[, nsteps, …])</p></td>
-<td><p>Compute a network constrained <cite>F</cite>-function.</p></td>
+<td><p>Compute a network constrained <cite>F</cite>-function, which is a cumulative frequency distribution of random distances within a set of observations associated with a network.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#spaghetti.Network.NetworkG" title="spaghetti.Network.NetworkG"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NetworkG</span></code></a>(self, pointpattern[, nsteps, …])</p></td>
-<td><p>Compute a network constrained <cite>G</cite>-function.</p></td>
+<td><p>Compute a network constrained <cite>G</cite>-function, which is a cumulative frequency distribution of nearest neighbor distances within a set of observations associated with a network.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#spaghetti.Network.NetworkK" title="spaghetti.Network.NetworkK"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NetworkK</span></code></a>(self, pointpattern[, nsteps, …])</p></td>
 <td><p>Compute a network constrained <cite>K</cite>-function.</p></td>
@@ -428,7 +428,9 @@ necessarily equal to <code class="docutils literal notranslate"><span class="pre
 <dl class="method">
 <dt id="spaghetti.Network.NetworkF">
 <code class="sig-name descname">NetworkF</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">pointpattern</em>, <em class="sig-param">nsteps=10</em>, <em class="sig-param">permutations=99</em>, <em class="sig-param">threshold=0.2</em>, <em class="sig-param">distribution='uniform'</em>, <em class="sig-param">lowerbound=None</em>, <em class="sig-param">upperbound=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.NetworkF"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.NetworkF" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute a network constrained <cite>F</cite>-function.</p>
+<dd><p>Compute a network constrained <cite>F</cite>-function, which is
+a cumulative frequency distribution of random distances
+within a set of observations associated with a network.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
@@ -461,8 +463,15 @@ Defaults to the maximum observed nearest neighbor distance.</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>Based on <a class="bibtex reference internal" href="../references.html#doi-10-1002-9780470549094-ch5" id="id16">[OSullivanU10]</a> and mentioned in
-<a class="bibtex reference internal" href="../references.html#doi-10-1002-9781119967101-ch5" id="id17">[OS12c]</a>.</p>
+<p>This is a network-constrained version 
+based on the Euclidean formulation found in 
+<a class="bibtex reference internal" href="../references.html#doi-10-1002-9780470549094-ch5" id="id16">[OSullivanU10]</a> and mentioned in
+<a class="bibtex reference internal" href="../references.html#doi-10-1002-9781119967101-ch5" id="id17">[OS12c]</a>. It is formulated in 
+<a class="bibtex reference internal" href="../references.html#doi-10-1002-9780470549094-ch5" id="id18">[OSullivanU10]</a> as:</p>
+<div class="math notranslate nohighlight">
+\[F(d) = \frac{\#[d_{min}(p_i, S)&lt;d]}{m}\]</div>
+<p>where $p_i$ are randomly selected observations totaling $m$ in 
+$S$ and $d$ is each step of distance along the network.</p>
 <p class="rubric">Examples</p>
 <p>Create a network instance.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">spaghetti</span>
@@ -471,19 +480,19 @@ Defaults to the maximum observed nearest neighbor distance.</p>
 </pre></div>
 </div>
 <p>Snap observation points onto the network.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pt_str</span> <span class="o">=</span> <span class="s2">&quot;crimes&quot;</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pt_str</span> <span class="o">=</span> <span class="s2">&quot;schools&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">in_data</span> <span class="o">=</span> <span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="n">pt_str</span><span class="o">+</span><span class="s2">&quot;.shp&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span><span class="n">in_data</span><span class="p">,</span> <span class="n">pt_str</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Simulate observations along the network.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">crimes</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="n">pt_str</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">simulate_observations</span><span class="p">(</span><span class="n">crimes</span><span class="o">.</span><span class="n">npoints</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">schools</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="n">pt_str</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">simulate_observations</span><span class="p">(</span><span class="n">schools</span><span class="o">.</span><span class="n">npoints</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Compute a network constrained <cite>F</cite>-function of crimes 
+<p>Compute a network constrained <cite>F</cite>-function of schools 
 with <code class="docutils literal notranslate"><span class="pre">5</span></code> <code class="docutils literal notranslate"><span class="pre">permutations</span></code> and <code class="docutils literal notranslate"><span class="pre">10</span></code> <code class="docutils literal notranslate"><span class="pre">nsteps</span></code>.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fres</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">NetworkF</span><span class="p">(</span><span class="n">crimes</span><span class="p">,</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">nsteps</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fres</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">NetworkF</span><span class="p">(</span><span class="n">schools</span><span class="p">,</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">nsteps</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fres</span><span class="o">.</span><span class="n">lowerenvelope</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="go">10</span>
 </pre></div>
@@ -493,7 +502,9 @@ with <code class="docutils literal notranslate"><span class="pre">5</span></code
 <dl class="method">
 <dt id="spaghetti.Network.NetworkG">
 <code class="sig-name descname">NetworkG</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">pointpattern</em>, <em class="sig-param">nsteps=10</em>, <em class="sig-param">permutations=99</em>, <em class="sig-param">threshold=0.5</em>, <em class="sig-param">distribution='uniform'</em>, <em class="sig-param">lowerbound=None</em>, <em class="sig-param">upperbound=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.NetworkG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.NetworkG" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute a network constrained <cite>G</cite>-function.</p>
+<dd><p>Compute a network constrained <cite>G</cite>-function, which is
+a cumulative frequency distribution of nearest neighbor distances
+within a set of observations associated with a network.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
@@ -526,9 +537,17 @@ Defaults to the maximum observed nearest neighbor distance.</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>Based on <a class="bibtex reference internal" href="../references.html#doi-10-1002-9780470549094-ch5" id="id18">[OSullivanU10]</a> and mentioned in
-<a class="bibtex reference internal" href="../references.html#doi-10-1002-9781119967101-ch5" id="id19">[OS12c]</a>.</p>
-<p>[note from <cite>jlaura</cite>] Both the <cite>G</cite> and <cite>K</cite> functions generate a
+<p>This is a network-constrained version 
+based on the Euclidean formulation found in 
+<a class="bibtex reference internal" href="../references.html#doi-10-1002-9780470549094-ch5" id="id19">[OSullivanU10]</a> and mentioned in
+<a class="bibtex reference internal" href="../references.html#doi-10-1002-9781119967101-ch5" id="id20">[OS12c]</a>. It is formulated in 
+<a class="bibtex reference internal" href="../references.html#doi-10-1002-9780470549094-ch5" id="id21">[OSullivanU10]</a> as:</p>
+<div class="math notranslate nohighlight">
+\[G(d) = \frac{\#(d_{min}(s_i)&lt;d)}{n}\]</div>
+<p>where $s_i$ are observations totaling $n$ in $S$ and $d$ is
+each step of distance along the network.</p>
+<p><strong>[note from `jlaura`]</strong>
+Both the <cite>G</cite> and <cite>K</cite> functions generate a
 full distance matrix.  This is because, I know that the full 
 generation is correct and I believe that the truncated generated, 
 e.g. nearest neighbor, has a bug.</p>
@@ -540,19 +559,19 @@ e.g. nearest neighbor, has a bug.</p>
 </pre></div>
 </div>
 <p>Snap observation points onto the network.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pt_str</span> <span class="o">=</span> <span class="s2">&quot;crimes&quot;</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pt_str</span> <span class="o">=</span> <span class="s2">&quot;schools&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">in_data</span> <span class="o">=</span> <span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="n">pt_str</span><span class="o">+</span><span class="s2">&quot;.shp&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span><span class="n">in_data</span><span class="p">,</span> <span class="n">pt_str</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Simulate observations along the network.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">crimes</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="n">pt_str</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">simulate_observations</span><span class="p">(</span><span class="n">crimes</span><span class="o">.</span><span class="n">npoints</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">schools</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="n">pt_str</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">simulate_observations</span><span class="p">(</span><span class="n">schools</span><span class="o">.</span><span class="n">npoints</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Compute a network constrained <cite>G</cite>-function of crimes 
+<p>Compute a network constrained <cite>G</cite>-function of schools 
 with <code class="docutils literal notranslate"><span class="pre">5</span></code> <code class="docutils literal notranslate"><span class="pre">permutations</span></code> and <code class="docutils literal notranslate"><span class="pre">10</span></code> <code class="docutils literal notranslate"><span class="pre">nsteps</span></code>.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gres</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">NetworkG</span><span class="p">(</span><span class="n">crimes</span><span class="p">,</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">nsteps</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gres</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">NetworkG</span><span class="p">(</span><span class="n">schools</span><span class="p">,</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">nsteps</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">gres</span><span class="o">.</span><span class="n">lowerenvelope</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="go">10</span>
 </pre></div>
@@ -595,9 +614,12 @@ Defaults to the maximum observed nearest neighbor distance.</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>Based on <a class="bibtex reference internal" href="../references.html#doi-10-1111-j-1538-4632-2001-tb00448-x" id="id20">[OY01]</a> 
-and <a class="bibtex reference internal" href="../references.html#doi-10-1002-9781119967101-ch6" id="id21">[OS12b]</a>.</p>
-<p>[note from <cite>jlaura</cite>] Both the <cite>G</cite> and <cite>K</cite> functions generate a
+<p>Based on <a class="bibtex reference internal" href="../references.html#ripley1977" id="id22">[Rip77]</a>, 
+<a class="bibtex reference internal" href="../references.html#doi-10-1002-9780470549094-ch5" id="id23">[OSullivanU10]</a>,
+<a class="bibtex reference internal" href="../references.html#doi-10-1111-j-1538-4632-2001-tb00448-x" id="id24">[OY01]</a>,
+and <a class="bibtex reference internal" href="../references.html#doi-10-1002-9781119967101-ch6" id="id25">[OS12b]</a>.</p>
+<p><strong>[note from `jlaura`]</strong>
+Both the <cite>G</cite> and <cite>K</cite> functions generate a
 full distance matrix.  This is because, I know that the full 
 generation is correct and I believe that the truncated generated, 
 e.g. nearest neighbor, has a bug.</p>
@@ -609,19 +631,19 @@ e.g. nearest neighbor, has a bug.</p>
 </pre></div>
 </div>
 <p>Snap observation points onto the network.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pt_str</span> <span class="o">=</span> <span class="s2">&quot;crimes&quot;</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pt_str</span> <span class="o">=</span> <span class="s2">&quot;schools&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">in_data</span> <span class="o">=</span> <span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="n">pt_str</span><span class="o">+</span><span class="s2">&quot;.shp&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span><span class="n">in_data</span><span class="p">,</span> <span class="n">pt_str</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Simulate observations along the network.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">crimes</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="n">pt_str</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">simulate_observations</span><span class="p">(</span><span class="n">crimes</span><span class="o">.</span><span class="n">npoints</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">schools</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="n">pt_str</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">simulate_observations</span><span class="p">(</span><span class="n">schools</span><span class="o">.</span><span class="n">npoints</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Compute a network constrained <cite>K</cite>-function of crimes 
+<p>Compute a network constrained <cite>K</cite>-function of schools 
 with <code class="docutils literal notranslate"><span class="pre">5</span></code> <code class="docutils literal notranslate"><span class="pre">permutations</span></code> and <code class="docutils literal notranslate"><span class="pre">10</span></code> <code class="docutils literal notranslate"><span class="pre">nsteps</span></code>.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">kres</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">NetworkK</span><span class="p">(</span><span class="n">crimes</span><span class="p">,</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">nsteps</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">kres</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">NetworkK</span><span class="p">(</span><span class="n">schools</span><span class="p">,</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">nsteps</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">kres</span><span class="o">.</span><span class="n">lowerenvelope</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="go">10</span>
 </pre></div>
@@ -801,7 +823,7 @@ representation (<code class="docutils literal notranslate"><span class="pre">Tru
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>See <a class="bibtex reference internal" href="../references.html#pysal2007" id="id22">[RA07]</a> and <a class="bibtex reference internal" href="../references.html#esda-2019" id="id23">[RWK+19]</a> for more details.</p>
+<p>See <a class="bibtex reference internal" href="../references.html#pysal2007" id="id26">[RA07]</a> and <a class="bibtex reference internal" href="../references.html#esda-2019" id="id27">[RWK+19]</a> for more details.</p>
 <p class="rubric">Examples</p>
 <p>Instantiate a network.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">spaghetti</span>
@@ -933,7 +955,7 @@ the network.</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>See <a class="bibtex reference internal" href="../references.html#anselinrey2014" id="id24">[AR14]</a> and <a class="bibtex reference internal" href="../references.html#rey-open-2015" id="id25">[RAL+15]</a> for more details
+<p>See <a class="bibtex reference internal" href="../references.html#anselinrey2014" id="id28">[AR14]</a> and <a class="bibtex reference internal" href="../references.html#rey-open-2015" id="id29">[RAL+15]</a> for more details
 regarding spatial weights.</p>
 <p class="rubric">Examples</p>
 <p>Instantiate an instance of a network.</p>
@@ -1022,7 +1044,7 @@ Default is <code class="docutils literal notranslate"><span class="pre">False</s
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>Based on <a class="bibtex reference internal" href="../references.html#dijkstra1959a" id="id26">[Dij59]</a> and <a class="bibtex reference internal" href="../references.html#doi-10-1002-9781119967101-ch3" id="id27">[OS12a]</a>.</p>
+<p>Based on <a class="bibtex reference internal" href="../references.html#dijkstra1959a" id="id30">[Dij59]</a> and <a class="bibtex reference internal" href="../references.html#doi-10-1002-9781119967101-ch3" id="id31">[OS12a]</a>.</p>
 </dd></dl>
 
 <dl class="method">
@@ -1309,7 +1331,7 @@ attribute of the network object.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>in_data</strong><span class="classifier">{<a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.7.0+3.g74b1d95)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a>, <a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a>}</span></dt><dd><p>The input geographic data. Either (1) a path to a
+<dt><strong>in_data</strong><span class="classifier">{<a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.7.0+4.g7350b49)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a>, <a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a>}</span></dt><dd><p>The input geographic data. Either (1) a path to a
 shapefile (str); or (2) a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code>.</p>
 </dd>
 <dt><strong>name</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>Name to be assigned to the point dataset.</p>
@@ -1324,7 +1346,7 @@ Default is <code class="docutils literal notranslate"><span class="pre">False</s
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>See <a class="bibtex reference internal" href="../references.html#doi-10-1111-gean-12211" id="id28">[GFH19]</a> for a detailed discussion on
+<p>See <a class="bibtex reference internal" href="../references.html#doi-10-1111-gean-12211" id="id32">[GFH19]</a> for a detailed discussion on
 the modeling consequences of snapping points to spatial networks.</p>
 <p class="rubric">Examples</p>
 <p>Instantiate a network.</p>

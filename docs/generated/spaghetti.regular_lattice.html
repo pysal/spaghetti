@@ -177,12 +177,12 @@ will result in 5 horizontal line sets and 4 vertical line sets.</p>
 </pre></div>
 </div>
 <p>Create a 7x9 regular lattice with an exterior from the 
-bounds of <code class="docutils literal notranslate"><span class="pre">newhaven_nework.shp</span></code>.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">path</span> <span class="o">=</span> <span class="n">libpysal</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;newhaven_nework.shp&quot;</span><span class="p">)</span>
+bounds of <code class="docutils literal notranslate"><span class="pre">streets.shp</span></code>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">path</span> <span class="o">=</span> <span class="n">libpysal</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;streets.shp&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">shp</span> <span class="o">=</span> <span class="n">libpysal</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">lattice</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">regular_lattice</span><span class="p">(</span><span class="n">shp</span><span class="o">.</span><span class="n">bbox</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">nv</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">exterior</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">lattice</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">vertices</span>
-<span class="go">[(-72.99783297382338, 41.247205), (-72.97499854017013, 41.247205)]</span>
+<span class="go">[(723414.3683108028, 875929.0396895551), (724286.1381211297, 875929.0396895551)]</span>
 </pre></div>
 </div>
 </dd></dl>
