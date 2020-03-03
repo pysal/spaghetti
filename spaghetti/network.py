@@ -2532,7 +2532,13 @@ class Network:
         -----
         
         Based on :cite:`doi:10.1002/9780470549094.ch5` and mentioned in
-        :cite:`doi:10.1002/9781119967101.ch5`.
+        :cite:`doi:10.1002/9781119967101.ch5`. Formulated in 
+        :cite:`doi:10.1002/9780470549094.ch5` as:
+        
+        .. math::
+            
+            G(d) = \frac{\#(d_{min}(s_i)<d)}{n}
+        
         
         [note from `jlaura`] Both the `G` and `K` functions generate a
         full distance matrix.  This is because, I know that the full 
