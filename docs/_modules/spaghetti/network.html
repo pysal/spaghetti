@@ -545,18 +545,18 @@
 
         <span class="c1"># is the network a single, fully-connected component?</span>
         <span class="k">if</span> <span class="n">n_components</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">fully_connected</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1">################################# TEST</span>
+            <span class="n">fully_connected</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">fully_connected</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1">################################## TEST</span>
+            <span class="n">fully_connected</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="c1"># link to component lookup</span>
         <span class="n">link2component</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">links</span><span class="p">,</span> <span class="n">component_labels</span><span class="p">))</span>
 
         <span class="c1"># component ID lookups: links, lengths, vertices, vertex counts</span>
         <span class="n">component2link</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">component_lengths</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1">######################################### TEST</span>
-        <span class="n">component_vertices</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1">######################################### TEST</span>
-        <span class="n">component_vertex_count</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1">###################################### TEST</span>
+        <span class="n">component_lengths</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">component_vertices</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">component_vertex_count</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">cp_labs_</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">component_labels</span><span class="p">)</span>
         <span class="n">l2c_</span> <span class="o">=</span> <span class="n">link2component</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">cpl</span> <span class="ow">in</span> <span class="n">cp_labs_</span><span class="p">:</span>
@@ -567,12 +567,12 @@
             <span class="n">component_vertices</span><span class="p">[</span><span class="n">cpl</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">([</span><span class="n">v</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">c2l_</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">l</span><span class="p">]))</span>
             <span class="n">component_vertex_count</span><span class="p">[</span><span class="n">cpl</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">component_vertices</span><span class="p">[</span><span class="n">cpl</span><span class="p">])</span>
 
-        <span class="c1"># longest and largest components ############################################################### TEST</span>
+        <span class="c1"># longest and largest components</span>
         <span class="n">longest_component</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">component_lengths</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">component_lengths</span><span class="o">.</span><span class="n">get</span><span class="p">)</span>
         <span class="n">largest_component</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">component_vertex_count</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">component_vertex_count</span><span class="o">.</span><span class="n">get</span><span class="p">)</span>
 
         <span class="c1"># component to ring lookup</span>
-        <span class="n">component_is_ring</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1">###################################### TEST</span>
+        <span class="n">component_is_ring</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">adj_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">adjacencylist</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">comp</span><span class="p">,</span> <span class="n">verts</span> <span class="ow">in</span> <span class="n">component_vertices</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">component_is_ring</span><span class="p">[</span><span class="n">comp</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
@@ -1553,6 +1553,8 @@
 
             <span class="c1"># if the vertical direction is negative from</span>
             <span class="c1"># vertex 1 to vertex 2 on the euclidean plane</span>
+            <span class="c1"># -- this shouldn&#39;t happen due to vertex sorting in</span>
+            <span class="c1"># -- self._extractnetwork() and self.extractgraph()</span>
             <span class="k">elif</span> <span class="n">y1</span> <span class="o">&gt;</span> <span class="n">y2</span><span class="p">:</span>
                 <span class="n">y0</span> <span class="o">=</span> <span class="n">y2</span> <span class="o">+</span> <span class="n">distance</span>
 
@@ -2617,7 +2619,9 @@
         <span class="n">lowerbound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">upperbound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Compute a network constrained `F`-function.</span>
+        <span class="sd">&quot;&quot;&quot;Compute a network constrained `F`-function, which is</span>
+<span class="sd">        a cumulative frequency distribution of random distances</span>
+<span class="sd">        within a set of observations associated with a network.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -2657,8 +2661,19 @@
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 <span class="sd">        </span>
-<span class="sd">        Based on :cite:`doi:10.1002/9780470549094.ch5` and mentioned in</span>
-<span class="sd">        :cite:`doi:10.1002/9781119967101.ch5`.</span>
+<span class="sd">        This is a network-constrained version </span>
+<span class="sd">        based on the Euclidean formulation found in </span>
+<span class="sd">        :cite:`doi:10.1002/9780470549094.ch5` and mentioned in</span>
+<span class="sd">        :cite:`doi:10.1002/9781119967101.ch5`. It is formulated in </span>
+<span class="sd">        :cite:`doi:10.1002/9780470549094.ch5` as:</span>
+<span class="sd">        </span>
+<span class="sd">        .. math::</span>
+<span class="sd">            </span>
+<span class="sd">            F(d) = \\frac{\\#[d_{min}(p_i, S)&lt;d]}{m}</span>
+<span class="sd">        </span>
+<span class="sd">        where $p_i$ are randomly selected observations totaling $m$ in </span>
+<span class="sd">        $S$ and $d$ is each step of distance along the network. </span>
+<span class="sd">        </span>
 <span class="sd">        </span>
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
@@ -2671,19 +2686,19 @@
 <span class="sd">        </span>
 <span class="sd">        Snap observation points onto the network.</span>
 <span class="sd">        </span>
-<span class="sd">        &gt;&gt;&gt; pt_str = &quot;crimes&quot;</span>
+<span class="sd">        &gt;&gt;&gt; pt_str = &quot;schools&quot;</span>
 <span class="sd">        &gt;&gt;&gt; in_data = examples.get_path(pt_str+&quot;.shp&quot;)</span>
 <span class="sd">        &gt;&gt;&gt; ntw.snapobservations(in_data, pt_str, attribute=True)</span>
 <span class="sd">        </span>
 <span class="sd">        Simulate observations along the network.</span>
 <span class="sd">        </span>
-<span class="sd">        &gt;&gt;&gt; crimes = ntw.pointpatterns[pt_str]</span>
-<span class="sd">        &gt;&gt;&gt; sim = ntw.simulate_observations(crimes.npoints)</span>
+<span class="sd">        &gt;&gt;&gt; schools = ntw.pointpatterns[pt_str]</span>
+<span class="sd">        &gt;&gt;&gt; sim = ntw.simulate_observations(schools.npoints)</span>
 <span class="sd">        </span>
-<span class="sd">        Compute a network constrained `F`-function of crimes </span>
+<span class="sd">        Compute a network constrained `F`-function of schools </span>
 <span class="sd">        with ``5`` ``permutations`` and ``10`` ``nsteps``.</span>
 <span class="sd">        </span>
-<span class="sd">        &gt;&gt;&gt; fres = ntw.NetworkF(crimes, permutations=5, nsteps=10)</span>
+<span class="sd">        &gt;&gt;&gt; fres = ntw.NetworkF(schools, permutations=5, nsteps=10)</span>
 <span class="sd">        &gt;&gt;&gt; fres.lowerenvelope.shape[0]</span>
 <span class="sd">        10</span>
 <span class="sd">        </span>
@@ -2711,7 +2726,9 @@
         <span class="n">lowerbound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">upperbound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Compute a network constrained `G`-function.</span>
+        <span class="sd">&quot;&quot;&quot;Compute a network constrained `G`-function, which is</span>
+<span class="sd">        a cumulative frequency distribution of nearest neighbor distances</span>
+<span class="sd">        within a set of observations associated with a network.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -2751,10 +2768,21 @@
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 <span class="sd">        </span>
-<span class="sd">        Based on :cite:`doi:10.1002/9780470549094.ch5` and mentioned in</span>
-<span class="sd">        :cite:`doi:10.1002/9781119967101.ch5`.</span>
+<span class="sd">        This is a network-constrained version </span>
+<span class="sd">        based on the Euclidean formulation found in </span>
+<span class="sd">        :cite:`doi:10.1002/9780470549094.ch5` and mentioned in</span>
+<span class="sd">        :cite:`doi:10.1002/9781119967101.ch5`. It is formulated in </span>
+<span class="sd">        :cite:`doi:10.1002/9780470549094.ch5` as:</span>
 <span class="sd">        </span>
-<span class="sd">        [note from `jlaura`] Both the `G` and `K` functions generate a</span>
+<span class="sd">        .. math::</span>
+<span class="sd">          </span>
+<span class="sd">          G(d) = \\frac{\\#(d_{min}(s_i)&lt;d)}{n}</span>
+<span class="sd">        </span>
+<span class="sd">        where $s_i$ are observations totaling $n$ in $S$ and $d$ is</span>
+<span class="sd">        each step of distance along the network.</span>
+<span class="sd">        </span>
+<span class="sd">        **[note from `jlaura`]**</span>
+<span class="sd">        Both the `G` and `K` functions generate a</span>
 <span class="sd">        full distance matrix.  This is because, I know that the full </span>
 <span class="sd">        generation is correct and I believe that the truncated generated, </span>
 <span class="sd">        e.g. nearest neighbor, has a bug.</span>
@@ -2770,19 +2798,19 @@
 <span class="sd">        </span>
 <span class="sd">        Snap observation points onto the network.</span>
 <span class="sd">        </span>
-<span class="sd">        &gt;&gt;&gt; pt_str = &quot;crimes&quot;</span>
+<span class="sd">        &gt;&gt;&gt; pt_str = &quot;schools&quot;</span>
 <span class="sd">        &gt;&gt;&gt; in_data = examples.get_path(pt_str+&quot;.shp&quot;)</span>
 <span class="sd">        &gt;&gt;&gt; ntw.snapobservations(in_data, pt_str, attribute=True)</span>
 <span class="sd">        </span>
 <span class="sd">        Simulate observations along the network.</span>
 <span class="sd">        </span>
-<span class="sd">        &gt;&gt;&gt; crimes = ntw.pointpatterns[pt_str]</span>
-<span class="sd">        &gt;&gt;&gt; sim = ntw.simulate_observations(crimes.npoints)</span>
+<span class="sd">        &gt;&gt;&gt; schools = ntw.pointpatterns[pt_str]</span>
+<span class="sd">        &gt;&gt;&gt; sim = ntw.simulate_observations(schools.npoints)</span>
 <span class="sd">        </span>
-<span class="sd">        Compute a network constrained `G`-function of crimes </span>
+<span class="sd">        Compute a network constrained `G`-function of schools </span>
 <span class="sd">        with ``5`` ``permutations`` and ``10`` ``nsteps``.</span>
 <span class="sd">        </span>
-<span class="sd">        &gt;&gt;&gt; gres = ntw.NetworkG(crimes, permutations=5, nsteps=10)</span>
+<span class="sd">        &gt;&gt;&gt; gres = ntw.NetworkG(schools, permutations=5, nsteps=10)</span>
 <span class="sd">        &gt;&gt;&gt; gres.lowerenvelope.shape[0]</span>
 <span class="sd">        10</span>
 <span class="sd">        </span>
@@ -2810,7 +2838,7 @@
         <span class="n">lowerbound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">upperbound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Compute a network constrained `K`-function.</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Compute a network constrained `K`-function.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -2850,10 +2878,13 @@
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 <span class="sd">        </span>
-<span class="sd">        Based on :cite:`doi:10.1111/j.1538-4632.2001.tb00448.x` </span>
-<span class="sd">        and :cite:`doi:10.1002/9781119967101.ch6`.</span>
+<span class="sd">        Based on :cite:`Ripley1977`, </span>
+<span class="sd">        :cite:`doi:10.1002/9780470549094.ch5`,</span>
+<span class="sd">        :cite:`doi:10.1111/j.1538-4632.2001.tb00448.x`,</span>
+<span class="sd">        and :cite:`doi:10.1002/9781119967101.ch6`. </span>
 <span class="sd">        </span>
-<span class="sd">        [note from `jlaura`] Both the `G` and `K` functions generate a</span>
+<span class="sd">        **[note from `jlaura`]**</span>
+<span class="sd">        Both the `G` and `K` functions generate a</span>
 <span class="sd">        full distance matrix.  This is because, I know that the full </span>
 <span class="sd">        generation is correct and I believe that the truncated generated, </span>
 <span class="sd">        e.g. nearest neighbor, has a bug.</span>
@@ -2869,19 +2900,19 @@
 <span class="sd">        </span>
 <span class="sd">        Snap observation points onto the network.</span>
 <span class="sd">        </span>
-<span class="sd">        &gt;&gt;&gt; pt_str = &quot;crimes&quot;</span>
+<span class="sd">        &gt;&gt;&gt; pt_str = &quot;schools&quot;</span>
 <span class="sd">        &gt;&gt;&gt; in_data = examples.get_path(pt_str+&quot;.shp&quot;)</span>
 <span class="sd">        &gt;&gt;&gt; ntw.snapobservations(in_data, pt_str, attribute=True)</span>
 <span class="sd">        </span>
 <span class="sd">        Simulate observations along the network.</span>
 <span class="sd">        </span>
-<span class="sd">        &gt;&gt;&gt; crimes = ntw.pointpatterns[pt_str]</span>
-<span class="sd">        &gt;&gt;&gt; sim = ntw.simulate_observations(crimes.npoints)</span>
+<span class="sd">        &gt;&gt;&gt; schools = ntw.pointpatterns[pt_str]</span>
+<span class="sd">        &gt;&gt;&gt; sim = ntw.simulate_observations(schools.npoints)</span>
 <span class="sd">        </span>
-<span class="sd">        Compute a network constrained `K`-function of crimes </span>
+<span class="sd">        Compute a network constrained `K`-function of schools </span>
 <span class="sd">        with ``5`` ``permutations`` and ``10`` ``nsteps``.</span>
 <span class="sd">        </span>
-<span class="sd">        &gt;&gt;&gt; kres = ntw.NetworkK(crimes, permutations=5, nsteps=10)</span>
+<span class="sd">        &gt;&gt;&gt; kres = ntw.NetworkK(schools, permutations=5, nsteps=10)</span>
 <span class="sd">        &gt;&gt;&gt; kres.lowerenvelope.shape[0]</span>
 <span class="sd">        10</span>
 <span class="sd">        </span>
@@ -3366,13 +3397,13 @@
 <span class="sd">    [(3.75, 3.75), (3.75, 5.0)]</span>
 <span class="sd">    </span>
 <span class="sd">    Create a 7x9 regular lattice with an exterior from the </span>
-<span class="sd">    bounds of ``newhaven_nework.shp``.</span>
+<span class="sd">    bounds of ``streets.shp``.</span>
 <span class="sd">    </span>
-<span class="sd">    &gt;&gt;&gt; path = libpysal.examples.get_path(&quot;newhaven_nework.shp&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; path = libpysal.examples.get_path(&quot;streets.shp&quot;)</span>
 <span class="sd">    &gt;&gt;&gt; shp = libpysal.io.open(path)</span>
 <span class="sd">    &gt;&gt;&gt; lattice = spaghetti.regular_lattice(shp.bbox, 5, nv=7, exterior=True)</span>
 <span class="sd">    &gt;&gt;&gt; lattice[0].vertices</span>
-<span class="sd">    [(-72.99783297382338, 41.247205), (-72.97499854017013, 41.247205)]</span>
+<span class="sd">    [(723414.3683108028, 875929.0396895551), (724286.1381211297, 875929.0396895551)]</span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
