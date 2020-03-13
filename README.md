@@ -1,5 +1,5 @@
 <p align="center">
-<img src="figs/pysal_nav_logo.svg" width="800" height="200" />
+<img src="figs/pysal_nav_logo.svg" width="400" height="100" />
 </p>
 
 [pysal/spaghetti](http://pysal.org/spaghetti/)
