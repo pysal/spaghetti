@@ -1,6 +1,6 @@
 <p align="center">
-<img src="figs/pysal_nav_logo_2line.svg" width="800" height="200" />
-<img src="figs/spaghetti_nav_logo.svg" width="800" height="200" />
+<img src="figs/pysal_nav_logo_2line.svg" width="370" height="200" />
+<img src="figs/spaghetti_nav_logo.svg" width="470" height="200" />
 </p>
 
 [pysal/spaghetti](http://pysal.org/spaghetti/)
