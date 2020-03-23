@@ -27,8 +27,8 @@
    "execution_count": 1,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-23T21:43:34.670664Z",
-     "start_time": "2020-02-23T21:43:34.397777Z"
+     "end_time": "2020-03-23T21:58:14.658290Z",
+     "start_time": "2020-03-23T21:58:14.248355Z"
     }
    },
    "outputs": [
@@ -36,7 +36,7 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "2020-02-23T16:43:34-05:00\n",
+      "2020-03-23T17:58:14-04:00\n",
       "\n",
       "CPython 3.7.3\n",
       "IPython 7.10.2\n",
@@ -61,8 +61,8 @@
    "execution_count": 2,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-23T21:43:36.377452Z",
-     "start_time": "2020-02-23T21:43:34.675740Z"
+     "end_time": "2020-03-23T21:58:16.997540Z",
+     "start_time": "2020-03-23T21:58:14.665288Z"
     }
    },
    "outputs": [
@@ -70,14 +70,14 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "Using Python-MIP package version 1.6.8\n",
+      "Using Python-MIP package version 1.7.2\n",
       "watermark 2.0.2\n",
       "matplotlib          3.1.2\n",
-      "mip                 1.6.8\n",
       "numpy               1.17.3\n",
       "matplotlib_scalebar 0.6.1\n",
-      "geopandas           0.6.2\n",
-      "spaghetti           1.4.2\n",
+      "geopandas           0.7.0\n",
+      "mip                 1.7.2\n",
+      "spaghetti           1.4.2.post2\n",
       "\n"
      ]
     }
@@ -103,8 +103,8 @@
    "execution_count": 3,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-23T21:43:36.390704Z",
-     "start_time": "2020-02-23T21:43:36.384288Z"
+     "end_time": "2020-03-23T21:58:17.014155Z",
+     "start_time": "2020-03-23T21:58:17.006207Z"
     }
    },
    "outputs": [],
@@ -183,8 +183,8 @@
    "execution_count": 4,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-23T21:43:36.401702Z",
-     "start_time": "2020-02-23T21:43:36.394723Z"
+     "end_time": "2020-03-23T21:58:17.029488Z",
+     "start_time": "2020-03-23T21:58:17.023257Z"
     }
    },
    "outputs": [],
@@ -205,8 +205,8 @@
    "execution_count": 5,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-23T21:43:36.415034Z",
-     "start_time": "2020-02-23T21:43:36.407775Z"
+     "end_time": "2020-03-23T21:58:17.049896Z",
+     "start_time": "2020-03-23T21:58:17.039345Z"
     }
    },
    "outputs": [],
@@ -227,8 +227,8 @@
    "execution_count": 6,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-23T21:43:36.462849Z",
-     "start_time": "2020-02-23T21:43:36.419055Z"
+     "end_time": "2020-03-23T21:58:17.119891Z",
+     "start_time": "2020-03-23T21:58:17.067148Z"
     }
    },
    "outputs": [],
@@ -456,8 +456,8 @@
    "execution_count": 7,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-23T21:43:36.474590Z",
-     "start_time": "2020-02-23T21:43:36.467592Z"
+     "end_time": "2020-03-23T21:58:17.132647Z",
+     "start_time": "2020-03-23T21:58:17.123181Z"
     }
    },
    "outputs": [],
@@ -470,8 +470,8 @@
    "execution_count": 8,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-23T21:43:36.492128Z",
-     "start_time": "2020-02-23T21:43:36.483200Z"
+     "end_time": "2020-03-23T21:58:17.166373Z",
+     "start_time": "2020-03-23T21:58:17.154459Z"
     }
    },
    "outputs": [],
@@ -497,8 +497,8 @@
    "execution_count": 9,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-23T21:43:36.515111Z",
-     "start_time": "2020-02-23T21:43:36.499083Z"
+     "end_time": "2020-03-23T21:58:17.211033Z",
+     "start_time": "2020-03-23T21:58:17.190565Z"
     }
    },
    "outputs": [],
@@ -540,8 +540,8 @@
    "execution_count": 10,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-23T21:43:36.529053Z",
-     "start_time": "2020-02-23T21:43:36.520646Z"
+     "end_time": "2020-03-23T21:58:17.235009Z",
+     "start_time": "2020-03-23T21:58:17.221289Z"
     }
    },
    "outputs": [],
@@ -560,8 +560,8 @@
    "execution_count": 11,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-23T21:43:36.551644Z",
-     "start_time": "2020-02-23T21:43:36.534650Z"
+     "end_time": "2020-03-23T21:58:17.263986Z",
+     "start_time": "2020-03-23T21:58:17.247970Z"
     }
    },
    "outputs": [],
@@ -594,8 +594,8 @@
    "execution_count": 12,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-23T21:43:36.982723Z",
-     "start_time": "2020-02-23T21:43:36.555540Z"
+     "end_time": "2020-03-23T21:58:17.812720Z",
+     "start_time": "2020-03-23T21:58:17.287436Z"
     }
    },
    "outputs": [],
@@ -617,8 +617,8 @@
    "execution_count": 13,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-23T21:43:37.297014Z",
-     "start_time": "2020-02-23T21:43:36.985510Z"
+     "end_time": "2020-03-23T21:58:18.178244Z",
+     "start_time": "2020-03-23T21:58:17.815018Z"
     }
    },
    "outputs": [],
@@ -641,8 +641,8 @@
    "execution_count": 14,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-23T21:43:37.356527Z",
-     "start_time": "2020-02-23T21:43:37.304858Z"
+     "end_time": "2020-03-23T21:58:18.209463Z",
+     "start_time": "2020-03-23T21:58:18.180481Z"
     }
    },
    "outputs": [
@@ -733,8 +733,8 @@
    "execution_count": 15,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-23T21:43:37.387348Z",
-     "start_time": "2020-02-23T21:43:37.367268Z"
+     "end_time": "2020-03-23T21:58:18.245996Z",
+     "start_time": "2020-03-23T21:58:18.218180Z"
     }
    },
    "outputs": [
@@ -830,8 +830,8 @@
    "execution_count": 16,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-23T21:43:37.890268Z",
-     "start_time": "2020-02-23T21:43:37.393925Z"
+     "end_time": "2020-03-23T21:58:19.037015Z",
+     "start_time": "2020-03-23T21:58:18.261000Z"
     }
    },
    "outputs": [],
@@ -852,8 +852,8 @@
    "execution_count": 17,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-23T21:43:38.645810Z",
-     "start_time": "2020-02-23T21:43:37.892586Z"
+     "end_time": "2020-03-23T21:58:20.044039Z",
+     "start_time": "2020-03-23T21:58:19.039575Z"
     }
    },
    "outputs": [
@@ -904,8 +904,8 @@
    "execution_count": 18,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-23T21:43:38.707597Z",
-     "start_time": "2020-02-23T21:43:38.648178Z"
+     "end_time": "2020-03-23T21:58:20.121414Z",
+     "start_time": "2020-03-23T21:58:20.053166Z"
     }
    },
    "outputs": [
@@ -998,8 +998,8 @@
    "execution_count": 19,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-23T21:43:38.769703Z",
-     "start_time": "2020-02-23T21:43:38.710657Z"
+     "end_time": "2020-03-23T21:58:20.201963Z",
+     "start_time": "2020-03-23T21:58:20.131387Z"
     }
    },
    "outputs": [
@@ -1092,8 +1092,8 @@
    "execution_count": 20,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-23T21:43:39.653402Z",
-     "start_time": "2020-02-23T21:43:38.773306Z"
+     "end_time": "2020-03-23T21:58:21.554776Z",
+     "start_time": "2020-03-23T21:58:20.210601Z"
     }
    },
    "outputs": [
@@ -1147,8 +1147,8 @@
    "execution_count": 21,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-23T21:43:40.414798Z",
-     "start_time": "2020-02-23T21:43:39.655611Z"
+     "end_time": "2020-03-23T21:58:22.997969Z",
+     "start_time": "2020-03-23T21:58:21.560269Z"
     }
    },
    "outputs": [
@@ -1175,8 +1175,8 @@
    "execution_count": 22,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-23T21:43:40.429448Z",
-     "start_time": "2020-02-23T21:43:40.418767Z"
+     "end_time": "2020-03-23T21:58:23.027975Z",
+     "start_time": "2020-03-23T21:58:23.005288Z"
     }
    },
    "outputs": [
@@ -1216,8 +1216,8 @@
    "execution_count": 23,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-23T21:43:40.463359Z",
-     "start_time": "2020-02-23T21:43:40.439359Z"
+     "end_time": "2020-03-23T21:58:23.109090Z",
+     "start_time": "2020-03-23T21:58:23.056070Z"
     }
    },
    "outputs": [
@@ -1326,8 +1326,8 @@
    "execution_count": 24,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-23T21:43:40.495833Z",
-     "start_time": "2020-02-23T21:43:40.468511Z"
+     "end_time": "2020-03-23T21:58:23.172008Z",
+     "start_time": "2020-03-23T21:58:23.122607Z"
     }
    },
    "outputs": [
@@ -1437,8 +1437,8 @@
    "execution_count": 25,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-23T21:43:40.638031Z",
-     "start_time": "2020-02-23T21:43:40.500664Z"
+     "end_time": "2020-03-23T21:58:23.566293Z",
+     "start_time": "2020-03-23T21:58:23.181171Z"
     }
    },
    "outputs": [
@@ -1475,8 +1475,8 @@
    "execution_count": 26,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-23T21:43:40.653132Z",
-     "start_time": "2020-02-23T21:43:40.642842Z"
+     "end_time": "2020-03-23T21:58:23.615420Z",
+     "start_time": "2020-03-23T21:58:23.573141Z"
     }
    },
    "outputs": [
@@ -1521,8 +1521,8 @@
    "execution_count": 27,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-23T21:43:40.692469Z",
-     "start_time": "2020-02-23T21:43:40.658890Z"
+     "end_time": "2020-03-23T21:58:23.674331Z",
+     "start_time": "2020-03-23T21:58:23.624071Z"
     }
    },
    "outputs": [
@@ -1625,8 +1625,8 @@
    "execution_count": 28,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-23T21:43:40.757527Z",
-     "start_time": "2020-02-23T21:43:40.708471Z"
+     "end_time": "2020-03-23T21:58:23.741373Z",
+     "start_time": "2020-03-23T21:58:23.680448Z"
     }
    },
    "outputs": [
@@ -1743,8 +1743,8 @@
    "execution_count": 29,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-02-23T21:43:42.488802Z",
-     "start_time": "2020-02-23T21:43:40.760915Z"
+     "end_time": "2020-03-23T21:58:25.896103Z",
+     "start_time": "2020-03-23T21:58:23.759939Z"
     }
    },
    "outputs": [

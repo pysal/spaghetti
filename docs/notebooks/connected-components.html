@@ -7,18 +7,18 @@
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/pysal-styles.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"TeX": {"equationNumbers": {"autoNumber": "AMS", "useLabelIds": true}}, "tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <script src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script src="../_static/js/jquery-fix.js"></script>
+    <script src="../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script src="../_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="../_static/pysal_favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -74,6 +74,7 @@
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Connected components in a spatial network</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shortest-path-visualization.html">Generating regular lattices and visualizing shortest paths</a></li>
+<li class="toctree-l2"><a class="reference internal" href="caveats.html">Caveats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="network-analysis.html">Spatial network analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="facility-location.html">Demostrating network-based optimal facility location modeling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="transportation-problem.html">The Transportation Problem</a></li>
@@ -422,7 +423,7 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-02-23T16:33:25-05:00
+2020-03-23T18:00:26-04:00
 
 CPython 3.7.3
 IPython 7.10.2
@@ -462,11 +463,11 @@ interpreter: 64bit
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 watermark 2.0.2
-libpysal            4.2.0
-matplotlib          3.1.2
-spaghetti           1.4.2
-geopandas           0.6.2
+spaghetti           1.4.2.post2
+libpysal            4.2.2
 matplotlib_scalebar 0.6.1
+geopandas           0.7.0
+matplotlib          3.1.2
 
 </pre></div></div>
 </div>
@@ -976,24 +977,15 @@ array([0, 0, 0, 1, 1, 1], dtype=int32)
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">base</span> <span class="o">=</span> <span class="n">arcs_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s2">&quot;comp_label&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Set2&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
-<span class="n">vertices_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">vertices_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">);</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-&lt;matplotlib.axes._subplots.AxesSubplot at 0x10c9c4320&gt;
-</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_connected-components_37_1.png"><img alt="../_images/notebooks_connected-components_37_1.png" src="../_images/notebooks_connected-components_37_1.png" style="width: 417px; height: 411px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_connected-components_37_0.png"><img alt="../_images/notebooks_connected-components_37_0.png" src="../_images/notebooks_connected-components_37_0.png" style="width: 417px; height: 411px;" /></a>
 </div>
 </div>
 </div>
@@ -1243,24 +1235,15 @@ array([0, 0, 0, 1, 1, 1], dtype=int32)
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">base</span> <span class="o">=</span> <span class="n">arcs_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s2">&quot;comp_label&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Set2&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
 <span class="n">articulation_vertices</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">non_articulation_vertices</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">non_articulation_vertices</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">);</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-&lt;matplotlib.axes._subplots.AxesSubplot at 0x12ce86ef0&gt;
-</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_connected-components_51_1.png"><img alt="../_images/notebooks_connected-components_51_1.png" src="../_images/notebooks_connected-components_51_1.png" style="width: 417px; height: 411px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_connected-components_51_0.png"><img alt="../_images/notebooks_connected-components_51_0.png" src="../_images/notebooks_connected-components_51_0.png" style="width: 417px; height: 411px;" /></a>
 </div>
 </div>
 </div>
@@ -1556,24 +1539,15 @@ array([0, 0, 0, 1, 1, 1], dtype=int32)
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">base</span> <span class="o">=</span> <span class="n">arcs_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s2">&quot;comp_label&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Set2&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
 <span class="n">articulation_vertices</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">non_articulation_vertices</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">non_articulation_vertices</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">);</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-&lt;matplotlib.axes._subplots.AxesSubplot at 0x12d5e78d0&gt;
-</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_connected-components_64_1.png"><img alt="../_images/notebooks_connected-components_64_1.png" src="../_images/notebooks_connected-components_64_1.png" style="width: 427px; height: 347px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_connected-components_64_0.png"><img alt="../_images/notebooks_connected-components_64_0.png" src="../_images/notebooks_connected-components_64_0.png" style="width: 427px; height: 347px;" /></a>
 </div>
 </div>
 </div>
@@ -1642,24 +1616,15 @@ array([0, 0, 0, 1, 1, 1], dtype=int32)
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">base</span> <span class="o">=</span> <span class="n">arcs_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s2">&quot;comp_label&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Set2&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
-<span class="n">vertices_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">vertices_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">);</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-&lt;matplotlib.axes._subplots.AxesSubplot at 0x12d92c4a8&gt;
-</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_connected-components_70_1.png"><img alt="../_images/notebooks_connected-components_70_1.png" src="../_images/notebooks_connected-components_70_1.png" style="width: 424px; height: 294px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_connected-components_70_0.png"><img alt="../_images/notebooks_connected-components_70_0.png" src="../_images/notebooks_connected-components_70_0.png" style="width: 424px; height: 294px;" /></a>
 </div>
 </div>
 <div class="section" id="The-longest-component-is-not-necessarily-the-largest">
@@ -1793,24 +1758,15 @@ The largest component is 1 with 6 vertices.
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">base</span> <span class="o">=</span> <span class="n">arcs_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s2">&quot;comp_label&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Set2&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
-<span class="n">vertices_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">vertices_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">);</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-&lt;matplotlib.axes._subplots.AxesSubplot at 0x12dbef128&gt;
-</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_connected-components_77_1.png"><img alt="../_images/notebooks_connected-components_77_1.png" src="../_images/notebooks_connected-components_77_1.png" style="width: 414px; height: 411px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_connected-components_77_0.png"><img alt="../_images/notebooks_connected-components_77_0.png" src="../_images/notebooks_connected-components_77_0.png" style="width: 414px; height: 411px;" /></a>
 </div>
 </div>
 </div>
@@ -1825,24 +1781,15 @@ The largest component is 1 with 6 vertices.
 <span class="c1"># network vertices and arcs</span>
 <span class="n">vertices_df</span><span class="p">,</span> <span class="n">arcs_df</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">largest</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">arcs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">base</span> <span class="o">=</span> <span class="n">arcs_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s2">&quot;comp_label&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Set2&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
-<span class="n">vertices_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">vertices_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">);</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-&lt;matplotlib.axes._subplots.AxesSubplot at 0x12de67da0&gt;
-</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_connected-components_79_1.png"><img alt="../_images/notebooks_connected-components_79_1.png" src="../_images/notebooks_connected-components_79_1.png" style="width: 427px; height: 294px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_connected-components_79_0.png"><img alt="../_images/notebooks_connected-components_79_0.png" src="../_images/notebooks_connected-components_79_0.png" style="width: 427px; height: 294px;" /></a>
 </div>
 </div>
 </div>
@@ -1968,24 +1915,15 @@ The largest component is 1 with 6 vertices.
 <span class="n">legend</span><span class="p">((</span><span class="s2">&quot;longest&quot;</span><span class="p">,</span> <span class="n">nlc</span><span class="p">,</span> <span class="p">(</span><span class="n">ocomp</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ocomp</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])))</span>
 <span class="c1"># add scale bar</span>
 <span class="n">scalebar</span> <span class="o">=</span> <span class="n">ScaleBar</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">)</span>
-<span class="n">base</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">scalebar</span><span class="p">)</span>
+<span class="n">base</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">scalebar</span><span class="p">);</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[57]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-&lt;matplotlib_scalebar.scalebar.ScaleBar at 0x12fdc3d30&gt;
-</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_connected-components_91_1.png"><img alt="../_images/notebooks_connected-components_91_1.png" src="../_images/notebooks_connected-components_91_1.png" style="width: 619px; height: 574px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_connected-components_91_0.png"><img alt="../_images/notebooks_connected-components_91_0.png" src="../_images/notebooks_connected-components_91_0.png" style="width: 619px; height: 574px;" /></a>
 </div>
 </div>
 </div>
@@ -2013,7 +1951,7 @@ The largest component is 1 with 6 vertices.
     </p>
     <p>
         &copy; Copyright 2018, pysal developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
     </p>
   </div>
 </footer>

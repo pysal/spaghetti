@@ -7,18 +7,18 @@
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/pysal-styles.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"TeX": {"equationNumbers": {"autoNumber": "AMS", "useLabelIds": true}}, "tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <script src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script src="../_static/js/jquery-fix.js"></script>
+    <script src="../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script src="../_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="../_static/pysal_favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -74,6 +74,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../notebooks/quickstart.html">Quickstart</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../notebooks/connected-components.html">Connected components in a spatial network</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../notebooks/shortest-path-visualization.html">Generating regular lattices and visualizing shortest paths</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/caveats.html">Caveats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../notebooks/network-analysis.html">Spatial network analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../notebooks/facility-location.html">Demostrating network-based optimal facility location modeling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../notebooks/transportation-problem.html">The Transportation Problem</a></li>
@@ -134,7 +135,7 @@
 <h1>spaghetti.Network<a class="headerlink" href="#spaghetti-network" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="spaghetti.Network">
-<em class="property">class </em><code class="sig-prename descclassname">spaghetti.</code><code class="sig-name descname">Network</code><span class="sig-paren">(</span><em class="sig-param">in_data=None</em>, <em class="sig-param">vertex_sig=11</em>, <em class="sig-param">unique_arcs=True</em>, <em class="sig-param">extractgraph=True</em>, <em class="sig-param">w_components=True</em>, <em class="sig-param">weightings=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">spaghetti.</code><code class="sig-name descname">Network</code><span class="sig-paren">(</span><em class="sig-param">in_data=None</em>, <em class="sig-param">vertex_sig=11</em>, <em class="sig-param">unique_arcs=True</em>, <em class="sig-param">extractgraph=True</em>, <em class="sig-param">w_components=True</em>, <em class="sig-param">weightings=False</em>, <em class="sig-param">vertex_atol=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network" title="Permalink to this definition">¶</a></dt>
 <dd><p>Spatially-constrained network representation and analytical
 functionality. Naming conventions are as follows, (1) arcs and
 vertices for the full network object, and (2) edges and nodes for
@@ -143,7 +144,7 @@ refer to a network arc or a graph edge.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>in_data</strong><span class="classifier">{<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#list" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#tuple" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">tuple</span></code></a>, <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>, <a class="reference external" href="https://pysal.org/libpysal/generated/libpysal.cg.Chain.html#libpysal.cg.Chain" title="(in libpysal v4.2.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">libpysal.cg.Chain</span></code></a>, <a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.7.0+4.g7350b49)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a>}</span></dt><dd><p>The input geographic data. Either (1) a path to a shapefile
+<dt><strong>in_data</strong><span class="classifier">{<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#list" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#tuple" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">tuple</span></code></a>, <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>, <a class="reference external" href="https://pysal.org/libpysal/generated/libpysal.cg.Chain.html#libpysal.cg.Chain" title="(in libpysal v4.2.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">libpysal.cg.Chain</span></code></a>, <a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.7.0+13.g6b037d0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a>}</span></dt><dd><p>The input geographic data. Either (1) a path to a shapefile
 (str); (2) an iterable containing <code class="docutils literal notranslate"><span class="pre">libpysal.cg.Chain</span></code>
 objects; (3) a single <code class="docutils literal notranslate"><span class="pre">libpysal.cg.Chain</span></code>; or
 (4) a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code>.</p>
@@ -165,6 +166,10 @@ nodes. Default is <code class="docutils literal notranslate"><span class="pre">T
 <dt><strong>weightings</strong><span class="classifier">{<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a>, <a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.8)"><span class="xref std std-ref">bool</span></a>}</span></dt><dd><p>If dict, lists of weightings for each arc. If bool,
 <code class="docutils literal notranslate"><span class="pre">True</span></code> flags <code class="docutils literal notranslate"><span class="pre">self.arc_lengths</span></code> as the weightings,
 <code class="docutils literal notranslate"><span class="pre">False</span></code> sets no weightings. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+<dt><strong>vertex_atol</strong><span class="classifier">{<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">None</span></code></a>}</span></dt><dd><p>Precision for vertex absolute tolerance. Round vertex coordinates to
+<code class="docutils literal notranslate"><span class="pre">vertex_atol</span></code> decimal places. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>. <strong>ONLY</strong> change
+the default when there are known issues with digitization.</p>
 </dd>
 </dl>
 </dd>
@@ -266,16 +271,21 @@ values are the length.</p>
 <dt><strong>pointpatterns</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are a string name of the pattern and values are
 <code class="docutils literal notranslate"><span class="pre">PointPattern</span></code> class instances.</p>
 </dd>
-<dt><strong>distance_matrix</strong><span class="classifier"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></span></dt><dd><p>All network vertices (non-observations) distance matrix.</p>
+<dt><strong>distance_matrix</strong><span class="classifier"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></span></dt><dd><p>All network vertices (non-observations) distance matrix. Distances
+between vertices in disparate components are recorded as <code class="docutils literal notranslate"><span class="pre">inf</span></code>
+by default.</p>
 </dd>
-<dt><strong>network_trees</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are the vertex IDs (int). Values are dictionaries
+<dt><strong>network_trees</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are the vertex IDs (<code class="docutils literal notranslate"><span class="pre">int</span></code>). Values are dictionaries
 with the keys being the IDs of the destination vertex
-and the value being a list of the shortest path.</p>
+and values being lists of vertices along the shortest path. 
+If the destination vertex is a) the origin or b) 
+unreachable (disparate component) it is listed as itself being the
+neighbor.</p>
 </dd>
 <dt><strong>edges</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#list" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">list</span></code></a></span></dt><dd><p>Tuples of graph edge IDs.</p>
 </dd>
-<dt><strong>edge_lengths</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are the graph edge IDs (tuple). Values are the graph edge
-length (float).</p>
+<dt><strong>edge_lengths</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are the graph edge IDs (<code class="docutils literal notranslate"><span class="pre">tuple</span></code>). Values are the
+graph edge length (<code class="docutils literal notranslate"><span class="pre">float</span></code>).</p>
 </dd>
 <dt><strong>non_articulation_points</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#list" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">list</span></code></a></span></dt><dd><p>All vertices with degree 2 that are not in an isolated
 island ring (loop) component.</p>
@@ -349,7 +359,7 @@ necessarily equal to <code class="docutils literal notranslate"><span class="pre
 </dl>
 <dl class="method">
 <dt id="spaghetti.Network.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">in_data=None</em>, <em class="sig-param">vertex_sig=11</em>, <em class="sig-param">unique_arcs=True</em>, <em class="sig-param">extractgraph=True</em>, <em class="sig-param">w_components=True</em>, <em class="sig-param">weightings=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">in_data=None</em>, <em class="sig-param">vertex_sig=11</em>, <em class="sig-param">unique_arcs=True</em>, <em class="sig-param">extractgraph=True</em>, <em class="sig-param">w_components=True</em>, <em class="sig-param">weightings=False</em>, <em class="sig-param">vertex_atol=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
@@ -1331,7 +1341,7 @@ attribute of the network object.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>in_data</strong><span class="classifier">{<a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.7.0+4.g7350b49)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a>, <a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a>}</span></dt><dd><p>The input geographic data. Either (1) a path to a
+<dt><strong>in_data</strong><span class="classifier">{<a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.7.0+13.g6b037d0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a>, <a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a>}</span></dt><dd><p>The input geographic data. Either (1) a path to a
 shapefile (str); or (2) a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code>.</p>
 </dd>
 <dt><strong>name</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>Name to be assigned to the point dataset.</p>
@@ -1429,7 +1439,7 @@ comprised of arcs with lengths exactly divisible by <code class="docutils litera
     </p>
     <p>
         &copy; Copyright 2018, pysal developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
     </p>
   </div>
 </footer>

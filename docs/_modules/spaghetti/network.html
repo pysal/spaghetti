@@ -7,18 +7,18 @@
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/pysal-styles.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"TeX": {"equationNumbers": {"autoNumber": "AMS", "useLabelIds": true}}, "tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <script src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script src="../../_static/js/jquery-fix.js"></script>
+    <script src="../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script src="../../_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="../../_static/pysal_favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -72,6 +72,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../notebooks/quickstart.html">Quickstart</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../notebooks/connected-components.html">Connected components in a spatial network</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../notebooks/shortest-path-visualization.html">Generating regular lattices and visualizing shortest paths</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../notebooks/caveats.html">Caveats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../notebooks/network-analysis.html">Spatial network analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../notebooks/facility-location.html">Demostrating network-based optimal facility location modeling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../notebooks/transportation-problem.html">The Transportation Problem</a></li>
@@ -189,6 +190,11 @@
 <span class="sd">        ``True`` flags ``self.arc_lengths`` as the weightings,</span>
 <span class="sd">        ``False`` sets no weightings. Default is ``False``.</span>
 <span class="sd">    </span>
+<span class="sd">    vertex_atol : {int, None}</span>
+<span class="sd">        Precision for vertex absolute tolerance. Round vertex coordinates to</span>
+<span class="sd">        ``vertex_atol`` decimal places. Default is ``None``. **ONLY** change</span>
+<span class="sd">        the default when there are known issues with digitization.</span>
+<span class="sd">    </span>
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    </span>
@@ -217,19 +223,24 @@
 <span class="sd">        ``PointPattern`` class instances.</span>
 <span class="sd">    </span>
 <span class="sd">    distance_matrix : numpy.ndarray</span>
-<span class="sd">        All network vertices (non-observations) distance matrix.</span>
+<span class="sd">        All network vertices (non-observations) distance matrix. Distances</span>
+<span class="sd">        between vertices in disparate components are recorded as ``inf``</span>
+<span class="sd">        by default.</span>
 <span class="sd">    </span>
 <span class="sd">    network_trees : dict</span>
-<span class="sd">        Keys are the vertex IDs (int). Values are dictionaries</span>
+<span class="sd">        Keys are the vertex IDs (``int``). Values are dictionaries</span>
 <span class="sd">        with the keys being the IDs of the destination vertex</span>
-<span class="sd">        and the value being a list of the shortest path.</span>
+<span class="sd">        and values being lists of vertices along the shortest path. </span>
+<span class="sd">        If the destination vertex is a) the origin or b) </span>
+<span class="sd">        unreachable (disparate component) it is listed as itself being the</span>
+<span class="sd">        neighbor.</span>
 <span class="sd">    </span>
 <span class="sd">    edges : list</span>
 <span class="sd">        Tuples of graph edge IDs.</span>
 <span class="sd">    </span>
 <span class="sd">    edge_lengths : dict</span>
-<span class="sd">        Keys are the graph edge IDs (tuple). Values are the graph edge</span>
-<span class="sd">        length (float).</span>
+<span class="sd">        Keys are the graph edge IDs (``tuple``). Values are the</span>
+<span class="sd">        graph edge length (``float``).</span>
 <span class="sd">    </span>
 <span class="sd">    non_articulation_points : list</span>
 <span class="sd">        All vertices with degree 2 that are not in an isolated</span>
@@ -413,6 +424,7 @@
         <span class="n">extractgraph</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">w_components</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">weightings</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">vertex_atol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
 
         <span class="c1"># do this when creating a clean network instance from a</span>
@@ -423,6 +435,7 @@
             <span class="c1"># set parameters as attributes</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">in_data</span> <span class="o">=</span> <span class="n">in_data</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">vertex_sig</span> <span class="o">=</span> <span class="n">vertex_sig</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vertex_atol</span> <span class="o">=</span> <span class="n">vertex_atol</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">unique_arcs</span> <span class="o">=</span> <span class="n">unique_arcs</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">adjacencylist</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
@@ -511,6 +524,9 @@
             <span class="k">else</span> <span class="nb">round</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="o">-</span><span class="nb">int</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="n">val</span><span class="p">))))</span> <span class="o">+</span> <span class="p">(</span><span class="n">sig</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
             <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">v</span>
         <span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertex_atol</span><span class="p">:</span>
+            <span class="n">out_v</span> <span class="o">=</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertex_atol</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">out_v</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">out_v</span><span class="p">)</span>
 
@@ -3674,7 +3690,7 @@
     </p>
     <p>
         &copy; Copyright 2018, pysal developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
     </p>
   </div>
 </footer>

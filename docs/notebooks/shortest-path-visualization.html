@@ -7,22 +7,22 @@
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/pysal-styles.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"TeX": {"equationNumbers": {"autoNumber": "AMS", "useLabelIds": true}}, "tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <script src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script src="../_static/js/jquery-fix.js"></script>
+    <script src="../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script src="../_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="../_static/pysal_favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Spatial network analysis" href="network-analysis.html" />
+    <link rel="next" title="Caveats" href="caveats.html" />
     <link rel="prev" title="Connected components in a spatial network" href="connected-components.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -74,6 +74,7 @@
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l2"><a class="reference internal" href="connected-components.html">Connected components in a spatial network</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Generating regular lattices and visualizing shortest paths</a></li>
+<li class="toctree-l2"><a class="reference internal" href="caveats.html">Caveats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="network-analysis.html">Spatial network analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="facility-location.html">Demostrating network-based optimal facility location modeling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="transportation-problem.html">The Transportation Problem</a></li>
@@ -128,7 +129,7 @@
 <li><a class="reference internal" href="#2.5-Plot-the-shortest-path-routes">2.5 Plot the shortest path routes</a></li>
 <li><a class="reference internal" href="#2.6.-Plot-all-shortest-path-routes-within-the-context-of-the-network">2.6. Plot all shortest path routes within the context of the network</a></li>
 <li><a class="reference internal" href="#2.7.-Plot-the-shortest-path-routes-originating-from-observation-0">2.7. Plot the shortest path routes originating from observation <code class="docutils literal notranslate"><span class="pre">0</span></code></a></li>
-<li><a class="reference internal" href="#2.7.-Plot-the-shortest-path-routes-arriving-at-observation-4">2.7. Plot the shortest path routes arriving at observation <code class="docutils literal notranslate"><span class="pre">4</span></code></a></li>
+<li><a class="reference internal" href="#2.8.-Plot-the-shortest-path-routes-arriving-at-observation-4">2.8. Plot the shortest path routes arriving at observation <code class="docutils literal notranslate"><span class="pre">4</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -396,7 +397,7 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-02-23T16:44:06-05:00
+2020-03-23T17:57:31-04:00
 
 CPython 3.7.3
 IPython 7.10.2
@@ -433,9 +434,9 @@ interpreter: 64bit
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 watermark 2.0.2
-libpysal   4.2.0
+libpysal   4.2.2
 matplotlib 3.1.2
-spaghetti  1.4.2
+spaghetti  1.4.2.post2
 
 </pre></div></div>
 </div>
@@ -545,9 +546,9 @@ spaghetti  1.4.2
     <span class="n">a</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">_lab_loc</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">**</span><span class="n">kws</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">vert_labels</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Label each point pattern observation.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Label each network vertex.&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">_lab_loc</span><span class="p">(</span><span class="n">_x</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Helper for labeling observations.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Helper for labeling vertices.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">_x</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">kws</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="n">s</span><span class="p">,</span> <span class="s2">&quot;ha&quot;</span><span class="p">:</span> <span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;va&quot;</span><span class="p">:</span> <span class="s2">&quot;bottom&quot;</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="s2">&quot;bold&quot;</span><span class="p">}</span>
     <span class="n">v</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">_lab_loc</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">**</span><span class="n">kws</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -651,9 +652,9 @@ array([[nan, 0.4, 3.8],
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[(0, 1), &lt;libpysal.cg.shapes.Chain at 0x12525cef0&gt;],
- [(0, 2), &lt;libpysal.cg.shapes.Chain at 0x1254604a8&gt;],
- [(1, 2), &lt;libpysal.cg.shapes.Chain at 0x1262449e8&gt;]]
+[[(0, 1), &lt;libpysal.cg.shapes.Chain at 0x130a14be0&gt;],
+ [(0, 2), &lt;libpysal.cg.shapes.Chain at 0x130a3a048&gt;],
+ [(1, 2), &lt;libpysal.cg.shapes.Chain at 0x13046f470&gt;]]
 </pre></div></div>
 </div>
 </div>
@@ -1013,9 +1014,9 @@ array([[nan, 0.4, 3.8],
 </div>
 </div>
 </div>
-<div class="section" id="2.7.-Plot-the-shortest-path-routes-arriving-at-observation-4">
-<h3>2.7. Plot the shortest path routes arriving at observation <code class="docutils literal notranslate"><span class="pre">4</span></code><a class="headerlink" href="#2.7.-Plot-the-shortest-path-routes-arriving-at-observation-4" title="Permalink to this headline">¶</a></h3>
-<p><strong>Since the point pattern is symmetric, origins equal destinations and the shortest paths IDs are sorted and pruned out. Therefore, we have to stipluate either ``O`` or ``D`` of ``4`` in this case.</strong></p>
+<div class="section" id="2.8.-Plot-the-shortest-path-routes-arriving-at-observation-4">
+<h3>2.8. Plot the shortest path routes arriving at observation <code class="docutils literal notranslate"><span class="pre">4</span></code><a class="headerlink" href="#2.8.-Plot-the-shortest-path-routes-arriving-at-observation-4" title="Permalink to this headline">¶</a></h3>
+<p>Since the point pattern is symmetric, origins equal destinations and the shortest paths IDs are sorted and pruned out. Therefore, we have to stipluate <strong>either</strong> <code class="docutils literal notranslate"><span class="pre">O</span></code> or <code class="docutils literal notranslate"><span class="pre">D</span></code> of <code class="docutils literal notranslate"><span class="pre">4</span></code> in this case.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
@@ -1078,7 +1079,7 @@ array([[nan, 0.4, 3.8],
     </p>
     <p>
         &copy; Copyright 2018, pysal developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
     </p>
   </div>
 </footer>
