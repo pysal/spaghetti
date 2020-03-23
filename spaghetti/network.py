@@ -94,12 +94,17 @@ class Network:
         ``PointPattern`` class instances.
     
     distance_matrix : numpy.ndarray
-        All network vertices (non-observations) distance matrix.
+        All network vertices (non-observations) distance matrix. Distances
+        between vertices in disparate components are recorded as ``inf``
+        by default.
     
     network_trees : dict
         Keys are the vertex IDs (``int``). Values are dictionaries
         with the keys being the IDs of the destination vertex
-        and values being lists of the shortest path.
+        and values being lists of vertices along the shortest path. 
+        If the destination vertex is a) the origin or b) 
+        unreachable (disparate component) it is listed as itself being the
+        neighbor.
     
     edges : list
         Tuples of graph edge IDs.
