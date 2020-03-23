@@ -1,6 +1,17 @@
 .. documentation master file
 
 
+.. raw:: html
+
+    <img 
+        src="_static/images/spaghetti_nav_logo.svg" 
+        class="img-responsive center-block" 
+        alt="spaghatti Logo" 
+        width="470" 
+        height="200"
+    >
+
+
 `spaghetti`
 ===========
 
@@ -98,7 +109,7 @@ If you use PySAL-spaghetti in a scientific publication, we would appreciate usin
 .. raw:: html
 
     <img 
-        src="_static/images/pysal_logo.png" 
+        src="_static/images/pysal_logo.svg" 
         class="img-responsive center-block" 
         alt="PySAL Logo" 
         width="400" 
