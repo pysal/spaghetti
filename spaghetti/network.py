@@ -61,6 +61,11 @@ class Network:
         ``True`` flags ``self.arc_lengths`` as the weightings,
         ``False`` sets no weightings. Default is ``False``.
     
+    vertex_atol : {int, None}
+        Precision for vertex absolute tolerance. Round vertex coordinates to
+        ``vertex_atol`` decimal places. Default is ``None``. **ONLY** change
+        the default when there are known issues with digitization.
+    
     Attributes
     ----------
     
@@ -92,16 +97,16 @@ class Network:
         All network vertices (non-observations) distance matrix.
     
     network_trees : dict
-        Keys are the vertex IDs (int). Values are dictionaries
+        Keys are the vertex IDs (``int``). Values are dictionaries
         with the keys being the IDs of the destination vertex
-        and the value being a list of the shortest path.
+        and values being lists of the shortest path.
     
     edges : list
         Tuples of graph edge IDs.
     
     edge_lengths : dict
-        Keys are the graph edge IDs (tuple). Values are the graph edge
-        length (float).
+        Keys are the graph edge IDs (``tuple``). Values are the
+        graph edge length (``float``).
     
     non_articulation_points : list
         All vertices with degree 2 that are not in an isolated
@@ -285,6 +290,7 @@ class Network:
         extractgraph=True,
         w_components=True,
         weightings=False,
+        vertex_atol=None,
     ):
 
         # do this when creating a clean network instance from a
@@ -295,6 +301,7 @@ class Network:
             # set parameters as attributes
             self.in_data = in_data
             self.vertex_sig = vertex_sig
+            self.vertex_atol = vertex_atol
             self.unique_arcs = unique_arcs
 
             self.adjacencylist = defaultdict(list)
@@ -383,6 +390,9 @@ class Network:
             else round(val, -int(numpy.floor(numpy.log10(numpy.fabs(val)))) + (sig - 1))
             for val in v
         ]
+
+        if self.vertex_atol:
+            out_v = [round(v, self.vertex_atol) for v in out_v]
 
         return tuple(out_v)
 
