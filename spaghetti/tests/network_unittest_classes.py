@@ -21,6 +21,8 @@ CRIMES = examples.get_path(crimes + ".shp")
 
 # native pysal geometries ------------------------------------------------------
 P00 = cg.Point((0, 0))
+P03 = cg.Point((0, 3))
+P030001 = cg.Point((0, 3.0001))
 P10 = cg.Point((1, 0))
 P11 = cg.Point((1, 1))
 P12 = cg.Point((1, 2))
@@ -28,6 +30,8 @@ P21 = cg.Point([2, 1])
 P22 = cg.Point((2, 2))
 P33 = cg.Point((3, 3))
 P34 = cg.Point((3, 4))
+P40 = cg.Point((4, 0))
+P400010 = cg.Point((4.0001, 0))
 P11P22_CHAIN = cg.Chain([P11, P22])
 
 P0505 = cg.Point([0.5, 0.5])
@@ -56,6 +60,12 @@ RING = [
     cg.Chain([P325075, P31]),
 ]
 EXTENSION = [cg.Chain([P12, P22, P21])]
+
+BAD_TRIANGLE = [
+    cg.Chain([P00, P03]),
+    cg.Chain([P030001, P400010]),
+    cg.Chain([P40, P00]),
+]
 
 synth_obs = "synth_obs"
 points1 = "points1"
@@ -163,6 +173,12 @@ class TestNetwork(unittest.TestCase):
         self.ntw_shp.vertex_sig = None
         obs_xy_roundNone = self.ntw_shp._round_sig((1215, 1865))
         self.assertEqual(obs_xy_roundNone, (x_roundNone, y_roundNone))
+
+    def test_vertex_atol(self):
+        known_components = 1
+        ntw_triangle = self.spaghetti.Network(in_data=BAD_TRIANGLE, vertex_atol=2)
+        observed_components = ntw_triangle.network_n_components
+        self.assertEqual(observed_components, known_components)
 
     def test_contiguity_weights(self):
         known_network_histo = [(2, 35), (3, 89), (4, 105), (5, 61), (6, 13)]
