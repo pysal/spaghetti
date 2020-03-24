@@ -19,6 +19,7 @@
        - uses: actions/checkout@v2
        - uses: goanpeca/setup-miniconda@v1
          with:
+            miniconda-version: 'latest'
             python-version: ${{ matrix.python-version }}
             auto-update-conda: true
             auto-activate-base: false
@@ -29,19 +30,22 @@
            conda info
            conda list
            python setup.py install
-           py.test -v spaghetti --doctest-modules
+           py.test -v spaghetti --cov=spaghetti -v --doctest-modules --cov-config=.coveragerc --cov-report term-missing;
+       - name: codecov (${{ matrix.python-version }}, ${{ matrix.os }}, ${{ matrix.environment-file }})
+         uses: codecov/codecov-action@v1
    conda_38:
      name: conda (${{ matrix.python-version }}, ${{ matrix.os }}, ${{ matrix.environment-file }})
      runs-on: ${{ matrix.os }}
      strategy:
        matrix:
          os: [ubuntu-latest]
-         python-version: ['3.8']
+         python-version: [3.8]
          environment-file: [ci/38-latest-conda-forge-PYPI.yaml]
      steps:
        - uses: actions/checkout@v2
        - uses: goanpeca/setup-miniconda@v1
          with:
+            miniconda-version: 'latest'
             python-version: ${{ matrix.python-version }}
             auto-update-conda: true
             auto-activate-base: false
