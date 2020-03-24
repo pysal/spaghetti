@@ -14,7 +14,7 @@
        matrix:
          os: [macos-latest, windows-latest, ubuntu-latest]
          python-version: ['3.6', '3.7']
-         environment-file: [ci/latest-conda-forge-PYPI.yaml]
+         environment-file: [ci/latest-conda-forge-PYPI.yaml, ci/latest-conda-forge-GIT.yaml]
      steps:
        - uses: actions/checkout@v2
        - uses: goanpeca/setup-miniconda@v1
@@ -31,13 +31,13 @@
            python setup.py install
            py.test -v spaghetti --doctest-modules
    conda_38:
-     name: conda python 3.8
+     name: conda (${{ matrix.python-version }}, ${{ matrix.os }}, ${{ matrix.environment-file }})
      runs-on: ${{ matrix.os }}
      strategy:
        matrix:
-         os: [windows-latest, ubuntu-latest]
+         os: [ubuntu-latest]
          python-version: ['3.8']
-         environment-file: [ci/latest-conda-forge-PYPI.yaml]
+         environment-file: [ci/38-latest-conda-forge-PYPI.yaml]
      steps:
        - uses: actions/checkout@v2
        - uses: goanpeca/setup-miniconda@v1
