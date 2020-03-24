@@ -14,7 +14,7 @@
        matrix:
          os: [macos-latest, windows-latest, ubuntu-latest]
          python-version: [3.6, 3.7]
-         environment-file: [ci/latest-conda-forge-PYPI.yaml, ci/latest-conda-forge-GIT.yaml, ci/latest-conda-forge-PYPI-PLUS.yaml, ci/latest-conda-forge-GIT-PLUS.yaml]
+         environment-file: [ci/latest-conda-forge-PYPI-PLUS.yaml, ci/latest-conda-forge-GIT-PLUS.yaml]
      steps:
        - uses: actions/checkout@v2
        - uses: goanpeca/setup-miniconda@v1
@@ -22,14 +22,15 @@
             miniconda-version: 'latest'
             python-version: ${{ matrix.python-version }}
             auto-update-conda: true
-            auto-activate-base: false
             environment-file: ${{ matrix.environment-file }}
             activate-environment: test
+            auto-activate-base: false
        - shell: bash -l {0}
          run: |
-           conda info --all
-           conda list
-           py.test -v spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
+           conda info --all;
+           conda list;
+           python -c 'import geopandas; print("\n\n\n\n",geopandas.__version__,"\n\n\n\n")'
+           py.test -v spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml;
        - name: codecov (${{ matrix.python-version }}, ${{ matrix.os }}, ${{ matrix.environment-file }})
          uses: codecov/codecov-action@v1
          with:
