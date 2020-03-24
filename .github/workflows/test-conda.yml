@@ -17,6 +17,7 @@
             activate-environment: test
             environment-file: ci/travis/36-latest-conda-forge-PYPI.yaml
             python-version: 3.6
+            auto-update-conda: true
             auto-activate-base: false
        - shell: bash -l {0}
          run: |
