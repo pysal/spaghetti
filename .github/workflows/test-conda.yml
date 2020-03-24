@@ -8,7 +8,7 @@
 
  jobs:
    conda_3637:
-     name: conda (${{ matrix.python-version }}, ${{ matrix.os }})
+     name: conda (${{ matrix.python-version }}, ${{ matrix.os }}, ${{ matrix.environment-file }})
      runs-on: ${{ matrix.os }}
      strategy:
        matrix:
@@ -24,6 +24,7 @@
             auto-activate-base: false
             environment-file: ${{ matrix.environment-file }}
             activate-environment: test
+            channels: conda-forge
        - shell: bash -l {0}
          run: |
            conda info
@@ -42,9 +43,10 @@
          with:
             activate-environment: test
             environment-file: ci/latest-conda-forge-PYPI.yaml
-            python-version: 3.8
+            python-version: 3.8.2
             auto-update-conda: true
             auto-activate-base: false
+            channels: conda-forge
        - shell: bash -l {0}
          run: |
            conda info

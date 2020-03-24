@@ -1,6 +1,4 @@
 name: test
-channels:
-  - conda-forge
 dependencies:
   # required
   - libpysal
