@@ -7,14 +7,23 @@
      - '*'
 
  jobs:
-   conda_3637:
-     name: conda (${{ matrix.python-version }}, ${{ matrix.os }}, ${{ matrix.environment-file }})
+   conda_3637_allos:
+     name: conda (
+        ${{ matrix.python-version }},
+        ${{ matrix.os }},
+        ${{ matrix.environment-file }}
+     )
      runs-on: ${{ matrix.os }}
      strategy:
        matrix:
          os: [macos-latest, windows-latest, ubuntu-latest]
-         python-version: ['3.6', '3.7']
-         environment-file: [ci/latest-conda-forge-PYPI.yaml, ci/latest-conda-forge-GIT.yaml]
+         python-version: [3.6, 3.7]
+         environment-file: [
+            ci/latest-conda-forge-PYPI.yaml,
+            ci/latest-conda-forge-GIT.yaml,
+            ci/latest-conda-forge-PYPI-PLUS.yaml,
+            ci/latest-conda-forge-GIT-PLUS.yaml,
+         ]
      steps:
        - uses: actions/checkout@v2
        - uses: goanpeca/setup-miniconda@v1
