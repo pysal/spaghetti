@@ -7,9 +7,12 @@
      - '*'
 
  jobs:
-   conda_36_ubuntu:
-     name: conda python 3.6 - ubuntu
-     runs-on: 'ubuntu-latest'
+   conda_36:
+     name: conda python 3.6
+     runs-on: ${{ matrix.os }}
+     strategy:
+       matrix:
+         os: [macos-latest, windows-latest, ubuntu-latest]
      steps:
        - uses: actions/checkout@v2
        - uses: goanpeca/setup-miniconda@v1
