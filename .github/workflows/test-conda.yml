@@ -29,9 +29,6 @@
          run: |
            conda info --all
            conda list
-           python -c 'import geopandas; print("\n\n\n ---PRE---",geopandas.__version__,"\n\n\n")'
-           python setup.py install
-           python -c 'import geopandas; print("\n\n\n ---POST---",geopandas.__version__,"\n\n\n")'
            py.test -v spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
        - name: codecov (${{ matrix.python-version }}, ${{ matrix.os }}, ${{ matrix.environment-file }})
          uses: codecov/codecov-action@v1
