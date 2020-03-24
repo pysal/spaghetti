@@ -28,9 +28,12 @@
            conda list
            python setup.py install
            py.test -v spaghetti --doctest-modules
-   conda_37_ubuntu:
-     name: conda python 3.7 - ubuntu
-     runs-on: 'ubuntu-latest'
+   conda_37:
+     name: conda python 3.7
+     runs-on: ${{ matrix.os }}
+     strategy:
+       matrix:
+         os: [macos-latest, windows-latest, ubuntu-latest]
      steps:
        - uses: actions/checkout@v2
        - uses: goanpeca/setup-miniconda@v1
@@ -46,9 +49,12 @@
            conda list
            python setup.py install
            py.test -v spaghetti --doctest-modules
-   conda_38_ubuntu:
-     name: conda python 3.8 - ubuntu
-     runs-on: 'ubuntu-latest'
+   conda_38:
+     name: conda python 3.8
+     runs-on: ${{ matrix.os }}
+     strategy:
+       matrix:
+         os: [macos-latest, windows-latest, ubuntu-latest]
      steps:
        - uses: actions/checkout@v2
        - uses: goanpeca/setup-miniconda@v1
