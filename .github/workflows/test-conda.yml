@@ -7,42 +7,22 @@
      - '*'
 
  jobs:
-   conda_36:
-     name: conda python 3.6
+   conda_3637:
+     name: conda (${{ matrix.python-version }}, ${{ matrix.os }})
      runs-on: ${{ matrix.os }}
      strategy:
        matrix:
          os: [macos-latest, windows-latest, ubuntu-latest]
+         python-version: ['3.6', '3.7']
      steps:
        - uses: actions/checkout@v2
        - uses: goanpeca/setup-miniconda@v1
          with:
-            activate-environment: test
-            environment-file: ci/travis/36-latest-conda-forge-PYPI.yaml
-            python-version: 3.6
+            python-version: ${{ matrix.python-version }}
             auto-update-conda: true
             auto-activate-base: false
-       - shell: bash -l {0}
-         run: |
-           conda info
-           conda list
-           python setup.py install
-           py.test -v spaghetti --doctest-modules
-   conda_37:
-     name: conda python 3.7
-     runs-on: ${{ matrix.os }}
-     strategy:
-       matrix:
-         os: [macos-latest, windows-latest, ubuntu-latest]
-     steps:
-       - uses: actions/checkout@v2
-       - uses: goanpeca/setup-miniconda@v1
-         with:
+            environment-file: ci/travis/latest-conda-forge-PYPI.yaml
             activate-environment: test
-            environment-file: ci/travis/37-latest-conda-forge-PYPI.yaml
-            python-version: 3.7
-            auto-update-conda: true
-            auto-activate-base: false
        - shell: bash -l {0}
          run: |
            conda info
@@ -54,7 +34,7 @@
      runs-on: ${{ matrix.os }}
      strategy:
        matrix:
-         os: [macos-latest, windows-latest, ubuntu-latest]
+         os: [windows-latest, ubuntu-latest]
      steps:
        - uses: actions/checkout@v2
        - uses: goanpeca/setup-miniconda@v1
