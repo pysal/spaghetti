@@ -36,15 +36,17 @@
      strategy:
        matrix:
          os: [windows-latest, ubuntu-latest]
+         python-version: ['3.8']
+         environment-file: [ci/latest-conda-forge-PYPI.yaml]
      steps:
        - uses: actions/checkout@v2
        - uses: goanpeca/setup-miniconda@v1
          with:
-            activate-environment: test
-            environment-file: ci/latest-conda-forge-PYPI.yaml
-            python-version: 3.8.2
+            python-version: ${{ matrix.python-version }}
             auto-update-conda: true
             auto-activate-base: false
+            environment-file: ${{ matrix.environment-file }}
+            activate-environment: test
        - shell: bash -l {0}
          run: |
            conda info
