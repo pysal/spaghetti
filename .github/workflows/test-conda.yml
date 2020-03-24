@@ -31,7 +31,7 @@
            python setup.py install
            py.test -v spaghetti --doctest-modules
    conda_38:
-     name: conda python 3.8.2
+     name: conda python 3.8
      runs-on: ${{ matrix.os }}
      strategy:
        matrix:
@@ -42,7 +42,7 @@
          with:
             activate-environment: test
             environment-file: ci/latest-conda-forge-PYPI.yaml
-            python-version: 3.8
+            python-version: 3.8.2
             auto-update-conda: true
             auto-activate-base: false
        - shell: bash -l {0}
