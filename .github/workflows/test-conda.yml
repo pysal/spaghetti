@@ -27,12 +27,16 @@
             activate-environment: test
        - shell: bash -l {0}
          run: |
-           conda info
+           conda info --all
            conda list
            python setup.py install
-           py.test -v spaghetti --cov=spaghetti -v --doctest-modules --cov-config=.coveragerc --cov-report term-missing;
+           py.test -v spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
        - name: codecov (${{ matrix.python-version }}, ${{ matrix.os }}, ${{ matrix.environment-file }})
          uses: codecov/codecov-action@v1
+         with:
+           file: ./coverage.xml
+           flags: unittests
+           name: codecov-umbrella
    conda_38:
      name: conda (${{ matrix.python-version }}, ${{ matrix.os }}, ${{ matrix.environment-file }})
      runs-on: ${{ matrix.os }}
