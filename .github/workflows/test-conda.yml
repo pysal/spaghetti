@@ -48,17 +48,17 @@
    #    - uses: goanpeca/setup-miniconda@v1
    #      with:
    #         miniconda-version: 'latest'
-            python-version: ${{ matrix.python-version }}
-            auto-update-conda: true
-            auto-activate-base: false
-            environment-file: ${{ matrix.environment-file }}
-            activate-environment: test
-       - shell: bash -l {0}
-         run: |
-           conda info
-           conda list
-           python setup.py install
-           py.test -v spaghetti --doctest-modules
+   #         python-version: ${{ matrix.python-version }}
+   #         auto-update-conda: true
+   #         auto-activate-base: false
+   #         environment-file: ${{ matrix.environment-file }}
+   #         activate-environment: test
+   #    - shell: bash -l {0}
+   #      run: |
+   #        conda info
+   #        conda list
+   #        python setup.py install
+   #        py.test -v spaghetti --doctest-modules
 
 
 
