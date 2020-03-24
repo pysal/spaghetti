@@ -12,8 +12,8 @@
      runs-on: ${{ matrix.os }}
      strategy:
        matrix:
-         os: [windows-latest, ubuntu-latest]
-         python-version: [3.6, 3.7]
+         os: ['macos-latest', 'ubuntu-latest', 'windows-latest']
+         python-version: ['3.6', '3.7']
          environment-file: [ci/travis/36-latest-conda-forge-PYPI.yaml, ci/travis/36-latest-conda-forge-PYPI-PLUS.yaml, ci/travis/37-latest-conda-forge-PYPI.yaml, ci/travis/37-latest-conda-forge-PYPI-PLUS.yaml]
      steps:
        - uses: actions/checkout@v2
