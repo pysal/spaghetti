@@ -5,12 +5,14 @@
    pull_request:
      branches:
      - '*'
+   schedule:
+     - cron: '59 11 * * *'
 
  jobs:
-   spaghetti-CI:
+   spaghetti-unittests:
      name: conda (${{ matrix.os }}, ${{ matrix.environment-file }})
      runs-on: ${{ matrix.os }}
-     timeout-minutes: 30
+     timeout-minutes: 90
      strategy:
        matrix:
          os: ['macos-latest', 'ubuntu-latest', 'windows-latest']
