@@ -7,9 +7,10 @@
      - '*'
 
  jobs:
-   conda_3637_allos:
+   spaghetti-CI:
      name: conda (${{ matrix.os }}, ${{ matrix.environment-file }})
      runs-on: ${{ matrix.os }}
+     timeout-minutes: 30
      strategy:
        matrix:
          os: ['macos-latest', 'ubuntu-latest', 'windows-latest']
@@ -33,33 +34,4 @@
          with:
            token: ${{ secrets.CODECOV_TOKEN }}
            file: ./coverage.xml
-           flags: unittests
-           name: codecov-umbrella
-   
-   #conda_38:
-   #  name: conda (${{ matrix.python-version }}, ${{ matrix.os }}, ${{ matrix.environment-file }})
-   #  runs-on: ${{ matrix.os }}
-   #  strategy:
-   #    matrix:
-   #      os: [ubuntu-latest]
-   #      python-version: [3.8]
-   #      environment-file: [ci/38-latest-conda-forge-PYPI.yaml]
-   #  steps:
-   #    - uses: actions/checkout@v2
-   #    - uses: goanpeca/setup-miniconda@v1
-   #      with:
-   #         miniconda-version: 'latest'
-   #         python-version: ${{ matrix.python-version }}
-   #         auto-update-conda: true
-   #         auto-activate-base: false
-   #         environment-file: ${{ matrix.environment-file }}
-   #         activate-environment: test
-   #    - shell: bash -l {0}
-   #      run: |
-   #        conda info
-   #        conda list
-   #        python setup.py install
-   #        py.test -v spaghetti --doctest-modules
-
-
-
+           name: spaghetti-codecov
