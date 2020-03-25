@@ -9,14 +9,14 @@
      - cron: '59 11 * * *'
 
  jobs:
-   spaghetti-unittests:
+   unittests:
      name: conda (${{ matrix.os }}, ${{ matrix.environment-file }})
      runs-on: ${{ matrix.os }}
      timeout-minutes: 90
      strategy:
        matrix:
          os: ['macos-latest', 'ubuntu-latest', 'windows-latest']
-         environment-file: [ci/travis/36-latest-conda-forge-PYPI.yaml, ci/travis/36-latest-conda-forge-PYPI-PLUS.yaml, ci/travis/36-latest-conda-forge-GIT.yaml, ci/travis/36-latest-conda-forge-GIT-PLUS.yaml, ci/travis/37-latest-conda-forge-PYPI.yaml, ci/travis/37-latest-conda-forge-PYPI-PLUS.yaml, ci/travis/37-latest-conda-forge-GIT.yaml, ci/travis/37-latest-conda-forge-GIT-PLUS.yaml, ci/travis/38-latest-conda-forge-PYPI.yaml, ci/travis/38-latest-conda-forge-PYPI-PLUS.yaml, ci/travis/38-latest-conda-forge-GIT.yaml, ci/travis/38-latest-conda-forge-GIT-PLUS.yaml]
+         environment-file: [ci/envs/36-PYPI.yaml, ci/envs/36-PYPI-PLUS.yaml, ci/envs/36-GIT.yaml, ci/envs/36-GIT-PLUS.yaml, ci/envs/37-PYPI.yaml, ci/envs/37-PYPI-PLUS.yaml, ci/envs/37-GIT.yaml, ci/envs/37-GIT-PLUS.yaml, ci/envs/38-PYPI.yaml, ci/envs/38-PYPI-PLUS.yaml, ci/envs/38-GIT.yaml, ci/envs/38-GIT-PLUS.yaml]
      steps:
        - uses: actions/checkout@v2
        - uses: goanpeca/setup-miniconda@v1
