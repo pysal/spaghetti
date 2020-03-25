@@ -237,8 +237,8 @@ class Network:
     Unique component labels in the network.
     
     >>> import numpy
-    >>> numpy.unique(ntw.network_component_labels)
-    array([0], dtype=int32)
+    >>> list(numpy.unique(ntw.network_component_labels))
+    [0]
     
     Show whether each component of the network is an isolated ring (or not).
     
@@ -256,8 +256,8 @@ class Network:
     
     >>> ntw.graph_n_components
     1
-    >>> numpy.unique(ntw.graph_component_labels)
-    array([0], dtype=int32)
+    >>> list(numpy.unique(ntw.graph_component_labels))
+    [0]
     >>> ntw.graph_component_is_ring
     {0: False}
     >>> edges = len(ntw.graph_component2edge[ntw.graph_component_labels[0]])
