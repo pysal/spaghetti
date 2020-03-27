@@ -14,7 +14,7 @@ Tutorials
     
 .. toctree::
     :maxdepth: 1
-    :caption: Known limitation and advanced functionality:
+    :caption: Known limitations and advanced functionality:
 
     notebooks/caveats.ipynb
     notebooks/network-analysis.ipynb

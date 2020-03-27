@@ -385,14 +385,14 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-03-23T18:23:20-04:00
+2020-03-27T11:08:07-04:00
 
 CPython 3.7.3
 IPython 7.10.2
 
 compiler   : Clang 9.0.0 (tags/RELEASE_900/final)
 system     : Darwin
-release    : 19.3.0
+release    : 19.4.0
 machine    : x86_64
 processor  : i386
 CPU cores  : 4
@@ -423,11 +423,11 @@ interpreter: 64bit
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 watermark 2.0.2
+spaghetti  1.4.2.post2
+libpysal   4.2.2
 matplotlib 3.1.2
 geopandas  0.7.0
-spaghetti  1.4.2.post2
 numpy      1.17.3
-libpysal   4.2.2
 
 </pre></div></div>
 </div>
@@ -451,7 +451,7 @@ libpysal   4.2.2
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">def</span> <span class="nf">arc_labels</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="p">[</span><span class="o">-.</span><span class="mi">025</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">]):</span>
+<span></span><span class="k">def</span> <span class="nf">arc_labels</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">]):</span>
     <span class="sd">&quot;&quot;&quot;Label each network arc.&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">_lab_loc</span><span class="p">(</span><span class="n">_x</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Helper for labeling network arcs.&quot;&quot;&quot;</span>
@@ -461,16 +461,15 @@ libpysal   4.2.2
     <span class="n">kws</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ha&quot;</span><span class="p">:</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="s2">&quot;va&quot;</span><span class="p">:</span><span class="s2">&quot;bottom&quot;</span><span class="p">,</span><span class="s2">&quot;weight&quot;</span><span class="p">:</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span><span class="s2">&quot;color&quot;</span><span class="p">:</span><span class="s2">&quot;k&quot;</span><span class="p">,</span><span class="s2">&quot;size&quot;</span><span class="p">:</span><span class="n">s</span><span class="p">}</span>
     <span class="n">a</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">comp_label</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">_lab_loc</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">**</span><span class="n">kws</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">vert_labels</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">vert_labels</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="p">[</span><span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">],</span> <span class="n">col</span><span class="o">=</span><span class="s2">&quot;comp_label&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Label each network vertex.&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">_lab_loc</span><span class="p">(</span><span class="n">_x</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Internal helper for labeling vertices.&quot;&quot;&quot;</span>
         <span class="n">xy</span> <span class="o">=</span> <span class="n">_x</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">offset</span><span class="p">:</span>
-            <span class="n">xy</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">_xy</span><span class="o">+</span><span class="n">offset</span> <span class="k">for</span> <span class="n">_xy</span> <span class="ow">in</span> <span class="n">xy</span><span class="p">])</span>
+        <span class="n">xy</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">_xy</span><span class="o">+</span><span class="n">o</span> <span class="k">for</span> <span class="p">(</span><span class="n">_xy</span><span class="p">,</span><span class="n">o</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span><span class="n">offset</span><span class="p">)])</span>
         <span class="k">return</span> <span class="n">xy</span>
-    <span class="n">kws</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ha&quot;</span><span class="p">:</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;va&quot;</span><span class="p">:</span><span class="s2">&quot;bottom&quot;</span><span class="p">,</span><span class="s2">&quot;weight&quot;</span><span class="p">:</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span><span class="s2">&quot;color&quot;</span><span class="p">:</span><span class="s2">&quot;r&quot;</span><span class="p">,</span><span class="s2">&quot;size&quot;</span><span class="p">:</span><span class="n">s</span><span class="p">}</span>
-    <span class="n">v</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">comp_label</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">_lab_loc</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">**</span><span class="n">kws</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">kws</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ha&quot;</span><span class="p">:</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;va&quot;</span><span class="p">:</span><span class="s2">&quot;bottom&quot;</span><span class="p">,</span><span class="s2">&quot;weight&quot;</span><span class="p">:</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span><span class="s2">&quot;color&quot;</span><span class="p">:</span><span class="n">c</span><span class="p">,</span><span class="s2">&quot;size&quot;</span><span class="p">:</span><span class="n">s</span><span class="p">}</span>
+    <span class="n">v</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">xy</span><span class="o">=</span><span class="n">_lab_loc</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">**</span><span class="n">kws</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -506,13 +505,13 @@ libpysal   4.2.2
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[&lt;libpysal.cg.shapes.Chain at 0x105cf3128&gt;,
- &lt;libpysal.cg.shapes.Chain at 0x11f597048&gt;,
- &lt;libpysal.cg.shapes.Chain at 0x11f597128&gt;,
- &lt;libpysal.cg.shapes.Chain at 0x11f597320&gt;,
- &lt;libpysal.cg.shapes.Chain at 0x11f5973c8&gt;,
- &lt;libpysal.cg.shapes.Chain at 0x11f597240&gt;,
- &lt;libpysal.cg.shapes.Chain at 0x11f597160&gt;]
+[&lt;libpysal.cg.shapes.Chain at 0x129990e10&gt;,
+ &lt;libpysal.cg.shapes.Chain at 0x129990eb8&gt;,
+ &lt;libpysal.cg.shapes.Chain at 0x129990f60&gt;,
+ &lt;libpysal.cg.shapes.Chain at 0x129990f98&gt;,
+ &lt;libpysal.cg.shapes.Chain at 0x1299910f0&gt;,
+ &lt;libpysal.cg.shapes.Chain at 0x129991198&gt;,
+ &lt;libpysal.cg.shapes.Chain at 0x129991240&gt;]
 </pre></div></div>
 </div>
 <p>Instantiate a <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object</p>
@@ -710,7 +709,8 @@ libpysal   4.2.2
 <span></span><span class="n">base</span> <span class="o">=</span> <span class="n">arcs_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=.</span><span class="mi">35</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
 <span class="n">vertices_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">ec</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="c1"># vertex labels</span>
-<span class="n">vert_labels</span><span class="p">(</span><span class="n">vertices_df</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="n">offset</span><span class="o">=.</span><span class="mi">025</span><span class="p">)</span>
+<span class="n">vert_labels</span><span class="p">(</span><span class="n">vertices_df</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">14</span><span class="p">)</span>
+<span class="n">vert_labels</span><span class="p">(</span><span class="n">vertices_df</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">],</span> <span class="n">col</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -721,7 +721,7 @@ libpysal   4.2.2
 <a class="reference internal image-reference" href="../_images/notebooks_caveats_14_0.png"><img alt="../_images/notebooks_caveats_14_0.png" src="../_images/notebooks_caveats_14_0.png" style="width: 539px; height: 434px;" /></a>
 </div>
 </div>
-<p>The plot above shows network arcs in gray with vertices in red. Also, component membership is labeled in red. Since there are no actual intersections between segments <code class="docutils literal notranslate"><span class="pre">(0,1),(3,4)</span></code> or <code class="docutils literal notranslate"><span class="pre">(3,4),(6,7)</span></code>, there are no vertices. Therefore, a shortest path from vertex <code class="docutils literal notranslate"><span class="pre">0</span></code> to <code class="docutils literal notranslate"><span class="pre">7</span></code> must follow the route <code class="docutils literal notranslate"><span class="pre">{1,2,3,4,5,6}</span></code> for a total of 21 units of distance.</p>
+<p>The plot above shows network arcs in gray with vertices in red. Also, vertices are labled in black and component membership is labeled in red. Since there are no actual intersections between segments <code class="docutils literal notranslate"><span class="pre">(0,1),(3,4)</span></code> or <code class="docutils literal notranslate"><span class="pre">(3,4),(6,7)</span></code>, there are no vertices. Therefore, a shortest path from vertex <code class="docutils literal notranslate"><span class="pre">0</span></code> to <code class="docutils literal notranslate"><span class="pre">7</span></code> must follow the route <code class="docutils literal notranslate"><span class="pre">{1,2,3,4,5,6}</span></code> for a total of 21 units of distance.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
@@ -790,8 +790,8 @@ libpysal   4.2.2
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[&lt;libpysal.cg.shapes.Chain at 0x11f595e10&gt;,
- &lt;libpysal.cg.shapes.Chain at 0x11f595da0&gt;]
+[&lt;libpysal.cg.shapes.Chain at 0x1299f57b8&gt;,
+ &lt;libpysal.cg.shapes.Chain at 0x1299f56d8&gt;]
 </pre></div></div>
 </div>
 <p>Instantiate a <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object</p>
@@ -1014,7 +1014,7 @@ libpysal   4.2.2
 <span class="n">base</span> <span class="o">=</span> <span class="n">arcs_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">),</span> <span class="o">**</span><span class="n">base_kws</span><span class="p">)</span>
 <span class="n">vertices_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">ec</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="c1"># vertex labels</span>
-<span class="n">vert_labels</span><span class="p">(</span><span class="n">vertices_df</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="n">offset</span><span class="o">=.</span><span class="mi">025</span><span class="p">)</span>
+<span class="n">vert_labels</span><span class="p">(</span><span class="n">vertices_df</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">14</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1042,7 +1042,7 @@ libpysal   4.2.2
 <span class="c1"># arc labels</span>
 <span class="n">arc_labels</span><span class="p">(</span><span class="n">arcs_df</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
 <span class="c1"># vertex labels</span>
-<span class="n">vert_labels</span><span class="p">(</span><span class="n">vertices_df</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="n">offset</span><span class="o">=.</span><span class="mi">025</span><span class="p">)</span>
+<span class="n">vert_labels</span><span class="p">(</span><span class="n">vertices_df</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">14</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1093,7 +1093,7 @@ Network vertices:        {0: [0, 1, 2, 3, 4, 5]}
 <span class="c1"># arc labels</span>
 <span class="n">arc_labels</span><span class="p">(</span><span class="n">arcs_df</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
 <span class="c1"># vertex labels</span>
-<span class="n">vert_labels</span><span class="p">(</span><span class="n">vertices_df</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="n">offset</span><span class="o">=.</span><span class="mi">025</span><span class="p">)</span>
+<span class="n">vert_labels</span><span class="p">(</span><span class="n">vertices_df</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">14</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1309,7 +1309,7 @@ Public water pumps and Cholera deaths in London 1954 (Snow&#39;s Map)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.axes._subplots.AxesSubplot at 0x1263ac048&gt;
+&lt;matplotlib.axes._subplots.AxesSubplot at 0x1307aac18&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1474,7 +1474,7 @@ Network vertices:        {0: [0, 1, 2, 3, 4], 1: [5, 6]}
 <span class="c1"># arc labels</span>
 <span class="n">arc_labels</span><span class="p">(</span><span class="n">arcs_df</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
 <span class="c1"># vertex labels</span>
-<span class="n">vert_labels</span><span class="p">(</span><span class="n">vertices_df</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="n">offset</span><span class="o">=.</span><span class="mi">025</span><span class="p">)</span>
+<span class="n">vert_labels</span><span class="p">(</span><span class="n">vertices_df</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">14</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1522,7 +1522,7 @@ Network vertices:        {0: [0, 1, 2, 3, 4, 5]}
 <span class="c1"># arc labels</span>
 <span class="n">arc_labels</span><span class="p">(</span><span class="n">arcs_df</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
 <span class="c1"># vertex labels</span>
-<span class="n">vert_labels</span><span class="p">(</span><span class="n">vertices_df</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="n">offset</span><span class="o">=.</span><span class="mi">025</span><span class="p">)</span>
+<span class="n">vert_labels</span><span class="p">(</span><span class="n">vertices_df</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">14</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1646,7 +1646,7 @@ array([ 0.,  1.,  3.,  4., inf, inf])
 {0: [0], 1: [0], 2: [1, 0], 3: [2, 1, 0], 4: [4], 5: [5]}
 </pre></div></div>
 </div>
-<p>Like the example in <code class="docutils literal notranslate"><span class="pre">cell</span> <span class="pre">21</span></code> above, by relaxing the <code class="docutils literal notranslate"><span class="pre">vertex_atol</span></code> complete network connectivity can be achieved.</p>
+<p>Like the example in <code class="docutils literal notranslate"><span class="pre">cell</span> <span class="pre">21</span></code> above, by inserting a vertex complete network connectivity can be achieved.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
 </pre></div>

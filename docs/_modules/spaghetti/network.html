@@ -366,8 +366,8 @@
 <span class="sd">    Unique component labels in the network.</span>
 <span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; import numpy</span>
-<span class="sd">    &gt;&gt;&gt; numpy.unique(ntw.network_component_labels)</span>
-<span class="sd">    array([0], dtype=int32)</span>
+<span class="sd">    &gt;&gt;&gt; list(numpy.unique(ntw.network_component_labels))</span>
+<span class="sd">    [0]</span>
 <span class="sd">    </span>
 <span class="sd">    Show whether each component of the network is an isolated ring (or not).</span>
 <span class="sd">    </span>
@@ -385,8 +385,8 @@
 <span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; ntw.graph_n_components</span>
 <span class="sd">    1</span>
-<span class="sd">    &gt;&gt;&gt; numpy.unique(ntw.graph_component_labels)</span>
-<span class="sd">    array([0], dtype=int32)</span>
+<span class="sd">    &gt;&gt;&gt; list(numpy.unique(ntw.graph_component_labels))</span>
+<span class="sd">    [0]</span>
 <span class="sd">    &gt;&gt;&gt; ntw.graph_component_is_ring</span>
 <span class="sd">    {0: False}</span>
 <span class="sd">    &gt;&gt;&gt; edges = len(ntw.graph_component2edge[ntw.graph_component_labels[0]])</span>
