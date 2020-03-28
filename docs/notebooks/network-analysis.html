@@ -22,8 +22,8 @@
     <link rel="shortcut icon" href="../_static/pysal_favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Demostrating network-based optimal facility location modeling" href="facility-location.html" />
-    <link rel="prev" title="Caveats" href="caveats.html" />
+    <link rel="next" title="Network spatial weights" href="network-spatial-weights.html" />
+    <link rel="prev" title="Generating regular lattices and visualizing shortest paths" href="shortest-path-visualization.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -74,8 +74,9 @@
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l2"><a class="reference internal" href="connected-components.html">Connected components in a spatial network</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shortest-path-visualization.html">Generating regular lattices and visualizing shortest paths</a></li>
-<li class="toctree-l2"><a class="reference internal" href="caveats.html">Caveats</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Spatial network analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network-spatial-weights.html">Network spatial weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="caveats.html">Caveats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="facility-location.html">Demostrating network-based optimal facility location modeling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="transportation-problem.html">The Transportation Problem</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tsp.html">The Traveling Sales(man)(person) Problem — TSP</a></li>
@@ -393,7 +394,7 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-03-27T11:09:42-04:00
+2020-03-28T16:18:00-04:00
 
 CPython 3.7.3
 IPython 7.10.2
@@ -433,12 +434,12 @@ interpreter: 64bit
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 watermark 2.0.2
-matplotlib          3.1.2
-spaghetti           1.4.2.post2
 esda                2.2.1
-matplotlib_scalebar 0.6.1
 numpy               1.17.3
 libpysal            4.2.2
+matplotlib          3.1.2
+spaghetti           1.4.2.post2
+matplotlib_scalebar 0.6.1
 
 </pre></div></div>
 </div>
@@ -499,8 +500,8 @@ libpysal            4.2.2
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x127484d30&gt;,
- &#39;schools&#39;: &lt;spaghetti.network.PointPattern at 0x1274c8978&gt;}
+{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x1242894a8&gt;,
+ &#39;schools&#39;: &lt;spaghetti.network.PointPattern at 0x1242ba710&gt;}
 </pre></div></div>
 </div>
 <p><strong>Attributes for every point pattern</strong></p>
