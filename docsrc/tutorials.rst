@@ -16,8 +16,9 @@ Tutorials
     :maxdepth: 1
     :caption: Known limitations and advanced functionality:
 
-    notebooks/caveats.ipynb
     notebooks/network-analysis.ipynb
+    notebooks/network-spatial-weights.ipynb
+    notebooks/caveats.ipynb
 
 .. toctree::
     :maxdepth: 1
