@@ -61,6 +61,9 @@ class Network:
         ``True`` flags ``self.arc_lengths`` as the weightings,
         ``False`` sets no weightings. Default is ``False``.
     
+    weights_kws : dict
+        ....................................................................................................................
+    
     vertex_atol : {int, None}
         Precision for vertex absolute tolerance. Round vertex coordinates to
         ``vertex_atol`` decimal places. Default is ``None``. **ONLY** change
@@ -295,6 +298,7 @@ class Network:
         extractgraph=True,
         w_components=True,
         weightings=False,
+        weights_kws=dict(),
         vertex_atol=None,
     ):
 
@@ -337,7 +341,7 @@ class Network:
 
                 # extract contiguity weights from libpysal
                 self.w_network = self.contiguityweights(
-                    graph=as_graph, weightings=weightings
+                    graph=as_graph, weightings=weightings, weights_kws=weights_kws,
                 )
                 # identify connected components from the `w_network`
                 self.identify_components(self.w_network, graph=as_graph)
@@ -354,7 +358,7 @@ class Network:
                         weightings = self.edge_lengths
 
                     self.w_graph = self.contiguityweights(
-                        graph=as_graph, weightings=weightings
+                        graph=as_graph, weightings=weightings, weights_kws=weights_kws,
                     )
                     self.identify_components(self.w_graph, graph=as_graph)
 
@@ -861,7 +865,7 @@ class Network:
 
         return nodes
 
-    def contiguityweights(self, graph=True, weightings=None):
+    def contiguityweights(self, graph=True, weightings=None, weights_kws=None):
         """Create a contiguity-based ``libpysal.weights.W`` object.
         
         Parameters
@@ -874,6 +878,9 @@ class Network:
         
         weightings : dict
             Dictionary of lists of weightings for each arc/edge.
+        
+        weights_kws : dict
+            ................................................................................................
         
         Returns
         -------
@@ -1006,7 +1013,9 @@ class Network:
                 working = False
 
         # call libpysal for `W` instance
-        w = weights.W(neighbors, weights=_weights)
+        w = weights.W(
+            neighbors, weights=_weights, **weights_kws
+        )  ################################# merge `weights` and `weights_kws`
 
         return w
 
