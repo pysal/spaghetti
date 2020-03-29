@@ -865,7 +865,7 @@ class Network:
 
         return nodes
 
-    def contiguityweights(self, graph=True, weightings=None, weights_kws=None):
+    def contiguityweights(self, graph=True, weightings=None, weights_kws=dict()):
         """Create a contiguity-based ``libpysal.weights.W`` object.
         
         Parameters
@@ -1015,7 +1015,7 @@ class Network:
         # call libpysal for `W` instance
         w = weights.W(
             neighbors, weights=_weights, **weights_kws
-        )  ################################# merge `weights` and `weights_kws`
+        )  ################################################################################# merge `weights` and `weights_kws`
 
         return w
 
