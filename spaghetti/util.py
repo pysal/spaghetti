@@ -490,6 +490,126 @@ def snap_points_to_links(points, links):
     return point2link
 
 
+def network_has_cycle(adjacency):
+    """Searches for a cycle in the complete network/graph.
+    
+    Parameters
+    ----------
+    adjacency : spaghetti.Network.adjacencylist
+        Vertex adjacency relationships.
+    
+    Returns
+    -------
+    network_cycle_found : bool
+        ``True`` for a cycle being found in the network/graph, 
+        otherwise ``False``.
+    """
+
+    def tree_has_cycle(_parent, _v):
+        """Searches for a cycle in the subtree.
+
+        Parameters
+        ----------
+        _parent : int
+            Root vertex for the subnetwork/graph.
+        _v : int
+            Current vertex index of in the complete network.
+
+        Returns
+        -------
+        subtree_cycle_found : bool
+            Current recursion found a cycle in the subtree.
+        """
+
+        # Set current cycle tag as False
+        subtree_cycle_found = False
+
+        # Label the current network vertex as seen
+        seen[_v] = True
+
+        # Perform recursion for all adjacent network/graph vertices
+        for rv in adjacency[_v]:
+
+            # If vertex already seen, skip it
+            if not seen[rv]:
+                # Perform recursion down the depth-first search tree
+                if tree_has_cycle(_v, rv):
+                    subtree_cycle_found = True
+                    break
+
+            # If an adjacent vertex has not been seen and it is not the
+            # parent of current vertex, then a cycle is present
+            elif _parent != rv:
+                subtree_cycle_found = True
+                break
+
+        return subtree_cycle_found
+
+    # set initial cycle tag as False
+    network_cycle_found = False
+
+    # Label all network/graph vertices as not seen
+    vids = list(adjacency.keys())
+    seen = {vid: False for vid in vids}
+
+    # Perform depth-first search recursion to isolate cycles
+    for idx, v in enumerate(vids):
+        # If vertex already seen, skip it
+        if not seen[v]:
+            # Perform recursion down the depth-first search tree
+            if tree_has_cycle(-1, v):
+                network_cycle_found = True
+                break
+
+    return network_cycle_found
+
+
+def chain_constr(vcoords, arcs):
+    """Create the spatial representation of a network arc.
+    
+    Parameters
+    ----------
+    vcoords : dict
+        Vertex to coordinate lookup (see ``spaghetti.Network.vertex_coords``).
+    
+    arcs : list
+        Arcs represented as start and end vertices.
+    
+    Returns
+    -------
+    spatial_reps : list
+        Spatial representations of arcs - ``libpysal.cg.Chain`` objects.
+    """
+    spatial_reps = [_chain_constr(vcoords, vs) for vs in arcs]
+    return spatial_reps
+
+
+def _chain_constr(_vcoords, _vs):
+    """Construct a libpysal.cg.Chain object.
+    
+    Parameters
+    ----------
+    _vcoords : {dict, None}
+        See ``vcoords`` in ``get_chains()``.
+        
+    _vs : tuple
+        Start and end vertex IDs of arc.
+        
+    Returns
+    -------
+    chain : libpysal.cg.Chain
+        Spatial representation of the arc.
+    """
+
+    if _vcoords:
+        chain_vtx_points = [cg.Point((_vcoords[v])) for v in _vs]
+    else:
+        chain_vtx_points = _vs
+    chain = cg.Chain(chain_vtx_points)
+
+    return chain
+
+
 def build_chains(space_h, space_v, exterior, bounds, h=True):
     """Generate line segments for a lattice.
     
@@ -564,7 +684,7 @@ def build_chains(space_h, space_v, exterior, bounds, h=True):
                 p2 = cg.Point((p2x, p2y))
 
                 # libpysal.cg.Chain
-                chains.append(cg.Chain([p1, p2]))
+                chains.append(_chain_constr(None, [p1, p2]))
 
     return chains
 

@@ -937,7 +937,7 @@ class Network:
         3.0
         
         Next, a standard call to 
-        `esda.Moran <https://esda.readthedocs.io/en/latest/generated/esda.Moran.html#esda.Moran>`_ 
+        `esda.Moran <https://esda.readthedocs.io/en/latest/generated/esda.Moran.html#esda.Moran>`_
         is made and the result placed into ``res``.
         
         >>> res = esda.moran.Moran(y, w, permutations=99)
@@ -1281,7 +1281,7 @@ class Network:
 
             # create a pysal.cg.Chain object of the arc
             # and add it to the arcs enumerator
-            arcs_.append(cg.Chain([head, tail]))
+            arcs_.append(util._chain_constr(None, [head, tail]))
 
             # add the arc into the snapped(point)-to-arc lookup
             s2a[(head, tail)] = arc
@@ -2317,10 +2317,9 @@ class Network:
 
                 # create copy of arc paths dataframe
                 full_segments = []
-                for _v0, _v1 in full_segs_path:
-                    full_segments.append(
-                        cg.Chain([cg.Point(vtx_coords[_v0]), cg.Point(vtx_coords[_v1])])
-                    )
+                for fsp in full_segs_path:
+                    full_segments.append(util._chain_constr(vtx_coords, fsp))
+
                 # unpack the vertices containers
                 segm_verts = [v for fs in full_segments for v in fs.vertices]
 
@@ -2346,7 +2345,7 @@ class Network:
                 path = [first_vtx] + segm_verts + [last_vtx]
 
             # populate the ``paths`` dataframe
-            paths.append([(obs0, obs1), cg.Chain(path)])
+            paths.append([(obs0, obs1), util._chain_constr(None, path)])
 
         return paths
 
@@ -3082,6 +3081,147 @@ def extract_component(net, component_id, weightings=None):
         cnet.w_graph = cnet.contiguityweights(graph=True, weightings=weightings)
 
     return cnet
+
+
+def spanning_tree(net, method="sort", maximum=False, silence_warnings=True):
+    """Extract a minimum or maximum spanning tree from a network.
+    
+    Parameters
+    ----------
+    net : spaghetti.Network
+        Instance of a network object.
+    
+    method : str
+        Method for determining spanning tree. Currently, the only
+        supported method is 'sort', which sorts the network arcs
+        by length prior to building intermediary networks and checking
+        for cycles within the tree/subtrees. Future methods may 
+        include linear programming approachs, etc.
+    
+    maximum : bool
+        When ``True`` a maximum spanning tree is created. When ``False``
+        a minimum spanning tree is created. Default is ``False``.
+    
+    silence_warnings : bool
+        Warn if there is more than one connected component. Default is
+        ``False`` due to the nature of constructing a minimum
+        spanning tree.
+    
+    Returns
+    -------
+    net : spaghetti.Network
+        Pruned instance of the network object.
+    
+    Notes
+    -----
+    For in-depth background and details see
+    :cite:`GrahamHell_1985`,
+    :cite:`AhujaRavindraK`, and
+    :cite:`Okabe2012`.
+    
+    See also
+    --------
+    
+    networkx.algorithms.mst
+    scipy.sparse.csgraph.minimum_spanning_tree
+    
+    Examples
+    --------
+    
+    Create a network instance.
+    
+    >>> from libpysal import cg
+    >>> import spaghetti
+    >>> p00 = cg.Point((0,0))
+    >>> lines = [cg.Chain([p00, cg.Point((0,3)), cg.Point((4,0)), p00])]
+    >>> ntw = spaghetti.Network(in_data=lines)
+    
+    Extract the minimum spanning tree.
+    
+    >>> minst_net = spaghetti.spanning_tree(ntw)
+    >>> min_len = sum(minst_net.arc_lengths.values())
+    >>> min_len
+    7.0
+    
+    Extract the maximum spanning tree.
+    
+    >>> maxst_net = spaghetti.spanning_tree(ntw, maximum=True)
+    >>> max_len = sum(maxst_net.arc_lengths.values())
+    >>> max_len
+    9.0
+    
+    >>> max_len > min_len
+    True
+    
+    """
+
+    # (un)silence warning
+    weights_kws = {"silence_warnings": silence_warnings}
+    # do not extract graph object while testing for cycles
+    net_kws = {"extractgraph": False, "weights_kws": weights_kws}
+
+    # if the network has no cycles, it is already a spanning tree
+    if util.network_has_cycle(net.adjacencylist):
+
+        if method.lower() == "sort":
+            spanning_tree = mst_weighted_sort(net, maximum, net_kws)
+        else:
+            msg = "'%s' not a valid method for minimum spanning tree creation"
+            raise ValueError(msg % method)
+
+        # instantiate the spanning tree as a network object
+        net = Network(in_data=spanning_tree, weights_kws=weights_kws)
+
+    return net
+
+
+def mst_weighted_sort(net, maximum, net_kws):
+    """Extract a minimum or maximum spanning tree from a network used
+    the length-weighted sort method.
+    
+    Parameters
+    ----------
+    net : spaghetti.Network
+        See ``spanning_tree()``.
+    maximum : bool
+        See ``spanning_tree()``.
+    net_kws : dict
+        Keywords arguments for instaniating a ``spaghetti.Network``.
+    
+    Returns
+    -------
+    spanning_tree : list
+        All networks arcs that are members of the spanning tree.
+    
+    Notes
+    -----
+    This function is based on the method found in Chapter 3
+    Section 4.3 of :cite:`Okabe2012`.
+    
+    """
+
+    # network arcs dictionary sorted by arc length
+    sort_kws = {"key": net.arc_lengths.get, "reverse": maximum}
+    sorted_lengths = sorted(net.arc_lengths, **sort_kws)
+
+    # the spanning tree is initially empty
+    spanning_tree = []
+
+    # iterate over each lengths of network arc
+    while sorted_lengths:
+        _arc = sorted_lengths.pop(0)
+        # make a spatial representation of an arc
+        chain_rep = util.chain_constr(net.vertex_coords, [_arc])
+        # current set of network arcs as libpysal.cg.Chain
+        _chains = spanning_tree + chain_rep
+        # current network iteration
+        _ntw = Network(in_data=_chains, **net_kws)
+        # determine if the network contains a cycle
+        if not util.network_has_cycle(_ntw.adjacencylist):
+            # If no cycle is present, add the arc to the spanning tree
+            spanning_tree.extend(chain_rep)
+
+    return spanning_tree
 
 
 @requires("geopandas", "shapely")
