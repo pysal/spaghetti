@@ -62,7 +62,7 @@ class Network:
         ``False`` sets no weightings. Default is ``False``.
     
     weights_kws : dict
-        ....................................................................................................................
+        Keyword arguments for ``libpysal.weights.W``.
     
     vertex_atol : {int, None}
         Precision for vertex absolute tolerance. Round vertex coordinates to
@@ -333,7 +333,7 @@ class Network:
                 as_graph = False
                 network_weightings = False
 
-                if weightings is True:
+                if weightings == True:
                     # set network arc weights to length if weights are
                     # desired, but no other input in given
                     weightings = self.arc_lengths
@@ -876,11 +876,11 @@ class Network:
             using the spatial representation (``False``) or the graph
             representation (``True``). Default is ``True``.
         
-        weightings : dict
+        weightings : {dict, None}
             Dictionary of lists of weightings for each arc/edge.
         
         weights_kws : dict
-            ................................................................................................
+            Keyword arguments for ``libpysal.weights.W``.
         
         Returns
         -------
@@ -1013,9 +1013,8 @@ class Network:
                 working = False
 
         # call libpysal for `W` instance
-        w = weights.W(
-            neighbors, weights=_weights, **weights_kws
-        )  ################################################################################# merge `weights` and `weights_kws`
+        weights_kws["weights"] = _weights
+        w = weights.W(neighbors, **weights_kws)
 
         return w
 

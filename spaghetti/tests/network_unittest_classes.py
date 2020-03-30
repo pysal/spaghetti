@@ -23,6 +23,7 @@ CRIMES = examples.get_path(crimes + ".shp")
 P00 = cg.Point((0, 0))
 P03 = cg.Point((0, 3))
 P030001 = cg.Point((0, 3.0001))
+P01 = cg.Point((0, 1))
 P10 = cg.Point((1, 0))
 P11 = cg.Point((1, 1))
 P12 = cg.Point((1, 2))
@@ -61,6 +62,12 @@ RING = [
 ]
 EXTENSION = [cg.Chain([P12, P22, P21])]
 
+GOOD_TRIANGLE = [
+    cg.Chain([P00, P03]),
+    cg.Chain([P03, P40]),
+    cg.Chain([P40, P00]),
+]
+
 BAD_TRIANGLE = [
     cg.Chain([P00, P03]),
     cg.Chain([P030001, P400010]),
@@ -91,6 +98,9 @@ class TestNetwork(unittest.TestCase):
         self.lines = self.lattice + RING + EXTENSION
         self.ntw_from_lattice_ring = self.spaghetti.Network(in_data=self.lines)
         self.ntw_from_lattice_ring.snapobservations([P0505, P052], "points")
+
+        # Pythagorean Triple
+        self.triangle = self.spaghetti.Network(in_data=GOOD_TRIANGLE)
 
     def tearDown(self):
         pass
@@ -331,6 +341,27 @@ class TestNetwork(unittest.TestCase):
         self.assertEqual(observed_arcs, known_edges)
         self.assertEqual(observed_edges, known_arcs)
         self.assertEqual(observed_edges, known_edges)
+
+    def test_spanning_tree(self):
+        # minimum
+        known_len = 7.0
+        mst = self.spaghetti.spanning_tree(
+            self.triangle, method="sort", maximum=False, silence_warnings=True
+        )
+        observed_len = sum(mst.arc_lengths.values())
+        self.assertEqual(observed_len, known_len)
+
+        # maximum
+        known_len = 9.0
+        mst = self.spaghetti.spanning_tree(
+            self.triangle, method="sort", maximum=True, silence_warnings=True
+        )
+        observed_len = sum(mst.arc_lengths.values())
+        self.assertEqual(observed_len, known_len)
+
+        # method error
+        with self.assertRaises(ValueError):
+            self.spaghetti.spanning_tree(self.triangle, method="tors")
 
     @unittest.skipIf(GEOPANDAS_EXTINCT, "Missing Geopandas")
     def test_element_as_gdf(self):
@@ -722,6 +753,8 @@ class TestNetworkAnalysis(unittest.TestCase):
 class TestNetworkUtils(unittest.TestCase):
     def setUp(self):
         self.ntw = self.spaghetti.Network(in_data=STREETS)
+        self.P00, self.P01 = P00, P01
+        self.P10, self.P11 = P10, P11
 
     def tearDown(self):
         pass
@@ -755,6 +788,35 @@ class TestNetworkUtils(unittest.TestCase):
         distance, pred = self.util.dijkstra_mp((self.ntw, 0))
         self.assertAlmostEqual(distance[196], 5505.668247, places=4)
         self.assertEqual(pred[196], 133)
+
+    def test_chain_constr(self):
+        known_len = 1.4142135623730951
+        chain = self.util.chain_constr({0: (0.0, 0.0), 1: (1.0, 1.0)}, [(0, 1)])[0]
+        self.assertAlmostEqual(chain.len, known_len, places=10)
+
+    def test_build_chains(self):
+        # 1x1 cross (regular lattice without the exterior)
+        v_known = [self.P10, self.P11]
+        h_known = [self.P01, self.P11]
+        space_h = space_v = [0.0, 1.0, 2.0]
+        exterior, bounds = False, (0, 0, 2, 2)
+        _vl = self.util.build_chains(space_h, space_v, exterior, bounds, h=False)
+        _hl = self.util.build_chains(space_h, space_v, exterior, bounds, h=True)
+        v_observed = _vl[0].vertices
+        h_observed = _hl[0].vertices
+        self.assertEqual(v_observed, v_known)
+        self.assertEqual(h_observed, h_known)
+
+        # 3x3 cross (regular lattice with the exterior)
+        v_known = [self.P00, self.P01]
+        h_known = [self.P00, self.P10]
+        exterior, bounds = True, (0, 0, 2, 2)
+        _vl = self.util.build_chains(space_h, space_v, exterior, bounds, h=False)
+        _hl = self.util.build_chains(space_h, space_v, exterior, bounds, h=True)
+        v_observed = _vl[0].vertices
+        h_observed = _hl[0].vertices
+        self.assertEqual(v_observed, v_known)
+        self.assertEqual(h_observed, h_known)
 
     def test_squared_distance_point_link(self):
         point, link = (1, 1), ((0, 0), (2, 0))
