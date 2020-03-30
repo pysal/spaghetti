@@ -262,10 +262,12 @@ intersphinx_mapping = {
     "geopandas": ("https://geopandas.readthedocs.io/en/latest/", None),
     "libpysal": ("https://pysal.org/libpysal/", None),
     "matplotlib": ("https://matplotlib.org/", None),
+    "networkx": ("https://networkx.github.io/documentation/stable/", None),
     "numpy": ("https://docs.scipy.org/doc/numpy", None),
     "pandas": ("https://pandas.pydata.org/pandas-docs/stable/", None),
     "python": ("https://docs.python.org/3.8/", None),
     "pulp": ("https://coin-or.github.io/pulp/", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy/reference/", None),
 }
 
 # This is processed by Jinja2 and inserted before each notebook
