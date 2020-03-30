@@ -18,6 +18,7 @@ Tutorials
 
     notebooks/network-analysis.ipynb
     notebooks/network-spatial-weights.ipynb
+    notebooks/spanning-trees.ipynb
     notebooks/caveats.ipynb
 
 .. toctree::
@@ -30,7 +31,7 @@ Tutorials
 
 Citations:
   * Advanced functionality:
-    :cite:`doi:10.1002/9780470549094.ch5`, :cite:`doi:10.1002/9781119967101.ch5`, :cite:`doi:10.1111/j.1538-4632.2001.tb00448.x`, :cite:`doi:10.1002/9781119967101.ch6`
+    :cite:`doi:10.1002/9780470549094.ch5`, :cite:`doi:10.1002/9781119967101.ch5`, :cite:`doi:10.1111/j.1538-4632.2001.tb00448.x`, :cite:`doi:10.1002/9781119967101.ch6`, :cite:`GrahamHell_1985`, :cite:`AhujaRavindraK`
   
   * Integrations & Applications:
     

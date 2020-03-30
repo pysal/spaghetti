@@ -76,6 +76,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../notebooks/shortest-path-visualization.html">Generating regular lattices and visualizing shortest paths</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../notebooks/network-analysis.html">Spatial network analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../notebooks/network-spatial-weights.html">Network spatial weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/spanning-trees.html">Network spanning trees</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../notebooks/caveats.html">Caveats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../notebooks/facility-location.html">Demostrating network-based optimal facility location modeling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../notebooks/transportation-problem.html">The Transportation Problem</a></li>
@@ -136,7 +137,7 @@
 <h1>spaghetti.Network<a class="headerlink" href="#spaghetti-network" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="spaghetti.Network">
-<em class="property">class </em><code class="sig-prename descclassname">spaghetti.</code><code class="sig-name descname">Network</code><span class="sig-paren">(</span><em class="sig-param">in_data=None</em>, <em class="sig-param">vertex_sig=11</em>, <em class="sig-param">unique_arcs=True</em>, <em class="sig-param">extractgraph=True</em>, <em class="sig-param">w_components=True</em>, <em class="sig-param">weightings=False</em>, <em class="sig-param">vertex_atol=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">spaghetti.</code><code class="sig-name descname">Network</code><span class="sig-paren">(</span><em class="sig-param">in_data=None</em>, <em class="sig-param">vertex_sig=11</em>, <em class="sig-param">unique_arcs=True</em>, <em class="sig-param">extractgraph=True</em>, <em class="sig-param">w_components=True</em>, <em class="sig-param">weightings=False</em>, <em class="sig-param">weights_kws={}</em>, <em class="sig-param">vertex_atol=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network" title="Permalink to this definition">¶</a></dt>
 <dd><p>Spatially-constrained network representation and analytical
 functionality. Naming conventions are as follows, (1) arcs and
 vertices for the full network object, and (2) edges and nodes for
@@ -167,6 +168,8 @@ nodes. Default is <code class="docutils literal notranslate"><span class="pre">T
 <dt><strong>weightings</strong><span class="classifier">{<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a>, <a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.8)"><span class="xref std std-ref">bool</span></a>}</span></dt><dd><p>If dict, lists of weightings for each arc. If bool,
 <code class="docutils literal notranslate"><span class="pre">True</span></code> flags <code class="docutils literal notranslate"><span class="pre">self.arc_lengths</span></code> as the weightings,
 <code class="docutils literal notranslate"><span class="pre">False</span></code> sets no weightings. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+<dt><strong>weights_kws</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keyword arguments for <code class="docutils literal notranslate"><span class="pre">libpysal.weights.W</span></code>.</p>
 </dd>
 <dt><strong>vertex_atol</strong><span class="classifier">{<a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">None</span></code></a>}</span></dt><dd><p>Precision for vertex absolute tolerance. Round vertex coordinates to
 <code class="docutils literal notranslate"><span class="pre">vertex_atol</span></code> decimal places. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>. <strong>ONLY</strong> change
@@ -360,7 +363,7 @@ necessarily equal to <code class="docutils literal notranslate"><span class="pre
 </dl>
 <dl class="method">
 <dt id="spaghetti.Network.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">in_data=None</em>, <em class="sig-param">vertex_sig=11</em>, <em class="sig-param">unique_arcs=True</em>, <em class="sig-param">extractgraph=True</em>, <em class="sig-param">w_components=True</em>, <em class="sig-param">weightings=False</em>, <em class="sig-param">vertex_atol=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">in_data=None</em>, <em class="sig-param">vertex_sig=11</em>, <em class="sig-param">unique_arcs=True</em>, <em class="sig-param">extractgraph=True</em>, <em class="sig-param">w_components=True</em>, <em class="sig-param">weightings=False</em>, <em class="sig-param">weights_kws={}</em>, <em class="sig-param">vertex_atol=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
@@ -392,7 +395,7 @@ necessarily equal to <code class="docutils literal notranslate"><span class="pre
 <tr class="row-odd"><td><p><a class="reference internal" href="#spaghetti.Network.compute_snap_dist" title="spaghetti.Network.compute_snap_dist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_snap_dist</span></code></a>(self, pattern, idx)</p></td>
 <td><p>Given an observation snapped to a network arc, calculate the distance from the original location to the snapped location.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#spaghetti.Network.contiguityweights" title="spaghetti.Network.contiguityweights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">contiguityweights</span></code></a>(self[, graph, weightings])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#spaghetti.Network.contiguityweights" title="spaghetti.Network.contiguityweights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">contiguityweights</span></code></a>(self[, graph, weightings, …])</p></td>
 <td><p>Create a contiguity-based <code class="docutils literal notranslate"><span class="pre">libpysal.weights.W</span></code> object.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#spaghetti.Network.count_per_link" title="spaghetti.Network.count_per_link"><code class="xref py py-obj docutils literal notranslate"><span class="pre">count_per_link</span></code></a>(self, obs_on[, graph])</p></td>
@@ -813,7 +816,7 @@ location.</p>
 
 <dl class="method">
 <dt id="spaghetti.Network.contiguityweights">
-<code class="sig-name descname">contiguityweights</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">graph=True</em>, <em class="sig-param">weightings=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.contiguityweights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.contiguityweights" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">contiguityweights</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">graph=True</em>, <em class="sig-param">weightings=None</em>, <em class="sig-param">weights_kws={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.contiguityweights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.contiguityweights" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a contiguity-based <code class="docutils literal notranslate"><span class="pre">libpysal.weights.W</span></code> object.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
@@ -822,7 +825,9 @@ location.</p>
 using the spatial representation (<code class="docutils literal notranslate"><span class="pre">False</span></code>) or the graph
 representation (<code class="docutils literal notranslate"><span class="pre">True</span></code>). Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
-<dt><strong>weightings</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Dictionary of lists of weightings for each arc/edge.</p>
+<dt><strong>weightings</strong><span class="classifier">{<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a>, <a class="reference external" href="https://docs.python.org/3.8/library/constants.html#None" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">None</span></code></a>}</span></dt><dd><p>Dictionary of lists of weightings for each arc/edge.</p>
+</dd>
+<dt><strong>weights_kws</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keyword arguments for <code class="docutils literal notranslate"><span class="pre">libpysal.weights.W</span></code>.</p>
 </dd>
 </dl>
 </dd>
@@ -882,7 +887,7 @@ created through <code class="docutils literal notranslate"><span class="pre">enu
 </pre></div>
 </div>
 <p>Next, a standard call to 
-<a class="reference external" href="https://esda.readthedocs.io/en/latest/generated/esda.Moran.html#esda.Moran">esda.Moran</a> 
+<a class="reference external" href="https://esda.readthedocs.io/en/latest/generated/esda.Moran.html#esda.Moran">esda.Moran</a>
 is made and the result placed into <code class="docutils literal notranslate"><span class="pre">res</span></code>.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">esda</span><span class="o">.</span><span class="n">moran</span><span class="o">.</span><span class="n">Moran</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">99</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
