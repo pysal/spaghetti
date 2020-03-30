@@ -3121,7 +3121,7 @@ def spanning_tree(net, method="sort", maximum=False, silence_warnings=True):
     See also
     --------
     
-    networkx.algorithms.minimum_spanning_tree
+    networkx.algorithms.tree.mst
     scipy.sparse.csgraph.minimum_spanning_tree
     
     Examples
