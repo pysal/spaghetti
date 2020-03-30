@@ -10,7 +10,7 @@ try:
     from shapely.geometry import Point, LineString
 except ImportError:
     msg = "geopandas/shapely not available. Some functionality will be disabled."
-    warn(err_msg)
+    warn(msg)
 
 
 def compute_length(v0, v1):
