@@ -9,9 +9,7 @@ try:
     import geopandas
     from shapely.geometry import Point, LineString
 except ImportError:
-    err_msg = (
-        "geopandas/shapely not available. " + "Some functionality will be disabled."
-    )
+    msg = "geopandas/shapely not available. Some functionality will be disabled."
     warn(err_msg)
 
 
