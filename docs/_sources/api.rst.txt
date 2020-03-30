@@ -25,6 +25,7 @@ Network feature extraction and creation
    :toctree: generated/
     
     spaghetti.extract_component
+    spaghetti.spanning_tree
     spaghetti.element_as_gdf
     spaghetti.regular_lattice
 
