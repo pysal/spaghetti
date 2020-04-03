@@ -3,15 +3,18 @@ channels:
   - conda-forge
 dependencies:
   - python=3.7
-  - geopandas
   - descartes
-  - rtree
-  - libspatialindex
-  - pulp
   - esda
+  - geopandas>=0.7.0
+  - libspatialindex
   - matplotlib
-  - watermark
+  - numpy
+  - pandas>=1.0
+  - pulp
+  - rtree
+  - scipy>=1.0
   - seaborn
+  - watermark
   - pip
   - pip:
     - mip
