@@ -7,7 +7,9 @@ dependencies:
   - libpysal
   - esda
   - numpy
+  - pandas>=1.0
   - rtree
+  - scipy>=1.0
   - watermark
   # testing
   - pytest
