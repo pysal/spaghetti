@@ -13,7 +13,7 @@ Spaghetti is an open-source Python library for the analysis of network-based spa
 
 *An example of a network's [minimum spanning tree](https://pysal.org/spaghetti/generated/spaghetti.spanning_tree.html#spaghetti.spanning_tree):*
 <p align="center">
-<img src="figs/mst_logo.png" width="1000" height="300" />
+<img src="figs/mst_logo_pasta.png" width="1000" height="300" />
 </p>
 
 
