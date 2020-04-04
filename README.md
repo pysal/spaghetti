@@ -11,11 +11,9 @@
 
 Spaghetti is an open-source Python library for the analysis of network-based spatial data. Originating from the `network` module in [PySAL (Python Spatial Analysis Library)](http://pysal.org), it is under active development for the inclusion of newly proposed methods for building graph-theoretic networks and the analysis of network events. This package is part of a [refactoring of PySAL](https://github.com/pysal/pysal/wiki/PEP-13:-Refactor-PySAL-Using-Submodules).
 
-*An example of a network's [minimum spanning tree](https://pysal.org/spaghetti/generated/spaghetti.spanning_tree.html#spaghetti.spanning_tree):*
-<p align="center">
-<img src="figs/mst_logo_pasta.png" width="1000" height="300" />
+*An example of a network's [minimum spanning tree](https://pysal.org/spaghetti/generated/spaghetti.spanning_tree.html#spaghetti.spanning_tree):*<p align="center">
+<img src="figs/mst_logo_pasta.png" width="600" height="225" />
 </p>
-
 
 |[![PyPI version](https://badge.fury.io/py/spaghetti.svg)](https://badge.fury.io/py/spaghetti)| [![Conda Version](https://img.shields.io/conda/vn/conda-forge/spaghetti.svg)](https://anaconda.org/conda-forge/spaghetti) | ![tag](https://img.shields.io/github/v/release/pysal/spaghetti?include_prereleases&sort=semver) | [![GitHub issues open](https://img.shields.io/github/issues/pysal/spaghetti.svg?maxAge=3600)](https://github.com/pysal/spaghetti/issues) | [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/pysal/spaghetti/master)
 |:---:|:---:|:---:|:---:|:---:|
