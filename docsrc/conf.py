@@ -253,7 +253,7 @@ plot_include_source = True
 
 
 def setup(app):
-    app.add_stylesheet("pysal-styles.css")
+    app.add_css_file("pysal-styles.css")
 
 
 # Example configuration for intersphinx: refer to the Python standard library.
@@ -266,7 +266,6 @@ intersphinx_mapping = {
     "numpy": ("https://docs.scipy.org/doc/numpy", None),
     "pandas": ("https://pandas.pydata.org/pandas-docs/stable/", None),
     "python": ("https://docs.python.org/3.8/", None),
-    "pulp": ("https://coin-or.github.io/pulp/", None),
     "scipy": ("https://docs.scipy.org/doc/scipy/reference/", None),
 }
 
