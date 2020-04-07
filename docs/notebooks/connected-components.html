@@ -15,10 +15,6 @@
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"TeX": {"equationNumbers": {"autoNumber": "AMS", "useLabelIds": true}}, "tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    <script src="../_static/js/jquery-1.11.0.min.js"></script>
-    <script src="../_static/js/jquery-fix.js"></script>
-    <script src="../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-    <script src="../_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="../_static/pysal_favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -28,6 +24,10 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
   </head><body>
 
@@ -138,7 +138,7 @@
 </li>
 <li><a class="reference internal" href="#3.-Add-a-loop-of-libpysal.cg.Chain-objects">3. Add a loop of <code class="docutils literal notranslate"><span class="pre">libpysal.cg.Chain</span></code> objects</a><ul>
 <li><a class="reference internal" href="#Here-we-can-see-that-all-the-new-network-vertices-are-non-articulation-point">Here we can see that all the new network vertices are non-articulation point</a></li>
-<li><a class="reference internal" href="#Slice-out-the-articulation-points-and-non-articulation-points">Slice out the articulation points and non-articulation points</a></li>
+<li><a class="reference internal" href="#id2">Slice out the articulation points and non-articulation points</a></li>
 <li><a class="reference internal" href="#The-new-network-vertices-are-non-articulation-points-because-they-form-a-closed-ring">The new network vertices are non-articulation points because they form a closed ring</a></li>
 </ul>
 </li>
@@ -153,7 +153,7 @@
 <li><a class="reference internal" href="#Extract-the-longest-component">Extract the longest component</a></li>
 <li><a class="reference internal" href="#Extract-the-largest-component-and-plot">Extract the largest component and plot</a></li>
 <li><a class="reference internal" href="#Empirical-Example-—-New-Haven,-Connecticut">Empirical Example — New Haven, Connecticut</a></li>
-<li><a class="reference internal" href="#Extract-the-longest-component">Extract the longest component</a></li>
+<li><a class="reference internal" href="#id3">Extract the longest component</a></li>
 <li><a class="reference internal" href="#Filter-non-longest-component-arcs">Filter non-longest component arcs</a></li>
 <li><a class="reference internal" href="#Plot-network-arcs">Plot network arcs</a></li>
 </ul>
@@ -187,7 +187,7 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-12 content">
+    <div class="body col-md-12 content" role="main">
       
   
 <style>
@@ -255,9 +255,9 @@ div.nboutput.container div.prompt pre {
 /* all prompts */
 div.nbinput.container div.prompt,
 div.nboutput.container div.prompt {
-    min-width: 7ex;
-    padding-top: 0.4em;
-    padding-right: 0.4em;
+    min-width: 5.5ex;
+    padding-top: 0.3rem;
+    padding-right: 0.3rem;
     text-align: right;
     flex: 0;
 }
@@ -281,7 +281,6 @@ div.nboutput.container div.prompt pre {
 /* input/output area */
 div.nbinput.container div.input_area,
 div.nboutput.container div.output_area {
-    padding: 0.4em;
     -webkit-flex: 1;
     flex: 1;
     overflow: auto;
@@ -354,6 +353,27 @@ div.nboutput.container div.output_area.stderr {
 
 .ansi-bold { font-weight: bold; }
 .ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 0.3rem;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
 
 /* Some additional styling taken form the Jupyter notebook CSS */
 div.rendered_html table {
@@ -1518,8 +1538,8 @@ array([0, 0, 0, 1, 1, 1], dtype=int32)
 </pre></div></div>
 </div>
 </div>
-<div class="section" id="Slice-out-the-articulation-points-and-non-articulation-points">
-<h3>Slice out the articulation points and non-articulation points<a class="headerlink" href="#Slice-out-the-articulation-points-and-non-articulation-points" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id2">
+<h3>Slice out the articulation points and non-articulation points<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
 </pre></div>
@@ -1819,8 +1839,8 @@ The largest component is 1 with 6 vertices.
 </pre></div></div>
 </div>
 </div>
-<div class="section" id="Extract-the-longest-component">
-<h3>Extract the longest component<a class="headerlink" href="#Extract-the-longest-component" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id3">
+<h3>Extract the longest component<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
 </pre></div>
@@ -1953,7 +1973,7 @@ The largest component is 1 with 6 vertices.
     </p>
     <p>
         &copy; Copyright 2018, pysal developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.0.<br/>
     </p>
   </div>
 </footer>
