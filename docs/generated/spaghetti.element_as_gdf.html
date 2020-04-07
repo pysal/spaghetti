@@ -15,10 +15,6 @@
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"TeX": {"equationNumbers": {"autoNumber": "AMS", "useLabelIds": true}}, "tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    <script src="../_static/js/jquery-1.11.0.min.js"></script>
-    <script src="../_static/js/jquery-fix.js"></script>
-    <script src="../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-    <script src="../_static/bootstrap-sphinx.js"></script>
     <link rel="shortcut icon" href="../_static/pysal_favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -28,6 +24,10 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
   </head><body>
 
@@ -131,13 +131,13 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-12 content">
+    <div class="body col-md-12 content" role="main">
       
   <div class="section" id="spaghetti-element-as-gdf">
 <h1>spaghetti.element_as_gdf<a class="headerlink" href="#spaghetti-element-as-gdf" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
+<dl class="py function">
 <dt id="spaghetti.element_as_gdf">
-<code class="sig-prename descclassname">spaghetti.</code><code class="sig-name descname">element_as_gdf</code><span class="sig-paren">(</span><em class="sig-param">net</em>, <em class="sig-param">vertices=False</em>, <em class="sig-param">arcs=False</em>, <em class="sig-param">pp_name=None</em>, <em class="sig-param">snapped=False</em>, <em class="sig-param">routes=None</em>, <em class="sig-param">id_col='id'</em>, <em class="sig-param">geom_col='geometry'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#element_as_gdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.element_as_gdf" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">spaghetti.</code><code class="sig-name descname">element_as_gdf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">net</span></em>, <em class="sig-param"><span class="n">vertices</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">arcs</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">pp_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">snapped</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">routes</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">id_col</span><span class="o">=</span><span class="default_value">'id'</span></em>, <em class="sig-param"><span class="n">geom_col</span><span class="o">=</span><span class="default_value">'geometry'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#element_as_gdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.element_as_gdf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> of network elements. This can be 
 (a) the vertices of a network; (b) the arcs of a network; (c) both the
 vertices and arcs of the network; (d) the raw point pattern associated
@@ -200,6 +200,12 @@ not exist within the network object.</p>
 </dl>
 </dd>
 </dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.7.0+15.g898dd86)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a></dt><dd></dd>
+</dl>
+</div>
 <p class="rubric">Notes</p>
 <p>When both network vertices and arcs are desired, the variable 
 declaration must be in the order: &lt;vertices&gt;, &lt;arcs&gt;. 
@@ -255,7 +261,7 @@ This function requires <code class="docutils literal notranslate"><span class="p
     </p>
     <p>
         &copy; Copyright 2018, pysal developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.0.<br/>
     </p>
   </div>
 </footer>
