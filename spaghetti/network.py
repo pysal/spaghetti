@@ -888,6 +888,11 @@ class Network:
          W : libpysal.weights.W
             A ``W`` representing the binary adjacency of the network.
         
+        See also
+        --------
+        
+        libpysal.weights.W
+        
         Examples
         --------
         
@@ -1048,6 +1053,11 @@ class Network:
         
         See :cite:`AnselinRey2014` and :cite:`rey_open_2015` for more details
         regarding spatial weights.
+        
+        See also
+        --------
+        
+        libpysal.weights.W
         
         Examples
         --------
@@ -3311,7 +3321,11 @@ def element_as_gdf(
     declaration must be in the order: <vertices>, <arcs>. 
     This function requires ``geopandas``.
     
-    
+    See also
+    --------
+        
+    geopandas.GeoDataFrame
+        
     Examples
     --------
     
