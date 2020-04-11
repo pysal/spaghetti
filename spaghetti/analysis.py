@@ -264,16 +264,16 @@ class NetworkK(NetworkBase):
         """Compute the observed nearest.
         """
 
-        # find nearest point that is not NaN
-        nearest = self.ntw.allneighbordistances(self.pointpattern)
-        self.setbounds(nearest)
+        # pairwise distances
+        distances = self.ntw.allneighbordistances(self.pointpattern)
+        self.setbounds(distances)
 
         # set the intensity (lambda)
         self.lam = self.npts / sum(self.ntw.arc_lengths.values())
 
         # compute a K-Function
         observedx, observedy = kfunction(
-            nearest, self.upperbound, self.lam, nsteps=self.nsteps
+            distances, self.upperbound, self.lam, nsteps=self.nsteps
         )
 
         # set observed values
@@ -281,7 +281,7 @@ class NetworkK(NetworkBase):
         self.xaxis = observedx
 
     def computepermutations(self):
-        """Compute permutations of the nearest.
+        """Compute permutations of the points.
         """
 
         # for each round of permutations
@@ -292,12 +292,12 @@ class NetworkK(NetworkBase):
                 self.npts, distribution=self.distribution
             )
 
-            # find nearest observation
-            nearest = self.ntw.allneighbordistances(sim)
+            # distances
+            distances = self.ntw.allneighbordistances(sim)
 
             # compute a K-Function
             simx, simy = kfunction(
-                nearest, self.upperbound, self.lam, nsteps=self.nsteps
+                distances, self.upperbound, self.lam, nsteps=self.nsteps
             )
 
             # label the permutation
