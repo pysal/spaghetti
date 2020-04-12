@@ -135,7 +135,7 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span>
 
-<span class="kn">from</span> <span class="nn">.analysis</span> <span class="kn">import</span> <span class="n">NetworkG</span><span class="p">,</span> <span class="n">NetworkK</span><span class="p">,</span> <span class="n">NetworkF</span>
+<span class="kn">from</span> <span class="nn">.analysis</span> <span class="kn">import</span> <span class="n">NetworkK</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">util</span>
 <span class="kn">from</span> <span class="nn">libpysal</span> <span class="kn">import</span> <span class="n">cg</span><span class="p">,</span> <span class="n">examples</span><span class="p">,</span> <span class="n">weights</span>
 <span class="kn">from</span> <span class="nn">libpysal.common</span> <span class="kn">import</span> <span class="n">requires</span>
@@ -148,7 +148,7 @@
     <span class="nb">open</span> <span class="o">=</span> <span class="n">libpysal</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">open</span>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Network&quot;</span><span class="p">,</span> <span class="s2">&quot;PointPattern&quot;</span><span class="p">,</span> <span class="s2">&quot;NetworkG&quot;</span><span class="p">,</span> <span class="s2">&quot;NetworkK&quot;</span><span class="p">,</span> <span class="s2">&quot;NetworkF&quot;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Network&quot;</span><span class="p">,</span> <span class="s2">&quot;PointPattern&quot;</span><span class="p">,</span> <span class="s2">&quot;NetworkK&quot;</span><span class="p">]</span>
 
 <span class="n">SAME_SEGMENT</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">)</span>
 
@@ -2644,225 +2644,6 @@
 
         <span class="k">return</span> <span class="n">split_network</span></div>
 
-<div class="viewcode-block" id="Network.NetworkF"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.NetworkF">[docs]</a>    <span class="k">def</span> <span class="nf">NetworkF</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">pointpattern</span><span class="p">,</span>
-        <span class="n">nsteps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-        <span class="n">permutations</span><span class="o">=</span><span class="mi">99</span><span class="p">,</span>
-        <span class="n">threshold</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
-        <span class="n">distribution</span><span class="o">=</span><span class="s2">&quot;uniform&quot;</span><span class="p">,</span>
-        <span class="n">lowerbound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">upperbound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Compute a network constrained `F`-function, which is</span>
-<span class="sd">        a cumulative frequency distribution of random distances</span>
-<span class="sd">        within a set of observations associated with a network.</span>
-<span class="sd">        </span>
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        </span>
-<span class="sd">        pointpattern : spaghetti.PointPattern</span>
-<span class="sd">            A ``spaghetti`` point pattern object.</span>
-<span class="sd">        </span>
-<span class="sd">        nsteps : int</span>
-<span class="sd">            The number of steps at which the count of the nearest</span>
-<span class="sd">            neighbors is computed.</span>
-<span class="sd">        </span>
-<span class="sd">        permutations : int</span>
-<span class="sd">            The number of permutations to perform. Default 99.</span>
-<span class="sd">        </span>
-<span class="sd">        threshold : float</span>
-<span class="sd">            The level at which significance is computed.</span>
-<span class="sd">            (0.5 would be 97.5% and 2.5%).</span>
-<span class="sd">        </span>
-<span class="sd">        distribution : str</span>
-<span class="sd">            The distribution from which random points are sampled.</span>
-<span class="sd">            Either ``&quot;uniform&quot;`` or ``&quot;poisson&quot;``.</span>
-<span class="sd">        </span>
-<span class="sd">        lowerbound : float</span>
-<span class="sd">            The lower bound at which the `F`-function is computed.</span>
-<span class="sd">            Default 0.</span>
-<span class="sd">        </span>
-<span class="sd">        upperbound : float</span>
-<span class="sd">            The upper bound at which the `F`-function is computed.</span>
-<span class="sd">            Defaults to the maximum observed nearest neighbor distance.</span>
-<span class="sd">        </span>
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        </span>
-<span class="sd">        NetworkF : spaghetti.analysis.NetworkF</span>
-<span class="sd">            A network `F` class instance.</span>
-<span class="sd">        </span>
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        </span>
-<span class="sd">        This is a network-constrained version </span>
-<span class="sd">        based on the Euclidean formulation found in </span>
-<span class="sd">        :cite:`doi:10.1002/9780470549094.ch5` and mentioned in</span>
-<span class="sd">        :cite:`doi:10.1002/9781119967101.ch5`. It is formulated in </span>
-<span class="sd">        :cite:`doi:10.1002/9780470549094.ch5` as:</span>
-<span class="sd">        </span>
-<span class="sd">        .. math::</span>
-<span class="sd">            </span>
-<span class="sd">            F(d) = \\frac{\\#[d_{min}(p_i, S)&lt;d]}{m}</span>
-<span class="sd">        </span>
-<span class="sd">        where $p_i$ are randomly selected observations totaling $m$ in </span>
-<span class="sd">        $S$ and $d$ is each step of distance along the network. </span>
-<span class="sd">        </span>
-<span class="sd">        </span>
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        </span>
-<span class="sd">        Create a network instance.</span>
-<span class="sd">        </span>
-<span class="sd">        &gt;&gt;&gt; import spaghetti</span>
-<span class="sd">        &gt;&gt;&gt; from libpysal import examples</span>
-<span class="sd">        &gt;&gt;&gt; ntw = spaghetti.Network(in_data=examples.get_path(&quot;streets.shp&quot;))</span>
-<span class="sd">        </span>
-<span class="sd">        Snap observation points onto the network.</span>
-<span class="sd">        </span>
-<span class="sd">        &gt;&gt;&gt; pt_str = &quot;schools&quot;</span>
-<span class="sd">        &gt;&gt;&gt; in_data = examples.get_path(pt_str+&quot;.shp&quot;)</span>
-<span class="sd">        &gt;&gt;&gt; ntw.snapobservations(in_data, pt_str, attribute=True)</span>
-<span class="sd">        </span>
-<span class="sd">        Simulate observations along the network.</span>
-<span class="sd">        </span>
-<span class="sd">        &gt;&gt;&gt; schools = ntw.pointpatterns[pt_str]</span>
-<span class="sd">        &gt;&gt;&gt; sim = ntw.simulate_observations(schools.npoints)</span>
-<span class="sd">        </span>
-<span class="sd">        Compute a network constrained `F`-function of schools </span>
-<span class="sd">        with ``5`` ``permutations`` and ``10`` ``nsteps``.</span>
-<span class="sd">        </span>
-<span class="sd">        &gt;&gt;&gt; fres = ntw.NetworkF(schools, permutations=5, nsteps=10)</span>
-<span class="sd">        &gt;&gt;&gt; fres.lowerenvelope.shape[0]</span>
-<span class="sd">        10</span>
-<span class="sd">        </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="c1"># call analysis.NetworkF</span>
-        <span class="k">return</span> <span class="n">NetworkF</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span>
-            <span class="n">pointpattern</span><span class="p">,</span>
-            <span class="n">nsteps</span><span class="o">=</span><span class="n">nsteps</span><span class="p">,</span>
-            <span class="n">permutations</span><span class="o">=</span><span class="n">permutations</span><span class="p">,</span>
-            <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">,</span>
-            <span class="n">distribution</span><span class="o">=</span><span class="n">distribution</span><span class="p">,</span>
-            <span class="n">lowerbound</span><span class="o">=</span><span class="n">lowerbound</span><span class="p">,</span>
-            <span class="n">upperbound</span><span class="o">=</span><span class="n">upperbound</span><span class="p">,</span>
-        <span class="p">)</span></div>
-
-<div class="viewcode-block" id="Network.NetworkG"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.NetworkG">[docs]</a>    <span class="k">def</span> <span class="nf">NetworkG</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">pointpattern</span><span class="p">,</span>
-        <span class="n">nsteps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-        <span class="n">permutations</span><span class="o">=</span><span class="mi">99</span><span class="p">,</span>
-        <span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-        <span class="n">distribution</span><span class="o">=</span><span class="s2">&quot;uniform&quot;</span><span class="p">,</span>
-        <span class="n">lowerbound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">upperbound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Compute a network constrained `G`-function, which is</span>
-<span class="sd">        a cumulative frequency distribution of nearest neighbor distances</span>
-<span class="sd">        within a set of observations associated with a network.</span>
-<span class="sd">        </span>
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        </span>
-<span class="sd">        pointpattern : spaghetti.PointPattern</span>
-<span class="sd">            A ``spaghetti`` point pattern object.</span>
-<span class="sd">        </span>
-<span class="sd">        nsteps : int</span>
-<span class="sd">            The number of steps at which the count of the nearest</span>
-<span class="sd">            neighbors is computed.</span>
-<span class="sd">        </span>
-<span class="sd">        permutations : int</span>
-<span class="sd">            The number of permutations to perform. Default 99.</span>
-<span class="sd">        </span>
-<span class="sd">        threshold : float</span>
-<span class="sd">            The level at which significance is computed.</span>
-<span class="sd">            (0.5 would be 97.5% and 2.5%).</span>
-<span class="sd">        </span>
-<span class="sd">        distribution : str</span>
-<span class="sd">            The distribution from which random points are sampled</span>
-<span class="sd">            Either ``&quot;uniform&quot;`` or ``&quot;poisson&quot;``.</span>
-<span class="sd">        </span>
-<span class="sd">        lowerbound : float</span>
-<span class="sd">            The lower bound at which the `G`-function is computed.</span>
-<span class="sd">            Default 0.</span>
-<span class="sd">        </span>
-<span class="sd">        upperbound : float</span>
-<span class="sd">            The upper bound at which the `G`-function is computed.</span>
-<span class="sd">            Defaults to the maximum observed nearest neighbor distance.</span>
-<span class="sd">        </span>
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        </span>
-<span class="sd">        NetworkG : spaghetti.analysis.NetworkG</span>
-<span class="sd">            A network `G` class instance.</span>
-<span class="sd">        </span>
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        </span>
-<span class="sd">        This is a network-constrained version </span>
-<span class="sd">        based on the Euclidean formulation found in </span>
-<span class="sd">        :cite:`doi:10.1002/9780470549094.ch5` and mentioned in</span>
-<span class="sd">        :cite:`doi:10.1002/9781119967101.ch5`. It is formulated in </span>
-<span class="sd">        :cite:`doi:10.1002/9780470549094.ch5` as:</span>
-<span class="sd">        </span>
-<span class="sd">        .. math::</span>
-<span class="sd">          </span>
-<span class="sd">          G(d) = \\frac{\\#(d_{min}(s_i)&lt;d)}{n}</span>
-<span class="sd">        </span>
-<span class="sd">        where $s_i$ are observations totaling $n$ in $S$ and $d$ is</span>
-<span class="sd">        each step of distance along the network.</span>
-<span class="sd">        </span>
-<span class="sd">        **[note from `jlaura`]**</span>
-<span class="sd">        Both the `G` and `K` functions generate a</span>
-<span class="sd">        full distance matrix.  This is because, I know that the full </span>
-<span class="sd">        generation is correct and I believe that the truncated generated, </span>
-<span class="sd">        e.g. nearest neighbor, has a bug.</span>
-<span class="sd">        </span>
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        </span>
-<span class="sd">        Create a network instance.</span>
-<span class="sd">        </span>
-<span class="sd">        &gt;&gt;&gt; import spaghetti</span>
-<span class="sd">        &gt;&gt;&gt; from libpysal import examples</span>
-<span class="sd">        &gt;&gt;&gt; ntw = spaghetti.Network(in_data=examples.get_path(&quot;streets.shp&quot;))</span>
-<span class="sd">        </span>
-<span class="sd">        Snap observation points onto the network.</span>
-<span class="sd">        </span>
-<span class="sd">        &gt;&gt;&gt; pt_str = &quot;schools&quot;</span>
-<span class="sd">        &gt;&gt;&gt; in_data = examples.get_path(pt_str+&quot;.shp&quot;)</span>
-<span class="sd">        &gt;&gt;&gt; ntw.snapobservations(in_data, pt_str, attribute=True)</span>
-<span class="sd">        </span>
-<span class="sd">        Simulate observations along the network.</span>
-<span class="sd">        </span>
-<span class="sd">        &gt;&gt;&gt; schools = ntw.pointpatterns[pt_str]</span>
-<span class="sd">        &gt;&gt;&gt; sim = ntw.simulate_observations(schools.npoints)</span>
-<span class="sd">        </span>
-<span class="sd">        Compute a network constrained `G`-function of schools </span>
-<span class="sd">        with ``5`` ``permutations`` and ``10`` ``nsteps``.</span>
-<span class="sd">        </span>
-<span class="sd">        &gt;&gt;&gt; gres = ntw.NetworkG(schools, permutations=5, nsteps=10)</span>
-<span class="sd">        &gt;&gt;&gt; gres.lowerenvelope.shape[0]</span>
-<span class="sd">        10</span>
-<span class="sd">        </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="c1"># call analysis.NetworkG</span>
-        <span class="k">return</span> <span class="n">NetworkG</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span>
-            <span class="n">pointpattern</span><span class="p">,</span>
-            <span class="n">nsteps</span><span class="o">=</span><span class="n">nsteps</span><span class="p">,</span>
-            <span class="n">permutations</span><span class="o">=</span><span class="n">permutations</span><span class="p">,</span>
-            <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">,</span>
-            <span class="n">distribution</span><span class="o">=</span><span class="n">distribution</span><span class="p">,</span>
-            <span class="n">lowerbound</span><span class="o">=</span><span class="n">lowerbound</span><span class="p">,</span>
-            <span class="n">upperbound</span><span class="o">=</span><span class="n">upperbound</span><span class="p">,</span>
-        <span class="p">)</span></div>
-
 <div class="viewcode-block" id="Network.NetworkK"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.NetworkK">[docs]</a>    <span class="k">def</span> <span class="nf">NetworkK</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">pointpattern</span><span class="p">,</span>
@@ -2870,7 +2651,6 @@
         <span class="n">permutations</span><span class="o">=</span><span class="mi">99</span><span class="p">,</span>
         <span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
         <span class="n">distribution</span><span class="o">=</span><span class="s2">&quot;uniform&quot;</span><span class="p">,</span>
-        <span class="n">lowerbound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">upperbound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Compute a network constrained `K`-function.</span>
@@ -2896,10 +2676,6 @@
 <span class="sd">            The distribution from which random points are sampled</span>
 <span class="sd">            Either ``&quot;uniform&quot;`` or ``&quot;poisson&quot;``.</span>
 <span class="sd">        </span>
-<span class="sd">        lowerbound : float</span>
-<span class="sd">            The lower bound at which the `K`-function is computed.</span>
-<span class="sd">            Default is 0.</span>
-<span class="sd">        </span>
 <span class="sd">        upperbound : float</span>
 <span class="sd">            The upper bound at which the `K`-function is computed.</span>
 <span class="sd">            Defaults to the maximum observed nearest neighbor distance.</span>
@@ -2913,16 +2689,11 @@
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 <span class="sd">        </span>
-<span class="sd">        Based on :cite:`Ripley1977`, </span>
-<span class="sd">        :cite:`doi:10.1002/9780470549094.ch5`,</span>
-<span class="sd">        :cite:`doi:10.1111/j.1538-4632.2001.tb00448.x`,</span>
-<span class="sd">        and :cite:`doi:10.1002/9781119967101.ch6`. </span>
-<span class="sd">        </span>
-<span class="sd">        **[note from `jlaura`]**</span>
-<span class="sd">        Both the `G` and `K` functions generate a</span>
-<span class="sd">        full distance matrix.  This is because, I know that the full </span>
-<span class="sd">        generation is correct and I believe that the truncated generated, </span>
-<span class="sd">        e.g. nearest neighbor, has a bug.</span>
+<span class="sd">        Based on :cite:`Ripley1977`, :cite:`doi:10.1002/9780470549094.ch5`.</span>
+<span class="sd">        For further Network-`K` formulation see</span>
+<span class="sd">        :cite:`doi:10.1111/j.1538-4632.2001.tb00448.x`, </span>
+<span class="sd">        :cite:`doi:10.1002/9781119967101.ch6`, and</span>
+<span class="sd">        :cite:`Baddeley2020`.</span>
 <span class="sd">        </span>
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
@@ -2961,7 +2732,6 @@
             <span class="n">permutations</span><span class="o">=</span><span class="n">permutations</span><span class="p">,</span>
             <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">,</span>
             <span class="n">distribution</span><span class="o">=</span><span class="n">distribution</span><span class="p">,</span>
-            <span class="n">lowerbound</span><span class="o">=</span><span class="n">lowerbound</span><span class="p">,</span>
             <span class="n">upperbound</span><span class="o">=</span><span class="n">upperbound</span><span class="p">,</span>
         <span class="p">)</span></div>
 
