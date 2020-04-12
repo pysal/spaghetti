@@ -29,12 +29,8 @@ class NetworkBase(object):
         The distribution from which random points are sampled
         Either ``"uniform"`` or ``"poisson"``.
     
-    lowerbound : float
-        The lower bound at which the {`F`,`G`,`K`}-function is computed.
-        Default 0.
-    
     upperbound : float
-        The upper bound at which the {`F`,`G`,`K`}-function is computed.
+        The upper bound at which the `K`-function is computed.
         Defaults to the maximum observed nearest neighbor distance.
     
     Attributes
@@ -62,7 +58,6 @@ class NetworkBase(object):
         permutations=99,
         threshold=0.5,
         distribution="poisson",
-        lowerbound=None,
         upperbound=None,
     ):
 
@@ -81,11 +76,10 @@ class NetworkBase(object):
         self.sim = numpy.empty((permutations, nsteps))
         self.npts = self.pointpattern.npoints
 
-        # set the lower and upper bounds (lower only for G)
-        self.lowerbound = lowerbound
+        # set the upper bounds
         self.upperbound = upperbound
 
-        # compute the statistic (F, G, or K)
+        # compute the statistic K
         self.computeobserved()
         self.computepermutations()
 
@@ -114,132 +108,8 @@ class NetworkBase(object):
     def setbounds(self, nearest):
         """set upper and lower bounds
         """
-
-        if self.lowerbound is None:
-            self.lowerbound = 0
         if self.upperbound is None:
             self.upperbound = numpy.nanmax(nearest)
-
-
-class NetworkF(NetworkBase):
-    """Compute a network constrained `F` statistic. This requires the
-    capability to compute a distance matrix between two point patterns.
-    In this case one will be observed and one will be simulated.
-    
-    Attributes
-    ----------
-    
-    fsim : spaghetti.network.SimulatedPointPattern
-        A simulated point pattern of ``self.npts`` points.
-    
-    """
-
-    def computeobserved(self):
-        """Compute the observed nearest and simulated nearest.
-        """
-
-        # create an initial simulated point pattern
-        self.fsim = self.ntw.simulate_observations(self.npts)
-
-        # find nearest neighbor distances from
-        # the simulated to the observed
-        nearest = numpy.nanmin(
-            self.ntw.allneighbordistances(self.fsim, self.pointpattern), axis=1
-        )
-
-        self.setbounds(nearest)
-
-        # find nearest neighbor distances from
-        # the simulated to the observed
-        nearest = numpy.nanmin(
-            self.ntw.allneighbordistances(self.fsim, self.pointpattern), axis=1
-        )
-        self.setbounds(nearest)
-
-        # compute an F-function
-        observedx, observedy = ffunction(
-            nearest,
-            self.lowerbound,
-            self.upperbound,
-            nsteps=self.nsteps,
-            npts=self.npts,
-        )
-
-        # set observed values
-        self.observed = observedy
-        self.xaxis = observedx
-
-    def computepermutations(self):
-        """Compute permutations of the nearest.
-        """
-
-        # for each round of permutations
-        for p in range(self.permutations):
-
-            # simulate a point pattern
-            sim = self.ntw.simulate_observations(
-                self.npts, distribution=self.distribution
-            )
-
-            # find nearest observation
-            nearest = numpy.nanmin(
-                self.ntw.allneighbordistances(sim, self.fsim), axis=1
-            )
-
-            # compute an F-function
-            simx, simy = ffunction(
-                nearest, self.lowerbound, self.upperbound, self.npts, nsteps=self.nsteps
-            )
-
-            # label the permutation
-            self.sim[p] = simy
-
-
-class NetworkG(NetworkBase):
-    """Compute a network constrained `G` statistic. This requires the
-    capability to compute a distance matrix between two point patterns.
-    In this case one will be observed and one will be simulated.
-    """
-
-    def computeobserved(self):
-        """Compute the observed nearest.
-        """
-
-        # find nearest point that is not NaN
-        nearest = numpy.nanmin(self.ntw.allneighbordistances(self.pointpattern), axis=1)
-        self.setbounds(nearest)
-
-        # compute a G-Function
-        observedx, observedy = gfunction(
-            nearest, self.lowerbound, self.upperbound, nsteps=self.nsteps
-        )
-
-        # set observed values
-        self.observed = observedy
-        self.xaxis = observedx
-
-    def computepermutations(self):
-        """Compute permutations of the nearest.
-        """
-
-        # for each round of permutations
-        for p in range(self.permutations):
-
-            # simulate a point pattern
-            sim = self.ntw.simulate_observations(
-                self.npts, distribution=self.distribution
-            )
-
-            # find nearest observation
-            nearest = numpy.nanmin(self.ntw.allneighbordistances(sim), axis=1)
-
-            # compute a G-Function
-            simx, simy = gfunction(
-                nearest, self.lowerbound, self.upperbound, nsteps=self.nsteps
-            )
-
-            # label the permutation
-            self.sim[p] = simy
 
 
 class NetworkK(NetworkBase):
@@ -302,128 +172,6 @@ class NetworkK(NetworkBase):
 
             # label the permutation
             self.sim[p] = simy
-
-
-def ffunction(nearest, lowerbound, upperbound, npts, nsteps=10):
-    """Compute an `F`-function.
-
-    Parameters
-    ----------
-    
-    nearest : numpy.ndarray
-        A vector of nearest neighbor distances.
-    
-    lowerbound : int or float
-        The starting value of the sequence.
-    
-    upperbound : int or float
-        The end value of the sequence.
-    
-    npts : int
-         The number of points (``pointpattern.npoints``).
-    
-    nsteps : int
-        The number of distance bands. Default is 10. Must be
-        non-negative.
-    
-    Returns
-    -------
-    
-    x : numpy.ndarray
-        The x-axis of values.
-    
-    y : numpy.ndarray
-        The y-axis of values.
-    
-    """
-
-    # create interval for x-axis
-    x = numpy.linspace(lowerbound, upperbound, nsteps)
-
-    # sort nearest neighbor distances
-    nearest = numpy.sort(nearest)
-
-    # create empty y-axis vector
-    y = numpy.empty(len(x))
-
-    # iterate over x-axis interval
-    for i, r in enumerate(x):
-
-        # slice out and count neighbors within radius
-        cnt = len(nearest[nearest <= r])
-
-        # if there is one or more neighbors compute `f`
-        if cnt > 0:
-            f = cnt / float(npts)
-        # otherwise set `f` to zero
-        else:
-            f = 0
-
-        # label `f` on the y-axis
-        y[i] = f
-
-    return x, y
-
-
-def gfunction(nearest, lowerbound, upperbound, nsteps=10):
-    """Compute a `G`-function.
-
-    Parameters
-    ----------
-    
-    nearest : numpy.ndarray
-        A vector of nearest neighbor distances.
-    
-    lowerbound : int or float
-        The starting value of the sequence.
-    
-    upperbound : int or float
-        The end value of the sequence.
-    
-    nsteps : int
-        The number of distance bands. Default is 10. Must be
-        non-negative.
-    
-    Returns
-    -------
-    
-    x : numpy.ndarray
-        The x-axis of values.
-    
-    y : numpy.ndarray
-        The y-axis of values.
-    
-    """
-
-    # set observation count
-    nobs = len(nearest)
-
-    # create interval for x-axis
-    x = numpy.linspace(lowerbound, upperbound, nsteps)
-
-    # sort nearest neighbor distances
-    nearest = numpy.sort(nearest)
-
-    # create empty y-axis vector
-    y = numpy.empty(len(x))
-
-    # iterate over x-axis interval
-    for i, r in enumerate(x):
-
-        # slice out and count neighbors within radius
-        cnt = len(nearest[nearest <= r])
-
-        # if there is one or more neighbors compute `g`
-        if cnt > 0:
-            g = cnt / float(nobs)
-        # otherwise set `g` to zero
-        else:
-            g = 0
-
-        # label `g` on the y-axis
-        y[i] = g
-
-    return x, y
 
 
 def kfunction(nearest, upperbound, intensity, nsteps=10):
