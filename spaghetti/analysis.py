@@ -1,7 +1,7 @@
 import numpy
 
 
-class NetworkBase(object):
+class FuncBase(object):
     """Base object for performing network analysis on a
     ``spaghetti.Network`` object.
     
@@ -112,10 +112,17 @@ class NetworkBase(object):
             self.upperbound = numpy.nanmax(nearest)
 
 
-class NetworkK(NetworkBase):
+class KFunc(FuncBase):
     """Compute a network constrained `K` statistic. This requires the
     capability to compute a distance matrix between two point patterns.
     In this case one will be observed and one will be simulated.
+    
+    
+    Compute a network constrained `K` statistic. This requires the
+    capability to compute a distance matrix between two point patterns.
+    In this case one will be observed and one will be simulated....................................
+    
+    
     
     Attributes
     ----------
@@ -174,14 +181,14 @@ class NetworkK(NetworkBase):
             self.sim[p] = simy
 
 
-def kfunction(nearest, upperbound, intensity, nsteps=10):
+def kfunction(dists, upperbound, intensity, nsteps=10):
     """Compute a `K`-function.
 
     Parameters
     ----------
     
-    nearest : numpy.ndarray
-        A vector of nearest neighbor distances.
+    dists : numpy.ndarray
+        An array of all pairwise distances.
     
     upperbound : int or float
         The end value of the sequence.
@@ -205,7 +212,7 @@ def kfunction(nearest, upperbound, intensity, nsteps=10):
     """
 
     # set observation count
-    nobs = len(nearest)
+    nobs = len(dists)
 
     # create interval for x-axis
     x = numpy.linspace(0, upperbound, nsteps)
@@ -218,7 +225,7 @@ def kfunction(nearest, upperbound, intensity, nsteps=10):
 
         # slice out and count neighbors within radius
         with numpy.errstate(invalid="ignore"):
-            y[i] = len(nearest[nearest <= r])
+            y[i] = len(dists[dists <= r])
 
     # compute k for y-axis vector
     y *= intensity ** -1
