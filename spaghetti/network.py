@@ -2600,7 +2600,6 @@ class Network:
             permutations=permutations,
             threshold=threshold,
             distribution=distribution,
-            lowerbound=lowerbound,
             upperbound=upperbound,
         )
 
