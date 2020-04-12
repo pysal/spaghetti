@@ -2560,8 +2560,9 @@ class Network:
         
         Based on :cite:`Ripley1977`, :cite:`doi:10.1002/9780470549094.ch5`.
         For further Network-`K` formulation see
-        :cite:`doi:10.1111/j.1538-4632.2001.tb00448.x` and 
-        and :cite:`doi:10.1002/9781119967101.ch6`.
+        :cite:`doi:10.1111/j.1538-4632.2001.tb00448.x`, 
+        :cite:`doi:10.1002/9781119967101.ch6`, and
+        :cite:`Baddeley2020`.
         
         Examples
         --------
