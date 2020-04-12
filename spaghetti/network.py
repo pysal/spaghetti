@@ -4,7 +4,7 @@ import copy, os, pickle, warnings
 
 import numpy
 
-from .analysis import NetworkG, NetworkK, NetworkF
+from .analysis import NetworkK
 from . import util
 from libpysal import cg, examples, weights
 from libpysal.common import requires
