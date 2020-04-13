@@ -174,14 +174,14 @@ class NetworkK(NetworkBase):
             self.sim[p] = simy
 
 
-def kfunction(nearest, upperbound, intensity, nsteps=10):
+def kfunction(dists, upperbound, intensity, nsteps=10):
     """Compute a `K`-function.
 
     Parameters
     ----------
     
-    nearest : numpy.ndarray
-        A vector of nearest neighbor distances.
+    dists : numpy.ndarray
+        A matrix of pairwise distances.
     
     upperbound : int or float
         The end value of the sequence.
@@ -205,7 +205,7 @@ def kfunction(nearest, upperbound, intensity, nsteps=10):
     """
 
     # set observation count
-    n_obs = nearest.shape[0]
+    n_obs = dists.shape[0]
 
     # create interval for x-axis
     x = numpy.linspace(0, upperbound, nsteps)
@@ -218,7 +218,7 @@ def kfunction(nearest, upperbound, intensity, nsteps=10):
 
         # slice out and count neighbors within radius
         with numpy.errstate(invalid="ignore"):
-            y[i] = nearest[nearest <= r].shape[0]
+            y[i] = dists[dists <= r].shape[0]
 
     # compute k for y-axis vector
     y /= n_obs * intensity
