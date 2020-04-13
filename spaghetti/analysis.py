@@ -205,20 +205,20 @@ def kfunction(nearest, upperbound, intensity, nsteps=10):
     """
 
     # set observation count
-    n_obs = len(nearest)
+    n_obs = nearest.shape[0]
 
     # create interval for x-axis
     x = numpy.linspace(0, upperbound, nsteps)
 
     # create empty y-axis vector
-    y = numpy.empty(len(x))
+    y = numpy.empty(x.shape[0])
 
     # iterate over x-axis interval
     for i, r in enumerate(x):
 
         # slice out and count neighbors within radius
         with numpy.errstate(invalid="ignore"):
-            y[i] = len(nearest[nearest <= r])
+            y[i] = nearest[nearest <= r].shape[0]
 
     # compute k for y-axis vector
     y /= n_obs * intensity
