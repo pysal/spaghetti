@@ -205,7 +205,7 @@ def kfunction(nearest, upperbound, intensity, nsteps=10):
     """
 
     # set observation count
-    nobs = len(nearest)
+    n_obs = len(nearest)
 
     # create interval for x-axis
     x = numpy.linspace(0, upperbound, nsteps)
@@ -221,6 +221,6 @@ def kfunction(nearest, upperbound, intensity, nsteps=10):
             y[i] = len(nearest[nearest <= r])
 
     # compute k for y-axis vector
-    y *= intensity ** -1
+    y /= n_obs * intensity
 
     return x, y
