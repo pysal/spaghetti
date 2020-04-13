@@ -143,7 +143,7 @@ class NetworkK(NetworkBase):
 
         # compute a K-Function
         observedx, observedy = kfunction(
-            distances, self.upperbound, self.lam, nsteps=self.nsteps
+            self.npts, distances, self.upperbound, self.lam, nsteps=self.nsteps
         )
 
         # set observed values
@@ -167,18 +167,21 @@ class NetworkK(NetworkBase):
 
             # compute a K-Function
             simx, simy = kfunction(
-                distances, self.upperbound, self.lam, nsteps=self.nsteps
+                self.npts, distances, self.upperbound, self.lam, nsteps=self.nsteps
             )
 
             # label the permutation
             self.sim[p] = simy
 
 
-def kfunction(dists, upperbound, intensity, nsteps=10):
+def kfunction(n_obs, dists, upperbound, intensity, nsteps=10):
     """Compute a `K`-function.
 
     Parameters
     ----------
+    
+    n_obs : int
+        The number of observations. See ``self.npts``.
     
     dists : numpy.ndarray
         A matrix of pairwise distances.
@@ -203,9 +206,6 @@ def kfunction(dists, upperbound, intensity, nsteps=10):
         The y-axis of values.
     
     """
-
-    # set observation count
-    n_obs = dists.shape[0]
 
     # create interval for x-axis
     x = numpy.linspace(0, upperbound, nsteps)
