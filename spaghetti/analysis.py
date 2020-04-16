@@ -143,7 +143,7 @@ class NetworkK(NetworkBase):
 
         # compute a K-Function
         observedx, observedy = kfunction(
-            self.npts, distances, self.upperbound, self.lam, nsteps=self.nsteps
+            distances, self.upperbound, self.lam, nsteps=self.nsteps
         )
 
         # set observed values
@@ -167,24 +167,21 @@ class NetworkK(NetworkBase):
 
             # compute a K-Function
             simx, simy = kfunction(
-                self.npts, distances, self.upperbound, self.lam, nsteps=self.nsteps
+                distances, self.upperbound, self.lam, nsteps=self.nsteps
             )
 
             # label the permutation
             self.sim[p] = simy
 
 
-def kfunction(n_obs, dists, upperbound, intensity, nsteps=10):
+def kfunction(nearest, upperbound, intensity, nsteps=10):
     """Compute a `K`-function.
 
     Parameters
     ----------
     
-    n_obs : int
-        The number of observations. See ``self.npts``.
-    
-    dists : numpy.ndarray
-        A matrix of pairwise distances.
+    nearest : numpy.ndarray
+        A vector of nearest neighbor distances.
     
     upperbound : int or float
         The end value of the sequence.
@@ -207,20 +204,23 @@ def kfunction(n_obs, dists, upperbound, intensity, nsteps=10):
     
     """
 
+    # set observation count
+    nobs = len(nearest)
+
     # create interval for x-axis
     x = numpy.linspace(0, upperbound, nsteps)
 
     # create empty y-axis vector
-    y = numpy.empty(x.shape[0])
+    y = numpy.empty(len(x))
 
     # iterate over x-axis interval
     for i, r in enumerate(x):
 
         # slice out and count neighbors within radius
         with numpy.errstate(invalid="ignore"):
-            y[i] = dists[dists <= r].shape[0]
+            y[i] = len(nearest[nearest <= r])
 
     # compute k for y-axis vector
-    y /= n_obs * intensity
+    y *= intensity ** -1
 
     return x, y
