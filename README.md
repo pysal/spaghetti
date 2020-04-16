@@ -45,6 +45,7 @@ Using `conda`, `spaghetti` can be installed as follows:
 $ conda config --set channel_priority strict
 $ conda install --channel conda-forge spaghetti
 ```
+Also, `geopandas` provides [a nice example](https://geopandas.org/install.html#creating-a-new-environment) to create a fresh environment for working with spatial data.
 
 **Installing with [`PyPI`](https://pypi.org/project/spaghetti/)**
 ```
