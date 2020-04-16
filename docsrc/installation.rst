@@ -15,6 +15,8 @@ Using ``conda``, `spaghetti` can be installed as follows::
   $ conda config --set channel_priority strict
   $ conda install --channel conda-forge spaghetti
 
+Also, ``geopandas`` provides `a nice example`_ to create a fresh environment for working with spatial data.
+
 
 Installing with `Python Package Index`_
 ---------------------------------------
@@ -33,9 +35,6 @@ Installing with `Python Package Index`_
 
 When installing via ``pip``, you have to ensure that the required dependencies for `spaghetti` are installed on your operating system. Details on how to install these packages are linked here_. Using ``conda`` (above) avoids having to install the dependencies separately.
 
-Install the most current development version of `spaghetti` by running: ::
-
-  $ pip install git+https://github.com/pysal/spaghetti
 
 Development Version
 -------------------
@@ -52,6 +51,7 @@ You can  also fork_ the `pysal/spaghetti`_ repo and create a local clone of your
 .. _3.7: https://docs.python.org/3.7/
 .. _3.8: https://docs.python.org/3.8/
 .. _spaghetti-feedstock: https://github.com/conda-forge/spaghetti-feedstock
+.. _a nice example: https://geopandas.org/install.html#creating-a-new-environment
 .. _conda: https://docs.conda.io/en/latest/
 .. _conda-forge: https://conda-forge.org
 .. _Anaconda Distribution: https://docs.continuum.io/anaconda/
