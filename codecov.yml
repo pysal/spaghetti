@@ -1,7 +1,6 @@
 codecov:
   notify:
    after_n_builds: 24
-
 coverage:
   range: 50..95
   round: nearest
@@ -9,48 +8,19 @@ coverage:
   status:
     project:
       default:
-        against: parent
-        target: auto
         threshold: 2%
-        branches:
-        - master
-        if_no_uploads: error
-        if_not_found: success
-        if_ci_failed: error
-        only_pulls: false
-        flags:
-        - integration
-        paths:
-        - folder
     patch:
       default:
-        against: parent
+        threshold: 2%
         target: 80%
-        branches: null
-        if_no_uploads: success
-        if_not_found: success
-        if_ci_failed: error
-        only_pulls: false
-        flags:
-          - integration
-        paths:
-          - folder
     changes:
       default:
-        against: parent
-        branches: null
-        if_no_uploads: error
-        if_not_found: success
-        if_ci_failed: error
-        only_pulls: false
-        flags:
-          - integration
-        paths:
-          - folder
+        threshold: 2%
   ignore:
     - "tests/*"
 comment:
-  layout: "reach, diff, flags, files"
+  layout: "reach, diff, files"
   branches: *
-  behavior: default
+  behavior: once
   after_n_builds: 24
+  require_changes: true
