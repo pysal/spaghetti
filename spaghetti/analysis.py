@@ -16,18 +16,18 @@ class FuncBase(object):
     
     nsteps : int
         The number of steps at which the count of the nearest
-        neighbors is computed.
+        neighbors is computed. Default is 10.
         
     permutations : int
-        The number of permutations to perform. Default 99.
+        The number of permutations to perform. Default is 99.
     
     threshold : float
         The level at which significance is computed.
-        (0.5 would be 97.5% and 2.5%).
+        (0.5 would be 97.5% and 2.5%). Default is 0.5.
     
     distribution : str
         The distribution from which random points are sampled
-        Either ``"uniform"`` or ``"poisson"``.
+        Either ``"uniform"`` or ``"poisson"``. Default is ``"uniform"``.
     
     upperbound : float
         The upper bound at which the `K`-function is computed.
@@ -57,7 +57,7 @@ class FuncBase(object):
         nsteps=10,
         permutations=99,
         threshold=0.5,
-        distribution="poisson",
+        distribution="uniform",
         upperbound=None,
     ):
 
@@ -112,28 +112,14 @@ class FuncBase(object):
             self.upperbound = numpy.nanmax(nearest)
 
 
-class KFunc(FuncBase):
-    """Compute a network constrained `K` statistic. This requires the
-    capability to compute a distance matrix between two point patterns.
-    In this case one will be observed and one will be simulated.
-    
-    
-    Compute a network constrained `K` statistic. This requires the
-    capability to compute a distance matrix between two point patterns.
-    In this case one will be observed and one will be simulated....................................
-    
-    
+class GlobalAutoK(FuncBase):
+    """See full description in ``network.Network.GlobalAutoK()``.
     
     Attributes
     ----------
     
     lam : float
         The ``lambda`` value.
-    
-    Notes
-    -----
-    
-    Based on :cite:`Okabe2001`.
     
     """
 
@@ -148,8 +134,8 @@ class KFunc(FuncBase):
         # set the intensity (lambda)
         self.lam = self.npts / sum(self.ntw.arc_lengths.values())
 
-        # compute a K-Function
-        observedx, observedy = kfunction(
+        # compute a Global Auto K-Function
+        observedx, observedy = global_auto_k(
             self.npts, distances, self.upperbound, self.lam, nsteps=self.nsteps
         )
 
@@ -158,7 +144,7 @@ class KFunc(FuncBase):
         self.xaxis = observedx
 
     def computepermutations(self):
-        """Compute permutations of the points.
+        """Compute permutations (Monte Carlo simulation) of the points.
         """
 
         # for each round of permutations
@@ -172,8 +158,8 @@ class KFunc(FuncBase):
             # distances
             distances = self.ntw.allneighbordistances(sim)
 
-            # compute a K-Function
-            simx, simy = kfunction(
+            # compute a Global Auto K-Function
+            simx, simy = global_auto_k(
                 self.npts, distances, self.upperbound, self.lam, nsteps=self.nsteps
             )
 
@@ -181,7 +167,7 @@ class KFunc(FuncBase):
             self.sim[p] = simy
 
 
-def kfunction(n_obs, dists, upperbound, intensity, nsteps=10):
+def global_auto_k(n_obs, dists, upperbound, intensity, nsteps=10):
     """Compute a `K`-function.
 
     Parameters
