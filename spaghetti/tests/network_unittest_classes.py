@@ -711,7 +711,7 @@ class TestNetworkAnalysis(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_network_k(self):
+    def test_global_auto_k(self):
         known_lowerenvelope = numpy.array(
             [
                 0.0,
@@ -727,7 +727,7 @@ class TestNetworkAnalysis(unittest.TestCase):
             ]
         )
         numpy.random.seed(0)
-        obtained = self.ntw.NetworkK(
+        obtained = self.ntw.GlobalAutoK(
             self.ntw.pointpatterns[self.mids],
             permutations=self.test_permutations,
             nsteps=self.test_steps,
