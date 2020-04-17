@@ -713,7 +713,18 @@ class TestNetworkAnalysis(unittest.TestCase):
 
     def test_network_k(self):
         known_lowerenvelope = numpy.array(
-            [0.0, 4.5, 14.5, 29.5, 50.5, 68.5, 89.0, 113.0, 124.5, 130.0]
+            [
+                0.0,
+                0.1875,
+                0.60416667,
+                1.22916667,
+                2.10416667,
+                2.85416667,
+                3.70833333,
+                4.70833333,
+                5.1875,
+                5.41666667,
+            ]
         )
         numpy.random.seed(0)
         obtained = self.ntw.NetworkK(

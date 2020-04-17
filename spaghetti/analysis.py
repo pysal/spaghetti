@@ -150,7 +150,7 @@ class KFunc(FuncBase):
 
         # compute a K-Function
         observedx, observedy = kfunction(
-            distances, self.upperbound, self.lam, nsteps=self.nsteps
+            self.npts, distances, self.upperbound, self.lam, nsteps=self.nsteps
         )
 
         # set observed values
@@ -174,21 +174,24 @@ class KFunc(FuncBase):
 
             # compute a K-Function
             simx, simy = kfunction(
-                distances, self.upperbound, self.lam, nsteps=self.nsteps
+                self.npts, distances, self.upperbound, self.lam, nsteps=self.nsteps
             )
 
             # label the permutation
             self.sim[p] = simy
 
 
-def kfunction(dists, upperbound, intensity, nsteps=10):
+def kfunction(n_obs, dists, upperbound, intensity, nsteps=10):
     """Compute a `K`-function.
 
     Parameters
     ----------
     
+    n_obs : int
+        The number of observations. See ``self.npts``.
+    
     dists : numpy.ndarray
-        An array of all pairwise distances.
+        A matrix of pairwise distances.
     
     upperbound : int or float
         The end value of the sequence.
@@ -211,23 +214,20 @@ def kfunction(dists, upperbound, intensity, nsteps=10):
     
     """
 
-    # set observation count
-    nobs = len(dists)
-
     # create interval for x-axis
     x = numpy.linspace(0, upperbound, nsteps)
 
     # create empty y-axis vector
-    y = numpy.empty(len(x))
+    y = numpy.empty(x.shape[0])
 
     # iterate over x-axis interval
     for i, r in enumerate(x):
 
         # slice out and count neighbors within radius
         with numpy.errstate(invalid="ignore"):
-            y[i] = len(dists[dists <= r])
+            y[i] = dists[dists <= r].shape[0]
 
     # compute k for y-axis vector
-    y *= intensity ** -1
+    y /= n_obs * intensity
 
     return x, y
