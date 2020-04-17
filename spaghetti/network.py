@@ -4,7 +4,7 @@ import copy, os, pickle, warnings
 
 import numpy
 
-from .analysis import NetworkK
+from .analysis import GlobalAutoK
 from . import util
 from libpysal import cg, examples, weights
 from libpysal.common import requires
@@ -17,7 +17,7 @@ except ImportError:
     open = libpysal.io.open
 
 
-__all__ = ["Network", "PointPattern", "NetworkK"]
+__all__ = ["Network", "PointPattern", "GlobalAutoK"]
 
 SAME_SEGMENT = (-0.1, -0.1)
 
@@ -2513,7 +2513,7 @@ class Network:
 
         return split_network
 
-    def NetworkK(
+    def GlobalAutoK(
         self,
         pointpattern,
         nsteps=10,
@@ -2522,8 +2522,12 @@ class Network:
         distribution="uniform",
         upperbound=None,
     ):
-        r"""Compute a network constrained `K`-function.
-        
+        r"""Compute a global auto `K`-function based on a network constrained
+        cost matrix through `Monte Carlo simulation <https://en.wikipedia.org/wiki/Monte_Carlo_method>`_
+        according to the formulation adapted from
+        :cite:`doi:10.1002/9780470549094.ch5`. See the **Notes**
+        section for further description.
+
         Parameters
         ----------
         
@@ -2532,18 +2536,18 @@ class Network:
         
         nsteps : int
             The number of steps at which the count of the nearest
-            neighbors is computed.
+            neighbors is computed. Default is 10.
         
         permutations : int
             The number of permutations to perform. Default is 99.
         
         threshold : float
             The level at which significance is computed.
-            (0.5 would be 97.5% and 2.5%).
+            (0.5 would be 97.5% and 2.5%). Default is 0.5.
         
         distribution : str
             The distribution from which random points are sampled
-            Either ``"uniform"`` or ``"poisson"``.
+            Either ``"uniform"`` or ``"poisson"``. Default is ``"uniform"``.
         
         upperbound : float
             The upper bound at which the `K`-function is computed.
@@ -2552,17 +2556,47 @@ class Network:
         Returns
         -------
         
-        NetworkK : spaghetti.analysis.NetworkK
-            A network `K` class instance.
+        GlobalAutoK : spaghetti.analysis.GlobalAutoK
+            The global auto `K`-function class instance.
         
         Notes
         -----
         
-        Based on :cite:`Ripley1977`, :cite:`doi:10.1002/9780470549094.ch5`.
-        For further Network-`K` formulation see
+        The `K`-function can be formulated as:
+        
+        .. math::
+        
+           \displaystyle K(r)=\frac{\sum^n_{i=1} \#[\hat{A} \in D(a_i, r)]}{n\lambda},
+        
+        where $n$ is the set cardinality of $A$, $\\hat{A}$ is the subset of
+        observations in $A$ that are within $D$ units of distance from $a_i$
+        (each single observation in $A$), and $r$ is the range of distance
+        values over which the `K`-function is calculated. The $\\lambda$ term
+        is the intensity of observations along the network, calculated as:
+        
+        .. math::
+        
+           \displaystyle \lambda = \frac{n}{\big|N_{arcs}\big|},
+        
+        where $\\big|N_{arcs}\\big|$ is the summed length of network arcs.
+        The global auto `K`-function measures overall clustering in one set of
+        observations by comparing all intra-set distances over a range of
+        distance buffers $D \\in r$. The `K`-function improves upon 
+        nearest-neighbor distance measures through the analysis of all neighbor
+        distances. For an explanation on how to interpret the results of the
+        `K`-function see the `Spatial Network Analysis tutorial <https://pysal.org/spaghetti/notebooks/network-analysis.html>`_.
+        
+        For original implementation see :cite:`Ripley1976`
+        and :cite:`Ripley1977`.
+        For further Network-`K` formulations see
         :cite:`doi:10.1111/j.1538-4632.2001.tb00448.x`, 
         :cite:`doi:10.1002/9781119967101.ch6`, and
         :cite:`Baddeley2020`.
+        
+        See also
+        --------
+        
+        pointpats.K
         
         Examples
         --------
@@ -2578,23 +2612,19 @@ class Network:
         >>> pt_str = "schools"
         >>> in_data = examples.get_path(pt_str+".shp")
         >>> ntw.snapobservations(in_data, pt_str, attribute=True)
-        
-        Simulate observations along the network.
-        
         >>> schools = ntw.pointpatterns[pt_str]
-        >>> sim = ntw.simulate_observations(schools.npoints)
         
-        Compute a network constrained `K`-function of schools 
-        with ``5`` ``permutations`` and ``10`` ``nsteps``.
+        Compute a `K`-function from school observations
+        with ``99`` ``permutations`` at ``10`` intervals.
         
-        >>> kres = ntw.NetworkK(schools, permutations=5, nsteps=10)
+        >>> kres = ntw.GlobalAutoK(schools, permutations=99, nsteps=10)
         >>> kres.lowerenvelope.shape[0]
         10
         
         """
 
-        # call analysis.NetworkK
-        return NetworkK(
+        # call analysis.GlobalAutoK
+        return GlobalAutoK(
             self,
             pointpattern,
             nsteps=nsteps,
