@@ -265,6 +265,7 @@ intersphinx_mapping = {
     "networkx": ("https://networkx.github.io/documentation/stable/", None),
     "numpy": ("https://docs.scipy.org/doc/numpy", None),
     "pandas": ("https://pandas.pydata.org/pandas-docs/stable/", None),
+    "pointpats": ("https://pointpats.readthedocs.io/en/latest/", None),
     "python": ("https://docs.python.org/3.8/", None),
     "scipy": ("https://docs.scipy.org/doc/scipy/reference/", None),
 }
