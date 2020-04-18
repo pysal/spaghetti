@@ -74,7 +74,8 @@ class FuncBase(object):
 
         # create an empty array to store the simulated points
         self.sim = numpy.empty((permutations, nsteps))
-        self.npts = self.pointpattern.npoints
+        self.pts = self.pointpattern
+        self.npts = self.pts.npoints
 
         # set the upper bounds
         self.upperbound = upperbound
@@ -105,11 +106,11 @@ class FuncBase(object):
         self.upperenvelope = numpy.nanmax(self.sim, axis=0) * upper
         self.lowerenvelope = numpy.nanmin(self.sim, axis=0) * lower
 
-    def setbounds(self, nearest):
-        """set upper and lower bounds
+    def setbounds(self, distances):
+        """set upper bound
         """
         if self.upperbound is None:
-            self.upperbound = numpy.nanmax(nearest)
+            self.upperbound = numpy.nanmax(distances)
 
 
 class GlobalAutoK(FuncBase):
@@ -128,7 +129,8 @@ class GlobalAutoK(FuncBase):
         """
 
         # pairwise distances
-        distances = self.ntw.allneighbordistances(self.pointpattern)
+        distances = self.ntw.allneighbordistances(self.pointpattern, fill_diagonal=0.0)
+
         self.setbounds(distances)
 
         # set the intensity (lambda)
@@ -156,7 +158,7 @@ class GlobalAutoK(FuncBase):
             )
 
             # distances
-            distances = self.ntw.allneighbordistances(sim)
+            distances = self.ntw.allneighbordistances(sim, fill_diagonal=0.0)
 
             # compute a Global Auto K-Function
             simx, simy = global_auto_k(
@@ -203,15 +205,9 @@ def global_auto_k(n_obs, dists, upperbound, intensity, nsteps=10):
     # create interval for x-axis
     x = numpy.linspace(0, upperbound, nsteps)
 
-    # create empty y-axis vector
-    y = numpy.empty(x.shape[0])
-
-    # iterate over x-axis interval
-    for i, r in enumerate(x):
-
-        # slice out and count neighbors within radius
-        with numpy.errstate(invalid="ignore"):
-            y[i] = dists[dists <= r].shape[0]
+    # create empty y-axis vector and iterate over x-axis interval
+    # -- here we should also not consider self-neighbors (the diagonal)
+    y = numpy.array([dists[dists <= r].shape[0] - n_obs for r in x]).astype(float)
 
     # compute k for y-axis vector
     y /= n_obs * intensity
