@@ -1572,10 +1572,12 @@ class Network:
         # iterate over random distances created above
         for i, r in enumerate(nrandompts):
 
-            # take the first element of the index array (arc ID)
-            # where the random distance is less than that that of
-            # its value in `stops`
-            idx = numpy.where(r < stops)[0][0]
+            # take the first element of the index array (arc ID) where the
+            # random distance is greater than that of its value in `stops`
+            try:
+                idx = numpy.where(r < stops)[0][0]
+            except IndexError:
+                idx = int(stops[-2])
 
             # assign the simulated point to the ar
             assignment_arc = arcs_[idx]
