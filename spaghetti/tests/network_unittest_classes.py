@@ -703,15 +703,13 @@ class TestNetworkAnalysis(unittest.TestCase):
         self.mids = "mids"
         self.ntw.snapobservations(midpoints, self.mids)
         npts = self.ntw.pointpatterns[self.mids].npoints
-        numpy.random.seed(0)
-        self.ntw.simulate_observations(npts)
         self.test_permutations = 99
         self.test_steps = 10
 
     def tearDown(self):
         pass
 
-    def test_global_auto_k(self):
+    def test_global_auto_k_uniform(self):
         known_lowerenvelope = numpy.array(
             [
                 0.0,
@@ -731,9 +729,24 @@ class TestNetworkAnalysis(unittest.TestCase):
             self.ntw.pointpatterns[self.mids],
             permutations=self.test_permutations,
             nsteps=self.test_steps,
+            distribution="uniform",
         )
         self.assertEqual(obtained.lowerenvelope.shape[0], self.test_steps)
         numpy.testing.assert_allclose(obtained.lowerenvelope, known_lowerenvelope)
+
+    def test_global_auto_k_poisson(self):
+        known_upperenvelope = numpy.array(
+            [2.5, 2.5, 6.125, 6.125, 10.6875, 10.6875, 14.875, 14.875, 17.0625, 17.25]
+        )
+        numpy.random.seed(0)
+        obtained = self.ntw.GlobalAutoK(
+            self.ntw.pointpatterns[self.mids],
+            permutations=self.test_permutations,
+            nsteps=self.test_steps,
+            distribution="poisson",
+        )
+        self.assertEqual(obtained.upperenvelope.shape[0], self.test_steps)
+        numpy.testing.assert_allclose(obtained.upperenvelope, known_upperenvelope)
 
 
 # -------------------------------------------------------------------------------
