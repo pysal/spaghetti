@@ -1505,20 +1505,22 @@ class Network:
         ----------
         
         count : int
-            The number of points to create or mean of the distribution
-            if not ``"uniform"``.
+            The number of points to create.
         
         distribution : str
-            Either a ``"uniform"`` or ``"poisson"`` distribution of
-            random points. If ``"poisson"``, the distribution is
-            calculated from half the total network length.
+            A distribution of random points. Currently, the only
+            supported distribution is uniform.
         
         Returns
         -------
         
         random_pts : dict
-            Keys are the edge tuple. Values are lists of new
-            point coordinates.
+            Keys are the edge tuple. Values are lists of new point coordinates.
+        
+        See also
+        --------
+        
+        numpy.random.Generator.uniform
         
         Examples
         --------
@@ -1566,29 +1568,23 @@ class Network:
 
         # cumulative network length
         stops = numpy.cumsum(lengths)
-        totallength = stops[-1]
+        cumlen = stops[-1]
 
         # create lengths with a uniform distribution
-        if distribution == "uniform":
-            nrandompts = numpy.random.uniform(0, totallength, size=(count,))
-
-        # create lengths with a poisson distribution
-        elif distribution == "poisson":
-            # calculate poisson from half the network length
-            mid_length = totallength / 2.0
-            nrandompts = numpy.random.poisson(mid_length, size=(count,))
+        if distribution.lower() == "uniform":
+            nrandompts = numpy.random.uniform(0, cumlen, size=(count,))
+        else:
+            msg = "%s distribution not currently supported." % distribution
+            raise RuntimeError(msg)
 
         # iterate over random distances created above
         for i, r in enumerate(nrandompts):
 
             # take the first element of the index array (arc ID) where the
             # random distance is greater than that of its value in `stops`
-            try:
-                idx = numpy.where(r < stops)[0][0]
-            except IndexError:
-                idx = int(stops[-2])
+            idx = numpy.where(r < stops)[0][0]
 
-            # assign the simulated point to the ar
+            # assign the simulated point to the arc
             assignment_arc = arcs_[idx]
 
             # calculate and set the distance from the arc start
@@ -2570,8 +2566,8 @@ class Network:
             (0.5 would be 97.5% and 2.5%). Default is 0.5.
         
         distribution : str
-            The distribution from which random points are sampled
-            Either ``"uniform"`` or ``"poisson"``. Default is ``"uniform"``.
+            The distribution from which random points are sampled.
+            Currently, the only supported distribution is uniform.
         
         upperbound : float
             The upper bound at which the `K`-function is computed.

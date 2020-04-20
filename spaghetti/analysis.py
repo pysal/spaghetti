@@ -26,8 +26,8 @@ class FuncBase(object):
         (0.5 would be 97.5% and 2.5%). Default is 0.5.
     
     distribution : str
-        The distribution from which random points are sampled
-        Either ``"uniform"`` or ``"poisson"``. Default is ``"uniform"``.
+        The distribution from which random points are sampled.
+        Currently, the only supported distribution is uniform.
     
     upperbound : float
         The upper bound at which the `K`-function is computed.
@@ -69,7 +69,7 @@ class FuncBase(object):
         self.threshold = threshold
 
         # set and validate the distribution
-        self.distribution = distribution
+        self.distribution = distribution.lower()
         self.validatedistribution()
 
         # create an empty array to store the simulated points
@@ -91,10 +91,10 @@ class FuncBase(object):
         """enusure statistical distribution is supported
         """
 
-        valid_distributions = ["uniform", "poisson"]
-        assert self.distribution in valid_distributions, (
-            "Distribution not in %s" % valid_distributions
-        )
+        valid_distributions = ["uniform"]
+        if not self.distribution in valid_distributions:
+            msg = "%s distribution not currently supported." % self.distribution
+            raise RuntimeError(msg)
 
     def computeenvelope(self):
         """compute upper and lower bounds of envelope
