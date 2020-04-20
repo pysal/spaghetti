@@ -733,16 +733,15 @@ def _points_as_gdf(
         pts_dict = net.vertex_coords
 
     if pp_name:
-        pp = net.pointpatterns[pp_name]
+        try:
+            pp = net.pointpatterns[pp_name]
+        except KeyError:
+            err_msg = "Available point patterns are {}"
+            raise KeyError(err_msg.format(list(net.pointpatterns.keys())))
 
         # raw point pattern
         if not snapped:
-            try:
-                pp_pts = pp.points
-            except KeyError:
-                err_msg = "Available point patterns are {}"
-                raise KeyError(err_msg.format(list(net.pointpatterns.keys())))
-
+            pp_pts = pp.points
             n_pp_pts = range(len(pp_pts))
             pts_dict = {point: pp_pts[point]["coordinates"] for point in n_pp_pts}
 
