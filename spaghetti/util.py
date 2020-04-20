@@ -732,20 +732,23 @@ def _points_as_gdf(
     if vertices or vertices_for_arcs:
         pts_dict = net.vertex_coords
 
-    # raw point pattern
-    if pp_name and not snapped:
-        try:
-            pp_pts = net.pointpatterns[pp_name].points
-        except KeyError:
-            err_msg = "Available point patterns are {}"
-            raise KeyError(err_msg.format(list(net.pointpatterns.keys())))
+    if pp_name:
+        pp = net.pointpatterns[pp_name]
 
-        n_pp_pts = range(len(pp_pts))
-        pts_dict = {point: pp_pts[point]["coordinates"] for point in n_pp_pts}
+        # raw point pattern
+        if not snapped:
+            try:
+                pp_pts = pp.points
+            except KeyError:
+                err_msg = "Available point patterns are {}"
+                raise KeyError(err_msg.format(list(net.pointpatterns.keys())))
 
-    # snapped point pattern
-    elif pp_name and snapped:
-        pts_dict = net.pointpatterns[pp_name].snapped_coordinates
+            n_pp_pts = range(len(pp_pts))
+            pts_dict = {point: pp_pts[point]["coordinates"] for point in n_pp_pts}
+
+        # snapped point pattern
+        else:
+            pts_dict = pp.snapped_coordinates
 
     # instantiate geopandas.GeoDataFrame
     pts_list = list(pts_dict.items())
@@ -753,11 +756,18 @@ def _points_as_gdf(
     points.geometry = points.geometry.apply(lambda p: Point(p))
 
     # additional columns
-    ncv_tag = "network_component_vertices"
-    if hasattr(net, ncv_tag):
-        ncv = getattr(net, ncv_tag)
-        ncv_map = {v: k for k, verts in ncv.items() for v in verts}
-        points["comp_label"] = points[id_col].map(ncv_map)
+    if not pp_name:
+        ncv_tag = "network_component_vertices"
+        if hasattr(net, ncv_tag):
+            ncv = getattr(net, ncv_tag)
+            ncv_map = {v: k for k, verts in ncv.items() for v in verts}
+            points["comp_label"] = points[id_col].map(ncv_map)
+    if pp_name:
+        c2o_tag = "component_to_obs"
+        if hasattr(pp, c2o_tag):
+            c2o = getattr(pp, c2o_tag)
+            o2c_map = {o: c for c, obs in c2o.items() for o in obs}
+            points["comp_label"] = points[id_col].map(o2c_map)
 
     return points
 

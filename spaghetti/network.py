@@ -1352,8 +1352,17 @@ class Network:
             obs_to_vertex[k[0]] = keys
             obs_to_vertex[k[1]] = keys
 
+        # iterate over components and assign observations
+        component_to_obs = {}
+        for comp, _arcids in self.network_component2arc.items():
+            component_to_obs[comp] = []
+            for lk, odict in obs_to_arc.items():
+                if lk in _arcids:
+                    component_to_obs[comp].extend(list(odict.keys()))
+
         # set crosswalks as attributes of the `pointpattern` class
         pointpattern.obs_to_arc = obs_to_arc
+        pointpattern.component_to_obs = component_to_obs
         pointpattern.dist_to_vertex = dist_to_vertex
         pointpattern.dist_snapped = dist_snapped
         pointpattern.obs_to_vertex = list(obs_to_vertex)
@@ -2360,7 +2369,7 @@ class Network:
 
         return paths
 
-    def split_arcs(self, distance):
+    def split_arcs(self, distance, w_components=True):
         """Split all of the arcs in the network at a fixed distance.
         
         Parameters
@@ -2368,6 +2377,10 @@ class Network:
         
         distance : float
             The distance at which arcs are split.
+        
+        w_components : bool
+            Set to ``False`` to not record connected components from a
+            ``libpysal.weights.W`` object. Default is ``True``.
         
         Returns
         -------
@@ -2508,6 +2521,15 @@ class Network:
         # remove the old arcs the network
         split_network.arcs.difference_update(remove_arcs)
         split_network.arcs = list(split_network.arcs)
+
+        # extract connected components
+        if w_components:
+
+            # extract contiguity weights from libpysal
+            split_network.w_network = split_network.contiguityweights(graph=False)
+
+            # identify connected components from the `w_network`
+            split_network.identify_components(split_network.w_network, graph=False)
 
         # update the snapped point pattern
         for instance in split_network.pointpatterns.values():
