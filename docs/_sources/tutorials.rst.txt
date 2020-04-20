@@ -9,6 +9,7 @@ Tutorials
     :caption: Basic functionality:
 
     notebooks/quickstart.ipynb
+    notebooks/pointpattern-attributes.ipynb
     notebooks/connected-components.ipynb
     notebooks/shortest-path-visualization.ipynb
     

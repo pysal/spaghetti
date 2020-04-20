@@ -72,6 +72,7 @@
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pointpattern-attributes.html">Network point pattern attributes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="connected-components.html">Connected components in a spatial network</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shortest-path-visualization.html">Generating regular lattices and visualizing shortest paths</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Spatial network analysis</a></li>
@@ -124,8 +125,9 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#7.-Simulate-a-point-pattern-on-the-network">7. Simulate a point pattern on the network</a></li>
-<li><a class="reference internal" href="#8.-Network-constrained-observation-cluster-testing">8. Network-constrained observation cluster testing</a><ul>
-<li><a class="reference internal" href="#K-function"><em>K</em>-function</a></li>
+<li><a class="reference internal" href="#8.-Network-constrained-observation-cluster-testing-—-K-function">8. Network-constrained observation cluster testing — <em>K</em> function</a><ul>
+<li><a class="reference internal" href="#Results-plotting-helper">Results plotting helper</a></li>
+<li><a class="reference internal" href="#Global-Auto-K-function">Global Auto <em>K</em>-function</a></li>
 </ul>
 </li>
 </ul>
@@ -413,7 +415,7 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-04-11T21:24:16-04:00
+2020-04-19T22:21:55-04:00
 
 CPython 3.7.3
 IPython 7.10.2
@@ -454,10 +456,10 @@ interpreter: 64bit
 <div class="highlight"><pre>
 watermark 2.0.2
 esda                2.2.1
+matplotlib          3.1.2
+libpysal            4.2.2
 matplotlib_scalebar 0.6.1
 spaghetti           1.4.2.post2
-libpysal            4.2.2
-matplotlib          3.1.2
 numpy               1.18.1
 
 </pre></div></div>
@@ -497,7 +499,7 @@ numpy               1.18.1
 <h2>2. Allocating observations (snapping points) to a network:<a class="headerlink" href="#2.-Allocating-observations-(snapping-points)-to-a-network:" title="Permalink to this headline">¶</a></h2>
 <p><strong>A network is composed of a single topological representation of network elements (arcs and vertices) to which point patterns may be snapped.</strong></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -514,13 +516,13 @@ numpy               1.18.1
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x121403d30&gt;,
- &#39;schools&#39;: &lt;spaghetti.network.PointPattern at 0x106f11be0&gt;}
+{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x131fbafd0&gt;,
+ &#39;schools&#39;: &lt;spaghetti.network.PointPattern at 0x1110e9b38&gt;}
 </pre></div></div>
 </div>
 <p><strong>Attributes for every point pattern</strong></p>
@@ -934,21 +936,453 @@ numpy               1.18.1
 </div>
 </div>
 <hr class="docutils" />
-<div class="section" id="8.-Network-constrained-observation-cluster-testing">
-<h2>8. Network-constrained observation cluster testing<a class="headerlink" href="#8.-Network-constrained-observation-cluster-testing" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="K-function">
-<h3><em>K</em>-function<a class="headerlink" href="#K-function" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="8.-Network-constrained-observation-cluster-testing-—-K-function">
+<h2>8. Network-constrained observation cluster testing — <em>K</em> function<a class="headerlink" href="#8.-Network-constrained-observation-cluster-testing-—-K-function" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="Results-plotting-helper">
+<h3>Results plotting helper<a class="headerlink" href="#Results-plotting-helper" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[127]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">kres</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">NetworkK</span><span class="p">(</span><span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;crimes&quot;</span><span class="p">],</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">99</span><span class="p">)</span>
+<span></span><span class="k">def</span> <span class="nf">plot_k</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">obs_name</span><span class="p">):</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">arr</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+    <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">k</span><span class="o">.</span><span class="n">observed</span><span class="p">,</span> <span class="s2">&quot;b-&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Observed&quot;</span><span class="p">)</span>
+    <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">k</span><span class="o">.</span><span class="n">upperenvelope</span><span class="p">,</span> <span class="s2">&quot;r--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Upper&quot;</span><span class="p">)</span>
+    <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">k</span><span class="o">.</span><span class="n">lowerenvelope</span><span class="p">,</span> <span class="s2">&quot;k--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Lower&quot;</span><span class="p">)</span>
+    <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;x-large&quot;</span><span class="p">)</span>
+    <span class="n">title_text</span> <span class="o">=</span> <span class="s2">&quot;Global Auto $K$ Function: </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">obs_name</span>
+    <span class="n">title_text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> steps, </span><span class="si">%s</span><span class="s2"> permutations,&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">nsteps</span><span class="p">,</span> <span class="n">k</span><span class="o">.</span><span class="n">permutations</span><span class="p">)</span>
+    <span class="n">title_text</span> <span class="o">+=</span> <span class="s2">&quot; </span><span class="si">%s</span><span class="s2"> distribution&quot;</span> <span class="o">%</span> <span class="n">k</span><span class="o">.</span><span class="n">distribution</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">title_text</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;xx-large&quot;</span><span class="p">)</span>
+    <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Distance $(r)$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;x-large&quot;</span><span class="p">)</span>
+    <span class="c1">#arr[0].ylabel(&quot;$K(r)$&quot;, fontsize=&quot;x-large&quot;)</span>
+    <span class="c1">#arr[0].set(xlabel=&#39;x-label&#39;, ylabel=&#39;y-label&#39;)</span>
+
+    <span class="n">base</span> <span class="o">=</span> <span class="n">arcs_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+    <span class="n">crimes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+    <span class="n">crimes_snapped</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+    <span class="c1"># add scale bar</span>
+    <span class="n">scalebar</span> <span class="o">=</span> <span class="n">ScaleBar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
+    <span class="n">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">scalebar</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[128]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">crimes</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="o">=</span><span class="s2">&quot;crimes&quot;</span><span class="p">)</span>
+<span class="n">crimes_snapped</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="o">=</span><span class="s2">&quot;crimes&quot;</span><span class="p">,</span> <span class="n">snapped</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[129]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">base</span> <span class="o">=</span> <span class="n">arcs_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+<span class="n">crimes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+<span class="n">crimes_snapped</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+<span class="c1"># add scale bar</span>
+<span class="n">scalebar</span> <span class="o">=</span> <span class="n">ScaleBar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
+<span class="n">base</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">scalebar</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<a class="reference internal image-reference" href="../_images/notebooks_network-analysis_45_0.png"><img alt="../_images/notebooks_network-analysis_45_0.png" src="../_images/notebooks_network-analysis_45_0.png" style="width: 720px; height: 683px;" /></a>
+</div>
+</div>
+</div>
+<div class="section" id="Global-Auto-K-function">
+<h3>Global Auto <em>K</em>-function<a class="headerlink" href="#Global-Auto-K-function" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[130]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">kres</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">GlobalAutoK</span><span class="p">(</span>
+    <span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;crimes&quot;</span><span class="p">],</span>
+    <span class="n">nsteps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">permutations</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">plot_k</span><span class="p">(</span><span class="n">kres</span><span class="p">,</span> <span class="s2">&quot;crimes&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<a class="reference internal image-reference" href="../_images/notebooks_network-analysis_47_0.png"><img alt="../_images/notebooks_network-analysis_47_0.png" src="../_images/notebooks_network-analysis_47_0.png" style="width: 852px; height: 461px;" /></a>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">schools</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="o">=</span><span class="s2">&quot;schools&quot;</span><span class="p">)</span>
+<span class="n">schools</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;schools&quot;</span>
+<span class="n">schools</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>geometry</th>
+      <th>comp_label</th>
+    </tr>
+    <tr>
+      <th>schools</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>POINT (727082.046 879863.261)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>POINT (725464.969 879693.983)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>POINT (726621.130 876600.146)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>POINT (723269.665 879549.791)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>POINT (725837.553 878229.296)</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">schools_snapped</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="o">=</span><span class="s2">&quot;schools&quot;</span><span class="p">,</span> <span class="n">snapped</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">schools_snapped</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;schools snapped&quot;</span>
+<span class="n">schools_snapped</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>geometry</th>
+      <th>comp_label</th>
+    </tr>
+    <tr>
+      <th>schools snapped</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>POINT (727287.664 879867.386)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>POINT (725237.927 879690.960)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>POINT (726791.239 876598.222)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>POINT (723438.886 879551.335)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>POINT (726023.634 878229.448)</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">base</span> <span class="o">=</span> <span class="n">arcs_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+<span class="n">schools</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+<span class="n">schools_snapped</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+<span class="c1"># add scale bar</span>
+<span class="n">scalebar</span> <span class="o">=</span> <span class="n">ScaleBar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
+<span class="n">base</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">scalebar</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<a class="reference internal image-reference" href="../_images/notebooks_network-analysis_50_0.png"><img alt="../_images/notebooks_network-analysis_50_0.png" src="../_images/notebooks_network-analysis_50_0.png" style="width: 720px; height: 683px;" /></a>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">kres</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">GlobalAutoK</span><span class="p">(</span>
+    <span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;schools&quot;</span><span class="p">],</span>
+    <span class="n">nsteps</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">permutations</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">plot_k</span><span class="p">(</span><span class="n">kres</span><span class="p">,</span> <span class="s2">&quot;schools&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<a class="reference internal image-reference" href="../_images/notebooks_network-analysis_51_0.png"><img alt="../_images/notebooks_network-analysis_51_0.png" src="../_images/notebooks_network-analysis_51_0.png" style="width: 518px; height: 522px;" /></a>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">kres</span><span class="o">.</span><span class="n">upperbound</span><span class="p">,</span> <span class="n">kres</span><span class="o">.</span><span class="n">nsteps</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([   0.        ,   63.07732064,  126.15464127,  189.23196191,
+        252.30928254,  315.38660318,  378.46392382,  441.54124445,
+        504.61856509,  567.69588572,  630.77320636,  693.850527  ,
+        756.92784763,  820.00516827,  883.0824889 ,  946.15980954,
+       1009.23713017, 1072.31445081, 1135.39177145, 1198.46909208,
+       1261.54641272, 1324.62373335, 1387.70105399, 1450.77837463,
+       1513.85569526, 1576.9330159 , 1640.01033653, 1703.08765717,
+       1766.16497781, 1829.24229844, 1892.31961908, 1955.39693971,
+       2018.47426035, 2081.55158099, 2144.62890162, 2207.70622226,
+       2270.78354289, 2333.86086353, 2396.93818417, 2460.0155048 ,
+       2523.09282544, 2586.17014607, 2649.24746671, 2712.32478735,
+       2775.40210798, 2838.47942862, 2901.55674925, 2964.63406989,
+       3027.71139052, 3090.78871116, 3153.8660318 , 3216.94335243,
+       3280.02067307, 3343.0979937 , 3406.17531434, 3469.25263498,
+       3532.32995561, 3595.40727625, 3658.48459688, 3721.56191752,
+       3784.63923816, 3847.71655879, 3910.79387943, 3973.87120006,
+       4036.9485207 , 4100.02584134, 4163.10316197, 4226.18048261,
+       4289.25780324, 4352.33512388, 4415.41244452, 4478.48976515,
+       4541.56708579, 4604.64440642, 4667.72172706, 4730.7990477 ,
+       4793.87636833, 4856.95368897, 4920.0310096 , 4983.10833024,
+       5046.18565087, 5109.26297151, 5172.34029215, 5235.41761278,
+       5298.49493342, 5361.57225405, 5424.64957469, 5487.72689533,
+       5550.80421596, 5613.8815366 , 5676.95885723, 5740.03617787,
+       5803.11349851, 5866.19081914, 5929.26813978, 5992.34546041,
+       6055.42278105, 6118.50010169, 6181.57742232, 6244.65474296])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">kres</span><span class="o">.</span><span class="n">lam</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+7.661801051671557e-05
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;crimes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">npoints</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+287
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">lower</span> <span class="o">=</span> <span class="n">threshold</span> <span class="o">/</span> <span class="mf">2.0</span>
+<span class="n">lower</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-35-b524fa8007f4&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>lower <span class="ansi-blue-fg">=</span> threshold <span class="ansi-blue-fg">/</span> <span class="ansi-cyan-fg">2.0</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> lower
+
+<span class="ansi-red-fg">NameError</span>: name &#39;threshold&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">sim</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">numpy</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">upper</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">numpy</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">lower</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">kres</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">GlobalAutoK</span><span class="p">(</span><span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;crimes&quot;</span><span class="p">],</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">99</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -960,13 +1394,6 @@ numpy               1.18.1
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Network K Function&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;xx-large&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_network-analysis_43_0.png"><img alt="../_images/notebooks_network-analysis_43_0.png" src="../_images/notebooks_network-analysis_43_0.png" style="width: 483px; height: 484px;" /></a>
 </div>
 </div>
 </div>

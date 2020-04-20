@@ -70,6 +70,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials.html">Tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../notebooks/quickstart.html">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../notebooks/pointpattern-attributes.html">Network point pattern attributes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../notebooks/connected-components.html">Connected components in a spatial network</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../notebooks/shortest-path-visualization.html">Generating regular lattices and visualizing shortest paths</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../notebooks/network-analysis.html">Spatial network analysis</a></li>
@@ -135,7 +136,7 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span>
 
-<span class="kn">from</span> <span class="nn">.analysis</span> <span class="kn">import</span> <span class="n">NetworkK</span>
+<span class="kn">from</span> <span class="nn">.analysis</span> <span class="kn">import</span> <span class="n">GlobalAutoK</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">util</span>
 <span class="kn">from</span> <span class="nn">libpysal</span> <span class="kn">import</span> <span class="n">cg</span><span class="p">,</span> <span class="n">examples</span><span class="p">,</span> <span class="n">weights</span>
 <span class="kn">from</span> <span class="nn">libpysal.common</span> <span class="kn">import</span> <span class="n">requires</span>
@@ -148,7 +149,7 @@
     <span class="nb">open</span> <span class="o">=</span> <span class="n">libpysal</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">open</span>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Network&quot;</span><span class="p">,</span> <span class="s2">&quot;PointPattern&quot;</span><span class="p">,</span> <span class="s2">&quot;NetworkK&quot;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Network&quot;</span><span class="p">,</span> <span class="s2">&quot;PointPattern&quot;</span><span class="p">,</span> <span class="s2">&quot;GlobalAutoK&quot;</span><span class="p">]</span>
 
 <span class="n">SAME_SEGMENT</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">)</span>
 
@@ -1483,8 +1484,17 @@
             <span class="n">obs_to_vertex</span><span class="p">[</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">keys</span>
             <span class="n">obs_to_vertex</span><span class="p">[</span><span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">keys</span>
 
+        <span class="c1"># iterate over components and assign observations</span>
+        <span class="n">component_to_obs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">comp</span><span class="p">,</span> <span class="n">_arcids</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_component2arc</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">component_to_obs</span><span class="p">[</span><span class="n">comp</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">lk</span><span class="p">,</span> <span class="n">odict</span> <span class="ow">in</span> <span class="n">obs_to_arc</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">lk</span> <span class="ow">in</span> <span class="n">_arcids</span><span class="p">:</span>
+                    <span class="n">component_to_obs</span><span class="p">[</span><span class="n">comp</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">odict</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+
         <span class="c1"># set crosswalks as attributes of the `pointpattern` class</span>
         <span class="n">pointpattern</span><span class="o">.</span><span class="n">obs_to_arc</span> <span class="o">=</span> <span class="n">obs_to_arc</span>
+        <span class="n">pointpattern</span><span class="o">.</span><span class="n">component_to_obs</span> <span class="o">=</span> <span class="n">component_to_obs</span>
         <span class="n">pointpattern</span><span class="o">.</span><span class="n">dist_to_vertex</span> <span class="o">=</span> <span class="n">dist_to_vertex</span>
         <span class="n">pointpattern</span><span class="o">.</span><span class="n">dist_snapped</span> <span class="o">=</span> <span class="n">dist_snapped</span>
         <span class="n">pointpattern</span><span class="o">.</span><span class="n">obs_to_vertex</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">obs_to_vertex</span><span class="p">)</span>
@@ -1627,20 +1637,22 @@
 <span class="sd">        ----------</span>
 <span class="sd">        </span>
 <span class="sd">        count : int</span>
-<span class="sd">            The number of points to create or mean of the distribution</span>
-<span class="sd">            if not ``&quot;uniform&quot;``.</span>
+<span class="sd">            The number of points to create.</span>
 <span class="sd">        </span>
 <span class="sd">        distribution : str</span>
-<span class="sd">            Either a ``&quot;uniform&quot;`` or ``&quot;poisson&quot;`` distribution of</span>
-<span class="sd">            random points. If ``&quot;poisson&quot;``, the distribution is</span>
-<span class="sd">            calculated from half the total network length.</span>
+<span class="sd">            A distribution of random points. Currently, the only</span>
+<span class="sd">            supported distribution is uniform.</span>
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        </span>
 <span class="sd">        random_pts : dict</span>
-<span class="sd">            Keys are the edge tuple. Values are lists of new</span>
-<span class="sd">            point coordinates.</span>
+<span class="sd">            Keys are the edge tuple. Values are lists of new point coordinates.</span>
+<span class="sd">        </span>
+<span class="sd">        See also</span>
+<span class="sd">        --------</span>
+<span class="sd">        </span>
+<span class="sd">        numpy.random.Generator.uniform</span>
 <span class="sd">        </span>
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
@@ -1688,27 +1700,23 @@
 
         <span class="c1"># cumulative network length</span>
         <span class="n">stops</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">lengths</span><span class="p">)</span>
-        <span class="n">totallength</span> <span class="o">=</span> <span class="n">stops</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">cumlen</span> <span class="o">=</span> <span class="n">stops</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="c1"># create lengths with a uniform distribution</span>
-        <span class="k">if</span> <span class="n">distribution</span> <span class="o">==</span> <span class="s2">&quot;uniform&quot;</span><span class="p">:</span>
-            <span class="n">nrandompts</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">totallength</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">count</span><span class="p">,))</span>
-
-        <span class="c1"># create lengths with a poisson distribution</span>
-        <span class="k">elif</span> <span class="n">distribution</span> <span class="o">==</span> <span class="s2">&quot;poisson&quot;</span><span class="p">:</span>
-            <span class="c1"># calculate poisson from half the network length</span>
-            <span class="n">mid_length</span> <span class="o">=</span> <span class="n">totallength</span> <span class="o">/</span> <span class="mf">2.0</span>
-            <span class="n">nrandompts</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">poisson</span><span class="p">(</span><span class="n">mid_length</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">count</span><span class="p">,))</span>
+        <span class="k">if</span> <span class="n">distribution</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;uniform&quot;</span><span class="p">:</span>
+            <span class="n">nrandompts</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">cumlen</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">count</span><span class="p">,))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> distribution not currently supported.&quot;</span> <span class="o">%</span> <span class="n">distribution</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
         <span class="c1"># iterate over random distances created above</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nrandompts</span><span class="p">):</span>
 
-            <span class="c1"># take the first element of the index array (arc ID)</span>
-            <span class="c1"># where the random distance is less than that that of</span>
-            <span class="c1"># its value in `stops`</span>
+            <span class="c1"># take the first element of the index array (arc ID) where the</span>
+            <span class="c1"># random distance is greater than that of its value in `stops`</span>
             <span class="n">idx</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">r</span> <span class="o">&lt;</span> <span class="n">stops</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
-            <span class="c1"># assign the simulated point to the ar</span>
+            <span class="c1"># assign the simulated point to the arc</span>
             <span class="n">assignment_arc</span> <span class="o">=</span> <span class="n">arcs_</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
 
             <span class="c1"># calculate and set the distance from the arc start</span>
@@ -2489,7 +2497,7 @@
 
         <span class="k">return</span> <span class="n">paths</span></div>
 
-<div class="viewcode-block" id="Network.split_arcs"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.split_arcs">[docs]</a>    <span class="k">def</span> <span class="nf">split_arcs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.split_arcs"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.split_arcs">[docs]</a>    <span class="k">def</span> <span class="nf">split_arcs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">w_components</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Split all of the arcs in the network at a fixed distance.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
@@ -2497,6 +2505,10 @@
 <span class="sd">        </span>
 <span class="sd">        distance : float</span>
 <span class="sd">            The distance at which arcs are split.</span>
+<span class="sd">        </span>
+<span class="sd">        w_components : bool</span>
+<span class="sd">            Set to ``False`` to not record connected components from a</span>
+<span class="sd">            ``libpysal.weights.W`` object. Default is ``True``.</span>
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -2638,13 +2650,22 @@
         <span class="n">split_network</span><span class="o">.</span><span class="n">arcs</span><span class="o">.</span><span class="n">difference_update</span><span class="p">(</span><span class="n">remove_arcs</span><span class="p">)</span>
         <span class="n">split_network</span><span class="o">.</span><span class="n">arcs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">split_network</span><span class="o">.</span><span class="n">arcs</span><span class="p">)</span>
 
+        <span class="c1"># extract connected components</span>
+        <span class="k">if</span> <span class="n">w_components</span><span class="p">:</span>
+
+            <span class="c1"># extract contiguity weights from libpysal</span>
+            <span class="n">split_network</span><span class="o">.</span><span class="n">w_network</span> <span class="o">=</span> <span class="n">split_network</span><span class="o">.</span><span class="n">contiguityweights</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="c1"># identify connected components from the `w_network`</span>
+            <span class="n">split_network</span><span class="o">.</span><span class="n">identify_components</span><span class="p">(</span><span class="n">split_network</span><span class="o">.</span><span class="n">w_network</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
         <span class="c1"># update the snapped point pattern</span>
         <span class="k">for</span> <span class="n">instance</span> <span class="ow">in</span> <span class="n">split_network</span><span class="o">.</span><span class="n">pointpatterns</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="n">split_network</span><span class="o">.</span><span class="n">_snap_to_link</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">split_network</span></div>
 
-<div class="viewcode-block" id="Network.NetworkK"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.NetworkK">[docs]</a>    <span class="k">def</span> <span class="nf">NetworkK</span><span class="p">(</span>
+<div class="viewcode-block" id="Network.GlobalAutoK"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.GlobalAutoK">[docs]</a>    <span class="k">def</span> <span class="nf">GlobalAutoK</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">pointpattern</span><span class="p">,</span>
         <span class="n">nsteps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
@@ -2653,8 +2674,12 @@
         <span class="n">distribution</span><span class="o">=</span><span class="s2">&quot;uniform&quot;</span><span class="p">,</span>
         <span class="n">upperbound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Compute a network constrained `K`-function.</span>
-<span class="sd">        </span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Compute a global auto `K`-function based on a network constrained</span>
+<span class="sd">        cost matrix through `Monte Carlo simulation &lt;https://en.wikipedia.org/wiki/Monte_Carlo_method&gt;`_</span>
+<span class="sd">        according to the formulation adapted from</span>
+<span class="sd">        :cite:`doi:10.1002/9780470549094.ch5`. See the **Notes**</span>
+<span class="sd">        section for further description.</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        </span>
@@ -2663,18 +2688,18 @@
 <span class="sd">        </span>
 <span class="sd">        nsteps : int</span>
 <span class="sd">            The number of steps at which the count of the nearest</span>
-<span class="sd">            neighbors is computed.</span>
+<span class="sd">            neighbors is computed. Default is 10.</span>
 <span class="sd">        </span>
 <span class="sd">        permutations : int</span>
 <span class="sd">            The number of permutations to perform. Default is 99.</span>
 <span class="sd">        </span>
 <span class="sd">        threshold : float</span>
 <span class="sd">            The level at which significance is computed.</span>
-<span class="sd">            (0.5 would be 97.5% and 2.5%).</span>
+<span class="sd">            (0.5 would be 97.5% and 2.5%). Default is 0.5.</span>
 <span class="sd">        </span>
 <span class="sd">        distribution : str</span>
-<span class="sd">            The distribution from which random points are sampled</span>
-<span class="sd">            Either ``&quot;uniform&quot;`` or ``&quot;poisson&quot;``.</span>
+<span class="sd">            The distribution from which random points are sampled.</span>
+<span class="sd">            Currently, the only supported distribution is uniform.</span>
 <span class="sd">        </span>
 <span class="sd">        upperbound : float</span>
 <span class="sd">            The upper bound at which the `K`-function is computed.</span>
@@ -2683,17 +2708,47 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        </span>
-<span class="sd">        NetworkK : spaghetti.analysis.NetworkK</span>
-<span class="sd">            A network `K` class instance.</span>
+<span class="sd">        GlobalAutoK : spaghetti.analysis.GlobalAutoK</span>
+<span class="sd">            The global auto `K`-function class instance.</span>
 <span class="sd">        </span>
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 <span class="sd">        </span>
-<span class="sd">        Based on :cite:`Ripley1977`, :cite:`doi:10.1002/9780470549094.ch5`.</span>
-<span class="sd">        For further Network-`K` formulation see</span>
+<span class="sd">        The `K`-function can be formulated as:</span>
+<span class="sd">        </span>
+<span class="sd">        .. math::</span>
+<span class="sd">        </span>
+<span class="sd">           \displaystyle K(r)=\frac{\sum^n_{i=1} \#[\hat{A} \in D(a_i, r)]}{n\lambda},</span>
+<span class="sd">        </span>
+<span class="sd">        where $n$ is the set cardinality of $A$, $\\hat{A}$ is the subset of</span>
+<span class="sd">        observations in $A$ that are within $D$ units of distance from $a_i$</span>
+<span class="sd">        (each single observation in $A$), and $r$ is the range of distance</span>
+<span class="sd">        values over which the `K`-function is calculated. The $\\lambda$ term</span>
+<span class="sd">        is the intensity of observations along the network, calculated as:</span>
+<span class="sd">        </span>
+<span class="sd">        .. math::</span>
+<span class="sd">        </span>
+<span class="sd">           \displaystyle \lambda = \frac{n}{\big|N_{arcs}\big|},</span>
+<span class="sd">        </span>
+<span class="sd">        where $\\big|N_{arcs}\\big|$ is the summed length of network arcs.</span>
+<span class="sd">        The global auto `K`-function measures overall clustering in one set of</span>
+<span class="sd">        observations by comparing all intra-set distances over a range of</span>
+<span class="sd">        distance buffers $D \\in r$. The `K`-function improves upon </span>
+<span class="sd">        nearest-neighbor distance measures through the analysis of all neighbor</span>
+<span class="sd">        distances. For an explanation on how to interpret the results of the</span>
+<span class="sd">        `K`-function see the `Spatial Network Analysis tutorial &lt;https://pysal.org/spaghetti/notebooks/network-analysis.html&gt;`_.</span>
+<span class="sd">        </span>
+<span class="sd">        For original implementation see :cite:`Ripley1976`</span>
+<span class="sd">        and :cite:`Ripley1977`.</span>
+<span class="sd">        For further Network-`K` formulations see</span>
 <span class="sd">        :cite:`doi:10.1111/j.1538-4632.2001.tb00448.x`, </span>
 <span class="sd">        :cite:`doi:10.1002/9781119967101.ch6`, and</span>
 <span class="sd">        :cite:`Baddeley2020`.</span>
+<span class="sd">        </span>
+<span class="sd">        See also</span>
+<span class="sd">        --------</span>
+<span class="sd">        </span>
+<span class="sd">        pointpats.K</span>
 <span class="sd">        </span>
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
@@ -2709,23 +2764,19 @@
 <span class="sd">        &gt;&gt;&gt; pt_str = &quot;schools&quot;</span>
 <span class="sd">        &gt;&gt;&gt; in_data = examples.get_path(pt_str+&quot;.shp&quot;)</span>
 <span class="sd">        &gt;&gt;&gt; ntw.snapobservations(in_data, pt_str, attribute=True)</span>
-<span class="sd">        </span>
-<span class="sd">        Simulate observations along the network.</span>
-<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; schools = ntw.pointpatterns[pt_str]</span>
-<span class="sd">        &gt;&gt;&gt; sim = ntw.simulate_observations(schools.npoints)</span>
 <span class="sd">        </span>
-<span class="sd">        Compute a network constrained `K`-function of schools </span>
-<span class="sd">        with ``5`` ``permutations`` and ``10`` ``nsteps``.</span>
+<span class="sd">        Compute a `K`-function from school observations</span>
+<span class="sd">        with ``99`` ``permutations`` at ``10`` intervals.</span>
 <span class="sd">        </span>
-<span class="sd">        &gt;&gt;&gt; kres = ntw.NetworkK(schools, permutations=5, nsteps=10)</span>
+<span class="sd">        &gt;&gt;&gt; kres = ntw.GlobalAutoK(schools, permutations=99, nsteps=10)</span>
 <span class="sd">        &gt;&gt;&gt; kres.lowerenvelope.shape[0]</span>
 <span class="sd">        10</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="c1"># call analysis.NetworkK</span>
-        <span class="k">return</span> <span class="n">NetworkK</span><span class="p">(</span>
+        <span class="c1"># call analysis.GlobalAutoK</span>
+        <span class="k">return</span> <span class="n">GlobalAutoK</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">pointpattern</span><span class="p">,</span>
             <span class="n">nsteps</span><span class="o">=</span><span class="n">nsteps</span><span class="p">,</span>

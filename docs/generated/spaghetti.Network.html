@@ -72,6 +72,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../notebooks/quickstart.html">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/pointpattern-attributes.html">Network point pattern attributes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../notebooks/connected-components.html">Connected components in a spatial network</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../notebooks/shortest-path-visualization.html">Generating regular lattices and visualizing shortest paths</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../notebooks/network-analysis.html">Spatial network analysis</a></li>
@@ -374,8 +375,8 @@ necessarily equal to <code class="docutils literal notranslate"><span class="pre
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#spaghetti.Network.NetworkK" title="spaghetti.Network.NetworkK"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NetworkK</span></code></a>(self, pointpattern[, nsteps, …])</p></td>
-<td><p>Compute a network constrained <cite>K</cite>-function.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#spaghetti.Network.GlobalAutoK" title="spaghetti.Network.GlobalAutoK"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GlobalAutoK</span></code></a>(self, pointpattern[, nsteps, …])</p></td>
+<td><p>Compute a global auto <cite>K</cite>-function based on a network constrained cost matrix through <a class="reference external" href="https://en.wikipedia.org/wiki/Monte_Carlo_method">Monte Carlo simulation</a> according to the formulation adapted from <a class="bibtex reference internal" href="../references.html#doi-10-1002-9780470549094-ch5" id="id16">[OSullivanU10]</a>.See the <strong>Notes</strong> section for further description..</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#spaghetti.Network.__init__" title="spaghetti.Network.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(self[, in_data, vertex_sig, …])</p></td>
 <td><p>Initialize self.</p></td>
@@ -428,30 +429,34 @@ necessarily equal to <code class="docutils literal notranslate"><span class="pre
 <tr class="row-even"><td><p><a class="reference internal" href="#spaghetti.Network.snapobservations" title="spaghetti.Network.snapobservations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">snapobservations</span></code></a>(self, in_data, name[, …])</p></td>
 <td><p>Snap a point pattern shapefile to a network object.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#spaghetti.Network.split_arcs" title="spaghetti.Network.split_arcs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">split_arcs</span></code></a>(self, distance)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#spaghetti.Network.split_arcs" title="spaghetti.Network.split_arcs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">split_arcs</span></code></a>(self, distance[, w_components])</p></td>
 <td><p>Split all of the arcs in the network at a fixed distance.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py method">
-<dt id="spaghetti.Network.NetworkK">
-<code class="sig-name descname">NetworkK</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">pointpattern</span></em>, <em class="sig-param"><span class="n">nsteps</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">permutations</span><span class="o">=</span><span class="default_value">99</span></em>, <em class="sig-param"><span class="n">threshold</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">distribution</span><span class="o">=</span><span class="default_value">'uniform'</span></em>, <em class="sig-param"><span class="n">upperbound</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.NetworkK"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.NetworkK" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute a network constrained <cite>K</cite>-function.</p>
+<dt id="spaghetti.Network.GlobalAutoK">
+<code class="sig-name descname">GlobalAutoK</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">pointpattern</span></em>, <em class="sig-param"><span class="n">nsteps</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">permutations</span><span class="o">=</span><span class="default_value">99</span></em>, <em class="sig-param"><span class="n">threshold</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">distribution</span><span class="o">=</span><span class="default_value">'uniform'</span></em>, <em class="sig-param"><span class="n">upperbound</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.GlobalAutoK"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.GlobalAutoK" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a global auto <cite>K</cite>-function based on a network constrained
+cost matrix through <a class="reference external" href="https://en.wikipedia.org/wiki/Monte_Carlo_method">Monte Carlo simulation</a>
+according to the formulation adapted from
+<a class="bibtex reference internal" href="../references.html#doi-10-1002-9780470549094-ch5" id="id18">[OSullivanU10]</a>. See the <strong>Notes</strong>
+section for further description.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
 <dt><strong>pointpattern</strong><span class="classifier"><a class="reference internal" href="spaghetti.PointPattern.html#spaghetti.PointPattern" title="spaghetti.PointPattern"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.PointPattern</span></code></a></span></dt><dd><p>A <code class="docutils literal notranslate"><span class="pre">spaghetti</span></code> point pattern object.</p>
 </dd>
 <dt><strong>nsteps</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of steps at which the count of the nearest
-neighbors is computed.</p>
+neighbors is computed. Default is 10.</p>
 </dd>
 <dt><strong>permutations</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of permutations to perform. Default is 99.</p>
 </dd>
 <dt><strong>threshold</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The level at which significance is computed.
-(0.5 would be 97.5% and 2.5%).</p>
+(0.5 would be 97.5% and 2.5%). Default is 0.5.</p>
 </dd>
-<dt><strong>distribution</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>The distribution from which random points are sampled
-Either <code class="docutils literal notranslate"><span class="pre">&quot;uniform&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;poisson&quot;</span></code>.</p>
+<dt><strong>distribution</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>The distribution from which random points are sampled.
+Currently, the only supported distribution is uniform.</p>
 </dd>
 <dt><strong>upperbound</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The upper bound at which the <cite>K</cite>-function is computed.
 Defaults to the maximum observed nearest neighbor distance.</p>
@@ -460,17 +465,41 @@ Defaults to the maximum observed nearest neighbor distance.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl>
-<dt><strong>NetworkK</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.analysis.NetworkK</span></code></span></dt><dd><p>A network <cite>K</cite> class instance.</p>
+<dt><strong>GlobalAutoK</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spaghetti.analysis.GlobalAutoK</span></code></span></dt><dd><p>The global auto <cite>K</cite>-function class instance.</p>
 </dd>
 </dl>
 </dd>
 </dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference external" href="https://pointpats.readthedocs.io/en/latest/generated/pointpats.K.html#pointpats.K" title="(in pointpats v2.1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pointpats.K</span></code></a></dt><dd></dd>
+</dl>
+</div>
 <p class="rubric">Notes</p>
-<p>Based on <a class="bibtex reference internal" href="../references.html#ripley1977" id="id16">[Rip77]</a>, <a class="bibtex reference internal" href="../references.html#doi-10-1002-9780470549094-ch5" id="id17">[OSullivanU10]</a>.
-For further Network-<cite>K</cite> formulation see
-<a class="bibtex reference internal" href="../references.html#doi-10-1111-j-1538-4632-2001-tb00448-x" id="id18">[OY01]</a>, 
-<a class="bibtex reference internal" href="../references.html#doi-10-1002-9781119967101-ch6" id="id19">[OS12b]</a>, and
-<a class="bibtex reference internal" href="../references.html#baddeley2020" id="id20">[BNR+20]</a>.</p>
+<p>The <cite>K</cite>-function can be formulated as:</p>
+<div class="math notranslate nohighlight">
+\[\displaystyle K(r)=\frac{\sum^n_{i=1} \#[\hat{A} \in D(a_i, r)]}{n\lambda},\]</div>
+<p>where $n$ is the set cardinality of $A$, $\hat{A}$ is the subset of
+observations in $A$ that are within $D$ units of distance from $a_i$
+(each single observation in $A$), and $r$ is the range of distance
+values over which the <cite>K</cite>-function is calculated. The $\lambda$ term
+is the intensity of observations along the network, calculated as:</p>
+<div class="math notranslate nohighlight">
+\[\displaystyle \lambda = \frac{n}{\big|N_{arcs}\big|},\]</div>
+<p>where $\big|N_{arcs}\big|$ is the summed length of network arcs.
+The global auto <cite>K</cite>-function measures overall clustering in one set of
+observations by comparing all intra-set distances over a range of
+distance buffers $D \in r$. The <cite>K</cite>-function improves upon 
+nearest-neighbor distance measures through the analysis of all neighbor
+distances. For an explanation on how to interpret the results of the
+<cite>K</cite>-function see the <a class="reference external" href="https://pysal.org/spaghetti/notebooks/network-analysis.html">Spatial Network Analysis tutorial</a>.</p>
+<p>For original implementation see <a class="bibtex reference internal" href="../references.html#ripley1976" id="id19">[Rip76]</a>
+and <a class="bibtex reference internal" href="../references.html#ripley1977" id="id20">[Rip77]</a>.
+For further Network-<cite>K</cite> formulations see
+<a class="bibtex reference internal" href="../references.html#doi-10-1111-j-1538-4632-2001-tb00448-x" id="id21">[OY01]</a>, 
+<a class="bibtex reference internal" href="../references.html#doi-10-1002-9781119967101-ch6" id="id22">[OS12b]</a>, and
+<a class="bibtex reference internal" href="../references.html#baddeley2020" id="id23">[BNR+20]</a>.</p>
 <p class="rubric">Examples</p>
 <p>Create a network instance.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">spaghetti</span>
@@ -482,16 +511,12 @@ For further Network-<cite>K</cite> formulation see
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pt_str</span> <span class="o">=</span> <span class="s2">&quot;schools&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">in_data</span> <span class="o">=</span> <span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="n">pt_str</span><span class="o">+</span><span class="s2">&quot;.shp&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span><span class="n">in_data</span><span class="p">,</span> <span class="n">pt_str</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">schools</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="n">pt_str</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>Simulate observations along the network.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">schools</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="n">pt_str</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">simulate_observations</span><span class="p">(</span><span class="n">schools</span><span class="o">.</span><span class="n">npoints</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Compute a network constrained <cite>K</cite>-function of schools 
-with <code class="docutils literal notranslate"><span class="pre">5</span></code> <code class="docutils literal notranslate"><span class="pre">permutations</span></code> and <code class="docutils literal notranslate"><span class="pre">10</span></code> <code class="docutils literal notranslate"><span class="pre">nsteps</span></code>.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">kres</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">NetworkK</span><span class="p">(</span><span class="n">schools</span><span class="p">,</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">nsteps</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<p>Compute a <cite>K</cite>-function from school observations
+with <code class="docutils literal notranslate"><span class="pre">99</span></code> <code class="docutils literal notranslate"><span class="pre">permutations</span></code> at <code class="docutils literal notranslate"><span class="pre">10</span></code> intervals.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">kres</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">GlobalAutoK</span><span class="p">(</span><span class="n">schools</span><span class="p">,</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">99</span><span class="p">,</span> <span class="n">nsteps</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">kres</span><span class="o">.</span><span class="n">lowerenvelope</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="go">10</span>
 </pre></div>
@@ -679,7 +704,7 @@ representation (<code class="docutils literal notranslate"><span class="pre">Tru
 </dl>
 </div>
 <p class="rubric">Notes</p>
-<p>See <a class="bibtex reference internal" href="../references.html#pysal2007" id="id21">[RA07]</a> and <a class="bibtex reference internal" href="../references.html#esda-2019" id="id22">[RWK+19]</a> for more details.</p>
+<p>See <a class="bibtex reference internal" href="../references.html#pysal2007" id="id24">[RA07]</a> and <a class="bibtex reference internal" href="../references.html#esda-2019" id="id25">[RWK+19]</a> for more details.</p>
 <p class="rubric">Examples</p>
 <p>Instantiate a network.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">spaghetti</span>
@@ -817,7 +842,7 @@ the network.</p>
 </dl>
 </div>
 <p class="rubric">Notes</p>
-<p>See <a class="bibtex reference internal" href="../references.html#anselinrey2014" id="id23">[AR14]</a> and <a class="bibtex reference internal" href="../references.html#rey-open-2015" id="id24">[RAL+15]</a> for more details
+<p>See <a class="bibtex reference internal" href="../references.html#anselinrey2014" id="id26">[AR14]</a> and <a class="bibtex reference internal" href="../references.html#rey-open-2015" id="id27">[RAL+15]</a> for more details
 regarding spatial weights.</p>
 <p class="rubric">Examples</p>
 <p>Instantiate an instance of a network.</p>
@@ -906,7 +931,7 @@ Default is <code class="docutils literal notranslate"><span class="pre">False</s
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>Based on <a class="bibtex reference internal" href="../references.html#dijkstra1959a" id="id25">[Dij59]</a> and <a class="bibtex reference internal" href="../references.html#doi-10-1002-9781119967101-ch3" id="id26">[OS12a]</a>.</p>
+<p>Based on <a class="bibtex reference internal" href="../references.html#dijkstra1959a" id="id28">[Dij59]</a> and <a class="bibtex reference internal" href="../references.html#doi-10-1002-9781119967101-ch3" id="id29">[OS12a]</a>.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1137,23 +1162,26 @@ attribute does not exist within the network object.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>count</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of points to create or mean of the distribution
-if not <code class="docutils literal notranslate"><span class="pre">&quot;uniform&quot;</span></code>.</p>
+<dt><strong>count</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#int" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of points to create.</p>
 </dd>
-<dt><strong>distribution</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>Either a <code class="docutils literal notranslate"><span class="pre">&quot;uniform&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;poisson&quot;</span></code> distribution of
-random points. If <code class="docutils literal notranslate"><span class="pre">&quot;poisson&quot;</span></code>, the distribution is
-calculated from half the total network length.</p>
+<dt><strong>distribution</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>A distribution of random points. Currently, the only
+supported distribution is uniform.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl>
-<dt><strong>random_pts</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are the edge tuple. Values are lists of new
-point coordinates.</p>
+<dt><strong>random_pts</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>Keys are the edge tuple. Values are lists of new point coordinates.</p>
 </dd>
 </dl>
 </dd>
 </dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/random/generated/numpy.random.Generator.uniform.html#numpy.random.Generator.uniform" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.random.Generator.uniform</span></code></a></dt><dd></dd>
+</dl>
+</div>
 <p class="rubric">Examples</p>
 <p>Instantiate a network.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">spaghetti</span>
@@ -1208,7 +1236,7 @@ Default is <code class="docutils literal notranslate"><span class="pre">False</s
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>See <a class="bibtex reference internal" href="../references.html#doi-10-1111-gean-12211" id="id27">[GFH19]</a> for a detailed discussion on
+<p>See <a class="bibtex reference internal" href="../references.html#doi-10-1111-gean-12211" id="id30">[GFH19]</a> for a detailed discussion on
 the modeling consequences of snapping points to spatial networks.</p>
 <p class="rubric">Examples</p>
 <p>Instantiate a network.</p>
@@ -1233,12 +1261,15 @@ the modeling consequences of snapping points to spatial networks.</p>
 
 <dl class="py method">
 <dt id="spaghetti.Network.split_arcs">
-<code class="sig-name descname">split_arcs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">distance</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.split_arcs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.split_arcs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">split_arcs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">distance</span></em>, <em class="sig-param"><span class="n">w_components</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#Network.split_arcs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.Network.split_arcs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Split all of the arcs in the network at a fixed distance.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
 <dt><strong>distance</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/functions.html#float" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The distance at which arcs are split.</p>
+</dd>
+<dt><strong>w_components</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#bltin-boolean-values" title="(in Python v3.8)"><span class="xref std std-ref">bool</span></a></span></dt><dd><p>Set to <code class="docutils literal notranslate"><span class="pre">False</span></code> to not record connected components from a
+<code class="docutils literal notranslate"><span class="pre">libpysal.weights.W</span></code> object. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
 </dl>
 </dd>
