@@ -129,7 +129,8 @@ class GlobalAutoK(FuncBase):
         """
 
         # pairwise distances
-        distances = self.ntw.allneighbordistances(self.pointpattern, fill_diagonal=0.0)
+        distances = self.ntw.allneighbordistances(self.pointpattern)
+        distances = upper_triangle_as_vector(distances)
 
         self.setbounds(distances)
 
@@ -158,7 +159,8 @@ class GlobalAutoK(FuncBase):
             )
 
             # distances
-            distances = self.ntw.allneighbordistances(sim, fill_diagonal=0.0)
+            distances = self.ntw.allneighbordistances(sim)
+            distances = upper_triangle_as_vector(distances)
 
             # compute a Global Auto K-Function
             simx, simy = global_auto_k(
@@ -167,6 +169,11 @@ class GlobalAutoK(FuncBase):
 
             # label the permutation
             self.sim[p] = simy
+
+
+def upper_triangle_as_vector(matrix):
+    """Return the upper triangle of a symmetric matrix without the diagonal."""
+    return matrix[numpy.triu_indices_from(matrix, k=1)]
 
 
 def global_auto_k(n_obs, dists, upperbound, intensity, nsteps=10):
@@ -179,7 +186,8 @@ def global_auto_k(n_obs, dists, upperbound, intensity, nsteps=10):
         The number of observations. See ``self.npts``.
     
     dists : numpy.ndarray
-        A matrix of pairwise distances.
+        A vector (the upper triangle of a symmetric matrix)
+        of pairwise distances.
     
     upperbound : int or float
         The end value of the sequence.
@@ -203,13 +211,16 @@ def global_auto_k(n_obs, dists, upperbound, intensity, nsteps=10):
     """
 
     # create interval for x-axis
-    x = numpy.linspace(0, upperbound, nsteps)
+    x = numpy.linspace(0, upperbound, num=nsteps).reshape(-1, 1)
 
-    # create empty y-axis vector and iterate over x-axis interval
-    # -- here we should also not consider self-neighbors (the diagonal)
-    y = numpy.array([dists[dists <= r].shape[0] - n_obs for r in x]).astype(float)
+    # "iterate" over the x-axis interval, slice out and count neighbors within
+    # each step radius, and multiply x2 to account for the lower triangle
+    y = (dists < x).sum(axis=1) * 2.0
 
-    # compute k for y-axis vector
+    # finalize the K computation for the denominator if the y-axis vector
     y /= n_obs * intensity
+
+    # reset the shape of the x-axis
+    x = x.squeeze()
 
     return x, y
