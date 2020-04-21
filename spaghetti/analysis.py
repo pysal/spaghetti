@@ -88,8 +88,7 @@ class FuncBase(object):
         self.computeenvelope()
 
     def validatedistribution(self):
-        """enusure statistical distribution is supported
-        """
+        """Ensure the statistical distribution is supported."""
 
         valid_distributions = ["uniform"]
         if not self.distribution in valid_distributions:
@@ -97,8 +96,7 @@ class FuncBase(object):
             raise RuntimeError(msg)
 
     def computeenvelope(self):
-        """compute upper and lower bounds of envelope
-        """
+        """Compute upper and lower bounds of envelope."""
 
         upper = 1.0 - self.threshold / 2.0
         lower = self.threshold / 2.0
@@ -107,8 +105,7 @@ class FuncBase(object):
         self.lowerenvelope = numpy.nanmin(self.sim, axis=0) * lower
 
     def setbounds(self, distances):
-        """set upper bound
-        """
+        """Set the upper bound."""
         if self.upperbound is None:
             self.upperbound = numpy.nanmax(distances)
 
@@ -120,13 +117,12 @@ class GlobalAutoK(FuncBase):
     ----------
     
     lam : float
-        The ``lambda`` value.
+        The ``lambda`` value; representing intensity.
     
     """
 
     def computeobserved(self):
-        """Compute the observed nearest.
-        """
+        """Compute the K function of observed points."""
 
         # pairwise distances
         distances = self.ntw.allneighbordistances(self.pointpattern)
@@ -139,7 +135,7 @@ class GlobalAutoK(FuncBase):
 
         # compute a Global Auto K-Function
         observedx, observedy = global_auto_k(
-            self.npts, distances, self.upperbound, self.lam, nsteps=self.nsteps
+            self.npts, distances, self.upperbound, self.lam, self.nsteps
         )
 
         # set observed values
@@ -147,8 +143,7 @@ class GlobalAutoK(FuncBase):
         self.xaxis = observedx
 
     def computepermutations(self):
-        """Compute permutations (Monte Carlo simulation) of the points.
-        """
+        """Compute the K function on permutations (Monte Carlo simulation)."""
 
         # for each round of permutations
         for p in range(self.permutations):
@@ -164,7 +159,7 @@ class GlobalAutoK(FuncBase):
 
             # compute a Global Auto K-Function
             simx, simy = global_auto_k(
-                self.npts, distances, self.upperbound, self.lam, nsteps=self.nsteps
+                self.npts, distances, self.upperbound, self.lam, self.nsteps
             )
 
             # label the permutation
@@ -176,7 +171,7 @@ def upper_triangle_as_vector(matrix):
     return matrix[numpy.triu_indices_from(matrix, k=1)]
 
 
-def global_auto_k(n_obs, dists, upperbound, intensity, nsteps=10):
+def global_auto_k(n_obs, dists, upperbound, intensity, nsteps):
     """Compute a `K`-function.
 
     Parameters
@@ -196,8 +191,7 @@ def global_auto_k(n_obs, dists, upperbound, intensity, nsteps=10):
         lambda value
     
     nsteps : int
-        The number of distance bands. Default is 10. Must be
-        non-negative.
+        The number of distance bands. Must be non-negative.
     
     Returns
     -------
