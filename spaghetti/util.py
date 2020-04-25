@@ -78,6 +78,7 @@ def get_neighbor_distances(ntw, v0, l):
     >>> neighs = spaghetti.util.get_neighbor_distances(ntw, 0, ntw.arc_lengths)
     >>> numpy.round(neighs[1], 10)
     102.6235345344
+    
     """
 
     # fetch links associated with vertices
@@ -324,6 +325,7 @@ def squared_distance_point_link(point, link):
     
     Returns
     -------
+    
     sqd : float
         The distance squared between the point and edge.
     
@@ -493,14 +495,17 @@ def network_has_cycle(adjacency):
     
     Parameters
     ----------
+    
     adjacency : spaghetti.Network.adjacencylist
         Vertex adjacency relationships.
     
     Returns
     -------
+    
     network_cycle_found : bool
         ``True`` for a cycle being found in the network/graph, 
         otherwise ``False``.
+    
     """
 
     def tree_has_cycle(_parent, _v):
@@ -508,15 +513,19 @@ def network_has_cycle(adjacency):
 
         Parameters
         ----------
+        
         _parent : int
             Root vertex for the subnetwork/graph.
+        
         _v : int
             Current vertex index of in the complete network.
 
         Returns
         -------
+        
         subtree_cycle_found : bool
             Current recursion found a cycle in the subtree.
+        
         """
 
         # Set current cycle tag as False
@@ -567,6 +576,7 @@ def chain_constr(vcoords, arcs):
     
     Parameters
     ----------
+    
     vcoords : dict
         Vertex to coordinate lookup (see ``spaghetti.Network.vertex_coords``).
     
@@ -575,8 +585,10 @@ def chain_constr(vcoords, arcs):
     
     Returns
     -------
+    
     spatial_reps : list
         Spatial representations of arcs - ``libpysal.cg.Chain`` objects.
+    
     """
     spatial_reps = [_chain_constr(vcoords, vs) for vs in arcs]
     return spatial_reps
@@ -587,6 +599,7 @@ def _chain_constr(_vcoords, _vs):
     
     Parameters
     ----------
+    
     _vcoords : {dict, None}
         See ``vcoords`` in ``get_chains()``.
         
@@ -595,8 +608,10 @@ def _chain_constr(_vcoords, _vs):
         
     Returns
     -------
+    
     chain : libpysal.cg.Chain
         Spatial representation of the arc.
+    
     """
 
     if _vcoords:
