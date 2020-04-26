@@ -2602,7 +2602,7 @@ class Network:
         distance buffers $D \\in r$. The `K`-function improves upon 
         nearest-neighbor distance measures through the analysis of all neighbor
         distances. For an explanation on how to interpret the results of the
-        `K`-function see the `Spatial Network Analysis tutorial <https://pysal.org/spaghetti/notebooks/network-analysis.html>`_.
+        `K`-function see the `Network Spatial Dependence tutorial <https://pysal.org/spaghetti/notebooks/network-spatial-dependence.html>`_.
         
         For original implementation see :cite:`Ripley1976`
         and :cite:`Ripley1977`.
