@@ -75,10 +75,12 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Network point pattern attributes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="connected-components.html">Connected components in a spatial network</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shortest-path-visualization.html">Generating regular lattices and visualizing shortest paths</a></li>
-<li class="toctree-l2"><a class="reference internal" href="network-analysis.html">Spatial network analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network-segmentation.html">Spatial network segmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network-spatial-dependence.html">Network-constrained spatial dependence</a></li>
 <li class="toctree-l2"><a class="reference internal" href="network-spatial-weights.html">Network spatial weights</a></li>
 <li class="toctree-l2"><a class="reference internal" href="spanning-trees.html">Network spanning trees</a></li>
 <li class="toctree-l2"><a class="reference internal" href="caveats.html">Caveats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network-spatial-autocorrelation.html">Network-constrained spatial autocorrelation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="facility-location.html">Demostrating network-based optimal facility location modeling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="transportation-problem.html">The Transportation Problem</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tsp.html">The Traveling Sales(man)(person) Problem — TSP</a></li>
@@ -116,7 +118,7 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#2.-Counts-per-link">2. Counts per link</a><ul>
-<li><a class="reference internal" href="#Counts-per-link-(arc-or-edge)-are-important,-but-should-not-be-precomputed-since-we-have-different-representations-of-the-network-(spatial-and-graph).-(Relatively)-Uniform-segmentation-still-needs-to-be-done.">Counts per link (arc or edge) are important, but should not be precomputed since we have different representations of the network (spatial and graph). (Relatively) Uniform segmentation still needs to be done.</a></li>
+<li><a class="reference internal" href="#Counts-per-link-(arc-or-edge)-are-important,-but-should-not-be-precomputed-since-we-have-different-representations-of-the-network-(spatial-and-graph).">Counts per link (arc or edge) are important, but should not be precomputed since we have different representations of the network (spatial and graph).</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#3.-Simulate-a-point-pattern-on-the-network">3. Simulate a point pattern on the network</a><ul>
@@ -413,7 +415,7 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-04-20T16:32:38-04:00
+2020-04-26T10:42:25-04:00
 
 CPython 3.7.3
 IPython 7.10.2
@@ -455,14 +457,14 @@ interpreter: 64bit
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 watermark 2.0.2
-geopandas           0.7.0
+pandas              1.0.3
 matplotlib          3.1.2
-libpysal            4.2.2
-matplotlib_scalebar 0.6.1
+numpy               1.18.1
 spaghetti           1.4.2.post2
 shapely             1.7.0
-pandas              1.0.3
-numpy               1.18.1
+matplotlib_scalebar 0.6.1
+libpysal            4.2.2
+geopandas           0.7.0
 
 </pre></div></div>
 </div>
@@ -519,7 +521,7 @@ numpy               1.18.1
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x10db46a90&gt;}
+{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x124fcea20&gt;}
 </pre></div></div>
 </div>
 </div>
@@ -677,20 +679,35 @@ numpy               1.18.1
 <hr class="docutils" />
 <div class="section" id="2.-Counts-per-link">
 <h2>2. Counts per link<a class="headerlink" href="#2.-Counts-per-link" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="Counts-per-link-(arc-or-edge)-are-important,-but-should-not-be-precomputed-since-we-have-different-representations-of-the-network-(spatial-and-graph).-(Relatively)-Uniform-segmentation-still-needs-to-be-done.">
-<h3>Counts per link (arc or edge) are important, but should not be precomputed since we have different representations of the network (spatial and graph). (Relatively) Uniform segmentation still needs to be done.<a class="headerlink" href="#Counts-per-link-(arc-or-edge)-are-important,-but-should-not-be-precomputed-since-we-have-different-representations-of-the-network-(spatial-and-graph).-(Relatively)-Uniform-segmentation-still-needs-to-be-done." title="Permalink to this headline">¶</a></h3>
-<div class="nbinput docutils container">
+<div class="section" id="Counts-per-link-(arc-or-edge)-are-important,-but-should-not-be-precomputed-since-we-have-different-representations-of-the-network-(spatial-and-graph).">
+<h3>Counts per link (arc or edge) are important, but should not be precomputed since we have different representations of the network (spatial and graph).<a class="headerlink" href="#Counts-per-link-(arc-or-edge)-are-important,-but-should-not-be-precomputed-since-we-have-different-representations-of-the-network-(spatial-and-graph)." title="Permalink to this headline">¶</a></h3>
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">counts</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">count_per_link</span><span class="p">(</span><span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="n">pp_name</span><span class="p">]</span><span class="o">.</span><span class="n">obs_to_arc</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="nb">list</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">items</span><span class="p">())[:</span><span class="mi">4</span><span class="p">]</span>
+<span></span><span class="k">def</span> <span class="nf">fetch_cpl</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">pp</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a counts per link object and find mean.&quot;&quot;&quot;</span>
+    <span class="n">cpl</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">count_per_link</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="n">pp</span><span class="p">]</span><span class="o">.</span><span class="n">obs_to_arc</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">mean</span><span class="p">:</span>
+        <span class="n">mean_cpl</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">cpl</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cpl</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+        <span class="k">return</span> <span class="n">cpl</span><span class="p">,</span> <span class="n">mean_cpl</span>
+    <span class="k">return</span> <span class="n">cpl</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ntw_counts</span><span class="p">,</span> <span class="n">ntw_ctmean</span> <span class="o">=</span> <span class="n">fetch_cpl</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="p">)</span>
+<span class="nb">list</span><span class="p">(</span><span class="n">ntw_counts</span><span class="o">.</span><span class="n">items</span><span class="p">())[:</span><span class="mi">4</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -699,17 +716,16 @@ numpy               1.18.1
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">counts_per_link</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
-<span class="n">counts_per_link</span>
+<span></span><span class="n">ntw_ctmean</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -725,7 +741,7 @@ numpy               1.18.1
 <div class="section" id="Need-to-supply-a-count-of-the-number-of-points.-The-only-distribution-currently-supported-is-uniform.-Generally,-this-will-not-be-called-by-the-user,-since-the-simulation-will-be-used-for-Monte-Carlo-permutation.">
 <h3>Need to supply a count of the number of points. The only distribution currently supported is uniform. Generally, this will not be called by the user, since the simulation will be used for Monte Carlo permutation.<a class="headerlink" href="#Need-to-supply-a-count-of-the-number-of-points.-The-only-distribution-currently-supported-is-uniform.-Generally,-this-will-not-be-called-by-the-user,-since-the-simulation-will-be-used-for-Monte-Carlo-permutation." title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -735,7 +751,7 @@ numpy               1.18.1
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -744,7 +760,7 @@ numpy               1.18.1
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -754,16 +770,16 @@ numpy               1.18.1
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;spaghetti.network.SimulatedPointPattern at 0x126cabd30&gt;
+&lt;spaghetti.network.SimulatedPointPattern at 0x1251fe550&gt;
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -783,7 +799,7 @@ numpy               1.18.1
 <div class="section" id="Extract-the-simulated-points-along-the-network-a-geopandas.GeoDataFrame">
 <h3>Extract the simulated points along the network a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code><a class="headerlink" href="#Extract-the-simulated-points-along-the-network-a-geopandas.GeoDataFrame" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -800,7 +816,7 @@ numpy               1.18.1
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -832,23 +848,23 @@ numpy               1.18.1
   <tbody>
     <tr>
       <th>0</th>
-      <td>POINT (725907.428 880189.841)</td>
+      <td>POINT (726020.759 878457.394)</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>POINT (725228.283 880416.996)</td>
+      <td>POINT (725259.927 880198.819)</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>POINT (727041.998 875962.934)</td>
+      <td>POINT (725239.200 879595.330)</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>POINT (726895.234 876218.617)</td>
+      <td>POINT (728270.700 877023.186)</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>POINT (727275.372 881232.686)</td>
+      <td>POINT (724212.237 878219.073)</td>
     </tr>
   </tbody>
 </table>
@@ -858,7 +874,7 @@ numpy               1.18.1
 <div class="section" id="Create-geopandas.GeoDataFrame-objects-of-the-vertices-and-arcs">
 <h3>Create <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> objects of the vertices and arcs<a class="headerlink" href="#Create-geopandas.GeoDataFrame-objects-of-the-vertices-and-arcs" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -872,7 +888,7 @@ numpy               1.18.1
 <div class="section" id="Create-geopandas.GeoDataFrame-objects-of-the-actual-and-snapped-crime-locations">
 <h3>Create <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> objects of the actual and snapped crime locations<a class="headerlink" href="#Create-geopandas.GeoDataFrame-objects-of-the-actual-and-snapped-crime-locations" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -885,7 +901,7 @@ numpy               1.18.1
 <div class="section" id="Helper-plotting-function">
 <h3>Helper plotting function<a class="headerlink" href="#Helper-plotting-function" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -929,7 +945,7 @@ numpy               1.18.1
 <div class="section" id="Crimes:-empirical,-network-snapped,-and-simulated-locations">
 <h3>Crimes: empirical, network-snapped, and simulated locations<a class="headerlink" href="#Crimes:-empirical,-network-snapped,-and-simulated-locations" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -941,7 +957,7 @@ numpy               1.18.1
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_pointpattern-attributes_38_0.png"><img alt="../_images/notebooks_pointpattern-attributes_38_0.png" src="../_images/notebooks_pointpattern-attributes_38_0.png" style="width: 897px; height: 507px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_pointpattern-attributes_39_0.png"><img alt="../_images/notebooks_pointpattern-attributes_39_0.png" src="../_images/notebooks_pointpattern-attributes_39_0.png" style="width: 897px; height: 507px;" /></a>
 </div>
 </div>
 </div>

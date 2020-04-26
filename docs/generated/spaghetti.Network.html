@@ -75,10 +75,12 @@
 <li class="toctree-l2"><a class="reference internal" href="../notebooks/pointpattern-attributes.html">Network point pattern attributes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../notebooks/connected-components.html">Connected components in a spatial network</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../notebooks/shortest-path-visualization.html">Generating regular lattices and visualizing shortest paths</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../notebooks/network-analysis.html">Spatial network analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/network-segmentation.html">Spatial network segmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/network-spatial-dependence.html">Network-constrained spatial dependence</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../notebooks/network-spatial-weights.html">Network spatial weights</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../notebooks/spanning-trees.html">Network spanning trees</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../notebooks/caveats.html">Caveats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/network-spatial-autocorrelation.html">Network-constrained spatial autocorrelation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../notebooks/facility-location.html">Demostrating network-based optimal facility location modeling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../notebooks/transportation-problem.html">The Transportation Problem</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../notebooks/tsp.html">The Traveling Sales(man)(person) Problem — TSP</a></li>
@@ -147,7 +149,7 @@ refer to a network arc or a graph edge.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>in_data</strong><span class="classifier">{<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#list" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#tuple" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">tuple</span></code></a>, <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>, <a class="reference external" href="https://pysal.org/libpysal/generated/libpysal.cg.Chain.html#libpysal.cg.Chain" title="(in libpysal v4.2.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">libpysal.cg.Chain</span></code></a>, <a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.7.0+21.gf70a669)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a>}</span></dt><dd><p>The input geographic data. Either (1) a path to a shapefile
+<dt><strong>in_data</strong><span class="classifier">{<a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#list" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#tuple" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">tuple</span></code></a>, <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>, <a class="reference external" href="https://pysal.org/libpysal/generated/libpysal.cg.Chain.html#libpysal.cg.Chain" title="(in libpysal v4.2.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">libpysal.cg.Chain</span></code></a>, <a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.7.0+37.g8811a17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a>}</span></dt><dd><p>The input geographic data. Either (1) a path to a shapefile
 (str); (2) an iterable containing <code class="docutils literal notranslate"><span class="pre">libpysal.cg.Chain</span></code>
 objects; (3) a single <code class="docutils literal notranslate"><span class="pre">libpysal.cg.Chain</span></code>; or
 (4) a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code>.</p>
@@ -183,7 +185,7 @@ the default when there are known issues with digitization.</p>
 <p>See <a class="bibtex reference internal" href="../references.html#cliff1981" id="id1">[CH81]</a>, <a class="bibtex reference internal" href="../references.html#tansel1983a" id="id2">[TF83]</a>,
 <a class="bibtex reference internal" href="../references.html#ahujaravindrak" id="id3">[AMO93]</a>, <a class="bibtex reference internal" href="../references.html#labbe1995" id="id4">[LabbePT95]</a>,
 <a class="bibtex reference internal" href="../references.html#kuby2009" id="id5">[KRUT09]</a>, <a class="bibtex reference internal" href="../references.html#barthelemy2011" id="id6">[Barthelemy11]</a>, 
-<a class="bibtex reference internal" href="../references.html#daskin2013" id="id7">[Das13]</a>, <a class="bibtex reference internal" href="../references.html#okabe2012" id="id8">[OS12d]</a>,
+<a class="bibtex reference internal" href="../references.html#daskin2013" id="id7">[Das13]</a>, <a class="bibtex reference internal" href="../references.html#okabe2012" id="id8">[OS12c]</a>,
 <a class="bibtex reference internal" href="../references.html#ducruet2014" id="id9">[DB14]</a>, <a class="bibtex reference internal" href="../references.html#weber2016" id="id10">[Web16]</a>, for more in-depth discussion on
 spatial networks, graph theory, and location along networks. 
 For related network-centric software see
@@ -493,7 +495,7 @@ observations by comparing all intra-set distances over a range of
 distance buffers $D \in r$. The <cite>K</cite>-function improves upon 
 nearest-neighbor distance measures through the analysis of all neighbor
 distances. For an explanation on how to interpret the results of the
-<cite>K</cite>-function see the <a class="reference external" href="https://pysal.org/spaghetti/notebooks/network-analysis.html">Spatial Network Analysis tutorial</a>.</p>
+<cite>K</cite>-function see the <a class="reference external" href="https://pysal.org/spaghetti/notebooks/network-spatial-dependence.html">Network Spatial Dependence tutorial</a>.</p>
 <p>For original implementation see <a class="bibtex reference internal" href="../references.html#ripley1976" id="id19">[Rip76]</a>
 and <a class="bibtex reference internal" href="../references.html#ripley1977" id="id20">[Rip77]</a>.
 For further Network-<cite>K</cite> formulations see
@@ -1221,7 +1223,7 @@ attribute of the network object.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>in_data</strong><span class="classifier">{<a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.7.0+21.gf70a669)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a>, <a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a>}</span></dt><dd><p>The input geographic data. Either (1) a path to a
+<dt><strong>in_data</strong><span class="classifier">{<a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0.7.0+37.g8811a17)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a>, <a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a>}</span></dt><dd><p>The input geographic data. Either (1) a path to a
 shapefile (str); or (2) a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code>.</p>
 </dd>
 <dt><strong>name</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3.8/library/stdtypes.html#str" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>Name to be assigned to the point dataset.</p>
