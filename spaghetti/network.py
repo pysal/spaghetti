@@ -497,8 +497,7 @@ class Network:
             setattr(self, obj_type + attr_str, attr)
 
     def _extractnetwork(self):
-        """Used internally to extract a network.
-        """
+        """Used internally to extract a network."""
 
         # initialize vertex count
         vertex_count = 0
@@ -1444,8 +1443,7 @@ class Network:
         return counts
 
     def _newpoint_coords(self, arc, distance):
-        """Used internally to compute new point coordinates during snapping.
-        """
+        """Used internally to compute new point coordinates during snapping."""
 
         # extract coordinates for vertex 1 of arc
         x1 = self.vertex_coords[arc[0]][0]
@@ -2697,7 +2695,7 @@ class Network:
         
         self : spaghetti.Network
             A pre-computed ``spaghetti`` network object.
-            
+        
         """
 
         with open(filename, "rb") as networkin:
@@ -2711,15 +2709,19 @@ def extract_component(net, component_id, weightings=None):
     
     Parameters
     ----------
+    
     net : spaghetti.Network
         Full network object.
+    
     component_id : int
         The ID of the desired network component.
+    
     weightings : {dict, bool}
         See the ``weightings`` keyword argument in ``spaghetti.Network``.
     
     Returns
     -------
+    
     cnet : spaghetti.Network
         The pruned network containing the component specified in
         ``component_id``.
@@ -2917,6 +2919,7 @@ def spanning_tree(net, method="sort", maximum=False, silence_warnings=True):
     
     Parameters
     ----------
+    
     net : spaghetti.Network
         Instance of a network object.
     
@@ -2938,11 +2941,13 @@ def spanning_tree(net, method="sort", maximum=False, silence_warnings=True):
     
     Returns
     -------
+    
     net : spaghetti.Network
         Pruned instance of the network object.
     
     Notes
     -----
+    
     For in-depth background and details see
     :cite:`GrahamHell_1985`,
     :cite:`AhujaRavindraK`, and
@@ -3010,20 +3015,25 @@ def mst_weighted_sort(net, maximum, net_kws):
     
     Parameters
     ----------
+    
     net : spaghetti.Network
         See ``spanning_tree()``.
+    
     maximum : bool
         See ``spanning_tree()``.
+    
     net_kws : dict
         Keywords arguments for instaniating a ``spaghetti.Network``.
     
     Returns
     -------
+    
     spanning_tree : list
         All networks arcs that are members of the spanning tree.
     
     Notes
     -----
+    
     This function is based on the method found in Chapter 3
     Section 4.3 of :cite:`Okabe2012`.
     
@@ -3234,7 +3244,6 @@ def regular_lattice(bounds, nh, nv=None, exterior=False):
 
     exterior : bool
         Flag for including the outer bounding box segments. Default is False.
-    
     
     Returns
     -------
