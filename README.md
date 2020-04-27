@@ -25,9 +25,9 @@ Spaghetti is an open-source Python library for the analysis of network-based spa
 Examples
 -----------
 The following are a selection of some examples that can be launched individually as interactive binders from the links on their respective pages. Additional examples can be found in the [Tutorials](https://pysal.org/spaghetti/tutorials.html) section of the documentation. See the [`pysal/notebooks`](http://pysal.org/notebooks) project for a [`jupyter-book`](https://github.com/choldgraf/jupyter-book) version of this repository.
-* [Network Representation](https://pysal.org/spaghetti/notebooks/quickstart.html)
-* [Spatial Network Analysis](https://pysal.org/spaghetti/notebooks/network-analysis.html)
-* [Optimal Facility Location](https://pysal.org/spaghetti/notebooks/facility-location.html)
+* [Quickstart](https://pysal.org/spaghetti/notebooks/quickstart.html)
+* [Shortest Path Visualization](https://pysal.org/spaghetti/notebooks/shortest-path-visualization.html)
+* [Caveats](https://pysal.org/spaghetti/notebooks/caveats.html)
 
 
 Installation
