@@ -113,16 +113,11 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#1.-Allocating-observations-(snapping-points)-to-a-network:">1. Allocating observations (snapping points) to a network:</a><ul>
-<li><a class="reference internal" href="#A-network-is-composed-of-a-single-topological-representation-of-network-elements-(arcs-and-vertices)-to-which-point-patterns-may-be-snapped.">A network is composed of a single topological representation of network elements (arcs and vertices) to which point patterns may be snapped.</a></li>
 <li><a class="reference internal" href="#Attributes-for-every-point-pattern">Attributes for every point pattern</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#2.-Counts-per-link">2. Counts per link</a><ul>
-<li><a class="reference internal" href="#Counts-per-link-(arc-or-edge)-are-important,-but-should-not-be-precomputed-since-we-have-different-representations-of-the-network-(spatial-and-graph).">Counts per link (arc or edge) are important, but should not be precomputed since we have different representations of the network (spatial and graph).</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#2.-Counts-per-link">2. Counts per link</a></li>
 <li><a class="reference internal" href="#3.-Simulate-a-point-pattern-on-the-network">3. Simulate a point pattern on the network</a><ul>
-<li><a class="reference internal" href="#Need-to-supply-a-count-of-the-number-of-points.-The-only-distribution-currently-supported-is-uniform.-Generally,-this-will-not-be-called-by-the-user,-since-the-simulation-will-be-used-for-Monte-Carlo-permutation.">Need to supply a count of the number of points. The only distribution currently supported is uniform. Generally, this will not be called by the user, since the simulation will be used for Monte Carlo permutation.</a></li>
 <li><a class="reference internal" href="#Extract-the-simulated-points-along-the-network-a-geopandas.GeoDataFrame">Extract the simulated points along the network a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a></li>
 <li><a class="reference internal" href="#Create-geopandas.GeoDataFrame-objects-of-the-vertices-and-arcs">Create <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> objects of the vertices and arcs</a></li>
 <li><a class="reference internal" href="#Create-geopandas.GeoDataFrame-objects-of-the-actual-and-snapped-crime-locations">Create <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> objects of the actual and snapped crime locations</a></li>
@@ -415,7 +410,7 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-04-26T10:42:25-04:00
+2020-04-27T13:00:16-04:00
 
 CPython 3.7.3
 IPython 7.10.2
@@ -457,13 +452,13 @@ interpreter: 64bit
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 watermark 2.0.2
+numpy               1.18.1
+libpysal            4.2.2
+matplotlib_scalebar 0.6.1
+shapely             1.7.0
+spaghetti           1.4.2.post2
 pandas              1.0.3
 matplotlib          3.1.2
-numpy               1.18.1
-spaghetti           1.4.2.post2
-shapely             1.7.0
-matplotlib_scalebar 0.6.1
-libpysal            4.2.2
 geopandas           0.7.0
 
 </pre></div></div>
@@ -501,8 +496,7 @@ geopandas           0.7.0
 <hr class="docutils" />
 <div class="section" id="1.-Allocating-observations-(snapping-points)-to-a-network:">
 <h2>1. Allocating observations (snapping points) to a network:<a class="headerlink" href="#1.-Allocating-observations-(snapping-points)-to-a-network:" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="A-network-is-composed-of-a-single-topological-representation-of-network-elements-(arcs-and-vertices)-to-which-point-patterns-may-be-snapped.">
-<h3>A network is composed of a single topological representation of network elements (arcs and vertices) to which point patterns may be snapped.<a class="headerlink" href="#A-network-is-composed-of-a-single-topological-representation-of-network-elements-(arcs-and-vertices)-to-which-point-patterns-may-be-snapped." title="Permalink to this headline">¶</a></h3>
+<p><strong>A network is composed of a single topological representation of network elements (arcs and vertices) to which point patterns may be snapped.</strong></p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
@@ -521,9 +515,8 @@ geopandas           0.7.0
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x124fcea20&gt;}
+{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x12b7ce668&gt;}
 </pre></div></div>
-</div>
 </div>
 <div class="section" id="Attributes-for-every-point-pattern">
 <h3>Attributes for every point pattern<a class="headerlink" href="#Attributes-for-every-point-pattern" title="Permalink to this headline">¶</a></h3>
@@ -679,8 +672,7 @@ geopandas           0.7.0
 <hr class="docutils" />
 <div class="section" id="2.-Counts-per-link">
 <h2>2. Counts per link<a class="headerlink" href="#2.-Counts-per-link" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="Counts-per-link-(arc-or-edge)-are-important,-but-should-not-be-precomputed-since-we-have-different-representations-of-the-network-(spatial-and-graph).">
-<h3>Counts per link (arc or edge) are important, but should not be precomputed since we have different representations of the network (spatial and graph).<a class="headerlink" href="#Counts-per-link-(arc-or-edge)-are-important,-but-should-not-be-precomputed-since-we-have-different-representations-of-the-network-(spatial-and-graph)." title="Permalink to this headline">¶</a></h3>
+<p><strong>Counts per link (arc or edge) are important, but should not be precomputed since there are spatial and graph representations.</strong></p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
@@ -734,12 +726,14 @@ geopandas           0.7.0
 </pre></div></div>
 </div>
 </div>
-</div>
 <hr class="docutils" />
 <div class="section" id="3.-Simulate-a-point-pattern-on-the-network">
 <h2>3. Simulate a point pattern on the network<a class="headerlink" href="#3.-Simulate-a-point-pattern-on-the-network" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="Need-to-supply-a-count-of-the-number-of-points.-The-only-distribution-currently-supported-is-uniform.-Generally,-this-will-not-be-called-by-the-user,-since-the-simulation-will-be-used-for-Monte-Carlo-permutation.">
-<h3>Need to supply a count of the number of points. The only distribution currently supported is uniform. Generally, this will not be called by the user, since the simulation will be used for Monte Carlo permutation.<a class="headerlink" href="#Need-to-supply-a-count-of-the-number-of-points.-The-only-distribution-currently-supported-is-uniform.-Generally,-this-will-not-be-called-by-the-user,-since-the-simulation-will-be-used-for-Monte-Carlo-permutation." title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><strong>The number of points must supplied.</strong></p></li>
+<li><p><strong>The only distribution currently supported is uniform.</strong></p></li>
+<li><p><strong>Generally, this will not be called by the user since the simulation will be used for Monte Carlo permutation.</strong></p></li>
+</ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
@@ -775,7 +769,7 @@ geopandas           0.7.0
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;spaghetti.network.SimulatedPointPattern at 0x1251fe550&gt;
+&lt;spaghetti.network.SimulatedPointPattern at 0x12b7ce208&gt;
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -794,7 +788,6 @@ geopandas           0.7.0
 <div class="highlight"><pre>
 [&#39;__class__&#39;, &#39;__delattr__&#39;, &#39;__dict__&#39;, &#39;__dir__&#39;, &#39;__doc__&#39;, &#39;__eq__&#39;, &#39;__format__&#39;, &#39;__ge__&#39;, &#39;__getattribute__&#39;, &#39;__gt__&#39;, &#39;__hash__&#39;, &#39;__init__&#39;, &#39;__init_subclass__&#39;, &#39;__le__&#39;, &#39;__lt__&#39;, &#39;__module__&#39;, &#39;__ne__&#39;, &#39;__new__&#39;, &#39;__reduce__&#39;, &#39;__reduce_ex__&#39;, &#39;__repr__&#39;, &#39;__setattr__&#39;, &#39;__sizeof__&#39;, &#39;__str__&#39;, &#39;__subclasshook__&#39;, &#39;__weakref__&#39;, &#39;dist_to_vertex&#39;, &#39;npoints&#39;, &#39;obs_to_arc&#39;, &#39;obs_to_vertex&#39;, &#39;points&#39;, &#39;snapped_coordinates&#39;]
 </pre></div></div>
-</div>
 </div>
 <div class="section" id="Extract-the-simulated-points-along-the-network-a-geopandas.GeoDataFrame">
 <h3>Extract the simulated points along the network a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code><a class="headerlink" href="#Extract-the-simulated-points-along-the-network-a-geopandas.GeoDataFrame" title="Permalink to this headline">¶</a></h3>
@@ -848,23 +841,23 @@ geopandas           0.7.0
   <tbody>
     <tr>
       <th>0</th>
-      <td>POINT (726020.759 878457.394)</td>
+      <td>POINT (723427.978 876005.082)</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>POINT (725259.927 880198.819)</td>
+      <td>POINT (724178.614 880208.203)</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>POINT (725239.200 879595.330)</td>
+      <td>POINT (723760.152 880213.873)</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>POINT (728270.700 877023.186)</td>
+      <td>POINT (727040.365 877022.114)</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>POINT (724212.237 878219.073)</td>
+      <td>POINT (724448.068 876327.878)</td>
     </tr>
   </tbody>
 </table>
@@ -906,12 +899,16 @@ geopandas           0.7.0
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="k">def</span> <span class="nf">plotter</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Generate a spatial plot.&quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="nf">_patch</span><span class="p">(</span><span class="n">_kws</span><span class="p">,</span> <span class="n">labinfo</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Generate a legend patch.&quot;&quot;&quot;</span>
         <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> — </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">labinfo</span><span class="p">)</span>
         <span class="n">_kws</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;lw&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span><span class="n">label</span><span class="p">,</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span><span class="o">.</span><span class="mi">5</span><span class="p">})</span>
         <span class="k">return</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">Line2D</span><span class="p">([],</span> <span class="p">[],</span> <span class="o">**</span><span class="n">_kws</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_legend</span><span class="p">(</span><span class="n">handles</span><span class="p">,</span> <span class="n">anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="o">.</span><span class="mi">75</span><span class="p">)):</span>
+        <span class="sd">&quot;&quot;&quot;Generate a legend.&quot;&quot;&quot;</span>
         <span class="n">lkws</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;fancybox&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span><span class="s2">&quot;framealpha&quot;</span><span class="p">:</span><span class="mf">0.85</span><span class="p">,</span> <span class="s2">&quot;fontsize&quot;</span><span class="p">:</span><span class="s2">&quot;xx-large&quot;</span><span class="p">}</span>
         <span class="n">lkws</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;bbox_to_anchor&quot;</span><span class="p">:</span> <span class="n">anchor</span><span class="p">,</span> <span class="s2">&quot;labelspacing&quot;</span><span class="p">:</span> <span class="mf">2.</span><span class="p">})</span>
         <span class="n">lkws</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;borderpad&quot;</span><span class="p">:</span> <span class="mf">2.</span><span class="p">,</span> <span class="s2">&quot;handletextpad&quot;</span><span class="p">:</span><span class="mf">1.5</span><span class="p">})</span>
@@ -919,6 +916,7 @@ geopandas           0.7.0
         <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="o">=</span><span class="n">handles</span><span class="p">,</span> <span class="o">**</span><span class="n">lkws</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">carto_elements</span><span class="p">(</span><span class="n">b</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add/adjust cartographic elements.&quot;&quot;&quot;</span>
         <span class="n">scalebar</span> <span class="o">=</span> <span class="n">ScaleBar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
         <span class="n">b</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">scalebar</span><span class="p">)</span>
         <span class="n">b</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([]);</span> <span class="n">b</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>

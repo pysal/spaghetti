@@ -117,6 +117,7 @@
 <li><a class="reference internal" href="#Split-network-arcs-into-segments-of-200-(US-feet-is-this-case)">Split network arcs into segments of 200 (US feet is this case)</a></li>
 <li><a class="reference internal" href="#The-returned-object-inherits-many-of-the-attributes-from-the-original-network">The returned object inherits many of the attributes from the original network</a></li>
 <li><a class="reference internal" href="#Extract-the-elements-from-both-the-original-network-and-the-split-network">Extract the elements from both the original network and the split network</a></li>
+<li><a class="reference internal" href="#Plotter-function">Plotter function</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#2.-Counts-per-link">2. Counts per link</a><ul>
@@ -415,7 +416,7 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-04-26T10:41:24-04:00
+2020-04-27T13:00:41-04:00
 
 CPython 3.7.3
 IPython 7.10.2
@@ -454,11 +455,11 @@ interpreter: 64bit
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 watermark 2.0.2
+matplotlib          3.1.2
 spaghetti           1.4.2.post2
+matplotlib_scalebar 0.6.1
 libpysal            4.2.2
 numpy               1.18.1
-matplotlib_scalebar 0.6.1
-matplotlib          3.1.2
 
 </pre></div></div>
 </div>
@@ -511,7 +512,7 @@ matplotlib          3.1.2
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x1238baef0&gt;}
+{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x123f07f28&gt;}
 </pre></div></div>
 </div>
 </div>
@@ -537,7 +538,7 @@ matplotlib          3.1.2
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;spaghetti.network.Network at 0x123967400&gt;
+&lt;spaghetti.network.Network at 0x123fb3978&gt;
 </pre></div></div>
 </div>
 </div>
@@ -575,7 +576,7 @@ matplotlib          3.1.2
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x123967668&gt;}
+{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x123fb3b00&gt;}
 </pre></div></div>
 </div>
 </div>
@@ -597,18 +598,25 @@ matplotlib          3.1.2
 </pre></div>
 </div>
 </div>
+</div>
+<div class="section" id="Plotter-function">
+<h3>Plotter function<a class="headerlink" href="#Plotter-function" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="k">def</span> <span class="nf">plotter</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Generate a spatial plot.&quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="nf">_patch</span><span class="p">(</span><span class="n">_kws</span><span class="p">,</span> <span class="n">labinfo</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Generate a legend patch.&quot;&quot;&quot;</span>
         <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> — </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">labinfo</span><span class="p">)</span>
         <span class="n">_kws</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;lw&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span><span class="n">label</span><span class="p">,</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span><span class="o">.</span><span class="mi">5</span><span class="p">})</span>
         <span class="k">return</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">Line2D</span><span class="p">([],</span> <span class="p">[],</span> <span class="o">**</span><span class="n">_kws</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_legend</span><span class="p">(</span><span class="n">handles</span><span class="p">,</span> <span class="n">anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="o">.</span><span class="mi">75</span><span class="p">)):</span>
+        <span class="sd">&quot;&quot;&quot;Generate a legend.&quot;&quot;&quot;</span>
         <span class="n">lkws</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;fancybox&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span><span class="s2">&quot;framealpha&quot;</span><span class="p">:</span><span class="mf">0.85</span><span class="p">,</span> <span class="s2">&quot;fontsize&quot;</span><span class="p">:</span><span class="s2">&quot;xx-large&quot;</span><span class="p">}</span>
         <span class="n">lkws</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;bbox_to_anchor&quot;</span><span class="p">:</span> <span class="n">anchor</span><span class="p">,</span> <span class="s2">&quot;labelspacing&quot;</span><span class="p">:</span> <span class="mf">2.</span><span class="p">})</span>
         <span class="n">lkws</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;borderpad&quot;</span><span class="p">:</span> <span class="mf">1.</span><span class="p">,</span> <span class="s2">&quot;handletextpad&quot;</span><span class="p">:</span><span class="mf">1.</span><span class="p">})</span>
@@ -631,6 +639,7 @@ matplotlib          3.1.2
     <span class="n">carto_elements</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">carto_elements</span><span class="p">(</span><span class="n">b</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Add/adjust cartographic elements.&quot;&quot;&quot;</span>
     <span class="n">scalebar</span> <span class="o">=</span> <span class="n">ScaleBar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
     <span class="n">b</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">scalebar</span><span class="p">)</span>
     <span class="n">b</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([]);</span> <span class="n">b</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>

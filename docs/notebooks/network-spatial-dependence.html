@@ -107,31 +107,24 @@
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">Network-constrained spatial dependence</a><ul>
-<li><a class="reference internal" href="#Demonstrating-cluster-detection-along-networks-with-the-K-function">Demonstrating cluster detection along networks with the <em>K</em> function</a></li>
-<li><a class="reference internal" href="#Instantiating-a-spaghetti.Network-object-and-point-patterns">Instantiating a <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object and point patterns</a><ul>
-<li><a class="reference internal" href="#Instantiate-the-network-from-a-.shp-file">Instantiate the network from a <code class="docutils literal notranslate"><span class="pre">.shp</span></code> file</a></li>
-<li><a class="reference internal" href="#Associate-the-network-with-point-patterns">Associate the network with point patterns</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#1.-…..">1. …..</a></li>
-<li><a class="reference internal" href="#quick-paragraph-on-clustering…..">quick paragraph on clustering…..</a></li>
-<li><a class="reference internal" href="#look-at-RDC-proposal-fro-1866">look at RDC proposal fro 1866</a><ul>
-<li><a class="reference internal" href="#k-function-looks-at-all-pairwise-distances"><em>k</em> function looks at all pairwise distances</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="###.-Network-constrained-observation-cluster-testing-—-K-function">##. Network-constrained observation cluster testing — <em>K</em> function</a><ul>
-<li><a class="reference internal" href="#Results-plotting-helper">Results plotting helper</a><ul>
+<li><a class="reference internal" href="#Demonstrating-cluster-detection-along-networks-with-the-Global-Auto-K-function">Demonstrating cluster detection along networks with the Global Auto <em>K</em> function</a></li>
+<li><a class="reference internal" href="#1.-A-demonstration-of-clustering">1. A demonstration of clustering</a><ul>
+<li><a class="reference internal" href="#Results-plotting-helper-function">Results plotting helper function</a></li>
 <li><a class="reference internal" href="#Equilateral-triangle">Equilateral triangle</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#2.-Synthetic-examples">2. Synthetic examples</a><ul>
+<li><a class="reference internal" href="#Regular-lattice-—-distinguishing-visual-clustering-from-statistical-clustering">Regular lattice — distinguishing visual clustering from statistical clustering</a></li>
+<li><a class="reference internal" href="#Network-arc-midpoints:-statistical-clustering">Network arc midpoints: statistical clustering</a></li>
+<li><a class="reference internal" href="#All-observations-on-two-network-arcs:-visual-clustering">All observations on two network arcs: visual clustering</a></li>
+<li><a class="reference internal" href="#Visual-clustering">Visual clustering</a></li>
+<li><a class="reference internal" href="#Statistical-clustering">Statistical clustering</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#3.-Empircal-examples">3. Empircal examples</a><ul>
-<li><a class="reference internal" href="#id3">Instantiate the network from a <code class="docutils literal notranslate"><span class="pre">.shp</span></code> file</a></li>
-<li><a class="reference internal" href="#id4">Associate the network with point patterns</a><ul>
+<li><a class="reference internal" href="#Instantiate-the-network-from-a-.shp-file">Instantiate the network from a <code class="docutils literal notranslate"><span class="pre">.shp</span></code> file</a></li>
+<li><a class="reference internal" href="#Associate-the-network-with-point-patterns">Associate the network with point patterns</a></li>
 <li><a class="reference internal" href="#Empircal-—-schools">Empircal — schools</a></li>
-</ul>
-</li>
 <li><a class="reference internal" href="#Empircal-—-crimes">Empircal — crimes</a></li>
 </ul>
 </li>
@@ -396,14 +389,14 @@ Interactive online version:
 <hr class="docutils" />
 <div class="section" id="Network-constrained-spatial-dependence">
 <h1>Network-constrained spatial dependence<a class="headerlink" href="#Network-constrained-spatial-dependence" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="Demonstrating-cluster-detection-along-networks-with-the-K-function">
-<h2>Demonstrating cluster detection along networks with the <em>K</em> function<a class="headerlink" href="#Demonstrating-cluster-detection-along-networks-with-the-K-function" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="Demonstrating-cluster-detection-along-networks-with-the-Global-Auto-K-function">
+<h2>Demonstrating cluster detection along networks with the Global Auto <em>K</em> function<a class="headerlink" href="#Demonstrating-cluster-detection-along-networks-with-the-Global-Auto-K-function" title="Permalink to this headline">¶</a></h2>
 <p><strong>Author: James D. Gaboardi</strong> <a class="reference external" href="mailto:jgaboardi&#37;&#52;&#48;gmail&#46;com">jgaboardi<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
 <p><strong>This notebook is an advanced walk-through for:</strong></p>
 <ol class="arabic simple">
-<li><p>Understanding the global auto <em>K</em> function elementary geometric objects</p></li>
-<li><p>Basic example with synthetic data</p></li>
-<li><p>Empirical example</p></li>
+<li><p>Understanding the global auto <em>K</em> function with an elementary geometric object</p></li>
+<li><p>Basic examples with synthetic data</p></li>
+<li><p>Empirical examples</p></li>
 </ol>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -420,7 +413,7 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-04-26T11:07:23-04:00
+2020-04-27T13:00:51-04:00
 
 CPython 3.7.3
 IPython 7.10.2
@@ -439,16 +432,14 @@ interpreter: 64bit
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">esda</span>
-<span class="kn">import</span> <span class="nn">geopandas</span>
+<span></span><span class="kn">import</span> <span class="nn">geopandas</span>
 <span class="kn">import</span> <span class="nn">libpysal</span>
 <span class="kn">import</span> <span class="nn">matplotlib</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">matplotlib_scalebar</span>
 <span class="kn">from</span> <span class="nn">matplotlib_scalebar.scalebar</span> <span class="kn">import</span> <span class="n">ScaleBar</span>
 <span class="kn">import</span> <span class="nn">numpy</span>
 <span class="kn">import</span> <span class="nn">spaghetti</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
+
 <span class="o">%</span><span class="k">matplotlib</span> inline
 <span class="o">%</span><span class="k">watermark</span> -w
 <span class="o">%</span><span class="k">watermark</span> -iv
@@ -461,13 +452,12 @@ interpreter: 64bit
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 watermark 2.0.2
-matplotlib_scalebar 0.6.1
-libpysal            4.2.2
-esda                2.2.1
-geopandas           0.7.0
 spaghetti           1.4.2.post2
 numpy               1.18.1
+matplotlib_scalebar 0.6.1
+geopandas           0.7.0
 matplotlib          3.1.2
+libpysal            4.2.2
 
 </pre></div></div>
 </div>
@@ -484,210 +474,65 @@ matplotlib          3.1.2
 </pre></div>
 </div>
 </div>
+<p><strong>The</strong> <a class="reference external" href="https://en.wikipedia.org/wiki/Spatial_descriptive_statistics#Ripley's_K_and_L_functions">K function</a> <strong>considers all pairwise distances of observations to determine the existence of clustering, or lack thereof. For further description see O’Sullivan and Unwin (2010) and Okabe and Sugihara (2012).</strong></p>
+<ul class="simple">
+<li><p><strong>D. O’Sullivan and D. J. Unwin.</strong> <em>Point Pattern Analysis</em>, chapter 5, pages 121–156. John Wiley &amp; Sons, Ltd, 2010. doi:10.1002/9780470549094.ch5.</p></li>
+<li><p><strong>Atsuyki Okabe and Kokichi Sugihara.</strong> <em>Network K Function Methods</em>, chapter 6, pages 119–136. John Wiley &amp; Sons, Ltd, 2012. doi:10.1002/9781119967101.ch6.</p></li>
+</ul>
 </div>
 <hr class="docutils" />
-<div class="section" id="Instantiating-a-spaghetti.Network-object-and-point-patterns">
-<h2>Instantiating a <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object and point patterns<a class="headerlink" href="#Instantiating-a-spaghetti.Network-object-and-point-patterns" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="Instantiate-the-network-from-a-.shp-file">
-<h3>Instantiate the network from a <code class="docutils literal notranslate"><span class="pre">.shp</span></code> file<a class="headerlink" href="#Instantiate-the-network-from-a-.shp-file" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="1.-A-demonstration-of-clustering">
+<h2>1. A demonstration of clustering<a class="headerlink" href="#1.-A-demonstration-of-clustering" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="Results-plotting-helper-function">
+<h3>Results plotting helper function<a class="headerlink" href="#Results-plotting-helper-function" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">in_data</span><span class="o">=</span><span class="n">libpysal</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;streets.shp&quot;</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="section" id="Associate-the-network-with-point-patterns">
-<h3>Associate the network with point patterns<a class="headerlink" href="#Associate-the-network-with-point-patterns" title="Permalink to this headline">¶</a></h3>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<hr class="docutils" />
-<div class="section" id="1.-…..">
-<h2>1. …..<a class="headerlink" href="#1.-….." title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="quick-paragraph-on-clustering…..">
-<h2>quick paragraph on clustering…..<a class="headerlink" href="#quick-paragraph-on-clustering….." title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="look-at-RDC-proposal-fro-1866">
-<h2>look at RDC proposal fro 1866<a class="headerlink" href="#look-at-RDC-proposal-fro-1866" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="k-function-looks-at-all-pairwise-distances">
-<h3><em>k</em> function looks at all pairwise distances<a class="headerlink" href="#k-function-looks-at-all-pairwise-distances" title="Permalink to this headline">¶</a></h3>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<hr class="docutils" />
-<div class="section" id="##.-Network-constrained-observation-cluster-testing-—-K-function">
-<h2>##. Network-constrained observation cluster testing — <em>K</em> function<a class="headerlink" href="###.-Network-constrained-observation-cluster-testing-—-K-function" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="Results-plotting-helper">
-<h3>Results plotting helper<a class="headerlink" href="#Results-plotting-helper" title="Permalink to this headline">¶</a></h3>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">def</span> <span class="nf">plot_k</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">_arcs</span><span class="p">,</span> <span class="n">df1</span><span class="p">,</span> <span class="n">df2</span><span class="p">,</span> <span class="n">obs_name</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span></span><span class="k">def</span> <span class="nf">plot_k</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">_arcs</span><span class="p">,</span> <span class="n">df1</span><span class="p">,</span> <span class="n">df2</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">wr</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">7</span><span class="p">)):</span>
+    <span class="sd">&quot;&quot;&quot;Plot a Global Auto K-function and spatial context.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">function_plot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Plot a Global Auto K-function.&quot;&quot;&quot;</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">k</span><span class="o">.</span><span class="n">observed</span><span class="p">,</span> <span class="s2">&quot;b-&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Observed&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">k</span><span class="o">.</span><span class="n">upperenvelope</span><span class="p">,</span> <span class="s2">&quot;r--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Upper&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">k</span><span class="o">.</span><span class="n">lowerenvelope</span><span class="p">,</span> <span class="s2">&quot;k--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Lower&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;x-large&quot;</span><span class="p">)</span>
+        <span class="n">title_text</span> <span class="o">=</span> <span class="s2">&quot;Global Auto $K$ Function: </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">obs</span>
+        <span class="n">title_text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> steps, </span><span class="si">%s</span><span class="s2"> permutations,&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">nsteps</span><span class="p">,</span> <span class="n">k</span><span class="o">.</span><span class="n">permutations</span><span class="p">)</span>
+        <span class="n">title_text</span> <span class="o">+=</span> <span class="s2">&quot; </span><span class="si">%s</span><span class="s2"> distribution&quot;</span> <span class="o">%</span> <span class="n">k</span><span class="o">.</span><span class="n">distribution</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">title_text</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.1</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Distance $(r)$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;x-large&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;$K(r)$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;x-large&quot;</span><span class="p">)</span>
 
-    <span class="c1"># function plot</span>
-    <span class="n">fig</span><span class="p">,</span> <span class="n">arr</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
-    <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">k</span><span class="o">.</span><span class="n">observed</span><span class="p">,</span> <span class="s2">&quot;b-&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Observed&quot;</span><span class="p">)</span>
-    <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">k</span><span class="o">.</span><span class="n">upperenvelope</span><span class="p">,</span> <span class="s2">&quot;r--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Upper&quot;</span><span class="p">)</span>
-    <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">k</span><span class="o">.</span><span class="n">lowerenvelope</span><span class="p">,</span> <span class="s2">&quot;k--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Lower&quot;</span><span class="p">)</span>
-    <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;x-large&quot;</span><span class="p">)</span>
-    <span class="n">title_text</span> <span class="o">=</span> <span class="s2">&quot;Global Auto $K$ Function: </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">obs_name</span>
-    <span class="n">title_text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> steps, </span><span class="si">%s</span><span class="s2"> permutations,&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">nsteps</span><span class="p">,</span> <span class="n">k</span><span class="o">.</span><span class="n">permutations</span><span class="p">)</span>
-    <span class="n">title_text</span> <span class="o">+=</span> <span class="s2">&quot; </span><span class="si">%s</span><span class="s2"> distribution&quot;</span> <span class="o">%</span> <span class="n">k</span><span class="o">.</span><span class="n">distribution</span>
-    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">title_text</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;xx-large&quot;</span><span class="p">)</span>
-    <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Distance $(r)$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;x-large&quot;</span><span class="p">)</span>
-    <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;$K(r)$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;x-large&quot;</span><span class="p">)</span>
-    <span class="c1"># spatial plot</span>
-    <span class="n">base</span> <span class="o">=</span> <span class="n">_arcs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
-    <span class="n">df1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
-    <span class="n">df2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">spatial_plot</span><span class="p">(</span><span class="n">ax</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Plot spatial context.&quot;&quot;&quot;</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="n">_arcs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+        <span class="n">df1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+        <span class="n">df2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">carto_elements</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
 
-    <span class="c1"># legend under geoplot</span>
-    <span class="c1"># horizontal -- 2 columns -- &quot;OBS NAME&quot; Locations - Empirical (#) and network-snapped (#)</span>
+    <span class="n">sub_args</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;gridspec_kw&quot;</span><span class="p">:{</span><span class="s2">&quot;width_ratios&quot;</span><span class="p">:</span> <span class="n">wr</span><span class="p">},</span> <span class="s2">&quot;figsize&quot;</span><span class="p">:</span><span class="n">size</span><span class="p">}</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">arr</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">**</span><span class="n">sub_args</span><span class="p">)</span>
+    <span class="n">function_plot</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">spatial_plot</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 
-    <span class="c1"># add scale bar ------------------------------------------- carto elements</span>
+<span class="k">def</span> <span class="nf">carto_elements</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Add/adjust cartographic elements.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">scale</span><span class="p">:</span>
         <span class="n">scalebar</span> <span class="o">=</span> <span class="n">ScaleBar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
-        <span class="n">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">scalebar</span><span class="p">)</span>
-    <span class="n">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([]);</span> <span class="n">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([]);</span>
-    <span class="n">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([]);</span> <span class="n">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([]);</span>
+        <span class="n">b</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">scalebar</span><span class="p">)</span>
+    <span class="n">b</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([]);</span> <span class="n">b</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+    <span class="n">b</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([]);</span> <span class="n">b</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([]);</span>
 </pre></div>
 </div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">libpysal</span><span class="o">.</span><span class="n">cg</span><span class="o">.</span><span class="n">Point</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)),</span> <span class="n">libpysal</span><span class="o">.</span><span class="n">cg</span><span class="o">.</span><span class="n">Point</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
-<span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">libpysal</span><span class="o">.</span><span class="n">cg</span><span class="o">.</span><span class="n">Chain</span><span class="p">([</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">]))</span>
-<span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">([</span><span class="n">p1</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">p2</span><span class="p">],</span> <span class="s2">&quot;eqtri_midps&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">vertices_df</span><span class="p">,</span> <span class="n">arcs_df</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span>
-    <span class="n">ntw</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="n">ntw</span><span class="o">.</span><span class="n">vertex_coords</span><span class="p">,</span> <span class="n">arcs</span><span class="o">=</span><span class="n">ntw</span><span class="o">.</span><span class="n">arcs</span>
-<span class="p">)</span>
-<span class="n">eqv</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="o">=</span><span class="s2">&quot;eqtri_midps&quot;</span><span class="p">)</span>
-<span class="n">eqv_snapped</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="o">=</span><span class="s2">&quot;eqtri_midps&quot;</span><span class="p">,</span> <span class="n">snapped</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">kres</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">GlobalAutoK</span><span class="p">(</span>
-    <span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;eqtri_midps&quot;</span><span class="p">],</span>
-    <span class="n">nsteps</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-    <span class="n">permutations</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-<span class="n">plot_k</span><span class="p">(</span><span class="n">kres</span><span class="p">,</span> <span class="n">arcs_df</span><span class="p">,</span> <span class="n">eqv</span><span class="p">,</span> <span class="n">eqv_snapped</span><span class="p">,</span> <span class="s2">&quot;eqtri_mps&quot;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_network-spatial-dependence_20_0.png"><img alt="../_images/notebooks_network-spatial-dependence_20_0.png" src="../_images/notebooks_network-spatial-dependence_20_0.png" style="width: 843px; height: 480px;" /></a>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
 </div>
 </div>
 <div class="section" id="Equilateral-triangle">
-<h4>Equilateral triangle<a class="headerlink" href="#Equilateral-triangle" title="Permalink to this headline">¶</a></h4>
+<h3>Equilateral triangle<a class="headerlink" href="#Equilateral-triangle" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -710,26 +555,18 @@ matplotlib          3.1.2
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">eqtri_sides</span><span class="p">,</span> <span class="n">eqtri_midps</span> <span class="o">=</span> <span class="n">equilateral_triangle</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">6.</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">eqtri_sides</span><span class="p">)</span>
+<span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">eqtri_sides</span><span class="p">)</span>
 <span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span><span class="n">eqtri_midps</span><span class="p">,</span> <span class="s2">&quot;eqtri_midps&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -738,11 +575,63 @@ matplotlib          3.1.2
 <span class="p">)</span>
 <span class="n">eqv</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="o">=</span><span class="s2">&quot;eqtri_midps&quot;</span><span class="p">)</span>
 <span class="n">eqv_snapped</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="o">=</span><span class="s2">&quot;eqtri_midps&quot;</span><span class="p">,</span> <span class="n">snapped</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">eqv_snapped</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>geometry</th>
+      <th>comp_label</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>POINT (3.00000 0.00000)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>POINT (1.50000 2.59808)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>POINT (4.50000 2.59808)</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -751,7 +640,7 @@ matplotlib          3.1.2
     <span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;eqtri_midps&quot;</span><span class="p">],</span>
     <span class="n">nsteps</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
     <span class="n">permutations</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-<span class="n">plot_k</span><span class="p">(</span><span class="n">kres</span><span class="p">,</span> <span class="n">arcs_df</span><span class="p">,</span> <span class="n">eqv</span><span class="p">,</span> <span class="n">eqv_snapped</span><span class="p">,</span> <span class="s2">&quot;eqtri_mps&quot;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">plot_k</span><span class="p">(</span><span class="n">kres</span><span class="p">,</span> <span class="n">arcs_df</span><span class="p">,</span> <span class="n">eqv</span><span class="p">,</span> <span class="n">eqv_snapped</span><span class="p">,</span> <span class="s2">&quot;eqtri_mps&quot;</span><span class="p">,</span> <span class="n">wr</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1.8</span><span class="p">],</span> <span class="n">scale</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -759,56 +648,135 @@ matplotlib          3.1.2
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_network-spatial-dependence_29_0.png"><img alt="../_images/notebooks_network-spatial-dependence_29_0.png" src="../_images/notebooks_network-spatial-dependence_29_0.png" style="width: 827px; height: 480px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_network-spatial-dependence_10_0.png"><img alt="../_images/notebooks_network-spatial-dependence_10_0.png" src="../_images/notebooks_network-spatial-dependence_10_0.png" style="width: 947px; height: 556px;" /></a>
 </div>
 </div>
-<p><strong>Interpretation:</strong> * <strong>This example demonstrates a complete lack of clustering with a strong indication of dispersion when approaching 5 units of distance.</strong></p>
+<p><strong>Interpretation:</strong></p>
+<ul class="simple">
+<li><p><strong>This example demonstrates a complete lack of clustering with a strong indication of dispersion when approaching 5 units of distance.</strong></p></li>
+</ul>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="2.-Synthetic-examples">
+<h2>2. Synthetic examples<a class="headerlink" href="#2.-Synthetic-examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="Regular-lattice-—-distinguishing-visual-clustering-from-statistical-clustering">
+<h3>Regular lattice — distinguishing visual clustering from statistical clustering<a class="headerlink" href="#Regular-lattice-—-distinguishing-visual-clustering-from-statistical-clustering" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
+<span></span><span class="n">bounds</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">h</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span>
+<span class="n">lattice</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">regular_lattice</span><span class="p">(</span><span class="n">bounds</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">nv</span><span class="o">=</span><span class="n">v</span><span class="p">,</span> <span class="n">exterior</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">in_data</span><span class="o">=</span><span class="n">lattice</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Network-arc-midpoints:-statistical-clustering">
+<h3>Network arc midpoints: statistical clustering<a class="headerlink" href="#Network-arc-midpoints:-statistical-clustering" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">midpoints</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">chain</span> <span class="ow">in</span> <span class="n">lattice</span><span class="p">:</span>
+    <span class="p">(</span><span class="n">v1x</span><span class="p">,</span> <span class="n">v1y</span><span class="p">),</span> <span class="p">(</span><span class="n">v2x</span><span class="p">,</span> <span class="n">v2y</span><span class="p">)</span> <span class="o">=</span> <span class="n">chain</span><span class="o">.</span><span class="n">vertices</span>
+    <span class="n">mp</span> <span class="o">=</span> <span class="n">libpysal</span><span class="o">.</span><span class="n">cg</span><span class="o">.</span><span class="n">Point</span><span class="p">(((</span><span class="n">v1x</span><span class="o">+</span><span class="n">v2x</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="p">(</span><span class="n">v1y</span><span class="o">+</span><span class="n">v2y</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span><span class="p">))</span>
+    <span class="n">midpoints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mp</span><span class="p">)</span>
+<span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span><span class="n">midpoints</span><span class="p">,</span> <span class="s2">&quot;midpoints&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="All-observations-on-two-network-arcs:-visual-clustering">
+<h3>All observations on two network arcs: visual clustering<a class="headerlink" href="#All-observations-on-two-network-arcs:-visual-clustering" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">npts</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">midpoints</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span>
+<span class="n">xs</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span> <span class="o">*</span> <span class="n">npts</span> <span class="o">+</span> <span class="p">[</span><span class="mf">2.0</span><span class="p">]</span> <span class="o">*</span> <span class="n">npts</span>
+<span class="n">ys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.4</span><span class="p">,</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">npts</span><span class="p">))</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">2.1</span><span class="p">,</span><span class="mf">2.9</span><span class="p">,</span> <span class="n">npts</span><span class="p">))</span>
+<span class="n">pclusters</span> <span class="o">=</span> <span class="p">[</span><span class="n">libpysal</span><span class="o">.</span><span class="n">cg</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span> <span class="k">for</span> <span class="n">xy</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span><span class="n">ys</span><span class="p">)]</span>
+<span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span><span class="n">pclusters</span><span class="p">,</span> <span class="s2">&quot;pclusters&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
+<span></span><span class="n">vertices_df</span><span class="p">,</span> <span class="n">arcs_df</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">arcs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">midpoints</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="o">=</span><span class="s2">&quot;midpoints&quot;</span><span class="p">,</span> <span class="n">snapped</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">pclusters</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="o">=</span><span class="s2">&quot;pclusters&quot;</span><span class="p">,</span> <span class="n">snapped</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="section" id="Visual-clustering">
+<h3>Visual clustering<a class="headerlink" href="#Visual-clustering" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
+<span></span><span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">kres</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">GlobalAutoK</span><span class="p">(</span><span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;pclusters&quot;</span><span class="p">],</span> <span class="n">nsteps</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">plot_k</span><span class="p">(</span><span class="n">kres</span><span class="p">,</span> <span class="n">arcs_df</span><span class="p">,</span> <span class="n">pclusters</span><span class="p">,</span> <span class="n">pclusters</span><span class="p">,</span> <span class="s2">&quot;pclusters&quot;</span><span class="p">,</span> <span class="n">wr</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1.8</span><span class="p">],</span> <span class="n">scale</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
 </div>
+<div class="output_area docutils container">
+<a class="reference internal image-reference" href="../_images/notebooks_network-spatial-dependence_19_0.png"><img alt="../_images/notebooks_network-spatial-dependence_19_0.png" src="../_images/notebooks_network-spatial-dependence_19_0.png" style="width: 914px; height: 556px;" /></a>
+</div>
+</div>
+<p><strong>Interpretation:</strong></p>
+<ul class="simple">
+<li><p><strong>This example exhibits a high degree of clustering within 1 unit of distance followed by a complete lack of clustering, then a strong indication of clustering around 3.5 units of distance and above. Both colloquilly and statistically, this pattern is clustered.</strong></p></li>
+</ul>
+</div>
+<div class="section" id="Statistical-clustering">
+<h3>Statistical clustering<a class="headerlink" href="#Statistical-clustering" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">kres</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">GlobalAutoK</span><span class="p">(</span><span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;midpoints&quot;</span><span class="p">],</span> <span class="n">nsteps</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">plot_k</span><span class="p">(</span><span class="n">kres</span><span class="p">,</span> <span class="n">arcs_df</span><span class="p">,</span> <span class="n">midpoints</span><span class="p">,</span> <span class="n">midpoints</span><span class="p">,</span> <span class="s2">&quot;midpoints&quot;</span><span class="p">,</span> <span class="n">wr</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1.8</span><span class="p">],</span> <span class="n">scale</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<a class="reference internal image-reference" href="../_images/notebooks_network-spatial-dependence_21_0.png"><img alt="../_images/notebooks_network-spatial-dependence_21_0.png" src="../_images/notebooks_network-spatial-dependence_21_0.png" style="width: 910px; height: 556px;" /></a>
+</div>
+</div>
+<p><strong>Interpretation:</strong></p>
+<ul class="simple">
+<li><p><strong>This example exhibits no clustering within 1 unit of distance followed by large increases in clustering at each 1-unit increment. After 3 units of distance, this pattern is highly clustered. Statistically speaking, this pattern is clustered, but not colloquilly.</strong></p></li>
+</ul>
 </div>
 </div>
 <hr class="docutils" />
 <div class="section" id="3.-Empircal-examples">
 <h2>3. Empircal examples<a class="headerlink" href="#3.-Empircal-examples" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id3">
-<h3>Instantiate the network from a <code class="docutils literal notranslate"><span class="pre">.shp</span></code> file<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="Instantiate-the-network-from-a-.shp-file">
+<h3>Instantiate the network from a <code class="docutils literal notranslate"><span class="pre">.shp</span></code> file<a class="headerlink" href="#Instantiate-the-network-from-a-.shp-file" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -820,10 +788,10 @@ matplotlib          3.1.2
 </div>
 </div>
 </div>
-<div class="section" id="id4">
-<h3>Associate the network with point patterns<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="Associate-the-network-with-point-patterns">
+<h3>Associate the network with point patterns<a class="headerlink" href="#Associate-the-network-with-point-patterns" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -835,19 +803,20 @@ matplotlib          3.1.2
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x130b4c8d0&gt;,
- &#39;schools&#39;: &lt;spaghetti.network.PointPattern at 0x12c9ad438&gt;}
+{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x131d6df98&gt;,
+ &#39;schools&#39;: &lt;spaghetti.network.PointPattern at 0x13089ef98&gt;}
 </pre></div></div>
 </div>
+</div>
 <div class="section" id="Empircal-—-schools">
-<h4>Empircal — schools<a class="headerlink" href="#Empircal-—-schools" title="Permalink to this headline">¶</a></h4>
+<h3>Empircal — schools<a class="headerlink" href="#Empircal-—-schools" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -857,15 +826,15 @@ matplotlib          3.1.2
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">kres</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">GlobalAutoK</span><span class="p">(</span>
     <span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;schools&quot;</span><span class="p">],</span>
-    <span class="n">nsteps</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
-    <span class="n">permutations</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+    <span class="n">nsteps</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">permutations</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="n">plot_k</span><span class="p">(</span><span class="n">kres</span><span class="p">,</span> <span class="n">arcs_df</span><span class="p">,</span> <span class="n">schools</span><span class="p">,</span> <span class="n">schools_snapped</span><span class="p">,</span> <span class="s2">&quot;schools&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -874,16 +843,18 @@ matplotlib          3.1.2
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_network-spatial-dependence_41_0.png"><img alt="../_images/notebooks_network-spatial-dependence_41_0.png" src="../_images/notebooks_network-spatial-dependence_41_0.png" style="width: 852px; height: 480px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_network-spatial-dependence_28_0.png"><img alt="../_images/notebooks_network-spatial-dependence_28_0.png" src="../_images/notebooks_network-spatial-dependence_28_0.png" style="width: 975px; height: 556px;" /></a>
 </div>
 </div>
-<p><strong>Interpretation…. this is what we can infer here….</strong></p>
-</div>
+<p><strong>Interpretation:</strong></p>
+<ul class="simple">
+<li><p><strong>Schools exhibit no clustering until roughly 1,000 meters then display more clustering up to approximately 3,000 meters, followed by high clustering up to 6,000 meters.</strong></p></li>
+</ul>
 </div>
 <div class="section" id="Empircal-—-crimes">
 <h3>Empircal — crimes<a class="headerlink" href="#Empircal-—-crimes" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -893,15 +864,15 @@ matplotlib          3.1.2
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">kres</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">GlobalAutoK</span><span class="p">(</span>
     <span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;crimes&quot;</span><span class="p">],</span>
-    <span class="n">nsteps</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
-    <span class="n">permutations</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+    <span class="n">nsteps</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">permutations</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="n">plot_k</span><span class="p">(</span><span class="n">kres</span><span class="p">,</span> <span class="n">arcs_df</span><span class="p">,</span> <span class="n">crimes</span><span class="p">,</span> <span class="n">crimes_snapped</span><span class="p">,</span> <span class="s2">&quot;crimes&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -910,10 +881,13 @@ matplotlib          3.1.2
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_network-spatial-dependence_45_0.png"><img alt="../_images/notebooks_network-spatial-dependence_45_0.png" src="../_images/notebooks_network-spatial-dependence_45_0.png" style="width: 859px; height: 480px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_network-spatial-dependence_31_0.png"><img alt="../_images/notebooks_network-spatial-dependence_31_0.png" src="../_images/notebooks_network-spatial-dependence_31_0.png" style="width: 973px; height: 556px;" /></a>
 </div>
 </div>
-<p><strong>Interpretation…. this is what we can infer here….</strong></p>
+<p><strong>Interpretation:</strong></p>
+<ul class="simple">
+<li><p><strong>There is strong evidence to suggest crimes are clustered at all distances along the network, but more so within several meters of each other and at 10,000 meters.</strong></p></li>
+</ul>
 </div>
 </div>
 </div>

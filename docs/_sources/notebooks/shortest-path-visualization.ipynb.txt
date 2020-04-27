@@ -28,8 +28,8 @@
    "execution_count": 1,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-03-28T20:16:47.646950Z",
-     "start_time": "2020-03-28T20:16:47.328560Z"
+     "end_time": "2020-04-27T17:05:45.520344Z",
+     "start_time": "2020-04-27T17:05:45.255541Z"
     }
    },
    "outputs": [
@@ -37,7 +37,7 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "2020-03-28T16:16:47-04:00\n",
+      "2020-04-27T13:05:45-04:00\n",
       "\n",
       "CPython 3.7.3\n",
       "IPython 7.10.2\n",
@@ -62,8 +62,8 @@
    "execution_count": 2,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-03-28T20:16:49.106862Z",
-     "start_time": "2020-03-28T20:16:47.651083Z"
+     "end_time": "2020-04-27T17:05:47.228896Z",
+     "start_time": "2020-04-27T17:05:45.524960Z"
     },
     "scrolled": true
    },
@@ -73,9 +73,9 @@
      "output_type": "stream",
      "text": [
       "watermark 2.0.2\n",
-      "matplotlib 3.1.2\n",
-      "libpysal   4.2.2\n",
       "spaghetti  1.4.2.post2\n",
+      "libpysal   4.2.2\n",
+      "matplotlib 3.1.2\n",
       "\n"
      ]
     }
@@ -97,8 +97,8 @@
    "execution_count": 3,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-03-28T20:16:49.117938Z",
-     "start_time": "2020-03-28T20:16:49.113950Z"
+     "end_time": "2020-04-27T17:05:47.249584Z",
+     "start_time": "2020-04-27T17:05:47.241181Z"
     }
    },
    "outputs": [],
@@ -124,8 +124,8 @@
    "execution_count": 4,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-03-28T20:16:49.138617Z",
-     "start_time": "2020-03-28T20:16:49.127509Z"
+     "end_time": "2020-04-27T17:05:47.281828Z",
+     "start_time": "2020-04-27T17:05:47.257452Z"
     }
    },
    "outputs": [],
@@ -151,8 +151,8 @@
    "execution_count": 5,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-03-28T20:16:49.180529Z",
-     "start_time": "2020-03-28T20:16:49.142016Z"
+     "end_time": "2020-04-27T17:05:47.368742Z",
+     "start_time": "2020-04-27T17:05:47.285194Z"
     }
    },
    "outputs": [],
@@ -165,8 +165,8 @@
    "execution_count": 6,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-03-28T20:16:49.777583Z",
-     "start_time": "2020-03-28T20:16:49.182890Z"
+     "end_time": "2020-04-27T17:05:47.919669Z",
+     "start_time": "2020-04-27T17:05:47.376781Z"
     }
    },
    "outputs": [
@@ -204,8 +204,8 @@
    "execution_count": 7,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-03-28T20:16:49.793240Z",
-     "start_time": "2020-03-28T20:16:49.780243Z"
+     "end_time": "2020-04-27T17:05:47.939975Z",
+     "start_time": "2020-04-27T17:05:47.925377Z"
     }
    },
    "outputs": [],
@@ -232,8 +232,8 @@
    "execution_count": 8,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-03-28T20:16:49.817632Z",
-     "start_time": "2020-03-28T20:16:49.799482Z"
+     "end_time": "2020-04-27T17:05:47.975855Z",
+     "start_time": "2020-04-27T17:05:47.948819Z"
     }
    },
    "outputs": [],
@@ -256,8 +256,8 @@
    "execution_count": 9,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-03-28T20:16:49.835500Z",
-     "start_time": "2020-03-28T20:16:49.825013Z"
+     "end_time": "2020-04-27T17:05:48.011970Z",
+     "start_time": "2020-04-27T17:05:47.980918Z"
     }
    },
    "outputs": [],
@@ -292,8 +292,8 @@
    "execution_count": 10,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-03-28T20:16:50.926014Z",
-     "start_time": "2020-03-28T20:16:49.839940Z"
+     "end_time": "2020-04-27T17:05:48.811847Z",
+     "start_time": "2020-04-27T17:05:48.019994Z"
     }
    },
    "outputs": [
@@ -339,8 +339,8 @@
    "execution_count": 11,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-03-28T20:16:50.950266Z",
-     "start_time": "2020-03-28T20:16:50.934534Z"
+     "end_time": "2020-04-27T17:05:48.846121Z",
+     "start_time": "2020-04-27T17:05:48.827018Z"
     }
    },
    "outputs": [
@@ -374,8 +374,8 @@
    "execution_count": 12,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-03-28T20:16:50.965697Z",
-     "start_time": "2020-03-28T20:16:50.955394Z"
+     "end_time": "2020-04-27T17:05:48.880572Z",
+     "start_time": "2020-04-27T17:05:48.852032Z"
     }
    },
    "outputs": [
@@ -406,17 +406,17 @@
    "execution_count": 13,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-03-28T20:16:50.981950Z",
-     "start_time": "2020-03-28T20:16:50.970615Z"
+     "end_time": "2020-04-27T17:05:48.899717Z",
+     "start_time": "2020-04-27T17:05:48.883768Z"
     }
    },
    "outputs": [
     {
      "data": {
       "text/plain": [
-       "[[(0, 1), <libpysal.cg.shapes.Chain at 0x1247fc048>],\n",
-       " [(0, 2), <libpysal.cg.shapes.Chain at 0x1205d7f28>],\n",
-       " [(1, 2), <libpysal.cg.shapes.Chain at 0x1205d7860>]]"
+       "[[(0, 1), <libpysal.cg.shapes.Chain at 0x11fc6b2e8>],\n",
+       " [(0, 2), <libpysal.cg.shapes.Chain at 0x124c9f828>],\n",
+       " [(1, 2), <libpysal.cg.shapes.Chain at 0x123e90ef0>]]"
       ]
      },
      "execution_count": 13,
@@ -441,8 +441,8 @@
    "execution_count": 14,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-03-28T20:16:51.021147Z",
-     "start_time": "2020-03-28T20:16:50.986862Z"
+     "end_time": "2020-04-27T17:05:48.963990Z",
+     "start_time": "2020-04-27T17:05:48.915635Z"
     }
    },
    "outputs": [
@@ -521,8 +521,8 @@
    "execution_count": 15,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-03-28T20:16:51.408788Z",
-     "start_time": "2020-03-28T20:16:51.028398Z"
+     "end_time": "2020-04-27T17:05:49.262620Z",
+     "start_time": "2020-04-27T17:05:48.969727Z"
     }
    },
    "outputs": [
@@ -559,8 +559,8 @@
    "execution_count": 16,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-03-28T20:16:52.306960Z",
-     "start_time": "2020-03-28T20:16:51.424513Z"
+     "end_time": "2020-04-27T17:05:50.048366Z",
+     "start_time": "2020-04-27T17:05:49.266256Z"
     }
    },
    "outputs": [
@@ -609,8 +609,8 @@
    "execution_count": 17,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-03-28T20:16:52.920917Z",
-     "start_time": "2020-03-28T20:16:52.313967Z"
+     "end_time": "2020-04-27T17:05:50.527681Z",
+     "start_time": "2020-04-27T17:05:50.061070Z"
     }
    },
    "outputs": [],
@@ -624,8 +624,8 @@
    "execution_count": 18,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-03-28T20:16:53.494612Z",
-     "start_time": "2020-03-28T20:16:52.925179Z"
+     "end_time": "2020-04-27T17:05:51.105772Z",
+     "start_time": "2020-04-27T17:05:50.529988Z"
     }
    },
    "outputs": [
@@ -663,8 +663,8 @@
    "execution_count": 19,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-03-28T20:16:53.714097Z",
-     "start_time": "2020-03-28T20:16:53.498671Z"
+     "end_time": "2020-04-27T17:05:51.219989Z",
+     "start_time": "2020-04-27T17:05:51.108419Z"
     }
    },
    "outputs": [],
@@ -691,8 +691,8 @@
    "execution_count": 20,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-03-28T20:16:58.886471Z",
-     "start_time": "2020-03-28T20:16:53.723841Z"
+     "end_time": "2020-04-27T17:05:55.195712Z",
+     "start_time": "2020-04-27T17:05:51.222355Z"
     }
    },
    "outputs": [
@@ -738,8 +738,8 @@
    "execution_count": 21,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-03-28T20:16:59.727949Z",
-     "start_time": "2020-03-28T20:16:58.889894Z"
+     "end_time": "2020-04-27T17:05:56.154983Z",
+     "start_time": "2020-04-27T17:05:55.203702Z"
     }
    },
    "outputs": [
@@ -848,8 +848,8 @@
    "execution_count": 22,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-03-28T20:17:00.143493Z",
-     "start_time": "2020-03-28T20:16:59.735032Z"
+     "end_time": "2020-04-27T17:05:56.513062Z",
+     "start_time": "2020-04-27T17:05:56.160922Z"
     }
    },
    "outputs": [
@@ -886,8 +886,8 @@
    "execution_count": 23,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-03-28T20:17:00.953129Z",
-     "start_time": "2020-03-28T20:17:00.168273Z"
+     "end_time": "2020-04-27T17:05:57.249469Z",
+     "start_time": "2020-04-27T17:05:56.521925Z"
     }
    },
    "outputs": [
@@ -929,8 +929,8 @@
    "execution_count": 24,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-03-28T20:17:00.987746Z",
-     "start_time": "2020-03-28T20:17:00.960811Z"
+     "end_time": "2020-04-27T17:05:57.277770Z",
+     "start_time": "2020-04-27T17:05:57.254907Z"
     }
    },
    "outputs": [],
@@ -946,8 +946,8 @@
    "execution_count": 25,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-03-28T20:17:02.052949Z",
-     "start_time": "2020-03-28T20:17:00.995141Z"
+     "end_time": "2020-04-27T17:05:57.943601Z",
+     "start_time": "2020-04-27T17:05:57.281109Z"
     }
    },
    "outputs": [
@@ -994,8 +994,8 @@
    "execution_count": 26,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-03-28T20:17:02.077373Z",
-     "start_time": "2020-03-28T20:17:02.061137Z"
+     "end_time": "2020-04-27T17:05:57.969071Z",
+     "start_time": "2020-04-27T17:05:57.946892Z"
     }
    },
    "outputs": [],
@@ -1011,8 +1011,8 @@
    "execution_count": 27,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2020-03-28T20:17:02.925792Z",
-     "start_time": "2020-03-28T20:17:02.083050Z"
+     "end_time": "2020-04-27T17:05:58.732662Z",
+     "start_time": "2020-04-27T17:05:57.971523Z"
     }
    },
    "outputs": [
