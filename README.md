@@ -111,7 +111,9 @@ If you use PySAL-spaghetti in a scientific publication, we would appreciate usin
 
 ```
 @misc{Gaboardi2018,
-    author    = {Gaboardi, James D. and Laura, Jay and Rey, Sergio and Wolf, Levi John and Folch, David C. and Kang, Wei and Stephens, Philip and Schmidt, Charles},
+    author    = {Gaboardi, James D. and Laura, Jay and Rey, Sergio and 
+                 Wolf, Levi John and Folch, David C. and Kang, Wei and 
+                 Stephens, Philip and Schmidt, Charles},
     month     = {oct},
     year      = {2018},
     title     = {pysal/spaghetti},
