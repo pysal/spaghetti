@@ -1,6 +1,6 @@
 <p align="center">
-<img src="figs/pysal_nav_logo_2line.svg" width="370" height="200" />
-<img src="figs/spaghetti_nav_logo.svg" width="480" height="200" />
+<img src="docsrc/_static/images/pysal_nav_logo_2line.svg" width="370" height="200" />
+<img src="docsrc/_static/images/spaghetti_nav_logo.svg" width="480" height="200" />
 </p>
 
 # [pysal/spaghetti](http://pysal.org/spaghetti/)
@@ -10,7 +10,7 @@
 Spaghetti is an open-source Python library for the analysis of network-based spatial data. Originating from the `network` module in [PySAL (Python Spatial Analysis Library)](http://pysal.org), it is under active development for the inclusion of newly proposed methods for building graph-theoretic networks and the analysis of network events. This package is part of a [refactoring of PySAL](https://github.com/pysal/pysal/wiki/PEP-13:-Refactor-PySAL-Using-Submodules).
 
 *An example of a network's [minimum spanning tree](https://pysal.org/spaghetti/generated/spaghetti.spanning_tree.html#spaghetti.spanning_tree):*<p align="center">
-<img src="figs/mst_logo_pasta.png" width="600" height="225" />
+<img src="docsrc/_static/images/mst_logo_pasta.png" width="600" height="225" />
 </p>
 
 |[![PyPI version](https://badge.fury.io/py/spaghetti.svg)](https://badge.fury.io/py/spaghetti)| [![Conda Version](https://img.shields.io/conda/vn/conda-forge/spaghetti.svg)](https://anaconda.org/conda-forge/spaghetti) | ![tag](https://img.shields.io/github/v/release/pysal/spaghetti?include_prereleases&sort=semver) | [![GitHub issues open](https://img.shields.io/github/issues/pysal/spaghetti.svg?maxAge=3600)](https://github.com/pysal/spaghetti/issues) | [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/pysal/spaghetti/master)
@@ -119,6 +119,6 @@ If you use PySAL-spaghetti in a scientific publication, we would appreciate usin
 ## Funding
 This project is/was partially funded through:
 
-[<img align="middle" src="figs/ardc_logo.png" width="150">](https://atlantardc.wordpress.com) Atlanta Research Data Center: [A Polygon-Based Approach to Spatial Network Allocation](https://atlantardc.files.wordpress.com/2018/05/ardc-newsletter_2018_2.pdf)
+[<img align="middle" src="docsrc/_static/images/ardc_logo.png" width="150">](https://atlantardc.wordpress.com) Atlanta Research Data Center: [A Polygon-Based Approach to Spatial Network Allocation](https://atlantardc.files.wordpress.com/2018/05/ardc-newsletter_2018_2.pdf)
 
-[<img align="middle" src="figs/nsf_logo.png" width="100">](https://www.nsf.gov/index.jsp) National Science Foundation Award #1825768: [National Historical Geographic Information System](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1825768&HistoricalAwards=false)
+[<img align="middle" src="docsrc/_static/images/nsf_logo.png" width="100">](https://www.nsf.gov/index.jsp) National Science Foundation Award #1825768: [National Historical Geographic Information System](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1825768&HistoricalAwards=false)
