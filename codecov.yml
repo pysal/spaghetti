@@ -1,26 +1,24 @@
 codecov:
   notify:
-   after_n_builds: 24
+    after_n_builds: 24
 coverage:
   range: 50..95
   round: nearest
   precision: 1
   status:
-    project:
-      default:
-        threshold: 2%
-    patch:
-      default:
-        threshold: 2%
-        target: 80%
-    changes:
-      default:
-        threshold: 2%
+  project:
+    default:
+      threshold: 2%
+  patch:
+    default:
+      threshold: 2%
+      target: 80%
   ignore:
     - "tests/*"
 comment:
   layout: "reach, diff, files"
-  branches: *
+  branches:
+    - *
   behavior: once
   after_n_builds: 24
   require_changes: true
