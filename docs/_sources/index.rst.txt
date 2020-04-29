@@ -6,7 +6,7 @@
     <img 
         src="_static/images/spaghetti_nav_logo.svg" 
         class="img-responsive center-block" 
-        alt="spaghatti Logo" 
+        alt="spaghetti logo" 
         width="470" 
         height="200"
     >
@@ -89,21 +89,39 @@ Development of `spaghetti` is hosted on GitHub_.
 Citing `spaghetti`
 ------------------
 
-If you use PySAL-spaghetti in a scientific publication, we would appreciate using the following citation:
+If you use PySAL-spaghetti in a scientific publication, we would appreciate using the following BibTeX citation::
 
-  Bibtex entry::
+  @misc{Gaboardi2018,
+    author   = {Gaboardi, James D. and Laura, Jay and Rey, Sergio and
+                Wolf, Levi John and Folch, David C. and Kang, Wei and 
+                Stephens, Philip and Schmidt, Charles},
+    month    = {oct},
+    year     = {2018},
+    title    = {pysal/spaghetti},
+    url      = {https://github.com/pysal/spaghetti},
+    doi      = {10.5281/zenodo.1343650},
+    keywords = {graph-theory,network-analysis,python,spatial-networks,topology}
+  }
 
-      @misc{Gaboardi2018,
-        author   = {Gaboardi, James D. and Laura, Jay and Rey, Sergio and
-                    Wolf, Levi John and Folch, David C. and Kang, Wei and 
-                    Stephens, Philip and Schmidt, Charles},
-        month    = {oct},
-        year     = {2018},
-        title    = {pysal/spaghetti},
-        url      = {https://github.com/pysal/spaghetti},
-        doi      = {10.5281/zenodo.1343650},
-        keywords = {graph-theory,network-analysis,python,spatial-networks,topology}
-      }
+
+Funding
+-------
+
+This project is/was partially funded through:
+
+.. figure:: _static/images/ardc_logo.png
+    :target: https://atlantardc.wordpress.com
+    :width: 150
+    :align: left
+
+    The Atlanta Research Data Center: `A Polygon-Based Approach to Spatial Network Allocation <https://atlantardc.files.wordpress.com/2018/05/ardc-newsletter_2018_2.pdf>`_
+
+.. figure:: _static/images/nsf_logo.png
+    :target: https://www.nsf.gov/index.jsp
+    :width: 100
+    :align: left
+
+    National Science Foundation Award #1825768: `National Historical Geographic Information System <https://www.nsf.gov/awardsearch/showAward?AWD_ID=1825768&HistoricalAwards=false>`_
 
 
 .. raw:: html
