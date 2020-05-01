@@ -17,8 +17,6 @@ coverage:
     - "tests/*"
 comment:
   layout: "reach, diff, files"
-  branches:
-    - *
   behavior: once
   after_n_builds: 24
   require_changes: true
