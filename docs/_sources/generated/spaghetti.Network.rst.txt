@@ -13,7 +13,7 @@ spaghetti.Network
 
    .. autosummary::
    
-      ~Network.NetworkK
+      ~Network.GlobalAutoK
       ~Network.__init__
       ~Network.allneighbordistances
       ~Network.compute_distance_to_vertices

@@ -548,15 +548,13 @@ class TestNetworkPointPattern(unittest.TestCase):
         meancounts = sum(counts.values()) / float(len(counts.keys()))
         self.assertAlmostEqual(meancounts, 1.0, places=5)
 
-    def test_simulate_normal_observations(self):
+    def test_simulate_uniform_observations(self):
         sim = self.ntw.simulate_observations(self.known_pp1_npoints)
         self.assertEqual(self.known_pp1_npoints, sim.npoints)
 
-    def test_simulate_poisson_observations(self):
-        sim = self.ntw.simulate_observations(
-            self.known_pp1_npoints, distribution="poisson"
-        )
-        self.assertEqual(self.known_pp1_npoints, sim.npoints)
+    def test_simulate_unsupported_distribution_observations(self):
+        with self.assertRaises(RuntimeError):
+            self.ntw.simulate_observations(1, distribution="mrofinu")
 
     def test_all_neighbor_distances(self):
         matrix1, tree = self.ntw.allneighbordistances(schools, gen_tree=True)
@@ -703,15 +701,13 @@ class TestNetworkAnalysis(unittest.TestCase):
         self.mids = "mids"
         self.ntw.snapobservations(midpoints, self.mids)
         npts = self.ntw.pointpatterns[self.mids].npoints
-        numpy.random.seed(0)
-        self.ntw.simulate_observations(npts)
         self.test_permutations = 99
         self.test_steps = 10
 
     def tearDown(self):
         pass
 
-    def test_network_k(self):
+    def test_global_auto_k_uniform(self):
         known_lowerenvelope = numpy.array(
             [
                 0.0,
@@ -727,13 +723,23 @@ class TestNetworkAnalysis(unittest.TestCase):
             ]
         )
         numpy.random.seed(0)
-        obtained = self.ntw.NetworkK(
+        obtained = self.ntw.GlobalAutoK(
             self.ntw.pointpatterns[self.mids],
             permutations=self.test_permutations,
             nsteps=self.test_steps,
+            distribution="uniform",
         )
         self.assertEqual(obtained.lowerenvelope.shape[0], self.test_steps)
         numpy.testing.assert_allclose(obtained.lowerenvelope, known_lowerenvelope)
+
+    def test_global_auto_k_unsupported_distribution(self):
+        with self.assertRaises(RuntimeError):
+            self.ntw.GlobalAutoK(
+                self.ntw.pointpatterns[self.mids],
+                permutations=self.test_permutations,
+                nsteps=self.test_steps,
+                distribution="mrofinu",
+            )
 
 
 # -------------------------------------------------------------------------------

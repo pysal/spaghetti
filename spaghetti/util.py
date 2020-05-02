@@ -78,6 +78,7 @@ def get_neighbor_distances(ntw, v0, l):
     >>> neighs = spaghetti.util.get_neighbor_distances(ntw, 0, ntw.arc_lengths)
     >>> numpy.round(neighs[1], 10)
     102.6235345344
+    
     """
 
     # fetch links associated with vertices
@@ -324,6 +325,7 @@ def squared_distance_point_link(point, link):
     
     Returns
     -------
+    
     sqd : float
         The distance squared between the point and edge.
     
@@ -493,14 +495,17 @@ def network_has_cycle(adjacency):
     
     Parameters
     ----------
+    
     adjacency : spaghetti.Network.adjacencylist
         Vertex adjacency relationships.
     
     Returns
     -------
+    
     network_cycle_found : bool
         ``True`` for a cycle being found in the network/graph, 
         otherwise ``False``.
+    
     """
 
     def tree_has_cycle(_parent, _v):
@@ -508,15 +513,19 @@ def network_has_cycle(adjacency):
 
         Parameters
         ----------
+        
         _parent : int
             Root vertex for the subnetwork/graph.
+        
         _v : int
             Current vertex index of in the complete network.
 
         Returns
         -------
+        
         subtree_cycle_found : bool
             Current recursion found a cycle in the subtree.
+        
         """
 
         # Set current cycle tag as False
@@ -567,6 +576,7 @@ def chain_constr(vcoords, arcs):
     
     Parameters
     ----------
+    
     vcoords : dict
         Vertex to coordinate lookup (see ``spaghetti.Network.vertex_coords``).
     
@@ -575,8 +585,10 @@ def chain_constr(vcoords, arcs):
     
     Returns
     -------
+    
     spatial_reps : list
         Spatial representations of arcs - ``libpysal.cg.Chain`` objects.
+    
     """
     spatial_reps = [_chain_constr(vcoords, vs) for vs in arcs]
     return spatial_reps
@@ -587,6 +599,7 @@ def _chain_constr(_vcoords, _vs):
     
     Parameters
     ----------
+    
     _vcoords : {dict, None}
         See ``vcoords`` in ``get_chains()``.
         
@@ -595,8 +608,10 @@ def _chain_constr(_vcoords, _vs):
         
     Returns
     -------
+    
     chain : libpysal.cg.Chain
         Spatial representation of the arc.
+    
     """
 
     if _vcoords:
@@ -732,20 +747,22 @@ def _points_as_gdf(
     if vertices or vertices_for_arcs:
         pts_dict = net.vertex_coords
 
-    # raw point pattern
-    if pp_name and not snapped:
+    if pp_name:
         try:
-            pp_pts = net.pointpatterns[pp_name].points
+            pp = net.pointpatterns[pp_name]
         except KeyError:
             err_msg = "Available point patterns are {}"
             raise KeyError(err_msg.format(list(net.pointpatterns.keys())))
 
-        n_pp_pts = range(len(pp_pts))
-        pts_dict = {point: pp_pts[point]["coordinates"] for point in n_pp_pts}
+        # raw point pattern
+        if not snapped:
+            pp_pts = pp.points
+            n_pp_pts = range(len(pp_pts))
+            pts_dict = {point: pp_pts[point]["coordinates"] for point in n_pp_pts}
 
-    # snapped point pattern
-    elif pp_name and snapped:
-        pts_dict = net.pointpatterns[pp_name].snapped_coordinates
+        # snapped point pattern
+        else:
+            pts_dict = pp.snapped_coordinates
 
     # instantiate geopandas.GeoDataFrame
     pts_list = list(pts_dict.items())
@@ -753,11 +770,18 @@ def _points_as_gdf(
     points.geometry = points.geometry.apply(lambda p: Point(p))
 
     # additional columns
-    ncv_tag = "network_component_vertices"
-    if hasattr(net, ncv_tag):
-        ncv = getattr(net, ncv_tag)
-        ncv_map = {v: k for k, verts in ncv.items() for v in verts}
-        points["comp_label"] = points[id_col].map(ncv_map)
+    if not pp_name:
+        ncv_tag = "network_component_vertices"
+        if hasattr(net, ncv_tag):
+            ncv = getattr(net, ncv_tag)
+            ncv_map = {v: k for k, verts in ncv.items() for v in verts}
+            points["comp_label"] = points[id_col].map(ncv_map)
+    if pp_name:
+        c2o_tag = "component_to_obs"
+        if hasattr(pp, c2o_tag):
+            c2o = getattr(pp, c2o_tag)
+            o2c_map = {o: c for c, obs in c2o.items() for o in obs}
+            points["comp_label"] = points[id_col].map(o2c_map)
 
     return points
 

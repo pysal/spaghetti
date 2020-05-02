@@ -72,12 +72,15 @@
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pointpattern-attributes.html">Network point pattern attributes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="connected-components.html">Connected components in a spatial network</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shortest-path-visualization.html">Generating regular lattices and visualizing shortest paths</a></li>
-<li class="toctree-l2"><a class="reference internal" href="network-analysis.html">Spatial network analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network-segmentation.html">Spatial network segmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network-spatial-dependence.html">Network-constrained spatial dependence</a></li>
 <li class="toctree-l2"><a class="reference internal" href="network-spatial-weights.html">Network spatial weights</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Network spanning trees</a></li>
 <li class="toctree-l2"><a class="reference internal" href="caveats.html">Caveats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network-spatial-autocorrelation.html">Network-constrained spatial autocorrelation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="facility-location.html">Demostrating network-based optimal facility location modeling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="transportation-problem.html">The Transportation Problem</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tsp.html">The Traveling Sales(man)(person) Problem — TSP</a></li>
@@ -406,7 +409,7 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-03-30T11:29:21-04:00
+2020-05-02T17:52:42-04:00
 
 CPython 3.7.3
 IPython 7.10.2
@@ -445,8 +448,8 @@ interpreter: 64bit
 <div class="highlight"><pre>
 watermark 2.0.2
 spaghetti  1.4.2.post2
-matplotlib 3.1.2
 geopandas  0.7.0
+matplotlib 3.1.2
 libpysal   4.2.2
 
 </pre></div></div>
@@ -600,7 +603,7 @@ libpysal   4.2.2
 <a class="reference internal image-reference" href="../_images/notebooks_spanning-trees_13_0.png"><img alt="../_images/notebooks_spanning-trees_13_0.png" src="../_images/notebooks_spanning-trees_13_0.png" style="width: 695px; height: 683px;" /></a>
 </div>
 </div>
-<p>No cycles can be formed with this simple intersection. Therefore, all network arcs are both members of the minimum and maximum spanning trees.</p>
+<p><strong>No cycles can be formed with this simple intersection. Therefore, all network arcs are both members of the minimum and maximum spanning trees.</strong></p>
 </div>
 <hr class="docutils" />
 <div class="section" id="1.b-Pythagorean-triple-triangle">
@@ -680,7 +683,7 @@ libpysal   4.2.2
 <a class="reference internal image-reference" href="../_images/notebooks_spanning-trees_21_0.png"><img alt="../_images/notebooks_spanning-trees_21_0.png" src="../_images/notebooks_spanning-trees_21_0.png" style="width: 706px; height: 535px;" /></a>
 </div>
 </div>
-<p>Due to the nature of a <a class="reference external" href="https://en.wikipedia.org/wiki/Pythagorean_triple">Pythagorean triple triangle</a>, it is excellent for demonstrating the most basic example of a network work cycle, and the difference between a minimum and maximum spanning tree.</p>
+<p><strong>Due to the nature of a</strong> <a class="reference external" href="https://en.wikipedia.org/wiki/Pythagorean_triple">Pythagorean triple triangle</a><strong>, it is excellent for demonstrating the most basic example of a network work cycle, and the difference between a minimum and maximum spanning tree.</strong></p>
 </div>
 </div>
 <hr class="docutils" />
@@ -838,7 +841,7 @@ libpysal   4.2.2
 <a class="reference internal image-reference" href="../_images/notebooks_spanning-trees_36_0.png"><img alt="../_images/notebooks_spanning-trees_36_0.png" src="../_images/notebooks_spanning-trees_36_0.png" style="width: 689px; height: 683px;" /></a>
 </div>
 </div>
-<p>Since all network arcs in a regular lattice are equal in length, the minimum and maximum spanning trees will be equivalent, and are dependent on the start index for cycle search.</p>
+<p><strong>Since all network arcs in a regular lattice are equal in length, the minimum and maximum spanning trees will be equivalent, and are dependent on the start index for cycle search.</strong></p>
 </div>
 </div>
 <hr class="docutils" />

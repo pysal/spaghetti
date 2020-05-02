@@ -1,7 +1,7 @@
 import numpy
 
 
-class NetworkBase(object):
+class FuncBase(object):
     """Base object for performing network analysis on a
     ``spaghetti.Network`` object.
     
@@ -16,18 +16,18 @@ class NetworkBase(object):
     
     nsteps : int
         The number of steps at which the count of the nearest
-        neighbors is computed.
+        neighbors is computed. Default is 10.
         
     permutations : int
-        The number of permutations to perform. Default 99.
+        The number of permutations to perform. Default is 99.
     
     threshold : float
         The level at which significance is computed.
-        (0.5 would be 97.5% and 2.5%).
+        (0.5 would be 97.5% and 2.5%). Default is 0.5.
     
     distribution : str
-        The distribution from which random points are sampled
-        Either ``"uniform"`` or ``"poisson"``.
+        The distribution from which random points are sampled.
+        Currently, the only supported distribution is uniform.
     
     upperbound : float
         The upper bound at which the `K`-function is computed.
@@ -57,7 +57,7 @@ class NetworkBase(object):
         nsteps=10,
         permutations=99,
         threshold=0.5,
-        distribution="poisson",
+        distribution="uniform",
         upperbound=None,
     ):
 
@@ -69,12 +69,13 @@ class NetworkBase(object):
         self.threshold = threshold
 
         # set and validate the distribution
-        self.distribution = distribution
+        self.distribution = distribution.lower()
         self.validatedistribution()
 
         # create an empty array to store the simulated points
         self.sim = numpy.empty((permutations, nsteps))
-        self.npts = self.pointpattern.npoints
+        self.pts = self.pointpattern
+        self.npts = self.pts.npoints
 
         # set the upper bounds
         self.upperbound = upperbound
@@ -87,17 +88,15 @@ class NetworkBase(object):
         self.computeenvelope()
 
     def validatedistribution(self):
-        """enusure statistical distribution is supported
-        """
+        """Ensure the statistical distribution is supported."""
 
-        valid_distributions = ["uniform", "poisson"]
-        assert self.distribution in valid_distributions, (
-            "Distribution not in %s" % valid_distributions
-        )
+        valid_distributions = ["uniform"]
+        if not self.distribution in valid_distributions:
+            msg = "%s distribution not currently supported." % self.distribution
+            raise RuntimeError(msg)
 
     def computeenvelope(self):
-        """compute upper and lower bounds of envelope
-        """
+        """Compute upper and lower bounds of envelope."""
 
         upper = 1.0 - self.threshold / 2.0
         lower = self.threshold / 2.0
@@ -105,45 +104,38 @@ class NetworkBase(object):
         self.upperenvelope = numpy.nanmax(self.sim, axis=0) * upper
         self.lowerenvelope = numpy.nanmin(self.sim, axis=0) * lower
 
-    def setbounds(self, nearest):
-        """set upper and lower bounds
-        """
+    def setbounds(self, distances):
+        """Set the upper bound."""
         if self.upperbound is None:
-            self.upperbound = numpy.nanmax(nearest)
+            self.upperbound = numpy.nanmax(distances)
 
 
-class NetworkK(NetworkBase):
-    """Compute a network constrained `K` statistic. This requires the
-    capability to compute a distance matrix between two point patterns.
-    In this case one will be observed and one will be simulated.
+class GlobalAutoK(FuncBase):
+    """See full description in ``network.Network.GlobalAutoK()``.
     
     Attributes
     ----------
     
     lam : float
-        The ``lambda`` value.
-    
-    Notes
-    -----
-    
-    Based on :cite:`Okabe2001`.
+        The ``lambda`` value; representing intensity.
     
     """
 
     def computeobserved(self):
-        """Compute the observed nearest.
-        """
+        """Compute the K function of observed points."""
 
         # pairwise distances
         distances = self.ntw.allneighbordistances(self.pointpattern)
+        distances = upper_triangle_as_vector(distances)
+
         self.setbounds(distances)
 
         # set the intensity (lambda)
         self.lam = self.npts / sum(self.ntw.arc_lengths.values())
 
-        # compute a K-Function
-        observedx, observedy = kfunction(
-            self.npts, distances, self.upperbound, self.lam, nsteps=self.nsteps
+        # compute a Global Auto K-Function
+        observedx, observedy = global_auto_k(
+            self.npts, distances, self.upperbound, self.lam, self.nsteps
         )
 
         # set observed values
@@ -151,8 +143,7 @@ class NetworkK(NetworkBase):
         self.xaxis = observedx
 
     def computepermutations(self):
-        """Compute permutations of the points.
-        """
+        """Compute the K function on permutations (Monte Carlo simulation)."""
 
         # for each round of permutations
         for p in range(self.permutations):
@@ -164,17 +155,23 @@ class NetworkK(NetworkBase):
 
             # distances
             distances = self.ntw.allneighbordistances(sim)
+            distances = upper_triangle_as_vector(distances)
 
-            # compute a K-Function
-            simx, simy = kfunction(
-                self.npts, distances, self.upperbound, self.lam, nsteps=self.nsteps
+            # compute a Global Auto K-Function
+            simx, simy = global_auto_k(
+                self.npts, distances, self.upperbound, self.lam, self.nsteps
             )
 
             # label the permutation
             self.sim[p] = simy
 
 
-def kfunction(n_obs, dists, upperbound, intensity, nsteps=10):
+def upper_triangle_as_vector(matrix):
+    """Return the upper triangle of a symmetric matrix without the diagonal."""
+    return matrix[numpy.triu_indices_from(matrix, k=1)]
+
+
+def global_auto_k(n_obs, dists, upperbound, intensity, nsteps):
     """Compute a `K`-function.
 
     Parameters
@@ -184,7 +181,8 @@ def kfunction(n_obs, dists, upperbound, intensity, nsteps=10):
         The number of observations. See ``self.npts``.
     
     dists : numpy.ndarray
-        A matrix of pairwise distances.
+        A vector (the upper triangle of a symmetric matrix)
+        of pairwise distances.
     
     upperbound : int or float
         The end value of the sequence.
@@ -193,8 +191,7 @@ def kfunction(n_obs, dists, upperbound, intensity, nsteps=10):
         lambda value
     
     nsteps : int
-        The number of distance bands. Default is 10. Must be
-        non-negative.
+        The number of distance bands. Must be non-negative.
     
     Returns
     -------
@@ -208,19 +205,16 @@ def kfunction(n_obs, dists, upperbound, intensity, nsteps=10):
     """
 
     # create interval for x-axis
-    x = numpy.linspace(0, upperbound, nsteps)
+    x = numpy.linspace(0, upperbound, num=nsteps).reshape(-1, 1)
 
-    # create empty y-axis vector
-    y = numpy.empty(x.shape[0])
+    # "iterate" over the x-axis interval, slice out and count neighbors within
+    # each step radius, and multiply x2 to account for the lower triangle
+    y = (dists < x).sum(axis=1) * 2.0
 
-    # iterate over x-axis interval
-    for i, r in enumerate(x):
-
-        # slice out and count neighbors within radius
-        with numpy.errstate(invalid="ignore"):
-            y[i] = dists[dists <= r].shape[0]
-
-    # compute k for y-axis vector
+    # finalize the K computation for the denominator if the y-axis vector
     y /= n_obs * intensity
+
+    # reset the shape of the x-axis
+    x = x.squeeze()
 
     return x, y

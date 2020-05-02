@@ -4,7 +4,7 @@ import copy, os, pickle, warnings
 
 import numpy
 
-from .analysis import NetworkK
+from .analysis import GlobalAutoK
 from . import util
 from libpysal import cg, examples, weights
 from libpysal.common import requires
@@ -17,7 +17,7 @@ except ImportError:
     open = libpysal.io.open
 
 
-__all__ = ["Network", "PointPattern", "NetworkK"]
+__all__ = ["Network", "PointPattern", "GlobalAutoK"]
 
 SAME_SEGMENT = (-0.1, -0.1)
 
@@ -497,8 +497,7 @@ class Network:
             setattr(self, obj_type + attr_str, attr)
 
     def _extractnetwork(self):
-        """Used internally to extract a network.
-        """
+        """Used internally to extract a network."""
 
         # initialize vertex count
         vertex_count = 0
@@ -1352,8 +1351,17 @@ class Network:
             obs_to_vertex[k[0]] = keys
             obs_to_vertex[k[1]] = keys
 
+        # iterate over components and assign observations
+        component_to_obs = {}
+        for comp, _arcids in self.network_component2arc.items():
+            component_to_obs[comp] = []
+            for lk, odict in obs_to_arc.items():
+                if lk in _arcids:
+                    component_to_obs[comp].extend(list(odict.keys()))
+
         # set crosswalks as attributes of the `pointpattern` class
         pointpattern.obs_to_arc = obs_to_arc
+        pointpattern.component_to_obs = component_to_obs
         pointpattern.dist_to_vertex = dist_to_vertex
         pointpattern.dist_snapped = dist_snapped
         pointpattern.obs_to_vertex = list(obs_to_vertex)
@@ -1435,8 +1443,7 @@ class Network:
         return counts
 
     def _newpoint_coords(self, arc, distance):
-        """Used internally to compute new point coordinates during snapping.
-        """
+        """Used internally to compute new point coordinates during snapping."""
 
         # extract coordinates for vertex 1 of arc
         x1 = self.vertex_coords[arc[0]][0]
@@ -1496,20 +1503,22 @@ class Network:
         ----------
         
         count : int
-            The number of points to create or mean of the distribution
-            if not ``"uniform"``.
+            The number of points to create.
         
         distribution : str
-            Either a ``"uniform"`` or ``"poisson"`` distribution of
-            random points. If ``"poisson"``, the distribution is
-            calculated from half the total network length.
+            A distribution of random points. Currently, the only
+            supported distribution is uniform.
         
         Returns
         -------
         
         random_pts : dict
-            Keys are the edge tuple. Values are lists of new
-            point coordinates.
+            Keys are the edge tuple. Values are lists of new point coordinates.
+        
+        See also
+        --------
+        
+        numpy.random.Generator.uniform
         
         Examples
         --------
@@ -1557,27 +1566,23 @@ class Network:
 
         # cumulative network length
         stops = numpy.cumsum(lengths)
-        totallength = stops[-1]
+        cumlen = stops[-1]
 
         # create lengths with a uniform distribution
-        if distribution == "uniform":
-            nrandompts = numpy.random.uniform(0, totallength, size=(count,))
-
-        # create lengths with a poisson distribution
-        elif distribution == "poisson":
-            # calculate poisson from half the network length
-            mid_length = totallength / 2.0
-            nrandompts = numpy.random.poisson(mid_length, size=(count,))
+        if distribution.lower() == "uniform":
+            nrandompts = numpy.random.uniform(0, cumlen, size=(count,))
+        else:
+            msg = "%s distribution not currently supported." % distribution
+            raise RuntimeError(msg)
 
         # iterate over random distances created above
         for i, r in enumerate(nrandompts):
 
-            # take the first element of the index array (arc ID)
-            # where the random distance is less than that that of
-            # its value in `stops`
+            # take the first element of the index array (arc ID) where the
+            # random distance is greater than that of its value in `stops`
             idx = numpy.where(r < stops)[0][0]
 
-            # assign the simulated point to the ar
+            # assign the simulated point to the arc
             assignment_arc = arcs_[idx]
 
             # calculate and set the distance from the arc start
@@ -2358,7 +2363,7 @@ class Network:
 
         return paths
 
-    def split_arcs(self, distance):
+    def split_arcs(self, distance, w_components=True):
         """Split all of the arcs in the network at a fixed distance.
         
         Parameters
@@ -2366,6 +2371,10 @@ class Network:
         
         distance : float
             The distance at which arcs are split.
+        
+        w_components : bool
+            Set to ``False`` to not record connected components from a
+            ``libpysal.weights.W`` object. Default is ``True``.
         
         Returns
         -------
@@ -2507,13 +2516,22 @@ class Network:
         split_network.arcs.difference_update(remove_arcs)
         split_network.arcs = list(split_network.arcs)
 
+        # extract connected components
+        if w_components:
+
+            # extract contiguity weights from libpysal
+            split_network.w_network = split_network.contiguityweights(graph=False)
+
+            # identify connected components from the `w_network`
+            split_network.identify_components(split_network.w_network, graph=False)
+
         # update the snapped point pattern
         for instance in split_network.pointpatterns.values():
             split_network._snap_to_link(instance)
 
         return split_network
 
-    def NetworkK(
+    def GlobalAutoK(
         self,
         pointpattern,
         nsteps=10,
@@ -2522,8 +2540,12 @@ class Network:
         distribution="uniform",
         upperbound=None,
     ):
-        r"""Compute a network constrained `K`-function.
-        
+        r"""Compute a global auto `K`-function based on a network constrained
+        cost matrix through `Monte Carlo simulation <https://en.wikipedia.org/wiki/Monte_Carlo_method>`_
+        according to the formulation adapted from
+        :cite:`doi:10.1002/9780470549094.ch5`. See the **Notes**
+        section for further description.
+
         Parameters
         ----------
         
@@ -2532,18 +2554,18 @@ class Network:
         
         nsteps : int
             The number of steps at which the count of the nearest
-            neighbors is computed.
+            neighbors is computed. Default is 10.
         
         permutations : int
             The number of permutations to perform. Default is 99.
         
         threshold : float
             The level at which significance is computed.
-            (0.5 would be 97.5% and 2.5%).
+            (0.5 would be 97.5% and 2.5%). Default is 0.5.
         
         distribution : str
-            The distribution from which random points are sampled
-            Either ``"uniform"`` or ``"poisson"``.
+            The distribution from which random points are sampled.
+            Currently, the only supported distribution is uniform.
         
         upperbound : float
             The upper bound at which the `K`-function is computed.
@@ -2552,17 +2574,47 @@ class Network:
         Returns
         -------
         
-        NetworkK : spaghetti.analysis.NetworkK
-            A network `K` class instance.
+        GlobalAutoK : spaghetti.analysis.GlobalAutoK
+            The global auto `K`-function class instance.
         
         Notes
         -----
         
-        Based on :cite:`Ripley1977`, :cite:`doi:10.1002/9780470549094.ch5`.
-        For further Network-`K` formulation see
+        The `K`-function can be formulated as:
+        
+        .. math::
+        
+           \displaystyle K(r)=\frac{\sum^n_{i=1} \#[\hat{A} \in D(a_i, r)]}{n\lambda},
+        
+        where $n$ is the set cardinality of $A$, $\\hat{A}$ is the subset of
+        observations in $A$ that are within $D$ units of distance from $a_i$
+        (each single observation in $A$), and $r$ is the range of distance
+        values over which the `K`-function is calculated. The $\\lambda$ term
+        is the intensity of observations along the network, calculated as:
+        
+        .. math::
+        
+           \displaystyle \lambda = \frac{n}{\big|N_{arcs}\big|},
+        
+        where $\\big|N_{arcs}\\big|$ is the summed length of network arcs.
+        The global auto `K`-function measures overall clustering in one set of
+        observations by comparing all intra-set distances over a range of
+        distance buffers $D \\in r$. The `K`-function improves upon 
+        nearest-neighbor distance measures through the analysis of all neighbor
+        distances. For an explanation on how to interpret the results of the
+        `K`-function see the `Network Spatial Dependence tutorial <https://pysal.org/spaghetti/notebooks/network-spatial-dependence.html>`_.
+        
+        For original implementation see :cite:`Ripley1976`
+        and :cite:`Ripley1977`.
+        For further Network-`K` formulations see
         :cite:`doi:10.1111/j.1538-4632.2001.tb00448.x`, 
         :cite:`doi:10.1002/9781119967101.ch6`, and
         :cite:`Baddeley2020`.
+        
+        See also
+        --------
+        
+        pointpats.K
         
         Examples
         --------
@@ -2578,23 +2630,19 @@ class Network:
         >>> pt_str = "schools"
         >>> in_data = examples.get_path(pt_str+".shp")
         >>> ntw.snapobservations(in_data, pt_str, attribute=True)
-        
-        Simulate observations along the network.
-        
         >>> schools = ntw.pointpatterns[pt_str]
-        >>> sim = ntw.simulate_observations(schools.npoints)
         
-        Compute a network constrained `K`-function of schools 
-        with ``5`` ``permutations`` and ``10`` ``nsteps``.
+        Compute a `K`-function from school observations
+        with ``99`` ``permutations`` at ``10`` intervals.
         
-        >>> kres = ntw.NetworkK(schools, permutations=5, nsteps=10)
+        >>> kres = ntw.GlobalAutoK(schools, permutations=99, nsteps=10)
         >>> kres.lowerenvelope.shape[0]
         10
         
         """
 
-        # call analysis.NetworkK
-        return NetworkK(
+        # call analysis.GlobalAutoK
+        return GlobalAutoK(
             self,
             pointpattern,
             nsteps=nsteps,
@@ -2647,7 +2695,7 @@ class Network:
         
         self : spaghetti.Network
             A pre-computed ``spaghetti`` network object.
-            
+        
         """
 
         with open(filename, "rb") as networkin:
@@ -2661,15 +2709,19 @@ def extract_component(net, component_id, weightings=None):
     
     Parameters
     ----------
+    
     net : spaghetti.Network
         Full network object.
+    
     component_id : int
         The ID of the desired network component.
+    
     weightings : {dict, bool}
         See the ``weightings`` keyword argument in ``spaghetti.Network``.
     
     Returns
     -------
+    
     cnet : spaghetti.Network
         The pruned network containing the component specified in
         ``component_id``.
@@ -2867,6 +2919,7 @@ def spanning_tree(net, method="sort", maximum=False, silence_warnings=True):
     
     Parameters
     ----------
+    
     net : spaghetti.Network
         Instance of a network object.
     
@@ -2888,11 +2941,13 @@ def spanning_tree(net, method="sort", maximum=False, silence_warnings=True):
     
     Returns
     -------
+    
     net : spaghetti.Network
         Pruned instance of the network object.
     
     Notes
     -----
+    
     For in-depth background and details see
     :cite:`GrahamHell_1985`,
     :cite:`AhujaRavindraK`, and
@@ -2960,20 +3015,25 @@ def mst_weighted_sort(net, maximum, net_kws):
     
     Parameters
     ----------
+    
     net : spaghetti.Network
         See ``spanning_tree()``.
+    
     maximum : bool
         See ``spanning_tree()``.
+    
     net_kws : dict
         Keywords arguments for instaniating a ``spaghetti.Network``.
     
     Returns
     -------
+    
     spanning_tree : list
         All networks arcs that are members of the spanning tree.
     
     Notes
     -----
+    
     This function is based on the method found in Chapter 3
     Section 4.3 of :cite:`Okabe2012`.
     
@@ -3184,7 +3244,6 @@ def regular_lattice(bounds, nh, nv=None, exterior=False):
 
     exterior : bool
         Flag for including the outer bounding box segments. Default is False.
-    
     
     Returns
     -------
