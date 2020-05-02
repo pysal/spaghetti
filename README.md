@@ -95,7 +95,7 @@ As a PySAL-federated project, `spaghetti` follows the [Code of Conduct](https://
 
 ## License
 
-The project is licensed under the [BSD license](https://github.com/pysal/spaghetti/blob/master/LICENSE.txt).
+The project is licensed under the [BSD 3-Clause license](https://github.com/pysal/spaghetti/blob/master/LICENSE.txt).
 
 ## BibTeX Citation
 
