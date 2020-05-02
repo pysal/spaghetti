@@ -413,7 +413,7 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-04-27T13:00:51-04:00
+2020-05-02T17:51:07-04:00
 
 CPython 3.7.3
 IPython 7.10.2
@@ -452,11 +452,11 @@ interpreter: 64bit
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 watermark 2.0.2
-spaghetti           1.4.2.post2
-numpy               1.18.1
+matplotlib          3.1.2
 matplotlib_scalebar 0.6.1
 geopandas           0.7.0
-matplotlib          3.1.2
+spaghetti           1.4.2.post2
+numpy               1.18.1
 libpysal            4.2.2
 
 </pre></div></div>
@@ -474,7 +474,7 @@ libpysal            4.2.2
 </pre></div>
 </div>
 </div>
-<p><strong>The</strong> <a class="reference external" href="https://en.wikipedia.org/wiki/Spatial_descriptive_statistics#Ripley's_K_and_L_functions">K function</a> <strong>considers all pairwise distances of observations to determine the existence of clustering, or lack thereof. For further description see O’Sullivan and Unwin (2010) and Okabe and Sugihara (2012).</strong></p>
+<p><strong>The</strong> <a class="reference external" href="https://en.wikipedia.org/wiki/Spatial_descriptive_statistics#Ripley's_K_and_L_functions">K function</a> <strong>considers all pairwise distances of nearest neighbors to determine the existence of clustering, or lack thereof, over a delineated range of distances. For further description see O’Sullivan and Unwin (2010) and Okabe and Sugihara (2012).</strong></p>
 <ul class="simple">
 <li><p><strong>D. O’Sullivan and D. J. Unwin.</strong> <em>Point Pattern Analysis</em>, chapter 5, pages 121–156. John Wiley &amp; Sons, Ltd, 2010. doi:10.1002/9780470549094.ch5.</p></li>
 <li><p><strong>Atsuyki Okabe and Kokichi Sugihara.</strong> <em>Network K Function Methods</em>, chapter 6, pages 119–136. John Wiley &amp; Sons, Ltd, 2012. doi:10.1002/9781119967101.ch6.</p></li>
@@ -523,8 +523,7 @@ libpysal            4.2.2
     <span class="k">if</span> <span class="n">scale</span><span class="p">:</span>
         <span class="n">scalebar</span> <span class="o">=</span> <span class="n">ScaleBar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
         <span class="n">b</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">scalebar</span><span class="p">)</span>
-    <span class="n">b</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([]);</span> <span class="n">b</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
-    <span class="n">b</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([]);</span> <span class="n">b</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([]);</span>
+    <span class="n">b</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xticklabels</span><span class="o">=</span><span class="p">[],</span> <span class="n">xticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">yticklabels</span><span class="o">=</span><span class="p">[],</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[]);</span>
 </pre></div>
 </div>
 </div>
@@ -808,8 +807,8 @@ libpysal            4.2.2
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x131d6df98&gt;,
- &#39;schools&#39;: &lt;spaghetti.network.PointPattern at 0x13089ef98&gt;}
+{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x12a482b00&gt;,
+ &#39;schools&#39;: &lt;spaghetti.network.PointPattern at 0x12a4d3dd8&gt;}
 </pre></div></div>
 </div>
 </div>

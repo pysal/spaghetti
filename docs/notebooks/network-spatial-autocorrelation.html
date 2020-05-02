@@ -107,16 +107,29 @@
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">Network-constrained spatial autocorrelation</a><ul>
-<li><a class="reference internal" href="#Performing-and-visualizing-ESDA">Performing and visualizing ESDA</a></li>
-<li><a class="reference internal" href="#ESDA-—-Exploratory-Spatial-Data-Analysis">ESDA — Exploratory Spatial Data Analysis</a></li>
-<li><a class="reference internal" href="#Spatial-Analysis-with-pysal/esda">Spatial Analysis with pysal/esda</a><ul>
-<li><a class="reference internal" href="#6.1-Moran’s-I-using-the-digitized-network">6.1 Moran’s <em>I</em> using the digitized network</a></li>
-<li><a class="reference internal" href="#6.2-Moran’s-I-using-the-graph-representation-to-generate-the-W">6.2 Moran’s <em>I</em> using the graph representation to generate the <em>W</em></a></li>
-<li><a class="reference internal" href="#6.3-Moran’s-I-using-the-segmented-network-and-intensities-instead-of-counts">6.3 Moran’s <em>I</em> using the segmented network and intensities instead of counts</a></li>
+<li><a class="reference internal" href="#Performing-and-visualizing-exploratory-spatial-data-analysis">Performing and visualizing exploratory spatial data analysis</a></li>
+<li><a class="reference internal" href="#Instantiating-a-spaghetti.Network-object-and-a-point-pattern">Instantiating a <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object and a point pattern</a><ul>
+<li><a class="reference internal" href="#Instantiate-the-network-from-a-.shp-file">Instantiate the network from a <code class="docutils literal notranslate"><span class="pre">.shp</span></code> file</a></li>
+<li><a class="reference internal" href="#Extract-network-arcs-as-a-geopandas.GeoDataFrame">Extract network arcs as a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a></li>
+<li><a class="reference internal" href="#Associate-the-network-with-a-point-pattern">Associate the network with a point pattern</a></li>
+<li><a class="reference internal" href="#Extract-the-crimes-point-pattern-as-a-geopandas.GeoDataFrame">Extract the crimes point pattern as a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#Visualizing-ESDA-with-splot">Visualizing ESDA with <code class="docutils literal notranslate"><span class="pre">splot</span></code></a><ul>
-<li><a class="reference internal" href="#….">….</a></li>
+<li><a class="reference internal" href="#1.-ESDA-—-Exploratory-Spatial-Data-Analysis-with-pysal/esda">1. ESDA — Exploratory Spatial Data Analysis with pysal/esda</a><ul>
+<li><a class="reference internal" href="#Moran’s-I-using-the-network-representation’s-W">Moran’s <em>I</em> using the network representation’s <em>W</em></a></li>
+<li><a class="reference internal" href="#Moran’s-I-using-the-graph-representation’s-W">Moran’s <em>I</em> using the graph representation’s <em>W</em></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#2.-Moran’s-I-on-a-segmented-network">2. Moran’s <em>I</em> on a segmented network</a><ul>
+<li><a class="reference internal" href="#Moran’s-I-on-a-network-split-into-200-meter-segments">Moran’s <em>I</em> on a network split into 200-meter segments</a></li>
+<li><a class="reference internal" href="#Moran’s-I-on-a-network-split-into-50-meter-segments">Moran’s <em>I</em> on a network split into 50-meter segments</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#3.-Visualizing-ESDA-with-splot">3. Visualizing ESDA with <code class="docutils literal notranslate"><span class="pre">splot</span></code></a><ul>
+<li><a class="reference internal" href="#Moran-scatterplot">Moran scatterplot</a></li>
+<li><a class="reference internal" href="#Reference-distribution-and-Moran-scatterplot">Reference distribution and Moran scatterplot</a></li>
+<li><a class="reference internal" href="#Local-Moran’s-l">Local Moran’s <em>l</em></a></li>
+<li><a class="reference internal" href="#Plotting-Local-Indicators-of-Spatial-Autocorrelation-(LISA)">Plotting Local Indicators of Spatial Autocorrelation (LISA)</a></li>
 </ul>
 </li>
 </ul>
@@ -380,14 +393,14 @@ Interactive online version:
 <hr class="docutils" />
 <div class="section" id="Network-constrained-spatial-autocorrelation">
 <h1>Network-constrained spatial autocorrelation<a class="headerlink" href="#Network-constrained-spatial-autocorrelation" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="Performing-and-visualizing-ESDA">
-<h2>Performing and visualizing ESDA<a class="headerlink" href="#Performing-and-visualizing-ESDA" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="Performing-and-visualizing-exploratory-spatial-data-analysis">
+<h2>Performing and visualizing exploratory spatial data analysis<a class="headerlink" href="#Performing-and-visualizing-exploratory-spatial-data-analysis" title="Permalink to this headline">¶</a></h2>
 <p><strong>Author: James D. Gaboardi</strong> <a class="reference external" href="mailto:jgaboardi&#37;&#52;&#48;gmail&#46;com">jgaboardi<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
 <p><strong>This notebook is an advanced walk-through for:</strong></p>
 <ol class="arabic simple">
-<li><p>Demonstrating spatial autocorrelation with <code class="docutils literal notranslate"><span class="pre">pysal/esda</span></code></p></li>
-<li><p>Understanding observation counts per network arc</p></li>
-<li><p>Visualizing spatial autocorrelation with <code class="docutils literal notranslate"><span class="pre">pysal/splot</span></code></p></li>
+<li><p>Demonstrating spatial autocorrelation with <a class="reference external" href="https://pysal.org/esda/">pysal/esda</a></p></li>
+<li><p>Calculating <a class="reference external" href="https://pysal.org/esda/generated/esda.Moran.html#esda.Moran">Moran’s I</a> on a segmented network</p></li>
+<li><p>Visualizing spatial autocorrelation with <a class="reference external" href="https://splot.readthedocs.io/en/latest/">pysal/splot</a></p></li>
 </ol>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -404,7 +417,7 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-04-27T13:01:00-04:00
+2020-05-02T17:50:19-04:00
 
 CPython 3.7.3
 IPython 7.10.2
@@ -426,7 +439,6 @@ interpreter: 64bit
 <span></span><span class="kn">import</span> <span class="nn">esda</span>
 <span class="kn">import</span> <span class="nn">libpysal</span>
 <span class="kn">import</span> <span class="nn">matplotlib</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span><span class="c1">########################</span>
 <span class="kn">import</span> <span class="nn">matplotlib_scalebar</span>
 <span class="kn">from</span> <span class="nn">matplotlib_scalebar.scalebar</span> <span class="kn">import</span> <span class="n">ScaleBar</span>
 <span class="kn">import</span> <span class="nn">numpy</span>
@@ -445,13 +457,13 @@ interpreter: 64bit
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 watermark 2.0.2
-libpysal            4.2.2
-numpy               1.18.1
-splot               1.1.2
-matplotlib          3.1.2
-esda                2.2.1
 spaghetti           1.4.2.post2
 matplotlib_scalebar 0.6.1
+numpy               1.18.1
+libpysal            4.2.2
+esda                2.2.1
+splot               1.1.2
+matplotlib          3.1.2
 
 </pre></div></div>
 </div>
@@ -468,215 +480,511 @@ matplotlib_scalebar 0.6.1
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
 </div>
 <hr class="docutils" />
-<div class="section" id="ESDA-—-Exploratory-Spatial-Data-Analysis">
-<h2>ESDA — Exploratory Spatial Data Analysis<a class="headerlink" href="#ESDA-—-Exploratory-Spatial-Data-Analysis" title="Permalink to this headline">¶</a></h2>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="section" id="Spatial-Analysis-with-pysal/esda">
-<h2>Spatial Analysis with <a class="reference external" href="https://esda.readthedocs.io/en/latest/">pysal/esda</a><a class="headerlink" href="#Spatial-Analysis-with-pysal/esda" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="6.1-Moran’s-I-using-the-digitized-network">
-<h3>6.1 Moran’s <em>I</em> using the digitized network<a class="headerlink" href="#6.1-Moran’s-I-using-the-digitized-network" title="Permalink to this headline">¶</a></h3>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
+<div class="section" id="Instantiating-a-spaghetti.Network-object-and-a-point-pattern">
+<h2>Instantiating a <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object and a point pattern<a class="headerlink" href="#Instantiating-a-spaghetti.Network-object-and-a-point-pattern" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="Instantiate-the-network-from-a-.shp-file">
+<h3>Instantiate the network from a <code class="docutils literal notranslate"><span class="pre">.shp</span></code> file<a class="headerlink" href="#Instantiate-the-network-from-a-.shp-file" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1">## get the counter from segmentation notebook</span>
+<span></span><span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">in_data</span><span class="o">=</span><span class="n">libpysal</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;streets.shp&quot;</span><span class="p">))</span>
+<span class="n">ntw</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;spaghetti.network.Network at 0x120937f28&gt;
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Extract-network-arcs-as-a-geopandas.GeoDataFrame">
+<h3>Extract network arcs as a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code><a class="headerlink" href="#Extract-network-arcs-as-a-geopandas.GeoDataFrame" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1">## Compute the counts</span>
-<span class="c1">#counts = ntw.count_per_link(ntw.pointpatterns[&quot;crimes&quot;].obs_to_arc, graph=False)</span>
-<span class="c1">#</span>
-<span class="c1">## Binary Adjacency</span>
-<span class="c1">#w = ntw.contiguityweights(graph=False)</span>
-<span class="c1">#</span>
-<span class="c1">## Build the y vector</span>
-<span class="c1">#arcs = w.neighbors.keys()</span>
-<span class="c1">#y = numpy.zeros(len(arcs))</span>
-<span class="c1">#</span>
-<span class="c1">#for i, a in enumerate(arcs):</span>
-<span class="c1">#    if a in counts.keys():</span>
-<span class="c1">#        y[i] = counts[a]</span>
-<span class="c1">#</span>
-<span class="c1">## Moran&#39;s I</span>
-<span class="c1">#res = esda.moran.Moran(y, w, permutations=99)</span>
-<span class="c1">#print(dir(res))</span>
+<span></span><span class="n">_</span><span class="p">,</span> <span class="n">arc_df</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">arcs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">arc_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
 </div>
-<div class="section" id="6.2-Moran’s-I-using-the-graph-representation-to-generate-the-W">
-<h3>6.2 Moran’s <em>I</em> using the graph representation to generate the <em>W</em><a class="headerlink" href="#6.2-Moran’s-I-using-the-graph-representation-to-generate-the-W" title="Permalink to this headline">¶</a></h3>
-<ul class="simple">
-<li><p>Note that we have to regenerate the counts per arc, since the graph will have fewer edges.</p></li>
-</ul>
-<div class="nbinput nblast docutils container">
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>geometry</th>
+      <th>comp_label</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>(0, 1)</td>
+      <td>LINESTRING (728368.048 877125.895, 728368.139 ...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>(0, 2)</td>
+      <td>LINESTRING (728368.048 877125.895, 728367.458 ...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>(1, 110)</td>
+      <td>LINESTRING (728368.139 877023.272, 728612.255 ...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>(1, 127)</td>
+      <td>LINESTRING (728368.139 877023.272, 727708.140 ...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>(1, 213)</td>
+      <td>LINESTRING (728368.139 877023.272, 728368.729 ...</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</div>
+<div class="section" id="Associate-the-network-with-a-point-pattern">
+<h3>Associate the network with a point pattern<a class="headerlink" href="#Associate-the-network-with-a-point-pattern" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1">## Compute the counts</span>
-<span class="c1">#counts = ntw.count_per_link(ntw.pointpatterns[&quot;crimes&quot;].obs_to_arc, graph=True)</span>
-<span class="c1">#</span>
-<span class="c1">## Binary Adjacency</span>
-<span class="c1">#w = ntw.contiguityweights(graph=True)</span>
-<span class="c1">#</span>
-<span class="c1">## Build the y vector</span>
-<span class="c1">#edges = w.neighbors.keys()</span>
-<span class="c1">#y = numpy.zeros(len(edges))</span>
-<span class="c1">#</span>
-<span class="c1">#for i, e in enumerate(edges):</span>
-<span class="c1">#    if e in counts.keys():</span>
-<span class="c1">#        y[i] = counts[e]</span>
-<span class="c1">#</span>
-<span class="c1">## Moran&#39;s I</span>
-<span class="c1">#res = esda.moran.Moran(y, w, permutations=99)</span>
-<span class="c1">#</span>
-<span class="c1">#print(dir(res))</span>
+<span></span><span class="n">pp_name</span> <span class="o">=</span> <span class="s2">&quot;crimes&quot;</span>
+<span class="n">pp_shp</span> <span class="o">=</span> <span class="n">libpysal</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.shp&quot;</span> <span class="o">%</span> <span class="n">pp_name</span><span class="p">)</span>
+<span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span><span class="n">pp_shp</span><span class="p">,</span> <span class="n">pp_name</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
 </div>
-<div class="section" id="6.3-Moran’s-I-using-the-segmented-network-and-intensities-instead-of-counts">
-<h3>6.3 Moran’s <em>I</em> using the segmented network and intensities instead of counts<a class="headerlink" href="#6.3-Moran’s-I-using-the-segmented-network-and-intensities-instead-of-counts" title="Permalink to this headline">¶</a></h3>
-<div class="nbinput nblast docutils container">
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x1213c0dd8&gt;}
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Extract-the-crimes-point-pattern-as-a-geopandas.GeoDataFrame">
+<h3>Extract the crimes point pattern as a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code><a class="headerlink" href="#Extract-the-crimes-point-pattern-as-a-geopandas.GeoDataFrame" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1">## Compute the counts</span>
-<span class="c1">#counts = n200.count_per_link(n200.pointpatterns[&quot;crimes&quot;].obs_to_arc, graph=False)</span>
-<span class="c1">#</span>
-<span class="c1">## Binary Adjacency</span>
-<span class="c1">#w = n200.contiguityweights(graph=False)</span>
-<span class="c1">#</span>
-<span class="c1">## Build the y vector and convert from raw counts to intensities</span>
-<span class="c1">#arcs = w.neighbors.keys()</span>
-<span class="c1">#y = numpy.zeros(len(n200.arcs))</span>
-<span class="c1">#</span>
-<span class="c1">#for i, a in enumerate(arcs):</span>
-<span class="c1">#    if a in counts.keys():</span>
-<span class="c1">#        length = n200.arc_lengths[a]</span>
-<span class="c1">#        y[i] = float(counts[a]) / float(length)</span>
-<span class="c1">#</span>
-<span class="c1">## Moran&#39;s I</span>
-<span class="c1">#res = esda.moran.Moran(y, w, permutations=99)</span>
-<span class="c1">#</span>
-<span class="c1">#print(dir(res))</span>
+<span></span><span class="n">pp_df</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="o">=</span><span class="n">pp_name</span><span class="p">)</span>
+<span class="n">pp_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>geometry</th>
+      <th>comp_label</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>POINT (727913.000 875721.000)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>POINT (724812.000 875763.000)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>POINT (727391.000 875853.000)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>POINT (728017.000 875858.000)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>POINT (727525.000 875860.000)</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
 </div>
 </div>
 </div>
 <hr class="docutils" />
-<div class="section" id="Visualizing-ESDA-with-splot">
-<h2>Visualizing ESDA with <code class="docutils literal notranslate"><span class="pre">splot</span></code><a class="headerlink" href="#Visualizing-ESDA-with-splot" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="….">
-<h3>….<a class="headerlink" href="#…." title="Permalink to this headline">¶</a></h3>
+<div class="section" id="1.-ESDA-—-Exploratory-Spatial-Data-Analysis-with-pysal/esda">
+<h2>1. ESDA — Exploratory Spatial Data Analysis with <a class="reference external" href="https://esda.readthedocs.io/en/latest/">pysal/esda</a><a class="headerlink" href="#1.-ESDA-—-Exploratory-Spatial-Data-Analysis-with-pysal/esda" title="Permalink to this headline">¶</a></h2>
+<p><strong>The Moran’s I test statistic allows for the inference of how clustered (or dispersed) a dataset is while considering both attribute values and spatial relationships. A value of closer to +1 indicates absolute clustering while a value of closer to -1 indicates absolute dispersion. Complete spatial randomness takes the value of 0. See the</strong> <a class="reference external" href="https://pysal.org/esda/">esda documentation</a> <strong>for in-depth descriptions and tutorials.</strong></p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
+<span></span><span class="k">def</span> <span class="nf">calc_moran</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">pp_name</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Calculate a Moran&#39;s I statistic based on network arcs.&quot;&quot;&quot;</span>
+    <span class="c1"># Compute the counts</span>
+    <span class="n">pointpat</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="n">pp_name</span><span class="p">]</span>
+    <span class="n">counts</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">count_per_link</span><span class="p">(</span><span class="n">pointpat</span><span class="o">.</span><span class="n">obs_to_arc</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="c1"># Build the y vector</span>
+    <span class="n">arcs</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">neighbors</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">counts</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="k">if</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">counts</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="mf">0.</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">arcs</span><span class="p">)]</span>
+    <span class="c1"># Moran&#39;s I</span>
+    <span class="n">moran</span> <span class="o">=</span> <span class="n">esda</span><span class="o">.</span><span class="n">moran</span><span class="o">.</span><span class="n">Moran</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">99</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">moran</span><span class="p">,</span> <span class="n">y</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="section" id="Moran’s-I-using-the-network-representation’s-W">
+<h3>Moran’s <em>I</em> using the network representation’s <em>W</em><a class="headerlink" href="#Moran’s-I-using-the-network-representation’s-W" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
+<span></span><span class="n">moran_ntwwn</span><span class="p">,</span> <span class="n">yaxis_ntwwn</span> <span class="o">=</span> <span class="n">calc_moran</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="p">,</span> <span class="n">ntw</span><span class="o">.</span><span class="n">w_network</span><span class="p">)</span>
+<span class="n">moran_ntwwn</span><span class="o">.</span><span class="n">I</span>
 </pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0.005192687496078421
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Moran’s-I-using-the-graph-representation’s-W">
+<h3>Moran’s <em>I</em> using the graph representation’s <em>W</em><a class="headerlink" href="#Moran’s-I-using-the-graph-representation’s-W" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">moran_ntwwg</span><span class="p">,</span> <span class="n">yaxis_ntwwg</span> <span class="o">=</span> <span class="n">calc_moran</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="p">,</span> <span class="n">ntw</span><span class="o">.</span><span class="n">w_graph</span><span class="p">)</span>
+<span class="n">moran_ntwwg</span><span class="o">.</span><span class="n">I</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0.05223210335368553
+</pre></div></div>
+</div>
+<p><strong>Interpretation:</strong></p>
+<ul class="simple">
+<li><p><strong>Although both the network and graph representations (</strong><code class="docutils literal notranslate"><span class="pre">moran_ntwwn</span></code> <strong>and</strong> <code class="docutils literal notranslate"><span class="pre">moran_ntwwg</span></code><strong>, respectively) display minimal postive spatial autocorrelation, a slighly higher value is observed in the graph represention. This is likely due to more direct connectivity in the graph representation; a direct result of eliminating</strong> <a class="reference external" href="https://en.wikipedia.org/wiki/Degree_(graph_theory)">degree-2 vertices</a><strong>. The Moran’s I for both the network and graph representations suggest that
+network arcs/graph edges attributed with associated crime counts are nearly randomly distributed.</strong></p></li>
+</ul>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="2.-Moran’s-I-on-a-segmented-network">
+<h2>2. Moran’s <em>I</em> on a segmented network<a class="headerlink" href="#2.-Moran’s-I-on-a-segmented-network" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="Moran’s-I-on-a-network-split-into-200-meter-segments">
+<h3>Moran’s <em>I</em> on a network split into 200-meter segments<a class="headerlink" href="#Moran’s-I-on-a-network-split-into-200-meter-segments" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">n200</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">split_arcs</span><span class="p">(</span><span class="mf">200.0</span><span class="p">)</span>
+<span class="n">n200</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;spaghetti.network.Network at 0x121451f98&gt;
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">moran_n200</span><span class="p">,</span> <span class="n">yaxis_n200</span> <span class="o">=</span> <span class="n">calc_moran</span><span class="p">(</span><span class="n">n200</span><span class="p">,</span> <span class="n">pp_name</span><span class="p">,</span> <span class="n">n200</span><span class="o">.</span><span class="n">w_network</span><span class="p">)</span>
+<span class="n">moran_n200</span><span class="o">.</span><span class="n">I</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+-0.01764461487556588
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Moran’s-I-on-a-network-split-into-50-meter-segments">
+<h3>Moran’s <em>I</em> on a network split into 50-meter segments<a class="headerlink" href="#Moran’s-I-on-a-network-split-into-50-meter-segments" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">n50</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">split_arcs</span><span class="p">(</span><span class="mf">50.0</span><span class="p">)</span>
+<span class="n">n50</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;spaghetti.network.Network at 0x1215b94e0&gt;
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">moran_n50</span><span class="p">,</span> <span class="n">yaxis_n50</span> <span class="o">=</span> <span class="n">calc_moran</span><span class="p">(</span><span class="n">n50</span><span class="p">,</span> <span class="n">pp_name</span><span class="p">,</span> <span class="n">n50</span><span class="o">.</span><span class="n">w_network</span><span class="p">)</span>
+<span class="n">moran_n50</span><span class="o">.</span><span class="n">I</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+-0.012505858739644651
+</pre></div></div>
+</div>
+<p><strong>Interpretation:</strong></p>
+<ul class="simple">
+<li><p><strong>Contrary to above, both the 200-meter and 50-meter segmented networks (</strong><code class="docutils literal notranslate"><span class="pre">moran_n200</span></code> <strong>and</strong> <code class="docutils literal notranslate"><span class="pre">moran_n50</span></code><strong>, respectively) display minimal negative spatial autocorrelation, with slighly lower values being observed in the 200-meter representation. However, similar to above the Moran’s I for both the these representations suggest that network arcs attributed with associated crime counts are nearly randomly distributed.</strong></p></li>
+</ul>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="3.-Visualizing-ESDA-with-splot">
+<h2>3. Visualizing ESDA with <code class="docutils literal notranslate"><span class="pre">splot</span></code><a class="headerlink" href="#3.-Visualizing-ESDA-with-splot" title="Permalink to this headline">¶</a></h2>
+<p><strong>Here we are demonstrating</strong> <a class="reference external" href="https://pysal.org/esda/notebooks/spatialautocorrelation.html#Attribute-Similarity">spatial lag</a><strong>, which refers to attribute similarity. See the</strong> <a class="reference external" href="https://splot.readthedocs.io/en/latest/">splot documentation</a> <strong>for in-depth descriptions and tutorials.</strong></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">splot.esda</span> <span class="kn">import</span> <span class="n">moran_scatterplot</span><span class="p">,</span> <span class="n">lisa_cluster</span><span class="p">,</span> <span class="n">plot_moran</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="Moran-scatterplot">
+<h3>Moran scatterplot<a class="headerlink" href="#Moran-scatterplot" title="Permalink to this headline">¶</a></h3>
+<p><strong>Plotted with equal aspect</strong></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">moran_scatterplot</span><span class="p">(</span><span class="n">moran_ntwwn</span><span class="p">,</span> <span class="n">aspect_equal</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<a class="reference internal image-reference" href="../_images/notebooks_network-spatial-autocorrelation_27_0.png"><img alt="../_images/notebooks_network-spatial-autocorrelation_27_0.png" src="../_images/notebooks_network-spatial-autocorrelation_27_0.png" style="width: 456px; height: 165px;" /></a>
+</div>
+</div>
+<p><strong>Plotted without equal aspect</strong></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">moran_scatterplot</span><span class="p">(</span><span class="n">moran_ntwwn</span><span class="p">,</span> <span class="n">aspect_equal</span><span class="o">=</span><span class="kc">False</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<a class="reference internal image-reference" href="../_images/notebooks_network-spatial-autocorrelation_29_0.png"><img alt="../_images/notebooks_network-spatial-autocorrelation_29_0.png" src="../_images/notebooks_network-spatial-autocorrelation_29_0.png" style="width: 474px; height: 459px;" /></a>
+</div>
+</div>
+<p><strong>This scatterplot demostrates the attribute values and associated attribute similarities in space (spatial lag) for the network representation’s W (</strong><code class="docutils literal notranslate"><span class="pre">moran_ntwwn</span></code><strong>).</strong></p>
+</div>
+<div class="section" id="Reference-distribution-and-Moran-scatterplot">
+<h3>Reference distribution and Moran scatterplot<a class="headerlink" href="#Reference-distribution-and-Moran-scatterplot" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plot_moran</span><span class="p">(</span><span class="n">moran_ntwwn</span><span class="p">,</span> <span class="n">zstandard</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">4</span><span class="p">));</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<a class="reference internal image-reference" href="../_images/notebooks_network-spatial-autocorrelation_31_0.png"><img alt="../_images/notebooks_network-spatial-autocorrelation_31_0.png" src="../_images/notebooks_network-spatial-autocorrelation_31_0.png" style="width: 610px; height: 288px;" /></a>
+</div>
+</div>
+<p><strong>This figure incorporates the reference distribution of Moran’s I values into the above scatterplot of the network representation’s W (</strong><code class="docutils literal notranslate"><span class="pre">moran_ntwwn</span></code><strong>).</strong></p>
+</div>
+<div class="section" id="Local-Moran’s-l">
+<h3>Local Moran’s <em>l</em><a class="headerlink" href="#Local-Moran’s-l" title="Permalink to this headline">¶</a></h3>
+<p><strong>The demonstrations above considered the dataset as a whole, providing a global measure. The following demostrates the consideration of</strong> <a class="reference external" href="https://pysal.org/esda/notebooks/spatialautocorrelation.html#Local-Autocorrelation:-Hot-Spots,-Cold-Spots,-and-Spatial-Outliers">local spatial autocorrelation</a><strong>, providing a measure for each observation. This is best interpreted visually, here with another scatterplot colored to indicate</strong> <a class="reference external" href="https://nbviewer.jupyter.org/github/pysal/splot/blob/master/notebooks/esda_morans_viz.ipynb#Visualizing-Local-Autocorrelation-with-splot---Hot-Spots,-Cold-Spots-and-Spatial-Outliers">relationship
+type</a><strong>.</strong></p>
+<p><strong>Plotted with equal aspect</strong></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">p</span> <span class="o">=</span> <span class="mf">0.05</span>
+<span class="n">moran_loc_ntwwn</span> <span class="o">=</span> <span class="n">esda</span><span class="o">.</span><span class="n">moran</span><span class="o">.</span><span class="n">Moran_Local</span><span class="p">(</span><span class="n">yaxis_ntwwn</span><span class="p">,</span> <span class="n">ntw</span><span class="o">.</span><span class="n">w_network</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">moran_scatterplot</span><span class="p">(</span><span class="n">moran_loc_ntwwn</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">aspect_equal</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;Crimes&quot;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Spatial Lag of Crimes&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<a class="reference internal image-reference" href="../_images/notebooks_network-spatial-autocorrelation_33_0.png"><img alt="../_images/notebooks_network-spatial-autocorrelation_33_0.png" src="../_images/notebooks_network-spatial-autocorrelation_33_0.png" style="width: 471px; height: 121px;" /></a>
+</div>
+</div>
+<p><strong>Plotted without equal aspect</strong></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">moran_scatterplot</span><span class="p">(</span><span class="n">moran_loc_ntwwn</span><span class="p">,</span> <span class="n">aspect_equal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;Crimes&quot;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Spatial Lag of Crimes&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<a class="reference internal image-reference" href="../_images/notebooks_network-spatial-autocorrelation_35_0.png"><img alt="../_images/notebooks_network-spatial-autocorrelation_35_0.png" src="../_images/notebooks_network-spatial-autocorrelation_35_0.png" style="width: 480px; height: 459px;" /></a>
+</div>
+</div>
+<p><strong>Interpretation:</strong></p>
+<ul class="simple">
+<li><p><strong>The majority of observations (network arcs) display no significant local spatial autocorrelation (shown in gray).</strong></p></li>
+</ul>
+</div>
+<div class="section" id="Plotting-Local-Indicators-of-Spatial-Autocorrelation-(LISA)">
+<h3>Plotting Local Indicators of Spatial Autocorrelation (<a class="reference external" href="https://onlinelibrary.wiley.com/doi/epdf/10.1111/j.1538-4632.1995.tb00338.x">LISA</a>)<a class="headerlink" href="#Plotting-Local-Indicators-of-Spatial-Autocorrelation-(LISA)" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">lisa_cluster</span><span class="p">(</span><span class="n">moran_loc_ntwwn</span><span class="p">,</span> <span class="n">arc_df</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">12</span><span class="p">),</span> <span class="n">lw</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">pp_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=.</span><span class="mi">25</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<span class="n">suptitle</span> <span class="o">=</span> <span class="s2">&quot;LISA for Crime-weighted Networks Arcs&quot;</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">suptitle</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">x</span><span class="o">=.</span><span class="mi">51</span><span class="p">,</span> <span class="n">y</span><span class="o">=.</span><span class="mi">93</span><span class="p">)</span>
+<span class="n">subtitle</span> <span class="o">=</span> <span class="s2">&quot;Crimes ($n=</span><span class="si">%s</span><span class="s2">$) are represented as semi-opaque green circles&quot;</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">subtitle</span> <span class="o">%</span> <span class="n">pp_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<a class="reference internal image-reference" href="../_images/notebooks_network-spatial-autocorrelation_37_0.png"><img alt="../_images/notebooks_network-spatial-autocorrelation_37_0.png" src="../_images/notebooks_network-spatial-autocorrelation_37_0.png" style="width: 665px; height: 709px;" /></a>
 </div>
 </div>
 </div>

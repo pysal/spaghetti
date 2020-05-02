@@ -416,7 +416,7 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-04-27T13:00:41-04:00
+2020-05-02T17:49:59-04:00
 
 CPython 3.7.3
 IPython 7.10.2
@@ -455,10 +455,10 @@ interpreter: 64bit
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 watermark 2.0.2
-matplotlib          3.1.2
-spaghetti           1.4.2.post2
 matplotlib_scalebar 0.6.1
+matplotlib          3.1.2
 libpysal            4.2.2
+spaghetti           1.4.2.post2
 numpy               1.18.1
 
 </pre></div></div>
@@ -512,7 +512,7 @@ numpy               1.18.1
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x123f07f28&gt;}
+{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x110d4c9e8&gt;}
 </pre></div></div>
 </div>
 </div>
@@ -538,7 +538,7 @@ numpy               1.18.1
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;spaghetti.network.Network at 0x123fb3978&gt;
+&lt;spaghetti.network.Network at 0x129f1d278&gt;
 </pre></div></div>
 </div>
 </div>
@@ -576,7 +576,7 @@ numpy               1.18.1
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x123fb3b00&gt;}
+{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x129c85c18&gt;}
 </pre></div></div>
 </div>
 </div>
@@ -642,8 +642,7 @@ numpy               1.18.1
     <span class="sd">&quot;&quot;&quot;Add/adjust cartographic elements.&quot;&quot;&quot;</span>
     <span class="n">scalebar</span> <span class="o">=</span> <span class="n">ScaleBar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
     <span class="n">b</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">scalebar</span><span class="p">)</span>
-    <span class="n">b</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([]);</span> <span class="n">b</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
-    <span class="n">b</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([]);</span> <span class="n">b</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([]);</span>
+    <span class="n">b</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xticklabels</span><span class="o">=</span><span class="p">[],</span> <span class="n">xticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">yticklabels</span><span class="o">=</span><span class="p">[],</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[]);</span>
 </pre></div>
 </div>
 </div>

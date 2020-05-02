@@ -47,7 +47,7 @@ Citations:
   * Integrations & applications:
     
     * Spatial Autocorrelation:
-      :cite:`Moran1950`, :cite:`Getis1992`, :cite:`esda:_2019`, :cite:`citation`... splot (zenodo, JOSS)
+      :cite:`Moran1950`, :cite:`Anselin1995`, :cite:`Getis1992`, :cite:`esda:_2019`, :cite:`splot:package:_2020`, :cite:`Lumnitz2020`
     
     * Facility Location:
       :cite:`Hakimi1964`, :cite:`ReVelle1970`, :cite:`Toregas1971`, :cite:`Toregas1972`, :cite:`Church1974`, :cite:`ReVelle2005`

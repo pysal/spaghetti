@@ -448,7 +448,7 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-04-27T14:07:00-04:00
+2020-05-02T17:48:53-04:00
 
 CPython 3.7.3
 IPython 7.10.2
@@ -488,11 +488,11 @@ interpreter: 64bit
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 watermark 2.0.2
+matplotlib          3.1.2
 libpysal            4.2.2
+matplotlib_scalebar 0.6.1
 spaghetti           1.4.2.post2
 geopandas           0.7.0
-matplotlib_scalebar 0.6.1
-matplotlib          3.1.2
 
 </pre></div></div>
 </div>
@@ -1940,7 +1940,8 @@ The largest component is 1 with 6 vertices.
 <span class="n">legend</span><span class="p">((</span><span class="s2">&quot;longest&quot;</span><span class="p">,</span> <span class="n">nlc</span><span class="p">,</span> <span class="p">(</span><span class="n">ocomp</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ocomp</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])))</span>
 <span class="c1"># add scale bar</span>
 <span class="n">scalebar</span> <span class="o">=</span> <span class="n">ScaleBar</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">)</span>
-<span class="n">base</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">scalebar</span><span class="p">);</span>
+<span class="n">base</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">scalebar</span><span class="p">)</span>
+<span class="n">base</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xticklabels</span><span class="o">=</span><span class="p">[],</span> <span class="n">xticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">yticklabels</span><span class="o">=</span><span class="p">[],</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[]);</span>
 </pre></div>
 </div>
 </div>
@@ -1948,7 +1949,7 @@ The largest component is 1 with 6 vertices.
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_connected-components_91_0.png"><img alt="../_images/notebooks_connected-components_91_0.png" src="../_images/notebooks_connected-components_91_0.png" style="width: 619px; height: 574px;" /></a>
+<a class="reference internal image-reference" href="../_images/notebooks_connected-components_91_0.png"><img alt="../_images/notebooks_connected-components_91_0.png" src="../_images/notebooks_connected-components_91_0.png" style="width: 563px; height: 561px;" /></a>
 </div>
 </div>
 </div>
