@@ -1,7 +1,5 @@
 # Release package on GitHub and publish to PyPI
-# IMPORTANT -- MANUAL STEPS
-#   * PRIOR TO TAGGED RELEASE:
-#       - set release_date and start_date in cell 1 of tools/gitcount.ipynb
+# IMPORTANT -- 1 MANUAL STEP
 #   * FOLLOWING TAGGED RELEASE
 #       - update CHANGELOG.md
 #--------------------------------------------------
