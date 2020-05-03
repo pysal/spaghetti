@@ -1,5 +1,5 @@
-
-name: Release Package
+# Release package on GitHub and publish to PyPI
+name: release_and_publish
 
 on:
   push:
