@@ -1,6 +1,34 @@
 
 # Changes
 
+## Version 1.5.0 (2020-05-04)
+
+We closed a total of 9 issues (enhancements and bug fixes) through 3 pull requests, since our last release on 2020-05-03.
+
+## Highlights
+ * New logo!
+ * Minimum/maximum spanning trees
+ * Refactored *K* Function
+ * More notebooks and tutorials
+ * Further improved and refactored testing
+
+## Issues Closed
+  - GHA for release and publish (#487)
+  - Attempting GHA release workflow #2 (#489)
+  - Attempting GHA release workflow (#488)
+  - Version bump for release v1.5.0.rc0 (#486)
+  - [WIP] Update Network K Function (#469)
+  - Break spatial analysis tutorial into several notebooks (#478)
+
+## Pull Requests
+  - Attempting GHA release workflow #2 (#489)
+  - Attempting GHA release workflow (#488)
+  - Version bump for release v1.5.0.rc0 (#486)
+
+The following individuals contributed to this release:
+
+  - James Gaboardi
+
 ------------------------------------
 
 ## Version 1.5.0.rc0 (2020-05-02)
