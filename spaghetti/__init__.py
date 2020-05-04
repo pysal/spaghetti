@@ -1,4 +1,4 @@
-__version__ = "1.5.0.rc13"
+__version__ = "1.5.0"
 """
 :mod:`spaghetti` --- Spatial Graphs: Networks, Topology, & Inference
 ====================================================================
