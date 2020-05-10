@@ -26,7 +26,7 @@ def compute_length(v0, v1):
         Coordinate sequence in the form x,y.
     
     Returns
-    --------
+    -------
     
     euc_dist : float
         Euclidean distance.
@@ -109,7 +109,7 @@ def generatetree(pred):
         List of preceding vertices for traversal route.
     
     Returns
-    --------
+    -------
     
     tree : dict
         The key is the root origin; value is the root origin to destination.
