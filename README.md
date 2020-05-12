@@ -7,7 +7,7 @@
 
 # *SPA*tial *G*rap*H*s: n*ET*works, *T*opology, & *I*nference
 
-Spaghetti is an open-source Python library for the analysis of network-based spatial data. Originating from the `network` module in [PySAL (Python Spatial Analysis Library)](http://pysal.org), it is under active development for the inclusion of newly proposed methods for building graph-theoretic networks and the analysis of network events. This package is part of a [refactoring of PySAL](https://github.com/pysal/pysal/wiki/PEP-13:-Refactor-PySAL-Using-Submodules).
+Spaghetti is an open-source Python library for the analysis of network-based spatial data. Originating from the `network` module in [PySAL (Python Spatial Analysis Library)](http://pysal.org), it is under active development for the inclusion of newly proposed methods for building graph-theoretic networks and the analysis of network events.
 
 *An example of a network's [minimum spanning tree](https://pysal.org/spaghetti/generated/spaghetti.spanning_tree.html#spaghetti.spanning_tree):*<p align="center">
 <img src="docs/_static/images/mst_logo_pasta.png" width="600" height="225" />
@@ -81,7 +81,7 @@ $ pip install git+https://github.com/pysal/spaghetti
 
 PySAL-spaghetti is under active development and contributors are welcome.
 
-If you have any suggestion, feature request, or bug report, please open a new [issue](https://github.com/pysal/spaghetti/issues) on GitHub. To submit patches, please review [PySAL: Getting Started](http://pysal.org/getting_started#for-developers), the PySAL [development guidelines](https://github.com/pysal/pysal/wiki), the `spaghetti` [contributing guidelines](https://github.com/pysal/spaghetti/blob/master/.github/CONTRIBUTING.md) before  opening a [pull request](https://github.com/pysal/spaghetti/pulls). Once your changes get merged, you’ll automatically be added to the [Contributors List](https://github.com/pysal/spaghetti/graphs/contributors).
+If you have any suggestions, feature requests, or bug reports, please open new [issues](https://github.com/pysal/spaghetti/issues) on GitHub. To submit patches, please review [PySAL: Getting Started](http://pysal.org/getting_started#for-developers), the PySAL [development guidelines](https://github.com/pysal/pysal/wiki), the `spaghetti` [contributing guidelines](https://github.com/pysal/spaghetti/blob/master/.github/CONTRIBUTING.md) before  opening a [pull request](https://github.com/pysal/spaghetti/pulls). Once your changes get merged, you’ll automatically be added to the [Contributors List](https://github.com/pysal/spaghetti/graphs/contributors).
 
 ## Support
 
