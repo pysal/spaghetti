@@ -11,9 +11,10 @@ dependencies:
   - rtree
   - scipy>=1.0
   - watermark
-  # testing
+  # testing/formatting
+  - black
+  - codecov
   - pytest
   - pytest-cov
-  - codecov
   # optional
   - geopandas>=0.7.0
