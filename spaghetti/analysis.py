@@ -7,44 +7,33 @@ class FuncBase(object):
     
     Parameters
     ----------
-    
     ntw : spaghetti.Network
         A spaghetti network object.
-    
     pointpattern : spaghetti.network.PointPattern
         A spaghetti point pattern object.
-    
     nsteps : int
         The number of steps at which the count of the nearest
         neighbors is computed. Default is 10.
-        
     permutations : int
         The number of permutations to perform. Default is 99.
-    
     threshold : float
         The level at which significance is computed.
         (0.5 would be 97.5% and 2.5%). Default is 0.5.
-    
     distribution : str
         The distribution from which random points are sampled.
         Currently, the only supported distribution is uniform.
-    
     upperbound : float
         The upper bound at which the `K`-function is computed.
         Defaults to the maximum observed nearest neighbor distance.
     
     Attributes
     ----------
-    
     sim : numpy.ndarray
         A simulated distance matrix.
-    
     npts : int
         The number of points (``pointpattern.npoints``).
-    
     xaxis : numpy.ndarray
         The observed x-axis of values.
-    
     observed : numpy.ndarray
         The observed y-axis of values.
     
@@ -115,7 +104,6 @@ class GlobalAutoK(FuncBase):
     
     Attributes
     ----------
-    
     lam : float
         The ``lambda`` value; representing intensity.
     
@@ -176,29 +164,22 @@ def global_auto_k(n_obs, dists, upperbound, intensity, nsteps):
 
     Parameters
     ----------
-    
     n_obs : int
         The number of observations. See ``self.npts``.
-    
     dists : numpy.ndarray
         A vector (the upper triangle of a symmetric matrix)
         of pairwise distances.
-    
     upperbound : int or float
         The end value of the sequence.
-    
     intensity : float
         lambda value
-    
     nsteps : int
         The number of distance bands. Must be non-negative.
     
     Returns
     -------
-    
     x : numpy.ndarray
         The x-axis of values.
-    
     y : numpy.ndarray
         The y-axis of values.
     
