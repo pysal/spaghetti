@@ -31,39 +31,31 @@ class Network:
     
     Parameters
     ----------
-    
     in_data : {str, list, tuple, numpy.ndarray, libpysal.cg.Chain, geopandas.GeoDataFrame}
         The input geographic data. Either (1) a path to a shapefile
         (str); (2) an iterable containing ``libpysal.cg.Chain``
         objects; (3) a single ``libpysal.cg.Chain``; or
         (4) a ``geopandas.GeoDataFrame``.
-    
     vertex_sig : int
         Round the x and y coordinates of all vertices to ``vertex_sig``
         significant digits (combined significant digits on the left and
         right of the decimal place). Default is 11. Set to ``None`` for
         no rounding.
-    
     unique_arcs : bool
         If ``True`` (default), keep only unique arcs (i.e., prune
         out any duplicated arcs). If ``False`` keep all segments.
-    
     extractgraph : bool
         If ``True``, extract a graph-theoretic object with no degree 2
         nodes. Default is ``True``.
-    
     w_components : bool
         Set to ``False`` to not record connected components from a
         ``libpysal.weights.W`` object. Default is ``True``.
-        
     weightings : {dict, bool}
         If dict, lists of weightings for each arc. If bool,
         ``True`` flags ``self.arc_lengths`` as the weightings,
         ``False`` sets no weightings. Default is ``False``.
-    
     weights_kws : dict
         Keyword arguments for ``libpysal.weights.W``.
-    
     vertex_atol : {int, None}
         Precision for vertex absolute tolerance. Round vertex coordinates to
         ``vertex_atol`` decimal places. Default is ``None``. **ONLY** change
@@ -71,36 +63,27 @@ class Network:
     
     Attributes
     ----------
-    
     adjacencylist : list
         List of lists storing vertex adjacency.
-    
     vertex_coords : dict
         Keys are vertex IDs and values are (x,y) coordinates of the vertices.
-    
     vertex_list : list
         List of vertex IDs.
-    
     vertices : dict
         Keys are tuples of vertex coords and values are the vertex ID.
-    
     arcs : list
         List of arcs, where each arc is a sorted tuple
         of vertex IDs.
-    
     arc_lengths : dict
         Keys are tuples of sorted vertex IDs representing an arc and
         values are the length.
-    
     pointpatterns : dict
         Keys are a string name of the pattern and values are
         ``PointPattern`` class instances.
-    
     distance_matrix : numpy.ndarray
         All network vertices (non-observations) distance matrix. Distances
         between vertices in disparate components are recorded as ``inf``
         by default.
-    
     network_trees : dict
         Keys are the vertex IDs (``int``). Values are dictionaries
         with the keys being the IDs of the destination vertex
@@ -108,100 +91,75 @@ class Network:
         If the destination vertex is a) the origin or b) 
         unreachable (disparate component) it is listed as itself being the
         neighbor.
-    
     edges : list
         Tuples of graph edge IDs.
-    
     edge_lengths : dict
         Keys are the graph edge IDs (``tuple``). Values are the
         graph edge length (``float``).
-    
     non_articulation_points : list
         All vertices with degree 2 that are not in an isolated
         island ring (loop) component.
-    
     w_network : libpysal.weights.W
         Weights object created from the network arcs.
-    
     network_n_components : int
         Count of connected components in the network.
-    
     network_fully_connected : bool
         ``True`` if the network representation is a single connected
         component, otherwise ``False``.
-    
     network_component_labels : numpy.ndarray
         Component labels for network arcs.
-    
     network_component2arc : dict
         Lookup in the form {int: list} for arcs comprising network
         connected components keyed by component labels with arcs in
         a list as values.
-    
     network_component_lengths : dict
         Length of each network component (keyed by component label).
-        
     network_longest_component : int
         The ID of the longest component in the network. This is not
         necessarily equal to ``network_largest_component``.
-        
     network_component_vertices : dict
         Lookup in the form {int: list} for vertices comprising network
         connected components keyed by component labels with vertices in
         a list as values.
-    
     network_component_vertex_count : dict
         The number of vertices in each network component
         (keyed by component label).
-    
     network_largest_component : int
         The ID of the largest component in the network. Within ``spaghetti``
         the largest component is the one with the most vertices. This is not
         necessarily equal to ``network_longest_component``.
-    
     network_component_is_ring : dict
         Lookup in the form {int: bool} keyed by component labels with values
         as ``True`` if the component is a closed ring, otherwise ``False``.
-    
     w_graph : libpysal.weights.W
         Weights object created from the graph edges.
-    
     graph_n_components : int
         Count of connected components in the network.
-    
     graph_fully_connected : bool
         ``True`` if the graph representation is a single connected
         component, otherwise ``False``.
-    
     graph_component_labels : numpy.ndarray
         Component labels for graph edges.
-    
     graph_component2edge : dict
         Lookup in the form {int: list} for edges comprising graph connected
         components keyed by component labels with edges in a list
         as values.
-    
     graph_component_lengths : dict
         Length of each graph component (keyed by component label).
-        
     graph_longest_component : int
         The ID of the longest component in the graph. This is not
         necessarily equal to ``graph_largest_component``.
-        
     graph_component_vertices : dict
         Lookup in the form {int: list} for vertices comprising graph
         connected components keyed by component labels with vertices in
         a list as values.
-    
     graph_component_vertex_count : dict
         The number of vertices in each graph component
         (keyed by component label).
-    
     graph_largest_component : int
         The ID of the largest component in the graph. Within ``spaghetti``
         the largest component is the one with the most vertices. This is not
         necessarily equal to ``graph_longest_component``.
-    
     graph_component_is_ring : dict
         Lookup in the form {int: bool} keyed by component labels with values as
         ``True`` if the component is a closed ring, otherwise ``False``.
@@ -374,7 +332,6 @@ class Network:
         
         Parameters
         ----------
-        
         v : tuple
             Coordinate (x,y) of the vertex.
         
@@ -411,11 +368,9 @@ class Network:
         
         Parameters
         ----------
-        
         w : libpysal.weights.W
             Weights object created from the network segments (either
             raw or graph-theoretic).
-        
         graph : bool
             Flag for a raw network (``False``) or graph-theoretic network
             (``True``). Default is ``False``.
@@ -739,7 +694,6 @@ class Network:
         
         Returns
         -------
-        
         napts : list
             Non-articulation points on a graph representation.
         
@@ -773,29 +727,23 @@ class Network:
         
         Parameters
         ----------
-        
         napts : set
             Non-articulation points (``napts``) in the network. The
             ``napts`` here do not include those within an isolated
             loop island.
-        
         unvisited : set
             Vertices left to evaluate in the network.
-        
         component_id : int
             ID for the network connected component for the
             current iteration of the algorithm.
-        
         ring : bool
             Network component is isolated island loop ``True`` or
             not ``False``.
         
         Returns
         -------
-        
         napts : set
             Updated ``napts`` object.
-        
         unvisited : set
             Updated ``napts`` object.
         
@@ -830,20 +778,16 @@ class Network:
         
         Parameters
         ----------
-        
         vtx : int
             The vertex ID.
-        
         arc_vertices : list
             All non-articulation points (``napts``) in the network.
             These are referred to as degree-2 vertices.
-        
         bridge : list
             Inital bridge list containing only ``vtx``.
         
         Returns
         -------
-        
         nodes : list
             Vertices to keep (articulation points). These elements are
             referred to as nodes.
@@ -869,21 +813,17 @@ class Network:
         
         Parameters
         ----------
-        
         graph : bool
             Controls whether the ``libpysal.weights.W`` is generated
             using the spatial representation (``False``) or the graph
             representation (``True``). Default is ``True``.
-        
         weightings : {dict, None}
             Dictionary of lists of weightings for each arc/edge.
-        
         weights_kws : dict
             Keyword arguments for ``libpysal.weights.W``.
         
         Returns
         -------
-        
          W : libpysal.weights.W
             A ``W`` representing the binary adjacency of the network.
         
@@ -1027,22 +967,18 @@ class Network:
         
         Parameters
         ----------
-        
         threshold : float
             Distance threshold value.
-        
         n_processes : {int, str}
             Specify the number of cores to utilize. Default is 1 core.
             Use ``"all"`` to request all available cores.
             Specify the exact number of cores with an integer.
-        
         gen_tree : bool
             Rebuild shortest path with ``True``, or skip with ``False``.
             Default is ``False``.
         
         Returns
         -------
-        
         w : libpysal.weights.W
             A ``W`` object representing the binary adjacency of
             the network.
@@ -1119,17 +1055,13 @@ class Network:
         
         Parameters
         ----------
-        
         in_data : {geopandas.GeoDataFrame, str}
             The input geographic data. Either (1) a path to a
             shapefile (str); or (2) a ``geopandas.GeoDataFrame``.
-        
         name : str
             Name to be assigned to the point dataset.
-        
         idvariable : str
             Column name to be used as the ID variable.
-        
         attribute : bool
             Defines whether attributes should be extracted. ``True`` for
             attribute extraction. ``False`` for no attribute extraction.
@@ -1179,22 +1111,17 @@ class Network:
         
         Parameters
         ----------
-        
         x : float
             The x-coordinate of the snapped point.
-        
         y : float
             The y-coordinate of the snapped point.
-        
         arc : tuple
             The (vtx0, vtx1) representation of the network arc.
         
         Returns
         -------
-        
         d1 : float
             The distance to vtx0. Always the vertex with the lesser ID.
-        
         d2 : float
             The distance to vtx1. Always the vertex with the greater ID.
         
@@ -1214,16 +1141,13 @@ class Network:
         
         Parameters
         -----------
-        
         pattern : spaghetti.PointPattern
             The point pattern object.
-        
         idx : int
             The point ID.
         
         Returns
         -------
-        
         dist : float
             The euclidean distance from original location to the snapped
             location.
@@ -1247,24 +1171,19 @@ class Network:
         
         Parameters
         -----------
-        
         pointpattern : spaghetti.PointPattern
             The point pattern object.
         
         Returns
         -------
-        
         obs_to_arc : dict
             Dictionary with arcs as keys and lists of points as values.
-        
         arc_to_obs : dict
             Dictionary with point IDs as keys and arc tuples as values.
-        
         dist_to_vertex : dict
             Dictionary with point IDs as keys and values as dictionaries
             with keys for vertex IDs and values as distances from point
             to vertex.
-        
         dist_snapped : dict
             Dictionary with point IDs as keys and distance from point
             to the network arc that it is snapped.
@@ -1371,7 +1290,6 @@ class Network:
         
         Parameters
         ----------
-        
         obs_on : dict
             Dictionary of observations on the network.
             Either in the form {(<LINK>):{<POINT_ID>:(<COORDS>)}} or 
@@ -1501,17 +1419,14 @@ class Network:
         
         Parameters
         ----------
-        
         count : int
             The number of points to create.
-        
         distribution : str
             A distribution of random points. Currently, the only
             supported distribution is uniform.
         
         Returns
         -------
-        
         random_pts : dict
             Keys are the edge tuple. Values are lists of new point coordinates.
         
@@ -1616,13 +1531,11 @@ class Network:
         
         Parameters
         -----------
-        
         v0 : int
             The vertex ID.
         
         Returns
         -------
-        
         links : list
             List of tuple arcs adjacent to the vertex.
         
@@ -1660,12 +1573,10 @@ class Network:
         
         Parameters
         -----------
-        
         n_processes : int
             Specify the number of cores to utilize. Default is 1 core.
             Use ``"all"`` to request all available cores.
             Specify the exact number of cores with an integer.
-       
         gen_tree : bool
             Rebuild shortest path ``True``, or skip ``False``.
             Default is ``False``.
@@ -1759,30 +1670,24 @@ class Network:
         
         Parameters
         ----------
-        
         sourcepattern : {str, spaghetti.PointPattern}
             The key of a point pattern snapped to the network or
             the full ``spaghetti.PointPattern`` object.
-        
         destpattern : str
             (Optional) The key of a point pattern snapped to the network
             or the full ``spaghetti.PointPattern`` object.
-        
         fill_diagonal : {float, int}
             (Optional) Fill the diagonal of the cost matrix. Default is
             ``None`` and will populate the diagonal with ``numpy.nan``.
             Do not declare a ``destpattern`` for a custom
             ``fill_diagonal``.
-        
         n_processes : {int, str}
             Specify the number of cores to utilize. Default is 1 core.
             Use ``"all"`` to request all available cores.
             Specify the exact number of cores with an integer.
-        
         gen_tree : bool
             Rebuild shortest path ``True``, or skip ``False``.
             Default is ``False``.
-        
         snap_dist : bool
             Flag as ``True`` to include the distance from the original
             location to the snapped location along the network. Default
@@ -1790,11 +1695,9 @@ class Network:
         
         Returns
         -------
-        
         nearest : numpy.ndarray
             An array of shape (n,m) storing distances between all
             source and destination points.
-        
         tree_nearest : dict
             Nearest network node to point pattern vertex shortest
             path lookup. The values of the dictionary are a tuple
@@ -2058,32 +1961,25 @@ class Network:
         
         Parameters
         ----------
-        
         sourcepattern : str
             The key of a point pattern snapped to the network.
-        
         destpattern : str
             (Optional) The key of a point pattern snapped to the
             network.
-        
         n_processes : {int, str}
             Specify the number of cores to utilize. Default is 1 core.
             Use ``"all"`` to request all available cores.
             Specify the exact number of cores with an integer.
-        
         gen_tree : bool
             Rebuild shortest path ``True``, or skip ``False``.
             Default is ``False``.
-        
         all_dists : numpy.ndarray
             An array of shape (n,n) storing distances between all
             points.
-        
         snap_dist : bool
             Flag as ``True`` to include the distance from the original
             location to the snapped location along the network. Default
             is ``False``.
-        
         keep_zero_dist : bool
             Include zero values in minimum distance ``True`` or exclude
             ``False``. Default is ``True``. If the source pattern is the
@@ -2212,26 +2108,21 @@ class Network:
     
         Parameters
         ----------
-        
         tree : dict
             See ``tree_nearest`` in 
             ``spaghetti.Network.allneighbordistances()``.
-        
         pp_orig : str
             Origin point pattern for shortest paths. 
             See ``name`` in ``spaghetti.Network.snapobservations()``.
-        
         pp_dest : str
             Destination point pattern for shortest paths. 
             See ``name`` in ``spaghetti.Network.snapobservations()``.
             Defaults ``pp_orig`` if not declared.
-        
         n_processes : int
             See ``n_processes`` in ``spaghetti.Network.full_distance_matrix()``.
         
         Returns
         -------
-        
         paths : list
             The shortest paths between observations as geometric objects.
             Each element of the list is a list where the first element
@@ -2368,17 +2259,14 @@ class Network:
         
         Parameters
         -----------
-        
         distance : float
             The distance at which arcs are split.
-        
         w_components : bool
             Set to ``False`` to not record connected components from a
             ``libpysal.weights.W`` object. Default is ``True``.
         
         Returns
         -------
-        
         split_network : spaghetti.Network
             A newly instantiated ``spaghetti.Network`` object.
         
@@ -2548,32 +2436,25 @@ class Network:
 
         Parameters
         ----------
-        
         pointpattern : spaghetti.PointPattern
             A ``spaghetti`` point pattern object.
-        
         nsteps : int
             The number of steps at which the count of the nearest
             neighbors is computed. Default is 10.
-        
         permutations : int
             The number of permutations to perform. Default is 99.
-        
         threshold : float
             The level at which significance is computed.
             (0.5 would be 97.5% and 2.5%). Default is 0.5.
-        
         distribution : str
             The distribution from which random points are sampled.
             Currently, the only supported distribution is uniform.
-        
         upperbound : float
             The upper bound at which the `K`-function is computed.
             Defaults to the maximum observed nearest neighbor distance.
         
         Returns
         -------
-        
         GlobalAutoK : spaghetti.analysis.GlobalAutoK
             The global auto `K`-function class instance.
         
@@ -2657,7 +2538,6 @@ class Network:
         
         Parameters
         ----------
-        
         filename : str
             The filename where the network should be saved. This should
             be a full path or it will be saved in the current directory.
@@ -2686,13 +2566,11 @@ class Network:
         
         Parameters
         ----------
-        
         filename : str
             The filename where the network is saved.
         
         Returns
         -------
-        
         self : spaghetti.Network
             A pre-computed ``spaghetti`` network object.
         
@@ -2709,19 +2587,15 @@ def extract_component(net, component_id, weightings=None):
     
     Parameters
     ----------
-    
     net : spaghetti.Network
         Full network object.
-    
     component_id : int
         The ID of the desired network component.
-    
     weightings : {dict, bool}
         See the ``weightings`` keyword argument in ``spaghetti.Network``.
     
     Returns
     -------
-    
     cnet : spaghetti.Network
         The pruned network containing the component specified in
         ``component_id``.
@@ -2919,21 +2793,17 @@ def spanning_tree(net, method="sort", maximum=False, silence_warnings=True):
     
     Parameters
     ----------
-    
     net : spaghetti.Network
         Instance of a network object.
-    
     method : str
         Method for determining spanning tree. Currently, the only
         supported method is 'sort', which sorts the network arcs
         by length prior to building intermediary networks and checking
         for cycles within the tree/subtrees. Future methods may 
         include linear programming approachs, etc.
-    
     maximum : bool
         When ``True`` a maximum spanning tree is created. When ``False``
         a minimum spanning tree is created. Default is ``False``.
-    
     silence_warnings : bool
         Warn if there is more than one connected component. Default is
         ``False`` due to the nature of constructing a minimum
@@ -2941,7 +2811,6 @@ def spanning_tree(net, method="sort", maximum=False, silence_warnings=True):
     
     Returns
     -------
-    
     net : spaghetti.Network
         Pruned instance of the network object.
     
@@ -3015,19 +2884,15 @@ def mst_weighted_sort(net, maximum, net_kws):
     
     Parameters
     ----------
-    
     net : spaghetti.Network
         See ``spanning_tree()``.
-    
     maximum : bool
         See ``spanning_tree()``.
-    
     net_kws : dict
         Keywords arguments for instaniating a ``spaghetti.Network``.
     
     Returns
     -------
-    
     spanning_tree : list
         All networks arcs that are members of the spanning tree.
     
@@ -3082,32 +2947,24 @@ def element_as_gdf(
     
     Parameters
     ----------
-    
     net : spaghetti.Network
         A `spaghetti` network object.
-    
     vertices : bool
         Extract the network vertices (``True``). Default is ``False``.
-    
     arcs : bool
         Extract the network arcs (``True``). Default is ``False``.
-    
     pp_name : str
         Name of the ``network.PointPattern`` to extract.
         Default is ``None``.
-    
     snapped : bool
         If extracting a ``network.PointPattern``, set to ``True`` for
         snapped point locations along the network. Default is ``False``.
-    
     routes : dict
         See ``paths`` from ``spaghetti.Network.shortest_paths``.
         Default is ``None``.
-    
     id_col : str
         ``geopandas.GeoDataFrame`` column name for IDs. Default is ``"id"``.
         When extracting routes this creates an (origin, destination) tuple.
-    
     geom_col : str
         ``geopandas.GeoDataFrame`` column name for geometry. Default is
         ``"geometry"``.
@@ -3123,21 +2980,18 @@ def element_as_gdf(
     
     Returns
     -------
-    
     points : geopandas.GeoDataFrame
         Network point elements (either vertices or ``network.PointPattern``
         points) as a ``geopandas.GeoDataFrame`` of ``shapely.geometry.Point``
         objects with an ``"id"`` column and ``"geometry""`` column.
         If the network object has a ``network_component_vertices`` attribute,
         then component labels are also added in a column.
-    
     lines : geopandas.GeoDataFrame
         Network arc elements as a ``geopandas.GeoDataFrame`` of
         ``shapely.geometry.LineString`` objects with an ``"id"``
         column and ``"geometry"`` column. If the network object has 
         a ``network_component_labels`` attribute, then component labels
         are also added in a column.
-    
     paths :  geopandas.GeoDataFrame
         Shortest path routes along network arc elements as a 
         ``geopandas.GeoDataFrame`` of ``shapely.geometry.LineString``
@@ -3231,23 +3085,18 @@ def regular_lattice(bounds, nh, nv=None, exterior=False):
     
     Parameters
     ----------
-    
     bounds : {tuple, list}
         Area bounds in the form - <minx,miny,maxx,maxy>.
-    
     nh : int
         The number of internal horizontal lines of the lattice.
-    
     nv : int
         The number of internal vertical lines of the lattice. Defaults to
         ``nh`` if left as None.
-
     exterior : bool
         Flag for including the outer bounding box segments. Default is False.
     
     Returns
     -------
-    
     lattice : list
         libpysal.cg.Chain objects forming a regular lattice
     
@@ -3333,36 +3182,29 @@ class PointPattern:
     
     Parameters
     ----------
-    
     in_data : {str, list, tuple, libpysal.cg.Point, geopandas.GeoDataFrame}
         The input geographic data. Either (1) a path to a shapefile
         (str); (2) an iterable containing ``libpysal.cg.Point``
         objects; (3) a single ``libpysal.cg.Point``; or
         (4) a ``geopandas.GeoDataFrame``.
-        
     idvariable : str
         Field in the shapefile to use as an ID variable.
-    
     attribute :  bool
         A flag to indicate whether all attributes are tagged to this
         class (``True``) or excluded (``False``). Default is ``False``.
     
     Attributes
     ----------
-    
     points : dict
         Keys are the point IDs (int). Values are the x,y
         coordinates (tuple).
-    
     npoints : int
         The number of points.
-    
     obs_to_arc : dict
         Keys are arc IDs (tuple). Values are snapped point information
         (``dict``).  Within the snapped point information (``dict``)
         keys are observation IDs (``int``), and values are snapped
         coordinates.
-    
     obs_to_vertex : list
        List of incident network vertices to snapped observation points
        converted from a ``default_dict``. Originally in the form of
@@ -3370,17 +3212,14 @@ class PointPattern:
        netvtx2: obs_id1, netvtx1: obs_id2... netvtx1: obs_idn}, then
        simplified to a list in the form
        [netvtx1, netvtx2, netvtx1, netvtx2, ...].
-       
     dist_to_vertex : dict
         Keys are observations IDs (``int``). Values are distance lookup
         (``dict``). Within distance lookup (``dict``) keys are the two
         incident vertices of the arc and values are distance to each of
         those arcs.
-    
     snapped_coordinates : dict
         Keys are the point IDs (int). Values are the snapped x,y
         coordinates (tuple).
-    
     snap_dist : bool
             Flag as ``True`` to include the distance from the original
             location to the snapped location along the network. Default
@@ -3492,16 +3331,13 @@ class SimulatedPointPattern:
     
     Attributes
     ----------
-    
     npoints : int
         The number of points.
-    
     obs_to_arc : dict
         Keys are arc IDs (tuple). Values are snapped point information
         (dict).  Within the snapped point information (dict)
         keys are observation IDs (int), and values are snapped
         coordinates.
-    
     obs_to_vertex : list
        List of incident network vertices to snapped observation points
        converted from a default_dict. Originally in the form of
@@ -3509,17 +3345,14 @@ class SimulatedPointPattern:
        netvtx2: obs_id1, netvtx1: obs_id2... netvtx1: obs_idn}, then
        simplified to a list in the form
        [netvtx1, netvtx2, netvtx1, netvtx2, ...].
-       
     dist_to_vertex : dict
         Keys are observations IDs (int). Values are distance lookup
         (dict). Within distance lookup (dict) keys are the two
         incident vertices of the arc and values are distance to each of
         those arcs.
-    
     snapped_coordinates : dict
         Keys are the point IDs (int). Values are the snapped x,y
         coordinates (tuple).
-    
     snap_dist : bool
             Flag as ``True`` to include the distance from the original
             location to the snapped location along the network. Default
