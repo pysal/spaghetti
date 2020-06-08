@@ -2227,7 +2227,7 @@ class Network:
 
                 # unpack the vertices containers
                 segm_verts = [v for fs in full_segments for v in fs.vertices]
-                
+
                 # remove duplicate vertices
                 for idx, v in enumerate(segm_verts):
                     try:
