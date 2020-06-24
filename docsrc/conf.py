@@ -277,19 +277,16 @@ nbsphinx_prolog = r"""
 
         This page was generated from `{{ docname }}`__.
         Interactive online version:
-        :raw-html:`<a href="https://mybinder.org/v2/gh/pysal/%s/master?filepath={{ docname }}"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a>`
+        :raw-html:`<a href="https://mybinder.org/v2/gh/pysal/spaghetti/master?filepath={{ docname }}"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a>`
 
-    __ https://github.com/pysal/%s/{{ fullpath }}
+    __ https://github.com/pysal/spaghetti/{{ fullpath }}
 
 .. raw:: latex
 
     \nbsphinxstartnotebook{\scriptsize\noindent\strut
     \textcolor{gray}{The following section was generated from
     \sphinxcode{\sphinxupquote{\strut {{ docname | escape_latex }}}} \dotfill}}
-""" % (
-    project,
-    project,
-)
+"""
 
 # This is processed by Jinja2 and inserted after each notebook
 nbsphinx_epilog = r"""
