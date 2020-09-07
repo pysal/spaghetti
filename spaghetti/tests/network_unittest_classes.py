@@ -634,8 +634,8 @@ class TestNetworkPointPattern(unittest.TestCase):
             self.ntw.nearestneighbordistances("i_should_not_exist")
         nnd1 = self.ntw.nearestneighbordistances(schools)
         nnd2 = self.ntw.nearestneighbordistances(schools, destpattern=schools)
-        nndv1 = numpy.array(list(nnd1.values()))[:, 1].astype(float)
-        nndv2 = numpy.array(list(nnd2.values()))[:, 1].astype(float)
+        nndv1 = numpy.array(list(nnd1.values()), dtype=object)[:, 1].astype(float)
+        nndv2 = numpy.array(list(nnd2.values()), dtype=object)[:, 1].astype(float)
         numpy.testing.assert_array_almost_equal_nulp(nndv1, nndv2)
         del self.ntw.distance_matrix
         del self.ntw.network_trees
