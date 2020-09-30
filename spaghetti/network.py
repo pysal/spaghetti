@@ -66,7 +66,7 @@ class Network:
     adjacencylist : list
         List of lists storing vertex adjacency.
     vertex_coords : dict
-        Keys are vertex IDs and values are (x,y) coordinates of the vertices.
+        Keys are vertex IDs and values are :math:`(x,y)` coordinates of the vertices.
     vertex_list : list
         List of vertex IDs.
     vertices : dict
@@ -1664,9 +1664,9 @@ class Network:
         gen_tree=False,
         snap_dist=False,
     ):
-        """Compute either all distances between ``i`` and ``j`` in a
-        single point pattern or all distances between each ``i`` from a
-        source pattern and all ``j`` from a destination pattern.
+        """Compute either all distances between :math:`i` and :math:`j` in a
+        single point pattern or all distances between each :math:`i` from a
+        source pattern and all :math:`j` from a destination pattern.
         
         Parameters
         ----------
@@ -1974,7 +1974,7 @@ class Network:
             Rebuild shortest path ``True``, or skip ``False``.
             Default is ``False``.
         all_dists : numpy.ndarray
-            An array of shape (n,n) storing distances between all
+            An array of shape :math:`(n,n)` storing distances between all
             points.
         snap_dist : bool
             Flag as ``True`` to include the distance from the original
@@ -2131,7 +2131,6 @@ class Network:
         
         Raises
         ------
-    
         AttributeError
             This exception is raised when an attempt to extract shortest
             path geometries is being made that but the ``network_trees``
@@ -2428,7 +2427,7 @@ class Network:
         distribution="uniform",
         upperbound=None,
     ):
-        r"""Compute a global auto `K`-function based on a network constrained
+        r"""Compute a global auto :math:`K`-function based on a network constrained
         cost matrix through `Monte Carlo simulation <https://en.wikipedia.org/wiki/Monte_Carlo_method>`_
         according to the formulation adapted from
         :cite:`doi:10.1002/9780470549094.ch5`. See the **Notes**
@@ -2450,40 +2449,40 @@ class Network:
             The distribution from which random points are sampled.
             Currently, the only supported distribution is uniform.
         upperbound : float
-            The upper bound at which the `K`-function is computed.
+            The upper bound at which the :math:`K`-function is computed.
             Defaults to the maximum observed nearest neighbor distance.
         
         Returns
         -------
         GlobalAutoK : spaghetti.analysis.GlobalAutoK
-            The global auto `K`-function class instance.
+            The global auto :math:`K`-function class instance.
         
         Notes
         -----
         
-        The `K`-function can be formulated as:
+        The :math:`K`-function can be formulated as:
         
         .. math::
         
            \displaystyle K(r)=\frac{\sum^n_{i=1} \#[\hat{A} \in D(a_i, r)]}{n\lambda},
         
-        where $n$ is the set cardinality of $A$, $\\hat{A}$ is the subset of
-        observations in $A$ that are within $D$ units of distance from $a_i$
-        (each single observation in $A$), and $r$ is the range of distance
-        values over which the `K`-function is calculated. The $\\lambda$ term
+        where $n$ is the set cardinality of :math:`A`, :math:`\hat{A}` is the subset of
+        observations in :math:`A` that are within :math:`D` units of distance from :math:`a_i`
+        (each single observation in :math:`A`), and :math:`r` is the range of distance
+        values over which the :math:`K`-function is calculated. The :math:`\lambda` term
         is the intensity of observations along the network, calculated as:
         
         .. math::
         
            \displaystyle \lambda = \frac{n}{\big|N_{arcs}\big|},
         
-        where $\\big|N_{arcs}\\big|$ is the summed length of network arcs.
-        The global auto `K`-function measures overall clustering in one set of
+        where :math:`\big|N_{arcs}\big|` is the summed length of network arcs.
+        The global auto :math:`K`-function measures overall clustering in one set of
         observations by comparing all intra-set distances over a range of
-        distance buffers $D \\in r$. The `K`-function improves upon 
+        distance buffers :math:`D \in r`. The :math:`K`-function improves upon 
         nearest-neighbor distance measures through the analysis of all neighbor
         distances. For an explanation on how to interpret the results of the
-        `K`-function see the `Network Spatial Dependence tutorial <https://pysal.org/spaghetti/notebooks/network-spatial-dependence.html>`_.
+        :math:`K`-function see the `Network Spatial Dependence tutorial <https://pysal.org/spaghetti/notebooks/network-spatial-dependence.html>`_.
         
         For original implementation see :cite:`Ripley1976`
         and :cite:`Ripley1977`.
@@ -2513,7 +2512,7 @@ class Network:
         >>> ntw.snapobservations(in_data, pt_str, attribute=True)
         >>> schools = ntw.pointpatterns[pt_str]
         
-        Compute a `K`-function from school observations
+        Compute a :math:`K`-function from school observations
         with ``99`` ``permutations`` at ``10`` intervals.
         
         >>> kres = ntw.GlobalAutoK(schools, permutations=99, nsteps=10)
@@ -2971,7 +2970,6 @@ def element_as_gdf(
     
     Raises
     ------
-    
     KeyError
         In order to extract a ``network.PointPattern`` it must already
         be a part of the network object. This exception is raised
@@ -2992,7 +2990,7 @@ def element_as_gdf(
         column and ``"geometry"`` column. If the network object has 
         a ``network_component_labels`` attribute, then component labels
         are also added in a column.
-    paths :  geopandas.GeoDataFrame
+    paths : geopandas.GeoDataFrame
         Shortest path routes along network arc elements as a 
         ``geopandas.GeoDataFrame`` of ``shapely.geometry.LineString``
         objects with an ``"id"`` (see ``spaghetti.Network.shortest_paths()``)
@@ -3098,7 +3096,7 @@ def regular_lattice(bounds, nh, nv=None, exterior=False):
     Returns
     -------
     lattice : list
-        libpysal.cg.Chain objects forming a regular lattice
+        The ``libpysal.cg.Chain`` objects forming a regular lattice.
     
     Notes
     -----
@@ -3196,7 +3194,7 @@ class PointPattern:
     Attributes
     ----------
     points : dict
-        Keys are the point IDs (int). Values are the x,y
+        Keys are the point IDs (int). Values are the :math:`(x,y)`
         coordinates (tuple).
     npoints : int
         The number of points.
@@ -3218,7 +3216,7 @@ class PointPattern:
         incident vertices of the arc and values are distance to each of
         those arcs.
     snapped_coordinates : dict
-        Keys are the point IDs (int). Values are the snapped x,y
+        Keys are the point IDs (int). Values are the snapped :math:`(x,y)`
         coordinates (tuple).
     snap_dist : bool
             Flag as ``True`` to include the distance from the original
@@ -3351,7 +3349,7 @@ class SimulatedPointPattern:
         incident vertices of the arc and values are distance to each of
         those arcs.
     snapped_coordinates : dict
-        Keys are the point IDs (int). Values are the snapped x,y
+        Keys are the point IDs (int). Values are the snapped :math:`(x,y)`
         coordinates (tuple).
     snap_dist : bool
             Flag as ``True`` to include the distance from the original
