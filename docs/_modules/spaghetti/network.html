@@ -3,7 +3,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>spaghetti.network &#8212; spaghetti v1.5.0 Manual</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -201,7 +201,7 @@
 <span class="sd">    adjacencylist : list</span>
 <span class="sd">        List of lists storing vertex adjacency.</span>
 <span class="sd">    vertex_coords : dict</span>
-<span class="sd">        Keys are vertex IDs and values are (x,y) coordinates of the vertices.</span>
+<span class="sd">        Keys are vertex IDs and values are :math:`(x,y)` coordinates of the vertices.</span>
 <span class="sd">    vertex_list : list</span>
 <span class="sd">        List of vertex IDs.</span>
 <span class="sd">    vertices : dict</span>
@@ -1799,9 +1799,9 @@
         <span class="n">gen_tree</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">snap_dist</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Compute either all distances between ``i`` and ``j`` in a</span>
-<span class="sd">        single point pattern or all distances between each ``i`` from a</span>
-<span class="sd">        source pattern and all ``j`` from a destination pattern.</span>
+        <span class="sd">&quot;&quot;&quot;Compute either all distances between :math:`i` and :math:`j` in a</span>
+<span class="sd">        single point pattern or all distances between each :math:`i` from a</span>
+<span class="sd">        source pattern and all :math:`j` from a destination pattern.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -2109,7 +2109,7 @@
 <span class="sd">            Rebuild shortest path ``True``, or skip ``False``.</span>
 <span class="sd">            Default is ``False``.</span>
 <span class="sd">        all_dists : numpy.ndarray</span>
-<span class="sd">            An array of shape (n,n) storing distances between all</span>
+<span class="sd">            An array of shape :math:`(n,n)` storing distances between all</span>
 <span class="sd">            points.</span>
 <span class="sd">        snap_dist : bool</span>
 <span class="sd">            Flag as ``True`` to include the distance from the original</span>
@@ -2266,7 +2266,6 @@
 <span class="sd">        </span>
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
-<span class="sd">    </span>
 <span class="sd">        AttributeError</span>
 <span class="sd">            This exception is raised when an attempt to extract shortest</span>
 <span class="sd">            path geometries is being made that but the ``network_trees``</span>
@@ -2563,7 +2562,7 @@
         <span class="n">distribution</span><span class="o">=</span><span class="s2">&quot;uniform&quot;</span><span class="p">,</span>
         <span class="n">upperbound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Compute a global auto `K`-function based on a network constrained</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Compute a global auto :math:`K`-function based on a network constrained</span>
 <span class="sd">        cost matrix through `Monte Carlo simulation &lt;https://en.wikipedia.org/wiki/Monte_Carlo_method&gt;`_</span>
 <span class="sd">        according to the formulation adapted from</span>
 <span class="sd">        :cite:`doi:10.1002/9780470549094.ch5`. See the **Notes**</span>
@@ -2585,40 +2584,40 @@
 <span class="sd">            The distribution from which random points are sampled.</span>
 <span class="sd">            Currently, the only supported distribution is uniform.</span>
 <span class="sd">        upperbound : float</span>
-<span class="sd">            The upper bound at which the `K`-function is computed.</span>
+<span class="sd">            The upper bound at which the :math:`K`-function is computed.</span>
 <span class="sd">            Defaults to the maximum observed nearest neighbor distance.</span>
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        GlobalAutoK : spaghetti.analysis.GlobalAutoK</span>
-<span class="sd">            The global auto `K`-function class instance.</span>
+<span class="sd">            The global auto :math:`K`-function class instance.</span>
 <span class="sd">        </span>
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 <span class="sd">        </span>
-<span class="sd">        The `K`-function can be formulated as:</span>
+<span class="sd">        The :math:`K`-function can be formulated as:</span>
 <span class="sd">        </span>
 <span class="sd">        .. math::</span>
 <span class="sd">        </span>
 <span class="sd">           \displaystyle K(r)=\frac{\sum^n_{i=1} \#[\hat{A} \in D(a_i, r)]}{n\lambda},</span>
 <span class="sd">        </span>
-<span class="sd">        where $n$ is the set cardinality of $A$, $\\hat{A}$ is the subset of</span>
-<span class="sd">        observations in $A$ that are within $D$ units of distance from $a_i$</span>
-<span class="sd">        (each single observation in $A$), and $r$ is the range of distance</span>
-<span class="sd">        values over which the `K`-function is calculated. The $\\lambda$ term</span>
+<span class="sd">        where $n$ is the set cardinality of :math:`A`, :math:`\hat{A}` is the subset of</span>
+<span class="sd">        observations in :math:`A` that are within :math:`D` units of distance from :math:`a_i`</span>
+<span class="sd">        (each single observation in :math:`A`), and :math:`r` is the range of distance</span>
+<span class="sd">        values over which the :math:`K`-function is calculated. The :math:`\lambda` term</span>
 <span class="sd">        is the intensity of observations along the network, calculated as:</span>
 <span class="sd">        </span>
 <span class="sd">        .. math::</span>
 <span class="sd">        </span>
 <span class="sd">           \displaystyle \lambda = \frac{n}{\big|N_{arcs}\big|},</span>
 <span class="sd">        </span>
-<span class="sd">        where $\\big|N_{arcs}\\big|$ is the summed length of network arcs.</span>
-<span class="sd">        The global auto `K`-function measures overall clustering in one set of</span>
+<span class="sd">        where :math:`\big|N_{arcs}\big|` is the summed length of network arcs.</span>
+<span class="sd">        The global auto :math:`K`-function measures overall clustering in one set of</span>
 <span class="sd">        observations by comparing all intra-set distances over a range of</span>
-<span class="sd">        distance buffers $D \\in r$. The `K`-function improves upon </span>
+<span class="sd">        distance buffers :math:`D \in r`. The :math:`K`-function improves upon </span>
 <span class="sd">        nearest-neighbor distance measures through the analysis of all neighbor</span>
 <span class="sd">        distances. For an explanation on how to interpret the results of the</span>
-<span class="sd">        `K`-function see the `Network Spatial Dependence tutorial &lt;https://pysal.org/spaghetti/notebooks/network-spatial-dependence.html&gt;`_.</span>
+<span class="sd">        :math:`K`-function see the `Network Spatial Dependence tutorial &lt;https://pysal.org/spaghetti/notebooks/network-spatial-dependence.html&gt;`_.</span>
 <span class="sd">        </span>
 <span class="sd">        For original implementation see :cite:`Ripley1976`</span>
 <span class="sd">        and :cite:`Ripley1977`.</span>
@@ -2648,7 +2647,7 @@
 <span class="sd">        &gt;&gt;&gt; ntw.snapobservations(in_data, pt_str, attribute=True)</span>
 <span class="sd">        &gt;&gt;&gt; schools = ntw.pointpatterns[pt_str]</span>
 <span class="sd">        </span>
-<span class="sd">        Compute a `K`-function from school observations</span>
+<span class="sd">        Compute a :math:`K`-function from school observations</span>
 <span class="sd">        with ``99`` ``permutations`` at ``10`` intervals.</span>
 <span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; kres = ntw.GlobalAutoK(schools, permutations=99, nsteps=10)</span>
@@ -3106,7 +3105,6 @@
 <span class="sd">    </span>
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
-<span class="sd">    </span>
 <span class="sd">    KeyError</span>
 <span class="sd">        In order to extract a ``network.PointPattern`` it must already</span>
 <span class="sd">        be a part of the network object. This exception is raised</span>
@@ -3127,7 +3125,7 @@
 <span class="sd">        column and ``&quot;geometry&quot;`` column. If the network object has </span>
 <span class="sd">        a ``network_component_labels`` attribute, then component labels</span>
 <span class="sd">        are also added in a column.</span>
-<span class="sd">    paths :  geopandas.GeoDataFrame</span>
+<span class="sd">    paths : geopandas.GeoDataFrame</span>
 <span class="sd">        Shortest path routes along network arc elements as a </span>
 <span class="sd">        ``geopandas.GeoDataFrame`` of ``shapely.geometry.LineString``</span>
 <span class="sd">        objects with an ``&quot;id&quot;`` (see ``spaghetti.Network.shortest_paths()``)</span>
@@ -3233,7 +3231,7 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    lattice : list</span>
-<span class="sd">        libpysal.cg.Chain objects forming a regular lattice</span>
+<span class="sd">        The ``libpysal.cg.Chain`` objects forming a regular lattice.</span>
 <span class="sd">    </span>
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
@@ -3331,7 +3329,7 @@
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    points : dict</span>
-<span class="sd">        Keys are the point IDs (int). Values are the x,y</span>
+<span class="sd">        Keys are the point IDs (int). Values are the :math:`(x,y)`</span>
 <span class="sd">        coordinates (tuple).</span>
 <span class="sd">    npoints : int</span>
 <span class="sd">        The number of points.</span>
@@ -3353,7 +3351,7 @@
 <span class="sd">        incident vertices of the arc and values are distance to each of</span>
 <span class="sd">        those arcs.</span>
 <span class="sd">    snapped_coordinates : dict</span>
-<span class="sd">        Keys are the point IDs (int). Values are the snapped x,y</span>
+<span class="sd">        Keys are the point IDs (int). Values are the snapped :math:`(x,y)`</span>
 <span class="sd">        coordinates (tuple).</span>
 <span class="sd">    snap_dist : bool</span>
 <span class="sd">            Flag as ``True`` to include the distance from the original</span>
@@ -3486,7 +3484,7 @@
 <span class="sd">        incident vertices of the arc and values are distance to each of</span>
 <span class="sd">        those arcs.</span>
 <span class="sd">    snapped_coordinates : dict</span>
-<span class="sd">        Keys are the point IDs (int). Values are the snapped x,y</span>
+<span class="sd">        Keys are the point IDs (int). Values are the snapped :math:`(x,y)`</span>
 <span class="sd">        coordinates (tuple).</span>
 <span class="sd">    snap_dist : bool</span>
 <span class="sd">            Flag as ``True`` to include the distance from the original</span>
@@ -3520,7 +3518,7 @@
     </p>
     <p>
         &copy; Copyright 2018, pysal developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.1.0.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
     </p>
   </div>
 </footer>

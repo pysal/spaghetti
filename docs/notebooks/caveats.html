@@ -3,7 +3,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Caveats &#8212; spaghetti v1.5.0 Manual</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -755,7 +755,7 @@ geopandas  0.7.0
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_caveats_14_0.png"><img alt="../_images/notebooks_caveats_14_0.png" src="../_images/notebooks_caveats_14_0.png" style="width: 539px; height: 434px;" /></a>
+<img alt="../_images/notebooks_caveats_14_0.png" class="no-scaled-link" src="../_images/notebooks_caveats_14_0.png" style="width: 539px; height: 434px;" />
 </div>
 </div>
 <p>The plot above shows network arcs in gray with vertices in red. Also, vertices are labled in black and component membership is labeled in red. Since there are no actual intersections between segments <code class="docutils literal notranslate"><span class="pre">(0,1),(3,4)</span></code> or <code class="docutils literal notranslate"><span class="pre">(3,4),(6,7)</span></code>, there are no vertices. Therefore, a shortest path from vertex <code class="docutils literal notranslate"><span class="pre">0</span></code> to <code class="docutils literal notranslate"><span class="pre">7</span></code> must follow the route <code class="docutils literal notranslate"><span class="pre">{1,2,3,4,5,6}</span></code> for a total of 21 units of distance.</p>
@@ -1059,7 +1059,7 @@ geopandas  0.7.0
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_caveats_31_0.png"><img alt="../_images/notebooks_caveats_31_0.png" src="../_images/notebooks_caveats_31_0.png" style="width: 532px; height: 520px;" /></a>
+<img alt="../_images/notebooks_caveats_31_0.png" class="no-scaled-link" src="../_images/notebooks_caveats_31_0.png" style="width: 532px; height: 520px;" />
 </div>
 </div>
 <p>As stated previously, flow from one network segment to another is only possible when segments share a vertex. In this case, no vertex is actually shared, although superficially there does appear to be. The plot above visualizes this concept by showing the two (dis)connected components of the “goalpost” network. Network arcs are colored by component membership and vertices are labeled by component membership. This is also demonstrated below when overlaying a plot of
@@ -1087,7 +1087,7 @@ geopandas  0.7.0
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_caveats_33_0.png"><img alt="../_images/notebooks_caveats_33_0.png" src="../_images/notebooks_caveats_33_0.png" style="width: 536px; height: 520px;" /></a>
+<img alt="../_images/notebooks_caveats_33_0.png" class="no-scaled-link" src="../_images/notebooks_caveats_33_0.png" style="width: 536px; height: 520px;" />
 </div>
 </div>
 <p>However, if the line segments were digitized “properly” a single connected component can be obtained (we emphasize “properly” because segments of a spatial network do not always intersect to form a single component in reality, for example highway over/underpases). In order to obtained a single connected component in this case we can simply add another point—<code class="docutils literal notranslate"><span class="pre">(3,1)</span></code>—to the initial collection of lines prior to network instantiation.</p>
@@ -1138,7 +1138,7 @@ Network vertices:        {0: [0, 1, 2, 3, 4, 5]}
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_caveats_36_0.png"><img alt="../_images/notebooks_caveats_36_0.png" src="../_images/notebooks_caveats_36_0.png" style="width: 536px; height: 520px;" /></a>
+<img alt="../_images/notebooks_caveats_36_0.png" class="no-scaled-link" src="../_images/notebooks_caveats_36_0.png" style="width: 536px; height: 520px;" />
 </div>
 </div>
 <p>Now both the network vertices and spatially-weighted arcs are all members of a single connected component.</p>
@@ -1353,7 +1353,7 @@ Public water pumps and Cholera deaths in London 1954 (Snow&#39;s Map)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_caveats_42_1.png"><img alt="../_images/notebooks_caveats_42_1.png" src="../_images/notebooks_caveats_42_1.png" style="width: 735px; height: 652px;" /></a>
+<img alt="../_images/notebooks_caveats_42_1.png" class="no-scaled-link" src="../_images/notebooks_caveats_42_1.png" style="width: 735px; height: 652px;" />
 </div>
 </div>
 <p>In this dataset that are <strong>45</strong> components of the networks, indicating some serious issues with intended connectivity. When overlayed with arc spatial weights it becomes clear that many of the arcs that appear to (and should) intersect, actually do not.</p>
@@ -1376,7 +1376,7 @@ Public water pumps and Cholera deaths in London 1954 (Snow&#39;s Map)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_caveats_44_0.png"><img alt="../_images/notebooks_caveats_44_0.png" src="../_images/notebooks_caveats_44_0.png" style="width: 735px; height: 652px;" /></a>
+<img alt="../_images/notebooks_caveats_44_0.png" class="no-scaled-link" src="../_images/notebooks_caveats_44_0.png" style="width: 735px; height: 652px;" />
 </div>
 </div>
 <p>Fuzzy contiguity can be acheived through <a class="reference external" href="https://pysal.org/libpysal/generated/libpysal.weights.fuzzy_contiguity.html#libpysal.weights.fuzzy_contiguity">libpysal.weights.fuzzy_contiguity()</a>, which provides us with a single connected component, but does not capture the true nature of the network stucture, as demonstrated below.</p>
@@ -1419,7 +1419,7 @@ Public water pumps and Cholera deaths in London 1954 (Snow&#39;s Map)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_caveats_47_0.png"><img alt="../_images/notebooks_caveats_47_0.png" src="../_images/notebooks_caveats_47_0.png" style="width: 735px; height: 652px;" /></a>
+<img alt="../_images/notebooks_caveats_47_0.png" class="no-scaled-link" src="../_images/notebooks_caveats_47_0.png" style="width: 735px; height: 652px;" />
 </div>
 </div>
 <p>The issue with the <a class="reference external" href="https://github.com/pysal/libpysal/tree/master/libpysal/examples/snow_maps">Soho_Network.shp</a> dataset is not precision, it is that not all true intersections are demarcated with vertices, as in the “goalpost” example above. This is clearly seen in the upper two segments of the network exterior where each segment is a single object, not broken at joining segments. In order to properly use the <code class="docutils literal notranslate"><span class="pre">Soho_Network.shp</span></code> dataset as a network, geometric preprocessing would need to be
@@ -1492,7 +1492,7 @@ Network vertices:        {0: [0, 1, 2, 3, 4], 1: [5, 6]}
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_caveats_50_0.png"><img alt="../_images/notebooks_caveats_50_0.png" src="../_images/notebooks_caveats_50_0.png" style="width: 590px; height: 543px;" /></a>
+<img alt="../_images/notebooks_caveats_50_0.png" class="no-scaled-link" src="../_images/notebooks_caveats_50_0.png" style="width: 590px; height: 543px;" />
 </div>
 </div>
 <p>A small gap is shown in the plot above resulting in two network components.</p>
@@ -1519,7 +1519,7 @@ Network vertices:        {0: [0, 1, 2, 3, 4], 1: [5, 6]}
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_caveats_52_0.png"><img alt="../_images/notebooks_caveats_52_0.png" src="../_images/notebooks_caveats_52_0.png" style="width: 536px; height: 520px;" /></a>
+<img alt="../_images/notebooks_caveats_52_0.png" class="no-scaled-link" src="../_images/notebooks_caveats_52_0.png" style="width: 536px; height: 520px;" />
 </div>
 </div>
 <p>In order to accomodate situations like these where network elements are digitized in generally the correct locations but the precision is lacking, the <code class="docutils literal notranslate"><span class="pre">vertex_atol</span></code> parameter can be invoked when instantiating the network. This parameter allows for the rounding of decimal places (not significant digits — see <a class="reference external" href="https://pysal.org/spaghetti/generated/spaghetti.Network.html#spaghetti.Network">vertex_sig</a>), but should be used with caution.</p>
@@ -1567,7 +1567,7 @@ Network vertices:        {0: [0, 1, 2, 3, 4, 5]}
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<a class="reference internal image-reference" href="../_images/notebooks_caveats_55_0.png"><img alt="../_images/notebooks_caveats_55_0.png" src="../_images/notebooks_caveats_55_0.png" style="width: 536px; height: 520px;" /></a>
+<img alt="../_images/notebooks_caveats_55_0.png" class="no-scaled-link" src="../_images/notebooks_caveats_55_0.png" style="width: 536px; height: 520px;" />
 </div>
 </div>
 </div>
@@ -1799,7 +1799,7 @@ array([0., 1., 2., 3., 4., 3.])
     </p>
     <p>
         &copy; Copyright 2018, pysal developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.1.0.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
     </p>
   </div>
 </footer>
