@@ -428,17 +428,17 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-05-02T21:45:25-04:00
+2020-10-05T17:27:13-04:00
 
-CPython 3.7.3
-IPython 7.10.2
+CPython 3.8.5
+IPython 7.18.1
 
-compiler   : Clang 9.0.0 (tags/RELEASE_900/final)
+compiler   : Clang 10.0.1
 system     : Darwin
-release    : 19.4.0
+release    : 19.6.0
 machine    : x86_64
 processor  : i386
-CPU cores  : 4
+CPU cores  : 8
 interpreter: 64bit
 </pre></div></div>
 </div>
@@ -467,11 +467,11 @@ interpreter: 64bit
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 watermark 2.0.2
-geopandas           0.7.0
-spaghetti           1.5.0.rc0
-libpysal            4.2.2
-matplotlib_scalebar 0.6.1
-matplotlib          3.1.2
+matplotlib_scalebar 0.6.2
+spaghetti           1.5.0
+geopandas           0.8.1
+matplotlib          3.3.2
+libpysal            4.3.0
 
 </pre></div></div>
 </div>
@@ -783,8 +783,8 @@ snapped coords: (727919.2473619275, 875942.4986759046)
 <span class="n">snapped_schools_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">markersize</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 <span class="c1"># add scale bar</span>
-<span class="n">scalebar</span> <span class="o">=</span> <span class="n">ScaleBar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
-<span class="n">base</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">scalebar</span><span class="p">)</span>
+<span class="n">kw</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;units&quot;</span><span class="p">:</span><span class="s2">&quot;ft&quot;</span><span class="p">,</span> <span class="s2">&quot;dimension&quot;</span><span class="p">:</span><span class="s2">&quot;imperial-length&quot;</span><span class="p">,</span> <span class="s2">&quot;fixed_value&quot;</span><span class="p">:</span><span class="mi">1000</span><span class="p">}</span>
+<span class="n">base</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">ScaleBar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">,</span> <span class="n">box_alpha</span><span class="o">=.</span><span class="mi">75</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">))</span>
 
 <span class="c1"># add legend</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span>
