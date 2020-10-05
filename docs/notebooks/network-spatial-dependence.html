@@ -427,17 +427,17 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-05-02T21:43:53-04:00
+2020-10-05T17:04:41-04:00
 
-CPython 3.7.3
-IPython 7.10.2
+CPython 3.8.5
+IPython 7.18.1
 
-compiler   : Clang 9.0.0 (tags/RELEASE_900/final)
+compiler   : Clang 10.0.1
 system     : Darwin
-release    : 19.4.0
+release    : 19.6.0
 machine    : x86_64
 processor  : i386
-CPU cores  : 4
+CPU cores  : 8
 interpreter: 64bit
 </pre></div></div>
 </div>
@@ -466,12 +466,12 @@ interpreter: 64bit
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 watermark 2.0.2
-spaghetti           1.5.0.rc0
-matplotlib          3.1.2
-libpysal            4.2.2
-geopandas           0.7.0
-numpy               1.18.1
-matplotlib_scalebar 0.6.1
+geopandas           0.8.1
+libpysal            4.3.0
+spaghetti           1.5.0
+matplotlib_scalebar 0.6.2
+matplotlib          3.3.2
+numpy               1.19.1
 
 </pre></div></div>
 </div>
@@ -535,8 +535,8 @@ matplotlib_scalebar 0.6.1
 <span class="k">def</span> <span class="nf">carto_elements</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Add/adjust cartographic elements.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">scale</span><span class="p">:</span>
-        <span class="n">scalebar</span> <span class="o">=</span> <span class="n">ScaleBar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
-        <span class="n">b</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">scalebar</span><span class="p">)</span>
+        <span class="n">kw</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;units&quot;</span><span class="p">:</span><span class="s2">&quot;ft&quot;</span><span class="p">,</span> <span class="s2">&quot;dimension&quot;</span><span class="p">:</span><span class="s2">&quot;imperial-length&quot;</span><span class="p">,</span> <span class="s2">&quot;fixed_value&quot;</span><span class="p">:</span><span class="mi">1000</span><span class="p">}</span>
+        <span class="n">b</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">ScaleBar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">))</span>
     <span class="n">b</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xticklabels</span><span class="o">=</span><span class="p">[],</span> <span class="n">xticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">yticklabels</span><span class="o">=</span><span class="p">[],</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[]);</span>
 </pre></div>
 </div>
@@ -661,7 +661,7 @@ matplotlib_scalebar 0.6.1
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_network-spatial-dependence_10_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-dependence_10_0.png" style="width: 947px; height: 556px;" />
+<img alt="../_images/notebooks_network-spatial-dependence_10_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-dependence_10_0.png" style="width: 912px; height: 556px;" />
 </div>
 </div>
 <p><strong>Interpretation:</strong></p>
@@ -749,7 +749,7 @@ matplotlib_scalebar 0.6.1
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_network-spatial-dependence_19_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-dependence_19_0.png" style="width: 914px; height: 556px;" />
+<img alt="../_images/notebooks_network-spatial-dependence_19_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-dependence_19_0.png" style="width: 876px; height: 556px;" />
 </div>
 </div>
 <p><strong>Interpretation:</strong></p>
@@ -774,7 +774,7 @@ matplotlib_scalebar 0.6.1
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_network-spatial-dependence_21_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-dependence_21_0.png" style="width: 910px; height: 556px;" />
+<img alt="../_images/notebooks_network-spatial-dependence_21_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-dependence_21_0.png" style="width: 876px; height: 556px;" />
 </div>
 </div>
 <p><strong>Interpretation:</strong></p>
@@ -821,8 +821,8 @@ matplotlib_scalebar 0.6.1
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x12a6dce80&gt;,
- &#39;schools&#39;: &lt;spaghetti.network.PointPattern at 0x1294bf4a8&gt;}
+{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x7fc2502217f0&gt;,
+ &#39;schools&#39;: &lt;spaghetti.network.PointPattern at 0x7fc2583b1fd0&gt;}
 </pre></div></div>
 </div>
 </div>
@@ -856,12 +856,12 @@ matplotlib_scalebar 0.6.1
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_network-spatial-dependence_28_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-dependence_28_0.png" style="width: 975px; height: 556px;" />
+<img alt="../_images/notebooks_network-spatial-dependence_28_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-dependence_28_0.png" style="width: 941px; height: 556px;" />
 </div>
 </div>
 <p><strong>Interpretation:</strong></p>
 <ul class="simple">
-<li><p><strong>Schools exhibit no clustering until roughly 1,000 meters then display more clustering up to approximately 3,000 meters, followed by high clustering up to 6,000 meters.</strong></p></li>
+<li><p><strong>Schools exhibit no clustering until roughly 1,000 feet then display more clustering up to approximately 3,000 feet, followed by high clustering up to 6,000 feet.</strong></p></li>
 </ul>
 </div>
 <div class="section" id="Empircal-—-crimes">
@@ -894,12 +894,12 @@ matplotlib_scalebar 0.6.1
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_network-spatial-dependence_31_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-dependence_31_0.png" style="width: 973px; height: 556px;" />
+<img alt="../_images/notebooks_network-spatial-dependence_31_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-dependence_31_0.png" style="width: 941px; height: 556px;" />
 </div>
 </div>
 <p><strong>Interpretation:</strong></p>
 <ul class="simple">
-<li><p><strong>There is strong evidence to suggest crimes are clustered at all distances along the network, but more so within several meters of each other and at 10,000 meters.</strong></p></li>
+<li><p><strong>There is strong evidence to suggest crimes are clustered at all distances along the network, but more so within several feet of each other and at 10,000 feet.</strong></p></li>
 </ul>
 <hr class="docutils" />
 </div>

@@ -122,8 +122,8 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#2.-Moran’s-I-on-a-segmented-network">2. Moran’s <em>I</em> on a segmented network</a><ul>
-<li><a class="reference internal" href="#Moran’s-I-on-a-network-split-into-200-meter-segments">Moran’s <em>I</em> on a network split into 200-meter segments</a></li>
-<li><a class="reference internal" href="#Moran’s-I-on-a-network-split-into-50-meter-segments">Moran’s <em>I</em> on a network split into 50-meter segments</a></li>
+<li><a class="reference internal" href="#Moran’s-I-on-a-network-split-into-200-foot-segments">Moran’s <em>I</em> on a network split into 200-foot segments</a></li>
+<li><a class="reference internal" href="#Moran’s-I-on-a-network-split-into-50-foot-segments">Moran’s <em>I</em> on a network split into 50-foot segments</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#3.-Visualizing-ESDA-with-splot">3. Visualizing ESDA with <code class="docutils literal notranslate"><span class="pre">splot</span></code></a><ul>
@@ -431,17 +431,17 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-05-02T21:43:38-04:00
+2020-10-05T17:12:08-04:00
 
-CPython 3.7.3
-IPython 7.10.2
+CPython 3.8.5
+IPython 7.18.1
 
-compiler   : Clang 9.0.0 (tags/RELEASE_900/final)
+compiler   : Clang 10.0.1
 system     : Darwin
-release    : 19.4.0
+release    : 19.6.0
 machine    : x86_64
 processor  : i386
-CPU cores  : 4
+CPU cores  : 8
 interpreter: 64bit
 </pre></div></div>
 </div>
@@ -471,18 +471,30 @@ interpreter: 64bit
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 watermark 2.0.2
-numpy               1.18.1
-esda                2.2.1
-libpysal            4.2.2
-matplotlib          3.1.2
-matplotlib_scalebar 0.6.1
-spaghetti           1.5.0.rc0
-splot               1.1.2
+numpy               1.19.1
+spaghetti           1.5.0
+splot               1.1.3
+matplotlib_scalebar 0.6.2
+esda                2.3.1
+libpysal            4.3.0
+matplotlib          3.3.2
 
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span>
+    <span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">MatplotlibDeprecationWarning</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -501,7 +513,7 @@ splot               1.1.2
 <div class="section" id="Instantiate-the-network-from-a-.shp-file">
 <h3>Instantiate the network from a <code class="docutils literal notranslate"><span class="pre">.shp</span></code> file<a class="headerlink" href="#Instantiate-the-network-from-a-.shp-file" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -511,19 +523,19 @@ splot               1.1.2
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;spaghetti.network.Network at 0x1201fe160&gt;
+&lt;spaghetti.network.Network at 0x7f95806731c0&gt;
 </pre></div></div>
 </div>
 </div>
 <div class="section" id="Extract-network-arcs-as-a-geopandas.GeoDataFrame">
 <h3>Extract network arcs as a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code><a class="headerlink" href="#Extract-network-arcs-as-a-geopandas.GeoDataFrame" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -533,7 +545,7 @@ splot               1.1.2
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -599,7 +611,7 @@ splot               1.1.2
 <div class="section" id="Associate-the-network-with-a-point-pattern">
 <h3>Associate the network with a point pattern<a class="headerlink" href="#Associate-the-network-with-a-point-pattern" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -611,19 +623,19 @@ splot               1.1.2
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x120c1af28&gt;}
+{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x7f95a1296220&gt;}
 </pre></div></div>
 </div>
 </div>
 <div class="section" id="Extract-the-crimes-point-pattern-as-a-geopandas.GeoDataFrame">
 <h3>Extract the crimes point pattern as a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code><a class="headerlink" href="#Extract-the-crimes-point-pattern-as-a-geopandas.GeoDataFrame" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -633,7 +645,7 @@ splot               1.1.2
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -702,7 +714,7 @@ splot               1.1.2
 <h2>1. ESDA — Exploratory Spatial Data Analysis with <a class="reference external" href="https://esda.readthedocs.io/en/latest/">pysal/esda</a><a class="headerlink" href="#1.-ESDA-—-Exploratory-Spatial-Data-Analysis-with-pysal/esda" title="Permalink to this headline">¶</a></h2>
 <p><strong>The Moran’s I test statistic allows for the inference of how clustered (or dispersed) a dataset is while considering both attribute values and spatial relationships. A value of closer to +1 indicates absolute clustering while a value of closer to -1 indicates absolute dispersion. Complete spatial randomness takes the value of 0. See the</strong> <a class="reference external" href="https://pysal.org/esda/">esda documentation</a> <strong>for in-depth descriptions and tutorials.</strong></p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -723,7 +735,7 @@ splot               1.1.2
 <div class="section" id="Moran’s-I-using-the-network-representation’s-W">
 <h3>Moran’s <em>I</em> using the network representation’s <em>W</em><a class="headerlink" href="#Moran’s-I-using-the-network-representation’s-W" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -733,7 +745,7 @@ splot               1.1.2
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -745,7 +757,7 @@ splot               1.1.2
 <div class="section" id="Moran’s-I-using-the-graph-representation’s-W">
 <h3>Moran’s <em>I</em> using the graph representation’s <em>W</em><a class="headerlink" href="#Moran’s-I-using-the-graph-representation’s-W" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -755,7 +767,7 @@ splot               1.1.2
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -773,10 +785,10 @@ network arcs/graph edges attributed with associated crime counts are nearly rand
 <hr class="docutils" />
 <div class="section" id="2.-Moran’s-I-on-a-segmented-network">
 <h2>2. Moran’s <em>I</em> on a segmented network<a class="headerlink" href="#2.-Moran’s-I-on-a-segmented-network" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="Moran’s-I-on-a-network-split-into-200-meter-segments">
-<h3>Moran’s <em>I</em> on a network split into 200-meter segments<a class="headerlink" href="#Moran’s-I-on-a-network-split-into-200-meter-segments" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="Moran’s-I-on-a-network-split-into-200-foot-segments">
+<h3>Moran’s <em>I</em> on a network split into 200-foot segments<a class="headerlink" href="#Moran’s-I-on-a-network-split-into-200-foot-segments" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -786,16 +798,16 @@ network arcs/graph edges attributed with associated crime counts are nearly rand
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;spaghetti.network.Network at 0x120cbb9e8&gt;
+&lt;spaghetti.network.Network at 0x7f9590fa5df0&gt;
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -805,19 +817,19 @@ network arcs/graph edges attributed with associated crime counts are nearly rand
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
--0.01764461487556588
+-0.012466546588822161
 </pre></div></div>
 </div>
 </div>
-<div class="section" id="Moran’s-I-on-a-network-split-into-50-meter-segments">
-<h3>Moran’s <em>I</em> on a network split into 50-meter segments<a class="headerlink" href="#Moran’s-I-on-a-network-split-into-50-meter-segments" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="Moran’s-I-on-a-network-split-into-50-foot-segments">
+<h3>Moran’s <em>I</em> on a network split into 50-foot segments<a class="headerlink" href="#Moran’s-I-on-a-network-split-into-50-foot-segments" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -827,16 +839,16 @@ network arcs/graph edges attributed with associated crime counts are nearly rand
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;spaghetti.network.Network at 0x120d51cf8&gt;
+&lt;spaghetti.network.Network at 0x7f95b15b8df0&gt;
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -846,17 +858,17 @@ network arcs/graph edges attributed with associated crime counts are nearly rand
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
--0.012505858739644651
+0.002806663172257146
 </pre></div></div>
 </div>
 <p><strong>Interpretation:</strong></p>
 <ul class="simple">
-<li><p><strong>Contrary to above, both the 200-meter and 50-meter segmented networks (</strong><code class="docutils literal notranslate"><span class="pre">moran_n200</span></code> <strong>and</strong> <code class="docutils literal notranslate"><span class="pre">moran_n50</span></code><strong>, respectively) display minimal negative spatial autocorrelation, with slighly lower values being observed in the 200-meter representation. However, similar to above the Moran’s I for both the these representations suggest that network arcs attributed with associated crime counts are nearly randomly distributed.</strong></p></li>
+<li><p><strong>Contrary to above, both the 200-foot and 50-foot segmented networks (</strong><code class="docutils literal notranslate"><span class="pre">moran_n200</span></code> <strong>and</strong> <code class="docutils literal notranslate"><span class="pre">moran_n50</span></code><strong>, respectively) display minimal negative spatial autocorrelation, with slighly lower values being observed in the 200-foot representation. However, similar to above the Moran’s I for both the these representations suggest that network arcs attributed with associated crime counts are nearly randomly distributed.</strong></p></li>
 </ul>
 </div>
 </div>
@@ -865,7 +877,7 @@ network arcs/graph edges attributed with associated crime counts are nearly rand
 <h2>3. Visualizing ESDA with <code class="docutils literal notranslate"><span class="pre">splot</span></code><a class="headerlink" href="#3.-Visualizing-ESDA-with-splot" title="Permalink to this headline">¶</a></h2>
 <p><strong>Here we are demonstrating</strong> <a class="reference external" href="https://pysal.org/esda/notebooks/spatialautocorrelation.html#Attribute-Similarity">spatial lag</a><strong>, which refers to attribute similarity. See the</strong> <a class="reference external" href="https://splot.readthedocs.io/en/latest/">splot documentation</a> <strong>for in-depth descriptions and tutorials.</strong></p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -877,7 +889,7 @@ network arcs/graph edges attributed with associated crime counts are nearly rand
 <h3>Moran scatterplot<a class="headerlink" href="#Moran-scatterplot" title="Permalink to this headline">¶</a></h3>
 <p><strong>Plotted with equal aspect</strong></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -889,12 +901,12 @@ network arcs/graph edges attributed with associated crime counts are nearly rand
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_network-spatial-autocorrelation_27_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-autocorrelation_27_0.png" style="width: 456px; height: 165px;" />
+<img alt="../_images/notebooks_network-spatial-autocorrelation_28_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-autocorrelation_28_0.png" style="width: 456px; height: 165px;" />
 </div>
 </div>
 <p><strong>Plotted without equal aspect</strong></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -906,7 +918,7 @@ network arcs/graph edges attributed with associated crime counts are nearly rand
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_network-spatial-autocorrelation_29_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-autocorrelation_29_0.png" style="width: 474px; height: 459px;" />
+<img alt="../_images/notebooks_network-spatial-autocorrelation_30_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-autocorrelation_30_0.png" style="width: 474px; height: 459px;" />
 </div>
 </div>
 <p><strong>This scatterplot demostrates the attribute values and associated attribute similarities in space (spatial lag) for the network representation’s W (</strong><code class="docutils literal notranslate"><span class="pre">moran_ntwwn</span></code><strong>).</strong></p>
@@ -914,7 +926,7 @@ network arcs/graph edges attributed with associated crime counts are nearly rand
 <div class="section" id="Reference-distribution-and-Moran-scatterplot">
 <h3>Reference distribution and Moran scatterplot<a class="headerlink" href="#Reference-distribution-and-Moran-scatterplot" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -926,7 +938,7 @@ network arcs/graph edges attributed with associated crime counts are nearly rand
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_network-spatial-autocorrelation_31_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-autocorrelation_31_0.png" style="width: 610px; height: 288px;" />
+<img alt="../_images/notebooks_network-spatial-autocorrelation_32_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-autocorrelation_32_0.png" style="width: 624px; height: 288px;" />
 </div>
 </div>
 <p><strong>This figure incorporates the reference distribution of Moran’s I values into the above scatterplot of the network representation’s W (</strong><code class="docutils literal notranslate"><span class="pre">moran_ntwwn</span></code><strong>).</strong></p>
@@ -937,7 +949,7 @@ network arcs/graph edges attributed with associated crime counts are nearly rand
 type</a><strong>.</strong></p>
 <p><strong>Plotted with equal aspect</strong></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -952,12 +964,12 @@ type</a><strong>.</strong></p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_network-spatial-autocorrelation_33_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-autocorrelation_33_0.png" style="width: 471px; height: 121px;" />
+<img alt="../_images/notebooks_network-spatial-autocorrelation_34_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-autocorrelation_34_0.png" style="width: 472px; height: 121px;" />
 </div>
 </div>
 <p><strong>Plotted without equal aspect</strong></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -970,7 +982,7 @@ type</a><strong>.</strong></p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_network-spatial-autocorrelation_35_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-autocorrelation_35_0.png" style="width: 480px; height: 459px;" />
+<img alt="../_images/notebooks_network-spatial-autocorrelation_36_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-autocorrelation_36_0.png" style="width: 481px; height: 459px;" />
 </div>
 </div>
 <p><strong>Interpretation:</strong></p>
@@ -981,7 +993,7 @@ type</a><strong>.</strong></p>
 <div class="section" id="Plotting-Local-Indicators-of-Spatial-Autocorrelation-(LISA)">
 <h3>Plotting Local Indicators of Spatial Autocorrelation (<a class="reference external" href="https://onlinelibrary.wiley.com/doi/epdf/10.1111/j.1538-4632.1995.tb00338.x">LISA</a>)<a class="headerlink" href="#Plotting-Local-Indicators-of-Spatial-Autocorrelation-(LISA)" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -990,7 +1002,9 @@ type</a><strong>.</strong></p>
 <span class="n">suptitle</span> <span class="o">=</span> <span class="s2">&quot;LISA for Crime-weighted Networks Arcs&quot;</span>
 <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">suptitle</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">x</span><span class="o">=.</span><span class="mi">51</span><span class="p">,</span> <span class="n">y</span><span class="o">=.</span><span class="mi">93</span><span class="p">)</span>
 <span class="n">subtitle</span> <span class="o">=</span> <span class="s2">&quot;Crimes ($n=</span><span class="si">%s</span><span class="s2">$) are represented as semi-opaque green circles&quot;</span>
-<span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">subtitle</span> <span class="o">%</span> <span class="n">pp_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">);</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">subtitle</span> <span class="o">%</span> <span class="n">pp_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">kw</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;units&quot;</span><span class="p">:</span><span class="s2">&quot;ft&quot;</span><span class="p">,</span> <span class="s2">&quot;dimension&quot;</span><span class="p">:</span><span class="s2">&quot;imperial-length&quot;</span><span class="p">,</span> <span class="s2">&quot;fixed_value&quot;</span><span class="p">:</span><span class="mi">1000</span><span class="p">}</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">ScaleBar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">,</span> <span class="n">box_alpha</span><span class="o">=.</span><span class="mi">75</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">));</span>
 </pre></div>
 </div>
 </div>
@@ -998,7 +1012,7 @@ type</a><strong>.</strong></p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_network-spatial-autocorrelation_37_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-autocorrelation_37_0.png" style="width: 665px; height: 709px;" />
+<img alt="../_images/notebooks_network-spatial-autocorrelation_38_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-autocorrelation_38_0.png" style="width: 665px; height: 709px;" />
 </div>
 </div>
 <hr class="docutils" />

@@ -115,7 +115,7 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#1.-Network-segmentation">1. Network segmentation</a><ul>
-<li><a class="reference internal" href="#Split-network-arcs-into-segments-of-200-(US-feet-is-this-case)">Split network arcs into segments of 200 (US feet is this case)</a></li>
+<li><a class="reference internal" href="#Split-network-arcs-into-segments-of-200-distance-units-(US-feet-is-this-case)">Split network arcs into segments of 200 distance units (US feet is this case)</a></li>
 <li><a class="reference internal" href="#The-returned-object-inherits-many-of-the-attributes-from-the-original-network">The returned object inherits many of the attributes from the original network</a></li>
 <li><a class="reference internal" href="#Extract-the-elements-from-both-the-original-network-and-the-split-network">Extract the elements from both the original network and the split network</a></li>
 <li><a class="reference internal" href="#Plotter-function">Plotter function</a></li>
@@ -430,17 +430,17 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-05-02T21:43:20-04:00
+2020-10-05T17:09:28-04:00
 
-CPython 3.7.3
-IPython 7.10.2
+CPython 3.8.5
+IPython 7.18.1
 
-compiler   : Clang 9.0.0 (tags/RELEASE_900/final)
+compiler   : Clang 10.0.1
 system     : Darwin
-release    : 19.4.0
+release    : 19.6.0
 machine    : x86_64
 processor  : i386
-CPU cores  : 4
+CPU cores  : 8
 interpreter: 64bit
 </pre></div></div>
 </div>
@@ -469,11 +469,11 @@ interpreter: 64bit
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 watermark 2.0.2
-matplotlib_scalebar 0.6.1
-libpysal            4.2.2
-spaghetti           1.5.0.rc0
-matplotlib          3.1.2
-numpy               1.18.1
+matplotlib          3.3.2
+spaghetti           1.5.0
+matplotlib_scalebar 0.6.2
+libpysal            4.3.0
+numpy               1.19.1
 
 </pre></div></div>
 </div>
@@ -526,7 +526,7 @@ numpy               1.18.1
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x12c074fd0&gt;}
+{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x7fba08f54f10&gt;}
 </pre></div></div>
 </div>
 </div>
@@ -534,8 +534,8 @@ numpy               1.18.1
 <hr class="docutils" />
 <div class="section" id="1.-Network-segmentation">
 <h2>1. Network segmentation<a class="headerlink" href="#1.-Network-segmentation" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="Split-network-arcs-into-segments-of-200-(US-feet-is-this-case)">
-<h3>Split network arcs into segments of 200 (<a class="reference external" href="https://github.com/pysal/libpysal/blob/master/libpysal/examples/geodanet/streets.prj">US feet is this case</a>)<a class="headerlink" href="#Split-network-arcs-into-segments-of-200-(US-feet-is-this-case)" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="Split-network-arcs-into-segments-of-200-distance-units-(US-feet-is-this-case)">
+<h3>Split network arcs into segments of 200 distance units (<a class="reference external" href="https://github.com/pysal/libpysal/blob/master/libpysal/examples/geodanet/streets.prj">US feet is this case</a>)<a class="headerlink" href="#Split-network-arcs-into-segments-of-200-distance-units-(US-feet-is-this-case)" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
@@ -552,7 +552,7 @@ numpy               1.18.1
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;spaghetti.network.Network at 0x12c0ed198&gt;
+&lt;spaghetti.network.Network at 0x7fb9d930a760&gt;
 </pre></div></div>
 </div>
 </div>
@@ -590,7 +590,7 @@ numpy               1.18.1
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x12c122278&gt;}
+{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x7fb9d930a850&gt;}
 </pre></div></div>
 </div>
 </div>
@@ -604,7 +604,7 @@ numpy               1.18.1
 <span></span><span class="c1"># &#39;full&#39; unsegmented network</span>
 <span class="n">vtx_df</span><span class="p">,</span> <span class="n">arc_df</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">arcs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="c1"># network segmented at 200-meter increments</span>
+<span class="c1"># network segmented at 200-foot increments</span>
 <span class="n">vtx200_df</span><span class="p">,</span> <span class="n">arc200_df</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">n200</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">arcs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># crimes point pattern</span>
@@ -654,8 +654,8 @@ numpy               1.18.1
 
 <span class="k">def</span> <span class="nf">carto_elements</span><span class="p">(</span><span class="n">b</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Add/adjust cartographic elements.&quot;&quot;&quot;</span>
-    <span class="n">scalebar</span> <span class="o">=</span> <span class="n">ScaleBar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
-    <span class="n">b</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">scalebar</span><span class="p">)</span>
+    <span class="n">kw</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;units&quot;</span><span class="p">:</span><span class="s2">&quot;ft&quot;</span><span class="p">,</span> <span class="s2">&quot;dimension&quot;</span><span class="p">:</span><span class="s2">&quot;imperial-length&quot;</span><span class="p">,</span> <span class="s2">&quot;fixed_value&quot;</span><span class="p">:</span><span class="mi">1000</span><span class="p">}</span>
+    <span class="n">b</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">ScaleBar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">box_alpha</span><span class="o">=.</span><span class="mi">75</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">))</span>
     <span class="n">b</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xticklabels</span><span class="o">=</span><span class="p">[],</span> <span class="n">xticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">yticklabels</span><span class="o">=</span><span class="p">[],</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[]);</span>
 </pre></div>
 </div>
@@ -896,7 +896,7 @@ numpy               1.18.1
     </tr>
     <tr>
       <th>1</th>
-      <td>(0, 408)</td>
+      <td>(0, 342)</td>
       <td>LINESTRING (728368.048 877125.895, 728367.869 ...</td>
       <td>0</td>
       <td>0.0</td>
@@ -904,7 +904,7 @@ numpy               1.18.1
     </tr>
     <tr>
       <th>2</th>
-      <td>(1, 371)</td>
+      <td>(1, 337)</td>
       <td>LINESTRING (728368.139 877023.272, 728568.139 ...</td>
       <td>0</td>
       <td>0.0</td>
@@ -912,7 +912,7 @@ numpy               1.18.1
     </tr>
     <tr>
       <th>3</th>
-      <td>(1, 461)</td>
+      <td>(1, 364)</td>
       <td>LINESTRING (728368.139 877023.272, 728368.318 ...</td>
       <td>0</td>
       <td>0.0</td>
@@ -920,7 +920,7 @@ numpy               1.18.1
     </tr>
     <tr>
       <th>4</th>
-      <td>(1, 612)</td>
+      <td>(1, 561)</td>
       <td>LINESTRING (728368.139 877023.272, 728168.139 ...</td>
       <td>0</td>
       <td>1.0</td>
@@ -987,7 +987,7 @@ numpy               1.18.1
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">suptitle</span> <span class="o">=</span> <span class="s2">&quot;Crimes associated with network arcs — raw count&quot;</span>
 <span class="n">subtitle1</span>  <span class="o">=</span> <span class="s2">&quot;Original ($n=</span><span class="si">%s</span><span class="s2">$)&quot;</span> <span class="o">%</span> <span class="n">arc_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">subtitle2</span> <span class="o">=</span> <span class="s2">&quot;200-meter split ($n=</span><span class="si">%s</span><span class="s2">$)&quot;</span> <span class="o">%</span> <span class="n">arc200_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">subtitle2</span> <span class="o">=</span> <span class="s2">&quot;200-foot split ($n=</span><span class="si">%s</span><span class="s2">$)&quot;</span> <span class="o">%</span> <span class="n">arc200_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">title_args</span> <span class="o">=</span> <span class="p">(</span><span class="n">suptitle</span><span class="p">,</span> <span class="n">subtitle1</span><span class="p">,</span> <span class="n">subtitle2</span><span class="p">)</span>
 <span class="n">sidexside_plot</span><span class="p">(</span><span class="n">arc_df</span><span class="p">,</span> <span class="n">arc200_df</span><span class="p">,</span> <span class="s2">&quot;n_crimes&quot;</span><span class="p">,</span> <span class="n">out_cmap</span><span class="p">,</span> <span class="o">*</span><span class="n">title_args</span><span class="p">)</span>
 </pre></div>
@@ -997,7 +997,7 @@ numpy               1.18.1
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_network-segmentation_31_0.png" class="no-scaled-link" src="../_images/notebooks_network-segmentation_31_0.png" style="width: 856px; height: 470px;" />
+<img alt="../_images/notebooks_network-segmentation_31_0.png" class="no-scaled-link" src="../_images/notebooks_network-segmentation_31_0.png" style="width: 856px; height: 487px;" />
 </div>
 </div>
 </div>
@@ -1010,7 +1010,7 @@ numpy               1.18.1
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">suptitle</span> <span class="o">=</span> <span class="s2">&quot;Crimes associated with network arcs — log10 transformed&quot;</span>
 <span class="n">subtitle1</span>  <span class="o">=</span> <span class="s2">&quot;Original ($n=</span><span class="si">%s</span><span class="s2">$)&quot;</span> <span class="o">%</span> <span class="n">arc_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">subtitle2</span> <span class="o">=</span> <span class="s2">&quot;200-meter split ($n=</span><span class="si">%s</span><span class="s2">$)&quot;</span> <span class="o">%</span> <span class="n">arc200_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">subtitle2</span> <span class="o">=</span> <span class="s2">&quot;200-foot split ($n=</span><span class="si">%s</span><span class="s2">$)&quot;</span> <span class="o">%</span> <span class="n">arc200_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">title_args</span> <span class="o">=</span> <span class="p">(</span><span class="n">suptitle</span><span class="p">,</span> <span class="n">subtitle1</span><span class="p">,</span> <span class="n">subtitle2</span><span class="p">)</span>
 <span class="n">sidexside_plot</span><span class="p">(</span><span class="n">arc_df</span><span class="p">,</span> <span class="n">arc200_df</span><span class="p">,</span> <span class="s2">&quot;n_crimes_log10&quot;</span><span class="p">,</span> <span class="n">out_cmap</span><span class="p">,</span> <span class="o">*</span><span class="n">title_args</span><span class="p">)</span>
 </pre></div>
@@ -1020,7 +1020,7 @@ numpy               1.18.1
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_network-segmentation_33_0.png" class="no-scaled-link" src="../_images/notebooks_network-segmentation_33_0.png" style="width: 856px; height: 469px;" />
+<img alt="../_images/notebooks_network-segmentation_33_0.png" class="no-scaled-link" src="../_images/notebooks_network-segmentation_33_0.png" style="width: 856px; height: 486px;" />
 </div>
 </div>
 <hr class="docutils" />

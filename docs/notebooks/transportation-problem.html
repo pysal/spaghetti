@@ -438,17 +438,17 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-05-02T21:46:34-04:00
+2020-10-05T17:42:48-04:00
 
-CPython 3.7.3
-IPython 7.10.2
+CPython 3.8.5
+IPython 7.18.1
 
-compiler   : Clang 9.0.0 (tags/RELEASE_900/final)
+compiler   : Clang 10.0.1
 system     : Darwin
-release    : 19.4.0
+release    : 19.6.0
 machine    : x86_64
 processor  : i386
-CPU cores  : 4
+CPU cores  : 8
 interpreter: 64bit
 </pre></div></div>
 </div>
@@ -478,14 +478,13 @@ interpreter: 64bit
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Using Python-MIP package version 1.7.3
 watermark 2.0.2
-mip                 1.7.3
-matplotlib          3.1.2
-geopandas           0.7.0
-numpy               1.18.1
-spaghetti           1.5.0.rc0
-matplotlib_scalebar 0.6.1
+spaghetti           1.5.0
+geopandas           0.8.1
+mip                 1.12.0
+matplotlib_scalebar 0.6.2
+numpy               1.19.1
+matplotlib          3.3.2
 
 </pre></div></div>
 </div>
@@ -896,7 +895,7 @@ to utilize a mathematical programming model to solve the microscope discrepency.
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">streets</span> <span class="o">=</span> <span class="n">geopandas</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;streets.shp&quot;</span><span class="p">))</span>
-<span class="n">streets</span><span class="o">.</span><span class="n">crs</span> <span class="o">=</span> <span class="s2">&quot;epsg:2223&quot;</span>
+<span class="n">streets</span><span class="o">.</span><span class="n">crs</span> <span class="o">=</span> <span class="s2">&quot;esri:102649&quot;</span>
 <span class="n">streets</span> <span class="o">=</span> <span class="n">streets</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s2">&quot;epsg:2762&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -911,7 +910,7 @@ to utilize a mathematical programming model to solve the microscope discrepency.
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">schools</span> <span class="o">=</span> <span class="n">geopandas</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;schools.shp&quot;</span><span class="p">))</span>
 <span class="n">schools</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;schools&quot;</span>
-<span class="n">schools</span><span class="o">.</span><span class="n">crs</span> <span class="o">=</span> <span class="s2">&quot;epsg:2223&quot;</span>
+<span class="n">schools</span><span class="o">.</span><span class="n">crs</span> <span class="o">=</span> <span class="s2">&quot;esri:102649&quot;</span>
 <span class="n">schools</span> <span class="o">=</span> <span class="n">schools</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s2">&quot;epsg:2762&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -966,22 +965,22 @@ to utilize a mathematical programming model to solve the microscope discrepency.
     <tr>
       <th>0</th>
       <td>1</td>
-      <td>POINT (221614.608 268182.322)</td>
+      <td>POINT (221615.157 268183.063)</td>
     </tr>
     <tr>
       <th>5</th>
       <td>6</td>
-      <td>POINT (221542.156 268184.287)</td>
+      <td>POINT (221542.706 268185.028)</td>
     </tr>
     <tr>
       <th>6</th>
       <td>7</td>
-      <td>POINT (221847.332 267982.491)</td>
+      <td>POINT (221847.882 267983.231)</td>
     </tr>
     <tr>
       <th>7</th>
       <td>8</td>
-      <td>POINT (221406.289 267990.060)</td>
+      <td>POINT (221406.839 267990.801)</td>
     </tr>
   </tbody>
 </table>
@@ -1037,22 +1036,22 @@ to utilize a mathematical programming model to solve the microscope discrepency.
     <tr>
       <th>1</th>
       <td>2</td>
-      <td>POINT (221121.722 268130.726)</td>
+      <td>POINT (221122.271 268131.466)</td>
     </tr>
     <tr>
       <th>2</th>
       <td>3</td>
-      <td>POINT (221474.120 267187.725)</td>
+      <td>POINT (221474.669 267188.462)</td>
     </tr>
     <tr>
       <th>3</th>
       <td>4</td>
-      <td>POINT (220452.594 268086.776)</td>
+      <td>POINT (220453.142 268087.516)</td>
     </tr>
     <tr>
       <th>4</th>
       <td>5</td>
-      <td>POINT (221235.286 267684.289)</td>
+      <td>POINT (221235.835 267685.028)</td>
     </tr>
   </tbody>
 </table>
@@ -1092,16 +1091,25 @@ to utilize a mathematical programming model to solve the microscope discrepency.
 <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span><span class="n">schools</span><span class="p">,</span> <span class="n">schools_supply</span><span class="p">,</span> <span class="n">schools_demand</span><span class="p">]</span>
 <span class="n">legend</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span>
 <span class="c1"># add scale bar</span>
-<span class="n">scalebar</span> <span class="o">=</span> <span class="n">ScaleBar</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
+<span class="n">scalebar</span> <span class="o">=</span> <span class="n">ScaleBar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
 <span class="n">base</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">scalebar</span><span class="p">);</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+&lt;ipython-input-8-0bca0f4bad5b&gt;:14: MatplotlibDeprecationWarning: The &#39;s&#39; parameter of annotate() has been renamed &#39;text&#39; since Matplotlib 3.3; support for the old name will be dropped two minor releases later.
+  o.apply(lambda x: b.annotate(s=X + str(x[col]), xy=_lab_loc(x), **kws), axis=1)
+</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_transportation-problem_27_0.png" class="no-scaled-link" src="../_images/notebooks_transportation-problem_27_0.png" style="width: 812px; height: 575px;" />
+<img alt="../_images/notebooks_transportation-problem_27_1.png" class="no-scaled-link" src="../_images/notebooks_transportation-problem_27_1.png" style="width: 807px; height: 575px;" />
 </div>
 </div>
 </div>
@@ -1159,25 +1167,25 @@ to utilize a mathematical programming model to solve the microscope discrepency.
     <tr>
       <th>0</th>
       <td>0</td>
-      <td>POINT (221677.280 268183.579)</td>
+      <td>POINT (221677.830 268184.321)</td>
       <td>0</td>
     </tr>
     <tr>
       <th>1</th>
       <td>1</td>
-      <td>POINT (221538.890 268184.326)</td>
+      <td>POINT (221539.440 268185.067)</td>
       <td>0</td>
     </tr>
     <tr>
       <th>2</th>
       <td>2</td>
-      <td>POINT (221847.381 267926.950)</td>
+      <td>POINT (221847.931 267927.691)</td>
       <td>0</td>
     </tr>
     <tr>
       <th>3</th>
       <td>3</td>
-      <td>POINT (221406.647 268046.397)</td>
+      <td>POINT (221407.196 268047.138)</td>
       <td>0</td>
     </tr>
   </tbody>
@@ -1236,25 +1244,25 @@ to utilize a mathematical programming model to solve the microscope discrepency.
     <tr>
       <th>0</th>
       <td>0</td>
-      <td>POINT (221052.520 268129.805)</td>
+      <td>POINT (221053.069 268130.545)</td>
       <td>0</td>
     </tr>
     <tr>
       <th>1</th>
       <td>1</td>
-      <td>POINT (221525.970 267187.138)</td>
+      <td>POINT (221526.519 267187.875)</td>
       <td>0</td>
     </tr>
     <tr>
       <th>2</th>
       <td>2</td>
-      <td>POINT (220504.172 268087.247)</td>
+      <td>POINT (220504.720 268087.986)</td>
       <td>0</td>
     </tr>
     <tr>
       <th>3</th>
       <td>3</td>
-      <td>POINT (221292.004 267684.336)</td>
+      <td>POINT (221292.553 267685.075)</td>
       <td>0</td>
     </tr>
   </tbody>
@@ -1282,16 +1290,25 @@ to utilize a mathematical programming model to solve the microscope discrepency.
 <span class="n">elements</span> <span class="o">+=</span> <span class="p">[</span><span class="n">supply_snapped</span><span class="p">,</span> <span class="n">demand_snapped</span><span class="p">]</span>
 <span class="n">legend</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span>
 <span class="c1"># add scale bar</span>
-<span class="n">scalebar</span> <span class="o">=</span> <span class="n">ScaleBar</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
+<span class="n">scalebar</span> <span class="o">=</span> <span class="n">ScaleBar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
 <span class="n">base</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">scalebar</span><span class="p">);</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+&lt;ipython-input-8-0bca0f4bad5b&gt;:14: MatplotlibDeprecationWarning: The &#39;s&#39; parameter of annotate() has been renamed &#39;text&#39; since Matplotlib 3.3; support for the old name will be dropped two minor releases later.
+  o.apply(lambda x: b.annotate(s=X + str(x[col]), xy=_lab_loc(x), **kws), axis=1)
+</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_transportation-problem_31_0.png" class="no-scaled-link" src="../_images/notebooks_transportation-problem_31_0.png" style="width: 878px; height: 575px;" />
+<img alt="../_images/notebooks_transportation-problem_31_1.png" class="no-scaled-link" src="../_images/notebooks_transportation-problem_31_1.png" style="width: 874px; height: 575px;" />
 </div>
 </div>
 </div>
@@ -1313,9 +1330,9 @@ to utilize a mathematical programming model to solve the microscope discrepency.
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-array([[ 849.03214874, 1141.07882307, 1355.96894348],
-       [ 705.24686884,  997.29354317, 1212.18366358],
-       [ 993.3892737 , 1052.63164495, 1500.32606844]])
+array([[ 849.03401966, 1141.08317288, 1355.97131088],
+       [ 705.24862712,  997.29778034, 1212.18591834],
+       [ 993.39148999, 1052.63537513, 1500.3287812 ]])
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1403,7 +1420,7 @@ array([[ 849.03214874, 1141.07882307, 1355.96894348],
     <tr>
       <th>0</th>
       <td>0</td>
-      <td>POINT (221614.608 268182.322)</td>
+      <td>POINT (221615.157 268183.063)</td>
       <td>0</td>
       <td>s_0</td>
       <td>20</td>
@@ -1411,7 +1428,7 @@ array([[ 849.03214874, 1141.07882307, 1355.96894348],
     <tr>
       <th>1</th>
       <td>1</td>
-      <td>POINT (221542.156 268184.287)</td>
+      <td>POINT (221542.706 268185.028)</td>
       <td>0</td>
       <td>s_1</td>
       <td>30</td>
@@ -1419,7 +1436,7 @@ array([[ 849.03214874, 1141.07882307, 1355.96894348],
     <tr>
       <th>2</th>
       <td>2</td>
-      <td>POINT (221847.332 267982.491)</td>
+      <td>POINT (221847.882 267983.231)</td>
       <td>0</td>
       <td>s_2</td>
       <td>15</td>
@@ -1427,7 +1444,7 @@ array([[ 849.03214874, 1141.07882307, 1355.96894348],
     <tr>
       <th>3</th>
       <td>3</td>
-      <td>POINT (221406.289 267990.060)</td>
+      <td>POINT (221406.839 267990.801)</td>
       <td>0</td>
       <td>s_3</td>
       <td>35</td>
@@ -1492,7 +1509,7 @@ array([[ 849.03214874, 1141.07882307, 1355.96894348],
     <tr>
       <th>0</th>
       <td>0</td>
-      <td>POINT (221121.722 268130.726)</td>
+      <td>POINT (221122.271 268131.466)</td>
       <td>0</td>
       <td>d_0</td>
       <td>5</td>
@@ -1500,7 +1517,7 @@ array([[ 849.03214874, 1141.07882307, 1355.96894348],
     <tr>
       <th>1</th>
       <td>1</td>
-      <td>POINT (221474.120 267187.725)</td>
+      <td>POINT (221474.669 267188.462)</td>
       <td>0</td>
       <td>d_1</td>
       <td>45</td>
@@ -1508,7 +1525,7 @@ array([[ 849.03214874, 1141.07882307, 1355.96894348],
     <tr>
       <th>2</th>
       <td>2</td>
-      <td>POINT (220452.594 268086.776)</td>
+      <td>POINT (220453.142 268087.516)</td>
       <td>0</td>
       <td>d_2</td>
       <td>10</td>
@@ -1516,7 +1533,7 @@ array([[ 849.03214874, 1141.07882307, 1355.96894348],
     <tr>
       <th>3</th>
       <td>3</td>
-      <td>POINT (221235.286 267684.289)</td>
+      <td>POINT (221235.835 267685.028)</td>
       <td>0</td>
       <td>d_3</td>
       <td>40</td>
@@ -1544,7 +1561,7 @@ array([[ 849.03214874, 1141.07882307, 1355.96894348],
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Minimized shipping costs: 84595.5083
+Minimized shipping costs: 84595.7958
 
 Shipping decisions:
          x_0,3 20.0
@@ -1576,8 +1593,8 @@ Shipping decisions:
  \Problem name:  TransportationProblem
 
 Minimize
-OBJROW: 849.03215 x_0,0 + 1141.07882 x_0,1 + 1355.96894 x_0,2 + 884.73001 x_0,3 + 705.24687 x_1,0 + 997.29354 x_1,1 + 1212.18366 x_1,2 + 740.94473 x_1,3 + 993.38927 x_2,0 + 1052.63164 x_2,1
- + 1500.32607 x_2,2 + 796.28284 x_2,3 + 435.89260 x_3,0 + 989.11235 x_3,1 + 942.82940 x_3,2 + 479.24350 x_3,3
+OBJROW: 849.03402 x_0,0 + 1141.08317 x_0,1 + 1355.97131 x_0,2 + 884.73265 x_0,3 + 705.24863 x_1,0 + 997.29778 x_1,1 + 1212.18592 x_1,2 + 740.94726 x_1,3 + 993.39149 x_2,0 + 1052.63538 x_2,1
+ + 1500.32878 x_2,2 + 796.28486 x_2,3 + 435.89351 x_3,0 + 989.11627 x_3,1 + 942.83080 x_3,2 + 479.24516 x_3,3
 Subject To
 supply(0):  x_0,0 + x_0,1 + x_0,2 + x_0,3 &lt;= 20
 supply(1):  x_1,0 + x_1,1 + x_1,2 + x_1,3 &lt;= 30
@@ -1638,35 +1655,35 @@ End
   <tbody>
     <tr>
       <th>0</th>
-      <td>LINESTRING (221677.280 268183.579, 221679.454 ...</td>
+      <td>LINESTRING (221677.830 268184.321, 221680.004 ...</td>
       <td>0</td>
       <td>0</td>
       <td>(0, 0)</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>LINESTRING (221677.280 268183.579, 221679.454 ...</td>
+      <td>LINESTRING (221677.830 268184.321, 221680.004 ...</td>
       <td>0</td>
       <td>1</td>
       <td>(0, 1)</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>LINESTRING (221677.280 268183.579, 221679.454 ...</td>
+      <td>LINESTRING (221677.830 268184.321, 221680.004 ...</td>
       <td>0</td>
       <td>2</td>
       <td>(0, 2)</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>LINESTRING (221677.280 268183.579, 221679.454 ...</td>
+      <td>LINESTRING (221677.830 268184.321, 221680.004 ...</td>
       <td>0</td>
       <td>3</td>
       <td>(0, 3)</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>LINESTRING (221538.890 268184.326, 221537.605 ...</td>
+      <td>LINESTRING (221539.440 268185.067, 221538.155 ...</td>
       <td>1</td>
       <td>0</td>
       <td>(1, 0)</td>
@@ -1721,7 +1738,7 @@ End
   <tbody>
     <tr>
       <th>3</th>
-      <td>LINESTRING (221677.280 268183.579, 221679.454 ...</td>
+      <td>LINESTRING (221677.830 268184.321, 221680.004 ...</td>
       <td>0</td>
       <td>3</td>
       <td>(0, 3)</td>
@@ -1729,7 +1746,7 @@ End
     </tr>
     <tr>
       <th>5</th>
-      <td>LINESTRING (221538.890 268184.326, 221537.605 ...</td>
+      <td>LINESTRING (221539.440 268185.067, 221538.155 ...</td>
       <td>1</td>
       <td>1</td>
       <td>(1, 1)</td>
@@ -1737,7 +1754,7 @@ End
     </tr>
     <tr>
       <th>9</th>
-      <td>LINESTRING (221847.381 267926.950, 221815.312 ...</td>
+      <td>LINESTRING (221847.931 267927.691, 221815.862 ...</td>
       <td>2</td>
       <td>1</td>
       <td>(2, 1)</td>
@@ -1745,7 +1762,7 @@ End
     </tr>
     <tr>
       <th>12</th>
-      <td>LINESTRING (221406.647 268046.397, 221336.067 ...</td>
+      <td>LINESTRING (221407.196 268047.138, 221336.616 ...</td>
       <td>3</td>
       <td>0</td>
       <td>(3, 0)</td>
@@ -1753,7 +1770,7 @@ End
     </tr>
     <tr>
       <th>14</th>
-      <td>LINESTRING (221406.647 268046.397, 221336.067 ...</td>
+      <td>LINESTRING (221407.196 268047.138, 221336.616 ...</td>
       <td>3</td>
       <td>2</td>
       <td>(3, 2)</td>
@@ -1761,7 +1778,7 @@ End
     </tr>
     <tr>
       <th>15</th>
-      <td>LINESTRING (221406.647 268046.397, 221336.067 ...</td>
+      <td>LINESTRING (221407.196 268047.138, 221336.616 ...</td>
       <td>3</td>
       <td>3</td>
       <td>(3, 3)</td>
@@ -1797,16 +1814,25 @@ End
 <span class="n">elements</span> <span class="o">+=</span> <span class="p">[</span><span class="n">shipments</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;O&quot;</span><span class="p">)]</span>
 <span class="n">legend</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span>
 <span class="c1"># add scale bar</span>
-<span class="n">scalebar</span> <span class="o">=</span> <span class="n">ScaleBar</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
+<span class="n">scalebar</span> <span class="o">=</span> <span class="n">ScaleBar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
 <span class="n">base</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">scalebar</span><span class="p">);</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+&lt;ipython-input-8-0bca0f4bad5b&gt;:14: MatplotlibDeprecationWarning: The &#39;s&#39; parameter of annotate() has been renamed &#39;text&#39; since Matplotlib 3.3; support for the old name will be dropped two minor releases later.
+  o.apply(lambda x: b.annotate(s=X + str(x[col]), xy=_lab_loc(x), **kws), axis=1)
+</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_transportation-problem_48_0.png" class="no-scaled-link" src="../_images/notebooks_transportation-problem_48_0.png" style="width: 908px; height: 575px;" />
+<img alt="../_images/notebooks_transportation-problem_48_1.png" class="no-scaled-link" src="../_images/notebooks_transportation-problem_48_1.png" style="width: 903px; height: 575px;" />
 </div>
 </div>
 </div>

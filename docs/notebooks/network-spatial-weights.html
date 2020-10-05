@@ -426,17 +426,17 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-05-02T21:44:39-04:00
+2020-10-05T17:06:12-04:00
 
-CPython 3.7.3
-IPython 7.10.2
+CPython 3.8.5
+IPython 7.18.1
 
-compiler   : Clang 9.0.0 (tags/RELEASE_900/final)
+compiler   : Clang 10.0.1
 system     : Darwin
-release    : 19.4.0
+release    : 19.6.0
 machine    : x86_64
 processor  : i386
-CPU cores  : 4
+CPU cores  : 8
 interpreter: 64bit
 </pre></div></div>
 </div>
@@ -463,10 +463,10 @@ interpreter: 64bit
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 watermark 2.0.2
-matplotlib 3.1.2
-geopandas  0.7.0
-libpysal   4.2.2
-spaghetti  1.5.0.rc0
+matplotlib 3.3.2
+libpysal   4.3.0
+spaghetti  1.5.0
+geopandas  0.8.1
 
 </pre></div></div>
 </div>
@@ -555,9 +555,9 @@ spaghetti  1.5.0.rc0
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[&lt;libpysal.cg.shapes.Chain at 0x12724c1d0&gt;,
- &lt;libpysal.cg.shapes.Chain at 0x12724c278&gt;,
- &lt;libpysal.cg.shapes.Chain at 0x12724c400&gt;]
+[&lt;libpysal.cg.shapes.Chain at 0x7fb1390b0640&gt;,
+ &lt;libpysal.cg.shapes.Chain at 0x7fb1390b0700&gt;,
+ &lt;libpysal.cg.shapes.Chain at 0x7fb1390b0880&gt;]
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -585,11 +585,22 @@ spaghetti  1.5.0.rc0
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+&lt;ipython-input-5-d52cc85c6cad&gt;:9: MatplotlibDeprecationWarning: The &#39;s&#39; parameter of annotate() has been renamed &#39;text&#39; since Matplotlib 3.3; support for the old name will be dropped two minor releases later.
+  a.apply(lambda x: b.annotate(s=x.id, xy=_lab_loc(x), **kws), axis=1)
+&lt;ipython-input-5-d52cc85c6cad&gt;:19: MatplotlibDeprecationWarning: The &#39;s&#39; parameter of annotate() has been renamed &#39;text&#39; since Matplotlib 3.3; support for the old name will be dropped two minor releases later.
+  v.apply(lambda x: b.annotate(s=x.id, xy=_lab_loc(x), **kws), axis=1)
+</pre></div></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_network-spatial-weights_11_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-weights_11_0.png" style="width: 706px; height: 535px;" />
+<img alt="../_images/notebooks_network-spatial-weights_11_1.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-weights_11_1.png" style="width: 706px; height: 533px;" />
 </div>
 </div>
 </div>
@@ -610,7 +621,7 @@ spaghetti  1.5.0.rc0
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;libpysal.weights.weights.W at 0x12722a438&gt;
+&lt;libpysal.weights.weights.W at 0x7fb1390b0d30&gt;
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -627,7 +638,7 @@ spaghetti  1.5.0.rc0
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[&#39;_W__get_id_order&#39;, &#39;_W__neighbors_0&#39;, &#39;_W__set_id_order&#39;, &#39;__class__&#39;, &#39;__delattr__&#39;, &#39;__dict__&#39;, &#39;__dir__&#39;, &#39;__doc__&#39;, &#39;__eq__&#39;, &#39;__format__&#39;, &#39;__ge__&#39;, &#39;__getattribute__&#39;, &#39;__getitem__&#39;, &#39;__gt__&#39;, &#39;__hash__&#39;, &#39;__init__&#39;, &#39;__init_subclass__&#39;, &#39;__iter__&#39;, &#39;__le__&#39;, &#39;__lt__&#39;, &#39;__module__&#39;, &#39;__ne__&#39;, &#39;__new__&#39;, &#39;__reduce__&#39;, &#39;__reduce_ex__&#39;, &#39;__repr__&#39;, &#39;__setattr__&#39;, &#39;__sizeof__&#39;, &#39;__str__&#39;, &#39;__subclasshook__&#39;, &#39;__weakref__&#39;, &#39;_build_sparse&#39;, &#39;_cache&#39;, &#39;_cardinalities&#39;, &#39;_component_labels&#39;, &#39;_id2i&#39;, &#39;_id_order&#39;, &#39;_id_order_set&#39;, &#39;_n&#39;, &#39;_n_components&#39;, &#39;_reset&#39;, &#39;_sparse&#39;, &#39;_transform&#39;, &#39;asymmetries&#39;, &#39;asymmetry&#39;, &#39;cardinalities&#39;, &#39;component_labels&#39;, &#39;diagW2&#39;, &#39;diagWtW&#39;, &#39;diagWtW_WW&#39;, &#39;from_WSP&#39;, &#39;from_adjlist&#39;, &#39;from_file&#39;, &#39;from_networkx&#39;, &#39;from_shapefile&#39;, &#39;full&#39;, &#39;get_transform&#39;, &#39;histogram&#39;, &#39;id2i&#39;, &#39;id_order&#39;, &#39;id_order_set&#39;, &#39;islands&#39;, &#39;max_neighbors&#39;, &#39;mean_neighbors&#39;, &#39;min_neighbors&#39;, &#39;n&#39;, &#39;n_components&#39;, &#39;neighbor_offsets&#39;, &#39;neighbors&#39;, &#39;nonzero&#39;, &#39;pct_nonzero&#39;, &#39;plot&#39;, &#39;remap_ids&#39;, &#39;s0&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s2array&#39;, &#39;sd&#39;, &#39;set_shapefile&#39;, &#39;set_transform&#39;, &#39;silence_warnings&#39;, &#39;sparse&#39;, &#39;symmetrize&#39;, &#39;to_WSP&#39;, &#39;to_adjlist&#39;, &#39;to_networkx&#39;, &#39;transform&#39;, &#39;transformations&#39;, &#39;trcW2&#39;, &#39;trcWtW&#39;, &#39;trcWtW_WW&#39;, &#39;weights&#39;]
+[&#39;_W__get_id_order&#39;, &#39;_W__neighbors_0&#39;, &#39;_W__set_id_order&#39;, &#39;__class__&#39;, &#39;__delattr__&#39;, &#39;__dict__&#39;, &#39;__dir__&#39;, &#39;__doc__&#39;, &#39;__eq__&#39;, &#39;__format__&#39;, &#39;__ge__&#39;, &#39;__getattribute__&#39;, &#39;__getitem__&#39;, &#39;__gt__&#39;, &#39;__hash__&#39;, &#39;__init__&#39;, &#39;__init_subclass__&#39;, &#39;__iter__&#39;, &#39;__le__&#39;, &#39;__lt__&#39;, &#39;__module__&#39;, &#39;__ne__&#39;, &#39;__new__&#39;, &#39;__reduce__&#39;, &#39;__reduce_ex__&#39;, &#39;__repr__&#39;, &#39;__setattr__&#39;, &#39;__sizeof__&#39;, &#39;__str__&#39;, &#39;__subclasshook__&#39;, &#39;__weakref__&#39;, &#39;_build_sparse&#39;, &#39;_cache&#39;, &#39;_cardinalities&#39;, &#39;_component_labels&#39;, &#39;_id2i&#39;, &#39;_id_order&#39;, &#39;_id_order_set&#39;, &#39;_n&#39;, &#39;_n_components&#39;, &#39;_reset&#39;, &#39;_sparse&#39;, &#39;_transform&#39;, &#39;asymmetries&#39;, &#39;asymmetry&#39;, &#39;cardinalities&#39;, &#39;component_labels&#39;, &#39;diagW2&#39;, &#39;diagWtW&#39;, &#39;diagWtW_WW&#39;, &#39;from_WSP&#39;, &#39;from_adjlist&#39;, &#39;from_file&#39;, &#39;from_networkx&#39;, &#39;from_shapefile&#39;, &#39;full&#39;, &#39;get_transform&#39;, &#39;histogram&#39;, &#39;id2i&#39;, &#39;id_order&#39;, &#39;id_order_set&#39;, &#39;islands&#39;, &#39;max_neighbors&#39;, &#39;mean_neighbors&#39;, &#39;min_neighbors&#39;, &#39;n&#39;, &#39;n_components&#39;, &#39;neighbor_offsets&#39;, &#39;neighbors&#39;, &#39;nonzero&#39;, &#39;pct_nonzero&#39;, &#39;plot&#39;, &#39;remap_ids&#39;, &#39;s0&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s2array&#39;, &#39;sd&#39;, &#39;set_shapefile&#39;, &#39;set_transform&#39;, &#39;silence_warnings&#39;, &#39;sparse&#39;, &#39;symmetrize&#39;, &#39;to_WSP&#39;, &#39;to_adjlist&#39;, &#39;to_file&#39;, &#39;to_networkx&#39;, &#39;transform&#39;, &#39;transformations&#39;, &#39;trcW2&#39;, &#39;trcWtW&#39;, &#39;trcWtW_WW&#39;, &#39;weights&#39;]
 </pre></div></div>
 </div>
 </div>
@@ -648,11 +659,22 @@ spaghetti  1.5.0.rc0
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+&lt;ipython-input-5-d52cc85c6cad&gt;:9: MatplotlibDeprecationWarning: The &#39;s&#39; parameter of annotate() has been renamed &#39;text&#39; since Matplotlib 3.3; support for the old name will be dropped two minor releases later.
+  a.apply(lambda x: b.annotate(s=x.id, xy=_lab_loc(x), **kws), axis=1)
+&lt;ipython-input-5-d52cc85c6cad&gt;:19: MatplotlibDeprecationWarning: The &#39;s&#39; parameter of annotate() has been renamed &#39;text&#39; since Matplotlib 3.3; support for the old name will be dropped two minor releases later.
+  v.apply(lambda x: b.annotate(s=x.id, xy=_lab_loc(x), **kws), axis=1)
+</pre></div></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_network-spatial-weights_16_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-weights_16_0.png" style="width: 706px; height: 535px;" />
+<img alt="../_images/notebooks_network-spatial-weights_16_1.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-weights_16_1.png" style="width: 706px; height: 533px;" />
 </div>
 </div>
 </div>
@@ -697,11 +719,22 @@ spaghetti  1.5.0.rc0
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+&lt;ipython-input-5-d52cc85c6cad&gt;:9: MatplotlibDeprecationWarning: The &#39;s&#39; parameter of annotate() has been renamed &#39;text&#39; since Matplotlib 3.3; support for the old name will be dropped two minor releases later.
+  a.apply(lambda x: b.annotate(s=x.id, xy=_lab_loc(x), **kws), axis=1)
+&lt;ipython-input-5-d52cc85c6cad&gt;:19: MatplotlibDeprecationWarning: The &#39;s&#39; parameter of annotate() has been renamed &#39;text&#39; since Matplotlib 3.3; support for the old name will be dropped two minor releases later.
+  v.apply(lambda x: b.annotate(s=x.id, xy=_lab_loc(x), **kws), axis=1)
+</pre></div></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_network-spatial-weights_20_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-weights_20_0.png" style="width: 714px; height: 630px;" />
+<img alt="../_images/notebooks_network-spatial-weights_20_1.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-weights_20_1.png" style="width: 714px; height: 620px;" />
 </div>
 </div>
 </div>
@@ -719,11 +752,20 @@ spaghetti  1.5.0.rc0
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+&lt;ipython-input-5-d52cc85c6cad&gt;:9: MatplotlibDeprecationWarning: The &#39;s&#39; parameter of annotate() has been renamed &#39;text&#39; since Matplotlib 3.3; support for the old name will be dropped two minor releases later.
+  a.apply(lambda x: b.annotate(s=x.id, xy=_lab_loc(x), **kws), axis=1)
+</pre></div></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_network-spatial-weights_22_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-weights_22_0.png" style="width: 714px; height: 630px;" />
+<img alt="../_images/notebooks_network-spatial-weights_22_1.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-weights_22_1.png" style="width: 714px; height: 620px;" />
 </div>
 </div>
 </div>
@@ -783,7 +825,7 @@ spaghetti  1.5.0.rc0
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_network-spatial-weights_27_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-weights_27_0.png" style="width: 698px; height: 683px;" />
+<img alt="../_images/notebooks_network-spatial-weights_27_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-weights_27_0.png" style="width: 697px; height: 683px;" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -800,7 +842,7 @@ spaghetti  1.5.0.rc0
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_network-spatial-weights_28_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-weights_28_0.png" style="width: 698px; height: 683px;" />
+<img alt="../_images/notebooks_network-spatial-weights_28_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-weights_28_0.png" style="width: 697px; height: 683px;" />
 </div>
 </div>
 <hr class="docutils" />
