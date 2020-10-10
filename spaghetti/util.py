@@ -15,27 +15,27 @@ except ImportError:
 
 def compute_length(v0, v1):
     """Compute the euclidean distance between two points.
-    
+
     Parameters
     ----------
     v0 : tuple
         Coordinate sequence in the form x,y.
     vq : tuple
         Coordinate sequence in the form x,y.
-    
+
     Returns
     -------
     euc_dist : float
         Euclidean distance.
-    
+
     Examples
     --------
-    
+
     >>> import spaghetti
     >>> point1, point2 = (0,0), (1,1)
     >>> spaghetti.util.compute_length(point1, point2)
     1.4142135623730951
-    
+
     """
 
     euc_dist = cg.standalone.get_points_dist(v0, v1)
@@ -46,7 +46,7 @@ def compute_length(v0, v1):
 def get_neighbor_distances(ntw, v0, l):
     """Get distances to the nearest vertex neighbors along
     connecting arcs.
-    
+
     Parameters
     ----------
     ntw : spaghetti.Network
@@ -56,22 +56,22 @@ def get_neighbor_distances(ntw, v0, l):
     l : dict
         The key is a tuple (start vertex, end vertex); value is ``float``.
         Cost per arc to travel, e.g. distance.
-    
+
     Returns
     -------
     neighbors : dict
        The key is an integer (vertex ID); value is ``float`` (distance).
-    
+
     Examples
     --------
-    
+
     >>> import spaghetti
     >>> from libpysal import examples
     >>> ntw = spaghetti.Network(examples.get_path("streets.shp"))
     >>> neighs = spaghetti.util.get_neighbor_distances(ntw, 0, ntw.arc_lengths)
     >>> numpy.round(neighs[1], 10)
     102.6235345344
-    
+
     """
 
     # fetch links associated with vertices
@@ -94,20 +94,20 @@ def get_neighbor_distances(ntw, v0, l):
 
 def generatetree(pred):
     """Rebuild the shortest path from root origin to destination.
-    
+
     Parameters
     ----------
     pred : list
         List of preceding vertices for traversal route.
-    
+
     Returns
     -------
     tree : dict
         The key is the root origin; value is the root origin to destination.
-    
+
     Examples
     --------
-    
+
     >>> import spaghetti
     >>> from libpysal import examples
     >>> ntw = spaghetti.Network(examples.get_path("streets.shp"))
@@ -115,7 +115,7 @@ def generatetree(pred):
     >>> tree = spaghetti.util.generatetree(pred)
     >>> tree[3]
     [23, 22, 20, 19, 170, 2, 0]
-    
+
     """
 
     # instantiate tree lookup
@@ -157,7 +157,7 @@ def generatetree(pred):
 def dijkstra(ntw, v0, initial_dist=numpy.inf):
     """Compute the shortest path between a start vertex and
     all other vertices in an origin-destination matrix.
-    
+
     Parameters
     ----------
     ntw :  spaghetti.Network
@@ -167,22 +167,22 @@ def dijkstra(ntw, v0, initial_dist=numpy.inf):
     initial_dist : float
         Integer break point to stop iteration and return n neighbors.
         Default is ``numpy.inf``.
-    
+
     Returns
     -------
     distance : list
         List of distances from vertex to all other vertices.
     pred : list
         List of preceeding vertices for traversal route.
-    
+
     Notes
     -----
-    
+
     Based on :cite:`Dijkstra1959a`.
-    
+
     Examples
     --------
-    
+
     >>> import spaghetti
     >>> from libpysal import examples
     >>> ntw = spaghetti.Network(examples.get_path("streets.shp"))
@@ -191,7 +191,7 @@ def dijkstra(ntw, v0, initial_dist=numpy.inf):
     5505.6682
     >>> pred[196]
     133
-    
+
     """
 
     # cost per arc to travel, e.g. distance
@@ -251,29 +251,29 @@ def dijkstra(ntw, v0, initial_dist=numpy.inf):
 def dijkstra_mp(ntw_vertex):
     """Compute the shortest path between a start vertex and all other
     vertices in the matrix utilizing multiple cores upon request.
-    
+
     Parameters
     ----------
     ntw_vertex : tuple
         Tuple of arguments to pass into ``dijkstra()`` as
         (1) ``ntw`` - ``spaghetti.Network object``;
         (2) ``vertex`` - int (start node ID)
-    
+
     Returns
     -------
     distance : list
         List of distances from vertex to all other vertices.
     pred : list
         List of preceeding vertices for traversal route.
-    
+
     Notes
     -----
-    
+
     Based on :cite:`Dijkstra1959a`.
-    
+
     Examples
     --------
-    
+
     >>> import spaghetti
     >>> from libpysal import examples
     >>> ntw = spaghetti.Network(examples.get_path("streets.shp"))
@@ -282,7 +282,7 @@ def dijkstra_mp(ntw_vertex):
     5505.6682
     >>> pred[196]
     133
-    
+
     """
 
     # unpack network object and source vertex
@@ -296,29 +296,29 @@ def dijkstra_mp(ntw_vertex):
 
 def squared_distance_point_link(point, link):
     """Find the squared distance between a point and a link.
-    
+
     Parameters
     ----------
     point : tuple
         Point coordinates (x,y).
     link : list
         List of 2 point coordinate tuples [(x0, y0), (x1, y1)].
-    
+
     Returns
     -------
     sqd : float
         The distance squared between the point and edge.
     nearp : numpy.ndarray
         An array of (xb, yb); the nearest point on the edge.
-    
+
     Examples
     --------
-    
+
     >>> import spaghetti
     >>> point, link = (1,1), ((0,0), (2,0))
     >>> spaghetti.util.squared_distance_point_link(point, link)
     (1.0, array([1., 0.]))
-    
+
     """
 
     # cast vertices comprising the network link as an array
@@ -362,7 +362,7 @@ def squared_distance_point_link(point, link):
 
 def snap_points_to_links(points, links):
     """Place points onto closest link in a set of links (arc/edges).
-    
+
     Parameters
     ----------
     points : dict
@@ -371,24 +371,24 @@ def snap_points_to_links(points, links):
         Elements are of type ``libpysal.cg.shapes.Chain``
         ** Note ** each element is a link represented as a chain with
         *one head and one tail vertex* in other words one link only.
-    
+
     Returns
     -------
     point2link : dict
-        Key [point ID (see points in arguments)]; value [a 2-tuple 
+        Key [point ID (see points in arguments)]; value [a 2-tuple
         ((head, tail), point) where (head, tail) is the target link,
         and point is the snapped location on the link.
-    
+
     Examples
     --------
-    
+
     >>> import spaghetti
     >>> from libpysal.cg.shapes import Point, Chain
     >>> points = {0: Point((1,1))}
     >>> link = [Chain([Point((0,0)), Point((2,0))])]
     >>> spaghetti.util.snap_points_to_links(points, link)
     {0: ([(0.0, 0.0), (2.0, 0.0)], array([1., 0.]))}
-    
+
     """
 
     # instantiate an rtree
@@ -468,18 +468,18 @@ def snap_points_to_links(points, links):
 
 def network_has_cycle(adjacency):
     """Searches for a cycle in the complete network/graph.
-    
+
     Parameters
     ----------
     adjacency : spaghetti.Network.adjacencylist
         Vertex adjacency relationships.
-    
+
     Returns
     -------
     network_cycle_found : bool
-        ``True`` for a cycle being found in the network/graph, 
+        ``True`` for a cycle being found in the network/graph,
         otherwise ``False``.
-    
+
     """
 
     def tree_has_cycle(_parent, _v):
@@ -496,7 +496,7 @@ def network_has_cycle(adjacency):
         -------
         subtree_cycle_found : bool
             Current recursion found a cycle in the subtree.
-        
+
         """
 
         # Set current cycle tag as False
@@ -544,19 +544,19 @@ def network_has_cycle(adjacency):
 
 def chain_constr(vcoords, arcs):
     """Create the spatial representation of a network arc.
-    
+
     Parameters
     ----------
     vcoords : dict
         Vertex to coordinate lookup (see ``spaghetti.Network.vertex_coords``).
     arcs : list
         Arcs represented as start and end vertices.
-    
+
     Returns
     -------
     spatial_reps : list
         Spatial representations of arcs - ``libpysal.cg.Chain`` objects.
-    
+
     """
     spatial_reps = [_chain_constr(vcoords, vs) for vs in arcs]
     return spatial_reps
@@ -564,19 +564,19 @@ def chain_constr(vcoords, arcs):
 
 def _chain_constr(_vcoords, _vs):
     """Construct a libpysal.cg.Chain object.
-    
+
     Parameters
     ----------
     _vcoords : {dict, None}
         See ``vcoords`` in ``get_chains()``.
     _vs : tuple
         Start and end vertex IDs of arc.
-        
+
     Returns
     -------
     chain : libpysal.cg.Chain
         Spatial representation of the arc.
-    
+
     """
 
     if _vcoords:
@@ -590,7 +590,7 @@ def _chain_constr(_vcoords, _vs):
 
 def build_chains(space_h, space_v, exterior, bounds, h=True):
     """Generate line segments for a lattice.
-    
+
     Parameters
     ----------
     space_h : list
@@ -604,12 +604,12 @@ def build_chains(space_h, space_v, exterior, bounds, h=True):
     h : bool
         Generate horizontal line segments.
         Default is ``True``. ``False`` generates vertical segments.
-    
+
     Returns
     -------
     chains : list
         All horizontal or vertical line segments in the lattice.
-    
+
     """
 
     # Initialize starting and ending indices
@@ -667,23 +667,23 @@ def _points_as_gdf(
 ):
     """Internal function for returning a point ``geopandas.GeoDataFrame``
     called from within ``spaghetti.element_as_gdf()``.
-    
+
     Parameters
     ----------
     vertices_for_arcs : bool
         Flag for points being an object returned (``False``) or for merely
         creating network arcs (``True``). Set from within the parent
         function (``spaghetti.element_as_gdf()``).
-    
+
     Raises
     ------
-    
+
     KeyError
         In order to extract a ``network.PointPattern`` it must already
         be a part of the network object. This exception is raised
         when a ``network.PointPattern`` is being extracted that does not
         exist within the network object.
-    
+
     Returns
     -------
     points : geopandas.GeoDataFrame
@@ -691,13 +691,13 @@ def _points_as_gdf(
         points) as a simple ``geopandas.GeoDataFrame`` of
         ``shapely.geometry.Point`` objects with an ``"id"`` column and
         ``"geometry"`` column.
-    
+
     Notes
     -----
-    
+
     1. See ``spaghetti.element_as_gdf()`` for description of arguments.
     2. This function requires ``geopandas``.
-    
+
     """
 
     # vertices / nodes
@@ -747,20 +747,20 @@ def _points_as_gdf(
 def _arcs_as_gdf(net, points, id_col=None, geom_col=None):
     """Internal function for returning an arc ``geopandas.GeoDataFrame``
     called from within ``spaghetti.element_as_gdf()``.
-    
+
     Returns
     -------
     arcs : geopandas.GeoDataFrame
         Network arc elements as a ``geopandas.GeoDataFrame`` of
         ``shapely.geometry.LineString`` objects with an ``"id"``
         column and ``geometry`` column.
-    
+
     Notes
     -----
-    
+
     1. See ``spaghetti.element_as_gdf()`` for description of arguments.
     2. This function requires ``geopandas``.
-    
+
     """
 
     # arcs
@@ -792,7 +792,7 @@ def _routes_as_gdf(paths, id_col, geom_col):
     """Internal function for returning a shortest paths
     ``geopandas.GeoDataFrame`` called from within
     ``spaghetti.element_as_gdf()``.
-    
+
     Returns
     -------
     paths : geopandas.GeoDataFrame
@@ -800,13 +800,13 @@ def _routes_as_gdf(paths, id_col, geom_col):
         ``shapely.geometry.LineString`` objects with an ``"O"`` (origin),
         ``D`` (destination), and ``geometry`` column. An additional
         column storing the ID as a tuple is available.
-    
+
     Notes
     -----
-    
+
     1. See ``spaghetti.element_as_gdf()`` for description of arguments.
     2. This function requires ``geopandas``.
-    
+
     """
 
     # isolate the origins, destinations, and geometries

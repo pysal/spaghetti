@@ -4,7 +4,7 @@ import numpy
 class FuncBase(object):
     """Base object for performing network analysis on a
     ``spaghetti.Network`` object.
-    
+
     Parameters
     ----------
     ntw : spaghetti.Network
@@ -25,7 +25,7 @@ class FuncBase(object):
     upperbound : float
         The upper bound at which the `K`-function is computed.
         Defaults to the maximum observed nearest neighbor distance.
-    
+
     Attributes
     ----------
     sim : numpy.ndarray
@@ -36,7 +36,7 @@ class FuncBase(object):
         The observed x-axis of values.
     observed : numpy.ndarray
         The observed y-axis of values.
-    
+
     """
 
     def __init__(
@@ -101,12 +101,12 @@ class FuncBase(object):
 
 class GlobalAutoK(FuncBase):
     """See full description in ``network.Network.GlobalAutoK()``.
-    
+
     Attributes
     ----------
     lam : float
         The ``lambda`` value; representing intensity.
-    
+
     """
 
     def computeobserved(self):
@@ -175,14 +175,14 @@ def global_auto_k(n_obs, dists, upperbound, intensity, nsteps):
         lambda value
     nsteps : int
         The number of distance bands. Must be non-negative.
-    
+
     Returns
     -------
     x : numpy.ndarray
         The x-axis of values.
     y : numpy.ndarray
         The y-axis of values.
-    
+
     """
 
     # create interval for x-axis
