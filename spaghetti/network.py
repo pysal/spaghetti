@@ -167,6 +167,15 @@ class Network:
     Notes
     -----
     
+    **Important**: The core procedure for generating network representations is 
+    performed within the ``_extractnetwork()`` method. Here it is important to note
+    that a ``spaghetti.Network`` instance is built up from the individual,
+    constituent euclidean units of each line segment object. Therefore, the resulting 
+    network structure will generally have (1) more vertices and links than may expected,
+    and, (2) many degree-2 vertices, which differs from a truly graph-theoretic object.
+    This is demonstrated in the
+    `Caveats Tutorial <https://pysal.org/spaghetti/notebooks/caveats.html#4.-Understanding-network-generation>`_.
+    
     See :cite:`Cliff1981`, :cite:`Tansel1983a`,
     :cite:`AhujaRavindraK`, :cite:`Labbe1995`,
     :cite:`Kuby2009`, :cite:`Barthelemy2011`, 
