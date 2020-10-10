@@ -426,7 +426,7 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-10-05T17:06:12-04:00
+2020-10-10T15:35:11-04:00
 
 CPython 3.8.5
 IPython 7.18.1
@@ -463,10 +463,10 @@ interpreter: 64bit
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 watermark 2.0.2
-matplotlib 3.3.2
-libpysal   4.3.0
-spaghetti  1.5.0
 geopandas  0.8.1
+libpysal   4.3.0
+matplotlib 3.3.2
+spaghetti  1.5.0
 
 </pre></div></div>
 </div>
@@ -514,7 +514,7 @@ geopandas  0.8.1
         <span class="n">xy</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">_xy</span><span class="o">+</span><span class="n">o</span> <span class="k">for</span> <span class="p">(</span><span class="n">_xy</span><span class="p">,</span><span class="n">o</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span><span class="n">offset</span><span class="p">)])</span>
         <span class="k">return</span> <span class="n">xy</span>
     <span class="n">kws</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ha&quot;</span><span class="p">:</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;va&quot;</span><span class="p">:</span><span class="s2">&quot;bottom&quot;</span><span class="p">,</span><span class="s2">&quot;weight&quot;</span><span class="p">:</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span><span class="s2">&quot;color&quot;</span><span class="p">:</span><span class="s2">&quot;k&quot;</span><span class="p">,</span><span class="s2">&quot;size&quot;</span><span class="p">:</span><span class="n">s</span><span class="p">}</span>
-    <span class="n">a</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">_lab_loc</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">**</span><span class="n">kws</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">a</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">_lab_loc</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">**</span><span class="n">kws</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">vert_labels</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="p">[</span><span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">]):</span>
     <span class="sd">&quot;&quot;&quot;Label each network vertex.&quot;&quot;&quot;</span>
@@ -524,7 +524,7 @@ geopandas  0.8.1
         <span class="n">xy</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">_xy</span><span class="o">+</span><span class="n">o</span> <span class="k">for</span> <span class="p">(</span><span class="n">_xy</span><span class="p">,</span><span class="n">o</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span><span class="n">offset</span><span class="p">)])</span>
         <span class="k">return</span> <span class="n">xy</span>
     <span class="n">kws</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ha&quot;</span><span class="p">:</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;va&quot;</span><span class="p">:</span><span class="s2">&quot;bottom&quot;</span><span class="p">,</span><span class="s2">&quot;weight&quot;</span><span class="p">:</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span><span class="s2">&quot;color&quot;</span><span class="p">:</span><span class="s2">&quot;r&quot;</span><span class="p">,</span><span class="s2">&quot;size&quot;</span><span class="p">:</span><span class="n">s</span><span class="p">}</span>
-    <span class="n">v</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">_lab_loc</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">**</span><span class="n">kws</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">v</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">_lab_loc</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">**</span><span class="n">kws</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -555,9 +555,9 @@ geopandas  0.8.1
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[&lt;libpysal.cg.shapes.Chain at 0x7fb1390b0640&gt;,
- &lt;libpysal.cg.shapes.Chain at 0x7fb1390b0700&gt;,
- &lt;libpysal.cg.shapes.Chain at 0x7fb1390b0880&gt;]
+[&lt;libpysal.cg.shapes.Chain at 0x7f8e596e3d60&gt;,
+ &lt;libpysal.cg.shapes.Chain at 0x7f8e596e3eb0&gt;,
+ &lt;libpysal.cg.shapes.Chain at 0x7f8e596e3f70&gt;]
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -585,22 +585,11 @@ geopandas  0.8.1
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-&lt;ipython-input-5-d52cc85c6cad&gt;:9: MatplotlibDeprecationWarning: The &#39;s&#39; parameter of annotate() has been renamed &#39;text&#39; since Matplotlib 3.3; support for the old name will be dropped two minor releases later.
-  a.apply(lambda x: b.annotate(s=x.id, xy=_lab_loc(x), **kws), axis=1)
-&lt;ipython-input-5-d52cc85c6cad&gt;:19: MatplotlibDeprecationWarning: The &#39;s&#39; parameter of annotate() has been renamed &#39;text&#39; since Matplotlib 3.3; support for the old name will be dropped two minor releases later.
-  v.apply(lambda x: b.annotate(s=x.id, xy=_lab_loc(x), **kws), axis=1)
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_network-spatial-weights_11_1.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-weights_11_1.png" style="width: 706px; height: 533px;" />
+<img alt="../_images/notebooks_network-spatial-weights_11_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-weights_11_0.png" style="width: 706px; height: 533px;" />
 </div>
 </div>
 </div>
@@ -621,7 +610,7 @@ geopandas  0.8.1
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;libpysal.weights.weights.W at 0x7fb1390b0d30&gt;
+&lt;libpysal.weights.weights.W at 0x7f8e596e3850&gt;
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -659,22 +648,11 @@ geopandas  0.8.1
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-&lt;ipython-input-5-d52cc85c6cad&gt;:9: MatplotlibDeprecationWarning: The &#39;s&#39; parameter of annotate() has been renamed &#39;text&#39; since Matplotlib 3.3; support for the old name will be dropped two minor releases later.
-  a.apply(lambda x: b.annotate(s=x.id, xy=_lab_loc(x), **kws), axis=1)
-&lt;ipython-input-5-d52cc85c6cad&gt;:19: MatplotlibDeprecationWarning: The &#39;s&#39; parameter of annotate() has been renamed &#39;text&#39; since Matplotlib 3.3; support for the old name will be dropped two minor releases later.
-  v.apply(lambda x: b.annotate(s=x.id, xy=_lab_loc(x), **kws), axis=1)
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_network-spatial-weights_16_1.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-weights_16_1.png" style="width: 706px; height: 533px;" />
+<img alt="../_images/notebooks_network-spatial-weights_16_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-weights_16_0.png" style="width: 706px; height: 533px;" />
 </div>
 </div>
 </div>
@@ -719,22 +697,11 @@ geopandas  0.8.1
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-&lt;ipython-input-5-d52cc85c6cad&gt;:9: MatplotlibDeprecationWarning: The &#39;s&#39; parameter of annotate() has been renamed &#39;text&#39; since Matplotlib 3.3; support for the old name will be dropped two minor releases later.
-  a.apply(lambda x: b.annotate(s=x.id, xy=_lab_loc(x), **kws), axis=1)
-&lt;ipython-input-5-d52cc85c6cad&gt;:19: MatplotlibDeprecationWarning: The &#39;s&#39; parameter of annotate() has been renamed &#39;text&#39; since Matplotlib 3.3; support for the old name will be dropped two minor releases later.
-  v.apply(lambda x: b.annotate(s=x.id, xy=_lab_loc(x), **kws), axis=1)
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_network-spatial-weights_20_1.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-weights_20_1.png" style="width: 714px; height: 620px;" />
+<img alt="../_images/notebooks_network-spatial-weights_20_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-weights_20_0.png" style="width: 714px; height: 620px;" />
 </div>
 </div>
 </div>
@@ -752,20 +719,11 @@ geopandas  0.8.1
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-&lt;ipython-input-5-d52cc85c6cad&gt;:9: MatplotlibDeprecationWarning: The &#39;s&#39; parameter of annotate() has been renamed &#39;text&#39; since Matplotlib 3.3; support for the old name will be dropped two minor releases later.
-  a.apply(lambda x: b.annotate(s=x.id, xy=_lab_loc(x), **kws), axis=1)
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_network-spatial-weights_22_1.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-weights_22_1.png" style="width: 714px; height: 620px;" />
+<img alt="../_images/notebooks_network-spatial-weights_22_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-weights_22_0.png" style="width: 714px; height: 620px;" />
 </div>
 </div>
 </div>
