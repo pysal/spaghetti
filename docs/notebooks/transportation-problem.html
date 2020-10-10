@@ -438,7 +438,7 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-10-05T17:42:48-04:00
+2020-10-10T15:39:09-04:00
 
 CPython 3.8.5
 IPython 7.18.1
@@ -480,11 +480,11 @@ interpreter: 64bit
 <div class="highlight"><pre>
 watermark 2.0.2
 spaghetti           1.5.0
-geopandas           0.8.1
-mip                 1.12.0
-matplotlib_scalebar 0.6.2
-numpy               1.19.1
 matplotlib          3.3.2
+mip                 1.12.0
+numpy               1.19.1
+matplotlib_scalebar 0.6.2
+geopandas           0.8.1
 
 </pre></div></div>
 </div>
@@ -807,7 +807,7 @@ to utilize a mathematical programming model to solve the microscope discrepency.
         <span class="n">X</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     <span class="n">kws</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="n">s</span><span class="p">,</span> <span class="s2">&quot;ha&quot;</span><span class="p">:</span> <span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;va&quot;</span><span class="p">:</span> <span class="s2">&quot;bottom&quot;</span><span class="p">,</span> <span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="s2">&quot;oblique&quot;</span><span class="p">}</span>
     <span class="n">kws</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="n">o</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="n">X</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">col</span><span class="p">]),</span> <span class="n">xy</span><span class="o">=</span><span class="n">_lab_loc</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">**</span><span class="n">kws</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">o</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">X</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">col</span><span class="p">]),</span> <span class="n">xy</span><span class="o">=</span><span class="n">_lab_loc</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">**</span><span class="n">kws</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1096,20 +1096,11 @@ to utilize a mathematical programming model to solve the microscope discrepency.
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-&lt;ipython-input-8-0bca0f4bad5b&gt;:14: MatplotlibDeprecationWarning: The &#39;s&#39; parameter of annotate() has been renamed &#39;text&#39; since Matplotlib 3.3; support for the old name will be dropped two minor releases later.
-  o.apply(lambda x: b.annotate(s=X + str(x[col]), xy=_lab_loc(x), **kws), axis=1)
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_transportation-problem_27_1.png" class="no-scaled-link" src="../_images/notebooks_transportation-problem_27_1.png" style="width: 807px; height: 575px;" />
+<img alt="../_images/notebooks_transportation-problem_27_0.png" class="no-scaled-link" src="../_images/notebooks_transportation-problem_27_0.png" style="width: 807px; height: 575px;" />
 </div>
 </div>
 </div>
@@ -1295,20 +1286,11 @@ to utilize a mathematical programming model to solve the microscope discrepency.
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-&lt;ipython-input-8-0bca0f4bad5b&gt;:14: MatplotlibDeprecationWarning: The &#39;s&#39; parameter of annotate() has been renamed &#39;text&#39; since Matplotlib 3.3; support for the old name will be dropped two minor releases later.
-  o.apply(lambda x: b.annotate(s=X + str(x[col]), xy=_lab_loc(x), **kws), axis=1)
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_transportation-problem_31_1.png" class="no-scaled-link" src="../_images/notebooks_transportation-problem_31_1.png" style="width: 874px; height: 575px;" />
+<img alt="../_images/notebooks_transportation-problem_31_0.png" class="no-scaled-link" src="../_images/notebooks_transportation-problem_31_0.png" style="width: 874px; height: 575px;" />
 </div>
 </div>
 </div>
@@ -1819,20 +1801,11 @@ End
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-&lt;ipython-input-8-0bca0f4bad5b&gt;:14: MatplotlibDeprecationWarning: The &#39;s&#39; parameter of annotate() has been renamed &#39;text&#39; since Matplotlib 3.3; support for the old name will be dropped two minor releases later.
-  o.apply(lambda x: b.annotate(s=X + str(x[col]), xy=_lab_loc(x), **kws), axis=1)
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_transportation-problem_48_1.png" class="no-scaled-link" src="../_images/notebooks_transportation-problem_48_1.png" style="width: 903px; height: 575px;" />
+<img alt="../_images/notebooks_transportation-problem_48_0.png" class="no-scaled-link" src="../_images/notebooks_transportation-problem_48_0.png" style="width: 903px; height: 575px;" />
 </div>
 </div>
 </div>
