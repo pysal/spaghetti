@@ -2310,7 +2310,7 @@ class Network:
         Neighboring arcs can also be queried through the weight object.
 
         >>> n200.w_network.neighbors[72,267]
-        [(72, 230), (267, 268), (71, 72), (72, 444)]
+        [(71, 72), (72, 230), (72, 444), (267, 268)]
 
         """
 
@@ -2409,6 +2409,7 @@ class Network:
                         split_network.vertex_list.append(currentstop)
                     else:
                         # retrieve vertex ID if coordinate already exists
+                        current_vertex_id -= 1
                         currentstop = split_network.vertices[new_vertex]
 
                 # update the new network adjacency list

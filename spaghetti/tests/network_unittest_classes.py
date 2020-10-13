@@ -275,20 +275,20 @@ class TestNetwork(unittest.TestCase):
 
     def test_split_arcs_ntw_from_lattice_ring_2(self):
         n_2 = self.ntw_from_lattice_ring.split_arcs(0.2)
-        known_neighbors = [(1, 45), (1, 17), (1, 35), (20, 21)]
-        observed_neighbors = n_2.w_network.neighbors[1, 20]
+        known_neighbors = [(1, 17), (1, 31), (1, 40), (19, 20)]
+        observed_neighbors = n_2.w_network.neighbors[1, 19]
         self.assertEqual(observed_neighbors, known_neighbors)
 
     def test_split_arcs_ntw_from_lattice_ring_3(self):
         n_3 = self.ntw_from_lattice_ring.split_arcs(0.3)
-        known_neighbors = [(1, 34), (18, 19), (1, 27), (1, 16)]
+        known_neighbors = [(1, 16), (1, 27), (1, 34), (18, 19)]
         observed_neighbors = n_3.w_network.neighbors[1, 18]
         self.assertEqual(observed_neighbors, known_neighbors)
 
     def test_split_arcs_ntw_from_lattice_ring_5(self):
         n_5 = self.ntw_from_lattice_ring.split_arcs(0.5)
-        known_neighbors = [(2, 16), (1, 14), (1, 24), (1, 22)]
-        observed_neighbors = n_5.w_network.neighbors[1, 16]
+        known_neighbors = [(1, 14), (1, 18), (1, 19), (2, 15)]
+        observed_neighbors = n_5.w_network.neighbors[1, 15]
         self.assertEqual(observed_neighbors, known_neighbors)
 
     def test_enum_links_vertex(self):
