@@ -2309,8 +2309,8 @@ class Network:
 
         Neighboring arcs can also be queried through the weight object.
 
-        >>> n200.w_network.neighbors[72,267]
-        [(71, 72), (72, 230), (72, 444), (267, 268)]
+        >>> n200.w_network.neighbors[72,392]
+        [(71, 72), (72, 252), (72, 391), (392, 393)]
 
         """
 
@@ -2324,7 +2324,7 @@ class Network:
         # duplicate input network attributes
         split_network.adjacencylist = copy.deepcopy(self.adjacencylist)
         split_network.arc_lengths = copy.deepcopy(self.arc_lengths)
-        split_network.arcs = set(copy.deepcopy(self.arcs))
+        split_network.arcs = copy.deepcopy(self.arcs)
         split_network.vertex_coords = copy.deepcopy(self.vertex_coords)
         split_network.vertex_list = copy.deepcopy(self.vertex_list)
         split_network.vertices = copy.deepcopy(self.vertices)
@@ -2427,10 +2427,9 @@ class Network:
                 # increment the starting vertex to the stopping vertex
                 currentstart = currentstop
 
-        # add the newly created arcs to the network
+        # add the newly created arcs to the network and remove the old arcs
+        split_network.arcs = set(split_network.arcs)
         split_network.arcs.update(new_arcs)
-
-        # remove the old arcs the network
         split_network.arcs.difference_update(remove_arcs)
         split_network.arcs = sorted(list(split_network.arcs))
 

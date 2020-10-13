@@ -275,19 +275,19 @@ class TestNetwork(unittest.TestCase):
 
     def test_split_arcs_ntw_from_lattice_ring_2(self):
         n_2 = self.ntw_from_lattice_ring.split_arcs(0.2)
-        known_neighbors = [(1, 17), (1, 31), (1, 40), (19, 20)]
-        observed_neighbors = n_2.w_network.neighbors[1, 19]
+        known_neighbors = [(1, 17), (1, 25), (1, 26), (18, 19)]
+        observed_neighbors = n_2.w_network.neighbors[1, 18]
         self.assertEqual(observed_neighbors, known_neighbors)
 
     def test_split_arcs_ntw_from_lattice_ring_3(self):
         n_3 = self.ntw_from_lattice_ring.split_arcs(0.3)
-        known_neighbors = [(1, 16), (1, 27), (1, 34), (18, 19)]
-        observed_neighbors = n_3.w_network.neighbors[1, 18]
+        known_neighbors = [(1, 16), (1, 22), (1, 23), (17, 18)]
+        observed_neighbors = n_3.w_network.neighbors[1, 17]
         self.assertEqual(observed_neighbors, known_neighbors)
 
     def test_split_arcs_ntw_from_lattice_ring_5(self):
         n_5 = self.ntw_from_lattice_ring.split_arcs(0.5)
-        known_neighbors = [(1, 14), (1, 18), (1, 19), (2, 15)]
+        known_neighbors = [(1, 14), (1, 16), (1, 17), (2, 15)]
         observed_neighbors = n_5.w_network.neighbors[1, 15]
         self.assertEqual(observed_neighbors, known_neighbors)
 
