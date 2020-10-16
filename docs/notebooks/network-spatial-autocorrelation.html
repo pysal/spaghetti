@@ -131,6 +131,7 @@
 <li><a class="reference internal" href="#Reference-distribution-and-Moran-scatterplot">Reference distribution and Moran scatterplot</a></li>
 <li><a class="reference internal" href="#Local-Moran’s-l">Local Moran’s <em>l</em></a></li>
 <li><a class="reference internal" href="#Plotting-Local-Indicators-of-Spatial-Autocorrelation-(LISA)">Plotting Local Indicators of Spatial Autocorrelation (LISA)</a></li>
+<li><a class="reference internal" href="#A-highly-clustered-synthetic-example">A highly-clustered synthetic example</a></li>
 </ul>
 </li>
 </ul>
@@ -414,7 +415,7 @@ Interactive online version:
 <ol class="arabic simple">
 <li><p>Demonstrating spatial autocorrelation with <a class="reference external" href="https://pysal.org/esda/">pysal/esda</a></p></li>
 <li><p>Calculating <a class="reference external" href="https://pysal.org/esda/generated/esda.Moran.html#esda.Moran">Moran’s I</a> on a segmented network</p></li>
-<li><p>Visualizing spatial autocorrelation with <a class="reference external" href="https://splot.readthedocs.io/en/latest/">pysal/splot</a></p></li>
+<li><p>Visualizing spatial autocorrelation with <a class="reference external" href="https://splot.readthedocs.io/en/latest/">pysal/splot</a> for empirical and synthetic data</p></li>
 </ol>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -431,7 +432,7 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-10-05T17:12:08-04:00
+2020-10-16T10:10:22-04:00
 
 CPython 3.8.5
 IPython 7.18.1
@@ -453,6 +454,7 @@ interpreter: 64bit
 <span></span><span class="kn">import</span> <span class="nn">esda</span>
 <span class="kn">import</span> <span class="nn">libpysal</span>
 <span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="c1">#import matplotlib.pyplot as plt</span>
 <span class="kn">import</span> <span class="nn">matplotlib_scalebar</span>
 <span class="kn">from</span> <span class="nn">matplotlib_scalebar.scalebar</span> <span class="kn">import</span> <span class="n">ScaleBar</span>
 <span class="kn">import</span> <span class="nn">numpy</span>
@@ -471,13 +473,13 @@ interpreter: 64bit
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 watermark 2.0.2
-numpy               1.19.1
-spaghetti           1.5.0
+libpysal            4.3.0
 splot               1.1.3
 matplotlib_scalebar 0.6.2
 esda                2.3.1
-libpysal            4.3.0
 matplotlib          3.3.2
+numpy               1.19.1
+spaghetti           1.5.0
 
 </pre></div></div>
 </div>
@@ -528,7 +530,7 @@ matplotlib          3.3.2
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;spaghetti.network.Network at 0x7f95806731c0&gt;
+&lt;spaghetti.network.Network at 0x7f9cc08a0f40&gt;
 </pre></div></div>
 </div>
 </div>
@@ -628,7 +630,7 @@ matplotlib          3.3.2
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x7f95a1296220&gt;}
+{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x7f9c915527c0&gt;}
 </pre></div></div>
 </div>
 </div>
@@ -718,16 +720,16 @@ matplotlib          3.3.2
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">def</span> <span class="nf">calc_moran</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">pp_name</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+<span></span><span class="k">def</span> <span class="nf">calc_moran</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Calculate a Moran&#39;s I statistic based on network arcs.&quot;&quot;&quot;</span>
     <span class="c1"># Compute the counts</span>
-    <span class="n">pointpat</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="n">pp_name</span><span class="p">]</span>
+    <span class="n">pointpat</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
     <span class="n">counts</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">count_per_link</span><span class="p">(</span><span class="n">pointpat</span><span class="o">.</span><span class="n">obs_to_arc</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="c1"># Build the y vector</span>
     <span class="n">arcs</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">neighbors</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
     <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">counts</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="k">if</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">counts</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">else</span> <span class="mf">0.</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">arcs</span><span class="p">)]</span>
     <span class="c1"># Moran&#39;s I</span>
-    <span class="n">moran</span> <span class="o">=</span> <span class="n">esda</span><span class="o">.</span><span class="n">moran</span><span class="o">.</span><span class="n">Moran</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">99</span><span class="p">)</span>
+    <span class="n">moran</span> <span class="o">=</span> <span class="n">esda</span><span class="o">.</span><span class="n">moran</span><span class="o">.</span><span class="n">Moran</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">permutations</span><span class="o">=</span><span class="mi">9999</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">moran</span><span class="p">,</span> <span class="n">y</span>
 </pre></div>
 </div>
@@ -803,7 +805,7 @@ network arcs/graph edges attributed with associated crime counts are nearly rand
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;spaghetti.network.Network at 0x7f9590fa5df0&gt;
+&lt;spaghetti.network.Network at 0x7f9cc1544f40&gt;
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -822,7 +824,7 @@ network arcs/graph edges attributed with associated crime counts are nearly rand
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
--0.012466546588822161
+0.008782712541437603
 </pre></div></div>
 </div>
 </div>
@@ -844,7 +846,7 @@ network arcs/graph edges attributed with associated crime counts are nearly rand
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;spaghetti.network.Network at 0x7f95b15b8df0&gt;
+&lt;spaghetti.network.Network at 0x7f9cc1544e20&gt;
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -863,7 +865,7 @@ network arcs/graph edges attributed with associated crime counts are nearly rand
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.002806663172257146
+0.005151667718437952
 </pre></div></div>
 </div>
 <p><strong>Interpretation:</strong></p>
@@ -875,7 +877,7 @@ network arcs/graph edges attributed with associated crime counts are nearly rand
 <hr class="docutils" />
 <div class="section" id="3.-Visualizing-ESDA-with-splot">
 <h2>3. Visualizing ESDA with <code class="docutils literal notranslate"><span class="pre">splot</span></code><a class="headerlink" href="#3.-Visualizing-ESDA-with-splot" title="Permalink to this headline">¶</a></h2>
-<p><strong>Here we are demonstrating</strong> <a class="reference external" href="https://pysal.org/esda/notebooks/spatialautocorrelation.html#Attribute-Similarity">spatial lag</a><strong>, which refers to attribute similarity. See the</strong> <a class="reference external" href="https://splot.readthedocs.io/en/latest/">splot documentation</a> <strong>for in-depth descriptions and tutorials.</strong></p>
+<p><strong>Here we are demonstrating</strong> <a class="reference external" href="https://pysal.org/esda/notebooks/spatialautocorrelation.html#Attribute-Similarity">spatial lag</a><strong>, which refers to attribute similarity. See the</strong> <a class="reference external" href="https://splot.readthedocs.io/en/latest/">splot documentation</a> <strong>for in-depth descriptions and tutorials. In this first section empirical data is utilized followed by a highly-clusterd synthetic example.</strong></p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
@@ -893,7 +895,12 @@ network arcs/graph edges attributed with associated crime counts are nearly rand
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">moran_scatterplot</span><span class="p">(</span><span class="n">moran_ntwwn</span><span class="p">,</span> <span class="n">aspect_equal</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span>
+<span></span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+<span class="n">fitline_kwds</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="s2">&quot;lw&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span><span class="o">.</span><span class="mi">7</span><span class="p">}</span>
+<span class="n">scatter_kwds</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;s&quot;</span><span class="p">:</span><span class="mi">20</span><span class="p">,</span> <span class="s2">&quot;edgecolors&quot;</span><span class="p">:</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span><span class="o">.</span><span class="mi">35</span><span class="p">}</span>
+<span class="n">pltkwds</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;fitline_kwds&quot;</span><span class="p">:</span> <span class="n">fitline_kwds</span><span class="p">,</span> <span class="s2">&quot;scatter_kwds&quot;</span><span class="p">:</span> <span class="n">scatter_kwds</span><span class="p">}</span>
+<span class="n">moran_scatterplot</span><span class="p">(</span><span class="n">moran_ntwwn</span><span class="p">,</span> <span class="n">aspect_equal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="o">**</span><span class="n">pltkwds</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -901,7 +908,7 @@ network arcs/graph edges attributed with associated crime counts are nearly rand
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_network-spatial-autocorrelation_28_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-autocorrelation_28_0.png" style="width: 456px; height: 165px;" />
+<img alt="../_images/notebooks_network-spatial-autocorrelation_28_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-autocorrelation_28_0.png" style="width: 766px; height: 240px;" />
 </div>
 </div>
 <p><strong>Plotted without equal aspect</strong></p>
@@ -910,7 +917,8 @@ network arcs/graph edges attributed with associated crime counts are nearly rand
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">moran_scatterplot</span><span class="p">(</span><span class="n">moran_ntwwn</span><span class="p">,</span> <span class="n">aspect_equal</span><span class="o">=</span><span class="kc">False</span><span class="p">);</span>
+<span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+<span class="n">moran_scatterplot</span><span class="p">(</span><span class="n">moran_ntwwn</span><span class="p">,</span> <span class="n">aspect_equal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="o">**</span><span class="n">pltkwds</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -918,7 +926,7 @@ network arcs/graph edges attributed with associated crime counts are nearly rand
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_network-spatial-autocorrelation_30_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-autocorrelation_30_0.png" style="width: 474px; height: 459px;" />
+<img alt="../_images/notebooks_network-spatial-autocorrelation_30_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-autocorrelation_30_0.png" style="width: 766px; height: 402px;" />
 </div>
 </div>
 <p><strong>This scatterplot demostrates the attribute values and associated attribute similarities in space (spatial lag) for the network representation’s W (</strong><code class="docutils literal notranslate"><span class="pre">moran_ntwwn</span></code><strong>).</strong></p>
@@ -930,7 +938,7 @@ network arcs/graph edges attributed with associated crime counts are nearly rand
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">plot_moran</span><span class="p">(</span><span class="n">moran_ntwwn</span><span class="p">,</span> <span class="n">zstandard</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">4</span><span class="p">));</span>
+<span></span><span class="n">plot_moran</span><span class="p">(</span><span class="n">moran_ntwwn</span><span class="p">,</span> <span class="n">zstandard</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="o">**</span><span class="n">pltkwds</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -938,7 +946,7 @@ network arcs/graph edges attributed with associated crime counts are nearly rand
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_network-spatial-autocorrelation_32_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-autocorrelation_32_0.png" style="width: 624px; height: 288px;" />
+<img alt="../_images/notebooks_network-spatial-autocorrelation_32_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-autocorrelation_32_0.png" style="width: 738px; height: 402px;" />
 </div>
 </div>
 <p><strong>This figure incorporates the reference distribution of Moran’s I values into the above scatterplot of the network representation’s W (</strong><code class="docutils literal notranslate"><span class="pre">moran_ntwwn</span></code><strong>).</strong></p>
@@ -955,7 +963,8 @@ type</a><strong>.</strong></p>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">p</span> <span class="o">=</span> <span class="mf">0.05</span>
 <span class="n">moran_loc_ntwwn</span> <span class="o">=</span> <span class="n">esda</span><span class="o">.</span><span class="n">moran</span><span class="o">.</span><span class="n">Moran_Local</span><span class="p">(</span><span class="n">yaxis_ntwwn</span><span class="p">,</span> <span class="n">ntw</span><span class="o">.</span><span class="n">w_network</span><span class="p">)</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">moran_scatterplot</span><span class="p">(</span><span class="n">moran_loc_ntwwn</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">aspect_equal</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+<span class="n">moran_scatterplot</span><span class="p">(</span><span class="n">moran_loc_ntwwn</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">aspect_equal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;Crimes&quot;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Spatial Lag of Crimes&quot;</span><span class="p">);</span>
 </pre></div>
 </div>
@@ -964,7 +973,7 @@ type</a><strong>.</strong></p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_network-spatial-autocorrelation_34_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-autocorrelation_34_0.png" style="width: 472px; height: 121px;" />
+<img alt="../_images/notebooks_network-spatial-autocorrelation_34_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-autocorrelation_34_0.png" style="width: 764px; height: 121px;" />
 </div>
 </div>
 <p><strong>Plotted without equal aspect</strong></p>
@@ -973,7 +982,8 @@ type</a><strong>.</strong></p>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">moran_scatterplot</span><span class="p">(</span><span class="n">moran_loc_ntwwn</span><span class="p">,</span> <span class="n">aspect_equal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">)</span>
+<span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+<span class="n">moran_scatterplot</span><span class="p">(</span><span class="n">moran_loc_ntwwn</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">aspect_equal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;Crimes&quot;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Spatial Lag of Crimes&quot;</span><span class="p">);</span>
 </pre></div>
 </div>
@@ -982,7 +992,7 @@ type</a><strong>.</strong></p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_network-spatial-autocorrelation_36_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-autocorrelation_36_0.png" style="width: 481px; height: 459px;" />
+<img alt="../_images/notebooks_network-spatial-autocorrelation_36_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-autocorrelation_36_0.png" style="width: 773px; height: 402px;" />
 </div>
 </div>
 <p><strong>Interpretation:</strong></p>
@@ -997,14 +1007,17 @@ type</a><strong>.</strong></p>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">lisa_cluster</span><span class="p">(</span><span class="n">moran_loc_ntwwn</span><span class="p">,</span> <span class="n">arc_df</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">12</span><span class="p">),</span> <span class="n">lw</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">pp_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=.</span><span class="mi">25</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<span></span><span class="n">lisa_args</span> <span class="o">=</span> <span class="n">moran_loc_ntwwn</span><span class="p">,</span> <span class="n">arc_df</span>
+<span class="n">lisa_kwds</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;p&quot;</span><span class="p">:</span><span class="n">p</span><span class="p">,</span> <span class="s2">&quot;figsize&quot;</span><span class="p">:(</span><span class="mi">12</span><span class="p">,</span><span class="mi">12</span><span class="p">),</span> <span class="s2">&quot;lw&quot;</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;zorder&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">}</span>
+<span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">lisa_cluster</span><span class="p">(</span><span class="o">*</span><span class="n">lisa_args</span><span class="p">,</span> <span class="o">**</span><span class="n">lisa_kwds</span><span class="p">)</span>
+<span class="n">pp_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=.</span><span class="mi">25</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">suptitle</span> <span class="o">=</span> <span class="s2">&quot;LISA for Crime-weighted Networks Arcs&quot;</span>
 <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">suptitle</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">x</span><span class="o">=.</span><span class="mi">51</span><span class="p">,</span> <span class="n">y</span><span class="o">=.</span><span class="mi">93</span><span class="p">)</span>
 <span class="n">subtitle</span> <span class="o">=</span> <span class="s2">&quot;Crimes ($n=</span><span class="si">%s</span><span class="s2">$) are represented as semi-opaque green circles&quot;</span>
 <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">subtitle</span> <span class="o">%</span> <span class="n">pp_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-<span class="n">kw</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;units&quot;</span><span class="p">:</span><span class="s2">&quot;ft&quot;</span><span class="p">,</span> <span class="s2">&quot;dimension&quot;</span><span class="p">:</span><span class="s2">&quot;imperial-length&quot;</span><span class="p">,</span> <span class="s2">&quot;fixed_value&quot;</span><span class="p">:</span><span class="mi">1000</span><span class="p">}</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">ScaleBar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">,</span> <span class="n">box_alpha</span><span class="o">=.</span><span class="mi">75</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">));</span>
+<span class="n">sbkw</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;units&quot;</span><span class="p">:</span><span class="s2">&quot;ft&quot;</span><span class="p">,</span> <span class="s2">&quot;dimension&quot;</span><span class="p">:</span><span class="s2">&quot;imperial-length&quot;</span><span class="p">,</span> <span class="s2">&quot;fixed_value&quot;</span><span class="p">:</span><span class="mi">1000</span><span class="p">}</span>
+<span class="n">sbkw</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;location&quot;</span><span class="p">:</span><span class="s2">&quot;lower left&quot;</span><span class="p">,</span> <span class="s2">&quot;box_alpha&quot;</span><span class="p">:</span><span class="o">.</span><span class="mi">75</span><span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">matplotlib_scalebar</span><span class="o">.</span><span class="n">scalebar</span><span class="o">.</span><span class="n">ScaleBar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">sbkw</span><span class="p">));</span>
 </pre></div>
 </div>
 </div>
@@ -1013,6 +1026,58 @@ type</a><strong>.</strong></p>
 </div>
 <div class="output_area docutils container">
 <img alt="../_images/notebooks_network-spatial-autocorrelation_38_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-autocorrelation_38_0.png" style="width: 665px; height: 709px;" />
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="A-highly-clustered-synthetic-example">
+<h3>A highly-clustered synthetic example<a class="headerlink" href="#A-highly-clustered-synthetic-example" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ncrimes</span><span class="p">,</span> <span class="n">cluster_crimes</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span> <span class="p">[];</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">minx</span><span class="p">,</span> <span class="n">miny</span><span class="p">,</span> <span class="n">maxx</span><span class="p">,</span> <span class="n">maxy</span> <span class="o">=</span> <span class="p">[</span><span class="mi">725400</span><span class="p">,</span> <span class="mi">877400</span><span class="p">,</span> <span class="mi">727100</span><span class="p">,</span> <span class="mi">879100</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ncrimes</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">plus_minus</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1000</span><span class="p">,</span> <span class="o">-</span><span class="mi">2000</span><span class="p">]:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">minx</span><span class="o">+</span><span class="n">plus_minus</span><span class="p">,</span> <span class="n">maxx</span><span class="o">+</span><span class="n">plus_minus</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">miny</span><span class="o">+</span><span class="n">plus_minus</span><span class="p">,</span> <span class="n">maxy</span><span class="o">+</span><span class="n">plus_minus</span><span class="p">)</span>
+        <span class="n">cluster_crimes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">libpysal</span><span class="o">.</span><span class="n">cg</span><span class="o">.</span><span class="n">Point</span><span class="p">((</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span><span class="n">cluster_crimes</span><span class="p">,</span> <span class="n">pp_name</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">moran_ntwwn</span><span class="p">,</span> <span class="n">yaxis_ntwwn</span> <span class="o">=</span> <span class="n">calc_moran</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="p">,</span> <span class="n">ntw</span><span class="o">.</span><span class="n">w_network</span><span class="p">)</span>
+<span class="n">moran_loc_ntwwn</span> <span class="o">=</span> <span class="n">esda</span><span class="o">.</span><span class="n">moran</span><span class="o">.</span><span class="n">Moran_Local</span><span class="p">(</span><span class="n">yaxis_ntwwn</span><span class="p">,</span> <span class="n">ntw</span><span class="o">.</span><span class="n">w_network</span><span class="p">)</span>
+<span class="n">pp_df</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="o">=</span><span class="n">pp_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">lisa_args</span> <span class="o">=</span> <span class="n">moran_loc_ntwwn</span><span class="p">,</span> <span class="n">arc_df</span>
+<span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">lisa_cluster</span><span class="p">(</span><span class="o">*</span><span class="n">lisa_args</span><span class="p">,</span> <span class="o">**</span><span class="n">lisa_kwds</span><span class="p">)</span>
+<span class="n">pp_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=.</span><span class="mi">25</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">suptitle</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">x</span><span class="o">=.</span><span class="mi">51</span><span class="p">,</span> <span class="n">y</span><span class="o">=.</span><span class="mi">93</span><span class="p">)</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">subtitle</span> <span class="o">%</span> <span class="n">pp_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">matplotlib_scalebar</span><span class="o">.</span><span class="n">scalebar</span><span class="o">.</span><span class="n">ScaleBar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">sbkw</span><span class="p">));</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_network-spatial-autocorrelation_42_0.png" class="no-scaled-link" src="../_images/notebooks_network-spatial-autocorrelation_42_0.png" style="width: 595px; height: 709px;" />
 </div>
 </div>
 <hr class="docutils" />

@@ -142,7 +142,7 @@
 <dl class="py function">
 <dt id="spaghetti.element_as_gdf">
 <code class="sig-prename descclassname">spaghetti.</code><code class="sig-name descname">element_as_gdf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">net</span></em>, <em class="sig-param"><span class="n">vertices</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">arcs</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">pp_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">snapped</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">routes</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">id_col</span><span class="o">=</span><span class="default_value">'id'</span></em>, <em class="sig-param"><span class="n">geom_col</span><span class="o">=</span><span class="default_value">'geometry'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spaghetti/network.html#element_as_gdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spaghetti.element_as_gdf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> of network elements. This can be 
+<dd><p>Return a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> of network elements. This can be
 (a) the vertices of a network; (b) the arcs of a network; (c) both the
 vertices and arcs of the network; (d) the raw point pattern associated
 with the network; (e) the snapped point pattern of (d); or (f) the
@@ -175,19 +175,19 @@ When extracting routes this creates an (origin, destination) tuple.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl>
-<dt><strong>points</strong><span class="classifier"><a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0+untagged.50.g7e595d0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a></span></dt><dd><p>Network point elements (either vertices or <code class="docutils literal notranslate"><span class="pre">network.PointPattern</span></code>
+<dt><strong>points</strong><span class="classifier"><a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0+untagged.50.g924cdf6)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a></span></dt><dd><p>Network point elements (either vertices or <code class="docutils literal notranslate"><span class="pre">network.PointPattern</span></code>
 points) as a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> of <code class="docutils literal notranslate"><span class="pre">shapely.geometry.Point</span></code>
 objects with an <code class="docutils literal notranslate"><span class="pre">&quot;id&quot;</span></code> column and <code class="docutils literal notranslate"><span class="pre">&quot;geometry&quot;&quot;</span></code> column.
 If the network object has a <code class="docutils literal notranslate"><span class="pre">network_component_vertices</span></code> attribute,
 then component labels are also added in a column.</p>
 </dd>
-<dt><strong>lines</strong><span class="classifier"><a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0+untagged.50.g7e595d0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a></span></dt><dd><p>Network arc elements as a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> of
+<dt><strong>lines</strong><span class="classifier"><a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0+untagged.50.g924cdf6)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a></span></dt><dd><p>Network arc elements as a <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> of
 <code class="docutils literal notranslate"><span class="pre">shapely.geometry.LineString</span></code> objects with an <code class="docutils literal notranslate"><span class="pre">&quot;id&quot;</span></code>
-column and <code class="docutils literal notranslate"><span class="pre">&quot;geometry&quot;</span></code> column. If the network object has 
+column and <code class="docutils literal notranslate"><span class="pre">&quot;geometry&quot;</span></code> column. If the network object has
 a <code class="docutils literal notranslate"><span class="pre">network_component_labels</span></code> attribute, then component labels
 are also added in a column.</p>
 </dd>
-<dt><strong>paths</strong><span class="classifier"><a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0+untagged.50.g7e595d0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a></span></dt><dd><p>Shortest path routes along network arc elements as a 
+<dt><strong>paths</strong><span class="classifier"><a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0+untagged.50.g924cdf6)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a></span></dt><dd><p>Shortest path routes along network arc elements as a
 <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> of <code class="docutils literal notranslate"><span class="pre">shapely.geometry.LineString</span></code>
 objects with an <code class="docutils literal notranslate"><span class="pre">&quot;id&quot;</span></code> (see <code class="docutils literal notranslate"><span class="pre">spaghetti.Network.shortest_paths()</span></code>)
 column and <code class="docutils literal notranslate"><span class="pre">&quot;geometry&quot;</span></code> column.</p>
@@ -207,12 +207,12 @@ not exist within the network object.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0+untagged.50.g7e595d0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a></dt><dd></dd>
+<dt><a class="reference external" href="https://geopandas.readthedocs.io/en/latest/reference/geopandas.GeoDataFrame.html#geopandas.GeoDataFrame" title="(in GeoPandas v0+untagged.50.g924cdf6)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a></dt><dd></dd>
 </dl>
 </div>
 <p class="rubric">Notes</p>
-<p>When both network vertices and arcs are desired, the variable 
-declaration must be in the order: &lt;vertices&gt;, &lt;arcs&gt;. 
+<p>When both network vertices and arcs are desired, the variable
+declaration must be in the order: &lt;vertices&gt;, &lt;arcs&gt;.
 This function requires <code class="docutils literal notranslate"><span class="pre">geopandas</span></code>.</p>
 <p class="rubric">Examples</p>
 <p>Instantiate a network object.</p>

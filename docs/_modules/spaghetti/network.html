@@ -163,7 +163,7 @@
 <span class="sd">    vertices for the full network object, and (2) edges and nodes for</span>
 <span class="sd">    the simplified graph-theoretic object. The term &#39;link&#39; is used to</span>
 <span class="sd">    refer to a network arc or a graph edge.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    in_data : {str, list, tuple, numpy.ndarray, libpysal.cg.Chain, geopandas.GeoDataFrame}</span>
@@ -195,7 +195,7 @@
 <span class="sd">        Precision for vertex absolute tolerance. Round vertex coordinates to</span>
 <span class="sd">        ``vertex_atol`` decimal places. Default is ``None``. **ONLY** change</span>
 <span class="sd">        the default when there are known issues with digitization.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    adjacencylist : list</span>
@@ -222,8 +222,8 @@
 <span class="sd">    network_trees : dict</span>
 <span class="sd">        Keys are the vertex IDs (``int``). Values are dictionaries</span>
 <span class="sd">        with the keys being the IDs of the destination vertex</span>
-<span class="sd">        and values being lists of vertices along the shortest path. </span>
-<span class="sd">        If the destination vertex is a) the origin or b) </span>
+<span class="sd">        and values being lists of vertices along the shortest path.</span>
+<span class="sd">        If the destination vertex is a) the origin or b)</span>
 <span class="sd">        unreachable (disparate component) it is listed as itself being the</span>
 <span class="sd">        neighbor.</span>
 <span class="sd">    edges : list</span>
@@ -298,67 +298,67 @@
 <span class="sd">    graph_component_is_ring : dict</span>
 <span class="sd">        Lookup in the form {int: bool} keyed by component labels with values as</span>
 <span class="sd">        ``True`` if the component is a closed ring, otherwise ``False``.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    </span>
-<span class="sd">    **Important**: The core procedure for generating network representations is </span>
+
+<span class="sd">    **Important**: The core procedure for generating network representations is</span>
 <span class="sd">    performed within the ``_extractnetwork()`` method. Here it is important to note</span>
 <span class="sd">    that a ``spaghetti.Network`` instance is built up from the individual,</span>
-<span class="sd">    constituent euclidean units of each line segment object. Therefore, the resulting </span>
+<span class="sd">    constituent euclidean units of each line segment object. Therefore, the resulting</span>
 <span class="sd">    network structure will generally have (1) more vertices and links than may expected,</span>
 <span class="sd">    and, (2) many degree-2 vertices, which differs from a truly graph-theoretic object.</span>
 <span class="sd">    This is demonstrated in the</span>
 <span class="sd">    `Caveats Tutorial &lt;https://pysal.org/spaghetti/notebooks/caveats.html#4.-Understanding-network-generation&gt;`_.</span>
-<span class="sd">    </span>
+
 <span class="sd">    See :cite:`Cliff1981`, :cite:`Tansel1983a`,</span>
 <span class="sd">    :cite:`AhujaRavindraK`, :cite:`Labbe1995`,</span>
-<span class="sd">    :cite:`Kuby2009`, :cite:`Barthelemy2011`, </span>
+<span class="sd">    :cite:`Kuby2009`, :cite:`Barthelemy2011`,</span>
 <span class="sd">    :cite:`daskin2013`, :cite:`Okabe2012`,</span>
 <span class="sd">    :cite:`Ducruet2014`, :cite:`Weber2016`, for more in-depth discussion on</span>
-<span class="sd">    spatial networks, graph theory, and location along networks. </span>
+<span class="sd">    spatial networks, graph theory, and location along networks.</span>
 <span class="sd">    For related network-centric software see</span>
 <span class="sd">    `Snkit &lt;https://github.com/tomalrussell/snkit&gt;`_ :cite:`tom_russell_2019_3379659`,</span>
 <span class="sd">    `SANET &lt;http://sanet.csis.u-tokyo.ac.jp&gt;`_ :cite:`Okabe2006a`,</span>
-<span class="sd">    `NetworkX &lt;https://networkx.github.io&gt;`_ :cite:`Hagberg2008`, </span>
+<span class="sd">    `NetworkX &lt;https://networkx.github.io&gt;`_ :cite:`Hagberg2008`,</span>
 <span class="sd">    `Pandana &lt;http://udst.github.io/pandana/&gt;`_ :cite:`Foti2012`,</span>
 <span class="sd">    and `OSMnx &lt;https://osmnx.readthedocs.io/en/stable/&gt;`_ :cite:`Boeing2017`.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    </span>
+
 <span class="sd">    Create an instance of a network.</span>
-<span class="sd">    </span>
+
 <span class="sd">    &gt;&gt;&gt; import spaghetti</span>
 <span class="sd">    &gt;&gt;&gt; from libpysal import examples</span>
 <span class="sd">    &gt;&gt;&gt; streets_file = examples.get_path(&quot;streets.shp&quot;)</span>
 <span class="sd">    &gt;&gt;&gt; ntw = spaghetti.Network(in_data=streets_file)</span>
-<span class="sd">    </span>
+
 <span class="sd">    Fetch the number connected components in the network.</span>
-<span class="sd">    </span>
+
 <span class="sd">    &gt;&gt;&gt; ntw.network_n_components</span>
 <span class="sd">    1</span>
-<span class="sd">    </span>
+
 <span class="sd">    Unique component labels in the network.</span>
-<span class="sd">    </span>
+
 <span class="sd">    &gt;&gt;&gt; import numpy</span>
 <span class="sd">    &gt;&gt;&gt; list(numpy.unique(ntw.network_component_labels))</span>
 <span class="sd">    [0]</span>
-<span class="sd">    </span>
+
 <span class="sd">    Show whether each component of the network is an isolated ring (or not).</span>
-<span class="sd">    </span>
+
 <span class="sd">    &gt;&gt;&gt; ntw.network_component_is_ring</span>
 <span class="sd">    {0: False}</span>
-<span class="sd">    </span>
+
 <span class="sd">    Show how many network arcs are associated with the component.</span>
-<span class="sd">    </span>
+
 <span class="sd">    &gt;&gt;&gt; arcs = len(ntw.network_component2arc[ntw.network_component_labels[0]])</span>
 <span class="sd">    &gt;&gt;&gt; arcs</span>
 <span class="sd">    303</span>
-<span class="sd">    </span>
+
 <span class="sd">    Do the same as above, but for the graph-theoretic representation</span>
 <span class="sd">    of the network object.</span>
-<span class="sd">    </span>
+
 <span class="sd">    &gt;&gt;&gt; ntw.graph_n_components</span>
 <span class="sd">    1</span>
 <span class="sd">    &gt;&gt;&gt; list(numpy.unique(ntw.graph_component_labels))</span>
@@ -368,28 +368,28 @@
 <span class="sd">    &gt;&gt;&gt; edges = len(ntw.graph_component2edge[ntw.graph_component_labels[0]])</span>
 <span class="sd">    &gt;&gt;&gt; edges</span>
 <span class="sd">    179</span>
-<span class="sd">    </span>
+
 <span class="sd">    The number of arcs in the network is always greater than or equal</span>
 <span class="sd">    to the number of edges in the graph-theoretic representation.</span>
-<span class="sd">    </span>
+
 <span class="sd">    &gt;&gt;&gt; arcs &gt;= edges</span>
 <span class="sd">    True</span>
-<span class="sd">    </span>
+
 <span class="sd">    Snap point observations to the network with attribute information.</span>
-<span class="sd">    </span>
+
 <span class="sd">    &gt;&gt;&gt; crimes_file = examples.get_path(&quot;crimes.shp&quot;)</span>
 <span class="sd">    &gt;&gt;&gt; ntw.snapobservations(crimes_file, &quot;crimes&quot;, attribute=True)</span>
-<span class="sd">   </span>
+
 <span class="sd">    And without attribute information.</span>
-<span class="sd">   </span>
+
 <span class="sd">    &gt;&gt;&gt; schools_file = examples.get_path(&quot;schools.shp&quot;)</span>
 <span class="sd">    &gt;&gt;&gt; ntw.snapobservations(schools_file, &quot;schools&quot;, attribute=False)</span>
-<span class="sd">    </span>
+
 <span class="sd">    Show the point patterns associated with the network.</span>
-<span class="sd">    </span>
+
 <span class="sd">    &gt;&gt;&gt; ntw.pointpatterns.keys()</span>
 <span class="sd">    dict_keys([&#39;crimes&#39;, &#39;schools&#39;])</span>
-<span class="sd">    </span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Network.__init__"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
@@ -473,12 +473,12 @@
 <span class="sd">        are some possible results for a coordinate are as follows.</span>
 <span class="sd">        (1) 0.0xxxx, (2) 0.xxxx, (3) x.xxx, (4) xx.xx,</span>
 <span class="sd">        (5) xxx.x, (6) xxxx.0, (7) xxxx0.0</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        v : tuple</span>
 <span class="sd">            Coordinate (x,y) of the vertex.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># set the number of significant digits</span>
@@ -509,7 +509,7 @@
 <div class="viewcode-block" id="Network.identify_components"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.identify_components">[docs]</a>    <span class="k">def</span> <span class="nf">identify_components</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Identify connected component information from a</span>
 <span class="sd">        ``libpysal.weights.W`` object</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        w : libpysal.weights.W</span>
@@ -518,7 +518,7 @@
 <span class="sd">        graph : bool</span>
 <span class="sd">            Flag for a raw network (``False``) or graph-theoretic network</span>
 <span class="sd">            (``True``). Default is ``False``.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># flag network (arcs) or graph (edges)</span>
@@ -835,12 +835,12 @@
         <span class="sd">&quot;&quot;&quot;Find all nodes with degree 2 that are not in an isolated</span>
 <span class="sd">        island ring (loop) component. These are non-articulation</span>
 <span class="sd">        points on the graph representation.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        napts : list</span>
 <span class="sd">            Non-articulation points on a graph representation.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># non-articulation points</span>
@@ -868,7 +868,7 @@
         <span class="sd">&quot;&quot;&quot;Evaluate one connected component in a network for</span>
 <span class="sd">        non-articulation points (``napts``) and return an updated set of</span>
 <span class="sd">        ``napts`` and unvisted vertices.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        napts : set</span>
@@ -883,14 +883,14 @@
 <span class="sd">        ring : bool</span>
 <span class="sd">            Network component is isolated island loop ``True`` or</span>
 <span class="sd">            not ``False``.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        napts : set</span>
 <span class="sd">            Updated ``napts`` object.</span>
 <span class="sd">        unvisited : set</span>
 <span class="sd">            Updated ``napts`` object.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># iterate over each `edge` of the `component`</span>
@@ -919,7 +919,7 @@
     <span class="k">def</span> <span class="nf">_yieldneighbor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vtx</span><span class="p">,</span> <span class="n">arc_vertices</span><span class="p">,</span> <span class="n">bridge</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Used internally, this method traverses a bridge arc</span>
 <span class="sd">        to find the source and destination nodes.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        vtx : int</span>
@@ -929,13 +929,13 @@
 <span class="sd">            These are referred to as degree-2 vertices.</span>
 <span class="sd">        bridge : list</span>
 <span class="sd">            Inital bridge list containing only ``vtx``.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        nodes : list</span>
 <span class="sd">            Vertices to keep (articulation points). These elements are</span>
 <span class="sd">            referred to as nodes.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># instantiate empty lis to fill with network articulation</span>
@@ -952,9 +952,11 @@
 
         <span class="k">return</span> <span class="n">nodes</span>
 
-<div class="viewcode-block" id="Network.contiguityweights"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.contiguityweights">[docs]</a>    <span class="k">def</span> <span class="nf">contiguityweights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">weightings</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weights_kws</span><span class="o">=</span><span class="nb">dict</span><span class="p">()):</span>
+<div class="viewcode-block" id="Network.contiguityweights"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.contiguityweights">[docs]</a>    <span class="k">def</span> <span class="nf">contiguityweights</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">weightings</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">from_split</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">weights_kws</span><span class="o">=</span><span class="nb">dict</span><span class="p">()</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create a contiguity-based ``libpysal.weights.W`` object.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        graph : bool</span>
@@ -962,81 +964,84 @@
 <span class="sd">            using the spatial representation (``False``) or the graph</span>
 <span class="sd">            representation (``True``). Default is ``True``.</span>
 <span class="sd">        weightings : {dict, None}</span>
-<span class="sd">            Dictionary of lists of weightings for each arc/edge.</span>
+<span class="sd">            Dictionary of lists of weightings for each arc/edge. Default is ``None``.</span>
+<span class="sd">        from_split : bool</span>
+<span class="sd">            Flag for whether the method is being called from within</span>
+<span class="sd">            ``split_arcs()`` (``True``) or not (``False``). Default is ``False``.</span>
 <span class="sd">        weights_kws : dict</span>
 <span class="sd">            Keyword arguments for ``libpysal.weights.W``.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">         W : libpysal.weights.W</span>
 <span class="sd">            A ``W`` representing the binary adjacency of the network.</span>
-<span class="sd">        </span>
+
 <span class="sd">        See also</span>
 <span class="sd">        --------</span>
-<span class="sd">        </span>
+
 <span class="sd">        libpysal.weights.W</span>
-<span class="sd">        </span>
+
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
-<span class="sd">        </span>
+
 <span class="sd">        Instantiate a network.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; import spaghetti</span>
 <span class="sd">        &gt;&gt;&gt; from libpysal import examples</span>
 <span class="sd">        &gt;&gt;&gt; import esda</span>
 <span class="sd">        &gt;&gt;&gt; import numpy</span>
 <span class="sd">        &gt;&gt;&gt; ntw = spaghetti.Network(examples.get_path(&quot;streets.shp&quot;))</span>
-<span class="sd">        </span>
+
 <span class="sd">        Snap point observations to the network with attribute information.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; ntw.snapobservations(</span>
 <span class="sd">        ...     examples.get_path(&quot;crimes.shp&quot;), &quot;crimes&quot;, attribute=True</span>
 <span class="sd">        ... )</span>
-<span class="sd">        </span>
+
 <span class="sd">        Find counts per network arc.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; counts = ntw.count_per_link(</span>
 <span class="sd">        ...     ntw.pointpatterns[&quot;crimes&quot;].obs_to_arc, graph=False</span>
 <span class="sd">        ... )</span>
 <span class="sd">        &gt;&gt;&gt; counts[(50, 165)]</span>
 <span class="sd">        4</span>
-<span class="sd">        </span>
+
 <span class="sd">        Create a contiguity-based ``W`` object.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; w = ntw.contiguityweights(graph=False)</span>
-<span class="sd">        </span>
-<span class="sd">        Using the ``W`` object, access to </span>
-<span class="sd">        `esda &lt;https://esda.readthedocs.io/en/latest/index.html&gt;`_ </span>
+
+<span class="sd">        Using the ``W`` object, access to</span>
+<span class="sd">        `esda &lt;https://esda.readthedocs.io/en/latest/index.html&gt;`_</span>
 <span class="sd">        functionality is provided. First, a vector of attributes is</span>
 <span class="sd">        created for all edges with observations.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; w = ntw.contiguityweights(graph=False)</span>
 <span class="sd">        &gt;&gt;&gt; arcs = w.neighbors.keys()</span>
 <span class="sd">        &gt;&gt;&gt; y = numpy.zeros(len(arcs))</span>
 <span class="sd">        &gt;&gt;&gt; for i, e in enumerate(arcs):</span>
 <span class="sd">        ...     if e in counts.keys():</span>
 <span class="sd">        ...         y[i] = counts[e]</span>
-<span class="sd">        </span>
-<span class="sd">        Fetch the number of observations associated with arc ``3``, </span>
+
+<span class="sd">        Fetch the number of observations associated with arc ``3``,</span>
 <span class="sd">        where ``3`` is the basic 0-indexed ID of ``w.neighbors.keys()``</span>
 <span class="sd">        created through ``enumerate(arcs)``.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; y[3]</span>
 <span class="sd">        3.0</span>
-<span class="sd">        </span>
-<span class="sd">        Next, a standard call to </span>
+
+<span class="sd">        Next, a standard call to</span>
 <span class="sd">        `esda.Moran &lt;https://esda.readthedocs.io/en/latest/generated/esda.Moran.html#esda.Moran&gt;`_</span>
 <span class="sd">        is made and the result placed into ``res``.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; res = esda.moran.Moran(y, w, permutations=99)</span>
 <span class="sd">        &gt;&gt;&gt; type(res)</span>
 <span class="sd">        &lt;class &#39;esda.moran.Moran&#39;&gt;</span>
-<span class="sd">        </span>
+
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
-<span class="sd">        </span>
+
 <span class="sd">        See :cite:`pysal2007` and :cite:`esda:_2019` for more details.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># instantiate OrderedDict to record network link</span>
@@ -1097,7 +1102,7 @@
                     <span class="k">if</span> <span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">neigh</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
                         <span class="n">working</span> <span class="o">=</span> <span class="kc">False</span>
 
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">links</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">links</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">from_split</span><span class="p">:</span>
                 <span class="n">working</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="c1"># call libpysal for `W` instance</span>
@@ -1108,7 +1113,7 @@
 
 <div class="viewcode-block" id="Network.distancebandweights"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.distancebandweights">[docs]</a>    <span class="k">def</span> <span class="nf">distancebandweights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">n_processes</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">gen_tree</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create distance-based weights.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        threshold : float</span>
@@ -1120,49 +1125,49 @@
 <span class="sd">        gen_tree : bool</span>
 <span class="sd">            Rebuild shortest path with ``True``, or skip with ``False``.</span>
 <span class="sd">            Default is ``False``.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        w : libpysal.weights.W</span>
 <span class="sd">            A ``W`` object representing the binary adjacency of</span>
 <span class="sd">            the network.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
-<span class="sd">        </span>
+
 <span class="sd">        See :cite:`AnselinRey2014` and :cite:`rey_open_2015` for more details</span>
 <span class="sd">        regarding spatial weights.</span>
-<span class="sd">        </span>
+
 <span class="sd">        See also</span>
 <span class="sd">        --------</span>
-<span class="sd">        </span>
+
 <span class="sd">        libpysal.weights.W</span>
-<span class="sd">        </span>
+
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
-<span class="sd">        </span>
+
 <span class="sd">        Instantiate an instance of a network.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; import spaghetti</span>
 <span class="sd">        &gt;&gt;&gt; from libpysal import examples</span>
 <span class="sd">        &gt;&gt;&gt; streets_file = examples.get_path(&quot;streets.shp&quot;)</span>
 <span class="sd">        &gt;&gt;&gt; ntw = spaghetti.Network(in_data=streets_file)</span>
-<span class="sd">        </span>
-<span class="sd">        Create a contiguity-based ``W`` object based on network distance, ``500`` </span>
+
+<span class="sd">        Create a contiguity-based ``W`` object based on network distance, ``500``</span>
 <span class="sd">        `US feet in this case &lt;https://github.com/pysal/libpysal/blob/master/libpysal/examples/geodanet/streets.prj&gt;`_.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; w = ntw.distancebandweights(threshold=500)</span>
-<span class="sd">        </span>
+
 <span class="sd">        Show the number of units in the ``W`` object.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; w.n</span>
 <span class="sd">        230</span>
-<span class="sd">        </span>
+
 <span class="sd">        There are ``8`` units with ``3`` neighbors in the ``W`` object.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; w.histogram[-1]</span>
 <span class="sd">        (8, 3)</span>
-<span class="sd">        </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># if the a vertex-to-vertex network distance matrix is</span>
@@ -1196,7 +1201,7 @@
         <span class="sd">&quot;&quot;&quot;Snap a point pattern shapefile to a network object. The</span>
 <span class="sd">        point pattern is stored in the ``network.pointpattern``</span>
 <span class="sd">        attribute of the network object.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        in_data : {geopandas.GeoDataFrame, str}</span>
@@ -1210,34 +1215,34 @@
 <span class="sd">            Defines whether attributes should be extracted. ``True`` for</span>
 <span class="sd">            attribute extraction. ``False`` for no attribute extraction.</span>
 <span class="sd">            Default is ``False``.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
-<span class="sd">        </span>
+
 <span class="sd">        See :cite:`doi:10.1111/gean.12211` for a detailed discussion on</span>
 <span class="sd">        the modeling consequences of snapping points to spatial networks.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
-<span class="sd">        </span>
+
 <span class="sd">        Instantiate a network.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; import spaghetti</span>
 <span class="sd">        &gt;&gt;&gt; from libpysal import examples</span>
 <span class="sd">        &gt;&gt;&gt; streets_file = examples.get_path(&quot;streets.shp&quot;)</span>
 <span class="sd">        &gt;&gt;&gt; ntw = spaghetti.Network(in_data=streets_file)</span>
-<span class="sd">        </span>
+
 <span class="sd">        Snap observations to the network.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; pt_str = &quot;crimes&quot;</span>
 <span class="sd">        &gt;&gt;&gt; in_data = examples.get_path(pt_str+&quot;.shp&quot;)</span>
 <span class="sd">        &gt;&gt;&gt; ntw.snapobservations(in_data, pt_str, attribute=True)</span>
-<span class="sd">        </span>
+
 <span class="sd">        Isolate the number of points in the dataset.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; ntw.pointpatterns[pt_str].npoints</span>
 <span class="sd">        287</span>
-<span class="sd">        </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># create attribute of `pointpattern` but instantiating a</span>
@@ -1252,7 +1257,7 @@
 <div class="viewcode-block" id="Network.compute_distance_to_vertices"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.compute_distance_to_vertices">[docs]</a>    <span class="k">def</span> <span class="nf">compute_distance_to_vertices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">arc</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Given an observation on a network arc, return the distance</span>
 <span class="sd">        to the two vertices that bound that end.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        x : float</span>
@@ -1261,14 +1266,14 @@
 <span class="sd">            The y-coordinate of the snapped point.</span>
 <span class="sd">        arc : tuple</span>
 <span class="sd">            The (vtx0, vtx1) representation of the network arc.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        d1 : float</span>
 <span class="sd">            The distance to vtx0. Always the vertex with the lesser ID.</span>
 <span class="sd">        d2 : float</span>
 <span class="sd">            The distance to vtx1. Always the vertex with the greater ID.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># distance to vertex 1</span>
@@ -1282,20 +1287,20 @@
 <div class="viewcode-block" id="Network.compute_snap_dist"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.compute_snap_dist">[docs]</a>    <span class="k">def</span> <span class="nf">compute_snap_dist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Given an observation snapped to a network arc, calculate the</span>
 <span class="sd">        distance from the original location to the snapped location.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        -----------</span>
 <span class="sd">        pattern : spaghetti.PointPattern</span>
 <span class="sd">            The point pattern object.</span>
 <span class="sd">        idx : int</span>
 <span class="sd">            The point ID.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        dist : float</span>
 <span class="sd">            The euclidean distance from original location to the snapped</span>
 <span class="sd">            location.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># set of original (x,y) point coordinates</span>
@@ -1312,12 +1317,12 @@
 
     <span class="k">def</span> <span class="nf">_snap_to_link</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pointpattern</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Used internally to snap point observations to network arcs.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        -----------</span>
 <span class="sd">        pointpattern : spaghetti.PointPattern</span>
 <span class="sd">            The point pattern object.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        obs_to_arc : dict</span>
@@ -1331,7 +1336,7 @@
 <span class="sd">        dist_snapped : dict</span>
 <span class="sd">            Dictionary with point IDs as keys and distance from point</span>
 <span class="sd">            to the network arc that it is snapped.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># instantiate observations snapped coordinates lookup</span>
@@ -1431,45 +1436,45 @@
 
 <div class="viewcode-block" id="Network.count_per_link"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.count_per_link">[docs]</a>    <span class="k">def</span> <span class="nf">count_per_link</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs_on</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Compute the counts per arc or edge (link).</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        obs_on : dict</span>
 <span class="sd">            Dictionary of observations on the network.</span>
-<span class="sd">            Either in the form {(&lt;LINK&gt;):{&lt;POINT_ID&gt;:(&lt;COORDS&gt;)}} or </span>
+<span class="sd">            Either in the form {(&lt;LINK&gt;):{&lt;POINT_ID&gt;:(&lt;COORDS&gt;)}} or</span>
 <span class="sd">            {&lt;LINK&gt;:[(&lt;COORD&gt;),(&lt;COORD&gt;)]}.</span>
-<span class="sd">            </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        counts : dict</span>
 <span class="sd">            Counts per network link in the form {(&lt;LINK&gt;):&lt;COUNT&gt;}.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
-<span class="sd">        </span>
+
 <span class="sd">        Note that this passes the ``obs_to_arc`` or ``obs_to_edge`` attribute</span>
 <span class="sd">        of a point pattern snapped to the network.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; import spaghetti</span>
 <span class="sd">        &gt;&gt;&gt; from libpysal import examples</span>
 <span class="sd">        &gt;&gt;&gt; ntw = spaghetti.Network(examples.get_path(&quot;streets.shp&quot;))</span>
-<span class="sd">        </span>
+
 <span class="sd">        Snap observations to the network.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; ntw.snapobservations(</span>
 <span class="sd">        ...     examples.get_path(&quot;crimes.shp&quot;), &quot;crimes&quot;, attribute=True</span>
 <span class="sd">        ... )</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; counts = ntw.count_per_link(</span>
 <span class="sd">        ...     ntw.pointpatterns[&quot;crimes&quot;].obs_to_arc, graph=False</span>
 <span class="sd">        ... )</span>
 <span class="sd">        &gt;&gt;&gt; counts[(140, 142)]</span>
 <span class="sd">        10</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; s = sum([v for v in list(counts.values())])</span>
 <span class="sd">        &gt;&gt;&gt; s</span>
 <span class="sd">        287</span>
-<span class="sd">        </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># instantiate observation counts by link lookup</span>
@@ -1560,7 +1565,7 @@
 
 <div class="viewcode-block" id="Network.simulate_observations"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.simulate_observations">[docs]</a>    <span class="k">def</span> <span class="nf">simulate_observations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">distribution</span><span class="o">=</span><span class="s2">&quot;uniform&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Generate a simulated point pattern on the network.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        count : int</span>
@@ -1568,47 +1573,47 @@
 <span class="sd">        distribution : str</span>
 <span class="sd">            A distribution of random points. Currently, the only</span>
 <span class="sd">            supported distribution is uniform.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        random_pts : dict</span>
 <span class="sd">            Keys are the edge tuple. Values are lists of new point coordinates.</span>
-<span class="sd">        </span>
+
 <span class="sd">        See also</span>
 <span class="sd">        --------</span>
-<span class="sd">        </span>
+
 <span class="sd">        numpy.random.Generator.uniform</span>
-<span class="sd">        </span>
+
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
-<span class="sd">        </span>
+
 <span class="sd">        Instantiate a network.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; import spaghetti</span>
 <span class="sd">        &gt;&gt;&gt; from libpysal import examples</span>
 <span class="sd">        &gt;&gt;&gt; ntw = spaghetti.Network(examples.get_path(&quot;streets.shp&quot;))</span>
-<span class="sd">        </span>
+
 <span class="sd">        Snap observations to the network.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; ntw.snapobservations(</span>
 <span class="sd">        ...     examples.get_path(&quot;crimes.shp&quot;), &quot;crimes&quot;, attribute=True</span>
 <span class="sd">        ... )</span>
-<span class="sd">        </span>
+
 <span class="sd">        Isolate the number of points in the dataset.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; npts = ntw.pointpatterns[&quot;crimes&quot;].npoints</span>
 <span class="sd">        &gt;&gt;&gt; npts</span>
 <span class="sd">        287</span>
-<span class="sd">        </span>
-<span class="sd">        Simulate ``npts`` number of points along the network </span>
+
+<span class="sd">        Simulate ``npts`` number of points along the network</span>
 <span class="sd">        in a `uniform` distribution.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; sim = ntw.simulate_observations(npts)</span>
 <span class="sd">        &gt;&gt;&gt; isinstance(sim, spaghetti.network.SimulatedPointPattern)</span>
 <span class="sd">        True</span>
 <span class="sd">        &gt;&gt;&gt; sim.npoints</span>
 <span class="sd">        287</span>
-<span class="sd">        </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># instantiate an empty `SimulatedPointPattern()`</span>
@@ -1672,31 +1677,31 @@
 
 <div class="viewcode-block" id="Network.enum_links_vertex"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.enum_links_vertex">[docs]</a>    <span class="k">def</span> <span class="nf">enum_links_vertex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns the arcs (links) adjacent to vertices.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        -----------</span>
 <span class="sd">        v0 : int</span>
 <span class="sd">            The vertex ID.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        links : list</span>
 <span class="sd">            List of tuple arcs adjacent to the vertex.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
-<span class="sd">        </span>
+
 <span class="sd">        Create an instance of a network.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; import spaghetti</span>
 <span class="sd">        &gt;&gt;&gt; from libpysal import examples</span>
 <span class="sd">        &gt;&gt;&gt; ntw = spaghetti.Network(examples.get_path(&quot;streets.shp&quot;))</span>
-<span class="sd">        </span>
+
 <span class="sd">        Enumerate the links/arcs that are adjacent to vertex ``24``.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; ntw.enum_links_vertex(24)</span>
 <span class="sd">        [(24, 48), (24, 25), (24, 26)]</span>
-<span class="sd">        </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># instantiate links list</span>
@@ -1714,7 +1719,7 @@
         <span class="sd">&quot;&quot;&quot;All vertex-to-vertex distances on a network. This method</span>
 <span class="sd">        is called from within ``allneighbordistances()``,</span>
 <span class="sd">        ``nearestneighbordistances()``, and ``distancebandweights()``.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        -----------</span>
 <span class="sd">        n_processes : int</span>
@@ -1724,12 +1729,12 @@
 <span class="sd">        gen_tree : bool</span>
 <span class="sd">            Rebuild shortest path ``True``, or skip ``False``.</span>
 <span class="sd">            Default is ``False``.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
-<span class="sd">        </span>
+
 <span class="sd">        Based on :cite:`Dijkstra1959a` and :cite:`doi:10.1002/9781119967101.ch3`.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># create an empty matrix which will store shortest path distance</span>
@@ -1811,7 +1816,7 @@
         <span class="sd">&quot;&quot;&quot;Compute either all distances between :math:`i` and :math:`j` in a</span>
 <span class="sd">        single point pattern or all distances between each :math:`i` from a</span>
 <span class="sd">        source pattern and all :math:`j` from a destination pattern.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        sourcepattern : {str, spaghetti.PointPattern}</span>
@@ -1836,7 +1841,7 @@
 <span class="sd">            Flag as ``True`` to include the distance from the original</span>
 <span class="sd">            location to the snapped location along the network. Default</span>
 <span class="sd">            is ``False``.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        nearest : numpy.ndarray</span>
@@ -1851,57 +1856,57 @@
 <span class="sd">            both the source and destination network vertex</span>
 <span class="sd">            indicating the same arc is used while also raising an</span>
 <span class="sd">            ``IndexError`` when rebuilding the path.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
-<span class="sd">        </span>
+
 <span class="sd">        Create a network instance.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; import spaghetti</span>
 <span class="sd">        &gt;&gt;&gt; from libpysal import examples</span>
 <span class="sd">        &gt;&gt;&gt; import numpy</span>
 <span class="sd">        &gt;&gt;&gt; ntw = spaghetti.Network(examples.get_path(&quot;streets.shp&quot;))</span>
-<span class="sd">        </span>
+
 <span class="sd">        Snap observations to the network.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; ntw.snapobservations(</span>
 <span class="sd">        ...     examples.get_path(&quot;crimes.shp&quot;), &quot;crimes&quot;, attribute=True</span>
 <span class="sd">        ... )</span>
-<span class="sd">        </span>
+
 <span class="sd">        Calculate all distances between observations in the ``crimes`` dataset.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; s2s_dist = ntw.allneighbordistances(&quot;crimes&quot;)</span>
-<span class="sd">        </span>
+
 <span class="sd">        If calculating a ``type-a`` to ``type-a`` distance matrix</span>
 <span class="sd">        the distance between an observation and itself is ``nan`` and</span>
 <span class="sd">        the distance between one observation and another will be positive value.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; s2s_dist[0,0], s2s_dist[1,0]</span>
 <span class="sd">        (nan, 3105.189475447081)</span>
-<span class="sd">        </span>
+
 <span class="sd">        If calculating a ``type-a`` to ``type-b`` distance matrix</span>
 <span class="sd">        the distance between all observations will likely be positive</span>
 <span class="sd">        values, may be zero (or approximately zero), but will never be negative.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; ntw.snapobservations(</span>
 <span class="sd">        ...     examples.get_path(&quot;schools.shp&quot;), &quot;schools&quot;, attribute=False</span>
 <span class="sd">        ... )</span>
 <span class="sd">        &gt;&gt;&gt; s2d_dist = ntw.allneighbordistances(&quot;crimes&quot;, destpattern=&quot;schools&quot;)</span>
 <span class="sd">        &gt;&gt;&gt; numpy.round((s2d_dist[0,0], s2d_dist[1,0]), 5)</span>
 <span class="sd">        array([4520.72354, 6340.42297])</span>
-<span class="sd">        </span>
-<span class="sd">        </span>
+
+
 <span class="sd">        Shortest paths can also be reconstructed when desired by</span>
 <span class="sd">        setting the ``gen_tree`` keyword argument to ``True``. Here</span>
 <span class="sd">        it is shown that the shortest path between school ``6`` and</span>
 <span class="sd">        school ``7`` flows along network arcs through network</span>
 <span class="sd">        vertices ``173`` and ``64``. The ``ntw.network_trees`` attribute</span>
 <span class="sd">        may then be queried for the network elements comprising that path.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; d2d_dist, tree = ntw.allneighbordistances(&quot;schools&quot;, gen_tree=True)</span>
 <span class="sd">        &gt;&gt;&gt; tree[(6, 7)]</span>
 <span class="sd">        (173, 64)</span>
-<span class="sd">        </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># calculate the network vertex to vertex distance matrix</span>
@@ -2102,7 +2107,7 @@
         <span class="sd">&quot;&quot;&quot;Compute the interpattern nearest neighbor distances or the</span>
 <span class="sd">        intrapattern nearest neighbor distances between a source</span>
 <span class="sd">        pattern and a destination pattern.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        sourcepattern : str</span>
@@ -2129,52 +2134,52 @@
 <span class="sd">            ``False``. Default is ``True``. If the source pattern is the</span>
 <span class="sd">            same as the destination pattern the diagonal is filled with</span>
 <span class="sd">            ``numpy.nan``.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        nearest : dict</span>
 <span class="sd">            Nearest neighbor distances keyed by the source point ID with</span>
 <span class="sd">            the value as as tuple of lists containing</span>
 <span class="sd">            nearest destination point ID(s) and distance.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
-<span class="sd">        </span>
+
 <span class="sd">        Instantiate a network.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; import spaghetti</span>
 <span class="sd">        &gt;&gt;&gt; from libpysal import examples</span>
 <span class="sd">        &gt;&gt;&gt; ntw = spaghetti.Network(examples.get_path(&quot;streets.shp&quot;))</span>
-<span class="sd">        </span>
+
 <span class="sd">        Snap observations to the network.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; ntw.snapobservations(examples.get_path(&quot;crimes.shp&quot;), &quot;crimes&quot;)</span>
-<span class="sd">        </span>
-<span class="sd">        Fetch nearest neighbor distances while (potentially) </span>
+
+<span class="sd">        Fetch nearest neighbor distances while (potentially)</span>
 <span class="sd">        keeping neighbors that have been geocoded directly on top of</span>
 <span class="sd">        each other. Here it is demonstrated that observation ``11``</span>
 <span class="sd">        has two neighbors (``18`` and ``19``) at an exactly equal distance.</span>
 <span class="sd">        However, observation ``18`` is shown to have only one neighbor</span>
 <span class="sd">        (``18``) with no distance between them.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; nn = ntw.nearestneighbordistances(&quot;crimes&quot;, keep_zero_dist=True)</span>
 <span class="sd">        &gt;&gt;&gt; nn[11], nn[18]</span>
 <span class="sd">        (([18, 19], 165.33982412719126), ([19], 0.0))</span>
-<span class="sd">        </span>
+
 <span class="sd">        This may be remedied by setting the ``keep_zero_dist`` keyword</span>
 <span class="sd">        argument to ``False``. With this parameter set, observation ``11``</span>
-<span class="sd">        still has the same neighbor/distance values, but </span>
+<span class="sd">        still has the same neighbor/distance values, but</span>
 <span class="sd">        observation ``18`` now has a single nearest neighbor (``11``)</span>
 <span class="sd">        with a non-zero, postive distance.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; nn = ntw.nearestneighbordistances(&quot;crimes&quot;, keep_zero_dist=False)</span>
 <span class="sd">        &gt;&gt;&gt; nn[11], nn[18]</span>
 <span class="sd">        (([18, 19], 165.33982412719126), ([11], 165.33982412719126))</span>
-<span class="sd">        </span>
+
 <span class="sd">        There are valid reasons for both retaining or masking zero distance</span>
 <span class="sd">        neighbors. When conducting analysis, thought must be given as to</span>
 <span class="sd">        which model more accurately represents the specific scenario.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># raise exception is the specified point pattern does not exist</span>
@@ -2249,22 +2254,22 @@
 <div class="viewcode-block" id="Network.shortest_paths"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.shortest_paths">[docs]</a>    <span class="k">def</span> <span class="nf">shortest_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tree</span><span class="p">,</span> <span class="n">pp_orig</span><span class="p">,</span> <span class="n">pp_dest</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_processes</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the shortest paths between observation points as</span>
 <span class="sd">        ``libpysal.cg.Chain`` objects.</span>
-<span class="sd">    </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        tree : dict</span>
-<span class="sd">            See ``tree_nearest`` in </span>
+<span class="sd">            See ``tree_nearest`` in</span>
 <span class="sd">            ``spaghetti.Network.allneighbordistances()``.</span>
 <span class="sd">        pp_orig : str</span>
-<span class="sd">            Origin point pattern for shortest paths. </span>
+<span class="sd">            Origin point pattern for shortest paths.</span>
 <span class="sd">            See ``name`` in ``spaghetti.Network.snapobservations()``.</span>
 <span class="sd">        pp_dest : str</span>
-<span class="sd">            Destination point pattern for shortest paths. </span>
+<span class="sd">            Destination point pattern for shortest paths.</span>
 <span class="sd">            See ``name`` in ``spaghetti.Network.snapobservations()``.</span>
 <span class="sd">            Defaults ``pp_orig`` if not declared.</span>
 <span class="sd">        n_processes : int</span>
 <span class="sd">            See ``n_processes`` in ``spaghetti.Network.full_distance_matrix()``.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        paths : list</span>
@@ -2272,49 +2277,49 @@
 <span class="sd">            Each element of the list is a list where the first element</span>
 <span class="sd">            is an origin-destination pair tuple and the second</span>
 <span class="sd">            element is a ``libpysal.cg.Chain``.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
 <span class="sd">        AttributeError</span>
 <span class="sd">            This exception is raised when an attempt to extract shortest</span>
 <span class="sd">            path geometries is being made that but the ``network_trees``</span>
 <span class="sd">            attribute does not exist within the network object.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
-<span class="sd">        </span>
+
 <span class="sd">        Instantiate a network.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; import spaghetti</span>
 <span class="sd">        &gt;&gt;&gt; from libpysal import examples</span>
 <span class="sd">        &gt;&gt;&gt; ntw = spaghetti.Network(examples.get_path(&quot;streets.shp&quot;))</span>
-<span class="sd">        </span>
+
 <span class="sd">        Snap observations to the network.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; ntw.snapobservations(examples.get_path(&quot;schools.shp&quot;), &quot;schools&quot;)</span>
-<span class="sd">        </span>
+
 <span class="sd">        Create shortest path trees between observations.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; _, tree = ntw.allneighbordistances(&quot;schools&quot;, gen_tree=True)</span>
-<span class="sd">        </span>
+
 <span class="sd">        Generate geometric objects from trees.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; paths = ntw.shortest_paths(tree, &quot;schools&quot;)</span>
-<span class="sd">        </span>
+
 <span class="sd">        Extract the first path, which is between observations</span>
 <span class="sd">        ``0`` and ``1``.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; path = paths[0]</span>
 <span class="sd">        &gt;&gt;&gt; path[0]</span>
 <span class="sd">        (0, 1)</span>
-<span class="sd">        </span>
-<span class="sd">        The are ``n`` vertices in the path between observations </span>
+
+<span class="sd">        The are ``n`` vertices in the path between observations</span>
 <span class="sd">        ``0`` and ``1``.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; n = len(path[1].vertices)</span>
 <span class="sd">        &gt;&gt;&gt; n</span>
 <span class="sd">        10</span>
-<span class="sd">        </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># build the network trees object if it is not already an attribute</span>
@@ -2399,7 +2404,7 @@
 
 <div class="viewcode-block" id="Network.split_arcs"><a class="viewcode-back" href="../../generated/spaghetti.Network.html#spaghetti.Network.split_arcs">[docs]</a>    <span class="k">def</span> <span class="nf">split_arcs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">w_components</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Split all of the arcs in the network at a fixed distance.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        -----------</span>
 <span class="sd">        distance : float</span>
@@ -2407,31 +2412,46 @@
 <span class="sd">        w_components : bool</span>
 <span class="sd">            Set to ``False`` to not record connected components from a</span>
 <span class="sd">            ``libpysal.weights.W`` object. Default is ``True``.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        split_network : spaghetti.Network</span>
 <span class="sd">            A newly instantiated ``spaghetti.Network`` object.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
-<span class="sd">        </span>
+
 <span class="sd">        Instantiate a network.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; import spaghetti</span>
 <span class="sd">        &gt;&gt;&gt; from libpysal import examples</span>
 <span class="sd">        &gt;&gt;&gt; ntw = spaghetti.Network(examples.get_path(&quot;streets.shp&quot;))</span>
-<span class="sd">        </span>
-<span class="sd">        Split the network into a segments of 200 distance units in length </span>
+
+<span class="sd">        Split the network into a segments of 200 distance units in length</span>
 <span class="sd">        (`US feet in this case &lt;https://github.com/pysal/libpysal/blob/master/libpysal/examples/geodanet/streets.prj&gt;`_.).</span>
 <span class="sd">        This will include &quot;remainder&quot; segments unless the network is</span>
 <span class="sd">        comprised of arcs with lengths exactly divisible by ``distance``.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; n200 = ntw.split_arcs(200.0)</span>
 <span class="sd">        &gt;&gt;&gt; len(n200.arcs)</span>
 <span class="sd">        688</span>
-<span class="sd">        </span>
+
+<span class="sd">        The number of arcs within the new object can be accessed via the</span>
+<span class="sd">        weights object, as well. These counts will be equal.</span>
+
+<span class="sd">        &gt;&gt;&gt; len(n200.arcs) == n200.w_network.n</span>
+<span class="sd">        True</span>
+
+<span class="sd">        Neighboring arcs can also be queried through the weight object.</span>
+
+<span class="sd">        &gt;&gt;&gt; n200.w_network.neighbors[72,392]</span>
+<span class="sd">        [(71, 72), (72, 252), (72, 391), (392, 393)]</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># convert coordinates for integers if possible</span>
+        <span class="c1"># e.g., (1.0, 0.5) --&gt; (1, 0.5)</span>
+        <span class="n">int_coord</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">==</span> <span class="nb">float</span> <span class="ow">and</span> <span class="n">c</span><span class="o">.</span><span class="n">is_integer</span><span class="p">())</span> <span class="k">else</span> <span class="n">c</span>
 
         <span class="c1"># create new shell network instance</span>
         <span class="n">split_network</span> <span class="o">=</span> <span class="n">Network</span><span class="p">()</span>
@@ -2439,7 +2459,7 @@
         <span class="c1"># duplicate input network attributes</span>
         <span class="n">split_network</span><span class="o">.</span><span class="n">adjacencylist</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">adjacencylist</span><span class="p">)</span>
         <span class="n">split_network</span><span class="o">.</span><span class="n">arc_lengths</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arc_lengths</span><span class="p">)</span>
-        <span class="n">split_network</span><span class="o">.</span><span class="n">arcs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arcs</span><span class="p">))</span>
+        <span class="n">split_network</span><span class="o">.</span><span class="n">arcs</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arcs</span><span class="p">)</span>
         <span class="n">split_network</span><span class="o">.</span><span class="n">vertex_coords</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertex_coords</span><span class="p">)</span>
         <span class="n">split_network</span><span class="o">.</span><span class="n">vertex_list</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertex_list</span><span class="p">)</span>
         <span class="n">split_network</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">)</span>
@@ -2466,18 +2486,22 @@
             <span class="c1"># initialize arc new arc length at zero</span>
             <span class="n">totallength</span> <span class="o">=</span> <span class="mi">0</span>
 
-            <span class="c1"># initialize the starting vertex, current vertex, and</span>
-            <span class="c1"># ending vertex</span>
-            <span class="n">currentstart</span> <span class="o">=</span> <span class="n">start_vertex</span> <span class="o">=</span> <span class="n">arc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">end_vertex</span> <span class="o">=</span> <span class="n">arc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="c1"># initialize the current vertex and ending vertex</span>
+            <span class="n">currentstart</span><span class="p">,</span> <span class="n">end_vertex</span> <span class="o">=</span> <span class="n">arc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">arc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="c1"># determine direction of arc vertices</span>
+            <span class="n">csx</span><span class="p">,</span> <span class="n">csy</span> <span class="o">=</span> <span class="n">split_network</span><span class="o">.</span><span class="n">vertex_coords</span><span class="p">[</span><span class="n">currentstart</span><span class="p">]</span>
+            <span class="n">evx</span><span class="p">,</span> <span class="n">evy</span> <span class="o">=</span> <span class="n">split_network</span><span class="o">.</span><span class="n">vertex_coords</span><span class="p">[</span><span class="n">end_vertex</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">csy</span> <span class="o">&gt;</span> <span class="n">evy</span> <span class="ow">and</span> <span class="n">csx</span> <span class="o">==</span> <span class="n">evx</span><span class="p">:</span>
+                <span class="n">currentstart</span><span class="p">,</span> <span class="n">end_vertex</span> <span class="o">=</span> <span class="n">end_vertex</span><span class="p">,</span> <span class="n">currentstart</span>
 
             <span class="c1"># if the arc will be split remove the current</span>
             <span class="c1"># arc from the adjacency list</span>
             <span class="k">if</span> <span class="n">interval</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">:</span>
 
                 <span class="c1"># remove old arc adjacency information</span>
-                <span class="n">split_network</span><span class="o">.</span><span class="n">adjacencylist</span><span class="p">[</span><span class="n">arc</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">arc</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-                <span class="n">split_network</span><span class="o">.</span><span class="n">adjacencylist</span><span class="p">[</span><span class="n">arc</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">arc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">split_network</span><span class="o">.</span><span class="n">adjacencylist</span><span class="p">[</span><span class="n">currentstart</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">end_vertex</span><span class="p">)</span>
+                <span class="n">split_network</span><span class="o">.</span><span class="n">adjacencylist</span><span class="p">[</span><span class="n">end_vertex</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">currentstart</span><span class="p">)</span>
 
                 <span class="c1"># remove old arc length information</span>
                 <span class="n">split_network</span><span class="o">.</span><span class="n">arc_lengths</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">arc</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
@@ -2491,9 +2515,6 @@
 
             <span class="c1"># traverse the length of the arc</span>
             <span class="k">while</span> <span class="n">totallength</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">:</span>
-
-                <span class="c1"># set/update the current vertex ID</span>
-                <span class="n">currentstop</span> <span class="o">=</span> <span class="n">current_vertex_id</span>
 
                 <span class="c1"># once an arc can not be split further</span>
                 <span class="k">if</span> <span class="n">totallength</span> <span class="o">+</span> <span class="n">interval</span> <span class="o">&gt;</span> <span class="n">length</span><span class="p">:</span>
@@ -2514,14 +2535,17 @@
 
                     <span class="c1"># compute the new vertex coordinate</span>
                     <span class="n">newx</span><span class="p">,</span> <span class="n">newy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_newpoint_coords</span><span class="p">(</span><span class="n">arc</span><span class="p">,</span> <span class="n">totallength</span><span class="p">)</span>
+                    <span class="n">new_vertex</span> <span class="o">=</span> <span class="p">(</span><span class="n">int_coord</span><span class="p">(</span><span class="n">newx</span><span class="p">),</span> <span class="n">int_coord</span><span class="p">(</span><span class="n">newy</span><span class="p">))</span>
 
-                    <span class="c1"># update the vertex</span>
-                    <span class="k">if</span> <span class="n">currentstop</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">split_network</span><span class="o">.</span><span class="n">vertex_list</span><span class="p">:</span>
+                    <span class="c1"># update the vertex and coordinate info if needed</span>
+                    <span class="k">if</span> <span class="n">new_vertex</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">split_network</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                        <span class="n">split_network</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="n">new_vertex</span><span class="p">]</span> <span class="o">=</span> <span class="n">currentstop</span>
+                        <span class="n">split_network</span><span class="o">.</span><span class="n">vertex_coords</span><span class="p">[</span><span class="n">currentstop</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_vertex</span>
                         <span class="n">split_network</span><span class="o">.</span><span class="n">vertex_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">currentstop</span><span class="p">)</span>
-
-                    <span class="c1"># update vertex coordinates and vertex ID</span>
-                    <span class="n">split_network</span><span class="o">.</span><span class="n">vertex_coords</span><span class="p">[</span><span class="n">currentstop</span><span class="p">]</span> <span class="o">=</span> <span class="n">newx</span><span class="p">,</span> <span class="n">newy</span>
-                    <span class="n">split_network</span><span class="o">.</span><span class="n">vertices</span><span class="p">[(</span><span class="n">newx</span><span class="p">,</span> <span class="n">newy</span><span class="p">)]</span> <span class="o">=</span> <span class="n">currentstop</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># retrieve vertex ID if coordinate already exists</span>
+                        <span class="n">current_vertex_id</span> <span class="o">-=</span> <span class="mi">1</span>
+                        <span class="n">currentstop</span> <span class="o">=</span> <span class="n">split_network</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="n">new_vertex</span><span class="p">]</span>
 
                 <span class="c1"># update the new network adjacency list</span>
                 <span class="n">split_network</span><span class="o">.</span><span class="n">adjacencylist</span><span class="p">[</span><span class="n">currentstart</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">currentstop</span><span class="p">)</span>
@@ -2529,29 +2553,28 @@
 
                 <span class="c1"># add the new arc to the arc dictionary</span>
                 <span class="c1"># iterating over this so we need to add after iterating</span>
-                <span class="n">new_arcs</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="nb">sorted</span><span class="p">([</span><span class="n">currentstart</span><span class="p">,</span> <span class="n">currentstop</span><span class="p">])))</span>
-
-                <span class="c1"># modify arc_lengths</span>
-                <span class="n">current_start_stop</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">sorted</span><span class="p">([</span><span class="n">currentstart</span><span class="p">,</span> <span class="n">currentstop</span><span class="p">]))</span>
+                <span class="n">_new_arc</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">sorted</span><span class="p">([</span><span class="n">currentstart</span><span class="p">,</span> <span class="n">currentstop</span><span class="p">]))</span>
+                <span class="n">new_arcs</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">_new_arc</span><span class="p">)</span>
 
                 <span class="c1"># set the length of the arc</span>
-                <span class="n">split_network</span><span class="o">.</span><span class="n">arc_lengths</span><span class="p">[</span><span class="n">current_start_stop</span><span class="p">]</span> <span class="o">=</span> <span class="n">interval</span>
+                <span class="n">split_network</span><span class="o">.</span><span class="n">arc_lengths</span><span class="p">[</span><span class="n">_new_arc</span><span class="p">]</span> <span class="o">=</span> <span class="n">interval</span>
 
                 <span class="c1"># increment the starting vertex to the stopping vertex</span>
                 <span class="n">currentstart</span> <span class="o">=</span> <span class="n">currentstop</span>
 
-        <span class="c1"># add the newly created arcs to the network</span>
+        <span class="c1"># add the newly created arcs to the network and remove the old arcs</span>
+        <span class="n">split_network</span><span class="o">.</span><span class="n">arcs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">split_network</span><span class="o">.</span><span class="n">arcs</span><span class="p">)</span>
         <span class="n">split_network</span><span class="o">.</span><span class="n">arcs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_arcs</span><span class="p">)</span>
-
-        <span class="c1"># remove the old arcs the network</span>
         <span class="n">split_network</span><span class="o">.</span><span class="n">arcs</span><span class="o">.</span><span class="n">difference_update</span><span class="p">(</span><span class="n">remove_arcs</span><span class="p">)</span>
-        <span class="n">split_network</span><span class="o">.</span><span class="n">arcs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">split_network</span><span class="o">.</span><span class="n">arcs</span><span class="p">)</span>
+        <span class="n">split_network</span><span class="o">.</span><span class="n">arcs</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">split_network</span><span class="o">.</span><span class="n">arcs</span><span class="p">))</span>
 
         <span class="c1"># extract connected components</span>
         <span class="k">if</span> <span class="n">w_components</span><span class="p">:</span>
 
             <span class="c1"># extract contiguity weights from libpysal</span>
-            <span class="n">split_network</span><span class="o">.</span><span class="n">w_network</span> <span class="o">=</span> <span class="n">split_network</span><span class="o">.</span><span class="n">contiguityweights</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">split_network</span><span class="o">.</span><span class="n">w_network</span> <span class="o">=</span> <span class="n">split_network</span><span class="o">.</span><span class="n">contiguityweights</span><span class="p">(</span>
+                <span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">from_split</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
 
             <span class="c1"># identify connected components from the `w_network`</span>
             <span class="n">split_network</span><span class="o">.</span><span class="n">identify_components</span><span class="p">(</span><span class="n">split_network</span><span class="o">.</span><span class="n">w_network</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -2595,74 +2618,74 @@
 <span class="sd">        upperbound : float</span>
 <span class="sd">            The upper bound at which the :math:`K`-function is computed.</span>
 <span class="sd">            Defaults to the maximum observed nearest neighbor distance.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        GlobalAutoK : spaghetti.analysis.GlobalAutoK</span>
 <span class="sd">            The global auto :math:`K`-function class instance.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
-<span class="sd">        </span>
+
 <span class="sd">        The :math:`K`-function can be formulated as:</span>
-<span class="sd">        </span>
+
 <span class="sd">        .. math::</span>
-<span class="sd">        </span>
+
 <span class="sd">           \displaystyle K(r)=\frac{\sum^n_{i=1} \#[\hat{A} \in D(a_i, r)]}{n\lambda},</span>
-<span class="sd">        </span>
+
 <span class="sd">        where $n$ is the set cardinality of :math:`A`, :math:`\hat{A}` is the subset of</span>
 <span class="sd">        observations in :math:`A` that are within :math:`D` units of distance from :math:`a_i`</span>
 <span class="sd">        (each single observation in :math:`A`), and :math:`r` is the range of distance</span>
 <span class="sd">        values over which the :math:`K`-function is calculated. The :math:`\lambda` term</span>
 <span class="sd">        is the intensity of observations along the network, calculated as:</span>
-<span class="sd">        </span>
+
 <span class="sd">        .. math::</span>
-<span class="sd">        </span>
+
 <span class="sd">           \displaystyle \lambda = \frac{n}{\big|N_{arcs}\big|},</span>
-<span class="sd">        </span>
+
 <span class="sd">        where :math:`\big|N_{arcs}\big|` is the summed length of network arcs.</span>
 <span class="sd">        The global auto :math:`K`-function measures overall clustering in one set of</span>
 <span class="sd">        observations by comparing all intra-set distances over a range of</span>
-<span class="sd">        distance buffers :math:`D \in r`. The :math:`K`-function improves upon </span>
+<span class="sd">        distance buffers :math:`D \in r`. The :math:`K`-function improves upon</span>
 <span class="sd">        nearest-neighbor distance measures through the analysis of all neighbor</span>
 <span class="sd">        distances. For an explanation on how to interpret the results of the</span>
 <span class="sd">        :math:`K`-function see the `Network Spatial Dependence tutorial &lt;https://pysal.org/spaghetti/notebooks/network-spatial-dependence.html&gt;`_.</span>
-<span class="sd">        </span>
+
 <span class="sd">        For original implementation see :cite:`Ripley1976`</span>
 <span class="sd">        and :cite:`Ripley1977`.</span>
 <span class="sd">        For further Network-`K` formulations see</span>
-<span class="sd">        :cite:`doi:10.1111/j.1538-4632.2001.tb00448.x`, </span>
+<span class="sd">        :cite:`doi:10.1111/j.1538-4632.2001.tb00448.x`,</span>
 <span class="sd">        :cite:`doi:10.1002/9781119967101.ch6`, and</span>
 <span class="sd">        :cite:`Baddeley2020`.</span>
-<span class="sd">        </span>
+
 <span class="sd">        See also</span>
 <span class="sd">        --------</span>
-<span class="sd">        </span>
+
 <span class="sd">        pointpats.K</span>
-<span class="sd">        </span>
+
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
-<span class="sd">        </span>
+
 <span class="sd">        Create a network instance.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; import spaghetti</span>
 <span class="sd">        &gt;&gt;&gt; from libpysal import examples</span>
 <span class="sd">        &gt;&gt;&gt; ntw = spaghetti.Network(in_data=examples.get_path(&quot;streets.shp&quot;))</span>
-<span class="sd">        </span>
+
 <span class="sd">        Snap observation points onto the network.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; pt_str = &quot;schools&quot;</span>
 <span class="sd">        &gt;&gt;&gt; in_data = examples.get_path(pt_str+&quot;.shp&quot;)</span>
 <span class="sd">        &gt;&gt;&gt; ntw.snapobservations(in_data, pt_str, attribute=True)</span>
 <span class="sd">        &gt;&gt;&gt; schools = ntw.pointpatterns[pt_str]</span>
-<span class="sd">        </span>
+
 <span class="sd">        Compute a :math:`K`-function from school observations</span>
 <span class="sd">        with ``99`` ``permutations`` at ``10`` intervals.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; kres = ntw.GlobalAutoK(schools, permutations=99, nsteps=10)</span>
 <span class="sd">        &gt;&gt;&gt; kres.lowerenvelope.shape[0]</span>
 <span class="sd">        10</span>
-<span class="sd">        </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># call analysis.GlobalAutoK</span>
@@ -2678,26 +2701,26 @@
 
 <div class="viewcode-block" id="Network.savenetwork"><a class="viewcode-back" href="../../generated/spaghetti.Network.savenetwork.html#spaghetti.Network.savenetwork">[docs]</a>    <span class="k">def</span> <span class="nf">savenetwork</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Save a network to disk as a binary file.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        filename : str</span>
 <span class="sd">            The filename where the network should be saved. This should</span>
 <span class="sd">            be a full path or it will be saved in the current directory.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
-<span class="sd">        </span>
+
 <span class="sd">        Create a network instance.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; import spaghetti</span>
 <span class="sd">        &gt;&gt;&gt; from libpysal import examples</span>
 <span class="sd">        &gt;&gt;&gt; ntw = spaghetti.Network(examples.get_path(&quot;streets.shp&quot;))</span>
-<span class="sd">        </span>
+
 <span class="sd">        Save out the network instance.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &gt;&gt;&gt; ntw.savenetwork(&quot;mynetwork.pkl&quot;)</span>
-<span class="sd">        </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">networkout</span><span class="p">:</span>
@@ -2706,17 +2729,17 @@
 <div class="viewcode-block" id="Network.loadnetwork"><a class="viewcode-back" href="../../generated/spaghetti.Network.loadnetwork.html#spaghetti.Network.loadnetwork">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">loadnetwork</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Load a network from a binary file saved on disk.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        filename : str</span>
 <span class="sd">            The filename where the network is saved.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        self : spaghetti.Network</span>
 <span class="sd">            A pre-computed ``spaghetti`` network object.</span>
-<span class="sd">        </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">networkin</span><span class="p">:</span>
@@ -2727,7 +2750,7 @@
 
 <div class="viewcode-block" id="extract_component"><a class="viewcode-back" href="../../generated/spaghetti.extract_component.html#spaghetti.extract_component">[docs]</a><span class="k">def</span> <span class="nf">extract_component</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">component_id</span><span class="p">,</span> <span class="n">weightings</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Extract a single component from a network object.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    net : spaghetti.Network</span>
@@ -2736,50 +2759,50 @@
 <span class="sd">        The ID of the desired network component.</span>
 <span class="sd">    weightings : {dict, bool}</span>
 <span class="sd">        See the ``weightings`` keyword argument in ``spaghetti.Network``.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    cnet : spaghetti.Network</span>
 <span class="sd">        The pruned network containing the component specified in</span>
 <span class="sd">        ``component_id``.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    </span>
+
 <span class="sd">    Point patterns are not reassigned when extracting a component. Therefore,</span>
 <span class="sd">    component extraction should be performed prior to snapping any point</span>
 <span class="sd">    sets onto the network. Also, if the ``spaghetti.Network`` object</span>
 <span class="sd">    has ``distance_matrix`` or ``network_trees`` attributes, they are</span>
 <span class="sd">    deleted and must be computed again on the single component.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    </span>
+
 <span class="sd">    Instantiate a network object.</span>
-<span class="sd">    </span>
+
 <span class="sd">    &gt;&gt;&gt; from libpysal import examples</span>
 <span class="sd">    &gt;&gt;&gt; import spaghetti</span>
 <span class="sd">    &gt;&gt;&gt; snow_net = examples.get_path(&quot;Soho_Network.shp&quot;)</span>
 <span class="sd">    &gt;&gt;&gt; ntw = spaghetti.Network(in_data=snow_net, extractgraph=False)</span>
-<span class="sd">    </span>
+
 <span class="sd">    The network is not fully connected.</span>
-<span class="sd">    </span>
+
 <span class="sd">    &gt;&gt;&gt; ntw.network_fully_connected</span>
 <span class="sd">    False</span>
-<span class="sd">    </span>
+
 <span class="sd">    Examine the number of network components.</span>
-<span class="sd">    </span>
+
 <span class="sd">    &gt;&gt;&gt; ntw.network_n_components</span>
 <span class="sd">    45</span>
-<span class="sd">    </span>
+
 <span class="sd">    Extract the longest component.</span>
-<span class="sd">    </span>
+
 <span class="sd">    &gt;&gt;&gt; longest = spaghetti.extract_component(ntw, ntw.network_longest_component)</span>
 <span class="sd">    &gt;&gt;&gt; longest.network_n_components</span>
 <span class="sd">    1</span>
 <span class="sd">    &gt;&gt;&gt; longest.network_component_lengths</span>
 <span class="sd">    {0: 13508.169276875526}</span>
-<span class="sd">    </span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">_reassign</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">cid</span><span class="p">):</span>
@@ -2933,7 +2956,7 @@
 
 <div class="viewcode-block" id="spanning_tree"><a class="viewcode-back" href="../../generated/spaghetti.spanning_tree.html#spaghetti.spanning_tree">[docs]</a><span class="k">def</span> <span class="nf">spanning_tree</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;sort&quot;</span><span class="p">,</span> <span class="n">maximum</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">silence_warnings</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Extract a minimum or maximum spanning tree from a network.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    net : spaghetti.Network</span>
@@ -2942,7 +2965,7 @@
 <span class="sd">        Method for determining spanning tree. Currently, the only</span>
 <span class="sd">        supported method is &#39;sort&#39;, which sorts the network arcs</span>
 <span class="sd">        by length prior to building intermediary networks and checking</span>
-<span class="sd">        for cycles within the tree/subtrees. Future methods may </span>
+<span class="sd">        for cycles within the tree/subtrees. Future methods may</span>
 <span class="sd">        include linear programming approachs, etc.</span>
 <span class="sd">    maximum : bool</span>
 <span class="sd">        When ``True`` a maximum spanning tree is created. When ``False``</span>
@@ -2951,54 +2974,54 @@
 <span class="sd">        Warn if there is more than one connected component. Default is</span>
 <span class="sd">        ``False`` due to the nature of constructing a minimum</span>
 <span class="sd">        spanning tree.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    net : spaghetti.Network</span>
 <span class="sd">        Pruned instance of the network object.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    </span>
+
 <span class="sd">    For in-depth background and details see</span>
 <span class="sd">    :cite:`GrahamHell_1985`,</span>
 <span class="sd">    :cite:`AhujaRavindraK`, and</span>
 <span class="sd">    :cite:`Okabe2012`.</span>
-<span class="sd">    </span>
+
 <span class="sd">    See also</span>
 <span class="sd">    --------</span>
-<span class="sd">    </span>
+
 <span class="sd">    networkx.algorithms.tree.mst</span>
 <span class="sd">    scipy.sparse.csgraph.minimum_spanning_tree</span>
-<span class="sd">    </span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    </span>
+
 <span class="sd">    Create a network instance.</span>
-<span class="sd">    </span>
+
 <span class="sd">    &gt;&gt;&gt; from libpysal import cg</span>
 <span class="sd">    &gt;&gt;&gt; import spaghetti</span>
 <span class="sd">    &gt;&gt;&gt; p00 = cg.Point((0,0))</span>
 <span class="sd">    &gt;&gt;&gt; lines = [cg.Chain([p00, cg.Point((0,3)), cg.Point((4,0)), p00])]</span>
 <span class="sd">    &gt;&gt;&gt; ntw = spaghetti.Network(in_data=lines)</span>
-<span class="sd">    </span>
+
 <span class="sd">    Extract the minimum spanning tree.</span>
-<span class="sd">    </span>
+
 <span class="sd">    &gt;&gt;&gt; minst_net = spaghetti.spanning_tree(ntw)</span>
 <span class="sd">    &gt;&gt;&gt; min_len = sum(minst_net.arc_lengths.values())</span>
 <span class="sd">    &gt;&gt;&gt; min_len</span>
 <span class="sd">    7.0</span>
-<span class="sd">    </span>
+
 <span class="sd">    Extract the maximum spanning tree.</span>
-<span class="sd">    </span>
+
 <span class="sd">    &gt;&gt;&gt; maxst_net = spaghetti.spanning_tree(ntw, maximum=True)</span>
 <span class="sd">    &gt;&gt;&gt; max_len = sum(maxst_net.arc_lengths.values())</span>
 <span class="sd">    &gt;&gt;&gt; max_len</span>
 <span class="sd">    9.0</span>
-<span class="sd">    </span>
+
 <span class="sd">    &gt;&gt;&gt; max_len &gt; min_len</span>
 <span class="sd">    True</span>
-<span class="sd">    </span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># (un)silence warning</span>
@@ -3024,7 +3047,7 @@
 <span class="k">def</span> <span class="nf">mst_weighted_sort</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">maximum</span><span class="p">,</span> <span class="n">net_kws</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Extract a minimum or maximum spanning tree from a network used</span>
 <span class="sd">    the length-weighted sort method.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    net : spaghetti.Network</span>
@@ -3033,18 +3056,18 @@
 <span class="sd">        See ``spanning_tree()``.</span>
 <span class="sd">    net_kws : dict</span>
 <span class="sd">        Keywords arguments for instaniating a ``spaghetti.Network``.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    spanning_tree : list</span>
 <span class="sd">        All networks arcs that are members of the spanning tree.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    </span>
+
 <span class="sd">    This function is based on the method found in Chapter 3</span>
 <span class="sd">    Section 4.3 of :cite:`Okabe2012`.</span>
-<span class="sd">    </span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># network arcs dictionary sorted by arc length</span>
@@ -3082,12 +3105,12 @@
     <span class="n">id_col</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span>
     <span class="n">geom_col</span><span class="o">=</span><span class="s2">&quot;geometry&quot;</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Return a ``geopandas.GeoDataFrame`` of network elements. This can be </span>
+    <span class="sd">&quot;&quot;&quot;Return a ``geopandas.GeoDataFrame`` of network elements. This can be</span>
 <span class="sd">    (a) the vertices of a network; (b) the arcs of a network; (c) both the</span>
 <span class="sd">    vertices and arcs of the network; (d) the raw point pattern associated</span>
 <span class="sd">    with the network; (e) the snapped point pattern of (d); or (f) the</span>
 <span class="sd">    shortest path routes between point observations.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    net : spaghetti.Network</span>
@@ -3111,7 +3134,7 @@
 <span class="sd">    geom_col : str</span>
 <span class="sd">        ``geopandas.GeoDataFrame`` column name for geometry. Default is</span>
 <span class="sd">        ``&quot;geometry&quot;``.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
 <span class="sd">    KeyError</span>
@@ -3119,7 +3142,7 @@
 <span class="sd">        be a part of the network object. This exception is raised</span>
 <span class="sd">        when a ``network.PointPattern`` is being extracted that does</span>
 <span class="sd">        not exist within the network object.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    points : geopandas.GeoDataFrame</span>
@@ -3131,56 +3154,56 @@
 <span class="sd">    lines : geopandas.GeoDataFrame</span>
 <span class="sd">        Network arc elements as a ``geopandas.GeoDataFrame`` of</span>
 <span class="sd">        ``shapely.geometry.LineString`` objects with an ``&quot;id&quot;``</span>
-<span class="sd">        column and ``&quot;geometry&quot;`` column. If the network object has </span>
+<span class="sd">        column and ``&quot;geometry&quot;`` column. If the network object has</span>
 <span class="sd">        a ``network_component_labels`` attribute, then component labels</span>
 <span class="sd">        are also added in a column.</span>
 <span class="sd">    paths : geopandas.GeoDataFrame</span>
-<span class="sd">        Shortest path routes along network arc elements as a </span>
+<span class="sd">        Shortest path routes along network arc elements as a</span>
 <span class="sd">        ``geopandas.GeoDataFrame`` of ``shapely.geometry.LineString``</span>
 <span class="sd">        objects with an ``&quot;id&quot;`` (see ``spaghetti.Network.shortest_paths()``)</span>
 <span class="sd">        column and ``&quot;geometry&quot;`` column.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    </span>
-<span class="sd">    When both network vertices and arcs are desired, the variable </span>
-<span class="sd">    declaration must be in the order: &lt;vertices&gt;, &lt;arcs&gt;. </span>
+
+<span class="sd">    When both network vertices and arcs are desired, the variable</span>
+<span class="sd">    declaration must be in the order: &lt;vertices&gt;, &lt;arcs&gt;.</span>
 <span class="sd">    This function requires ``geopandas``.</span>
-<span class="sd">    </span>
+
 <span class="sd">    See also</span>
 <span class="sd">    --------</span>
-<span class="sd">        </span>
+
 <span class="sd">    geopandas.GeoDataFrame</span>
-<span class="sd">        </span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    </span>
+
 <span class="sd">    Instantiate a network object.</span>
-<span class="sd">    </span>
+
 <span class="sd">    &gt;&gt;&gt; import spaghetti</span>
 <span class="sd">    &gt;&gt;&gt; from libpysal import examples</span>
 <span class="sd">    &gt;&gt;&gt; ntw = spaghetti.Network(examples.get_path(&quot;streets.shp&quot;))</span>
-<span class="sd">    </span>
+
 <span class="sd">    Extract the network elements (vertices and arcs) as</span>
 <span class="sd">    ``geopandas.GeoDataFrame`` objects.</span>
-<span class="sd">    </span>
+
 <span class="sd">    &gt;&gt;&gt; vertices_df, arcs_df = spaghetti.element_as_gdf(</span>
 <span class="sd">    ...     ntw, vertices=True, arcs=True</span>
 <span class="sd">    ... )</span>
-<span class="sd">    </span>
+
 <span class="sd">    Examine the first vertex. It is a member of the component labeled ``0``.</span>
-<span class="sd">    </span>
+
 <span class="sd">    &gt;&gt;&gt; vertices_df.loc[0]</span>
 <span class="sd">    id                                            0</span>
 <span class="sd">    geometry      POINT (728368.04762 877125.89535)</span>
 <span class="sd">    comp_label                                    0</span>
 <span class="sd">    Name: 0, dtype: object</span>
-<span class="sd">    </span>
+
 <span class="sd">    Calculate the total length of the network.</span>
-<span class="sd">    </span>
+
 <span class="sd">    &gt;&gt;&gt; arcs_df.geometry.length.sum()</span>
 <span class="sd">    104414.09200823458</span>
-<span class="sd">    </span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># shortest path routes between observations</span>
@@ -3222,9 +3245,9 @@
 
 
 <div class="viewcode-block" id="regular_lattice"><a class="viewcode-back" href="../../generated/spaghetti.regular_lattice.html#spaghetti.regular_lattice">[docs]</a><span class="k">def</span> <span class="nf">regular_lattice</span><span class="p">(</span><span class="n">bounds</span><span class="p">,</span> <span class="n">nh</span><span class="p">,</span> <span class="n">nv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exterior</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Generate a regular lattice of line segments </span>
+    <span class="sd">&quot;&quot;&quot;Generate a regular lattice of line segments</span>
 <span class="sd">    (`libpysal.cg.Chain objects &lt;https://pysal.org/libpysal/generated/libpysal.cg.Chain.html#libpysal.cg.Chain&gt;`_).</span>
-<span class="sd">    </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    bounds : {tuple, list}</span>
@@ -3236,44 +3259,44 @@
 <span class="sd">        ``nh`` if left as None.</span>
 <span class="sd">    exterior : bool</span>
 <span class="sd">        Flag for including the outer bounding box segments. Default is False.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    lattice : list</span>
 <span class="sd">        The ``libpysal.cg.Chain`` objects forming a regular lattice.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    </span>
-<span class="sd">    The ``nh`` and ``nv`` parameters do not include the external </span>
+
+<span class="sd">    The ``nh`` and ``nv`` parameters do not include the external</span>
 <span class="sd">    line segments. For example, setting ``nh=3, nv=2, exterior=True``</span>
 <span class="sd">    will result in 5 horizontal line sets and 4 vertical line sets.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    </span>
+
 <span class="sd">    Create a 5x5 regular lattice with an exterior</span>
-<span class="sd">    </span>
+
 <span class="sd">    &gt;&gt;&gt; import spaghetti</span>
 <span class="sd">    &gt;&gt;&gt; lattice = spaghetti.regular_lattice((0,0,4,4), 3, exterior=True)</span>
 <span class="sd">    &gt;&gt;&gt; lattice[0].vertices</span>
 <span class="sd">    [(0.0, 0.0), (1.0, 0.0)]</span>
-<span class="sd">    </span>
+
 <span class="sd">    Create a 5x5 regular lattice without an exterior</span>
-<span class="sd">    </span>
+
 <span class="sd">    &gt;&gt;&gt; lattice = spaghetti.regular_lattice((0,0,5,5), 3, exterior=False)</span>
 <span class="sd">    &gt;&gt;&gt; lattice[-1].vertices</span>
 <span class="sd">    [(3.75, 3.75), (3.75, 5.0)]</span>
-<span class="sd">    </span>
-<span class="sd">    Create a 7x9 regular lattice with an exterior from the </span>
+
+<span class="sd">    Create a 7x9 regular lattice with an exterior from the</span>
 <span class="sd">    bounds of ``streets.shp``.</span>
-<span class="sd">    </span>
+
 <span class="sd">    &gt;&gt;&gt; path = libpysal.examples.get_path(&quot;streets.shp&quot;)</span>
 <span class="sd">    &gt;&gt;&gt; shp = libpysal.io.open(path)</span>
 <span class="sd">    &gt;&gt;&gt; lattice = spaghetti.regular_lattice(shp.bbox, 5, nv=7, exterior=True)</span>
 <span class="sd">    &gt;&gt;&gt; lattice[0].vertices</span>
 <span class="sd">    [(723414.3683108028, 875929.0396895551), (724286.1381211297, 875929.0396895551)]</span>
-<span class="sd">    </span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># check for bounds validity</span>
@@ -3316,12 +3339,12 @@
 
 <div class="viewcode-block" id="PointPattern"><a class="viewcode-back" href="../../generated/spaghetti.PointPattern.html#spaghetti.PointPattern">[docs]</a><span class="k">class</span> <span class="nc">PointPattern</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;A stub point pattern class used to store a point pattern.</span>
-<span class="sd">    </span>
-<span class="sd">    Note from the original author of ``pysal.network``: </span>
+
+<span class="sd">    Note from the original author of ``pysal.network``:</span>
 <span class="sd">    This class is monkey patched with network specific attributes when the</span>
 <span class="sd">    points are snapped to a network. In the future this class may be</span>
 <span class="sd">    replaced with a generic point pattern class.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    in_data : {str, list, tuple, libpysal.cg.Point, geopandas.GeoDataFrame}</span>
@@ -3334,7 +3357,7 @@
 <span class="sd">    attribute :  bool</span>
 <span class="sd">        A flag to indicate whether all attributes are tagged to this</span>
 <span class="sd">        class (``True``) or excluded (``False``). Default is ``False``.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    points : dict</span>
@@ -3366,7 +3389,7 @@
 <span class="sd">            Flag as ``True`` to include the distance from the original</span>
 <span class="sd">            location to the snapped location along the network. Default</span>
 <span class="sd">            is ``False``.</span>
-<span class="sd">    </span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="PointPattern.__init__"><a class="viewcode-back" href="../../generated/spaghetti.PointPattern.html#spaghetti.PointPattern.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">idvariable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -3470,7 +3493,7 @@
 <span class="sd">    If the ``PointPattern`` class has methods, it might make</span>
 <span class="sd">    sense to make this a child of that class. This class is not intended</span>
 <span class="sd">    to be used by the external user.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    npoints : int</span>
@@ -3499,7 +3522,7 @@
 <span class="sd">            Flag as ``True`` to include the distance from the original</span>
 <span class="sd">            location to the snapped location along the network. Default</span>
 <span class="sd">            is ``False``.</span>
-<span class="sd">    </span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
