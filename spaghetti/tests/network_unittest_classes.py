@@ -269,6 +269,28 @@ class TestNetwork(unittest.TestCase):
         n200 = self.ntw_shp.split_arcs(200.0)
         self.assertEqual(len(n200.arcs), 688)
 
+    def test_split_arcs_1000(self):
+        n1000 = self.ntw_shp.split_arcs(1000.0)
+        self.assertEqual(len(n1000.arcs), 303)
+
+    def test_split_arcs_ntw_from_lattice_ring_2(self):
+        n_2 = self.ntw_from_lattice_ring.split_arcs(0.2)
+        known_neighbors = [(1, 17), (1, 25), (1, 26), (18, 19)]
+        observed_neighbors = n_2.w_network.neighbors[1, 18]
+        self.assertEqual(observed_neighbors, known_neighbors)
+
+    def test_split_arcs_ntw_from_lattice_ring_3(self):
+        n_3 = self.ntw_from_lattice_ring.split_arcs(0.3)
+        known_neighbors = [(1, 16), (1, 22), (1, 23), (17, 18)]
+        observed_neighbors = n_3.w_network.neighbors[1, 17]
+        self.assertEqual(observed_neighbors, known_neighbors)
+
+    def test_split_arcs_ntw_from_lattice_ring_5(self):
+        n_5 = self.ntw_from_lattice_ring.split_arcs(0.5)
+        known_neighbors = [(1, 14), (1, 16), (1, 17), (2, 15)]
+        observed_neighbors = n_5.w_network.neighbors[1, 15]
+        self.assertEqual(observed_neighbors, known_neighbors)
+
     def test_enum_links_vertex(self):
         coincident = self.ntw_shp.enum_links_vertex(24)
         self.assertIn((24, 48), coincident)
@@ -528,10 +550,6 @@ class TestNetworkPointPattern(unittest.TestCase):
 
         self.assertEqual(self.pp1.npoints, self.gdf_pp1.npoints)
         self.assertEqual(self.pp2.npoints, self.gdf_pp2.npoints)
-
-    def test_split_arcs_1000(self):
-        n1000 = self.ntw.split_arcs(1000.0)
-        self.assertEqual(len(n1000.arcs), 303)
 
     def test_add_point_pattern(self):
         self.assertEqual(self.pp1.npoints, self.known_pp1_npoints)

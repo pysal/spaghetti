@@ -817,7 +817,9 @@ class Network:
 
         return nodes
 
-    def contiguityweights(self, graph=True, weightings=None, weights_kws=dict()):
+    def contiguityweights(
+        self, graph=True, weightings=None, from_split=False, weights_kws=dict()
+    ):
         """Create a contiguity-based ``libpysal.weights.W`` object.
 
         Parameters
@@ -827,7 +829,10 @@ class Network:
             using the spatial representation (``False``) or the graph
             representation (``True``). Default is ``True``.
         weightings : {dict, None}
-            Dictionary of lists of weightings for each arc/edge.
+            Dictionary of lists of weightings for each arc/edge. Default is ``None``.
+        from_split : bool
+            Flag for whether the method is being called from within
+            ``split_arcs()`` (``True``) or not (``False``). Default is ``False``.
         weights_kws : dict
             Keyword arguments for ``libpysal.weights.W``.
 
@@ -962,7 +967,7 @@ class Network:
                     if key[1] > neigh[1]:
                         working = False
 
-            if len(links) == 1:
+            if len(links) == 1 or from_split:
                 working = False
 
         # call libpysal for `W` instance
@@ -2296,7 +2301,22 @@ class Network:
         >>> len(n200.arcs)
         688
 
+        The number of arcs within the new object can be accessed via the
+        weights object, as well. These counts will be equal.
+
+        >>> len(n200.arcs) == n200.w_network.n
+        True
+
+        Neighboring arcs can also be queried through the weight object.
+
+        >>> n200.w_network.neighbors[72,392]
+        [(71, 72), (72, 252), (72, 391), (392, 393)]
+
         """
+
+        # convert coordinates for integers if possible
+        # e.g., (1.0, 0.5) --> (1, 0.5)
+        int_coord = lambda c: int(c) if (type(c) == float and c.is_integer()) else c
 
         # create new shell network instance
         split_network = Network()
@@ -2304,7 +2324,7 @@ class Network:
         # duplicate input network attributes
         split_network.adjacencylist = copy.deepcopy(self.adjacencylist)
         split_network.arc_lengths = copy.deepcopy(self.arc_lengths)
-        split_network.arcs = set(copy.deepcopy(self.arcs))
+        split_network.arcs = copy.deepcopy(self.arcs)
         split_network.vertex_coords = copy.deepcopy(self.vertex_coords)
         split_network.vertex_list = copy.deepcopy(self.vertex_list)
         split_network.vertices = copy.deepcopy(self.vertices)
@@ -2331,18 +2351,22 @@ class Network:
             # initialize arc new arc length at zero
             totallength = 0
 
-            # initialize the starting vertex, current vertex, and
-            # ending vertex
-            currentstart = start_vertex = arc[0]
-            end_vertex = arc[1]
+            # initialize the current vertex and ending vertex
+            currentstart, end_vertex = arc[0], arc[1]
+
+            # determine direction of arc vertices
+            csx, csy = split_network.vertex_coords[currentstart]
+            evx, evy = split_network.vertex_coords[end_vertex]
+            if csy > evy and csx == evx:
+                currentstart, end_vertex = end_vertex, currentstart
 
             # if the arc will be split remove the current
             # arc from the adjacency list
             if interval < length:
 
                 # remove old arc adjacency information
-                split_network.adjacencylist[arc[0]].remove(arc[1])
-                split_network.adjacencylist[arc[1]].remove(arc[0])
+                split_network.adjacencylist[currentstart].remove(end_vertex)
+                split_network.adjacencylist[end_vertex].remove(currentstart)
 
                 # remove old arc length information
                 split_network.arc_lengths.pop(arc, None)
@@ -2356,9 +2380,6 @@ class Network:
 
             # traverse the length of the arc
             while totallength < length:
-
-                # set/update the current vertex ID
-                currentstop = current_vertex_id
 
                 # once an arc can not be split further
                 if totallength + interval > length:
@@ -2379,14 +2400,17 @@ class Network:
 
                     # compute the new vertex coordinate
                     newx, newy = self._newpoint_coords(arc, totallength)
+                    new_vertex = (int_coord(newx), int_coord(newy))
 
-                    # update the vertex
-                    if currentstop not in split_network.vertex_list:
+                    # update the vertex and coordinate info if needed
+                    if new_vertex not in split_network.vertices.keys():
+                        split_network.vertices[new_vertex] = currentstop
+                        split_network.vertex_coords[currentstop] = new_vertex
                         split_network.vertex_list.append(currentstop)
-
-                    # update vertex coordinates and vertex ID
-                    split_network.vertex_coords[currentstop] = newx, newy
-                    split_network.vertices[(newx, newy)] = currentstop
+                    else:
+                        # retrieve vertex ID if coordinate already exists
+                        current_vertex_id -= 1
+                        currentstop = split_network.vertices[new_vertex]
 
                 # update the new network adjacency list
                 split_network.adjacencylist[currentstart].append(currentstop)
@@ -2394,29 +2418,28 @@ class Network:
 
                 # add the new arc to the arc dictionary
                 # iterating over this so we need to add after iterating
-                new_arcs.add(tuple(sorted([currentstart, currentstop])))
-
-                # modify arc_lengths
-                current_start_stop = tuple(sorted([currentstart, currentstop]))
+                _new_arc = tuple(sorted([currentstart, currentstop]))
+                new_arcs.add(_new_arc)
 
                 # set the length of the arc
-                split_network.arc_lengths[current_start_stop] = interval
+                split_network.arc_lengths[_new_arc] = interval
 
                 # increment the starting vertex to the stopping vertex
                 currentstart = currentstop
 
-        # add the newly created arcs to the network
+        # add the newly created arcs to the network and remove the old arcs
+        split_network.arcs = set(split_network.arcs)
         split_network.arcs.update(new_arcs)
-
-        # remove the old arcs the network
         split_network.arcs.difference_update(remove_arcs)
-        split_network.arcs = list(split_network.arcs)
+        split_network.arcs = sorted(list(split_network.arcs))
 
         # extract connected components
         if w_components:
 
             # extract contiguity weights from libpysal
-            split_network.w_network = split_network.contiguityweights(graph=False)
+            split_network.w_network = split_network.contiguityweights(
+                graph=False, from_split=True
+            )
 
             # identify connected components from the `w_network`
             split_network.identify_components(split_network.w_network, graph=False)

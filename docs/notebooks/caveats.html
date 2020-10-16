@@ -126,7 +126,10 @@
 <li><a class="reference internal" href="#Continuing-with-the-original-“goalpost”-network-comprised-of-2-components">Continuing with the original “goalpost” network comprised of 2 components</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#4.-Understanding-network-generation">4. Understanding network generation</a></li>
+<li><a class="reference internal" href="#4.-Understanding-network-generation">4. Understanding network generation</a><ul>
+<li><a class="reference internal" href="#Why-does-the-spaghetti.Network-object-have-so-many-vertices?">Why does the <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object have so many vertices?</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -426,7 +429,7 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-10-10T17:30:22-04:00
+2020-10-16T17:02:26-04:00
 
 CPython 3.8.5
 IPython 7.18.1
@@ -466,12 +469,12 @@ interpreter: 64bit
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 watermark 2.0.2
-numpy      1.19.1
-shapely    1.7.1
-matplotlib 3.3.2
 geopandas  0.8.1
-spaghetti  1.5.0
+matplotlib 3.3.2
+numpy      1.19.1
 libpysal   4.3.0
+spaghetti  1.5.0
+shapely    1.7.1
 
 </pre></div></div>
 </div>
@@ -549,13 +552,13 @@ libpysal   4.3.0
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[&lt;libpysal.cg.shapes.Chain at 0x7fb291b38160&gt;,
- &lt;libpysal.cg.shapes.Chain at 0x7fb291b388e0&gt;,
- &lt;libpysal.cg.shapes.Chain at 0x7fb291b389d0&gt;,
- &lt;libpysal.cg.shapes.Chain at 0x7fb291b38b20&gt;,
- &lt;libpysal.cg.shapes.Chain at 0x7fb291b38c70&gt;,
- &lt;libpysal.cg.shapes.Chain at 0x7fb291b38d90&gt;,
- &lt;libpysal.cg.shapes.Chain at 0x7fb291b38eb0&gt;]
+[&lt;libpysal.cg.shapes.Chain at 0x7fe388381970&gt;,
+ &lt;libpysal.cg.shapes.Chain at 0x7fe388381a30&gt;,
+ &lt;libpysal.cg.shapes.Chain at 0x7fe388381c40&gt;,
+ &lt;libpysal.cg.shapes.Chain at 0x7fe3883814f0&gt;,
+ &lt;libpysal.cg.shapes.Chain at 0x7fe388381550&gt;,
+ &lt;libpysal.cg.shapes.Chain at 0x7fe388381730&gt;,
+ &lt;libpysal.cg.shapes.Chain at 0x7fe35a7340d0&gt;]
 </pre></div></div>
 </div>
 <p>Instantiate a <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object</p>
@@ -834,8 +837,8 @@ libpysal   4.3.0
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[&lt;libpysal.cg.shapes.Chain at 0x7fb2a14cd640&gt;,
- &lt;libpysal.cg.shapes.Chain at 0x7fb2a14cd760&gt;]
+[&lt;libpysal.cg.shapes.Chain at 0x7fe35a7bd160&gt;,
+ &lt;libpysal.cg.shapes.Chain at 0x7fe35a7bd280&gt;]
 </pre></div></div>
 </div>
 <p>Instantiate a <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object</p>
@@ -1787,6 +1790,8 @@ array([0., 1., 2., 3., 4., 3.])
 <hr class="docutils" />
 <div class="section" id="4.-Understanding-network-generation">
 <h2>4. Understanding network generation<a class="headerlink" href="#4.-Understanding-network-generation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="Why-does-the-spaghetti.Network-object-have-so-many-vertices?">
+<h3>Why does the <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object have so many vertices?<a class="headerlink" href="#Why-does-the-spaghetti.Network-object-have-so-many-vertices?" title="Permalink to this headline">¶</a></h3>
 <p>The core procedure for generating network representations is performed within the internal <code class="docutils literal notranslate"><span class="pre">spaghetti.Network._extractnetwork()</span></code> method. Here it is important to note that a <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> instance is built up from the individual, constituent euclidean units of each line segment object. Therefore, the resulting network structure will generally have: 1. More vertices and links than may expected, and; 2. Many degree-2 vertices, which differs from a truly graph-theoretic object.</p>
 <p>This is demonstrated below with a sinuous line.</p>
 <div class="nbinput nblast docutils container">
@@ -2098,6 +2103,7 @@ array([0., 1., 2., 3., 4., 3.])
 </div>
 </div>
 <hr class="docutils" />
+</div>
 </div>
 </div>
 

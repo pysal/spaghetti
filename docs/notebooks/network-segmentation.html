@@ -128,8 +128,13 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#3.-Visualizing-differences-for-comparison">3. Visualizing differences for comparison</a><ul>
-<li><a class="reference internal" href="#Raw-counts">Raw counts</a></li>
-<li><a class="reference internal" href="#Transformed-counts-(log10)">Transformed counts (<code class="docutils literal notranslate"><span class="pre">log10</span></code>)</a></li>
+<li><a class="reference internal" href="#Empirical-data-—-Raw-counts">Empirical data — Raw counts</a></li>
+<li><a class="reference internal" href="#Empirical-data-—-Transformed-counts-(log10)">Empirical data — Transformed counts (<code class="docutils literal notranslate"><span class="pre">log10</span></code>)</a></li>
+<li><a class="reference internal" href="#Large-synthetic-clusters">Large synthetic clusters</a><ul>
+<li><a class="reference internal" href="#Large-synthetic-clusters-—-Raw-counts">Large synthetic clusters — Raw counts</a></li>
+<li><a class="reference internal" href="#Large-synthetic-clusters-—-Transformed-counts-(log10)">Large synthetic clusters — Transformed counts (<code class="docutils literal notranslate"><span class="pre">log10</span></code>)</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -413,7 +418,7 @@ Interactive online version:
 <ol class="arabic simple">
 <li><p>Demonstrating network segmentation</p></li>
 <li><p>Understanding observation counts per network arc</p></li>
-<li><p>Visualizing network representations</p></li>
+<li><p>Visualizing network representations with emprical and synthetic data</p></li>
 </ol>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -430,7 +435,7 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-10-05T17:09:28-04:00
+2020-10-16T17:08:30-04:00
 
 CPython 3.8.5
 IPython 7.18.1
@@ -469,11 +474,11 @@ interpreter: 64bit
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 watermark 2.0.2
-matplotlib          3.3.2
 spaghetti           1.5.0
-matplotlib_scalebar 0.6.2
 libpysal            4.3.0
+matplotlib_scalebar 0.6.2
 numpy               1.19.1
+matplotlib          3.3.2
 
 </pre></div></div>
 </div>
@@ -526,7 +531,7 @@ numpy               1.19.1
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x7fba08f54f10&gt;}
+{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x7fdc50f38af0&gt;}
 </pre></div></div>
 </div>
 </div>
@@ -552,7 +557,7 @@ numpy               1.19.1
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;spaghetti.network.Network at 0x7fb9d930a760&gt;
+&lt;spaghetti.network.Network at 0x7fdc69626c40&gt;
 </pre></div></div>
 </div>
 </div>
@@ -590,7 +595,7 @@ numpy               1.19.1
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x7fb9d930a850&gt;}
+{&#39;crimes&#39;: &lt;spaghetti.network.PointPattern at 0x7fdc69626dc0&gt;}
 </pre></div></div>
 </div>
 </div>
@@ -734,7 +739,7 @@ numpy               1.19.1
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2.0354609929078014
+2.05
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -896,7 +901,7 @@ numpy               1.19.1
     </tr>
     <tr>
       <th>1</th>
-      <td>(0, 342)</td>
+      <td>(0, 230)</td>
       <td>LINESTRING (728368.048 877125.895, 728367.869 ...</td>
       <td>0</td>
       <td>0.0</td>
@@ -904,7 +909,7 @@ numpy               1.19.1
     </tr>
     <tr>
       <th>2</th>
-      <td>(1, 337)</td>
+      <td>(1, 233)</td>
       <td>LINESTRING (728368.139 877023.272, 728568.139 ...</td>
       <td>0</td>
       <td>0.0</td>
@@ -912,19 +917,19 @@ numpy               1.19.1
     </tr>
     <tr>
       <th>3</th>
-      <td>(1, 364)</td>
-      <td>LINESTRING (728368.139 877023.272, 728368.318 ...</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>(1, 561)</td>
+      <td>(1, 234)</td>
       <td>LINESTRING (728368.139 877023.272, 728168.139 ...</td>
       <td>0</td>
       <td>1.0</td>
       <td>0.2</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>(1, 237)</td>
+      <td>LINESTRING (728368.139 877023.272, 728368.318 ...</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
   </tbody>
 </table>
@@ -978,8 +983,8 @@ numpy               1.19.1
 </pre></div>
 </div>
 </div>
-<div class="section" id="Raw-counts">
-<h3>Raw counts<a class="headerlink" href="#Raw-counts" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="Empirical-data-—-Raw-counts">
+<h3>Empirical data — Raw counts<a class="headerlink" href="#Empirical-data-—-Raw-counts" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
@@ -1001,8 +1006,8 @@ numpy               1.19.1
 </div>
 </div>
 </div>
-<div class="section" id="Transformed-counts-(log10)">
-<h3>Transformed counts (<code class="docutils literal notranslate"><span class="pre">log10</span></code>)<a class="headerlink" href="#Transformed-counts-(log10)" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="Empirical-data-—-Transformed-counts-(log10)">
+<h3>Empirical data — Transformed counts (<code class="docutils literal notranslate"><span class="pre">log10</span></code>)<a class="headerlink" href="#Empirical-data-—-Transformed-counts-(log10)" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
@@ -1023,7 +1028,130 @@ numpy               1.19.1
 <img alt="../_images/notebooks_network-segmentation_33_0.png" class="no-scaled-link" src="../_images/notebooks_network-segmentation_33_0.png" style="width: 856px; height: 486px;" />
 </div>
 </div>
+</div>
 <hr class="docutils" />
+<div class="section" id="Large-synthetic-clusters">
+<h3>Large synthetic clusters<a class="headerlink" href="#Large-synthetic-clusters" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ncrimes</span><span class="p">,</span> <span class="n">cluster_crimes</span> <span class="o">=</span> <span class="mi">400</span><span class="p">,</span> <span class="p">[];</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">minx</span><span class="p">,</span> <span class="n">miny</span><span class="p">,</span> <span class="n">maxx</span><span class="p">,</span> <span class="n">maxy</span> <span class="o">=</span> <span class="p">[</span><span class="mi">725400</span><span class="p">,</span> <span class="mi">877400</span><span class="p">,</span> <span class="mi">727100</span><span class="p">,</span> <span class="mi">879100</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ncrimes</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">pm</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1000</span><span class="p">,</span> <span class="o">-</span><span class="mi">2000</span><span class="p">]:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">minx</span><span class="o">+</span><span class="n">pm</span><span class="p">,</span> <span class="n">maxx</span><span class="o">+</span><span class="n">pm</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">miny</span><span class="o">+</span><span class="n">pm</span><span class="p">,</span> <span class="n">maxy</span><span class="o">+</span><span class="n">pm</span><span class="p">)</span>
+        <span class="n">cluster_crimes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">libpysal</span><span class="o">.</span><span class="n">cg</span><span class="o">.</span><span class="n">Point</span><span class="p">((</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">pp_name</span> <span class="o">=</span> <span class="s2">&quot;crimes&quot;</span>
+<span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span><span class="n">cluster_crimes</span><span class="p">,</span> <span class="n">pp_name</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">pp_df</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="o">=</span><span class="n">pp_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ntw_counts</span><span class="p">,</span> <span class="n">ntw_ctmean</span> <span class="o">=</span> <span class="n">fetch_cpl</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="p">)</span>
+<span class="n">n200</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">split_arcs</span><span class="p">(</span><span class="mf">200.0</span><span class="p">)</span>
+<span class="n">n200_counts</span><span class="p">,</span> <span class="n">n200_ctmean</span> <span class="o">=</span> <span class="n">fetch_cpl</span><span class="p">(</span><span class="n">n200</span><span class="p">,</span> <span class="n">pp_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">vtx_df</span><span class="p">,</span> <span class="n">arc_df</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">arcs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">vtx200_df</span><span class="p">,</span> <span class="n">arc200_df</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">n200</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">arcs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">arc_df</span> <span class="o">=</span> <span class="n">counts_col</span><span class="p">(</span><span class="n">ntw_counts</span><span class="p">,</span> <span class="n">arc_df</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;n_crimes&quot;</span><span class="p">)</span>
+<span class="n">arc200_df</span> <span class="o">=</span> <span class="n">counts_col</span><span class="p">(</span><span class="n">n200_counts</span><span class="p">,</span> <span class="n">arc200_df</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;n_crimes&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plotter</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_network-segmentation_40_0.png" class="no-scaled-link" src="../_images/notebooks_network-segmentation_40_0.png" style="width: 776px; height: 507px;" />
+</div>
+</div>
+<div class="section" id="Large-synthetic-clusters-—-Raw-counts">
+<h4>Large synthetic clusters — Raw counts<a class="headerlink" href="#Large-synthetic-clusters-—-Raw-counts" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">suptitle</span> <span class="o">=</span> <span class="s2">&quot;Crimes associated with network arcs — raw count&quot;</span>
+<span class="n">subtitle1</span>  <span class="o">=</span> <span class="s2">&quot;Original ($n=</span><span class="si">%s</span><span class="s2">$)&quot;</span> <span class="o">%</span> <span class="n">arc_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">subtitle2</span> <span class="o">=</span> <span class="s2">&quot;200-foot split ($n=</span><span class="si">%s</span><span class="s2">$)&quot;</span> <span class="o">%</span> <span class="n">arc200_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">title_args</span> <span class="o">=</span> <span class="p">(</span><span class="n">suptitle</span><span class="p">,</span> <span class="n">subtitle1</span><span class="p">,</span> <span class="n">subtitle2</span><span class="p">)</span>
+<span class="n">sidexside_plot</span><span class="p">(</span><span class="n">arc_df</span><span class="p">,</span> <span class="n">arc200_df</span><span class="p">,</span> <span class="s2">&quot;n_crimes&quot;</span><span class="p">,</span> <span class="n">out_cmap</span><span class="p">,</span> <span class="o">*</span><span class="n">title_args</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_network-segmentation_42_0.png" class="no-scaled-link" src="../_images/notebooks_network-segmentation_42_0.png" style="width: 856px; height: 487px;" />
+</div>
+</div>
+</div>
+<div class="section" id="Large-synthetic-clusters-—-Transformed-counts-(log10)">
+<h4>Large synthetic clusters — Transformed counts (<code class="docutils literal notranslate"><span class="pre">log10</span></code>)<a class="headerlink" href="#Large-synthetic-clusters-—-Transformed-counts-(log10)" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">suptitle</span> <span class="o">=</span> <span class="s2">&quot;Crimes associated with network arcs — log10 transformed&quot;</span>
+<span class="n">subtitle1</span>  <span class="o">=</span> <span class="s2">&quot;Original ($n=</span><span class="si">%s</span><span class="s2">$)&quot;</span> <span class="o">%</span> <span class="n">arc_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">subtitle2</span> <span class="o">=</span> <span class="s2">&quot;200-foot split ($n=</span><span class="si">%s</span><span class="s2">$)&quot;</span> <span class="o">%</span> <span class="n">arc200_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">title_args</span> <span class="o">=</span> <span class="p">(</span><span class="n">suptitle</span><span class="p">,</span> <span class="n">subtitle1</span><span class="p">,</span> <span class="n">subtitle2</span><span class="p">)</span>
+<span class="n">sidexside_plot</span><span class="p">(</span><span class="n">arc_df</span><span class="p">,</span> <span class="n">arc200_df</span><span class="p">,</span> <span class="s2">&quot;n_crimes_log10&quot;</span><span class="p">,</span> <span class="n">out_cmap</span><span class="p">,</span> <span class="o">*</span><span class="n">title_args</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_network-segmentation_44_0.png" class="no-scaled-link" src="../_images/notebooks_network-segmentation_44_0.png" style="width: 856px; height: 486px;" />
+</div>
+</div>
+<hr class="docutils" />
+</div>
 </div>
 </div>
 </div>
