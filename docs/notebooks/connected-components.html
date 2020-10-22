@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Connected components in a spatial network &#8212; spaghetti v1.5.0 Manual</title>
+    <title>Connected components in a spatial network &#8212; spaghetti v1.5.2 Manual</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/pysal-styles.css" />
@@ -43,7 +43,7 @@
         </button>
         <a class="navbar-brand" href="../index.html">
           spaghetti</a>
-        <span class="navbar-text navbar-version pull-left"><b>1.5.0</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>1.5.2</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -462,17 +462,17 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-05-02T21:42:12-04:00
+2020-10-22T17:23:20-04:00
 
-CPython 3.7.3
-IPython 7.10.2
+CPython 3.8.5
+IPython 7.18.1
 
-compiler   : Clang 9.0.0 (tags/RELEASE_900/final)
+compiler   : Clang 10.0.1
 system     : Darwin
-release    : 19.4.0
+release    : 19.6.0
 machine    : x86_64
 processor  : i386
-CPU cores  : 4
+CPU cores  : 8
 interpreter: 64bit
 </pre></div></div>
 </div>
@@ -502,11 +502,11 @@ interpreter: 64bit
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 watermark 2.0.2
-spaghetti           1.5.0.rc0
-matplotlib_scalebar 0.6.1
-libpysal            4.2.2
-geopandas           0.7.0
-matplotlib          3.1.2
+libpysal            4.3.0
+geopandas           0.8.1
+matplotlib_scalebar 0.6.2
+matplotlib          3.3.2
+spaghetti           1.5.1
 
 </pre></div></div>
 </div>
@@ -561,7 +561,7 @@ matplotlib          3.1.2
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/Users/jgaboardi/miniconda3/envs/py3_spgh_dev/lib/python3.7/site-packages/libpysal/weights/weights.py:167: UserWarning: The weights matrix is not fully connected:
+/Users/the-gaboardi/miniconda3/envs/py3_spgh_dev/lib/python3.8/site-packages/libpysal/weights/weights.py:172: UserWarning: The weights matrix is not fully connected:
  There are 2 disconnected components.
   warnings.warn(message)
 </pre></div></div>
@@ -1062,10 +1062,10 @@ array([0, 0, 0, 1, 1, 1], dtype=int32)
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/Users/jgaboardi/miniconda3/envs/py3_spgh_dev/lib/python3.7/site-packages/libpysal/weights/weights.py:167: UserWarning: The weights matrix is not fully connected:
+/Users/the-gaboardi/miniconda3/envs/py3_spgh_dev/lib/python3.8/site-packages/libpysal/weights/weights.py:172: UserWarning: The weights matrix is not fully connected:
  There are 3 disconnected components.
   warnings.warn(message)
-/Users/jgaboardi/miniconda3/envs/py3_spgh_dev/lib/python3.7/site-packages/libpysal/weights/weights.py:167: UserWarning: The weights matrix is not fully connected:
+/Users/the-gaboardi/miniconda3/envs/py3_spgh_dev/lib/python3.8/site-packages/libpysal/weights/weights.py:172: UserWarning: The weights matrix is not fully connected:
  There are 3 disconnected components.
  There are 2 islands with ids: (8, 10), (11, 13).
   warnings.warn(message)
@@ -1321,10 +1321,10 @@ array([0, 0, 0, 1, 1, 1], dtype=int32)
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/Users/jgaboardi/miniconda3/envs/py3_spgh_dev/lib/python3.7/site-packages/libpysal/weights/weights.py:167: UserWarning: The weights matrix is not fully connected:
+/Users/the-gaboardi/miniconda3/envs/py3_spgh_dev/lib/python3.8/site-packages/libpysal/weights/weights.py:172: UserWarning: The weights matrix is not fully connected:
  There are 3 disconnected components.
   warnings.warn(message)
-/Users/jgaboardi/miniconda3/envs/py3_spgh_dev/lib/python3.7/site-packages/libpysal/weights/weights.py:167: UserWarning: The weights matrix is not fully connected:
+/Users/the-gaboardi/miniconda3/envs/py3_spgh_dev/lib/python3.8/site-packages/libpysal/weights/weights.py:172: UserWarning: The weights matrix is not fully connected:
  There are 3 disconnected components.
  There are 2 islands with ids: (8, 10), (11, 13).
   warnings.warn(message)
@@ -1586,7 +1586,7 @@ array([0, 0, 0, 1, 1, 1], dtype=int32)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_connected-components_64_0.png" class="no-scaled-link" src="../_images/notebooks_connected-components_64_0.png" style="width: 427px; height: 347px;" />
+<img alt="../_images/notebooks_connected-components_64_0.png" class="no-scaled-link" src="../_images/notebooks_connected-components_64_0.png" style="width: 427px; height: 343px;" />
 </div>
 </div>
 <hr class="docutils" />
@@ -1634,7 +1634,7 @@ array([0, 0, 0, 1, 1, 1], dtype=int32)
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/Users/jgaboardi/miniconda3/envs/py3_spgh_dev/lib/python3.7/site-packages/libpysal/weights/weights.py:167: UserWarning: The weights matrix is not fully connected:
+/Users/the-gaboardi/miniconda3/envs/py3_spgh_dev/lib/python3.8/site-packages/libpysal/weights/weights.py:172: UserWarning: The weights matrix is not fully connected:
  There are 2 disconnected components.
   warnings.warn(message)
 </pre></div></div>
@@ -1663,7 +1663,7 @@ array([0, 0, 0, 1, 1, 1], dtype=int32)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_connected-components_70_0.png" class="no-scaled-link" src="../_images/notebooks_connected-components_70_0.png" style="width: 424px; height: 294px;" />
+<img alt="../_images/notebooks_connected-components_70_0.png" class="no-scaled-link" src="../_images/notebooks_connected-components_70_0.png" style="width: 424px; height: 291px;" />
 </div>
 </div>
 <div class="section" id="The-longest-component-is-not-necessarily-the-largest">
@@ -1828,7 +1828,7 @@ The largest component is 1 with 6 vertices.
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_connected-components_79_0.png" class="no-scaled-link" src="../_images/notebooks_connected-components_79_0.png" style="width: 427px; height: 294px;" />
+<img alt="../_images/notebooks_connected-components_79_0.png" class="no-scaled-link" src="../_images/notebooks_connected-components_79_0.png" style="width: 434px; height: 291px;" />
 </div>
 </div>
 </div>
@@ -1849,7 +1849,7 @@ The largest component is 1 with 6 vertices.
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/Users/jgaboardi/miniconda3/envs/py3_spgh_dev/lib/python3.7/site-packages/libpysal/weights/weights.py:167: UserWarning: The weights matrix is not fully connected:
+/Users/the-gaboardi/miniconda3/envs/py3_spgh_dev/lib/python3.8/site-packages/libpysal/weights/weights.py:172: UserWarning: The weights matrix is not fully connected:
  There are 21 disconnected components.
  There are 7 islands with ids: (1494, 1495), (2129, 2130), (3756, 3757), (8669, 8670), (9611, 9612), (11152, 11153), (11228, 11229).
   warnings.warn(message)

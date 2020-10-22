@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Generating regular lattices and visualizing shortest paths &#8212; spaghetti v1.5.0 Manual</title>
+    <title>Generating regular lattices and visualizing shortest paths &#8212; spaghetti v1.5.2 Manual</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/pysal-styles.css" />
@@ -43,7 +43,7 @@
         </button>
         <a class="navbar-brand" href="../index.html">
           spaghetti</a>
-        <span class="navbar-text navbar-version pull-left"><b>1.5.0</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>1.5.2</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -436,17 +436,17 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-05-02T21:45:38-04:00
+2020-10-22T17:31:03-04:00
 
-CPython 3.7.3
-IPython 7.10.2
+CPython 3.8.5
+IPython 7.18.1
 
-compiler   : Clang 9.0.0 (tags/RELEASE_900/final)
+compiler   : Clang 10.0.1
 system     : Darwin
-release    : 19.4.0
+release    : 19.6.0
 machine    : x86_64
 processor  : i386
-CPU cores  : 4
+CPU cores  : 8
 interpreter: 64bit
 </pre></div></div>
 </div>
@@ -473,9 +473,9 @@ interpreter: 64bit
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 watermark 2.0.2
-libpysal   4.2.2
-matplotlib 3.1.2
-spaghetti  1.5.0.rc0
+matplotlib 3.3.2
+libpysal   4.3.0
+spaghetti  1.5.1
 
 </pre></div></div>
 </div>
@@ -582,7 +582,7 @@ spaghetti  1.5.0.rc0
         <span class="sd">&quot;&quot;&quot;Helper for labeling location.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">_x</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">normalized</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">kws</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="n">s</span><span class="p">,</span> <span class="s2">&quot;ha&quot;</span><span class="p">:</span> <span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="s2">&quot;va&quot;</span><span class="p">:</span> <span class="s2">&quot;bottom&quot;</span><span class="p">}</span>
-    <span class="n">a</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">_lab_loc</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">**</span><span class="n">kws</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">a</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">_lab_loc</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">**</span><span class="n">kws</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">vert_labels</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Label each network vertex.&quot;&quot;&quot;</span>
@@ -590,7 +590,7 @@ spaghetti  1.5.0.rc0
         <span class="sd">&quot;&quot;&quot;Helper for labeling vertices.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">_x</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">kws</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="n">s</span><span class="p">,</span> <span class="s2">&quot;ha&quot;</span><span class="p">:</span> <span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;va&quot;</span><span class="p">:</span> <span class="s2">&quot;bottom&quot;</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="s2">&quot;bold&quot;</span><span class="p">}</span>
-    <span class="n">v</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">_lab_loc</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">**</span><span class="n">kws</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">v</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">_lab_loc</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">**</span><span class="n">kws</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">obs_labels</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Label each point pattern observation.&quot;&quot;&quot;</span>
@@ -598,7 +598,7 @@ spaghetti  1.5.0.rc0
         <span class="sd">&quot;&quot;&quot;Helper for labeling observations.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">_x</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">kws</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="n">s</span><span class="p">,</span> <span class="s2">&quot;ha&quot;</span><span class="p">:</span> <span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;va&quot;</span><span class="p">:</span> <span class="s2">&quot;bottom&quot;</span><span class="p">,</span> <span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="s2">&quot;oblique&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">:</span><span class="n">c</span><span class="p">}</span>
-    <span class="n">o</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">_lab_loc</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">**</span><span class="n">kws</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">o</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">_lab_loc</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">**</span><span class="n">kws</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -691,9 +691,9 @@ array([[nan, 0.4, 3.8],
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[(0, 1), &lt;libpysal.cg.shapes.Chain at 0x125159908&gt;],
- [(0, 2), &lt;libpysal.cg.shapes.Chain at 0x12b3f6da0&gt;],
- [(1, 2), &lt;libpysal.cg.shapes.Chain at 0x12b41ea20&gt;]]
+[[(0, 1), &lt;libpysal.cg.shapes.Chain at 0x7fbd904208b0&gt;],
+ [(0, 2), &lt;libpysal.cg.shapes.Chain at 0x7fbd9042c0a0&gt;],
+ [(1, 2), &lt;libpysal.cg.shapes.Chain at 0x7fbd9042c370&gt;]]
 </pre></div></div>
 </div>
 </div>
@@ -1009,7 +1009,7 @@ array([[nan, 0.4, 3.8],
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_shortest-path-visualization_39_0.png" class="no-scaled-link" src="../_images/notebooks_shortest-path-visualization_39_0.png" style="width: 609px; height: 574px;" />
+<img alt="../_images/notebooks_shortest-path-visualization_39_0.png" class="no-scaled-link" src="../_images/notebooks_shortest-path-visualization_39_0.png" style="width: 606px; height: 574px;" />
 </div>
 </div>
 </div>
@@ -1049,7 +1049,7 @@ array([[nan, 0.4, 3.8],
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_shortest-path-visualization_42_0.png" class="no-scaled-link" src="../_images/notebooks_shortest-path-visualization_42_0.png" style="width: 609px; height: 574px;" />
+<img alt="../_images/notebooks_shortest-path-visualization_42_0.png" class="no-scaled-link" src="../_images/notebooks_shortest-path-visualization_42_0.png" style="width: 606px; height: 574px;" />
 </div>
 </div>
 </div>
@@ -1090,7 +1090,7 @@ array([[nan, 0.4, 3.8],
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_shortest-path-visualization_45_0.png" class="no-scaled-link" src="../_images/notebooks_shortest-path-visualization_45_0.png" style="width: 609px; height: 574px;" />
+<img alt="../_images/notebooks_shortest-path-visualization_45_0.png" class="no-scaled-link" src="../_images/notebooks_shortest-path-visualization_45_0.png" style="width: 606px; height: 574px;" />
 </div>
 </div>
 <hr class="docutils" />
