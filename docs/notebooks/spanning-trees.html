@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Network spanning trees &#8212; spaghetti v1.5.0 Manual</title>
+    <title>Network spanning trees &#8212; spaghetti v1.5.2 Manual</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/pysal-styles.css" />
@@ -43,7 +43,7 @@
         </button>
         <a class="navbar-brand" href="../index.html">
           spaghetti</a>
-        <span class="navbar-text navbar-version pull-left"><b>1.5.0</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>1.5.2</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -423,17 +423,17 @@ Interactive online version:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2020-05-02T21:45:48-04:00
+2020-10-22T17:31:26-04:00
 
-CPython 3.7.3
-IPython 7.10.2
+CPython 3.8.5
+IPython 7.18.1
 
-compiler   : Clang 9.0.0 (tags/RELEASE_900/final)
+compiler   : Clang 10.0.1
 system     : Darwin
-release    : 19.4.0
+release    : 19.6.0
 machine    : x86_64
 processor  : i386
-CPU cores  : 4
+CPU cores  : 8
 interpreter: 64bit
 </pre></div></div>
 </div>
@@ -461,10 +461,10 @@ interpreter: 64bit
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 watermark 2.0.2
-libpysal   4.2.2
-geopandas  0.7.0
-matplotlib 3.1.2
-spaghetti  1.5.0.rc0
+matplotlib 3.3.2
+geopandas  0.8.1
+spaghetti  1.5.1
+libpysal   4.3.0
 
 </pre></div></div>
 </div>
@@ -521,7 +521,7 @@ spaghetti  1.5.0.rc0
         <span class="sd">&quot;&quot;&quot;Helper for labeling network arcs.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">_x</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">normalized</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">kws</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="n">s</span><span class="p">,</span> <span class="s2">&quot;ha&quot;</span><span class="p">:</span> <span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="s2">&quot;va&quot;</span><span class="p">:</span> <span class="s2">&quot;bottom&quot;</span><span class="p">}</span>
-    <span class="n">a</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">_lab_loc</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">**</span><span class="n">kws</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">a</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">_lab_loc</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">**</span><span class="n">kws</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">vert_labels</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Label each network vertex.&quot;&quot;&quot;</span>
@@ -529,7 +529,7 @@ spaghetti  1.5.0.rc0
         <span class="sd">&quot;&quot;&quot;Helper for labeling vertices.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">_x</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">kws</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="n">s</span><span class="p">,</span> <span class="s2">&quot;ha&quot;</span><span class="p">:</span> <span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;va&quot;</span><span class="p">:</span> <span class="s2">&quot;bottom&quot;</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="s2">&quot;bold&quot;</span><span class="p">}</span>
-    <span class="n">v</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">_lab_loc</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">**</span><span class="n">kws</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">v</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">_lab_loc</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">**</span><span class="n">kws</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -656,7 +656,7 @@ spaghetti  1.5.0.rc0
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_spanning-trees_17_0.png" class="no-scaled-link" src="../_images/notebooks_spanning-trees_17_0.png" style="width: 706px; height: 534px;" />
+<img alt="../_images/notebooks_spanning-trees_17_0.png" class="no-scaled-link" src="../_images/notebooks_spanning-trees_17_0.png" style="width: 706px; height: 533px;" />
 </div>
 </div>
 <p>Minimum Spanning Tree</p>
@@ -675,7 +675,7 @@ spaghetti  1.5.0.rc0
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_spanning-trees_19_0.png" class="no-scaled-link" src="../_images/notebooks_spanning-trees_19_0.png" style="width: 706px; height: 535px;" />
+<img alt="../_images/notebooks_spanning-trees_19_0.png" class="no-scaled-link" src="../_images/notebooks_spanning-trees_19_0.png" style="width: 706px; height: 533px;" />
 </div>
 </div>
 <p>Maximum Spanning Tree</p>
@@ -694,7 +694,7 @@ spaghetti  1.5.0.rc0
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_spanning-trees_21_0.png" class="no-scaled-link" src="../_images/notebooks_spanning-trees_21_0.png" style="width: 706px; height: 535px;" />
+<img alt="../_images/notebooks_spanning-trees_21_0.png" class="no-scaled-link" src="../_images/notebooks_spanning-trees_21_0.png" style="width: 706px; height: 533px;" />
 </div>
 </div>
 <p><strong>Due to the nature of a</strong> <a class="reference external" href="https://en.wikipedia.org/wiki/Pythagorean_triple">Pythagorean triple triangle</a><strong>, it is excellent for demonstrating the most basic example of a network work cycle, and the difference between a minimum and maximum spanning tree.</strong></p>
@@ -743,7 +743,7 @@ spaghetti  1.5.0.rc0
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_spanning-trees_25_0.png" class="no-scaled-link" src="../_images/notebooks_spanning-trees_25_0.png" style="width: 697px; height: 332px;" />
+<img alt="../_images/notebooks_spanning-trees_25_0.png" class="no-scaled-link" src="../_images/notebooks_spanning-trees_25_0.png" style="width: 706px; height: 328px;" />
 </div>
 </div>
 <p>Minimum Spanning Tree</p>
@@ -762,7 +762,7 @@ spaghetti  1.5.0.rc0
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_spanning-trees_27_0.png" class="no-scaled-link" src="../_images/notebooks_spanning-trees_27_0.png" style="width: 697px; height: 334px;" />
+<img alt="../_images/notebooks_spanning-trees_27_0.png" class="no-scaled-link" src="../_images/notebooks_spanning-trees_27_0.png" style="width: 706px; height: 328px;" />
 </div>
 </div>
 <p>Maximum Spanning Tree</p>
@@ -781,7 +781,7 @@ spaghetti  1.5.0.rc0
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_spanning-trees_29_0.png" class="no-scaled-link" src="../_images/notebooks_spanning-trees_29_0.png" style="width: 697px; height: 334px;" />
+<img alt="../_images/notebooks_spanning-trees_29_0.png" class="no-scaled-link" src="../_images/notebooks_spanning-trees_29_0.png" style="width: 706px; height: 328px;" />
 </div>
 </div>
 </div>
