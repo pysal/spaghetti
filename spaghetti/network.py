@@ -875,8 +875,7 @@ class Network:
 
         >>> w = ntw.contiguityweights(graph=False)
 
-        Using the ``W`` object, access to
-        `esda <https://esda.readthedocs.io/en/latest/index.html>`_
+        Using the ``W`` object, access to `esda <https://pysal.org/esda/>`_
         functionality is provided. First, a vector of attributes is
         created for all edges with observations.
 
@@ -895,7 +894,7 @@ class Network:
         3.0
 
         Next, a standard call to
-        `esda.Moran <https://esda.readthedocs.io/en/latest/generated/esda.Moran.html#esda.Moran>`_
+        `esda.Moran <https://pysal.org/esda/generated/esda.Moran.html#esda.Moran>`_
         is made and the result placed into ``res``.
 
         >>> res = esda.moran.Moran(y, w, permutations=99)

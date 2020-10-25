@@ -51,7 +51,7 @@ You can  also fork_ the `pysal/spaghetti`_ repo and create a local clone of your
 .. _3.7: https://docs.python.org/3.7/
 .. _3.8: https://docs.python.org/3.8/
 .. _spaghetti-feedstock: https://github.com/conda-forge/spaghetti-feedstock
-.. _a nice example: https://geopandas.org/install.html#creating-a-new-environment
+.. _a nice example: https://geopandas.readthedocs.io/en/latest/getting_started/install.html#creating-a-new-environment
 .. _conda: https://docs.conda.io/en/latest/
 .. _conda-forge: https://conda-forge.org
 .. _Anaconda Distribution: https://docs.continuum.io/anaconda/

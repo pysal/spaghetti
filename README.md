@@ -42,7 +42,7 @@ Using `conda`, `spaghetti` can be installed as follows:
 $ conda config --set channel_priority strict
 $ conda install --channel conda-forge spaghetti
 ```
-Also, `geopandas` provides [a nice example](https://geopandas.org/install.html#creating-a-new-environment) to create a fresh environment for working with spatial data.
+Also, `geopandas` provides [a nice example](https://geopandas.readthedocs.io/en/latest/getting_started/install.html#creating-a-new-environment) to create a fresh environment for working with spatial data.
 
 **Installing with [`PyPI`](https://pypi.org/project/spaghetti/)**
 ```
@@ -66,15 +66,16 @@ $ pip install git+https://github.com/pysal/spaghetti
 
 ## Requirements
 
-- [`esda`](https://esda.readthedocs.io/en/latest/)
-- [`libspatialindex`](https://libspatialindex.org/index.html)
+- [`esda`](https://pysal.org/esda/)
+- [`libpysal`](https://pysal.org/libpysal/)
+- [`libspatialindex`](https://libspatialindex.org/en/latest/)
 - [`numpy`](https://numpy.org/devdocs/)
-- [`rtree`](http://toblerity.org/rtree/install.html)
+- [`rtree`](https://rtree.readthedocs.io/en/latest/)
 - [`scipy`](http://scipy.github.io/devdocs/)
 
 ## Soft Dependencies
 
-- [`geopandas`](http://geopandas.org/install.html)
+- [`geopandas`](https://geopandas.readthedocs.io/en/latest/index.html)
 - [`shapely`](https://shapely.readthedocs.io/en/latest/)
 
 ##  Contribute
@@ -122,4 +123,3 @@ This project is/was partially funded through:
 [<img align="middle" src="docs/_static/images/ardc_logo.png" width="150">](https://atlantardc.wordpress.com) Atlanta Research Data Center: [A Polygon-Based Approach to Spatial Network Allocation](https://atlantardc.files.wordpress.com/2018/05/ardc-newsletter_2018_2.pdf)
 
 [<img align="middle" src="docs/_static/images/nsf_logo.png" width="100">](https://www.nsf.gov/index.jsp) National Science Foundation Award #1825768: [National Historical Geographic Information System](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1825768&HistoricalAwards=false)
-
