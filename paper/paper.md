@@ -23,28 +23,24 @@ affiliations:
    index: 2
  - name: Directorate of Earth Observation Programs, ESRIN, European Space Agency
    index: 3
-date: 25 October 2020
+date: 30 October 2020
 bibliography: paper.bib
 
 ---
 
 # Summary
 
-The role spatial networks, such as streets, play on the human experience cannot be overstated. All of our daily activities fall along, or in close proximity to, roads, bike paths, and subway systems to name a few. Therefore, when performing spatial analysis in many cases considering network space, as opposed to Euclidean space, allows for a more precise representation of daily human action and movement patterns. For example, people generally cannot get to work by driving in a straight line directly from their home, but move along paths within networks. To this end, `spaghetti` (``**spa**tial **g**rap**h**s: n**et**works, **t**opology, & **i**nference''), a sub-module in the wider PySAL ecosystem, was developed to address network-centric research questions with a strong focus on spatial analysis [@pysal2007, @pysal2015, @gaboardi2018].
+The role spatial networks, such as streets, play on the human experience cannot be overstated. All of our daily activities fall along, or in close proximity to, roads, bike paths, and subway systems to name a few. Therefore, when performing spatial analysis in many cases considering network space, as opposed to Euclidean space, allows for a more precise representation of daily human action and movement patterns. For example, people generally cannot get to work by driving in a straight line directly from their home, but move along paths within networks. To this end, `spaghetti` (**spa**tial **g**rap**h**s: n**et**works, **t**opology, & **i**nference), a sub-module in the wider PySAL ecosystem (see \autoref{fig:logo}), was developed to address network-centric research questions with a strong focus on spatial analysis [@pysal2007, @pysal2015, @gaboardi2018].
 
----
+![The PySAL logo.\label{fig:logo}](figs/pysal_logo.png)
 
-![The PySAL logo.](figs/pysal_logo.png)Figure 1 --- The PySAL logo.
-
----
-
-# Related Work
+# Statement of Need
 
 The most well-known network analysis package within the Python scientific stack is [NetworkX](https://networkx.github.io) [@hagberg2008], which can be used for modelling any type of complex network (e.g. social, spatial, etc.). [OSMnx](https://osmnx.readthedocs.io/en/stable/) [@boeing2017] is built on top of NetworkX and queries [OpenStreetMap](https://openstreetmap.org) for modelling street networks with resultant network objects returned within a `geopandas.GeoDataFrame` [@geopandas2020]. Another package, [`pandana`](https://github.com/UDST/pandana) [@foti2012generalized], is built on top of `pandas` [@mckinney-proc-scipy-2010, @reback2020pandas] with a focus on shortest path calculation and accessibility measures. Within the realm of Python, the functionality provided by  [`snkit`](https://github.com/tomalrussell/snkit) [@russell2019] is most comparable to `spaghetti`, though it's main purpose is the processing of raw line data into clean network objects. Outside of Python, [SANET](http://sanet.csis.u-tokyo.ac.jp) [@okabe2006a] is the most closely related project to `spaghetti`, however, it is not written in Python and provides a GUI plugin for GIS software such as QGIS. Moreover, SANET is not fully open source.
 
 # Current Functionality
 
-Considering the related projects detailed above, `spaghetti` fills a niche for not only the processing of spatial network objects, but also post-processing analysis. In other words, this package can be used to study the network *itself* or provide the foundation for studying network-based phenomena, such as crimes along city streets, all within a fully open-source environment. Considering this, the primary purpose of `spaghetti` is creating network objects: collections of vertices and arcs, and their topological relationships. The creation of a network object is realized through the following general steps:
+Considering the related projects in the [Statement of Need](#statement-of-need) detailed above, `spaghetti` fills a niche for not only the processing of spatial network objects, but also post-processing analysis. In other words, this package can be used to study the network *itself* or provide the foundation for studying network-based phenomena, such as crimes along city streets, all within a fully open-source environment. Considering this, the primary purpose of `spaghetti` is creating network objects: collections of vertices and arcs, and their topological relationships. The creation of a network object is realized through the following general steps:
 
  1. read in line data or create features (regular lattices)
  1. generate the network representation 
@@ -66,9 +62,7 @@ After the creation of a base network object it can be manipulated, analyzed, and
     * shortest paths
     * minimum/maximum spanning trees
 
-The following demonstrates several functionalities mentioned above, including feature creation, network instantiation, and feature extraction, along with a supplementary plot (see fig 2).
-
--------
+The following demonstrates several functionalities mentioned above, including feature creation, network instantiation, and feature extraction, along with a supplementary plot in \autoref{fig:gridweights}.
 
 ```python
 import spaghetti
@@ -87,11 +81,7 @@ ntw.w_network.plot(arcs_df, indexed_on="id", ax=base, **w_kws)
 vertices_df.plot(ax=base, fc="r", ec="k", markersize=50, zorder=2)
 ```
 
--------
-
-![spaghetti 5 network](figs/spaghetti_network.png)Figure 2 --- A 4x4 regular lattice with network arcs in gray and vertices in red. Connectivity is demonstrated with `libpysal` spatial weights, which plotted over the network in black [@libpysal2020].
-
--------
+![A 4x4 regular lattice with network arcs in gray and vertices in red. Connectivity is demonstrated with `libpysal` spatial weights, which are plotted over the network in black [@libpysal2020].\label{fig:gridweights}](figs/spaghetti_network.png)
 
 The overview presented here provides a high-level summary of functionality. More detailed examples and applications can be found in the *Tutorials* section of the `spaghetti` [documentation](https://pysal.org/spaghetti/tutorials.html).
 
@@ -107,6 +97,4 @@ Network-constrained spatial analysis is an important facet of scientific inquiry
 
 Firstly, we would like to thank all the contributors to, and users of, this package. We would also like to acknowledge Jay Laura, who was the original lead developer of this package (`pysal.network`) prior to the introduction of the PySAL 2.0 ecosystem. The development of this package was partially supported by the [Atlanta Research Data Center](https://atlantardc.wordpress.com) and National Science Foundation Award [#1825768](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1825768).
 
-
 # References
-...
