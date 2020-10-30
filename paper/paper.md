@@ -52,7 +52,7 @@ After the creation of a base network object it can be manipulated, analyzed, and
  * calculating all neighbor distance matrices
     * point type A to point type A (auto)
     * point type A to point type B (cross)
- * simulating point patterns that can be used within the  [*K* function](https://pysal.org/spaghetti/generated/spaghetti.Network.html\#spaghetti.Network.GlobalAutoK) for cluster analysis [@okabe2012]
+ * simulating point patterns that can be used within the  [*K* function](https://pysal.org/spaghetti/generated/spaghetti.Network.html&#35spaghetti.Network.GlobalAutoK) for cluster analysis [@okabe2012]
  * splitting the network into (nearly) uniform segments
  * extracting features as `geopandas.GeoDataFrame` objects:
     * network arcs, vertices and point patterns 
