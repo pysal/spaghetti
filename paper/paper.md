@@ -1,5 +1,4 @@
 ---
-
 title: 'spaghetti: spatial network analysis in PySAL'
 tags:
   - Python
@@ -25,7 +24,6 @@ affiliations:
    index: 3
 date: 30 October 2020
 bibliography: paper.bib
-
 ---
 
 # Summary
