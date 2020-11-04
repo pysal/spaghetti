@@ -23,7 +23,7 @@
          #  - environment-file: ci/36-GIT-PLUS.yaml
          #    os: windows-latest
      steps:
-       - uses: actions/checkout@v2.3.3
+       - uses: actions/checkout@v2.3.4
        - uses: goanpeca/setup-miniconda@v1
          with:
             miniconda-version: 'latest'
