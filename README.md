@@ -17,7 +17,7 @@ Spaghetti is an open-source Python library for the analysis of network-based spa
 |[![PyPI version](https://badge.fury.io/py/spaghetti.svg)](https://badge.fury.io/py/spaghetti)| [![Conda Version](https://img.shields.io/conda/vn/conda-forge/spaghetti.svg)](https://anaconda.org/conda-forge/spaghetti) | ![tag](https://img.shields.io/github/v/release/pysal/spaghetti?include_prereleases&sort=semver) | [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/pysal/spaghetti/main)
 |:---:|:---:|:---:|:---:|
 |[![Downloads](https://pepy.tech/badge/spaghetti)](https://pepy.tech/project/spaghetti) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/spaghetti.svg)](https://anaconda.org/conda-forge/spaghetti) | [![Documentation](https://img.shields.io/static/v1.svg?label=docs&message=current&color=9cf)](http://pysal.org/spaghetti/) | [![Gitter](https://badges.gitter.im/pysal/Spaghetti.svg)](https://gitter.im/pysal/Spaghetti?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-| ![Pypi python versions](https://img.shields.io/pypi/pyversions/spaghetti.svg) | [![Conda Recipe](https://img.shields.io/badge/recipe-spaghetti-red.svg)](https://github.com/conda-forge/spaghetti-feedstock) | [![codecov](https://codecov.io/gh/pysal/spaghetti/branch/master/graph/badge.svg)](https://codecov.io/gh/pysal/spaghetti) | [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+| ![Pypi python versions](https://img.shields.io/pypi/pyversions/spaghetti.svg) | [![Conda Recipe](https://img.shields.io/badge/recipe-spaghetti-red.svg)](https://github.com/conda-forge/spaghetti-feedstock) | [![codecov](https://codecov.io/gh/pysal/spaghetti/branch/main/graph/badge.svg)](https://codecov.io/gh/pysal/spaghetti) | [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 | [![unittests](https://github.com/pysal/spaghetti/workflows/.github/workflows/unittests.yml/badge.svg)](https://github.com/pysal/spaghetti/actions?query=workflow%3A.github%2Fworkflows%2Funittests.yml) | [![status](https://joss.theoj.org/papers/52b8d0c81bbf311465b45bfc26379e74/status.svg)](https://joss.theoj.org/papers/52b8d0c81bbf311465b45bfc26379e74) | [![DOI](https://zenodo.org/badge/88305306.svg)](https://zenodo.org/badge/latestdoi/88305306) | [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
 
@@ -83,7 +83,7 @@ $ pip install git+https://github.com/pysal/spaghetti
 
 PySAL-spaghetti is under active development and contributors are welcome.
 
-If you have any suggestions, feature requests, or bug reports, please open new [issues](https://github.com/pysal/spaghetti/issues) on GitHub. To submit patches, please review [PySAL: Getting Started](http://pysal.org/getting_started#for-developers), the PySAL [development guidelines](https://github.com/pysal/pysal/wiki), the `spaghetti` [contributing guidelines](https://github.com/pysal/spaghetti/blob/master/.github/CONTRIBUTING.md) before  opening a [pull request](https://github.com/pysal/spaghetti/pulls). Once your changes get merged, you’ll automatically be added to the [Contributors List](https://github.com/pysal/spaghetti/graphs/contributors).
+If you have any suggestions, feature requests, or bug reports, please open new [issues](https://github.com/pysal/spaghetti/issues) on GitHub. To submit patches, please review [PySAL: Getting Started](http://pysal.org/getting_started#for-developers), the PySAL [development guidelines](https://github.com/pysal/pysal/wiki), the `spaghetti` [contributing guidelines](https://github.com/pysal/spaghetti/blob/main/.github/CONTRIBUTING.md) before  opening a [pull request](https://github.com/pysal/spaghetti/pulls). Once your changes get merged, you’ll automatically be added to the [Contributors List](https://github.com/pysal/spaghetti/graphs/contributors).
 
 ## Support
 
@@ -92,12 +92,12 @@ If you are having issues, please [create an issue](https://github.com/pysal/spag
 
 ## Code of Conduct
 
-As a PySAL-federated project, `spaghetti` follows the [Code of Conduct](https://github.com/pysal/governance/blob/master/conduct/code_of_conduct.rst) under the [PySAL governance model](https://github.com/pysal/governance).
+As a PySAL-federated project, `spaghetti` follows the [Code of Conduct](https://github.com/pysal/governance/blob/main/conduct/code_of_conduct.rst) under the [PySAL governance model](https://github.com/pysal/governance).
 
 
 ## License
 
-The project is licensed under the [BSD 3-Clause license](https://github.com/pysal/spaghetti/blob/master/LICENSE.txt).
+The project is licensed under the [BSD 3-Clause license](https://github.com/pysal/spaghetti/blob/main/LICENSE.txt).
 
 ## BibTeX Citation
 
