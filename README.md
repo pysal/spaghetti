@@ -87,7 +87,7 @@ If you have any suggestions, feature requests, or bug reports, please open new [
 
 ## Support
 
-If you are having issues, please [create an issue](https://github.com/pysal/spaghetti/issues) or talk to us in the [gitter room](https://gitter.im/pysal/spaghetti).
+If you are having issues, please [create an issue](https://github.com/pysal/spaghetti/issues), start a [discussion](https://github.com/pysal/spaghetti/discussions), or talk to us in the [gitter room](https://gitter.im/pysal/spaghetti).
 
 
 ## Code of Conduct
