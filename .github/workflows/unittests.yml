@@ -23,8 +23,8 @@
          #  - environment-file: ci/36-GIT-PLUS.yaml
          #    os: windows-latest
      steps:
-       - uses: actions/checkout@v2.3.4
-       - uses: goanpeca/setup-miniconda@v1
+       - uses: actions/checkout@v2
+       - uses: conda-incubator/setup-miniconda@v2
          with:
             miniconda-version: 'latest'
             auto-update-conda: true
@@ -38,7 +38,7 @@
        - shell: bash -l {0}
          run: py.test -v spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
        - name: codecov (${{ matrix.os }}, ${{ matrix.environment-file }})
-         uses: codecov/codecov-action@v1.0.14
+         uses: codecov/codecov-action@v1
          with:
            token: ${{ secrets.CODECOV_TOKEN }}
            file: ./coverage.xml
