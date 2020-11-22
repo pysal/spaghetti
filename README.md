@@ -31,7 +31,7 @@ The following are a selection of some examples that can be launched individually
 
 ## Installation
 
-As of version 1.4.2, `spaghetti` officially supports Python [3.6](https://docs.python.org/3.6/), [3.7](https://docs.python.org/3.7/), and [3.8](https://docs.python.org/3.8/). Please make sure that you are operating in a Python >= 3.6 environment.
+As of version 1.5.3, `spaghetti` officially supports Python [3.6](https://docs.python.org/3.6/), [3.7](https://docs.python.org/3.7/), [3.8](https://docs.python.org/3.8/), and [3.9](https://docs.python.org/3.9/). Please make sure that you are operating in a Python >= 3.6 environment.
 
 **Installing with `conda` via [`conda-forge`](https://github.com/conda-forge/spaghetti-feedstock) (highly recommended)**
 

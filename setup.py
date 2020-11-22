@@ -79,6 +79,7 @@ def setup_package():
             "Programming Language :: Python :: 3.6",
             "Programming Language :: Python :: 3.7",
             "Programming Language :: Python :: 3.8",
+            "Programming Language :: Python :: 3.9",
         ],
         license="3-Clause BSD",
         packages=[package],
@@ -87,7 +88,7 @@ def setup_package():
         extras_require=extras_reqs,
         zip_safe=False,
         cmdclass={"build.py": build_py},
-        python_requires=">3.5",
+        python_requires=">=3.6",
     )
 
 
