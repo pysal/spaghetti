@@ -259,7 +259,7 @@ intersphinx_mapping = {
     "numpy": ("https://numpy.org/doc/stable/", None),
     "pandas": ("https://pandas.pydata.org/pandas-docs/stable/", None),
     "pointpats": ("https://pointpats.readthedocs.io/en/latest/", None),
-    "python": ("https://docs.python.org/3.8/", None),
+    "python": ("https://docs.python.org/3.9/", None),
     "scipy": ("https://docs.scipy.org/doc/scipy/reference/", None),
 }
 
