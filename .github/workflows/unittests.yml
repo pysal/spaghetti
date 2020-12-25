@@ -22,6 +22,9 @@
              os: windows-latest
            - environment-file: ci/36-GIT-PLUS.yaml
              os: windows-latest
+     defaults:
+       run:
+         shell: bash -l {0}
      steps:
        - uses: actions/checkout@v2
        - uses: conda-incubator/setup-miniconda@v2
