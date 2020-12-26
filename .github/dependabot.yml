@@ -12,13 +12,6 @@ updates:
     reviewers:
       - "jGaboardi"
 
-  - package-ecosystem: "gitsubmodule"
-    directory: "/"
-    schedule:
-      interval: "daily"
-    reviewers:
-      - "jGaboardi"
-
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
