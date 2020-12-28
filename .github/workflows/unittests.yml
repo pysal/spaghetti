@@ -36,7 +36,7 @@
        - uses: conda-incubator/setup-miniconda@v2
          with:
             miniconda-version: 'latest'
-            mamba-version: "*"
+            mamba-version: '*'
             channels: conda-forge
             channel-priority: true
             auto-update-conda: false
@@ -46,6 +46,8 @@
             use-only-tar-bz2: true
        - run: mamba info --all
        - run: mamba list
+       - run: mamba config --show-sources
+       - run: mamba config --show
        - run: pytest -v spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
        - name: codecov (${{ matrix.os }}, ${{ matrix.environment-file }})
          uses: codecov/codecov-action@v1
