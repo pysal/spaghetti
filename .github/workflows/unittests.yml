@@ -46,8 +46,8 @@
             use-only-tar-bz2: true
        - run: mamba info --all
        - run: mamba list
-       - run: mamba config --show-sources
-       - run: mamba config --show
+       - run: conda config --show-sources
+       - run: conda config --show
        - run: pytest -v spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
        - name: codecov (${{ matrix.os }}, ${{ matrix.environment-file }})
          uses: codecov/codecov-action@v1
