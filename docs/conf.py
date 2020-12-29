@@ -12,7 +12,7 @@ import sys, os
 import sphinx_bootstrap_theme
 
 
-sys.path.insert(0, os.path.abspath("../../"))
+sys.path.insert(0, os.path.abspath("../"))
 
 # import your package to obtain the version info to display on the docs website
 import spaghetti
