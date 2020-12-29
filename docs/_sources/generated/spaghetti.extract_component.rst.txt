@@ -1,6 +1,0 @@
-spaghetti.extract\_component
-============================
-
-.. currentmodule:: spaghetti
-
-.. autofunction:: extract_component
