@@ -265,7 +265,7 @@ intersphinx_mapping = {
 
 # This is processed by Jinja2 and inserted before each notebook
 nbsphinx_prolog = r"""
-{% set docname = env.doc2path(env.docname, base='notebooks/') %}
+{% set docname = env.doc2path(env.docname, base='') %}
 {% set fullpath = env.doc2path(env.docname, base='tree/main/notebooks/') %}
 
 .. only:: html
