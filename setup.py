@@ -1,6 +1,5 @@
 from distutils.command.build_py import build_py
 from setuptools import setup
-import sys
 
 package = "spaghetti"
 
