@@ -1,4 +1,4 @@
-__version__ = "1.5.3"
+__version__ = "1.5.4"
 
 """
 # `spaghetti` --- Spatial Graphs: Networks, Topology, & Inference

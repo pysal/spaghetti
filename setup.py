@@ -20,16 +20,16 @@ def _get_requirements_from_files(groups_files):
 
     Parameters
     ----------
-
     groups_files : dict
         k - descriptive name, v - file name (including extension)
 
     Returns
     -------
-
     groups_reqlist : dict
         k - descriptive name, v - list of required packages
+    
     """
+
     groups_reqlist = {}
     for k, v in groups_files.items():
         with open(v, "r") as f:
