@@ -28,9 +28,7 @@ bibliography: paper.bib
 
 # Summary
 
-The role spatial networks, such as streets, play on the human experience cannot be overstated. All of our daily activities fall along, or in close proximity to, roads, bike paths, and subway systems to name a few. Therefore, when performing spatial analysis in many cases considering network space, as opposed to Euclidean space, allows for a more precise representation of daily human action and movement patterns. For example, people generally cannot get to work by driving in a straight line directly from their home, but move along paths within networks. To this end, `spaghetti` (**spa**tial **g**rap**h**s: n**et**works, **t**opology, & **i**nference), a sub-module in the wider PySAL ecosystem (see \autoref{fig:logo}), was developed to address network-centric research questions with a strong focus on spatial analysis [@pysal2007;@pysal2015;@gaboardi2018].
-
-![The PySAL logo.\label{fig:logo}](figs/pysal_logo.png)
+The role spatial networks, such as streets, play on the human experience cannot be overstated. All of our daily activities fall along, or in close proximity to, roads, bike paths, and subway systems to name a few. Therefore, when performing spatial analysis in many cases considering network space, as opposed to Euclidean space, allows for a more precise representation of daily human action and movement patterns. For example, people generally cannot get to work by driving in a straight line directly from their home, but move along paths within networks. To this end, `spaghetti` (**spa**tial **g**rap**h**s: n**et**works, **t**opology, & **i**nference), a sub-module in the wider PySAL ecosystem, was developed to address network-centric research questions with a strong focus on spatial analysis [@pysal2007;@pysal2015;@gaboardi2018].
 
 # Statement of Need
 
