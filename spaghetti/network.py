@@ -31,7 +31,7 @@ class Network:
 
     Parameters
     ----------
-    in_data : {str, list, tuple, numpy.ndarray, libpysal.cg.Chain, geopandas.GeoDataFrame}
+    in_data : {str, iterable (list, tuple, numpy.ndarray), libpysal.cg.Chain, geopandas.GeoDataFrame}
         The input geographic data. Either (1) a path to a shapefile
         (str); (2) an iterable containing ``libpysal.cg.Chain``
         objects; (3) a single ``libpysal.cg.Chain``; or
