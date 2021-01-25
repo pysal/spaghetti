@@ -18,7 +18,7 @@
          #os: [macos-latest, ubuntu-latest, windows-latest]
          os: [ubuntu-latest]
          #environment-file: [ci/36-PYPI.yaml, ci/36-PYPI-PLUS.yaml, ci/36-GIT.yaml, ci/36-GIT-PLUS.yaml, ci/37-PYPI.yaml, ci/37-PYPI-PLUS.yaml, ci/37-GIT.yaml, ci/37-GIT-PLUS.yaml, ci/38-PYPI.yaml, ci/38-PYPI-PLUS.yaml, ci/38-GIT.yaml, ci/38-GIT-PLUS.yaml, ci/39-PYPI.yaml, ci/39-PYPI-PLUS.yaml, ci/39-GIT.yaml, ci/39-GIT-PLUS.yaml]
-         environment-file: [ci/37-PYPI.yaml, ci/37-PYPI-PLUS.yaml, ci/37-GIT.yaml, ci/37-GIT-PLUS.yaml]#, ci/38-PYPI.yaml, ci/38-PYPI-PLUS.yaml, ci/38-GIT.yaml, ci/38-GIT-PLUS.yaml, ci/39-PYPI.yaml, ci/39-PYPI-PLUS.yaml, ci/39-GIT.yaml, ci/39-GIT-PLUS.yaml]
+         environment-file: [ci/39-PYPI.yaml, ci/39-PYPI-PLUS.yaml, ci/39-GIT.yaml, ci/39-GIT-PLUS.yaml]
          exclude:
            - environment-file: ci/36-PYPI-PLUS.yaml
              os: windows-latest
