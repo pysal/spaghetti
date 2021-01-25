@@ -2,6 +2,7 @@ from collections import defaultdict, OrderedDict
 from itertools import islice
 import copy, os, pickle, warnings
 
+import esda
 import numpy
 
 from .analysis import GlobalAutoK
@@ -853,7 +854,6 @@ class Network:
 
         >>> import spaghetti
         >>> from libpysal import examples
-        >>> import esda
         >>> import numpy
         >>> ntw = spaghetti.Network(examples.get_path("streets.shp"))
 
@@ -874,37 +874,13 @@ class Network:
         Create a contiguity-based ``W`` object.
 
         >>> w = ntw.contiguityweights(graph=False)
-
-        Using the ``W`` object, access to `esda <https://pysal.org/esda/>`_
-        functionality is provided. First, a vector of attributes is
-        created for all edges with observations.
-
-        >>> w = ntw.contiguityweights(graph=False)
-        >>> arcs = w.neighbors.keys()
-        >>> y = numpy.zeros(len(arcs))
-        >>> for i, e in enumerate(arcs):
-        ...     if e in counts.keys():
-        ...         y[i] = counts[e]
-
-        Fetch the number of observations associated with arc ``3``,
-        where ``3`` is the basic 0-indexed ID of ``w.neighbors.keys()``
-        created through ``enumerate(arcs)``.
-
-        >>> y[3]
-        3.0
-
-        Next, a standard call to
-        `esda.Moran <https://pysal.org/esda/generated/esda.Moran.html#esda.Moran>`_
-        is made and the result placed into ``res``.
-
-        >>> res = esda.moran.Moran(y, w, permutations=99)
-        >>> type(res)
-        <class 'esda.moran.Moran'>
+        >>> w.n, w.n_components
+        (303, 1)
 
         Notes
         -----
 
-        See :cite:`pysal2007` and :cite:`esda:_2019` for more details.
+        See :cite:`pysal2007` for more details.
 
         """
 
@@ -1298,20 +1274,23 @@ class Network:
         pointpattern.dist_snapped = dist_snapped
         pointpattern.obs_to_vertex = list(obs_to_vertex)
 
-    def count_per_link(self, obs_on, graph=True):
+    def count_per_link(self, obs_on, graph=False):
         """Compute the counts per arc or edge (link).
 
         Parameters
         ----------
         obs_on : dict
             Dictionary of observations on the network.
-            Either in the form {(<LINK>):{<POINT_ID>:(<COORDS>)}} or
-            {<LINK>:[(<COORD>),(<COORD>)]}.
+            Either in the form ``{(<LINK>):{<POINT_ID>:(<COORDS>)}}``
+            or ``{<LINK>:[(<COORD>),(<COORD>)]}``.
+        graph : bool
+            Count observations on graph edges (``True``) or
+            network arcs (``False``). Default is ``False``.
 
         Returns
         -------
         counts : dict
-            Counts per network link in the form {(<LINK>):<COUNT>}.
+            Counts per network link in the form ``{(<LINK>):<COUNT>}``.
 
         Examples
         --------
@@ -2470,15 +2449,15 @@ class Network:
             A ``spaghetti`` point pattern object.
         nsteps : int
             The number of steps at which the count of the nearest
-            neighbors is computed. Default is 10.
+            neighbors is computed. Default is ``10``.
         permutations : int
-            The number of permutations to perform. Default is 99.
+            The number of permutations to perform. Default is ``99``.
         threshold : float
             The level at which significance is computed.
-            (0.5 would be 97.5% and 2.5%). Default is 0.5.
+            (0.5 would be 97.5% and 2.5%). Default is ``0.5``.
         distribution : str
             The distribution from which random points are sampled.
-            Currently, the only supported distribution is uniform.
+            Currently, the only supported distribution is ``'uniform'``.
         upperbound : float
             The upper bound at which the :math:`K`-function is computed.
             Defaults to the maximum observed nearest neighbor distance.
@@ -2562,6 +2541,82 @@ class Network:
             distribution=distribution,
             upperbound=upperbound,
         )
+
+    def Moran(self, pp_name, permutations=9999, graph=False):
+        """Calculate a Moran's *I* statistic on a set of observations
+        based on network arcs. The Moran’s *I* test statistic allows
+        for the inference of how clustered (or dispersed) a dataset is
+        while considering both attribute values and spatial relationships.
+        A value of closer to +1 indicates absolute clustering while a
+        value of closer to -1 indicates absolute dispersion. Complete
+        spatial randomness takes the value of 0. See the
+        `esda documentation <https://pysal.org/esda/generated/esda.Moran.html#esda.Moran>`_
+        for in-depth descriptions and tutorials.
+        
+        Parameters
+        ----------
+        pp_name : str
+            The name of the point pattern in question.
+        permutations : int
+            The number of permutations to perform. Default is ``9999``.
+        graph : bool
+            Perform the Moran calculation on the graph `W` object
+            (``True``). Default is ``False``, which performs the
+            Moran calculation on the network `W` object.
+        
+        Returns
+        -------
+        moran : esda.Moran
+            A Moran's *I* statistic object results.
+        y : list
+            The y-axis (counts).
+        
+        Examples
+        --------
+        
+        Create a network instance.
+
+        >>> import spaghetti
+        >>> from libpysal import examples
+        >>> ntw = spaghetti.Network(in_data=examples.get_path("streets.shp"))
+
+        Snap observation points onto the network.
+
+        >>> crimes = "crimes"
+        >>> in_data = examples.get_path(crimes+".shp")
+        >>> ntw.snapobservations(in_data, crimes, attribute=True)
+
+        Compute a Moran's :math:`I` from crime observations.
+
+        >>> moran_res, _ = ntw.Moran(crimes)
+        >>> round(moran_res.I, 6)
+        0.005193
+        
+        Notes
+        -----
+
+        See :cite:`esda:_2019` for more details.
+
+        """
+
+        # set proper weights attribute
+        if graph:
+            w = self.w_graph
+        else:
+            w = self.w_network
+
+        # Compute the counts
+        pointpat = self.pointpatterns[pp_name]
+        counts = self.count_per_link(pointpat.obs_to_arc, graph=graph)
+
+        # Build the y vector
+        arcs = w.neighbors.keys()
+        y = [counts[a] if a in counts.keys() else 0.0 for i, a in enumerate(arcs)]
+
+        # Moran's I
+        moran = esda.moran.Moran(y, w, permutations=permutations)
+
+        return moran, y
 
     def savenetwork(self, filename):
         """Save a network to disk as a binary file.
