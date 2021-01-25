@@ -2542,7 +2542,7 @@ class Network:
             upperbound=upperbound,
         )
 
-    def Moran(self, pp_name, permutations=9999, graph=False):
+    def Moran(self, pp_name, permutations=999, graph=False):
         """Calculate a Moran's *I* statistic on a set of observations
         based on network arcs. The Moran’s *I* test statistic allows
         for the inference of how clustered (or dispersed) a dataset is
@@ -2558,7 +2558,7 @@ class Network:
         pp_name : str
             The name of the point pattern in question.
         permutations : int
-            The number of permutations to perform. Default is ``9999``.
+            The number of permutations to perform. Default is ``999``.
         graph : bool
             Perform the Moran calculation on the graph `W` object
             (``True``). Default is ``False``, which performs the
