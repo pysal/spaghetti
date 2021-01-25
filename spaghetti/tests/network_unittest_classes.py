@@ -766,12 +766,14 @@ class TestNetworkAnalysis(unittest.TestCase):
 
     def test_moran_network(self):
         known_moran_I, known_y = 0.005193, [0.0, 1, 0.0, 3, 0.0]
+        numpy.random.seed(0)
         observed_moran, observed_y = self.ntw_shp.Moran(crimes)
         self.assertAlmostEqual(observed_moran.I, known_moran_I, places=6)
         self.assertEqual(observed_y[:5], known_y)
 
     def test_moran_graph(self):
         known_moran_I, known_y = 0.004778, [1, 0.0, 0.0, 3, 1]
+        numpy.random.seed(0)
         observed_moran, observed_y = self.ntw_shp.Moran(crimes, graph=True)
         self.assertAlmostEqual(observed_moran.I, known_moran_I, places=6)
         self.assertEqual(observed_y[:5], known_y)
