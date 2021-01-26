@@ -767,7 +767,7 @@ class TestNetworkAnalysis(unittest.TestCase):
 
     def test_moran_network(self):
         known_moran_I, known_y = 0.005192687496078421, [0.0, 1, 0.0, 3, 0.0]
-        observed_moran, observed_y = self.ntw_shp.Moran(crimes, permutations=0)
+        observed_moran, observed_y = self.ntw_shp.Moran(crimes)
         numpy.testing.assert_allclose(
             observed_moran.I, known_moran_I, rtol=RTOL, atol=ATOL
         )
@@ -775,9 +775,7 @@ class TestNetworkAnalysis(unittest.TestCase):
 
     def test_moran_graph(self):
         known_moran_I, known_y = 0.004777863137379377, [1, 0.0, 0.0, 3, 1]
-        observed_moran, observed_y = self.ntw_shp.Moran(
-            crimes, graph=True, permutations=0
-        )
+        observed_moran, observed_y = self.ntw_shp.Moran(crimes, graph=True)
         numpy.testing.assert_allclose(
             observed_moran.I, known_moran_I, rtol=RTOL, atol=ATOL
         )
