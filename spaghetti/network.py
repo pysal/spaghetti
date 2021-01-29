@@ -1240,8 +1240,7 @@ class Network:
         snapped = util.snap_points_to_links(points, arcs_)
 
         # record obs_to_arc, dist_to_vertex, and dist_snapped
-
-        # iterate over the snapped observation points
+        # -- iterate over the snapped observation points
         for point_idx, snap_info in snapped.items():
 
             # fetch the x and y coordinate
