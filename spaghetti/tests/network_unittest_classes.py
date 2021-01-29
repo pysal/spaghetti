@@ -79,7 +79,7 @@ synth_obs = "synth_obs"
 points1 = "points1"
 points2 = "points2"
 
-"""
+
 # -------------------------------------------------------------------------------
 class TestNetwork(unittest.TestCase):
     def setUp(self):
@@ -695,7 +695,7 @@ class TestNetworkPointPattern(unittest.TestCase):
 
         with self.assertRaises(KeyError):
             self.spaghetti.element_as_gdf(self.ntw, pp_name="i_should_not_exist")
-"""
+
 
 # -------------------------------------------------------------------------------
 class TestNetworkAnalysis(unittest.TestCase):
@@ -768,21 +768,20 @@ class TestNetworkAnalysis(unittest.TestCase):
     def test_moran_network(self):
         known_moran_I, known_y = 0.005192687496078421, [0.0, 1, 0.0, 3, 0.0]
         observed_moran, observed_y = self.ntw_shp.Moran(crimes)
-        # numpy.testing.assert_allclose(
-        #    observed_moran.I, known_moran_I, rtol=RTOL, atol=ATOL
-        # )
+        numpy.testing.assert_allclose(
+            observed_moran.I, known_moran_I, rtol=RTOL, atol=ATOL
+        )
         self.assertEqual(observed_y[:5], known_y)
 
     def test_moran_graph(self):
         known_moran_I, known_y = 0.004777863137379377, [1, 0.0, 0.0, 3, 1]
         observed_moran, observed_y = self.ntw_shp.Moran(crimes, graph=True)
-        # numpy.testing.assert_allclose(
-        #    observed_moran.I, known_moran_I, rtol=RTOL, atol=ATOL
-        # )
+        numpy.testing.assert_allclose(
+            observed_moran.I, known_moran_I, rtol=RTOL, atol=ATOL
+        )
         self.assertEqual(observed_y[:5], known_y)
 
 
-"""
 # -------------------------------------------------------------------------------
 class TestNetworkUtils(unittest.TestCase):
     def setUp(self):
@@ -865,4 +864,3 @@ class TestNetworkUtils(unittest.TestCase):
         known_coords = [xy._Point__loc for xy in snapped[0][0]]
         self.assertEqual(known_coords, [(0.0, 0.0), (2.0, 0.0)])
         self.assertEqual(snapped[0][1].all(), numpy.array([1.0, 0.0]).all())
-"""
