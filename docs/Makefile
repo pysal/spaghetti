@@ -26,7 +26,7 @@ github:
 sync:
 	@rsync -avh _build/html/ ../docs/ --delete
 	@make clean
-	touch ../docs/.nojekyll
+	touch .nojekyll
 
 clean:
 	rm -rf $(BUILDDIR)/*

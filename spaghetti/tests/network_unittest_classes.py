@@ -1,4 +1,5 @@
 from libpysal import cg, examples, io
+from libpysal.common import RTOL, ATOL
 import numpy
 import unittest
 import copy
@@ -699,6 +700,7 @@ class TestNetworkPointPattern(unittest.TestCase):
 # -------------------------------------------------------------------------------
 class TestNetworkAnalysis(unittest.TestCase):
     def setUp(self):
+        # synthetic test data
         bounds, h, v = (0, 0, 3, 3), 2, 2
         lattice = self.spaghetti.regular_lattice(bounds, h, nv=v, exterior=True)
         self.ntw = self.spaghetti.Network(in_data=lattice)
@@ -721,6 +723,10 @@ class TestNetworkAnalysis(unittest.TestCase):
         npts = self.ntw.pointpatterns[self.mids].npoints
         self.test_permutations = 99
         self.test_steps = 10
+
+        # empirical test_data
+        self.ntw_shp = self.spaghetti.Network(in_data=STREETS)
+        self.ntw_shp.snapobservations(CRIMES, crimes, attribute=True)
 
     def tearDown(self):
         pass
@@ -758,6 +764,22 @@ class TestNetworkAnalysis(unittest.TestCase):
                 nsteps=self.test_steps,
                 distribution="mrofinu",
             )
+
+    def test_moran_network(self):
+        known_moran_I, known_y = 0.005192687496078421, [0.0, 1, 0.0, 3, 0.0]
+        observed_moran, observed_y = self.ntw_shp.Moran(crimes)
+        numpy.testing.assert_allclose(
+            observed_moran.I, known_moran_I, rtol=RTOL, atol=ATOL
+        )
+        self.assertEqual(observed_y[:5], known_y)
+
+    def test_moran_graph(self):
+        known_moran_I, known_y = 0.004777863137379377, [1, 0.0, 0.0, 3, 1]
+        observed_moran, observed_y = self.ntw_shp.Moran(crimes, graph=True)
+        numpy.testing.assert_allclose(
+            observed_moran.I, known_moran_I, rtol=RTOL, atol=ATOL
+        )
+        self.assertEqual(observed_y[:5], known_y)
 
 
 # -------------------------------------------------------------------------------
