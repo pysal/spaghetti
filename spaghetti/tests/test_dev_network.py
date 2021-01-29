@@ -2,9 +2,11 @@
 """
 
 import unittest
+
 from .network_unittest_classes import TestNetwork
 from .network_unittest_classes import TestNetworkPointPattern
 from .network_unittest_classes import TestNetworkAnalysis
+
 from .network_unittest_classes import TestNetworkUtils
 
 # dev import structure
