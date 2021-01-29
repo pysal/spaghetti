@@ -74,16 +74,19 @@ $ pip install git+https://github.com/pysal/spaghetti
 - [`rtree`](https://rtree.readthedocs.io/en/latest/)
 - [`scipy`](http://scipy.github.io/devdocs/)
 
+
 ## Soft Dependencies
 
 - [`geopandas`](https://geopandas.readthedocs.io/en/latest/index.html)
 - [`shapely`](https://shapely.readthedocs.io/en/latest/)
+
 
 ##  Contribute
 
 PySAL-spaghetti is under active development and contributors are welcome.
 
 If you have any suggestions, feature requests, or bug reports, please open new [issues](https://github.com/pysal/spaghetti/issues) on GitHub. To submit patches, please review [PySAL: Getting Started](http://pysal.org/getting_started#for-developers), the PySAL [development guidelines](https://github.com/pysal/pysal/wiki), the `spaghetti` [contributing guidelines](https://github.com/pysal/spaghetti/blob/main/.github/CONTRIBUTING.md) before  opening a [pull request](https://github.com/pysal/spaghetti/pulls). Once your changes get merged, you’ll automatically be added to the [Contributors List](https://github.com/pysal/spaghetti/graphs/contributors).
+
 
 ## Support
 
@@ -98,6 +101,7 @@ As a PySAL-federated project, `spaghetti` follows the [Code of Conduct](https://
 ## License
 
 The project is licensed under the [BSD 3-Clause license](https://github.com/pysal/spaghetti/blob/main/LICENSE.txt).
+
 
 ## BibTeX Citation
 
@@ -116,6 +120,11 @@ If you use PySAL-spaghetti in a scientific publication, we would appreciate usin
     keywords  = {graph-theory,network-analysis,python,spatial-networks,topology}
 }
 ```
+
+
+## Citing Work
+
+* **Lovelace, R**. *Open source tools for geographic analysis in transport planning*. J Geogr Syst (2021). https://doi.org/10.1007/s10109-020-00342-2.
 
 
 ## Funding

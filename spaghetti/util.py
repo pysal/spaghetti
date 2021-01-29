@@ -451,15 +451,21 @@ def snap_points_to_links(points, links):
         # a query rectangle centered on the point with sides
         # of length dmin * dmin
         rtree_lookup = rtree.intersection([x0, y0, x1, y1], objects=True)
-        candidates = [cand.object for cand in rtree_lookup]
+        candidates = [cand.object.vertices for cand in rtree_lookup]
+        # Sorting the candidate ensures reproducible results from OS to OS.
+        # See:
+        #   https://github.com/pysal/spaghetti/pull/595
+        #   https://github.com/pysal/spaghetti/issues/598
+        #   https://github.com/pysal/spaghetti/pull/599
+        candidates.sort(reverse=True)
         dmin += SMALL
         dmin2 = dmin * dmin
 
         # of the candidate arcs, find the nearest to the query point
         for candidate in candidates:
-            dist2cand, nearp = squared_distance_point_link(point, candidate.vertices)
+            dist2cand, nearp = squared_distance_point_link(point, candidate)
             if dist2cand <= dmin2:
-                closest = candidate.vertices
+                closest = candidate
                 dmin2 = dist2cand
                 point2link[pt_idx] = (closest, nearp)
 
