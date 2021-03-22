@@ -309,7 +309,9 @@ class Network:
 
                 # extract contiguity weights from libpysal
                 self.w_network = self.contiguityweights(
-                    graph=as_graph, weightings=weightings, weights_kws=weights_kws,
+                    graph=as_graph,
+                    weightings=weightings,
+                    weights_kws=weights_kws,
                 )
                 # identify connected components from the `w_network`
                 self.identify_components(self.w_network, graph=as_graph)
@@ -326,7 +328,9 @@ class Network:
                         weightings = self.edge_lengths
 
                     self.w_graph = self.contiguityweights(
-                        graph=as_graph, weightings=weightings, weights_kws=weights_kws,
+                        graph=as_graph,
+                        weightings=weightings,
+                        weights_kws=weights_kws,
                     )
                     self.identify_components(self.w_graph, graph=as_graph)
 
@@ -2551,7 +2555,7 @@ class Network:
         spatial randomness takes the value of 0. See the
         `esda documentation <https://pysal.org/esda/generated/esda.Moran.html#esda.Moran>`_
         for in-depth descriptions and tutorials.
-        
+
         Parameters
         ----------
         pp_name : str
@@ -2562,17 +2566,17 @@ class Network:
             Perform the Moran calculation on the graph `W` object
             (``True``). Default is ``False``, which performs the
             Moran calculation on the network `W` object.
-        
+
         Returns
         -------
         moran : esda.Moran
             A Moran's *I* statistic object results.
         y : list
             The y-axis (counts).
-        
+
         Examples
         --------
-        
+
         Create a network instance.
 
         >>> import spaghetti
@@ -2590,11 +2594,11 @@ class Network:
         >>> moran_res, _ = ntw.Moran(crimes)
         >>> round(moran_res.I, 6)
         0.005193
-        
+
         Notes
         -----
 
-        See :cite:`esda:_2019` for more details.
+        See :cite:`moran:_cliff81` and :cite:`esda:_2019` for more details.
 
         """
 
