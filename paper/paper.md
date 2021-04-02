@@ -58,7 +58,7 @@ After the creation of a base network object it can be manipulated, analyzed, and
     * point type A to point type A (auto)
     * point type A to point type B (cross)
  * utilizing observation counts on network segments and network spatial weights within the [Moran’s *I*](https://pysal.org/spaghetti/generated/spaghetti.Network.html#spaghetti.Network.Moran) attribute to analyze global spatial autocorrelation [@moran:_cliff81;@esda:_2019] as seen in \autoref{fig:pointsnapmoran}
- * simulating point patterns that can be used within the  [*K* function](https://pysal.org/spaghetti/generated/spaghetti.Network.html#spaghetti.Network.GlobalAutoK) attribute for cluster analysis [osullivan_unwin2010.ch5;@okabe2012]
+ * simulating point patterns that can be used within the  [*K* function](https://pysal.org/spaghetti/generated/spaghetti.Network.html#spaghetti.Network.GlobalAutoK) attribute for cluster analysis [@osullivan_unwin2010.ch5;@okabe2012]
  * splitting the network into (nearly) uniform segments
  * extracting features as `geopandas.GeoDataFrame` objects:
     * network arcs, vertices and point patterns 
@@ -85,7 +85,7 @@ ntw.w_network.plot(arcs_df, indexed_on="id", ax=base, **w_kws)
 vertices_df.plot(ax=base, fc="r", ec="k", markersize=50, zorder=2)
 ```
 
-![A 4x4 regular lattice with network arcs in gray and vertices in red. Connectivity is demonstrated with `libpysal` spatial weights, which are plotted over the network in black [@libpysal2020]. \label{fig:gridweights}](figs/spaghetti_network.png)
+![A 4x4 regular lattice with network arcs in gray and vertices in red. Connectivity is demonstrated with `libpysal` spatial weights, which are plotted over the network in black [@libpysal2020]. \label{fig:gridweights}](figs/spaghetti_network.png =50x)
 
 ```python
 import spaghetti, libpysal, matplotlib
@@ -109,7 +109,7 @@ schools_snapped.plot(ax=base, fc="g", ec="k", markersize=50, zorder=2)
 matplotlib.pyplot.title(f"Moran's $I$: {round(moran.I, 3)}", size="xx-large")
 ```
 
-![Demonstrating the creation of a network and point pattern from shapefiles, followed by spatial autocorrelation analysis. A shapefile of school locations (blue) is read in and the points are snapped to the nearest network segments (green). A Moran's *I* statistic of -0.026 indicates near complete spatial randomness, though slightly dispersed. \label{fig:pointsnapmoran}](figs/spaghetti_pointpattern_moran.png)
+![Demonstrating the creation of a network and point pattern from shapefiles, followed by spatial autocorrelation analysis. A shapefile of school locations (blue) is read in and the points are snapped to the nearest network segments (green). A Moran's *I* statistic of -0.026 indicates near complete spatial randomness, though slightly dispersed. \label{fig:pointsnapmoran}](figs/spaghetti_pointpattern_moran.png =50x)
 
 The overview presented here provides a high-level summary of functionality. More detailed examples and applications can be found in the *Tutorials* section of the `spaghetti` [documentation](https://pysal.org/spaghetti/tutorials.html).
 
