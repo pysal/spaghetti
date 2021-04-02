@@ -85,7 +85,7 @@ ntw.w_network.plot(arcs_df, indexed_on="id", ax=base, **w_kws)
 vertices_df.plot(ax=base, fc="r", ec="k", markersize=50, zorder=2)
 ```
 
-![A 4x4 regular lattice with network arcs in gray and vertices in red. Connectivity is demonstrated with `libpysal` spatial weights, which are plotted over the network in black [@libpysal2020]. \label{fig:gridweights}](figs/spaghetti_network.png =50x)
+![A 4x4 regular lattice with network arcs in gray and vertices in red. Connectivity is demonstrated with `libpysal` spatial weights, which are plotted over the network in black [@libpysal2020]. \label{fig:gridweights}](figs/spaghetti_network.png)
 
 ```python
 import spaghetti, libpysal, matplotlib
@@ -109,7 +109,7 @@ schools_snapped.plot(ax=base, fc="g", ec="k", markersize=50, zorder=2)
 matplotlib.pyplot.title(f"Moran's $I$: {round(moran.I, 3)}", size="xx-large")
 ```
 
-![Demonstrating the creation of a network and point pattern from shapefiles, followed by spatial autocorrelation analysis. A shapefile of school locations (blue) is read in and the points are snapped to the nearest network segments (green). A Moran's *I* statistic of -0.026 indicates near complete spatial randomness, though slightly dispersed. \label{fig:pointsnapmoran}](figs/spaghetti_pointpattern_moran.png =50x)
+![Demonstrating the creation of a network and point pattern from shapefiles, followed by spatial autocorrelation analysis. A shapefile of school locations (blue) is read in and the points are snapped to the nearest network segments (green). A Moran's *I* statistic of -0.026 indicates near complete spatial randomness, though slightly dispersed. \label{fig:pointsnapmoran}](figs/spaghetti_pointpattern_moran.png)
 
 The overview presented here provides a high-level summary of functionality. More detailed examples and applications can be found in the *Tutorials* section of the `spaghetti` [documentation](https://pysal.org/spaghetti/tutorials.html).
 
