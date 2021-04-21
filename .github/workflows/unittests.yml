@@ -37,7 +37,7 @@
          with:
             miniconda-version: 'latest'
             channels: conda-forge
-            channel-priority: true
+            channel-priority: strict
             auto-update-conda: false
             auto-activate-base: false
             environment-file: ${{ matrix.environment-file }}
