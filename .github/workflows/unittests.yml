@@ -36,6 +36,8 @@
        - uses: conda-incubator/setup-miniconda@v2
          with:
             miniconda-version: 'latest'
+            mamba-version: '*'
+            use-mamba: true
             channels: conda-forge
             channel-priority: strict
             auto-update-conda: false
@@ -43,10 +45,10 @@
             environment-file: ${{ matrix.environment-file }}
             activate-environment: test
             use-only-tar-bz2: true
-       - run: conda info --all
-       - run: conda list
-       - run: conda config --show-sources
-       - run: conda config --show
+       - run: mamba info --all
+       - run: mamba list
+       - run: mamba config --show-sources
+       - run: mamba config --show
        - run: pytest -v spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
        - name: codecov (${{ matrix.os }}, ${{ matrix.environment-file }})
          uses: codecov/codecov-action@v1
