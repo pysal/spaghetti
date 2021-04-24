@@ -32,14 +32,15 @@
          uses: mamba-org/provision-with-micromamba@main
          with:
            environment-file: ${{ matrix.environment-file }}
-       - name: run tests in bash
-         shell: bash -l {0}
-         run: pytest -v spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
-         if: matrix.os != 'windows-latest' && matrix.environment-file == 'ci/*PYPI*.yaml'
-       - name: run tests in powershell
-         shell: powershell
-         run: pytest -v spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
-         if: matrix.os == 'windows-latest' && matrix.environment-file == 'ci/*PYPI*.yaml'
+           if: matrix.environment-file == 'ci/*PYPI*.yaml'
+         - name: run tests in bash
+           shell: bash -l {0}
+           run: pytest -v spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
+           if: matrix.os != 'windows-latest'
+         - name: run tests in powershell
+           shell: powershell
+           run: pytest -v spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
+           if: matrix.os == 'windows-latest'
        - name: codecov (${{ matrix.os }}, ${{ matrix.environment-file }})
          uses: codecov/codecov-action@v1
          with:
