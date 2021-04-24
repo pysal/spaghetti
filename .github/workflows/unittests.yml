@@ -38,15 +38,15 @@
        - name: setup mamba
          uses: conda-incubator/setup-miniconda@v2
          with:
-             miniconda-version: 'latest'
-             mamba-version: '*'
-             use-mamba: true
-             channels: conda-forge
-             channel-priority: strict
-             auto-update-conda: false
-             auto-activate-base: false
-             environment-file: ${{ matrix.environment-file }}
-             activate-environment: test
+           miniconda-version: 'latest'
+           mamba-version: '*'
+           use-mamba: true
+           channels: conda-forge
+           channel-priority: strict
+           auto-update-conda: false
+           auto-activate-base: false
+           environment-file: ${{ matrix.environment-file }}
+           activate-environment: test
          if: contains(matrix.environment-file, 'GIT')
        
        - name: run tests in bash
