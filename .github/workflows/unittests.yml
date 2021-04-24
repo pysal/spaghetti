@@ -10,7 +10,7 @@
 
  jobs:
    unittests:
-     name: micromambda (${{ matrix.os }}, ${{ matrix.environment-file }})
+     name: micromamba (${{ matrix.os }}, ${{ matrix.environment-file }})
      runs-on: ${{ matrix.os }}
      timeout-minutes: 30
      strategy:
@@ -33,15 +33,15 @@
          with:
            - environment-file: ${{ matrix.environment-file }}
            - environment-name: test
-        - run: mamba info --all
-        - run: mamba list
-        - run: pytest -v spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
-        - name: codecov (${{ matrix.os }}, ${{ matrix.environment-file }})
-          uses: codecov/codecov-action@v1
-          with:
-            token: ${{ secrets.CODECOV_TOKEN }}
-            file: ./coverage.xml
-            name: spaghetti-codecov
+       - run: mamba info --all
+       - run: mamba list
+       - run: pytest -v spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
+       - name: codecov (${{ matrix.os }}, ${{ matrix.environment-file }})
+         uses: codecov/codecov-action@v1
+         with:
+           token: ${{ secrets.CODECOV_TOKEN }}
+           file: ./coverage.xml
+           name: spaghetti-codecov
 
 
 #jobs:
