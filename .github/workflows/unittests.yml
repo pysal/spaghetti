@@ -16,7 +16,6 @@
      strategy:
        matrix:
          os: [macos-latest, ubuntu-latest, windows-latest]
-         #environment-file: [ci/36-PYPI.yaml, ci/36-PYPI-PLUS.yaml, ci/37-PYPI.yaml,  ci/37-PYPI-PLUS.yaml, ci/38-PYPI.yaml, ci/38-PYPI-PLUS.yaml, ci/39-PYPI.yaml, ci/39-PYPI-PLUS.yaml]
          environment-file: [ci/36-PYPI.yaml, ci/36-PYPI-PLUS.yaml, ci/36-GIT.yaml, ci/36-GIT-PLUS.yaml, ci/37-PYPI.yaml,  ci/37-PYPI-PLUS.yaml, ci/37-GIT.yaml, ci/37-GIT-PLUS.yaml, ci/38-PYPI.yaml, ci/38-PYPI-PLUS.yaml,  ci/38-GIT.yaml, ci/38-GIT-PLUS.yaml, ci/39-PYPI.yaml, ci/39-PYPI-PLUS.yaml, ci/39-GIT.yaml,  ci/39-GIT-PLUS.yaml]
          exclude:
            - environment-file: ci/36-PYPI-PLUS.yaml
@@ -27,20 +26,40 @@
        run:
          shell: bash -l {0}
      steps:
-       - uses: actions/checkout@v2
-       - name: install mamba
+       - name: chacout repo
+         uses: actions/checkout@v2
+       
+       - name: setup micromamba
          uses: mamba-org/provision-with-micromamba@main
          with:
            environment-file: ${{ matrix.environment-file }}
          if: contains(matrix.environment-file, 'PYPI')
+       
+       - name: setup mamba
+         uses: conda-incubator/setup-miniconda@v2
+         with:
+             miniconda-version: 'latest'
+             mamba-version: '*'
+             use-mamba: true
+             channels: conda-forge
+             channel-priority: strict
+             auto-update-conda: false
+             auto-activate-base: false
+             environment-file: ${{ matrix.environment-file }}
+             activate-environment: test
+         if: contains(matrix.environment-file, 'GIT')
+       
        - name: run tests in bash
          shell: bash -l {0}
          run: pytest -v spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
-         if: matrix.os != 'windows-latest' && contains(matrix.environment-file, 'PYPI')
+         #if: matrix.os != 'windows-latest' && contains(matrix.environment-file, 'PYPI')
+         if: (matrix.os != 'windows-latest' && contains(matrix.environment-file, 'PYPI')) || contains(matrix.environment-file, 'GIT'))
+       
        - name: run tests in powershell
          shell: powershell
          run: pytest -v spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
          if: matrix.os == 'windows-latest' && contains(matrix.environment-file, 'PYPI')
+       
        - name: codecov (${{ matrix.os }}, ${{ matrix.environment-file }})
          uses: codecov/codecov-action@v1
          with:
