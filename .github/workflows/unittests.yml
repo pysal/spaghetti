@@ -18,13 +18,14 @@
          shell: bash -l {0}
      steps:
        - uses: actions/checkout@v2
-       - name: somename
+       - name: install mambda
          uses: mamba-org/provision-with-micromamba@main
          with:
            environment-file: ci/39-PYPI.yaml
-       - run: mamba info --all
-       - run: mamba list
-       - run: pytest -v spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
+       #- run: mamba info --all
+       #- run: mamba list
+       - name: run tests
+         run: pytest -v spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
        - name: codecov
          uses: codecov/codecov-action@v1
          with:
