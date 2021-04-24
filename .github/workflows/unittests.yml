@@ -42,16 +42,8 @@ jobs:
            token: ${{ secrets.CODECOV_TOKEN }}
            file: ./coverage.xml
            name: spaghetti-codecov
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+
+
 #jobs:
 #  unittests:
 #    name: conda (${{ matrix.os }}, ${{ matrix.environment-file }})
