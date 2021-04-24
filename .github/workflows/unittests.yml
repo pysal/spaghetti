@@ -32,7 +32,7 @@
        - uses: mamba-org/provision-with-micromamba@main
          with:
            environment-file: ${{ matrix.environment-file }}
-           activate-environment: test
+           environment-name: test
         - run: mamba info --all
         - run: mamba list
         - run: pytest -v spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
