@@ -52,7 +52,6 @@
        - name: run tests in bash
          shell: bash -l {0}
          run: pytest -v spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
-         #if: matrix.os != 'windows-latest' && contains(matrix.environment-file, 'PYPI')
          if: [matrix.os != 'windows-latest' && contains(matrix.environment-file, 'PYPI')] || contains(matrix.environment-file, 'GIT')
        
        - name: run tests in powershell
@@ -68,6 +67,9 @@
            name: spaghetti-codecov
 
 
+ 
+#if: matrix.os != 'windows-latest' && contains(matrix.environment-file, 'PYPI')
+ 
  
 # jobs:
 #   unittests:
