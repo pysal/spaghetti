@@ -10,7 +10,7 @@
 
  jobs:
    unittests:
-     name: micromamba (${{ ubuntu-latest }}, ${{ ci/39-PYPI.yaml }})
+     name: micromamba (ubuntu-latest ci/39-PYPI.yaml)
      runs-on: ubuntu-latest
      timeout-minutes: 30
      #strategy:
@@ -36,7 +36,7 @@
        - run: mamba info --all
        - run: mamba list
        - run: pytest -v spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
-       - name: codecov (${{ ubuntu-latest }}, ${{ ci/39-PYPI.yaml }})
+       - name: codecov (ubuntu-latest ci/39-PYPI.yaml)
          uses: codecov/codecov-action@v1
          with:
            token: ${{ secrets.CODECOV_TOKEN }}
