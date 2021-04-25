@@ -2,11 +2,12 @@ name: test
 channels:
   - conda-forge
 dependencies:
-  - python=3.6
+  - python=3.8
   # required
   - esda
   - numpy
   - pandas>=1.0
+  - pip
   - rtree
   - scipy>=1.0
   - watermark
@@ -15,7 +16,3 @@ dependencies:
   - codecov
   - pytest
   - pytest-cov
-  # required
-  - pip
-  - pip:
-    - git+https://github.com/pysal/libpysal.git@master

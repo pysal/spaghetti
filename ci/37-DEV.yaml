@@ -7,6 +7,7 @@ dependencies:
   - esda
   - numpy
   - pandas>=1.0
+  - pip
   - rtree
   - scipy>=1.0
   - watermark
@@ -15,7 +16,3 @@ dependencies:
   - codecov
   - pytest
   - pytest-cov
-  # required
-  - pip
-  - pip:
-    - git+https://github.com/pysal/libpysal.git@master

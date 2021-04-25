@@ -7,6 +7,7 @@ dependencies:
   - esda
   - numpy
   - pandas>=1.0
+  - pip
   - rtree
   - scipy>=1.0
   - watermark
@@ -15,7 +16,11 @@ dependencies:
   - codecov
   - pytest
   - pytest-cov
-  # required
-  - pip
-  - pip:
-    - git+https://github.com/pysal/libpysal.git@master
+  # optional
+  - geopandas>=0.7.0
+  # for docs build action (this env only)
+  - nbsphinx
+  - numpydoc
+  - sphinx>=1.4.3
+  - sphinxcontrib-bibtex<2.0.0
+  - sphinx_bootstrap_theme
