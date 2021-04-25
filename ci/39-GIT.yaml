@@ -16,6 +16,6 @@ dependencies:
   - pytest
   - pytest-cov
   # required
-  - pip
-  - pip:
-    - git+https://github.com/pysal/libpysal.git@master
+  #- pip
+  #- pip:
+  #  - git+https://github.com/pysal/libpysal.git@master
