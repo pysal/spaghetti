@@ -32,7 +32,7 @@
          with:
            environment-file: ${{ matrix.environment-file }}
            micromamba-version: 'latest'
-         if: contains(matrix.environment-file, 'PYPI')
+         #if: contains(matrix.environment-file, 'PYPI')
       
        - name: install bleeding edge libpysal - bash
          shell: bash -l {0}
