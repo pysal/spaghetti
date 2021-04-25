@@ -37,15 +37,15 @@
        - name: install bleeding edge libpysal - bash
          shell: bash -l {0}
          run: |
-            pip install pip
-            pip install git+https://github.com/pysal/libpysal.git@master
+           pip install pip
+           pip install git+https://github.com/pysal/libpysal.git@master
          if: matrix.os != 'windows-latest' && contains(matrix.environment-file, 'GIT')
       
       - name: install bleeding edge libpysal - powershell
          shell: powershell
          run: |
-            pip install pip
-            pip install git+https://github.com/pysal/libpysal.git@master
+           pip install pip
+           pip install git+https://github.com/pysal/libpysal.git@master
          if: matrix.os == 'windows-latest' && contains(matrix.environment-file, 'GIT')
        
        #- name: setup mamba
