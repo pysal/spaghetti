@@ -41,7 +41,7 @@
            pip install git+https://github.com/pysal/libpysal.git@master
          if: matrix.os != 'windows-latest' && contains(matrix.environment-file, 'GIT')
       
-      - name: install bleeding edge libpysal - powershell
+       - name: install bleeding edge libpysal - powershell
          shell: powershell
          run: |
            pip install pip
