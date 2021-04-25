@@ -22,11 +22,11 @@
              os: windows-latest
            - environment-file: ci/36-GIT-PLUS.yaml
              os: windows-latest
-     defaults:
-       run:
-         shell: bash -l {0}
+     #defaults:
+     #  run:
+     #    shell: bash -l {0}
      steps:
-       - name: chacout repo
+       - name: checkout repo
          uses: actions/checkout@v2
        
        - name: setup micromamba
@@ -52,7 +52,7 @@
        - name: run tests in bash
          shell: bash -l {0}
          run: pytest -v spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
-         if: [ matrix.os != 'windows-latest' && contains(matrix.environment-file, 'PYPI') ] || [ contains(matrix.environment-file, 'GIT') ]
+         if: {{ [ matrix.os != 'windows-latest' && contains(matrix.environment-file, 'PYPI') ] || [ contains(matrix.environment-file, 'GIT') ] }}
        
        - name: run tests in powershell
          shell: powershell
