@@ -34,14 +34,14 @@
            micromamba-version: 'latest'
          if: contains(matrix.environment-file, 'PYPI')
       
-       - name: install bleeding edge libpysal bash
+       - name: install bleeding edge libpysal - bash
          shell: bash -l {0}
          run: |
             pip install pip
             pip install git+https://github.com/pysal/libpysal.git@master
          if: matrix.os != 'windows-latest' && contains(matrix.environment-file, 'GIT')
       
-      - name: install bleeding edge libpysal powershell
+      - name: install bleeding edge libpysal - powershell
          shell: powershell
          run: |
             pip install pip
@@ -62,17 +62,17 @@
        #    activate-environment: test
        #  if: contains(matrix.environment-file, 'GIT')
        
-       - name: run tests in bash PYPI
+       - name: run tests - bash PYPI
          shell: bash -l {0}
          run: pytest -v spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
          if: matrix.os != 'windows-latest' && contains(matrix.environment-file, 'PYPI')
        
-       - name: run tests in bash GIT
+       - name: run tests - bash GIT
          shell: bash -l {0}
          run: pytest -v spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
          if: contains(matrix.environment-file, 'GIT')
        
-       - name: run tests in powershell
+       - name: run tests - powershell
          shell: powershell
          run: pytest -v spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
          if: matrix.os == 'windows-latest' && contains(matrix.environment-file, 'PYPI')
