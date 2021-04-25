@@ -49,10 +49,15 @@
            activate-environment: test
          if: contains(matrix.environment-file, 'GIT')
        
-       - name: run tests in bash
+       - name: run tests in bash PYPI
          shell: bash -l {0}
          run: pytest -v spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
-         if: {{ matrix.os != 'windows-latest' && contains(matrix.environment-file, 'PYPI') }} || {{ contains(matrix.environment-file, 'GIT') }}
+         if: matrix.os != 'windows-latest' && contains(matrix.environment-file, 'PYPI')
+       
+       - name: run tests in bash GIT
+         shell: bash -l {0}
+         run: pytest -v spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
+         if: contains(matrix.environment-file, 'GIT')
        
        - name: run tests in powershell
          shell: powershell
