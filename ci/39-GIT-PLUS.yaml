@@ -23,7 +23,3 @@ dependencies:
   - sphinx>=1.4.3
   - sphinxcontrib-bibtex<2.0.0
   - sphinx_bootstrap_theme
-  # required
-  #- pip
-  #- pip:
-  #  - git+https://github.com/pysal/libpysal.git@master
