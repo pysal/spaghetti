@@ -16,11 +16,13 @@
      strategy:
        matrix:
          os: [macos-latest, ubuntu-latest, windows-latest]
-         environment-file: [ci/36-STABLE.yaml, ci/36-STABLE-PLUS.yaml, ci/36-DEV.yaml, ci/36-DEV-PLUS.yaml, ci/37-STABLE.yaml, ci/37-STABLE-PLUS.yaml, ci/37-DEV.yaml, ci/37-DEV-PLUS.yaml, ci/38-STABLE.yaml, ci/38-STABLE-PLUS.yaml, ci/38-DEV.yaml, ci/38-DEV-PLUS.yaml, ci/39-STABLE.yaml, ci/39-STABLE-PLUS.yaml, ci/39-DEV.yaml, ci/39-DEV-PLUS.yaml]
+         environment-file: [ci/36.yaml, ci/37.yaml, ci/38.yaml, ci/39.yaml, ci/39-BASE.yaml]
          exclude:
-           - environment-file: ci/36-STABLE-PLUS.yaml
+           - environment-file: ci/36.yaml
              os: windows-latest
-           - environment-file: ci/36-DEV-PLUS.yaml
+           - environment-file: ci/39-BASE.yaml
+             os: macos-latest
+           - environment-file: ci/39-BASE.yaml
              os: windows-latest
            
      steps:
@@ -36,12 +38,12 @@
        - name: install bleeding edge libpysal - bash
          shell: bash -l {0}
          run: pip install git+https://github.com/pysal/libpysal.git@master
-         if: matrix.os != 'windows-latest' && contains(matrix.environment-file, 'DEV')
+         if: matrix.os != 'windows-latest'
       
        - name: install bleeding edge libpysal - powershell
          shell: powershell
          run: pip install git+https://github.com/pysal/libpysal.git@master
-         if: matrix.os == 'windows-latest' && contains(matrix.environment-file, 'DEV')
+         if: matrix.os == 'windows-latest'
        
        - name: run tests - bash
          shell: bash -l {0}
