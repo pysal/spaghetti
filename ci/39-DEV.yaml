@@ -5,7 +5,6 @@ dependencies:
   - python=3.9
   # required
   - esda
-  - libpysal
   - numpy
   - pandas>=1.0
   - pip
@@ -17,3 +16,5 @@ dependencies:
   - codecov
   - pytest
   - pytest-cov
+  # optional
+  - geopandas>=0.7.0

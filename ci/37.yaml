@@ -5,6 +5,7 @@ dependencies:
   - python=3.7
   # required
   - esda
+  - libpysal
   - numpy
   - pandas>=1.0
   - pip
