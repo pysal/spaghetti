@@ -4,10 +4,11 @@ channels:
 dependencies:
   - python=3.9
   # required
-  - libpysal
   - esda
+  - libpysal
   - numpy
   - pandas>=1.0
+  - pip
   - rtree
   - scipy>=1.0
   - watermark
@@ -18,3 +19,9 @@ dependencies:
   - pytest-cov
   # optional
   - geopandas>=0.7.0
+  # for docs build action (this env only)
+  - nbsphinx
+  - numpydoc
+  - sphinx>=1.4.3
+  - sphinxcontrib-bibtex<2.0.0
+  - sphinx_bootstrap_theme
