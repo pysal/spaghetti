@@ -1,7 +1,7 @@
 <p align="center">
 <img src="docs/_static/images/pysal_nav_logo_2line.svg" width="300" />
 <img src="docs/_static/images/spaghetti_nav_logo.svg" width="400" />
-</p> 
+</p>
 
 # [pysal/spaghetti](http://pysal.org/spaghetti/)
 
