@@ -1,7 +1,7 @@
 # Release package on GitHub and publish to PyPI
 # IMPORTANT -- 1 MANUAL STEP
 #   * FOLLOWING TAGGED RELEASE
-#       - update CHANGELOG.md
+#       - update CHANGELOG.md 
 #--------------------------------------------------
 name: Release & Publish
 
