@@ -81,7 +81,7 @@ $ pip install git+https://github.com/pysal/spaghetti
 - [`shapely`](https://shapely.readthedocs.io/en/latest/)
 
 
-##
+## History
 
 `spaghetti` was 
 created and has evolved in line with the Python Spatial Analysis Library ecosystem for 
@@ -132,16 +132,16 @@ If you use PySAL-spaghetti in a scientific publication, we would appreciate usin
 
 ```
 @article{Gaboardi2021,
-  doi       = {10.21105/joss.02826},
-  url       = {https://doi.org/10.21105/joss.02826},
-  year      = {2021},
-  publisher = {The Open Journal},
-  volume    = {6},
-  number    = {62},
-  pages     = {2826},
-  author    = {James D. Gaboardi and Sergio Rey and Stefanie Lumnitz},
-  title     = {spaghetti: spatial network analysis in PySAL},
-  journal   = {Journal of Open Source Software}
+    doi       = {10.21105/joss.02826},
+    url       = {https://doi.org/10.21105/joss.02826},
+    year      = {2021},
+    publisher = {The Open Journal},
+    volume    = {6},
+    number    = {62},
+    pages     = {2826},
+    author    = {James D. Gaboardi and Sergio Rey and Stefanie Lumnitz},
+    title     = {spaghetti: spatial network analysis in PySAL},
+    journal   = {Journal of Open Source Software}
 }
 
 @misc{Gaboardi2018,
