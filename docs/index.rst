@@ -67,6 +67,30 @@ and usage tutorials are provided here through the links above.
     </div>
 
 
+History
+-------
+
+`Spaghetti` was 
+created and has evolved in line with the Python Spatial Analysis Library ecosystem for 
+the specific purpose of utilizing the functionality of spatial weights in 
+`libpysal <https://pysal.org/libpysal/>`_ for generating network segment contiguity objects. 
+The PySAL project was started in the mid-2000s when installation was difficult to maintain. 
+Due to the non-triviality of relying on dependencies to secondary packages, a conscious 
+decision was made to limit dependencies and build native PySAL data structures in cases 
+where at all possible. Therefore, the original `pysal.network` submodule was developed to 
+address the need for integrating support for network data structures with PySAL weights 
+data structures, with the target audience being spatial data scientists and anyone 
+interested in investigating network-centric phenomena within PySAL. Owing to the 
+co-development of network functionality found within `spaghetti` and the evolution of 
+the wider PySAL ecosystem, today, the package provides specialized network functionality 
+that easily integrates with the rest of PySAL. This allows users of `spaghetti`’s network 
+functionality to access spatial analysis functionality that complements network analysis, 
+such as spatial statistical tools with `esda` and integration with core components of 
+`libpysal`: `libpysal.weights` (mentioned above), 
+`libpysal.cg` (computational geometry and data structures), 
+`libpysal.io` (input-output), and `libpysal.examples` (built-in example data).
+
+
 Development
 -----------
 
@@ -76,8 +100,21 @@ Development of `spaghetti` is hosted on GitHub_.
 Citing `spaghetti`
 ------------------
 
-If you use PySAL-spaghetti in a scientific publication, we would appreciate using the following BibTeX citation::
+If you use PySAL-spaghetti in a scientific publication, we would appreciate using the following BibTeX citations::
 
+  @article{Gaboardi2021,
+    doi       = {10.21105/joss.02826},
+    url       = {https://doi.org/10.21105/joss.02826},
+    year      = {2021},
+    publisher = {The Open Journal},
+    volume    = {6},
+    number    = {62},
+    pages     = {2826},
+    author    = {James D. Gaboardi and Sergio Rey and Stefanie Lumnitz},
+    title     = {spaghetti: spatial network analysis in PySAL},
+    journal   = {Journal of Open Source Software}
+  }
+  
   @misc{Gaboardi2018,
     author   = {Gaboardi, James D. and Laura, Jay and Rey, Sergio and
                 Wolf, Levi John and Folch, David C. and Kang, Wei and 
