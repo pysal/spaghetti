@@ -49,8 +49,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # token is provided by GHA, DO NOT create
         with:
           tag_name: ${{ github.ref }}
-          #release_name: Release ${{ github.ref }}
-          release_name: spaghetti: spatial network analysis in PySAL
+          release_name: Release ${{ github.ref }}
           body: ${{ steps.changetxt.outputs.text }}
           draft: false
           prerelease: false
