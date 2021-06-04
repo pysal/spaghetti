@@ -128,9 +128,22 @@ The project is licensed under the [BSD 3-Clause license](https://github.com/pysa
 
 ## BibTeX Citation
 
-If you use PySAL-spaghetti in a scientific publication, we would appreciate using the following citation:
+If you use PySAL-spaghetti in a scientific publication, we would appreciate using the following citations:
 
 ```
+@article{Gaboardi2021,
+  doi       = {10.21105/joss.02826},
+  url       = {https://doi.org/10.21105/joss.02826},
+  year      = {2021},
+  publisher = {The Open Journal},
+  volume    = {6},
+  number    = {62},
+  pages     = {2826},
+  author    = {James D. Gaboardi and Sergio Rey and Stefanie Lumnitz},
+  title     = {spaghetti: spatial network analysis in PySAL},
+  journal   = {Journal of Open Source Software}
+}
+
 @misc{Gaboardi2018,
     author    = {Gaboardi, James D. and Laura, Jay and Rey, Sergio and 
                  Wolf, Levi John and Folch, David C. and Kang, Wei and 
