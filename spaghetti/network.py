@@ -2249,7 +2249,7 @@ class Network:
         return paths
 
     def split_arcs(self, split_param, split_by="distance", w_components=True):
-        """Split all of the arcs in the network at a fixed distance.
+        """Split all network arcs at either a fixed distance or fixed count.
 
         Parameters
         -----------
