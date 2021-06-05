@@ -131,7 +131,8 @@ If you use PySAL-spaghetti in a scientific publication, we would appreciate usin
 Citing Work
 -----------
 
-* **Lovelace, R**. `Open source tools for geographic analysis in transport planning`. J Geogr Syst (2021). https://doi.org/10.1007/s10109-020-00342-2.
+* **Lovelace, R**. `Open source tools for geographic analysis in transport planning`. Journal of Geographical Systems (2021). https://doi.org/10.1007/s10109-020-00342-2.
+* **Rey, SJ et al**. `The **PySAL** Ecosystem: Philosophy and Implementation`. Geographical Analysis (2021). https://doi.org/10.1111/gean.12276.
 
 
 Funding
