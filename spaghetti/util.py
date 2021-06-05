@@ -2,8 +2,9 @@ from warnings import warn
 
 from libpysal import cg
 from libpysal.common import requires
-from rtree import Rtree
 import numpy
+from rtree import Rtree
+
 
 try:
     import geopandas
@@ -452,6 +453,7 @@ def snap_points_to_links(points, links):
         # of length dmin * dmin
         rtree_lookup = rtree.intersection([x0, y0, x1, y1], objects=True)
         candidates = [cand.object.vertices for cand in rtree_lookup]
+
         # Sorting the candidate ensures reproducible results from OS to OS.
         # See:
         #   https://github.com/pysal/spaghetti/pull/595

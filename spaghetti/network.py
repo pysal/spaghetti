@@ -2248,13 +2248,16 @@ class Network:
 
         return paths
 
-    def split_arcs(self, distance, w_components=True):
+    def split_arcs(self, split_param, split_by="distance", w_components=True):
         """Split all of the arcs in the network at a fixed distance.
 
         Parameters
         -----------
-        distance : float
-            The distance at which arcs are split.
+        split_param : {int, float}
+            Either the number of desired resultant split arcs or
+            the distance at which arcs are split.
+        split_by : str
+            Either ``'distance'`` or ``'count'``. Default is ``'distance'``.
         w_components : bool
             Set to ``False`` to not record connected components from a
             ``libpysal.weights.W`` object. Default is ``True``.
@@ -2293,7 +2296,35 @@ class Network:
         >>> n200.w_network.neighbors[72,392]
         [(71, 72), (72, 252), (72, 391), (392, 393)]
 
+        Network arcs can also be split by a specified number of divisions with
+        the ``split_by`` keyword set to ``'count'``, which is ``'distance'`` by
+        default. For example, each arc can be split into 2 equal parts.
+
+        >>> n2 = ntw.split_arcs(2, split_by="count")
+        >>> len(n2.arcs)
+        606
+
         """
+
+        # catch invalid split types
+        split_by = split_by.lower()
+        valid_split_types = ["distance", "count"]
+        if split_by not in valid_split_types:
+            msg = f"'{split_by}' is not a valid value for 'split_by'. "
+            msg += f"Valid arguments include: {valid_split_types}."
+            raise ValueError(msg)
+
+        # catch invalid count params
+        if split_by == "count":
+            if split_param <= 1:
+                msg = "Splitting arcs by 1 or less is not possible. "
+                msg += f"Currently 'split_param' is set to {split_param}."
+                raise ValueError(msg)
+            split_integer = int(split_param)
+            if split_param != split_integer:
+                msg = "Network arcs must split by an integer. "
+                msg += f"Currently 'split_param' is set to {split_param}."
+                raise TypeError(msg)
 
         # convert coordinates for integers if possible
         # e.g., (1.0, 0.5) --> (1, 0.5)
@@ -2327,7 +2358,10 @@ class Network:
             length = split_network.arc_lengths[arc]
 
             # set initial segmentation interval
-            interval = distance
+            if split_by == "distance":
+                interval = split_param
+            else:
+                interval = length / float(split_param)
 
             # initialize arc new arc length at zero
             totallength = 0
@@ -2363,7 +2397,7 @@ class Network:
             while totallength < length:
 
                 # once an arc can not be split further
-                if totallength + interval > length:
+                if totallength + interval >= length:
                     # record the ending vertex
                     currentstop = end_vertex
                     # set the length remainder
@@ -2421,7 +2455,6 @@ class Network:
             split_network.w_network = split_network.contiguityweights(
                 graph=False, from_split=True
             )
-
             # identify connected components from the `w_network`
             split_network.identify_components(split_network.w_network, graph=False)
 
