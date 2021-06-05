@@ -266,31 +266,51 @@ class TestNetwork(unittest.TestCase):
             [(1, 22), (2, 58), (3, 63), (4, 40), (5, 36), (6, 3), (7, 5), (8, 3)],
         )
 
-    def test_split_arcs_200(self):
+    def test_split_arcs_dist_200(self):
         n200 = self.ntw_shp.split_arcs(200.0)
         self.assertEqual(len(n200.arcs), 688)
 
-    def test_split_arcs_1000(self):
+    def test_split_arcs_dist_1000(self):
         n1000 = self.ntw_shp.split_arcs(1000.0)
         self.assertEqual(len(n1000.arcs), 303)
 
-    def test_split_arcs_ntw_from_lattice_ring_2(self):
+    def test_split_arcs_dist_ntw_from_lattice_ring_2(self):
         n_2 = self.ntw_from_lattice_ring.split_arcs(0.2)
         known_neighbors = [(1, 17), (1, 25), (1, 26), (18, 19)]
         observed_neighbors = n_2.w_network.neighbors[1, 18]
         self.assertEqual(observed_neighbors, known_neighbors)
 
-    def test_split_arcs_ntw_from_lattice_ring_3(self):
+    def test_split_arcs_dist_ntw_from_lattice_ring_3(self):
         n_3 = self.ntw_from_lattice_ring.split_arcs(0.3)
         known_neighbors = [(1, 16), (1, 22), (1, 23), (17, 18)]
         observed_neighbors = n_3.w_network.neighbors[1, 17]
         self.assertEqual(observed_neighbors, known_neighbors)
 
-    def test_split_arcs_ntw_from_lattice_ring_5(self):
+    def test_split_arcs_dist_ntw_from_lattice_ring_5(self):
         n_5 = self.ntw_from_lattice_ring.split_arcs(0.5)
         known_neighbors = [(1, 14), (1, 16), (1, 17), (2, 15)]
         observed_neighbors = n_5.w_network.neighbors[1, 15]
         self.assertEqual(observed_neighbors, known_neighbors)
+
+    def test_split_arcs_count_2(self):
+        n200 = self.ntw_shp.split_arcs(2, split_by="count")
+        self.assertEqual(len(n200.arcs), 606)
+
+    def test_split_arcs_count_1(self):
+        with self.assertRaises(ValueError):
+            self.ntw_shp.split_arcs(1, split_by="count")
+
+    def test_split_arcs_count_half(self):
+        with self.assertRaises(ValueError):
+            self.ntw_shp.split_arcs(0.5, split_by="count")
+
+    def test_split_arcs_count_1_and_half(self):
+        with self.assertRaises(TypeError):
+            self.ntw_shp.split_arcs(1.99, split_by="count")
+
+    def test_split_arcs_misspell(self):
+        with self.assertRaises(ValueError):
+            self.ntw_shp.split_arcs(3, split_by="MasterP")
 
     def test_enum_links_vertex(self):
         coincident = self.ntw_shp.enum_links_vertex(24)
