@@ -1,6 +1,6 @@
 .. Installation
 
-As of version 1.5.3, `spaghetti` supports Python 3.7_, 3.8_, and 3.9_. Please make sure that you are operating in a Python >= 3.7 environment.
+As of version 1.6.0, `spaghetti` supports Python 3.7_, 3.8_, and 3.9_. Please make sure that you are operating in a Python >= 3.7 environment.
 
 Installation
 ============
