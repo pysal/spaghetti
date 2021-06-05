@@ -1,6 +1,6 @@
 .. Installation
 
-As of version 1.5.3, `spaghetti` supports Python 3.6_, 3.7_, 3.8_, and 3.9_. Please make sure that you are operating in a Python >= 3.6 environment.
+As of version 1.5.3, `spaghetti` supports Python 3.7_, 3.8_, and 3.9_. Please make sure that you are operating in a Python >= 3.7 environment.
 
 Installation
 ============
@@ -47,7 +47,6 @@ You can  also fork_ the `pysal/spaghetti`_ repo and create a local clone of your
 
 |
 
-.. _3.6: https://docs.python.org/3.6/
 .. _3.7: https://docs.python.org/3.7/
 .. _3.8: https://docs.python.org/3.8/
 .. _3.9: https://docs.python.org/3.9/
