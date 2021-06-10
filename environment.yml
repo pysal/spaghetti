@@ -3,7 +3,6 @@ channels:
   - conda-forge
 dependencies:
   - python=3.9
-  - descartes
   - esda
   - geopandas>=0.7.0
   - libspatialindex
