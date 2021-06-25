@@ -47,7 +47,7 @@ jobs:
         with:
           body: ${{ steps.changetxt.outputs.text }}
           body_path: ${{ steps.changetxt.outputs.path }}
-          name: Release ${{ github.ref }}
+          name: Release ${{ github.GITHUB_REF }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
