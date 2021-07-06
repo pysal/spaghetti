@@ -35,9 +35,11 @@
            environment-file: ${{ matrix.environment-file }}
            micromamba-version: 'latest'
       
-       - name: install bleeding edge libpysal (only Ubuntu / Python 3.9)
+       - name: install bleeding edge libpysal & esda (only Ubuntu / Python 3.9)
          shell: bash -l {0}
-         run: pip install git+https://github.com/pysal/libpysal.git@master
+         run: |
+           pip install git+https://github.com/pysal/libpysal.git@master
+           pip install git+https://github.com/pysal/esda.git@master
          if: matrix.os == 'ubuntu-latest' && contains(matrix.environment-file, 'DEV')
        
        - name: run tests - bash
