@@ -4,12 +4,13 @@ channels:
 dependencies:
   - python=3.9
   - esda
-  - geopandas>=0.7.0
+  - geopandas>=0.9.0
   - libspatialindex
   - matplotlib
   - numpy
   - pandas>=1.0
   - pulp
+  - pygeos>=0.8.0
   - rtree
   - scipy>=1.0
   - seaborn
@@ -20,4 +21,4 @@ dependencies:
     - mip
     - ortools
     - matplotlib_scalebar
-    - git+https://github.com/pysal/spaghetti.git@main
+    #- git+https://github.com/pysal/spaghetti.git@main
