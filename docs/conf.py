@@ -11,12 +11,9 @@
 import sys, os
 import sphinx_bootstrap_theme
 
-
-sys.path.insert(0, os.path.abspath("../"))
-
 # import your package to obtain the version info to display on the docs website
+sys.path.insert(0, os.path.abspath("../"))
 import spaghetti
-
 
 # -- General configuration ------------------------------------------------
 
@@ -37,7 +34,7 @@ extensions = [  #'sphinx_gallery.gen_gallery',
     "numpydoc",
     "nbsphinx",
 ]
-
+bibtex_bibfiles = ["_static/references.bib"]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
