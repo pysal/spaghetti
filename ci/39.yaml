@@ -22,6 +22,6 @@ dependencies:
   # for docs build action (this env only)
   - nbsphinx
   - numpydoc
-  - sphinx>=1.4.3
-  - sphinxcontrib-bibtex<2.0.0
+  - sphinx
+  - sphinxcontrib-bibtex
   - sphinx_bootstrap_theme
