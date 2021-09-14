@@ -23,6 +23,11 @@ __all__ = ["Network", "PointPattern", "GlobalAutoK"]
 SAME_SEGMENT = (-0.1, -0.1)
 
 
+dep_msg = "The next major release of pysal/spaghetti (2.0.0) will drop support for all ``libpysal.cg`` geometries."
+warnings.simplefilter("always", DeprecationWarning)
+warnings.warn(f"{dep_msg}", DeprecationWarning)
+
+
 class Network:
     """Spatially-constrained network representation and analytical
     functionality. Naming conventions are as follows, (1) arcs and
