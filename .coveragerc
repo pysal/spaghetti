@@ -25,6 +25,9 @@ ignore_errors = True
 omit =
     */tests/*
     *__init__.py
+    *setup.py
+    *versioneer.py
+    *_version.py
 
 [html]
 directory = coverage_html_report
