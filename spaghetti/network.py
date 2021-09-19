@@ -23,16 +23,16 @@ __all__ = ["Network", "PointPattern", "GlobalAutoK"]
 SAME_SEGMENT = (-0.1, -0.1)
 
 
-dep_msg = "The next major release of pysal/spaghetti (2.0.0) will "
-dep_msg += "drop support for all ``libpysal.cg`` geometries, which "
-dep_msg += "includes using ``libpysal.cg`` geometries for network "
-dep_msg += "instantiation and all internal computation. This change "
-dep_msg += "is a first step in refactoring ``spaghetti`` that is "
-dep_msg += "expected to result in dramatically reduced runtimes for "
-dep_msg += "network instantiation and operations. Users currently "
-dep_msg += "requiring network and point pattern input as ``libpysal.cg`` "
-dep_msg += "geometries should prepare for this simply by converting "
-dep_msg += "to ``shapely`` geometries."
+dep_msg = (
+    "The next major release of pysal/spaghetti (2.0.0) will "
+    "drop support for all ``libpysal.cg`` geometries. This change "
+    "is a first step in refactoring ``spaghetti`` that is "
+    "expected to result in dramatically reduced runtimes for "
+    "network instantiation and operations. Users currently "
+    "requiring network and point pattern input as ``libpysal.cg`` "
+    "geometries should prepare for this simply by converting "
+    "to ``shapely`` geometries."
+    )
 warnings.warn(f"{dep_msg}", FutureWarning)
 
 
