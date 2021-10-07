@@ -37,17 +37,17 @@ jobs:
           pip install setuptools wheel twine jupyter urllib3 pandas pyyaml
           python setup.py sdist bdist_wheel
       
-      - name: run Changelog
-        run: |
-          jupyter nbconvert --to notebook --execute --inplace --ExecutePreprocessor.timeout=-1 --ExecutePreprocessor.kernel_name=python3 tools/gitcount.ipynb
+      #- name: run Changelog
+      #  run: |
+      #    jupyter nbconvert --to notebook --execute --inplace --ExecutePreprocessor.timeout=-1 --ExecutePreprocessor.kernel_name=python3 tools/gitcount.ipynb
       
-      - name: cat Changelog
-        uses: pCYSl5EDgo/cat@master
-        id: changetxt
-        with:
-          path: ./tools/changelog.md
-        env:
-          TEXT: ${{ steps.changetxt.outputs.text }}
+      #- name: cat Changelog
+      #  uses: pCYSl5EDgo/cat@master
+      #  id: changetxt
+      #  with:
+      #    path: ./tools/changelog.md
+      #  env:
+      #    TEXT: ${{ steps.changetxt.outputs.text }}
       
       - name: Get the tag name
         run: echo "TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
@@ -55,8 +55,8 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          body: ${{ steps.changetxt.outputs.text }}
-          body_path: ${{ steps.changetxt.outputs.path }}
+          #body: ${{ steps.changetxt.outputs.text }}
+          #body_path: ${{ steps.changetxt.outputs.path }}
           name: Release ${{ env.TAG }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
