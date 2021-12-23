@@ -26,9 +26,9 @@
          os: [macos-latest, ubuntu-latest, windows-latest]
          environment-file: [ci/37.yaml, ci/38.yaml, ci/39.yaml, ci/310.yaml]
          include:
-           - environment-file: ci/39-BASE.yaml
+           - environment-file: ci/310-BASE.yaml
              os: ubuntu-latest
-           - environment-file: ci/39-DEV.yaml
+           - environment-file: ci/310-DEV.yaml
              os: ubuntu-latest
            
      steps:
@@ -41,7 +41,7 @@
            environment-file: ${{ matrix.environment-file }}
            micromamba-version: 'latest'
       
-       - name: install bleeding edge libpysal & esda (only Ubuntu / Python 3.9)
+       - name: install bleeding edge libpysal & esda (only Ubuntu / Python 3.10)
          shell: bash -l {0}
          run: |
            pip install git+https://github.com/pysal/libpysal.git@master
