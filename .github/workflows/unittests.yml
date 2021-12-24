@@ -23,7 +23,7 @@
      timeout-minutes: 30
      strategy:
        matrix:
-         os: [macos-latest, ubuntu-latest, windows-latest]
+         os: [macos-latest]
          environment-file: [ci/37.yaml, ci/38.yaml, ci/39.yaml, ci/310.yaml]
          include:
            - environment-file: ci/310-BASE.yaml
