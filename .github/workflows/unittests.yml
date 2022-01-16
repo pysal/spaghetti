@@ -52,12 +52,12 @@
        
        - name: run tests - bash
          shell: bash -l {0}
-         run: env.RUN_TEST
+         run: ${{ env.RUN_TEST }}
          if: matrix.os != 'windows-latest'
        
        - name: run tests - powershell
          shell: powershell
-         run: env.RUN_TEST
+         run: ${{ env.RUN_TEST }}
          if: matrix.os == 'windows-latest'
        
        - name: codecov
