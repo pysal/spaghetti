@@ -20,11 +20,7 @@
    unittests:
      env:
        PIP_INSTALL: pip install git+https://github.com/pysal/
-       RUN_TEST: >
-         pytest -v -n auto spaghetti
-         --cov spaghetti --doctest-modules
-         --cov-config .coveragerc --cov-report xml 
-         --color yes --cov-append --cov-report term-missing
+       RUN_TEST: pytest -v -n auto spaghetti --cov spaghetti --doctest-modules --cov-config .coveragerc --cov-report xml --color yes --cov-append --cov-report term-missing
      name: ${{ matrix.os }}, ${{ matrix.env-file }}
      runs-on: ${{ matrix.os }}
      timeout-minutes: 30
