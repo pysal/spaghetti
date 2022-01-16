@@ -19,7 +19,6 @@
  jobs:
    unittests:
      env:
-       PIP_INSTALL: pip install git+https://github.com/pysal/
        RUN_TEST: pytest -v -n auto spaghetti --cov spaghetti --doctest-modules --cov-config .coveragerc --cov-report xml --color yes --cov-append --cov-report term-missing
      name: ${{ matrix.os }}, ${{ matrix.environment-file }}
      runs-on: ${{ matrix.os }}
@@ -53,8 +52,8 @@
        - name: install bleeding edge libpysal & esda (Ubuntu / Python 3.10)
          shell: bash -l {0}
          run: |
-           ${{ env.PIP_INSTALL }}libpysal.git@master
-           ${{ env.PIP_INSTALL }}esda.git@master
+           pip install git+https://github.com/pysal/libpysal.git@master
+           pip install git+https://github.com/pysal/esda.git@master
          if: matrix.os == 'ubuntu-latest' && contains(matrix.environment-file, 'DEV')
        
        - name: run tests - bash
