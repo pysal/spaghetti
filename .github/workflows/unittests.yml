@@ -18,13 +18,21 @@
 
  jobs:
    unittests:
+     env:
+       RUN_TEST: pytest -v -n auto spaghetti --cov spaghetti --doctest-modules --cov-config .coveragerc --cov-report xml --color yes --cov-append --cov-report term-missing
      name: ${{ matrix.os }}, ${{ matrix.environment-file }}
      runs-on: ${{ matrix.os }}
      timeout-minutes: 30
      strategy:
        matrix:
          os: [ubuntu-latest]
-         environment-file: [ci/37.yaml, ci/38.yaml, ci/39.yaml, ci/310.yaml, ci/310-BASE.yaml, ci/310-DEV.yaml]
+         environment-file:
+           - ci/37.yaml
+           - ci/38.yaml
+           - ci/39.yaml
+           - ci/310.yaml
+           - ci/310-BASE.yaml
+           - ci/310-DEV.yaml
          include:
            - environment-file: ci/310.yaml
              os: macos-latest
@@ -41,7 +49,7 @@
            environment-file: ${{ matrix.environment-file }}
            micromamba-version: 'latest'
       
-       - name: install bleeding edge libpysal & esda (only Ubuntu / Python 3.10)
+       - name: install bleeding edge libpysal & esda (Ubuntu / Python 3.10)
          shell: bash -l {0}
          run: |
            pip install git+https://github.com/pysal/libpysal.git@master
@@ -50,12 +58,12 @@
        
        - name: run tests - bash
          shell: bash -l {0}
-         run: pytest -v spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
+         run: ${{ env.RUN_TEST }}
          if: matrix.os != 'windows-latest'
        
        - name: run tests - powershell
          shell: powershell
-         run: pytest -v spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
+         run: ${{ env.RUN_TEST }}
          if: matrix.os == 'windows-latest'
        
        - name: codecov

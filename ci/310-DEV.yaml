@@ -15,6 +15,7 @@ dependencies:
   - codecov
   - pytest
   - pytest-cov
+  - pytest-xdist
   # optional
   - geopandas>=0.9.0
   - pygeos>=0.8.0
