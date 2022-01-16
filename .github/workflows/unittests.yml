@@ -25,13 +25,13 @@
          --cov spaghetti --doctest-modules \
          --cov-config .coveragerc --cov-report xml \
          --color yes --cov-append --cov-report term-missing
-     name: ${{ matrix.os }}, ${{ matrix.env }}
+     name: ${{ matrix.os }}, ${{ matrix.environment-file }}
      runs-on: ${{ matrix.os }}
      timeout-minutes: 30
      strategy:
        matrix:
          os: [ubuntu-latest]
-         env:
+         environment-file:
            - ci/37.yaml
            - ci/38.yaml
            - ci/39.yaml
@@ -39,9 +39,9 @@
            - ci/310-BASE.yaml
            - ci/310-DEV.yaml
          include:
-           - env: ci/310.yaml
+           - environment-file: ci/310.yaml
              os: macos-latest
-           - env: ci/310.yaml
+           - environment-file: ci/310.yaml
              os: windows-latest
      
      steps:
@@ -51,7 +51,7 @@
        - name: setup micromamba
          uses: mamba-org/provision-with-micromamba@main
          with:
-           env: ${{ matrix.env }}
+           environment-file: ${{ matrix.environment-file }}
            micromamba-version: 'latest'
       
        - name: install bleeding edge libpysal & esda (Ubuntu / Python 3.10)
@@ -59,7 +59,9 @@
          run: |
            ${{ env.PIP_INSTALL }}libpysal.git@master
            ${{ env.PIP_INSTALL }}esda.git@master
-         if: matrix.os == 'ubuntu-latest' && contains(matrix.env, 'DEV')
+         if: |
+           matrix.os == 'ubuntu-latest'
+           && contains(matrix.environment-file, 'DEV')
        
        - name: run tests - bash
          shell: bash -l {0}
