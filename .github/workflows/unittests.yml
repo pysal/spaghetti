@@ -18,6 +18,8 @@
 
  jobs:
    unittests:
+     env:
+       RUN_TEST: pytest -v -n 4 spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
      name: ${{ matrix.os }}, ${{ matrix.environment-file }}
      runs-on: ${{ matrix.os }}
      timeout-minutes: 30
@@ -50,12 +52,12 @@
        
        - name: run tests - bash
          shell: bash -l {0}
-         run: pytest -v spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
+         run: env.RUN_TEST
          if: matrix.os != 'windows-latest'
        
        - name: run tests - powershell
          shell: powershell
-         run: pytest -v spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
+         run: env.RUN_TEST
          if: matrix.os == 'windows-latest'
        
        - name: codecov
