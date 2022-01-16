@@ -19,7 +19,7 @@
  jobs:
    unittests:
      env:
-       RUN_TEST: pytest -v -n 4 spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
+       RUN_TEST: pytest -v -n auto spaghetti --cov=spaghetti --doctest-modules --cov-config=.coveragerc --cov-report=xml
      name: ${{ matrix.os }}, ${{ matrix.environment-file }}
      runs-on: ${{ matrix.os }}
      timeout-minutes: 30
