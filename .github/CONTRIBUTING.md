@@ -3,6 +3,10 @@
 Thank you for your interest in contributing! We work primarily on Github. Please review the contributing procedures [here](http://pysal.org/getting_started#for-developers) and [here](https://github.com/pysal/pysal/wiki/GitHub-Standard-Operating-Procedures) so that we can accept your contributions! Alternatively, contact someone in the [development chat channel](https://gitter.im//pysal/Spaghetti).
 
 
+## Contact
+
+1. All questions, comments, & discussions should happen in a public forum, where possible. Please start a [discussion](https://github.com/pysal/spaghetti/discussions) for questions or open an [issue](https://github.com/pysal/spaghetti/issues) if there appears to be a bug. Private messages and emails will not be answered in a substantive manner.
+
 ## Style and format
 
 1. Python 3.7, 3.8, 3.9, and 3.10 are the officially supported versions.
