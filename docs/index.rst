@@ -97,6 +97,15 @@ Development
 Development of `spaghetti` is hosted on GitHub_.
 
 
+Support
+-------
+
+All questions, comments, & discussions should happen in a public forum, where possible. 
+Please start a [discussion](https://github.com/pysal/spaghetti/discussions) for questions 
+or open an [issue](https://github.com/pysal/spaghetti/issues) if there appears to be a 
+bug. Private messages and emails will not be answered in a substantive manner.
+
+
 Citing `spaghetti`
 ------------------
 
