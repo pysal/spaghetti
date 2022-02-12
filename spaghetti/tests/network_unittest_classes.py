@@ -1,7 +1,6 @@
 from libpysal import cg, examples, io
 from libpysal.common import RTOL, ATOL
 import numpy
-import pytest
 import unittest
 import copy
 
@@ -874,7 +873,6 @@ class TestNetworkUtils(unittest.TestCase):
 
     # this test is causing CI to stall in some cases
     # see https://github.com/pysal/spaghetti/issues/666
-    @pytest.mark.timeout(60)
     def test_squared_distance_point_link(self):
         point, link = (1, 1), ((0, 0), (2, 0))
         sqrd_nearp = self.util.squared_distance_point_link(point, link)
