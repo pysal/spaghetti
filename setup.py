@@ -73,7 +73,6 @@ def setup_package():
             "Topic :: Scientific/Engineering :: GIS",
             "License :: OSI Approved :: BSD License",
             "Programming Language :: Python",
-            "Programming Language :: Python :: 3.7",
             "Programming Language :: Python :: 3.8",
             "Programming Language :: Python :: 3.9",
             "Programming Language :: Python :: 3.10",
@@ -84,7 +83,7 @@ def setup_package():
         install_requires=install_reqs,
         extras_require=extras_reqs,
         zip_safe=False,
-        python_requires=">=3.7",
+        python_requires=">=3.8",
     )
 
 
