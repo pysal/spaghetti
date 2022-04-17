@@ -2,11 +2,12 @@ name: notebooks-environment
 channels:
   - conda-forge
 dependencies:
-  - python=3.9
+  - python=3.10
   - esda
   - geopandas>=0.9.0
   - libspatialindex
   - matplotlib
+  - matplotlib-scalebar
   - numpy
   - pandas>=1.0
   - pulp
@@ -20,5 +21,4 @@ dependencies:
   - pip:
     - mip
     - ortools
-    - matplotlib_scalebar
     - git+https://github.com/pysal/spaghetti.git@main
