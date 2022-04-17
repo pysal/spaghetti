@@ -31,7 +31,7 @@ The following are a selection of some examples that can be launched individually
 
 ## Installation
 
-As of version 1.6.5, `spaghetti` officially supports Python [3.7](https://docs.python.org/3.7/), [3.8](https://docs.python.org/3.8/), [3.9](https://docs.python.org/3.9/), and [3.10](https://docs.python.org/3.10/). Please make sure that you are operating in a Python >= 3.7 environment.
+Python [3.8](https://docs.python.org/3.8/), [3.9](https://docs.python.org/3.9/), and [3.10](https://docs.python.org/3.10/) are tested for support by `spaghetti`. Please make sure that you are operating in a Python >= 3.8 environment.
 
 **Installing with `conda` via [`conda-forge`](https://github.com/conda-forge/spaghetti-feedstock) (highly recommended)**
 
@@ -69,16 +69,16 @@ $ pip install git+https://github.com/pysal/spaghetti
 
 - [`esda`](https://pysal.org/esda/)
 - [`libpysal`](https://pysal.org/libpysal/)
-- [`libspatialindex`](https://libspatialindex.org/en/latest/)
+- [`libspatialindex`](https://libspatialindex.org/en/stable/)
 - [`numpy`](https://numpy.org/devdocs/)
-- [`rtree`](https://rtree.readthedocs.io/en/latest/)
+- [`rtree`](https://rtree.readthedocs.io/en/stable/)
 - [`scipy`](http://scipy.github.io/devdocs/)
 
 
 ## Soft Dependencies
 
-- [`geopandas`](https://geopandas.readthedocs.io/en/latest/index.html)
-- [`shapely`](https://shapely.readthedocs.io/en/latest/)
+- [`geopandas`](https://geopandas.org/en/stable/)
+- [`shapely`](https://shapely.readthedocs.io/en/stable/)
 
 
 ## History

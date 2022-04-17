@@ -1,3 +1,2 @@
 mip
 ortools
-matplotlib_scalebar
