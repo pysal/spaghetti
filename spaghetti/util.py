@@ -1,14 +1,13 @@
 from warnings import warn
 
+import numpy
 from libpysal import cg
 from libpysal.common import requires
-import numpy
 from rtree import Rtree
-
 
 try:
     import geopandas
-    from shapely.geometry import Point, LineString
+    from shapely.geometry import LineString, Point
 except ImportError:
     msg = "geopandas/shapely not available. Some functionality will be disabled."
     warn(msg)
@@ -44,7 +43,7 @@ def compute_length(v0, v1):
     return euc_dist
 
 
-def get_neighbor_distances(ntw, v0, l):
+def get_neighbor_distances(ntw, v0, link):
     """Get distances to the nearest vertex neighbors along
     connecting arcs.
 
@@ -54,7 +53,7 @@ def get_neighbor_distances(ntw, v0, l):
         A spaghetti network object.
     v0 : int
         The vertex ID.
-    l : dict
+    link : dict
         The key is a tuple (start vertex, end vertex); value is ``float``.
         Cost per arc to travel, e.g. distance.
 
@@ -86,9 +85,9 @@ def get_neighbor_distances(ntw, v0, l):
 
         # set distance from vertex1 to vertex2 (link length)
         if arc[0] != v0:
-            neighbors[arc[0]] = l[arc]
+            neighbors[arc[0]] = link[arc]
         else:
-            neighbors[arc[1]] = l[arc]
+            neighbors[arc[1]] = link[arc]
 
     return neighbors
 
@@ -99,7 +98,7 @@ def generatetree(pred):
     Parameters
     ----------
     pred : list
-        List of preceding vertices for traversal route.
+        List of preceding vertices for route traversal.
 
     Returns
     -------
@@ -244,7 +243,7 @@ def dijkstra(ntw, v0, initial_dist=numpy.inf):
                 unvisited.add(v1)
 
     # cast preceding vertices list as an array of integers
-    pred = numpy.array(pred, dtype=numpy.int)
+    pred = numpy.array(pred, dtype=int)
 
     return distance, pred
 

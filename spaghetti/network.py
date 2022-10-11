@@ -1,14 +1,17 @@
-from collections import defaultdict, OrderedDict
+import copy
+import os
+import pickle
+import warnings
+from collections import OrderedDict, defaultdict
 from itertools import islice
-import copy, os, pickle, warnings
 
 import esda
 import numpy
-
-from .analysis import GlobalAutoK
-from . import util
-from libpysal import cg, examples, weights
+from libpysal import cg, weights
 from libpysal.common import requires
+
+from . import util
+from .analysis import GlobalAutoK
 
 try:
     from libpysal import open
@@ -32,7 +35,7 @@ dep_msg = (
     "requiring network and point pattern input as ``libpysal.cg`` "
     "geometries should prepare for this simply by converting "
     "to ``shapely`` geometries."
-    )
+)
 warnings.warn(f"{dep_msg}", FutureWarning)
 
 
@@ -45,7 +48,7 @@ class Network:
 
     Parameters
     ----------
-    in_data : {str, iterable (list, tuple, numpy.ndarray), libpysal.cg.Chain, geopandas.GeoDataFrame}
+    in_data : {str, iterable, libpysal.cg.Chain, geopandas.GeoDataFrame}
         The input geographic data. Either (1) a path to a shapefile
         (str); (2) an iterable containing ``libpysal.cg.Chain``
         objects; (3) a single ``libpysal.cg.Chain``; or
@@ -188,7 +191,7 @@ class Network:
     network structure will generally have (1) more vertices and links than may expected,
     and, (2) many degree-2 vertices, which differs from a truly graph-theoretic object.
     This is demonstrated in the
-    `Caveats Tutorial <https://pysal.org/spaghetti/notebooks/caveats.html#4.-Understanding-network-generation>`_.
+    `Caveats Tutorial <https://pysal.org/spaghetti/notebooks/caveats.html>`_.
 
     See :cite:`Cliff1981`, :cite:`Tansel1983a`,
     :cite:`AhujaRavindraK`, :cite:`Labbe1995`,
@@ -314,7 +317,7 @@ class Network:
                 as_graph = False
                 network_weightings = False
 
-                if weightings == True:
+                if weightings:
                     # set network arc weights to length if weights are
                     # desired, but no other input in given
                     weightings = self.arc_lengths
@@ -437,7 +440,7 @@ class Network:
             c2l_ = component2link[cpl]
             arclens_ = self.arc_lengths.items()
             component_lengths[cpl] = sum([v for k, v in arclens_ if k in c2l_])
-            component_vertices[cpl] = list(set([v for l in c2l_ for v in l]))
+            component_vertices[cpl] = list(set([v for link in c2l_ for v in link]))
             component_vertex_count[cpl] = len(component_vertices[cpl])
 
         # longest and largest components
@@ -1011,7 +1014,7 @@ class Network:
         >>> ntw = spaghetti.Network(in_data=streets_file)
 
         Create a contiguity-based ``W`` object based on network distance, ``500``
-        `US feet in this case <https://github.com/pysal/libpysal/blob/master/libpysal/examples/geodanet/streets.prj>`_.
+        US feet in this case.
 
         >>> w = ntw.distancebandweights(threshold=500)
 
@@ -1409,12 +1412,12 @@ class Network:
         # if the horizontal direction is negative from
         # vertex 1 to vertex 2 on the euclidean plane
         if x1 > x2:
-            x0 = x1 - distance / numpy.sqrt(1 + m ** 2)
+            x0 = x1 - distance / numpy.sqrt(1 + m**2)
 
         # if the horizontal direction is positive from
         # vertex 1 to vertex 2 on the euclidean plane
         elif x1 < x2:
-            x0 = x1 + distance / numpy.sqrt(1 + m ** 2)
+            x0 = x1 + distance / numpy.sqrt(1 + m**2)
 
         # calculate the (y) coordinate
         y0 = m * (x0 - x1) + y1
@@ -2290,7 +2293,7 @@ class Network:
         >>> ntw = spaghetti.Network(examples.get_path("streets.shp"))
 
         Split the network into a segments of 200 distance units in length
-        (`US feet in this case <https://github.com/pysal/libpysal/blob/master/libpysal/examples/geodanet/streets.prj>`_.).
+        (US feet in this case).
         This will include "remainder" segments unless the network is
         comprised of arcs with lengths exactly divisible by ``distance``.
 
@@ -2319,6 +2322,12 @@ class Network:
 
         """
 
+        def int_coord(c):
+            """convert coordinates for integers if possible
+            e.g., (1.0, 0.5) --> (1, 0.5)
+            """
+            return int(c) if (type(c) == float and c.is_integer()) else c
+
         # catch invalid split types
         split_by = split_by.lower()
         valid_split_types = ["distance", "count"]
@@ -2338,10 +2347,6 @@ class Network:
                 msg = "Network arcs must split by an integer. "
                 msg += f"Currently 'split_param' is set to {split_param}."
                 raise TypeError(msg)
-
-        # convert coordinates for integers if possible
-        # e.g., (1.0, 0.5) --> (1, 0.5)
-        int_coord = lambda c: int(c) if (type(c) == float and c.is_integer()) else c
 
         # create new shell network instance
         split_network = Network()
@@ -2487,7 +2492,8 @@ class Network:
         upperbound=None,
     ):
         r"""Compute a global auto :math:`K`-function based on a network constrained
-        cost matrix through `Monte Carlo simulation <https://en.wikipedia.org/wiki/Monte_Carlo_method>`_
+        cost matrix through
+        `Monte Carlo simulation <https://en.wikipedia.org/wiki/Monte_Carlo_method>`_
         according to the formulation adapted from
         :cite:`doi:10.1002/9780470549094.ch5`. See the **Notes**
         section for further description.
@@ -2525,11 +2531,12 @@ class Network:
 
            \displaystyle K(r)=\frac{\sum^n_{i=1} \#[\hat{A} \in D(a_i, r)]}{n\lambda},
 
-        where $n$ is the set cardinality of :math:`A`, :math:`\hat{A}` is the subset of
-        observations in :math:`A` that are within :math:`D` units of distance from :math:`a_i`
-        (each single observation in :math:`A`), and :math:`r` is the range of distance
-        values over which the :math:`K`-function is calculated. The :math:`\lambda` term
-        is the intensity of observations along the network, calculated as:
+        where $n$ is the set cardinality of :math:`A`, :math:`\hat{A}` is the
+        subset of observations in :math:`A` that are within :math:`D` units of
+        distance from :math:`a_i` (each single observation in :math:`A`), and :math:`r`
+        is the range of distance values over which the :math:`K`-function is
+        calculated. The :math:`\lambda` term is the intensity of observations
+        along the network, calculated as:
 
         .. math::
 
@@ -2541,7 +2548,8 @@ class Network:
         distance buffers :math:`D \in r`. The :math:`K`-function improves upon
         nearest-neighbor distance measures through the analysis of all neighbor
         distances. For an explanation on how to interpret the results of the
-        :math:`K`-function see the `Network Spatial Dependence tutorial <https://pysal.org/spaghetti/notebooks/network-spatial-dependence.html>`_.
+        :math:`K`-function see the Network Spatial Dependence tutorial
+        `here <https://pysal.org/spaghetti/notebooks/network-spatial-dependence.html>`_.
 
         For original implementation see :cite:`Ripley1976`
         and :cite:`Ripley1977`.
@@ -2598,8 +2606,8 @@ class Network:
         while considering both attribute values and spatial relationships.
         A value of closer to +1 indicates absolute clustering while a
         value of closer to -1 indicates absolute dispersion. Complete
-        spatial randomness takes the value of 0. See the
-        `esda documentation <https://pysal.org/esda/generated/esda.Moran.html#esda.Moran>`_
+        spatial randomness takes the value of 0. See the ``esda``
+        `documentation <https://pysal.org/esda/generated/esda.Moran.html#esda.Moran>`_
         for in-depth descriptions and tutorials.
 
         Parameters
@@ -2873,8 +2881,7 @@ def extract_component(net, component_id, weightings=None):
         warnings.warn(msg)
         for attr in [dm, nt]:
             if hasattr(net, attr):
-                _attr = getattr(net, attr)
-                del _attr
+                delattr(net, attr)
 
     # make initial copy of the network
     cnet = copy.deepcopy(net)
@@ -3212,8 +3219,8 @@ def element_as_gdf(
 
 
 def regular_lattice(bounds, nh, nv=None, exterior=False):
-    """Generate a regular lattice of line segments
-    (`libpysal.cg.Chain objects <https://pysal.org/libpysal/generated/libpysal.cg.Chain.html#libpysal.cg.Chain>`_).
+    """Generate a regular lattice of line segments (``libpysal.cg.Chain``
+    `objects <https://pysal.org/libpysal/generated/libpysal.cg.Chain.html>`_).
 
     Parameters
     ----------

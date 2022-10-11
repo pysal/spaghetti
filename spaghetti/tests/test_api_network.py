@@ -1,14 +1,14 @@
 """ Testing for the spaghetti api import structure.
 """
 
-import unittest
-
-from .network_unittest_classes import TestNetwork
-from .network_unittest_classes import TestNetworkPointPattern
-from .network_unittest_classes import TestNetworkAnalysis
-
 # api import structure
 import spaghetti
+
+from .network_test_classes import (
+    TestNetwork,
+    TestNetworkAnalysis,
+    TestNetworkPointPattern,
+)
 
 # run tests on spaghetti.network.Network
 TestNetwork.spaghetti = spaghetti
@@ -21,6 +21,3 @@ TestNetworkPointPattern()
 # run tests on spaghetti.analysis
 TestNetworkAnalysis.spaghetti = spaghetti
 TestNetworkAnalysis()
-
-if __name__ == "__main__":
-    unittest.main()
