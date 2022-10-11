@@ -1,14 +1,13 @@
 from warnings import warn
 
+import numpy
 from libpysal import cg
 from libpysal.common import requires
-import numpy
 from rtree import Rtree
-
 
 try:
     import geopandas
-    from shapely.geometry import Point, LineString
+    from shapely.geometry import LineString, Point
 except ImportError:
     msg = "geopandas/shapely not available. Some functionality will be disabled."
     warn(msg)

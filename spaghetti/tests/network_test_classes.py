@@ -1,9 +1,10 @@
-from libpysal import cg, examples, io
-from libpysal.common import RTOL, ATOL
-import numpy
 import copy
-import pytest
 import warnings
+
+import numpy
+import pytest
+from libpysal import cg, examples, io
+from libpysal.common import ATOL, RTOL
 
 try:
     import geopandas

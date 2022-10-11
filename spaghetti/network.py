@@ -1,14 +1,17 @@
-from collections import defaultdict, OrderedDict
+import copy
+import os
+import pickle
+import warnings
+from collections import OrderedDict, defaultdict
 from itertools import islice
-import copy, os, pickle, warnings
 
 import esda
 import numpy
-
-from .analysis import GlobalAutoK
-from . import util
 from libpysal import cg, examples, weights
 from libpysal.common import requires
+
+from . import util
+from .analysis import GlobalAutoK
 
 try:
     from libpysal import open
@@ -32,7 +35,7 @@ dep_msg = (
     "requiring network and point pattern input as ``libpysal.cg`` "
     "geometries should prepare for this simply by converting "
     "to ``shapely`` geometries."
-    )
+)
 warnings.warn(f"{dep_msg}", FutureWarning)
 
 
@@ -1409,12 +1412,12 @@ class Network:
         # if the horizontal direction is negative from
         # vertex 1 to vertex 2 on the euclidean plane
         if x1 > x2:
-            x0 = x1 - distance / numpy.sqrt(1 + m ** 2)
+            x0 = x1 - distance / numpy.sqrt(1 + m**2)
 
         # if the horizontal direction is positive from
         # vertex 1 to vertex 2 on the euclidean plane
         elif x1 < x2:
-            x0 = x1 + distance / numpy.sqrt(1 + m ** 2)
+            x0 = x1 + distance / numpy.sqrt(1 + m**2)
 
         # calculate the (y) coordinate
         y0 = m * (x0 - x1) + y1
