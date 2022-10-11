@@ -80,7 +80,7 @@ class FuncBase(object):
         """Ensure the statistical distribution is supported."""
 
         valid_distributions = ["uniform"]
-        if not self.distribution in valid_distributions:
+        if self.distribution not in valid_distributions:
             msg = "%s distribution not currently supported." % self.distribution
             raise RuntimeError(msg)
 
