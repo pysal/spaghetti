@@ -1,8 +1,9 @@
 from libpysal import cg, examples, io
 from libpysal.common import RTOL, ATOL
 import numpy
-import unittest
 import copy
+import pytest
+import warnings
 
 try:
     import geopandas
@@ -81,8 +82,8 @@ points2 = "points2"
 
 
 # -------------------------------------------------------------------------------
-class TestNetwork(unittest.TestCase):
-    def setUp(self):
+class TestNetwork:
+    def setup_method(self):
         # empirical network instantiated from shapefile
         self.ntw_shp = self.spaghetti.Network(in_data=STREETS, weightings=True)
         self.n_known_shp_arcs, self.n_known_shp_vertices = 303, 230
@@ -103,20 +104,17 @@ class TestNetwork(unittest.TestCase):
         # Pythagorean Triple
         self.triangle = self.spaghetti.Network(in_data=GOOD_TRIANGLE)
 
-    def tearDown(self):
-        pass
-
     def test_network_data_read(self):
         # shp test against known
-        self.assertEqual(len(self.ntw_shp.arcs), self.n_known_shp_arcs)
-        self.assertEqual(len(self.ntw_shp.vertices), self.n_known_shp_vertices)
+        assert len(self.ntw_shp.arcs) == self.n_known_shp_arcs
+        assert len(self.ntw_shp.vertices) == self.n_known_shp_vertices
 
         arc_lengths = self.ntw_shp.arc_lengths.values()
-        self.assertAlmostEqual(sum(arc_lengths), 104414.0920159, places=5)
+        assert sum(arc_lengths) == pytest.approx(104414.0920159, 0.00001)
 
-        self.assertIn(0, self.ntw_shp.adjacencylist[1])
-        self.assertIn(0, self.ntw_shp.adjacencylist[2])
-        self.assertNotIn(0, self.ntw_shp.adjacencylist[3])
+        assert 0 in self.ntw_shp.adjacencylist[1]
+        assert 0 in self.ntw_shp.adjacencylist[2]
+        assert 0 not in self.ntw_shp.adjacencylist[3]
 
     def test_network_from_libpysal_chains(self):
         known_components = self.ntw_shp.network_n_components
@@ -127,8 +125,8 @@ class TestNetwork(unittest.TestCase):
             self.ntw_from_chains = self.spaghetti.Network(in_data=ntw_data)
             observed_components = self.ntw_from_chains.network_n_components
             observed_length = sum(self.ntw_from_chains.arc_lengths.values())
-            self.assertEqual(observed_components, known_components)
-            self.assertAlmostEqual(observed_length, known_length, places=3)
+            assert observed_components == known_components
+            assert observed_length == pytest.approx(known_length, 0.001)
 
     def test_network_from_single_libpysal_chain(self):
         # network instantiated from a single libpysal.cg.Chain
@@ -139,75 +137,75 @@ class TestNetwork(unittest.TestCase):
         self.ntw_chain_out.savenetwork(fname)
         self.ntw_chain_in = self.spaghetti.Network.loadnetwork(fname)
         observed_arcs = self.ntw_chain_in.arcs
-        self.assertEqual(observed_arcs, known_edges)
+        assert observed_arcs == known_edges
 
     def test_network_from_vertical_libpysal_chains(self):
         vert_up = cg.Chain([P0505, P052])
         self.ntw_up_chain = self.spaghetti.Network(in_data=vert_up)
-        self.assertEqual(len(self.ntw_up_chain.arcs), len(vert_up.segments))
+        assert len(self.ntw_up_chain.arcs) == len(vert_up.segments)
 
         vert_down = cg.Chain([P052, P0505])
         self.ntw_down_chain = self.spaghetti.Network(in_data=vert_down)
-        self.assertEqual(len(self.ntw_down_chain.arcs), len(vert_down.segments))
+        assert len(self.ntw_down_chain.arcs) == len(vert_down.segments)
 
     def test_network_failures(self):
         # try instantiating network with single point
-        with self.assertRaises(TypeError):
+        with pytest.raises(TypeError):
             self.spaghetti.Network(in_data=P11)
         # try instantiating network with list of single point
-        with self.assertRaises(TypeError):
+        with pytest.raises(TypeError):
             self.spaghetti.Network(in_data=[P11])
 
-    @unittest.skipIf(GEOPANDAS_EXTINCT, "Missing Geopandas")
+    @pytest.mark.skipif(GEOPANDAS_EXTINCT, reason="Missing Geopandas")
     def test_network_from_geopandas(self):
         # network instantiated from geodataframe
         gdf = geopandas.read_file(STREETS)
         self.ntw_gdf = self.spaghetti.Network(in_data=gdf, w_components=True)
 
         # gdf test against known
-        self.assertEqual(len(self.ntw_gdf.arcs), self.n_known_shp_arcs)
-        self.assertEqual(len(self.ntw_gdf.vertices), self.n_known_shp_vertices)
+        assert len(self.ntw_gdf.arcs) == self.n_known_shp_arcs
+        assert len(self.ntw_gdf.vertices) == self.n_known_shp_vertices
 
         # shp against gdf
-        self.assertEqual(len(self.ntw_shp.arcs), len(self.ntw_gdf.arcs))
-        self.assertEqual(len(self.ntw_shp.vertices), len(self.ntw_gdf.vertices))
+        assert len(self.ntw_shp.arcs) == len(self.ntw_gdf.arcs)
+        assert len(self.ntw_shp.vertices) == len(self.ntw_gdf.vertices)
 
     def test_round_sig(self):
         # round to 2 significant digits test
         x_round2, y_round2 = 1200, 1900
         self.ntw_shp.vertex_sig = 2
         obs_xy_round2 = self.ntw_shp._round_sig((1215, 1865))
-        self.assertEqual(obs_xy_round2, (x_round2, y_round2))
+        assert obs_xy_round2 == (x_round2, y_round2)
 
         # round to no significant digits test
         x_roundNone, y_roundNone = 1215, 1865
         self.ntw_shp.vertex_sig = None
         obs_xy_roundNone = self.ntw_shp._round_sig((1215, 1865))
-        self.assertEqual(obs_xy_roundNone, (x_roundNone, y_roundNone))
+        assert obs_xy_roundNone == (x_roundNone, y_roundNone)
 
     def test_vertex_atol(self):
         known_components = 1
         ntw_triangle = self.spaghetti.Network(in_data=BAD_TRIANGLE, vertex_atol=2)
         observed_components = ntw_triangle.network_n_components
-        self.assertEqual(observed_components, known_components)
+        assert observed_components == known_components
 
     def test_contiguity_weights(self):
         known_network_histo = [(2, 35), (3, 89), (4, 105), (5, 61), (6, 13)]
         observed_network_histo = self.ntw_shp.w_network.histogram
-        self.assertEqual(known_network_histo, observed_network_histo)
+        assert known_network_histo == observed_network_histo
 
         known_graph_histo = [(2, 2), (3, 2), (4, 47), (5, 80), (6, 48)]
         observed_graph_histo = self.ntw_shp.w_graph.histogram
-        self.assertEqual(observed_graph_histo, known_graph_histo)
+        assert observed_graph_histo == known_graph_histo
 
     def test_components(self):
         known_network_arc = (225, 226)
         observed_network_arc = self.ntw_shp.network_component2arc[0][-1]
-        self.assertEqual(observed_network_arc, known_network_arc)
+        assert observed_network_arc == known_network_arc
 
         known_graph_edge = (207, 208)
         observed_graph_edge = self.ntw_shp.graph_component2edge[0][-1]
-        self.assertEqual(observed_graph_edge, known_graph_edge)
+        assert observed_graph_edge == known_graph_edge
 
     def test_connected_components(self):
         ## test warnings
@@ -217,7 +215,7 @@ class TestNetwork(unittest.TestCase):
         observed_connected = ntw.network_fully_connected
         # known values
         known_connected = False
-        self.assertEqual(observed_connected, known_connected)
+        assert observed_connected == known_connected
 
         # observed values
         observed_component_vertices = ntw.network_component_vertices
@@ -226,7 +224,7 @@ class TestNetwork(unittest.TestCase):
             0: [0, 1, 2, 3, 4, 13],
             1: [5, 6, 7, 8, 9, 10, 11, 12],
         }
-        self.assertEqual(observed_component_vertices, known_component_vertices)
+        assert observed_component_vertices == known_component_vertices
 
         # observed values
         observed_network_vtx = ntw.network_component_vertex_count
@@ -234,14 +232,14 @@ class TestNetwork(unittest.TestCase):
         # known values
         known_network_vtx = {0: 6, 1: 8}
         known_graph_vtx = {0: 3, 1: 8}
-        self.assertEqual(observed_network_vtx, known_network_vtx)
-        self.assertEqual(observed_graph_vtx, known_graph_vtx)
+        assert observed_network_vtx == known_network_vtx
+        assert observed_graph_vtx == known_graph_vtx
 
         # observed values
         observed_edge_lengths = ntw.edge_lengths[(0, 1)]
         # known values
         known_edge_lengths = 1.0
-        self.assertEqual(observed_edge_lengths, known_edge_lengths)
+        assert observed_edge_lengths == known_edge_lengths
 
         # observed values
         observed_largest_net = ntw.network_largest_component
@@ -249,72 +247,78 @@ class TestNetwork(unittest.TestCase):
         # known values
         known_largest = 1
         known_longest = 0
-        self.assertEqual(observed_largest_net, known_largest)
-        self.assertEqual(observed_longest_graph, known_longest)
+        assert observed_largest_net == known_largest
+        assert observed_longest_graph == known_longest
 
         # observed values
         observed_lengths = ntw.network_component_lengths
         # known values
         known_lengths = {0: 6.0, 1: 1.914213562373095}
-        self.assertEqual(observed_lengths, known_lengths)
+        assert observed_lengths == known_lengths
 
     def test_distance_band_weights(self):
         w = self.ntw_shp.distancebandweights(threshold=500)
-        self.assertEqual(w.n, 230)
-        self.assertEqual(
-            w.histogram,
-            [(1, 22), (2, 58), (3, 63), (4, 40), (5, 36), (6, 3), (7, 5), (8, 3)],
-        )
+        assert w.n == 230
+        assert w.histogram == [
+            (1, 22),
+            (2, 58),
+            (3, 63),
+            (4, 40),
+            (5, 36),
+            (6, 3),
+            (7, 5),
+            (8, 3),
+        ]
 
     def test_split_arcs_dist_200(self):
         n200 = self.ntw_shp.split_arcs(200.0)
-        self.assertEqual(len(n200.arcs), 688)
+        assert len(n200.arcs) == 688
 
     def test_split_arcs_dist_1000(self):
         n1000 = self.ntw_shp.split_arcs(1000.0)
-        self.assertEqual(len(n1000.arcs), 303)
+        assert len(n1000.arcs) == 303
 
     def test_split_arcs_dist_ntw_from_lattice_ring_2(self):
         n_2 = self.ntw_from_lattice_ring.split_arcs(0.2)
         known_neighbors = [(1, 17), (1, 25), (1, 26), (18, 19)]
         observed_neighbors = n_2.w_network.neighbors[1, 18]
-        self.assertEqual(observed_neighbors, known_neighbors)
+        assert observed_neighbors == known_neighbors
 
     def test_split_arcs_dist_ntw_from_lattice_ring_3(self):
         n_3 = self.ntw_from_lattice_ring.split_arcs(0.3)
         known_neighbors = [(1, 16), (1, 22), (1, 23), (17, 18)]
         observed_neighbors = n_3.w_network.neighbors[1, 17]
-        self.assertEqual(observed_neighbors, known_neighbors)
+        assert observed_neighbors == known_neighbors
 
     def test_split_arcs_dist_ntw_from_lattice_ring_5(self):
         n_5 = self.ntw_from_lattice_ring.split_arcs(0.5)
         known_neighbors = [(1, 14), (1, 16), (1, 17), (2, 15)]
         observed_neighbors = n_5.w_network.neighbors[1, 15]
-        self.assertEqual(observed_neighbors, known_neighbors)
+        assert observed_neighbors == known_neighbors
 
     def test_split_arcs_count_2(self):
         n200 = self.ntw_shp.split_arcs(2, split_by="count")
-        self.assertEqual(len(n200.arcs), 606)
+        assert len(n200.arcs) == 606
 
     def test_split_arcs_count_1(self):
-        with self.assertRaises(ValueError):
+        with pytest.raises(ValueError):
             self.ntw_shp.split_arcs(1, split_by="count")
 
     def test_split_arcs_count_half(self):
-        with self.assertRaises(ValueError):
+        with pytest.raises(ValueError):
             self.ntw_shp.split_arcs(0.5, split_by="count")
 
     def test_split_arcs_count_1_and_half(self):
-        with self.assertRaises(TypeError):
+        with pytest.raises(TypeError):
             self.ntw_shp.split_arcs(1.99, split_by="count")
 
     def test_split_arcs_misspell(self):
-        with self.assertRaises(ValueError):
+        with pytest.raises(ValueError):
             self.ntw_shp.split_arcs(3, split_by="MasterP")
 
     def test_enum_links_vertex(self):
         coincident = self.ntw_shp.enum_links_vertex(24)
-        self.assertIn((24, 48), coincident)
+        assert (24, 48) in coincident
 
     def test_shortest_paths(self):
         # symmetric point pattern
@@ -323,7 +327,7 @@ class TestNetwork(unittest.TestCase):
         _, tree = self.ntw_shp.allneighbordistances(schools, gen_tree=True)
         observed_paths = self.ntw_shp.shortest_paths(tree, schools)
         observed_vertices = len(observed_paths[0][1].vertices)
-        self.assertEqual(observed_vertices, known_vertices)
+        assert observed_vertices == known_vertices
 
         # asymmetric point pattern
         bounds, h, v = (0, 0, 3, 3), 2, 2
@@ -343,29 +347,38 @@ class TestNetwork(unittest.TestCase):
         # known values
         known_vertices1 = [(1.0, 0.5), (1.0, 0.6)]
         known_vertices2 = 4
-        self.assertEqual(observed_vertices1, observed_vertices1)
-        self.assertEqual(observed_vertices2, known_vertices2)
+        assert observed_vertices1 == observed_vertices1
+        assert observed_vertices2 == known_vertices2
 
         # test error
-        with self.assertRaises(AttributeError):
+        with pytest.raises(AttributeError):
             lattice = self.spaghetti.regular_lattice((0, 0, 4, 4), 4)
             ntw = self.spaghetti.Network(in_data=lattice)
             paths = ntw.shortest_paths([], synth_obs)
 
+    @pytest.mark.filterwarnings("ignore:There is a least one point pattern")
+    @pytest.mark.filterwarnings("ignore:Either one or both")
     def test_extract_component(self):
         ntw = copy.deepcopy(self.ntw_from_lattice_ring)
         s2s, tree = ntw.allneighbordistances("points", gen_tree=True)
 
         # test longest component
-        longest = self.spaghetti.extract_component(ntw, ntw.network_longest_component)
+        with pytest.warns(UserWarning, match="There is a least one point pattern"):
+            longest = self.spaghetti.extract_component(
+                ntw, ntw.network_longest_component
+            )
         # observed values
         observed_napts = longest.non_articulation_points
         # known values
         known_napts = [2, 4, 13]
-        self.assertEqual(observed_napts, known_napts)
+        assert observed_napts == known_napts
 
         # test largest component
-        largest = self.spaghetti.extract_component(ntw, ntw.network_largest_component)
+        with pytest.warns(UserWarning, match="Either one or both"):
+            largest = self.spaghetti.extract_component(
+                ntw, ntw.network_largest_component
+            )
+
         # observed values
         observed_arcs, observed_edges = largest.arcs, largest.edges
         # known values
@@ -380,10 +393,10 @@ class TestNetwork(unittest.TestCase):
             (11, 12),
         ]
         known_edges = known_arcs
-        self.assertEqual(observed_arcs, known_arcs)
-        self.assertEqual(observed_arcs, known_edges)
-        self.assertEqual(observed_edges, known_arcs)
-        self.assertEqual(observed_edges, known_edges)
+        assert observed_arcs == known_arcs
+        assert observed_arcs == known_edges
+        assert observed_edges == known_arcs
+        assert observed_edges == known_edges
 
     def test_spanning_tree(self):
         # minimum
@@ -392,7 +405,7 @@ class TestNetwork(unittest.TestCase):
             self.triangle, method="sort", maximum=False, silence_warnings=True
         )
         observed_len = sum(mst.arc_lengths.values())
-        self.assertEqual(observed_len, known_len)
+        assert observed_len == known_len
 
         # maximum
         known_len = 9.0
@@ -400,13 +413,13 @@ class TestNetwork(unittest.TestCase):
             self.triangle, method="sort", maximum=True, silence_warnings=True
         )
         observed_len = sum(mst.arc_lengths.values())
-        self.assertEqual(observed_len, known_len)
+        assert observed_len == known_len
 
         # method error
-        with self.assertRaises(ValueError):
+        with pytest.raises(ValueError):
             self.spaghetti.spanning_tree(self.triangle, method="tors")
 
-    @unittest.skipIf(GEOPANDAS_EXTINCT, "Missing Geopandas")
+    @pytest.mark.skipif(GEOPANDAS_EXTINCT, reason="Missing Geopandas")
     def test_element_as_gdf(self):
         # extract both vertices and arcs
         vertices, arcs = self.spaghetti.element_as_gdf(
@@ -416,20 +429,20 @@ class TestNetwork(unittest.TestCase):
         known_vertex_wkt = "POINT (728368.04762 877125.89535)"
         observed_vertex = vertices.loc[(vertices["id"] == 0), "geometry"].squeeze()
         observed_vertex_wkt = observed_vertex.wkt
-        self.assertEqual(observed_vertex_wkt, known_vertex_wkt)
+        assert observed_vertex_wkt == known_vertex_wkt
         # test arcs
         known_arc_wkt = (
             "LINESTRING (728368.04762 877125.89535, 728368.13931 877023.27186)"
         )
         observed_arc = arcs.loc[(arcs["id"] == (0, 1)), "geometry"].squeeze()
         observed_arc_wkt = observed_arc.wkt
-        self.assertEqual(observed_arc_wkt, known_arc_wkt)
+        assert observed_arc_wkt == known_arc_wkt
 
         # extract only arcs
         arcs = self.spaghetti.element_as_gdf(self.ntw_shp, arcs=True)
         observed_arc = arcs.loc[(arcs["id"] == (0, 1)), "geometry"].squeeze()
         observed_arc_wkt = observed_arc.wkt
-        self.assertEqual(observed_arc_wkt, known_arc_wkt)
+        assert observed_arc_wkt == known_arc_wkt
 
         # extract symmetric routes
         known_length, bounds, h, v = 2.6, (0, 0, 3, 3), 2, 2
@@ -441,7 +454,7 @@ class TestNetwork(unittest.TestCase):
         paths = ntw.shortest_paths(tree, synth_obs)
         paths_gdf = self.spaghetti.element_as_gdf(ntw, routes=paths)
         observed_length = paths_gdf.loc[0, "geometry"].length
-        self.assertEqual(observed_length, known_length)
+        assert observed_length == known_length
 
         # extract asymmetric routes
         known_origins, bounds, h, v = 2, (0, 0, 3, 3), 2, 2
@@ -455,7 +468,7 @@ class TestNetwork(unittest.TestCase):
         paths = ntw.shortest_paths(tree, points1, pp_dest=points2)
         paths_gdf = self.spaghetti.element_as_gdf(ntw, routes=paths)
         observed_origins = paths_gdf["O"].nunique()
-        self.assertEqual(observed_origins, known_origins)
+        assert observed_origins == known_origins
 
     def test_regular_lattice(self):
         # 4x4 regular lattice with the exterior
@@ -463,14 +476,14 @@ class TestNetwork(unittest.TestCase):
         bounds = (0, 0, 3, 3)
         lattice = self.spaghetti.regular_lattice(bounds, 2, nv=2, exterior=True)
         observed = lattice[0].vertices
-        self.assertEqual(observed, known)
+        assert observed == known
 
         # 5x5 regular lattice without the exterior
         known = [P33, P34]
         bounds = (0, 0, 4, 4)
         lattice = self.spaghetti.regular_lattice(bounds, 3, exterior=False)
         observed = lattice[-1].vertices
-        self.assertEqual(observed, known)
+        assert observed == known
 
         # 7x9 regular lattice from shapefile bounds
         known_vertices = [
@@ -481,20 +494,20 @@ class TestNetwork(unittest.TestCase):
         lattice = self.spaghetti.regular_lattice(shp.bbox, 5, nv=7, exterior=True)
         observed_vertices = lattice[0].vertices
         for observed, known in zip(observed_vertices, known_vertices):
-            self.assertEqual((observed[0], observed[1]), known)
+            assert (observed[0], observed[1]) == known
 
         # test for Type Error
-        with self.assertRaises(TypeError):
+        with pytest.raises(TypeError):
             self.spaghetti.regular_lattice(bounds, [[4]])
 
         # test for Runtime Error
-        with self.assertRaises(RuntimeError):
+        with pytest.raises(RuntimeError):
             self.spaghetti.regular_lattice((0, 0, 1), 1)
 
 
 # -------------------------------------------------------------------------------
-class TestNetworkPointPattern(unittest.TestCase):
-    def setUp(self):
+class TestNetworkPointPattern:
+    def setup_method(self):
         self.ntw = self.spaghetti.Network(in_data=STREETS)
         self.obs = [schools, crimes]
         self.OBS = [SCHOOLS, CRIMES]
@@ -505,9 +518,6 @@ class TestNetworkPointPattern(unittest.TestCase):
             setattr(self, idx, self.ntw.pointpatterns[obs])
 
         self.known_pp1_npoints = 8
-
-    def tearDown(self):
-        pass
 
     def test_pp_from_libpysal_points(self):
         # known
@@ -521,7 +531,7 @@ class TestNetworkPointPattern(unittest.TestCase):
             self.ntw.snapobservations(point_data, cg_crimes, attribute=True)
             observed = self.ntw.pointpatterns[cg_crimes]
             observed_snapped = set(observed.snapped_coordinates.values())
-            self.assertEqual(observed_snapped, known_snapped)
+            assert observed_snapped == known_snapped
 
     def test_pp_from_single_libpysal_point(self):
         # network instantiated from a single libpysal.cg.Chain
@@ -529,7 +539,7 @@ class TestNetworkPointPattern(unittest.TestCase):
         self.ntw_from_chain = self.spaghetti.Network(in_data=P11P22_CHAIN)
         self.ntw_from_chain.snapobservations(P00, synth_obs)
         snap_dist = self.ntw_from_chain.pointpatterns[synth_obs].dist_snapped[0]
-        self.assertAlmostEqual(snap_dist, known_dist, places=10)
+        assert snap_dist == pytest.approx(known_dist, 0.0000000001)
 
         # network instantiated from a single vertical (up) libpysal.cg.Chain
         chain = cg.Chain([P11, P12])
@@ -537,7 +547,7 @@ class TestNetworkPointPattern(unittest.TestCase):
         self.ntw_from_chain = self.spaghetti.Network(in_data=chain)
         self.ntw_from_chain.snapobservations(cg.Point((0, 1.5)), synth_obs)
         snap_dist = self.ntw_from_chain.pointpatterns[synth_obs].dist_snapped[0]
-        self.assertEqual(snap_dist, known_dist)
+        assert snap_dist == known_dist
 
         # network instantiated from a single vertical (down) libpysal.cg.Chain
         chain = cg.Chain([cg.Point((5, 5)), cg.Point((5, 4))])
@@ -545,19 +555,19 @@ class TestNetworkPointPattern(unittest.TestCase):
         self.ntw_from_chain = self.spaghetti.Network(in_data=chain)
         self.ntw_from_chain.snapobservations(cg.Point((6.5, 4.5)), synth_obs)
         snap_dist = self.ntw_from_chain.pointpatterns[synth_obs].dist_snapped[0]
-        self.assertEqual(snap_dist, known_dist)
+        assert snap_dist == known_dist
 
     def test_pp_failures(self):
         # network instantiated from a single libpysal.cg.Chain
         self.ntw_from_chain = self.spaghetti.Network(in_data=P11P22_CHAIN)
         # try snapping chain
-        with self.assertRaises(TypeError):
+        with pytest.raises(TypeError):
             self.ntw_from_chain.snapobservations(P11P22_CHAIN, "chain")
         # try snapping list of chain
-        with self.assertRaises(TypeError):
+        with pytest.raises(TypeError):
             self.ntw_from_chain.snapobservations([P11P22_CHAIN], "chain")
 
-    @unittest.skipIf(GEOPANDAS_EXTINCT, "Missing Geopandas")
+    @pytest.mark.skipif(GEOPANDAS_EXTINCT, reason="Missing Geopandas")
     def test_pp_from_geopandas(self):
         idxs = ["gdf_%s" % pp for pp in self.idxs]
         iterator = zip(self.obs, self.OBS, idxs)
@@ -569,30 +579,30 @@ class TestNetworkPointPattern(unittest.TestCase):
             self.ntw.snapobservations(OBS, obs, **kwargs)
             setattr(self, idx, self.ntw.pointpatterns[obs])
 
-        self.assertEqual(self.pp1.npoints, self.gdf_pp1.npoints)
-        self.assertEqual(self.pp2.npoints, self.gdf_pp2.npoints)
+        assert self.pp1.npoints == self.gdf_pp1.npoints
+        assert self.pp2.npoints == self.gdf_pp2.npoints
 
     def test_add_point_pattern(self):
-        self.assertEqual(self.pp1.npoints, self.known_pp1_npoints)
-        self.assertIn("properties", self.pp1.points[0])
-        self.assertIn([1], self.pp1.points[0]["properties"])
+        assert self.pp1.npoints == self.known_pp1_npoints
+        assert "properties" in self.pp1.points[0]
+        assert [1] in self.pp1.points[0]["properties"]
 
     def test_count_per_link_network(self):
         counts = self.ntw.count_per_link(self.pp1.obs_to_arc, graph=False)
         meancounts = sum(counts.values()) / float(len(counts.keys()))
-        self.assertAlmostEqual(meancounts, 1.0, places=5)
+        assert meancounts == pytest.approx(1.0, 0.00001)
 
     def test_count_per_edge_graph(self):
         counts = self.ntw.count_per_link(self.pp1.obs_to_arc, graph=True)
         meancounts = sum(counts.values()) / float(len(counts.keys()))
-        self.assertAlmostEqual(meancounts, 1.0, places=5)
+        assert meancounts == pytest.approx(1.0, 0.00001)
 
     def test_simulate_uniform_observations(self):
         sim = self.ntw.simulate_observations(self.known_pp1_npoints)
-        self.assertEqual(self.known_pp1_npoints, sim.npoints)
+        assert self.known_pp1_npoints == sim.npoints
 
     def test_simulate_unsupported_distribution_observations(self):
-        with self.assertRaises(RuntimeError):
+        with pytest.raises(RuntimeError):
             self.ntw.simulate_observations(1, distribution="mrofinu")
 
     def test_all_neighbor_distances(self):
@@ -600,29 +610,29 @@ class TestNetworkPointPattern(unittest.TestCase):
         known_mtx_val = 17682.436988
         known_tree_val = (173, 64)
 
-        self.assertAlmostEqual(numpy.nansum(matrix1[0]), known_mtx_val, places=4)
-        self.assertEqual(tree[(6, 7)], known_tree_val)
+        assert numpy.nansum(matrix1[0]) == pytest.approx(known_mtx_val, 0.0001)
+        assert tree[(6, 7)] == known_tree_val
         del self.ntw.distance_matrix
         del self.ntw.network_trees
 
         matrix2 = self.ntw.allneighbordistances(schools, fill_diagonal=0.0)
         observed = matrix2.diagonal()
         known = numpy.zeros(matrix2.shape[0])
-        self.assertEqual(observed.all(), known.all())
+        assert observed.all() == known.all()
         del self.ntw.distance_matrix
         del self.ntw.network_trees
 
         matrix3 = self.ntw.allneighbordistances(schools, snap_dist=True)
         known_mtx_val = 3218.2597894
         observed_mtx_val = matrix3
-        self.assertAlmostEqual(observed_mtx_val[0, 1], known_mtx_val, places=4)
+        assert observed_mtx_val[0, 1] == pytest.approx(known_mtx_val, 0.0001)
         del self.ntw.distance_matrix
         del self.ntw.network_trees
 
         matrix4 = self.ntw.allneighbordistances(schools, fill_diagonal=0.0)
         observed = matrix4.diagonal()
         known = numpy.zeros(matrix4.shape[0])
-        self.assertEqual(observed.all(), known.all())
+        assert observed.all() == known.all()
         del self.ntw.distance_matrix
         del self.ntw.network_trees
 
@@ -630,8 +640,8 @@ class TestNetworkPointPattern(unittest.TestCase):
         known_mtx_val = 1484112.694526529
         known_tree_val = (-0.1, -0.1)
 
-        self.assertAlmostEqual(numpy.nansum(matrix5[0]), known_mtx_val, places=4)
-        self.assertEqual(tree[(18, 19)], known_tree_val)
+        assert numpy.nansum(matrix5[0]) == pytest.approx(known_mtx_val, 0.0001)
+        assert tree[(18, 19)] == known_tree_val
         del self.ntw.distance_matrix
         del self.ntw.network_trees
 
@@ -644,15 +654,15 @@ class TestNetworkPointPattern(unittest.TestCase):
 
         observed = matrix1.diagonal()
         known = numpy.zeros(matrix1.shape[0])
-        self.assertEqual(observed.all(), known.all())
-        self.assertAlmostEqual(numpy.nansum(matrix1[0]), known_mtx1_val, places=4)
-        self.assertEqual(tree[(6, 7)], known_tree_val)
+        assert observed.all() == known.all()
+        assert numpy.nansum(matrix1[0]) == pytest.approx(known_mtx1_val, 0.0001)
+        assert tree[(6, 7)] == known_tree_val
         del self.ntw.distance_matrix
         del self.ntw.network_trees
 
         matrix2 = self.ntw.allneighbordistances(schools, n_processes=2)
         known_mtx2_val = 17682.436988
-        self.assertAlmostEqual(numpy.nansum(matrix2[0]), known_mtx2_val, places=4)
+        assert numpy.nansum(matrix2[0]) == pytest.approx(known_mtx2_val, 0.0001)
         del self.ntw.distance_matrix
         del self.ntw.network_trees
 
@@ -662,14 +672,14 @@ class TestNetworkPointPattern(unittest.TestCase):
         known_mtx3_val = 17682.436988
         known_tree_val = (173, 64)
 
-        self.assertAlmostEqual(numpy.nansum(matrix3[0]), known_mtx3_val, places=4)
-        self.assertEqual(tree[(6, 7)], known_tree_val)
+        assert numpy.nansum(matrix3[0]) == pytest.approx(known_mtx3_val, 0.0001)
+        assert tree[(6, 7)] == known_tree_val
         del self.ntw.distance_matrix
         del self.ntw.network_trees
 
     def test_nearest_neighbor_distances(self):
         # general test
-        with self.assertRaises(KeyError):
+        with pytest.raises(KeyError):
             self.ntw.nearestneighbordistances("i_should_not_exist")
         nnd1 = self.ntw.nearestneighbordistances(schools)
         nnd2 = self.ntw.nearestneighbordistances(schools, destpattern=schools)
@@ -682,25 +692,25 @@ class TestNetworkPointPattern(unittest.TestCase):
         # nearest neighbor keeping zero test
         known_zero = ([19], 0.0)[0]
         nn_c = self.ntw.nearestneighbordistances(crimes, keep_zero_dist=True)
-        self.assertEqual(nn_c[18][0], known_zero)
+        assert nn_c[18][0] == known_zero
         del self.ntw.distance_matrix
         del self.ntw.network_trees
 
         # nearest neighbor omitting zero test
         known_nonzero = ([11], 165.33982412719126)[1]
         nn_c = self.ntw.nearestneighbordistances(crimes, keep_zero_dist=False)
-        self.assertAlmostEqual(nn_c[18][1], known_nonzero, places=4)
+        assert nn_c[18][1] == pytest.approx(known_nonzero, 0.0001)
         del self.ntw.distance_matrix
         del self.ntw.network_trees
 
         # nearest neighbor with snap distance
         known_neigh = ([3], 402.5219673922477)[1]
         nn_c = self.ntw.nearestneighbordistances(crimes, snap_dist=True)
-        self.assertAlmostEqual(nn_c[0][1], known_neigh, places=4)
+        assert nn_c[0][1] == pytest.approx(known_neigh, 0.0001)
         del self.ntw.distance_matrix
         del self.ntw.network_trees
 
-    @unittest.skipIf(GEOPANDAS_EXTINCT, "Missing Geopandas")
+    @pytest.mark.skipif(GEOPANDAS_EXTINCT, reason="Missing Geopandas")
     def test_element_as_gdf(self):
         obs = self.spaghetti.element_as_gdf(self.ntw, pp_name=schools)
         snap_obs = self.spaghetti.element_as_gdf(
@@ -711,15 +721,15 @@ class TestNetworkPointPattern(unittest.TestCase):
         observed_point = obs.loc[(obs["id"] == 0), "geometry"].squeeze()
         snap_point = snap_obs.loc[(snap_obs["id"] == 0), "geometry"].squeeze()
         observed_dist = observed_point.distance(snap_point)
-        self.assertAlmostEqual(observed_dist, known_dist, places=8)
+        assert observed_dist == pytest.approx(known_dist, 0.00000001)
 
-        with self.assertRaises(KeyError):
+        with pytest.raises(KeyError):
             self.spaghetti.element_as_gdf(self.ntw, pp_name="i_should_not_exist")
 
 
 # -------------------------------------------------------------------------------
-class TestNetworkAnalysis(unittest.TestCase):
-    def setUp(self):
+class TestNetworkAnalysis:
+    def setup_method(self):
         # synthetic test data
         bounds, h, v = (0, 0, 3, 3), 2, 2
         lattice = self.spaghetti.regular_lattice(bounds, h, nv=v, exterior=True)
@@ -748,9 +758,6 @@ class TestNetworkAnalysis(unittest.TestCase):
         self.ntw_shp = self.spaghetti.Network(in_data=STREETS)
         self.ntw_shp.snapobservations(CRIMES, crimes, attribute=True)
 
-    def tearDown(self):
-        pass
-
     def test_global_auto_k_uniform(self):
         known_lowerenvelope = numpy.array(
             [
@@ -773,11 +780,11 @@ class TestNetworkAnalysis(unittest.TestCase):
             nsteps=self.test_steps,
             distribution="uniform",
         )
-        self.assertEqual(obtained.lowerenvelope.shape[0], self.test_steps)
+        assert obtained.lowerenvelope.shape[0] == self.test_steps
         numpy.testing.assert_allclose(obtained.lowerenvelope, known_lowerenvelope)
 
     def test_global_auto_k_unsupported_distribution(self):
-        with self.assertRaises(RuntimeError):
+        with pytest.raises(RuntimeError):
             self.ntw.GlobalAutoK(
                 self.ntw.pointpatterns[self.mids],
                 permutations=self.test_permutations,
@@ -791,7 +798,7 @@ class TestNetworkAnalysis(unittest.TestCase):
         numpy.testing.assert_allclose(
             observed_moran.I, known_moran_I, rtol=RTOL, atol=ATOL
         )
-        self.assertEqual(observed_y[:5], known_y)
+        assert observed_y[:5] == known_y
 
     def test_moran_graph(self):
         known_moran_I, known_y = 0.004777863137379377, [1, 0.0, 0.0, 3, 1]
@@ -799,24 +806,21 @@ class TestNetworkAnalysis(unittest.TestCase):
         numpy.testing.assert_allclose(
             observed_moran.I, known_moran_I, rtol=RTOL, atol=ATOL
         )
-        self.assertEqual(observed_y[:5], known_y)
+        assert observed_y[:5] == known_y
 
 
 # -------------------------------------------------------------------------------
-class TestNetworkUtils(unittest.TestCase):
-    def setUp(self):
+class TestNetworkUtils:
+    def setup_method(self):
         self.ntw = self.spaghetti.Network(in_data=STREETS)
         self.P00, self.P01 = P00, P01
         self.P10, self.P11 = P10, P11
-
-    def tearDown(self):
-        pass
 
     def test_compute_length(self):
         point1, point2 = (0, 0), (1, 1)
         known_length = 1.4142135623730951
         observed_length = self.util.compute_length(point1, point2)
-        self.assertAlmostEqual(observed_length, known_length, places=4)
+        assert observed_length == pytest.approx(known_length, 0.0001)
 
     def test_get_neighbor_distances(self):
         known_neighs = {1: 102.62353453439829, 2: 660.000001049743}
@@ -824,28 +828,28 @@ class TestNetworkUtils(unittest.TestCase):
             self.ntw, 0, self.ntw.arc_lengths
         )
         for k in known_neighs.keys():
-            self.assertAlmostEqual(observed_neighs[k], known_neighs[k], places=4)
+            assert observed_neighs[k] == pytest.approx(known_neighs[k], 0.0001)
 
     def test_generate_tree(self):
         known_path = [23, 22, 20, 19, 170, 2, 0]
         distance, pred = self.util.dijkstra(self.ntw, 0)
         tree = self.util.generatetree(pred)
-        self.assertEqual(tree[3], known_path)
+        assert tree[3] == known_path
 
     def test_dijkstra(self):
         distance, pred = self.util.dijkstra(self.ntw, 0)
-        self.assertAlmostEqual(distance[196], 5505.668247, places=4)
-        self.assertEqual(pred[196], 133)
+        assert distance[196] == pytest.approx(5505.668247, 0.0001)
+        assert pred[196] == 133
 
     def test_dijkstra_mp(self):
         distance, pred = self.util.dijkstra_mp((self.ntw, 0))
-        self.assertAlmostEqual(distance[196], 5505.668247, places=4)
-        self.assertEqual(pred[196], 133)
+        assert distance[196] == pytest.approx(5505.668247, 0.0001)
+        assert pred[196] == 133
 
     def test_chain_constr(self):
         known_len = 1.4142135623730951
         chain = self.util.chain_constr({0: (0.0, 0.0), 1: (1.0, 1.0)}, [(0, 1)])[0]
-        self.assertAlmostEqual(chain.len, known_len, places=10)
+        assert chain.len == pytest.approx(known_len, 0.00000000001)
 
     def test_build_chains(self):
         # 1x1 cross (regular lattice without the exterior)
@@ -857,8 +861,8 @@ class TestNetworkUtils(unittest.TestCase):
         _hl = self.util.build_chains(space_h, space_v, exterior, bounds, h=True)
         v_observed = _vl[0].vertices
         h_observed = _hl[0].vertices
-        self.assertEqual(v_observed, v_known)
-        self.assertEqual(h_observed, h_known)
+        assert v_observed == v_known
+        assert h_observed == h_known
 
         # 3x3 cross (regular lattice with the exterior)
         v_known = [self.P00, self.P01]
@@ -868,21 +872,21 @@ class TestNetworkUtils(unittest.TestCase):
         _hl = self.util.build_chains(space_h, space_v, exterior, bounds, h=True)
         v_observed = _vl[0].vertices
         h_observed = _hl[0].vertices
-        self.assertEqual(v_observed, v_known)
-        self.assertEqual(h_observed, h_known)
+        assert v_observed == v_known
+        assert h_observed == h_known
 
     # this test is causing CI to stall in some cases
     # see https://github.com/pysal/spaghetti/issues/666
     def test_squared_distance_point_link(self):
         point, link = (1, 1), ((0, 0), (2, 0))
         sqrd_nearp = self.util.squared_distance_point_link(point, link)
-        self.assertEqual(sqrd_nearp[0], 1.0)
-        self.assertEqual(sqrd_nearp[1].all(), numpy.array([1.0, 0.0]).all())
+        assert sqrd_nearp[0] == 1.0
+        assert sqrd_nearp[1].all() == numpy.array([1.0, 0.0]).all()
 
     def test_snap_points_to_links(self):
         points = {0: P11}
         links = [cg.shapes.Chain([P00, cg.shapes.Point((2, 0))])]
         snapped = self.util.snap_points_to_links(points, links)
         known_coords = [xy._Point__loc for xy in snapped[0][0]]
-        self.assertEqual(known_coords, [(0.0, 0.0), (2.0, 0.0)])
-        self.assertEqual(snapped[0][1].all(), numpy.array([1.0, 0.0]).all())
+        assert known_coords == [(0.0, 0.0), (2.0, 0.0)]
+        assert snapped[0][1].all() == numpy.array([1.0, 0.0]).all()

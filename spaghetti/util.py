@@ -244,7 +244,7 @@ def dijkstra(ntw, v0, initial_dist=numpy.inf):
                 unvisited.add(v1)
 
     # cast preceding vertices list as an array of integers
-    pred = numpy.array(pred, dtype=numpy.int)
+    pred = numpy.array(pred, dtype=int)
 
     return distance, pred
 
