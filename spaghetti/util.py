@@ -43,7 +43,7 @@ def compute_length(v0, v1):
     return euc_dist
 
 
-def get_neighbor_distances(ntw, v0, l):
+def get_neighbor_distances(ntw, v0, link):
     """Get distances to the nearest vertex neighbors along
     connecting arcs.
 
@@ -53,7 +53,7 @@ def get_neighbor_distances(ntw, v0, l):
         A spaghetti network object.
     v0 : int
         The vertex ID.
-    l : dict
+    link : dict
         The key is a tuple (start vertex, end vertex); value is ``float``.
         Cost per arc to travel, e.g. distance.
 
@@ -85,9 +85,9 @@ def get_neighbor_distances(ntw, v0, l):
 
         # set distance from vertex1 to vertex2 (link length)
         if arc[0] != v0:
-            neighbors[arc[0]] = l[arc]
+            neighbors[arc[0]] = link[arc]
         else:
-            neighbors[arc[1]] = l[arc]
+            neighbors[arc[1]] = link[arc]
 
     return neighbors
 
