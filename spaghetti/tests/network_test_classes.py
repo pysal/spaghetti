@@ -1,5 +1,4 @@
 import copy
-import warnings
 
 import numpy
 import pytest
@@ -209,7 +208,6 @@ class TestNetwork:
         assert observed_graph_edge == known_graph_edge
 
     def test_connected_components(self):
-        ## test warnings
         ntw = copy.deepcopy(self.ntw_from_lattice_ring)
 
         # observed values
@@ -346,19 +344,22 @@ class TestNetwork:
         observed_vertices1 = observed_paths[2][1].vertices
         observed_vertices2 = len(observed_paths[3][1].vertices)
         # known values
-        known_vertices1 = [(1.0, 0.5), (1.0, 0.6)]
+        known_vertices1 = [
+            cg.Point((0.5, 1.0)),
+            cg.Point((1.0, 1.0)),
+            cg.Point((1.0, 0.6)),
+        ]
         known_vertices2 = 4
-        assert observed_vertices1 == observed_vertices1
+        assert observed_vertices1 == known_vertices1
         assert observed_vertices2 == known_vertices2
 
         # test error
         with pytest.raises(AttributeError):
             lattice = self.spaghetti.regular_lattice((0, 0, 4, 4), 4)
             ntw = self.spaghetti.Network(in_data=lattice)
-            paths = ntw.shortest_paths([], synth_obs)
+            ntw.shortest_paths([], synth_obs)
 
     @pytest.mark.filterwarnings("ignore:There is a least one point pattern")
-    @pytest.mark.filterwarnings("ignore:Either one or both")
     def test_extract_component(self):
         ntw = copy.deepcopy(self.ntw_from_lattice_ring)
         s2s, tree = ntw.allneighbordistances("points", gen_tree=True)
@@ -375,10 +376,7 @@ class TestNetwork:
         assert observed_napts == known_napts
 
         # test largest component
-        with pytest.warns(UserWarning, match="Either one or both"):
-            largest = self.spaghetti.extract_component(
-                ntw, ntw.network_largest_component
-            )
+        largest = self.spaghetti.extract_component(ntw, ntw.network_largest_component)
 
         # observed values
         observed_arcs, observed_edges = largest.arcs, largest.edges
@@ -751,7 +749,6 @@ class TestNetworkAnalysis:
             midpoints.append(mid)
         self.mids = "mids"
         self.ntw.snapobservations(midpoints, self.mids)
-        npts = self.ntw.pointpatterns[self.mids].npoints
         self.test_permutations = 99
         self.test_steps = 10
 
