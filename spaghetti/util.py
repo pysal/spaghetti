@@ -98,7 +98,7 @@ def generatetree(pred):
     Parameters
     ----------
     pred : list
-        List of preceding vertices for traversal route.
+        List of preceding vertices for route traversal.
 
     Returns
     -------
