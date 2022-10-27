@@ -48,6 +48,7 @@
          with:
            environment-file: ${{ matrix.environment-file }}
            micromamba-version: 'latest'
+           channel-priority: 'flexible'
       
        - name: install bleeding edge libpysal & esda (Ubuntu / Python 3.10)
          shell: bash -l {0}
