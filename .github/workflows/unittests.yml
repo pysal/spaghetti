@@ -32,6 +32,7 @@
            - ci/310.yaml
            - ci/310-BASE.yaml
            - ci/310-DEV.yaml
+           - ci/310-DEV_shapely20b1.yaml
          include:
            - environment-file: ci/310.yaml
              os: macos-latest
@@ -47,6 +48,7 @@
          with:
            environment-file: ${{ matrix.environment-file }}
            micromamba-version: 'latest'
+           channel-priority: 'flexible'
       
        - name: install bleeding edge libpysal & esda (Ubuntu / Python 3.10)
          shell: bash -l {0}
