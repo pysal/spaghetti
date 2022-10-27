@@ -21,4 +21,6 @@ dependencies:
   # optional
   - geopandas>=0.9.0
   - pygeos>=0.8.0
-  - shapely>=2.0b1
+  - pip:
+      - --pre
+      - shapely==2.0b1
