@@ -20,4 +20,4 @@ dependencies:
   - pytest-xdist
   # optional
   - geopandas>=0.12.0
-  - shapely==2.0b1
+  - shapely>=2.0b1
