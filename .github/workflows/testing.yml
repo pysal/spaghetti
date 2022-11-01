@@ -38,14 +38,14 @@
            - ci/38.yaml
            - ci/39.yaml
            - ci/310.yaml
-           - ci/310-BASE.yaml
-           - ci/310-DEV.yaml
-           - ci/310-DEV_shapely_dev.yaml
            - ci/311.yaml
+           - ci/311-BASE.yaml
+           - ci/311-DEV.yaml
+           - ci/311-DEV_shapely_dev.yaml
          include:
-           - environment-file: ci/310.yaml
+           - environment-file: ci/311.yaml
              os: macos-latest
-           - environment-file: ci/310.yaml
+           - environment-file: ci/311.yaml
              os: windows-latest
      
      steps:
@@ -59,7 +59,7 @@
            micromamba-version: 'latest'
            channel-priority: 'flexible'
       
-       - name: install bleeding edge libpysal & esda (Ubuntu / Python 3.10)
+       - name: install bleeding edge libpysal & esda (Ubuntu / Python 3.11)
          shell: bash -l {0}
          run: |
            pip install git+https://github.com/pysal/libpysal.git@master
