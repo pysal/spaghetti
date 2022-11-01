@@ -19,3 +19,11 @@ dependencies:
   - pytest-cov
   - pytest-timeout
   - pytest-xdist
+  # optional
+  - geopandas>=0.7.0
+  # for docs build action (this env only)
+  - nbsphinx
+  - numpydoc
+  - sphinx
+  - sphinxcontrib-bibtex
+  - sphinx_bootstrap_theme

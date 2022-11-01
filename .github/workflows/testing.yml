@@ -35,20 +35,18 @@
        matrix:
          os: [ubuntu-latest]
          environment-file:
-           - ci/38.yaml
-           - ci/39.yaml
-           - ci/310.yaml
+           - ci/38-BASE.yaml
+           - ci/39-BASE.yaml
+           - ci/310-BASE.yaml
            - ci/310-DEV_shapely_dev.yaml
-           - ci/311.yaml
+           - ci/311-BARE.yaml
            - ci/311-BASE.yaml
            - ci/311-DEV.yaml
-           
          include:
-           - environment-file: ci/311.yaml
+           - environment-file: ci/311-BASE.yaml
              os: macos-latest
-           - environment-file: ci/311.yaml
+           - environment-file: ci/311-BASE.yaml
              os: windows-latest
-     
        fail-fast: false
      
      steps:
@@ -78,7 +76,7 @@
        - name: spatial versions (where geopandas is installed)
          shell: bash -l {0}
          run: 'python -c "import geopandas; geopandas.show_versions();"'
-         if: notIn('BASE', matrix.environment-file)
+         if: contains(matrix.environment-file, 'DEV') || contains(matrix.environment-file, 'BASE')
        
        - name: run tests - bash
          shell: bash -l {0}
