@@ -69,6 +69,17 @@
            pip install git+https://github.com/pysal/esda.git@master
          if: matrix.os == 'ubuntu-latest' && contains(matrix.environment-file, 'DEV')
        
+       - name: environment info
+         shell: bash -l {0}
+         run: |
+           micromamba info
+           micromamba list
+       
+       - name: spatial versions (where geopandas is installed)
+         shell: bash -l {0}
+         run: 'python -c "import geopandas; geopandas.show_versions();"'
+         if: contains(matrix.environment-file, 'BASE')
+       
        - name: run tests - bash
          shell: bash -l {0}
          run: ${{ env.RUN_TEST }}
