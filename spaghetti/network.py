@@ -1010,18 +1010,28 @@ class Network:
 
         >>> import spaghetti
         >>> from libpysal import examples
+        >>> import warnings
         >>> streets_file = examples.get_path("streets.shp")
         >>> ntw = spaghetti.Network(in_data=streets_file)
 
         Create a contiguity-based ``W`` object based on network distance, ``500``
         US feet in this case.
 
-        >>> w = ntw.distancebandweights(threshold=500)
+        >>> with warnings.catch_warnings():
+        ...     warnings.filterwarnings(
+        ...         "ignore", "The weights matrix is not fully connected", UserWarning
+        ...     )
+        ...     w = ntw.distancebandweights(threshold=500)
 
         Show the number of units in the ``W`` object.
 
         >>> w.n
         230
+
+        There are 7 components in the ``W`` object.
+
+        >>> w.n_components
+        7
 
         There are ``8`` units with ``3`` neighbors in the ``W`` object.
 
@@ -2757,8 +2767,13 @@ def extract_component(net, component_id, weightings=None):
 
     >>> from libpysal import examples
     >>> import spaghetti
+    >>> import warnings
     >>> snow_net = examples.get_path("Soho_Network.shp")
-    >>> ntw = spaghetti.Network(in_data=snow_net, extractgraph=False)
+    >>> with warnings.catch_warnings():
+    ...     warnings.filterwarnings(
+    ...         "ignore", "The weights matrix is not fully connected", UserWarning
+    ...     )
+    ...     ntw = spaghetti.Network(in_data=snow_net, extractgraph=False)
 
     The network is not fully connected.
 
