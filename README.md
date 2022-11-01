@@ -31,7 +31,7 @@ The following are a selection of some examples that can be launched individually
 
 ## Installation
 
-Python [3.8](https://docs.python.org/3.8/), [3.9](https://docs.python.org/3.9/), and [3.10](https://docs.python.org/3.10/) are tested for support by `spaghetti`. Please make sure that you are operating in a Python >= 3.8 environment.
+Python [3.8](https://docs.python.org/3.8/), [3.9](https://docs.python.org/3.9/), [3.10](https://docs.python.org/3.10/), and [3.11](https://docs.python.org/3.11/) are tested for support by `spaghetti`. Please make sure that you are operating in a Python >= 3.8 environment.
 
 **Installing with `conda` via [`conda-forge`](https://github.com/conda-forge/spaghetti-feedstock) (highly recommended)**
 
