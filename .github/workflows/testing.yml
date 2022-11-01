@@ -78,7 +78,7 @@
        - name: spatial versions (where geopandas is installed)
          shell: bash -l {0}
          run: 'python -c "import geopandas; geopandas.show_versions();"'
-         if: not(contains(matrix.environment-file, 'BASE'))
+         if: notIn('BASE', matrix.environment-file)
        
        - name: run tests - bash
          shell: bash -l {0}
