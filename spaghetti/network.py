@@ -1010,18 +1010,28 @@ class Network:
 
         >>> import spaghetti
         >>> from libpysal import examples
+        >>> import warnings
         >>> streets_file = examples.get_path("streets.shp")
         >>> ntw = spaghetti.Network(in_data=streets_file)
 
         Create a contiguity-based ``W`` object based on network distance, ``500``
         US feet in this case.
 
-        >>> w = ntw.distancebandweights(threshold=500)
+        >>> with warnings.catch_warnings():
+        ...     warnings.filterwarnings(
+        ...         "ignore", "The weights matrix is not fully connected", UserWarning
+        ...     )
+        ...     w = ntw.distancebandweights(threshold=500)
 
         Show the number of units in the ``W`` object.
 
         >>> w.n
         230
+
+        There are 7 components in the ``W`` object.
+
+        >>> w.n_components
+        7
 
         There are ``8`` units with ``3`` neighbors in the ``W`` object.
 
@@ -2329,15 +2339,15 @@ class Network:
             return int(c) if (type(c) == float and c.is_integer()) else c
 
         # catch invalid split types
-        split_by = split_by.lower()
+        _split_by = split_by.lower()
         valid_split_types = ["distance", "count"]
-        if split_by not in valid_split_types:
+        if _split_by not in valid_split_types:
             msg = f"'{split_by}' is not a valid value for 'split_by'. "
             msg += f"Valid arguments include: {valid_split_types}."
             raise ValueError(msg)
 
         # catch invalid count params
-        if split_by == "count":
+        if _split_by == "count":
             if split_param <= 1:
                 msg = "Splitting arcs by 1 or less is not possible. "
                 msg += f"Currently 'split_param' is set to {split_param}."
@@ -2376,7 +2386,7 @@ class Network:
             length = split_network.arc_lengths[arc]
 
             # set initial segmentation interval
-            if split_by == "distance":
+            if _split_by == "distance":
                 interval = split_param
             else:
                 interval = length / float(split_param)
@@ -2757,8 +2767,13 @@ def extract_component(net, component_id, weightings=None):
 
     >>> from libpysal import examples
     >>> import spaghetti
+    >>> import warnings
     >>> snow_net = examples.get_path("Soho_Network.shp")
-    >>> ntw = spaghetti.Network(in_data=snow_net, extractgraph=False)
+    >>> with warnings.catch_warnings():
+    ...     warnings.filterwarnings(
+    ...         "ignore", "The weights matrix is not fully connected", UserWarning
+    ...     )
+    ...     ntw = spaghetti.Network(in_data=snow_net, extractgraph=False)
 
     The network is not fully connected.
 
@@ -3009,7 +3024,7 @@ def spanning_tree(net, method="sort", maximum=False, silence_warnings=True):
         if method.lower() == "sort":
             spanning_tree = mst_weighted_sort(net, maximum, net_kws)
         else:
-            msg = "'%s' not a valid method for minimum spanning tree creation"
+            msg = "'%s' not a valid method for minimum spanning tree creation."
             raise ValueError(msg % method)
 
         # instantiate the spanning tree as a network object

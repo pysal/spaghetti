@@ -1,6 +1,6 @@
 .. Installation
 
-Python 3.8_, 3.9_, and 3.10_ are tested for support by `spaghetti`. Please make sure that you are operating in a Python >= 3.8 environment.
+Python 3.8_, 3.9_, 3.10_, and 3.11_ are tested for support by `spaghetti`. Please make sure that you are operating in a Python >= 3.8 environment.
 
 
 Installation
@@ -51,6 +51,7 @@ You can  also fork_ the `pysal/spaghetti`_ repo and create a local clone of your
 .. _3.8: https://docs.python.org/3.8/
 .. _3.9: https://docs.python.org/3.9/
 .. _3.10: https://docs.python.org/3.10/
+.. _3.11: https://docs.python.org/3.11/
 .. _spaghetti-feedstock: https://github.com/conda-forge/spaghetti-feedstock
 .. _a nice example: https://geopandas.readthedocs.io/en/latest/getting_started/install.html#creating-a-new-environment
 .. _conda: https://docs.conda.io/en/latest/

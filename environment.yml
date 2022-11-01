@@ -2,7 +2,7 @@ name: notebooks-environment
 channels:
   - conda-forge
 dependencies:
-  - python=3.10
+  - python=3.11
   - esda
   - geopandas>=0.9.0
   - libspatialindex
