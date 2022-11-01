@@ -160,11 +160,12 @@ class TestNetwork:
         assert len(self.ntw_down_chain.arcs) == len(vert_down.segments)
 
     def test_network_failures(self):
+        msg = "'libpysal.cg.shapes.Point' not supported for network instantiation."
         # try instantiating network with single point
-        with pytest.raises(TypeError):
+        with pytest.raises(TypeError, match=msg):
             spaghetti.Network(in_data=P11)
         # try instantiating network with list of single point
-        with pytest.raises(TypeError):
+        with pytest.raises(TypeError, match=msg):
             spaghetti.Network(in_data=[P11])
 
     @pytest.mark.skipif(GEOPANDAS_EXTINCT, reason="Missing Geopandas")
@@ -316,20 +317,37 @@ class TestNetwork:
         assert len(n200.arcs) == 606
 
     def test_split_arcs_count_1(self):
-        with pytest.raises(ValueError):
-            self.ntw_shp.split_arcs(1, split_by="count")
+        split_param = 1
+        msg = (
+            f"Splitting arcs by 1 or less is not possible. "
+            f"Currently 'split_param' is set to {split_param}."
+        )
+        with pytest.raises(ValueError, match=msg):
+            self.ntw_shp.split_arcs(split_param, split_by="count")
 
     def test_split_arcs_count_half(self):
-        with pytest.raises(ValueError):
-            self.ntw_shp.split_arcs(0.5, split_by="count")
+        split_param = 0.5
+        msg = (
+            f"Splitting arcs by 1 or less is not possible. "
+            f"Currently 'split_param' is set to {split_param}."
+        )
+        with pytest.raises(ValueError, match=msg):
+            self.ntw_shp.split_arcs(split_param, split_by="count")
 
     def test_split_arcs_count_1_and_half(self):
-        with pytest.raises(TypeError):
-            self.ntw_shp.split_arcs(1.99, split_by="count")
+        split_param = 1.5
+        msg = (
+            "Network arcs must split by an integer. "
+            f"Currently 'split_param' is set to {split_param}."
+        )
+        with pytest.raises(TypeError, match=msg):
+            self.ntw_shp.split_arcs(split_param, split_by="count")
 
     def test_split_arcs_misspell(self):
-        with pytest.raises(ValueError):
-            self.ntw_shp.split_arcs(3, split_by="MasterP")
+        split_by = "MasterP"
+        msg = f"'{split_by}' is not a valid value for 'split_by'. "
+        with pytest.raises(ValueError, match=msg):
+            self.ntw_shp.split_arcs(3, split_by=split_by)
 
     def test_enum_links_vertex(self):
         coincident = self.ntw_shp.enum_links_vertex(24)
@@ -370,7 +388,9 @@ class TestNetwork:
         assert observed_vertices2 == known_vertices2
 
         # test error
-        with pytest.raises(AttributeError):
+        with pytest.raises(
+            AttributeError, match="The 'network_trees' attribute has not been created."
+        ):
             lattice = spaghetti.regular_lattice((0, 0, 4, 4), 4)
             ntw = spaghetti.Network(in_data=lattice)
             ntw.shortest_paths([], synth_obs)
@@ -429,8 +449,10 @@ class TestNetwork:
         assert observed_len == known_len
 
         # method error
-        with pytest.raises(ValueError):
-            spaghetti.spanning_tree(self.triangle, method="tors")
+        method = "tors"
+        msg = f"'{method}' not a valid method for minimum spanning tree creation."
+        with pytest.raises(ValueError, match=msg):
+            spaghetti.spanning_tree(self.triangle, method=method)
 
     @pytest.mark.skipif(GEOPANDAS_EXTINCT, reason="Missing Geopandas")
     def test_element_as_gdf(self):
@@ -510,11 +532,11 @@ class TestNetwork:
             assert (observed[0], observed[1]) == known
 
         # test for Type Error
-        with pytest.raises(TypeError):
+        with pytest.raises(TypeError, match="The 'nh' and 'nv' parameters"):
             spaghetti.regular_lattice(bounds, [[4]])
 
         # test for Runtime Error
-        with pytest.raises(RuntimeError):
+        with pytest.raises(RuntimeError, match="The 'bounds' parameter is 3 elements"):
             spaghetti.regular_lattice((0, 0, 1), 1)
 
 
@@ -573,11 +595,14 @@ class TestNetworkPointPattern:
     def test_pp_failures(self):
         # network instantiated from a single libpysal.cg.Chain
         self.ntw_from_chain = spaghetti.Network(in_data=P11P22_CHAIN)
+        msg = (
+            "'libpysal.cg.shapes.Chain' not supported for point pattern instantiation."
+        )
         # try snapping chain
-        with pytest.raises(TypeError):
+        with pytest.raises(TypeError, match=msg):
             self.ntw_from_chain.snapobservations(P11P22_CHAIN, "chain")
         # try snapping list of chain
-        with pytest.raises(TypeError):
+        with pytest.raises(TypeError, match=msg):
             self.ntw_from_chain.snapobservations([P11P22_CHAIN], "chain")
 
     @pytest.mark.skipif(GEOPANDAS_EXTINCT, reason="Missing Geopandas")
@@ -615,8 +640,10 @@ class TestNetworkPointPattern:
         assert self.known_pp1_npoints == sim.npoints
 
     def test_simulate_unsupported_distribution_observations(self):
-        with pytest.raises(RuntimeError):
-            self.ntw.simulate_observations(1, distribution="mrofinu")
+        distribution = "mrofinu"
+        msg = f"{distribution} distribution not currently supported."
+        with pytest.raises(RuntimeError, match=msg):
+            self.ntw.simulate_observations(1, distribution=distribution)
 
     def test_all_neighbor_distances(self):
         matrix1, tree = self.ntw.allneighbordistances(schools, gen_tree=True)
@@ -692,7 +719,7 @@ class TestNetworkPointPattern:
 
     def test_nearest_neighbor_distances(self):
         # general test
-        with pytest.raises(KeyError):
+        with pytest.raises(KeyError, match="Available point patterns are"):
             self.ntw.nearestneighbordistances("i_should_not_exist")
         nnd1 = self.ntw.nearestneighbordistances(schools)
         nnd2 = self.ntw.nearestneighbordistances(schools, destpattern=schools)
@@ -734,7 +761,7 @@ class TestNetworkPointPattern:
         observed_dist = observed_point.distance(snap_point)
         assert observed_dist == pytest.approx(known_dist, 0.00000001)
 
-        with pytest.raises(KeyError):
+        with pytest.raises(KeyError, match="Available point patterns are"):
             spaghetti.element_as_gdf(self.ntw, pp_name="i_should_not_exist")
 
 
@@ -794,12 +821,14 @@ class TestNetworkAnalysis:
         numpy.testing.assert_allclose(obtained.lowerenvelope, known_lowerenvelope)
 
     def test_global_auto_k_unsupported_distribution(self):
-        with pytest.raises(RuntimeError):
+        distribution = "mrofinu"
+        msg = f"{distribution} distribution not currently supported."
+        with pytest.raises(RuntimeError, match=msg):
             self.ntw.GlobalAutoK(
                 self.ntw.pointpatterns[self.mids],
                 permutations=self.test_permutations,
                 nsteps=self.test_steps,
-                distribution="mrofinu",
+                distribution=distribution,
             )
 
     def test_moran_network(self):

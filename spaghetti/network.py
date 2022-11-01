@@ -2339,15 +2339,15 @@ class Network:
             return int(c) if (type(c) == float and c.is_integer()) else c
 
         # catch invalid split types
-        split_by = split_by.lower()
+        _split_by = split_by.lower()
         valid_split_types = ["distance", "count"]
-        if split_by not in valid_split_types:
+        if _split_by not in valid_split_types:
             msg = f"'{split_by}' is not a valid value for 'split_by'. "
             msg += f"Valid arguments include: {valid_split_types}."
             raise ValueError(msg)
 
         # catch invalid count params
-        if split_by == "count":
+        if _split_by == "count":
             if split_param <= 1:
                 msg = "Splitting arcs by 1 or less is not possible. "
                 msg += f"Currently 'split_param' is set to {split_param}."
@@ -2386,7 +2386,7 @@ class Network:
             length = split_network.arc_lengths[arc]
 
             # set initial segmentation interval
-            if split_by == "distance":
+            if _split_by == "distance":
                 interval = split_param
             else:
                 interval = length / float(split_param)
@@ -3024,7 +3024,7 @@ def spanning_tree(net, method="sort", maximum=False, silence_warnings=True):
         if method.lower() == "sort":
             spanning_tree = mst_weighted_sort(net, maximum, net_kws)
         else:
-            msg = "'%s' not a valid method for minimum spanning tree creation"
+            msg = "'%s' not a valid method for minimum spanning tree creation."
             raise ValueError(msg % method)
 
         # instantiate the spanning tree as a network object
