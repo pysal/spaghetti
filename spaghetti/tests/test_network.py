@@ -2,7 +2,6 @@
 """
 
 import copy
-import warnings
 
 import numpy
 import pytest
@@ -18,6 +17,7 @@ try:
 except ImportError:
     GEOPANDAS_EXTINCT = True
 
+SILENCE = dict(weights_kws=dict(silence_warnings=True))
 
 # empirical data ---------------------------------------------------------------
 # network shapefile
@@ -101,16 +101,12 @@ class TestNetwork:
             for arc in self.ntw_shp.arcs
         ]
 
-        with warnings.catch_warnings():
-            warnings.filterwarnings(
-                "ignore", "The weights matrix is not fully connected", UserWarning
-            )
-            # lattice and ring + extension
-            bounds, h, v = (0, 0, 2, 2), 1, 1
-            self.lattice = spaghetti.regular_lattice(bounds, h, nv=v)
-            self.lines = self.lattice + RING + EXTENSION
-            self.ntw_from_lattice_ring = spaghetti.Network(in_data=self.lines)
-            self.ntw_from_lattice_ring.snapobservations([P0505, P052], "points")
+        # lattice and ring + extension
+        bounds, h, v = (0, 0, 2, 2), 1, 1
+        self.lattice = spaghetti.regular_lattice(bounds, h, nv=v)
+        self.lines = self.lattice + RING + EXTENSION
+        self.ntw_from_lattice_ring = spaghetti.Network(in_data=self.lines, **SILENCE)
+        self.ntw_from_lattice_ring.snapobservations([P0505, P052], "points")
 
         # Pythagorean Triple
         self.triangle = spaghetti.Network(in_data=GOOD_TRIANGLE)
@@ -219,7 +215,6 @@ class TestNetwork:
         observed_graph_edge = self.ntw_shp.graph_component2edge[0][-1]
         assert observed_graph_edge == known_graph_edge
 
-    @pytest.mark.filterwarnings("ignore:The weights matrix is not fully connected")
     def test_connected_components(self):
         ntw = copy.deepcopy(self.ntw_from_lattice_ring)
 
@@ -268,9 +263,8 @@ class TestNetwork:
         known_lengths = {0: 6.0, 1: 1.914213562373095}
         assert observed_lengths == known_lengths
 
-    @pytest.mark.filterwarnings("ignore:The weights matrix is not fully connected")
     def test_distance_band_weights(self):
-        w = self.ntw_shp.distancebandweights(threshold=500)
+        w = self.ntw_shp.distancebandweights(threshold=500, **SILENCE)
         assert w.n == 230
         assert w.histogram == [
             (1, 22),
@@ -291,23 +285,20 @@ class TestNetwork:
         n1000 = self.ntw_shp.split_arcs(1000.0)
         assert len(n1000.arcs) == 303
 
-    @pytest.mark.filterwarnings("ignore:The weights matrix is not fully connected")
     def test_split_arcs_dist_ntw_from_lattice_ring_2(self):
-        n_2 = self.ntw_from_lattice_ring.split_arcs(0.2)
+        n_2 = self.ntw_from_lattice_ring.split_arcs(0.2, **SILENCE)
         known_neighbors = [(1, 17), (1, 25), (1, 26), (18, 19)]
         observed_neighbors = n_2.w_network.neighbors[1, 18]
         assert observed_neighbors == known_neighbors
 
-    @pytest.mark.filterwarnings("ignore:The weights matrix is not fully connected")
     def test_split_arcs_dist_ntw_from_lattice_ring_3(self):
-        n_3 = self.ntw_from_lattice_ring.split_arcs(0.3)
+        n_3 = self.ntw_from_lattice_ring.split_arcs(0.3, **SILENCE)
         known_neighbors = [(1, 16), (1, 22), (1, 23), (17, 18)]
         observed_neighbors = n_3.w_network.neighbors[1, 17]
         assert observed_neighbors == known_neighbors
 
-    @pytest.mark.filterwarnings("ignore:The weights matrix is not fully connected")
     def test_split_arcs_dist_ntw_from_lattice_ring_5(self):
-        n_5 = self.ntw_from_lattice_ring.split_arcs(0.5)
+        n_5 = self.ntw_from_lattice_ring.split_arcs(0.5, **SILENCE)
         known_neighbors = [(1, 14), (1, 16), (1, 17), (2, 15)]
         observed_neighbors = n_5.w_network.neighbors[1, 15]
         assert observed_neighbors == known_neighbors

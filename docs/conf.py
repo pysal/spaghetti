@@ -68,7 +68,7 @@ release = spaghetti.__version__
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = "en"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -251,15 +251,15 @@ def setup(app):
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
     "esda": ("https://pysal.org/esda/", None),
-    "geopandas": ("https://geopandas.readthedocs.io/en/latest/", None),
+    "geopandas": ("https://geopandas.org/en/latest/", None),
     "libpysal": ("https://pysal.org/libpysal/", None),
-    "matplotlib": ("https://matplotlib.org/", None),
-    "networkx": ("https://networkx.github.io/documentation/stable/", None),
+    "matplotlib": ("https://matplotlib.org/stable/", None),
+    "networkx": ("https://networkx.org/documentation/stable/", None),
     "numpy": ("https://numpy.org/doc/stable/", None),
     "pandas": ("https://pandas.pydata.org/pandas-docs/stable/", None),
     "pointpats": ("https://pointpats.readthedocs.io/en/latest/", None),
-    "python": ("https://docs.python.org/3.9/", None),
-    "scipy": ("https://docs.scipy.org/doc/scipy/reference/", None),
+    "python": ("https://docs.python.org/3.11/", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy/", None),
 }
 
 # This is processed by Jinja2 and inserted before each notebook
@@ -301,6 +301,7 @@ nbsphinx_execute_arguments = [
     "--InlineBackend.rc={'figure.dpi': 96}",
 ]
 
-mathjax_config = {
+
+mathjax3_config = {
     "TeX": {"equationNumbers": {"autoNumber": "AMS", "useLabelIds": True}},
 }
