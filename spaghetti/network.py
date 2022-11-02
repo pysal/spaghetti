@@ -72,7 +72,7 @@ class Network:
         ``True`` flags ``self.arc_lengths`` as the weightings,
         ``False`` sets no weightings. Default is ``False``.
     weights_kws : dict
-        Keyword arguments for ``libpysal.weights.W``.
+        Keyword arguments for ``libpysal.weights.W``. Default is ``dict()``.
     vertex_atol : {int, None}
         Precision for vertex absolute tolerance. Round vertex coordinates to
         ``vertex_atol`` decimal places. Default is ``None``. **ONLY** change
@@ -855,7 +855,7 @@ class Network:
             Flag for whether the method is being called from within
             ``split_arcs()`` (``True``) or not (``False``). Default is ``False``.
         weights_kws : dict
-            Keyword arguments for ``libpysal.weights.W``.
+            Keyword arguments for ``libpysal.weights.W``. Default is ``dict()``.
 
         Returns
         -------
@@ -971,7 +971,9 @@ class Network:
 
         return w
 
-    def distancebandweights(self, threshold, n_processes=1, gen_tree=False):
+    def distancebandweights(
+        self, threshold, n_processes=1, gen_tree=False, weights_kws=dict()
+    ):
         """Create distance-based weights.
 
         Parameters
@@ -985,6 +987,8 @@ class Network:
         gen_tree : bool
             Rebuild shortest path with ``True``, or skip with ``False``.
             Default is ``False``.
+        weights_kws : dict
+            Keyword arguments for ``libpysal.weights.W``. Default is ``dict()``.
 
         Returns
         -------
@@ -1017,11 +1021,9 @@ class Network:
         Create a contiguity-based ``W`` object based on network distance, ``500``
         US feet in this case.
 
-        >>> with warnings.catch_warnings():
-        ...     warnings.filterwarnings(
-        ...         "ignore", "The weights matrix is not fully connected", UserWarning
-        ...     )
-        ...     w = ntw.distancebandweights(threshold=500)
+        >>> w = ntw.distancebandweights(
+        ...     threshold=500, weights_kws=dict(silence_warnings=True)
+        ... )
 
         Show the number of units in the ``W`` object.
 
@@ -1063,7 +1065,7 @@ class Network:
                 neighbors[n].append(neigh)
 
         # call libpysal for `W` instance
-        w = weights.W(neighbors)
+        w = weights.W(neighbors, **weights_kws)
 
         return w
 
@@ -1159,7 +1161,7 @@ class Network:
         distance from the original location to the snapped location.
 
         Parameters
-        -----------
+        ----------
         pattern : spaghetti.PointPattern
             The point pattern object.
         idx : int
@@ -1189,7 +1191,7 @@ class Network:
         """Used internally to snap point observations to network arcs.
 
         Parameters
-        -----------
+        ----------
         pointpattern : spaghetti.PointPattern
             The point pattern object.
 
@@ -1551,7 +1553,7 @@ class Network:
         """Returns the arcs (links) adjacent to vertices.
 
         Parameters
-        -----------
+        ----------
         v0 : int
             The vertex ID.
 
@@ -1593,7 +1595,7 @@ class Network:
         ``nearestneighbordistances()``, and ``distancebandweights()``.
 
         Parameters
-        -----------
+        ----------
         n_processes : int
             Specify the number of cores to utilize. Default is 1 core.
             Use ``"all"`` to request all available cores.
@@ -2274,11 +2276,13 @@ class Network:
 
         return paths
 
-    def split_arcs(self, split_param, split_by="distance", w_components=True):
+    def split_arcs(
+        self, split_param, split_by="distance", w_components=True, weights_kws=dict()
+    ):
         """Split all network arcs at either a fixed distance or fixed count.
 
         Parameters
-        -----------
+        ----------
         split_param : {int, float}
             Either the number of desired resultant split arcs or
             the distance at which arcs are split.
@@ -2287,6 +2291,8 @@ class Network:
         w_components : bool
             Set to ``False`` to not record connected components from a
             ``libpysal.weights.W`` object. Default is ``True``.
+        weights_kws : dict
+            Keyword arguments for ``libpysal.weights.W``. Default is ``dict()``.
 
         Returns
         -------
@@ -2481,7 +2487,7 @@ class Network:
 
             # extract contiguity weights from libpysal
             split_network.w_network = split_network.contiguityweights(
-                graph=False, from_split=True
+                graph=False, from_split=True, weights_kws=weights_kws
             )
             # identify connected components from the `w_network`
             split_network.identify_components(split_network.w_network, graph=False)
@@ -2767,13 +2773,12 @@ def extract_component(net, component_id, weightings=None):
 
     >>> from libpysal import examples
     >>> import spaghetti
-    >>> import warnings
     >>> snow_net = examples.get_path("Soho_Network.shp")
-    >>> with warnings.catch_warnings():
-    ...     warnings.filterwarnings(
-    ...         "ignore", "The weights matrix is not fully connected", UserWarning
-    ...     )
-    ...     ntw = spaghetti.Network(in_data=snow_net, extractgraph=False)
+    >>> ntw = spaghetti.Network(
+    ...     in_data=snow_net,
+    ...     extractgraph=False,
+    ...     weights_kws=dict(silence_warnings=True)
+    ... )
 
     The network is not fully connected.
 
