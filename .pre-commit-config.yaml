@@ -8,6 +8,8 @@ repos:
   rev: 6.0.0
   hooks:
   - id: flake8
+    entry: pflake8
+    additional_dependencies: [pyproject-flake8]
     language_version: python3
 - repo: https://github.com/psf/black
   rev: 22.10.0

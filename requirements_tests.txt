@@ -1,8 +1,0 @@
-pytest
-pytest-cov
-pytest-timeout
-pytest-xdist
-codecov
-coverage
-twine
-wheel
