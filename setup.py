@@ -12,6 +12,7 @@ sys.path.append(os.path.dirname(__file__))
 
 # see pyproject.toml for static project metadata
 setup(
+    name="spaghetti",  # needed by GitHub dependency graph
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
 )
