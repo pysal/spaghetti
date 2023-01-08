@@ -11,7 +11,6 @@ dependencies:
   - numpy
   - pandas>=1.0
   - pulp
-  - pygeos>=0.8.0
   - rtree
   - scipy>=1.0
   - seaborn
