@@ -3,8 +3,8 @@ requires = [
     "black",
     "isort",
     "pyproject-flake8",
-    "setuptools>=61.0.0",
-    "versioneer[toml]==0.26",
+    "setuptools",
+    "versioneer[toml]",
     
 ]
 build-backend = "setuptools.build_meta"
