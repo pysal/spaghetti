@@ -11,6 +11,7 @@ on:
     - cron: '0 6 1 * *' # 1st day of each month at 06:00 UTC
   push:
     paths:
+    - 'pyproject.toml'
     - '.github/workflows/versioneer.yml'
 
 jobs:
