@@ -3,15 +3,15 @@ requires = [
     "black",
     "isort",
     "pyproject-flake8",
-    "setuptools",
-    "versioneer[toml]",
-    
+    "setuptools>=61.0.0",
+    "versioneer[toml]==0.26",
+
 ]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "spaghetti"
-dynamic = ["version"]
+dynamic = ["dependencies", "version"]
 maintainers = [
     {name = "James D. Gaboardi", email = "jgaboardi@gmail.com"},
 ]
