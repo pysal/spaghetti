@@ -2,11 +2,11 @@
 name: "Update Versioneer"
 on:
   workflow_dispatch:
-  inputs:
-    version:
-      description: Manual Unittest Run
-      default: test
-      required: false
+    inputs:
+      version:
+        description: Manual Unittest Run
+        default: test
+        required: false
   schedule:
     - cron: "0 6 1 * *" # 1st day of each month at 06:00 UTC
   push:
