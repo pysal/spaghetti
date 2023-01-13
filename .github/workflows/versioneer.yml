@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: Manual Unittest Run
+        description: Manual Versioneer Run
         default: test
         required: false
   schedule:
