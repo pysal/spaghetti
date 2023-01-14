@@ -110,6 +110,11 @@ parentdir_prefix = "spaghetti-"
 [tool.isort]
 profile = "black"
 src_paths = ["spaghetti"]
+skip = [
+    "docs/conf.py",
+    "versioneer.py",
+    "spaghetti/_version.py"
+]
 
 [tool.flake8]
 max_line_length = 88
@@ -124,3 +129,10 @@ exclude = [
 
 [tool.black]
 line-length = 88
+extend-exclude = '''
+(
+  docs/conf.py
+  "versioneer.py",
+  "spaghetti/_version.py"
+)
+'''
