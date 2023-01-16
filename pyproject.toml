@@ -11,7 +11,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "spaghetti"
-dynamic = ["dependencies", "version"]
+dynamic = ["version"]
 maintainers = [
     {name = "James D. Gaboardi", email = "jgaboardi@gmail.com"},
 ]
