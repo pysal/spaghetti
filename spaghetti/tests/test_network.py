@@ -539,7 +539,7 @@ class TestNetworkPointPattern:
         self.OBS = [SCHOOLS, CRIMES]
         self.idxs = ["pp1", "pp2"]
         iterator = zip(self.obs, self.OBS, self.idxs)
-        for (obs, OBS, idx) in iterator:
+        for obs, OBS, idx in iterator:
             self.ntw.snapobservations(OBS, obs, attribute=True)
             setattr(self, idx, self.ntw.pointpatterns[obs])
 
@@ -600,7 +600,7 @@ class TestNetworkPointPattern:
     def test_pp_from_geopandas(self):
         idxs = ["gdf_%s" % pp for pp in self.idxs]
         iterator = zip(self.obs, self.OBS, idxs)
-        for (obs, OBS, idx) in iterator:
+        for obs, OBS, idx in iterator:
             OBS = geopandas.read_file(OBS)
             kwargs = {"attribute": True}
             if obs == crimes:
