@@ -285,12 +285,10 @@ class Network:
         weights_kws=dict(),
         vertex_atol=None,
     ):
-
         # do this when creating a clean network instance from a
         # shapefile or a geopandas.GeoDataFrame, otherwise a shell
         # network instance is created (see `split_arcs()` method)
         if in_data is not None:
-
             # set parameters as attributes
             self.in_data = in_data
             self.vertex_sig = vertex_sig
@@ -478,7 +476,7 @@ class Network:
 
         # iterate over list and set attribute with
         # either "network" or "graph" extension
-        for (attr_str, attr) in extracted_attrs:
+        for attr_str, attr in extracted_attrs:
             setattr(self, obj_type + attr_str, attr)
 
     def _extractnetwork(self):
@@ -514,7 +512,6 @@ class Network:
 
         # iterate over each record of the network lines
         for shp in shps:
-
             # if the segments are native pysal geometries
             if is_libpysal_chains:
                 vertices = shp.vertices
@@ -526,7 +523,6 @@ class Network:
 
             # iterate over each vertex (v)
             for i, v in enumerate(vertices[:-1]):
-
                 # -- For vertex 1
                 # adjust precision -- this was originally
                 # implemented to handle high-precision
@@ -609,7 +605,6 @@ class Network:
         # iterate over all vertices that are not contained within
         # isolated loops that have a degree of 2
         for s in non_articulation_points:
-
             # initialize bridge with an articulation point
             bridge = [s]
 
@@ -617,7 +612,6 @@ class Network:
             # that are also degree 2
             neighbors = self._yieldneighbor(s, non_articulation_points, bridge)
             while neighbors:
-
                 # extract the current node in `neighbors`
                 cnode = neighbors.pop()
                 # remove it from `non_articulation_points`
@@ -638,11 +632,9 @@ class Network:
 
         # iterate over the list of newly created rooted bridges
         for bridge in bridge_roots:
-
             # if the vertex is only one non-articulation
             # point in the bridge
             if len(bridge) == 1:
-
                 # that the singular element of the bridge
                 n = self.adjacencylist[bridge[0]]
                 # and create a new graph edge from it
@@ -736,10 +728,8 @@ class Network:
         unvisted = set(self.vertices.values())
 
         while unvisted:
-
             # iterate over each component
             for component_id, ring in self.network_component_is_ring.items():
-
                 # evaluate for non-articulation points
                 napts, unvisted = self._evaluate_napts(
                     napts, unvisted, component_id, ring
@@ -781,10 +771,8 @@ class Network:
 
         # iterate over each `edge` of the `component`
         for component in self.network_component2arc[component_id]:
-
             # each `component` has two vertices
             for vertex in component:
-
                 # if `component` is not an isolated island
                 # and `vertex` has exactly 2 neighbors,
                 # add `vertex` to `napts`
@@ -832,7 +820,6 @@ class Network:
         # get all nodes adjacent to `vtx` that are not in the
         # set of 'bridge' vertices
         for i in self.adjacencylist[vtx]:
-
             if i in arc_vertices and i not in bridge:
                 nodes.append(i)
 
@@ -926,10 +913,8 @@ class Network:
         # for network link adjacency are exhausted
         working = True
         while working:
-
             # for each network link (1)
             for key in links:
-
                 # instantiate a slot in the OrderedDict
                 neighbors[key] = []
 
@@ -1222,7 +1207,6 @@ class Network:
 
         # iterate over network arc IDs
         for arc in self.arcs:
-
             # record the start and end of the arc
             head = self.vertex_coords[arc[0]]
             tail = self.vertex_coords[arc[1]]
@@ -1250,7 +1234,6 @@ class Network:
         # record obs_to_arc, dist_to_vertex, and dist_snapped
         # -- iterate over the snapped observation points
         for point_idx, snap_info in snapped.items():
-
             # fetch the x and y coordinate
             x, y = snap_info[1].tolist()
 
@@ -1284,7 +1267,6 @@ class Network:
 
         # iterate over the observations to arcs lookup
         for k, v in obs_to_arc.items():
-
             # record the left and right vertex ids
             keys = v.keys()
             obs_to_vertex[k[0]] = keys
@@ -1356,10 +1338,8 @@ class Network:
 
         # graph-theoretic object of nodes and edges
         if graph:
-
             # iterate the links-to-observations lookup
             for key, observations in obs_on.items():
-
                 # isolate observation count for the link
                 cnt = len(observations)
 
@@ -1376,7 +1356,6 @@ class Network:
 
         # network object of arcs and vertices
         else:
-
             # simplified version of the above process
             for key in obs_on.keys():
                 counts[key] = len(obs_on[key])
@@ -1515,7 +1494,6 @@ class Network:
 
         # iterate over random distances created above
         for i, r in enumerate(nrandompts):
-
             # take the first element of the index array (arc ID) where the
             # random distance is greater than that of its value in `stops`
             idx = numpy.where(r < stops)[0][0]
@@ -1621,10 +1599,8 @@ class Network:
 
         # single-core processing
         if n_processes == 1:
-
             # iterate over each network vertex
             for vtx in self.vertex_list:
-
                 # calculate the shortest path and preceding
                 # vertices for traversal route
                 distance, pred = util.dijkstra(self, vtx)
@@ -1642,7 +1618,6 @@ class Network:
 
         # multiprocessing
         else:
-
             # set up multiprocessing schema
             import multiprocessing as mp
             from itertools import repeat
@@ -1853,7 +1828,6 @@ class Network:
 
         # iterate over each point in sources
         for p1 in src_indices:
-
             # get the source vertices and dist to source vertices
             source1, source2 = src_vertices[p1]
             set1 = set(src_vertices[p1])
@@ -1863,13 +1837,11 @@ class Network:
             sdist1, sdist2 = src_d2v[p1].values()
 
             if symmetric:
-
                 # only compute the upper triangle if symmetric
                 dest_searchpts.remove(p1)
 
             # iterate over each point remaining in destinations
             for p2 in dest_searchpts:
-
                 # get the destination vertices and
                 # dist to destination vertices
                 dest1, dest2 = dest_vertices[p2]
@@ -1877,7 +1849,6 @@ class Network:
 
                 # when the observations are snapped to the same arc
                 if set1 == set2:
-
                     # calculate only the length between points along
                     # that arc
                     x1, y1 = sourcepattern.snapped_coordinates[p1]
@@ -1894,7 +1865,6 @@ class Network:
                 # otherwise lookup distance between the source and
                 # destination vertex
                 else:
-
                     # distance from destination vertex1 to point and
                     # distance from destination vertex2 to point
                     ddist1, ddist2 = dst_d2v[p2].values()
@@ -1943,14 +1913,12 @@ class Network:
                     tree_nearest[p1, p2] = (s_vertex, d_vertex)
 
                 if symmetric:
-
                     # mirror the upper and lower triangle
                     # when symmetric
                     nearest[p2, p1] = nearest[p1, p2]
 
         # populate the main diagonal when symmetric
         if symmetric:
-
             # fill the matrix diagonal with NaN values is no fill
             # value is specified
             if fill_diagonal is None:
@@ -2103,7 +2071,6 @@ class Network:
 
         # iterate over each source point
         for source_index in sourcepattern.points.keys():
-
             # this considers all zero-distance neighbors
             if keep_zero_dist and symmetric:
                 val = numpy.nanmin(all_dists[source_index, :])
@@ -2217,7 +2184,6 @@ class Network:
 
         # iterate over each path in the tree
         for idx, ((obs0, obs1), (v0, v1)) in enumerate(tree.items()):
-
             # if the observations share the same segment
             # create a partial segment path
             if (v0, v1) == SAME_SEGMENT:
@@ -2387,7 +2353,6 @@ class Network:
 
         # iterate over all network arcs
         for arc in split_network.arcs:
-
             # fetch network arc length
             length = split_network.arc_lengths[arc]
 
@@ -2412,7 +2377,6 @@ class Network:
             # if the arc will be split remove the current
             # arc from the adjacency list
             if interval < length:
-
                 # remove old arc adjacency information
                 split_network.adjacencylist[currentstart].remove(end_vertex)
                 split_network.adjacencylist[end_vertex].remove(currentstart)
@@ -2429,7 +2393,6 @@ class Network:
 
             # traverse the length of the arc
             while totallength < length:
-
                 # once an arc can not be split further
                 if totallength + interval >= length:
                     # record the ending vertex
@@ -2484,7 +2447,6 @@ class Network:
 
         # extract connected components
         if w_components:
-
             # extract contiguity weights from libpysal
             split_network.w_network = split_network.contiguityweights(
                 graph=False, from_split=True, weights_kws=weights_kws
@@ -3025,7 +2987,6 @@ def spanning_tree(net, method="sort", maximum=False, silence_warnings=True):
 
     # if the network has no cycles, it is already a spanning tree
     if util.network_has_cycle(net.adjacencylist):
-
         if method.lower() == "sort":
             spanning_tree = mst_weighted_sort(net, maximum, net_kws)
         else:
@@ -3387,7 +3348,6 @@ class PointPattern:
     """
 
     def __init__(self, in_data=None, idvariable=None, attribute=False):
-
         # initialize points dictionary and counter
         self.points = {}
         self.npoints = 0
@@ -3437,7 +3397,6 @@ class PointPattern:
 
         # fetch attributes if requested
         if attribute and not is_libpysal_points:
-
             # open the database file if data is from shapefile
             if from_shp:
                 dbname = os.path.splitext(in_data)[0] + ".dbf"
@@ -3453,7 +3412,6 @@ class PointPattern:
 
         # iterate over all points
         for i, pt in enumerate(pts):
-
             # IDs, attributes
             if ids and db is not None:
                 self.points[ids[i]] = {"coordinates": pt, "properties": db[i]}
@@ -3520,7 +3478,6 @@ class SimulatedPointPattern:
     """
 
     def __init__(self):
-
         # duplicate post-snapping PointPattern class structure
         self.npoints = 0
         self.obs_to_arc = {}

@@ -49,7 +49,6 @@ class FuncBase(object):
         distribution="uniform",
         upperbound=None,
     ):
-
         # set initial class attributes
         self.ntw = ntw
         self.pointpattern = pointpattern
@@ -135,7 +134,6 @@ class GlobalAutoK(FuncBase):
 
         # for each round of permutations
         for p in range(self.permutations):
-
             # simulate a point pattern
             sim = self.ntw.simulate_observations(
                 self.npts, distribution=self.distribution

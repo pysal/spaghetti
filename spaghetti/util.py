@@ -82,7 +82,6 @@ def get_neighbor_distances(ntw, v0, link):
 
     # iterate over each associated link
     for arc in arcs:
-
         # set distance from vertex1 to vertex2 (link length)
         if arc[0] != v0:
             neighbors[arc[0]] = link[arc]
@@ -123,11 +122,9 @@ def generatetree(pred):
 
     # iterate over the list of predecessor vertices
     for i, p in enumerate(pred):
-
         # if the route begins/ends with itself set the
         # root vertex and continue to next iteration
         if p == -1:
-
             # tree keyed by root vertex with root vertex as path
             tree[i] = [i]
             continue
@@ -211,7 +208,6 @@ def dijkstra(ntw, v0, initial_dist=numpy.inf):
 
     # iterate over `unvisited` until all vertices have been visited
     while len(unvisited) > 0:
-
         # get vertex with the lowest value from distance
         dist = initial_dist
 
@@ -228,11 +224,9 @@ def dijkstra(ntw, v0, initial_dist=numpy.inf):
 
         # iterate over neighbors to find least cost along path
         for v1, indiv_cost in neighbors.items():
-
             # if the labeled cost is greater than
             # the currently calculated cost
             if distance[v1] > distance[current] + indiv_cost:
-
                 # relabel to the currently calculated cost
                 distance[v1] = distance[current] + indiv_cost
 
@@ -401,7 +395,6 @@ def snap_points_to_links(points, links):
 
     # iterate over network links
     for i, link in enumerate(links):
-
         # extract network link (x,y) vertex coordinates
         head, tail = link.vertices
         x0, y0 = head
@@ -433,7 +426,6 @@ def snap_points_to_links(points, links):
     point2link = {}
 
     for pt_idx, point in points.items():
-
         # first, find nearest neighbor link vertices for the point
         dmin, vertex = kdtree.query(point, k=1)
         vertex = tuple(kdtree.data[vertex])
@@ -514,7 +506,6 @@ def network_has_cycle(adjacency):
 
         # Perform recursion for all adjacent network/graph vertices
         for rv in adjacency[_v]:
-
             # If vertex already seen, skip it
             if not seen[rv]:
                 # Perform recursion down the depth-first search tree
@@ -642,10 +633,8 @@ def build_chains(space_h, space_v, exterior, bounds, h=True):
 
     # for element in the horizontal index
     for plus_h in range(start_h, end_h):
-
         # for element in the vertical index
         for plus_v in range(start_v, end_v):
-
             # ignore if a -1 index
             if plus_h - minus_x == -1 or plus_v - minus_y == -1:
                 continue
@@ -774,8 +763,7 @@ def _arcs_as_gdf(net, points, id_col=None, geom_col=None):
     arcs = {}
 
     # iterate over network arcs
-    for (vtx1_id, vtx2_id) in net.arcs:
-
+    for vtx1_id, vtx2_id in net.arcs:
         # extract vertices comprising the network arc
         vtx1 = points.loc[(points[id_col] == vtx1_id), geom_col].squeeze()
         vtx2 = points.loc[(points[id_col] == vtx2_id), geom_col].squeeze()
