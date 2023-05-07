@@ -1631,7 +1631,7 @@ class Network:
                 # calculate the shortest path and preceding
                 # vertices for traversal route by mapping each process
                 distance_pred = p.map(
-                    util.dijkstra_mp, zip(repeat(self), self.vertex_list, strict=False)
+                    util.dijkstra_mp, zip(repeat(self), self.vertex_list)
                 )
 
                 # set range of iterations
