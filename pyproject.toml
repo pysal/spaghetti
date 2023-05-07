@@ -1,13 +1,8 @@
 [build-system]
-requires = [
-    "black",
-    "isort",
-    "pyproject-flake8",
-    "setuptools>=61.0.0",
-    "versioneer[toml]",
-
-]
+requires = ["setuptools>=61.0", "setuptools_scm[toml]>=6.2"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
 
 [project]
 name = "spaghetti"
@@ -55,10 +50,8 @@ Repository = "https://github.com/pysal/spaghetti"
 [project.optional-dependencies]
 dev = [
     "black",
-    "flake8",
-    "isort",
+    "ruff",
     "pre-commit",
-    "pyproject-flake8",
 ]
 docs = [
     "nbsphinx",
@@ -99,40 +92,44 @@ include = [
     "spaghetti.*",
 ]
 
-[tool.versioneer]
-VCS = "git"
-style = "pep440"
-versionfile_source = "spaghetti/_version.py"
-versionfile_build = "spaghetti/_version.py"
-tag_prefix = "v"
-parentdir_prefix = "spaghetti-"
-
-[tool.isort]
-profile = "black"
-src_paths = ["spaghetti"]
-skip = [
-    "docs/conf.py",
-    "versioneer.py",
-    "spaghetti/_version.py"
-]
-
-[tool.flake8]
-max_line_length = 88
-per-file-ignores = [
-    "*__init__.py:F401",
-]
-exclude = [
-    "docs/conf.py",
-    "versioneer.py",
-    "spaghetti/_version.py"
-]
-
 [tool.black]
 line-length = 88
 extend-exclude = '''
 (
   docs/conf.py
-  "versioneer.py",
-  "spaghetti/_version.py"
 )
-'''
+#'''
+
+[tool.ruff]
+line-length = 88
+select = ["E", "F", "W", "I", "UP", "N", "B", "A", "C4", "SIM", "ARG"]
+target-version = "py38"
+ignore = [
+    "B006",
+    "B008",
+    "B009",
+    "B010",
+    "C408",
+    "E731",
+    "F401",
+    "F403",
+    "N803",
+    "N806",
+    "N999",
+    "UP007"
+]
+exclude = ["spaghetti/tests/*", "docs/*"]
+
+[tool.coverage.run]
+source = ["./spaghetti"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "if self.debug:",
+    "pragma: no cover",
+    "raise NotImplementedError",
+    "except ModuleNotFoundError:",
+    "except ImportError",
+]
+ignore_errors = true
+omit = ["spaghetti/tests/*", "docs/conf.py"]

@@ -1,3 +1,0 @@
-include LICENSE.txt CHANGELOG.md MANIFEST.in requirements_notebooks_conda.txt requirements_notebooks_pypi.txt requirements_dev.txt requirements_docs.txt requirements_plus.txt requirements_tests.txt requirements.txt
-include versioneer.py
-include spaghetti/_version.py

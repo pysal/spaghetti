@@ -2,7 +2,9 @@
 # `spaghetti` --- Spatial Graphs: Networks, Topology, & Inference
 """
 
-from . import _version
+import contextlib
+from importlib.metadata import PackageNotFoundError, version
+
 from .network import (
     Network,
     PointPattern,
@@ -13,4 +15,5 @@ from .network import (
     spanning_tree,
 )
 
-__version__ = _version.get_versions()["version"]
+with contextlib.suppress(PackageNotFoundError):
+    __version__ = version("spaghetti")
