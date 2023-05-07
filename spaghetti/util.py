@@ -720,7 +720,7 @@ def _points_as_gdf(
     # instantiate geopandas.GeoDataFrame
     pts_list = list(pts_dict.items())
     points = geopandas.GeoDataFrame(pts_list, columns=[id_col, geom_col])
-    points.geometry = points.geometry.apply(lambda p: Point(p))
+    points.geometry = points[geom_col].map(lambda p: Point(p))
 
     # additional columns
     if not pp_name:
