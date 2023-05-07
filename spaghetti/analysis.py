@@ -1,7 +1,7 @@
 import numpy
 
 
-class FuncBase(object):
+class FuncBase:
     """Base object for performing network analysis on a
     ``spaghetti.Network`` object.
 

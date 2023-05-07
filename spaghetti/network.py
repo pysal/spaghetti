@@ -14,11 +14,11 @@ from . import util
 from .analysis import GlobalAutoK
 
 try:
-    from libpysal import open
+    from libpysal import open as _open
 except ImportError:
     import libpysal
 
-    open = libpysal.io.open
+    _open = libpysal.io.open
 
 
 __all__ = ["Network", "PointPattern", "GlobalAutoK"]
@@ -494,7 +494,7 @@ class Network:
 
         # set appropriate geometries
         if in_dtype == "str":
-            shps = open(self.in_data)
+            shps = _open(self.in_data)
         elif in_dtype in supported_iterables:
             shps = self.in_data
             shp_type = str(type(shps[0])).split("'")[1]
@@ -2678,7 +2678,7 @@ class Network:
 
         """
 
-        with open(filename, "wb") as networkout:
+        with _open(filename, "wb") as networkout:
             pickle.dump(self, networkout, protocol=2)
 
     @staticmethod
@@ -2697,7 +2697,7 @@ class Network:
 
         """
 
-        with open(filename, "rb") as networkin:
+        with _open(filename, "rb") as networkin:
             self = pickle.load(networkin)
 
         return self
@@ -3390,7 +3390,7 @@ class PointPattern:
         # extract the point geometries
         if not is_libpysal_points:
             if from_shp:
-                pts = open(in_data)
+                pts = _open(in_data)
             else:
                 pts_objs = list(in_data.geometry)
                 pts = [cg.shapes.Point((p.x, p.y)) for p in pts_objs]
@@ -3402,7 +3402,7 @@ class PointPattern:
             # open the database file if data is from shapefile
             if from_shp:
                 dbname = os.path.splitext(in_data)[0] + ".dbf"
-                db = open(dbname)
+                db = _open(dbname)
 
             # if data is from a GeoDataFrame, drop the geometry column
             # and declare attribute values as a list of lists
