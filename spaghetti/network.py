@@ -1626,32 +1626,34 @@ class Network:
                 cores = mp.cpu_count()
             else:
                 cores = n_processes
-            p = mp.Pool(processes=cores)
 
-            # calculate the shortest path and preceding
-            # vertices for traversal route by mapping each process
-            distance_pred = p.map(util.dijkstra_mp, zip(repeat(self), self.vertex_list))
+            with mp.Pool(processes=cores) as p:
+                # calculate the shortest path and preceding
+                # vertices for traversal route by mapping each process
+                distance_pred = p.map(
+                    util.dijkstra_mp, zip(repeat(self), self.vertex_list)
+                )
 
-            # set range of iterations
-            iterations = range(len(distance_pred))
+                # set range of iterations
+                iterations = range(len(distance_pred))
 
-            # fill shortest paths
-            distance = [distance_pred[itr][0] for itr in iterations]
+                # fill shortest paths
+                distance = [distance_pred[itr][0] for itr in iterations]
 
-            # fill preceding vertices
-            pred = numpy.array([distance_pred[itr][1] for itr in iterations])
+                # fill preceding vertices
+                pred = numpy.array([distance_pred[itr][1] for itr in iterations])
 
-            # iterate of network vertices and generate
-            # the shortest path tree for each
-            for vtx in self.vertex_list:
-                if gen_tree:
-                    tree = util.generatetree(pred[vtx])
-                else:
-                    tree = None
+                # iterate of network vertices and generate
+                # the shortest path tree for each
+                for vtx in self.vertex_list:
+                    if gen_tree:
+                        tree = util.generatetree(pred[vtx])
+                    else:
+                        tree = None
 
-                # populate distances and paths
-                self.distance_matrix[vtx] = distance[vtx]
-                self.network_trees[vtx] = tree
+                    # populate distances and paths
+                    self.distance_matrix[vtx] = distance[vtx]
+                    self.network_trees[vtx] = tree
 
     def allneighbordistances(
         self,
