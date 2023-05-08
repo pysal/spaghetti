@@ -228,8 +228,8 @@ class TestNetwork:
         observed_component_vertices = ntw.network_component_vertices
         # known values
         known_component_vertices = {
-            0: [0, 1, 2, 3, 4, 13],
-            1: [5, 6, 7, 8, 9, 10, 11, 12],
+            0: {0, 1, 2, 3, 4, 13},
+            1: {5, 6, 7, 8, 9, 10, 11, 12},
         }
         assert observed_component_vertices == known_component_vertices
 
@@ -549,7 +549,7 @@ class TestNetworkPointPattern:
         # known
         cpp = self.ntw.pointpatterns[crimes]
         known_snapped = set(cpp.snapped_coordinates.values())
-        cg_crimes = "cg_%s" % crimes
+        cg_crimes = f"cg_{crimes}"
         # points from pysal geometries
         points = [cg.Point(cpp.points[i]["coordinates"]) for i in cpp.points]
         for dtype in (list, tuple):
@@ -598,7 +598,7 @@ class TestNetworkPointPattern:
 
     @pytest.mark.skipif(GEOPANDAS_EXTINCT, reason="Missing Geopandas")
     def test_pp_from_geopandas(self):
-        idxs = ["gdf_%s" % pp for pp in self.idxs]
+        idxs = [f"gdf_{pp}" for pp in self.idxs]
         iterator = zip(self.obs, self.OBS, idxs)
         for obs, OBS, idx in iterator:
             OBS = geopandas.read_file(OBS)
