@@ -7,7 +7,7 @@ from rtree import Rtree
 
 try:
     import geopandas
-    import pandas
+    import shapely
     from shapely.geometry import LineString
 except ImportError:
     msg = "geopandas/shapely not available. Some functionality will be disabled."
@@ -719,11 +719,10 @@ def _points_as_gdf(
             pts_dict = pp.snapped_coordinates
 
     # instantiate geopandas.GeoDataFrame
-    points = pandas.DataFrame(list(pts_dict.items()), columns=[id_col, geom_col])
-    points["x"] = points[geom_col].map(lambda coord: coord[0])
-    points["y"] = points[geom_col].map(lambda coord: coord[1])
-    points = points.set_geometry(geopandas.points_from_xy(x=points["x"], y=points["y"]))
-    points = points.drop(columns=["x", "y"])
+    pts = numpy.asarray(list(pts_dict.values()))
+    points = geopandas.GeoDataFrame(
+        pts_dict.keys(), columns=[id_col], geometry=shapely.points(pts[:, 0], pts[:, 1])
+    )
 
     # additional columns
     if not pp_name:
