@@ -719,9 +719,10 @@ def _points_as_gdf(
             pts_dict = pp.snapped_coordinates
 
     # instantiate geopandas.GeoDataFrame
-    pts = numpy.asarray(list(pts_dict.values()))
     points = geopandas.GeoDataFrame(
-        pts_dict.keys(), columns=[id_col], geometry=shapely.points(pts[:, 0], pts[:, 1])
+        pts_dict.keys(),
+        columns=[id_col],
+        geometry=shapely.points(numpy.asarray(list(pts_dict.values()))),
     )
 
     # additional columns
