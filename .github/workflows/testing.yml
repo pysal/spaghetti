@@ -38,7 +38,6 @@
            - ci/38-BASE.yaml
            - ci/39-BASE.yaml
            - ci/310-BASE.yaml
-           - ci/310-DEV_shapely_dev.yaml
            - ci/311-BARE.yaml
            - ci/311-BASE.yaml
            - ci/311-DEV.yaml

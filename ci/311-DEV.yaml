@@ -18,4 +18,5 @@ dependencies:
   - pytest-timeout
   - pytest-xdist
   # optional
-  - geopandas>=0.9.0
+  - geopandas>=0.12.0
+  - shapely>=2

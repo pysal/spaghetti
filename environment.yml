@@ -4,7 +4,7 @@ channels:
 dependencies:
   - python=3.11
   - esda
-  - geopandas>=0.9.0
+  - geopandas>=0.12.0
   - libspatialindex
   - matplotlib
   - matplotlib-scalebar
@@ -14,6 +14,7 @@ dependencies:
   - rtree
   - scipy>=1.0
   - seaborn
+  - shapely>=2
   - splot
   - watermark
   - pip
