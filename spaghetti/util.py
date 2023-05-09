@@ -655,7 +655,13 @@ def build_chains(space_h, space_v, exterior, bounds, h=True):
 
 @requires("geopandas", "shapely")
 def _points_as_gdf(
-    net, vertices, vertices_for_arcs, pp_name, snapped, id_col=None, geom_col=None
+    net,
+    vertices,
+    vertices_for_arcs,
+    pp_name,
+    snapped,
+    id_col=None,
+    geom_col=None,  # noqa ARG001
 ):
     """Internal function for returning a point ``geopandas.GeoDataFrame``
     called from within ``spaghetti.element_as_gdf()``.
