@@ -2832,7 +2832,7 @@ def extract_component(net, component_id, weightings=None):
             " point patterns to the network object; failing to do so may"
             " lead to unexpected results."
         )
-        warnings.warn(msg, stacklevel=1)
+        warnings.warn(msg, stacklevel=2)
     # provide warning (for now) if the network contains a point pattern
     dm, nt = "distance_matrix", "network_trees"
     if hasattr(net, dm) or hasattr(net, nt):
@@ -2841,7 +2841,7 @@ def extract_component(net, component_id, weightings=None):
             " are present and will be deleted. These must be"
             " recalculated following component extraction."
         )
-        warnings.warn(msg, stacklevel=1)
+        warnings.warn(msg, stacklevel=2)
         for attr in [dm, nt]:
             if hasattr(net, attr):
                 delattr(net, attr)
