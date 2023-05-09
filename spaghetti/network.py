@@ -3060,7 +3060,6 @@ def element_as_gdf(
     snapped=False,
     routes=None,
     id_col="id",
-    geom_col="geometry",
 ):
     """Return a ``geopandas.GeoDataFrame`` of network elements. This can be
     (a) the vertices of a network; (b) the arcs of a network; (c) both the
@@ -3088,9 +3087,6 @@ def element_as_gdf(
     id_col : str
         ``geopandas.GeoDataFrame`` column name for IDs. Default is ``"id"``.
         When extracting routes this creates an (origin, destination) tuple.
-    geom_col : str
-        ``geopandas.GeoDataFrame`` column name for geometry. Default is
-        ``"geometry"``.
 
     Raises
     ------
@@ -3165,7 +3161,7 @@ def element_as_gdf(
 
     # shortest path routes between observations
     if routes:
-        paths = util._routes_as_gdf(routes, id_col, geom_col)
+        paths = util._routes_as_gdf(routes, id_col)
         return paths
 
     # need vertices place holder to create network segment LineStrings
@@ -3183,7 +3179,6 @@ def element_as_gdf(
             pp_name,
             snapped,
             id_col=id_col,
-            geom_col=geom_col,
         )
 
         # return points geodataframe if arcs not specified or
@@ -3192,7 +3187,7 @@ def element_as_gdf(
             return points
 
     # arcs
-    arcs = util._arcs_as_gdf(net, points, id_col=id_col, geom_col=geom_col)
+    arcs = util._arcs_as_gdf(net, points, id_col=id_col)
 
     if vertices_for_arcs:
         return arcs

@@ -493,7 +493,7 @@ class TestNetwork:
         _, tree = ntw.allneighbordistances(points1, points2, gen_tree=True)
         paths = ntw.shortest_paths(tree, points1, pp_dest=points2)
         paths_gdf = spaghetti.element_as_gdf(ntw, routes=paths)
-        observed_origins = paths_gdf["O"].nunique()
+        observed_origins = paths_gdf["id"].map(lambda x: x[0]).nunique()
         assert observed_origins == known_origins
 
     def test_regular_lattice(self):

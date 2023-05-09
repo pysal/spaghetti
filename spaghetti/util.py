@@ -7,6 +7,7 @@ from rtree import Rtree
 
 try:
     import geopandas
+    import pandas
     import shapely
     from shapely.geometry import LineString
 except ImportError:
@@ -659,9 +660,7 @@ def build_chains(space_h, space_v, exterior, bounds, h=True):
 
 
 @requires("geopandas", "shapely")
-def _points_as_gdf(
-    net, vertices, vertices_for_arcs, pp_name, snapped, id_col=None, geom_col=None
-):
+def _points_as_gdf(net, vertices, vertices_for_arcs, pp_name, snapped, id_col=None):
     """Internal function for returning a point ``geopandas.GeoDataFrame``
     called from within ``spaghetti.element_as_gdf()``.
 
@@ -743,7 +742,7 @@ def _points_as_gdf(
 
 
 @requires("geopandas", "shapely")
-def _arcs_as_gdf(net, points, id_col=None, geom_col=None):
+def _arcs_as_gdf(net, points, id_col=None):
     """Internal function for returning an arc ``geopandas.GeoDataFrame``
     called from within ``spaghetti.element_as_gdf()``.
 
@@ -762,20 +761,16 @@ def _arcs_as_gdf(net, points, id_col=None, geom_col=None):
 
     """
 
-    # arcs
-    arcs = {}
-
-    # iterate over network arcs
-    for vtx1_id, vtx2_id in net.arcs:
-        # extract vertices comprising the network arc
-        vtx1 = points.loc[(points[id_col] == vtx1_id), geom_col].squeeze()
-        vtx2 = points.loc[(points[id_col] == vtx2_id), geom_col].squeeze()
-        # create a LineString for the network arc
-        arcs[(vtx1_id, vtx2_id)] = LineString((vtx1, vtx2))
+    def _line_coords(loc):
+        return (
+            (points.loc[loc[0]].geometry.x, points.loc[loc[0]].geometry.y),
+            (points.loc[loc[1]].geometry.x, points.loc[loc[1]].geometry.y),
+        )
 
     # instantiate GeoDataFrame
-    arcs = geopandas.GeoDataFrame(
-        sorted(list(arcs.items())), columns=[id_col, geom_col]
+    arcs = pandas.DataFrame(zip(sorted(net.arcs)), columns=[id_col])
+    arcs = arcs.set_geometry(
+        shapely.linestrings(arcs[id_col].map(_line_coords).values.tolist())
     )
 
     # additional columns
@@ -786,7 +781,7 @@ def _arcs_as_gdf(net, points, id_col=None, geom_col=None):
 
 
 @requires("geopandas", "shapely")
-def _routes_as_gdf(paths, id_col, geom_col):
+def _routes_as_gdf(paths, id_col):
     """Internal function for returning a shortest paths
     ``geopandas.GeoDataFrame`` called from within
     ``spaghetti.element_as_gdf()``.
@@ -807,17 +802,9 @@ def _routes_as_gdf(paths, id_col, geom_col):
 
     """
 
-    # isolate the origins, destinations, and geometries
-    origs = [o for (o, d), g in paths]
-    dests = [d for (o, d), g in paths]
-    geoms = [LineString(g.vertices) for (o, d), g in paths]
-
     # instantiate as a geodataframe
-    paths = geopandas.GeoDataFrame(geometry=geoms)
-    paths["O"] = origs
-    paths["D"] = dests
-
-    if id_col:
-        paths[id_col] = paths.apply(lambda x: (x["O"], x["D"]), axis=1)
+    paths = dict(paths)
+    ids, geoms = zip(paths.keys()), [LineString(g.vertices) for g in paths.values()]
+    paths = geopandas.GeoDataFrame(ids, columns=[id_col], geometry=geoms)
 
     return paths
