@@ -464,11 +464,30 @@ class TestNetwork:
         observed_arc_wkt = observed_arc.wkt
         assert observed_arc_wkt == known_arc_wkt
 
+        # See GH#722
+        with pytest.warns(
+            FutureWarning, match="The ``geom_col`` keyword argument is deprecated"
+        ):
+            geom_col = "MY_GEOM"
+            vertices, arcs = spaghetti.element_as_gdf(
+                self.ntw_shp, vertices=True, arcs=True, geom_col=geom_col
+            )
+            assert vertices.geometry.name == geom_col
+            assert arcs.geometry.name == geom_col
+
         # extract only arcs
         arcs = spaghetti.element_as_gdf(self.ntw_shp, arcs=True)
         observed_arc = arcs.loc[(arcs["id"] == (0, 1)), "geometry"].squeeze()
         observed_arc_wkt = observed_arc.wkt
         assert observed_arc_wkt == known_arc_wkt
+
+        # See GH#722
+        with pytest.warns(
+            FutureWarning, match="The ``geom_col`` keyword argument is deprecated"
+        ):
+            geom_col = "MY_GEOM"
+            arcs = spaghetti.element_as_gdf(self.ntw_shp, arcs=True, geom_col=geom_col)
+            assert arcs.geometry.name == geom_col
 
         # extract symmetric routes
         known_length, bounds, h, v = 2.6, (0, 0, 3, 3), 2, 2
@@ -495,6 +514,14 @@ class TestNetwork:
         paths_gdf = spaghetti.element_as_gdf(ntw, routes=paths)
         observed_origins = paths_gdf["id"].map(lambda x: x[0]).nunique()
         assert observed_origins == known_origins
+
+        # See GH#722
+        with pytest.warns(
+            FutureWarning, match="The ``geom_col`` keyword argument is deprecated"
+        ):
+            geom_col = "MY_GEOM"
+            paths_gdf = spaghetti.element_as_gdf(ntw, routes=paths, geom_col=geom_col)
+            assert paths_gdf.geometry.name == geom_col
 
     def test_regular_lattice(self):
         # 4x4 regular lattice with the exterior
