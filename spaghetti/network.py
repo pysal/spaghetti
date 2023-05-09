@@ -3172,7 +3172,7 @@ def element_as_gdf(
             "in favor of the default 'geometry' name. Users can rename "
             "the geometry column following processing, if desired."
         )
-        warnings.warn(dep_msg, FutureWarning)
+        warnings.warn(dep_msg, FutureWarning, stacklevel=2)
 
     # shortest path routes between observations
     if routes:
