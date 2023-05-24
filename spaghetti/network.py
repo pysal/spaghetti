@@ -3039,7 +3039,7 @@ def element_as_gdf(
     snapped=False,
     routes=None,
     id_col="id",
-    geom_col="geometry",
+    geom_col=None,
 ):
     """Return a ``geopandas.GeoDataFrame`` of network elements. This can be
     (a) the vertices of a network; (b) the arcs of a network; (c) both the
@@ -3068,8 +3068,9 @@ def element_as_gdf(
         ``geopandas.GeoDataFrame`` column name for IDs. Default is ``"id"``.
         When extracting routes this creates an (origin, destination) tuple.
     geom_col : str
-        ``geopandas.GeoDataFrame`` column name for geometry. Default is
-        ``"geometry"``.
+        Deprecated and will be removed in the minor release.
+        ``geopandas.GeoDataFrame`` column name for IDs. Default is ``"id"``.
+        When extracting routes this creates an (origin, destination) tuple.
 
     Raises
     ------
@@ -3142,9 +3143,22 @@ def element_as_gdf(
 
     """
 
+    # see GH#722
+    if geom_col:
+        dep_msg = (
+            "The ``geom_col`` keyword argument is deprecated and will "
+            "be dropped in the next minor release of pysal/spaghetti (1.8.0) "
+            "in favor of the default 'geometry' name. Users can rename "
+            "the geometry column following processing, if desired."
+        )
+        warnings.warn(dep_msg, FutureWarning, stacklevel=2)
+
     # shortest path routes between observations
     if routes:
         paths = util._routes_as_gdf(routes, id_col)
+        # see GH#722
+        if geom_col:
+            paths.rename_geometry(geom_col, inplace=True)
         return paths
 
     # need vertices place holder to create network segment LineStrings
@@ -3162,21 +3176,30 @@ def element_as_gdf(
             pp_name,
             snapped,
             id_col=id_col,
-            geom_col=geom_col,
         )
 
         # return points geodataframe if arcs not specified or
         # if extracting `PointPattern` points
         if not arcs or pp_name:
+            # see GH#722
+            if geom_col:
+                points.rename_geometry(geom_col, inplace=True)
             return points
 
     # arcs
-    arcs = util._arcs_as_gdf(net, points, id_col=id_col, geom_col=geom_col)
+    arcs = util._arcs_as_gdf(net, points, id_col=id_col)
 
     if vertices_for_arcs:
+        # see GH#722
+        if geom_col:
+            arcs.rename_geometry(geom_col, inplace=True)
         return arcs
 
     else:
+        # see GH#722
+        if geom_col:
+            points.rename_geometry(geom_col, inplace=True)
+            arcs.rename_geometry(geom_col, inplace=True)
         return points, arcs
 
 
