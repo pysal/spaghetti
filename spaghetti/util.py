@@ -10,8 +10,11 @@ try:
     import shapely
     from shapely.geometry import LineString
 except ImportError:
-    msg = "geopandas/shapely not available. Some functionality will be disabled."
-    warn(msg)
+    warn(
+        "geopandas/shapely not available. Some functionality will be disabled.",
+        UserWarning,
+        stacklevel=1,
+    )
 
 
 def compute_length(v0, v1):
@@ -202,7 +205,7 @@ def dijkstra(ntw, v0, initial_dist=numpy.inf):
     distance[ntw.vertex_list.index(v0)] = 0
 
     # instantiate set of unvisited vertices
-    unvisited = set([v0])
+    unvisited = {v0}
 
     # initially label as predecessor vertices with -1 as path
     pred = [-1 for x in ntw.vertex_list]
@@ -317,7 +320,7 @@ def squared_distance_point_link(point, link):
     """
 
     # cast vertices comprising the network link as an array
-    p0, p1 = [numpy.array(p) for p in link]
+    p0, p1 = (numpy.array(p) for p in link)
 
     # cast the observation point as an array
     p = numpy.array(point)
@@ -530,13 +533,11 @@ def network_has_cycle(adjacency):
     seen = {vid: False for vid in vids}
 
     # Perform depth-first search recursion to isolate cycles
-    for idx, v in enumerate(vids):
-        # If vertex already seen, skip it
-        if not seen[v]:
-            # Perform recursion down the depth-first search tree
-            if tree_has_cycle(-1, v):
-                network_cycle_found = True
-                break
+    for v in vids:
+        # If vertex already seen, skip it; or recurse down the depth-first search tree
+        if not seen[v] and tree_has_cycle(-1, v):
+            network_cycle_found = True
+            break
 
     return network_cycle_found
 
@@ -573,18 +574,12 @@ def _chain_constr(_vcoords, _vs):
 
     Returns
     -------
-    chain : libpysal.cg.Chain
+    libpysal.cg.Chain
         Spatial representation of the arc.
 
     """
 
-    if _vcoords:
-        chain_vtx_points = [cg.Point((_vcoords[v])) for v in _vs]
-    else:
-        chain_vtx_points = _vs
-    chain = cg.Chain(chain_vtx_points)
-
-    return chain
+    return cg.Chain([cg.Point(_vcoords[v]) for v in _vs] if _vcoords else _vs)
 
 
 def build_chains(space_h, space_v, exterior, bounds, h=True):
@@ -660,7 +655,13 @@ def build_chains(space_h, space_v, exterior, bounds, h=True):
 
 @requires("geopandas", "shapely")
 def _points_as_gdf(
-    net, vertices, vertices_for_arcs, pp_name, snapped, id_col=None, geom_col=None
+    net,
+    vertices,
+    vertices_for_arcs,
+    pp_name,
+    snapped,
+    id_col=None,
+    geom_col=None,  # noqa ARG001
 ):
     """Internal function for returning a point ``geopandas.GeoDataFrame``
     called from within ``spaghetti.element_as_gdf()``.
@@ -704,9 +705,9 @@ def _points_as_gdf(
     if pp_name:
         try:
             pp = net.pointpatterns[pp_name]
-        except KeyError:
-            err_msg = "Available point patterns are {}"
-            raise KeyError(err_msg.format(list(net.pointpatterns.keys())))
+        except KeyError as err:
+            err_msg = f"Available point patterns are {net.pointpatterns.keys()}"
+            raise KeyError(err_msg) from err
 
         # raw point pattern
         if not snapped:
@@ -774,9 +775,7 @@ def _arcs_as_gdf(net, points, id_col=None, geom_col=None):
         arcs[(vtx1_id, vtx2_id)] = LineString((vtx1, vtx2))
 
     # instantiate GeoDataFrame
-    arcs = geopandas.GeoDataFrame(
-        sorted(list(arcs.items())), columns=[id_col, geom_col]
-    )
+    arcs = geopandas.GeoDataFrame(sorted(arcs.items()), columns=[id_col, geom_col])
 
     # additional columns
     if hasattr(net, "network_component_labels"):
@@ -786,7 +785,7 @@ def _arcs_as_gdf(net, points, id_col=None, geom_col=None):
 
 
 @requires("geopandas", "shapely")
-def _routes_as_gdf(paths, id_col, geom_col):
+def _routes_as_gdf(paths, id_col):
     """Internal function for returning a shortest paths
     ``geopandas.GeoDataFrame`` called from within
     ``spaghetti.element_as_gdf()``.

@@ -1,3 +1,4 @@
+import contextlib
 import copy
 import os
 import pickle
@@ -14,11 +15,11 @@ from . import util
 from .analysis import GlobalAutoK
 
 try:
-    from libpysal import open
+    from libpysal import open as _open
 except ImportError:
     import libpysal
 
-    open = libpysal.io.open
+    _open = libpysal.io.open
 
 
 __all__ = ["Network", "PointPattern", "GlobalAutoK"]
@@ -36,7 +37,7 @@ dep_msg = (
     "geometries should prepare for this simply by converting "
     "to ``shapely`` geometries."
 )
-warnings.warn(f"{dep_msg}", FutureWarning)
+warnings.warn(dep_msg, FutureWarning, stacklevel=1)
 
 
 class Network:
@@ -308,7 +309,7 @@ class Network:
             # spatial representation of the network
             self._extractnetwork()
             self.arcs = sorted(self.arcs)
-            self.vertex_coords = dict((v, k) for k, v in self.vertices.items())
+            self.vertex_coords = {v: k for k, v in self.vertices.items()}
 
             # extract connected components
             if w_components:
@@ -418,10 +419,7 @@ class Network:
         component_labels = w.component_labels
 
         # is the network a single, fully-connected component?
-        if n_components == 1:
-            fully_connected = True
-        else:
-            fully_connected = False
+        fully_connected = bool(n_components == 1)
 
         # link to component lookup
         link2component = dict(zip(links, component_labels))
@@ -438,7 +436,7 @@ class Network:
             c2l_ = component2link[cpl]
             arclens_ = self.arc_lengths.items()
             component_lengths[cpl] = sum([v for k, v in arclens_ if k in c2l_])
-            component_vertices[cpl] = list(set([v for link in c2l_ for v in link]))
+            component_vertices[cpl] = {v for link in c2l_ for v in link}
             component_vertex_count[cpl] = len(component_vertices[cpl])
 
         # longest and largest components
@@ -455,10 +453,7 @@ class Network:
                 component_is_ring[comp] = True
 
         # attribute label name depends on object type
-        if graph:
-            c2l_attr_name = "component2edge"
-        else:
-            c2l_attr_name = "component2arc"
+        c2l_attr_name = "component2edge" if graph else "component2arc"
 
         # set all new variables into list
         extracted_attrs = [
@@ -490,25 +485,25 @@ class Network:
         is_libpysal_chains = False
         supported_iterables = ["list", "tuple", "numpy.ndarray"]
         # type error message
-        msg = "'%s' not supported for network instantiation."
+        msg = "'{}' not supported for network instantiation."
 
         # set appropriate geometries
         if in_dtype == "str":
-            shps = open(self.in_data)
+            shps = _open(self.in_data)
         elif in_dtype in supported_iterables:
             shps = self.in_data
             shp_type = str(type(shps[0])).split("'")[1]
             if shp_type == "libpysal.cg.shapes.Chain":
                 is_libpysal_chains = True
             else:
-                raise TypeError(msg % shp_type)
+                raise TypeError(msg.format(shp_type))
         elif in_dtype == "libpysal.cg.shapes.Chain":
             shps = [self.in_data]
             is_libpysal_chains = True
         elif in_dtype == "geopandas.geodataframe.GeoDataFrame":
             shps = self.in_data.geometry
         else:
-            raise TypeError(msg % in_dtype)
+            raise TypeError(msg.format(in_dtype))
 
         # iterate over each record of the network lines
         for shp in shps:
@@ -669,7 +664,7 @@ class Network:
                 start_end = {}
 
                 # initialize a redundant set of bridge edges
-                redundant = set([])
+                redundant = set()
 
                 # iterate over the current bridge
                 for b in bridge:
@@ -776,17 +771,14 @@ class Network:
                 # if `component` is not an isolated island
                 # and `vertex` has exactly 2 neighbors,
                 # add `vertex` to `napts`
-                if not ring:
-                    if len(self.adjacencylist[vertex]) == 2:
-                        napts.add(vertex)
+                if not ring and len(self.adjacencylist[vertex]) == 2:
+                    napts.add(vertex)
 
                 # remove `vertex` from `unvisited` if
                 # it is still in the set else move along to
                 # the next iteration
-                try:
+                with contextlib.suppress(KeyError):
                     unvisited.remove(vertex)
-                except KeyError:
-                    pass
 
         return napts, unvisited
 
@@ -897,17 +889,11 @@ class Network:
         neighbors = OrderedDict()
 
         # flag network (arcs) or graph (edges)
-        if graph:
-            links = self.edges
-        else:
-            links = self.arcs
+        links = self.edges if graph else self.arcs
 
         # if weightings are desired instantiate a dictionary
         # other ignore weightings
-        if weightings:
-            _weights = {}
-        else:
-            _weights = None
+        _weights = {} if weightings else None
 
         # iterate over all links until all possibilities
         # for network link adjacency are exhausted
@@ -1344,7 +1330,7 @@ class Network:
                 cnt = len(observations)
 
                 # extract link (edges) key
-                if key in self.arcs_to_edges.keys():
+                if key in self.arcs_to_edges:
                     key = self.arcs_to_edges[key]
 
                 # either add to current count or a dictionary
@@ -1357,7 +1343,7 @@ class Network:
         # network object of arcs and vertices
         else:
             # simplified version of the above process
-            for key in obs_on.keys():
+            for key in obs_on:
                 counts[key] = len(obs_on[key])
 
         return counts
@@ -1489,8 +1475,7 @@ class Network:
         if distribution.lower() == "uniform":
             nrandompts = numpy.random.uniform(0, cumlen, size=(count,))
         else:
-            msg = "%s distribution not currently supported." % distribution
-            raise RuntimeError(msg)
+            raise RuntimeError(f"{distribution} distribution not currently supported.")
 
         # iterate over random distances created above
         for i, r in enumerate(nrandompts):
@@ -1607,10 +1592,7 @@ class Network:
                 pred = numpy.array(pred)
 
                 # generate the shortest path tree
-                if gen_tree:
-                    tree = util.generatetree(pred)
-                else:
-                    tree = None
+                tree = util.generatetree(pred) if gen_tree else None
 
                 # populate distances and paths
                 self.distance_matrix[vtx] = distance
@@ -1622,10 +1604,7 @@ class Network:
             import multiprocessing as mp
             from itertools import repeat
 
-            if n_processes == "all":
-                cores = mp.cpu_count()
-            else:
-                cores = n_processes
+            cores = mp.cpu_count() if n_processes == "all" else n_processes
 
             with mp.Pool(processes=cores) as p:
                 # calculate the shortest path and preceding
@@ -1646,10 +1625,7 @@ class Network:
                 # iterate of network vertices and generate
                 # the shortest path tree for each
                 for vtx in self.vertex_list:
-                    if gen_tree:
-                        tree = util.generatetree(pred[vtx])
-                    else:
-                        tree = None
+                    tree = util.generatetree(pred[vtx]) if gen_tree else None
 
                     # populate distances and paths
                     self.distance_matrix[vtx] = distance[vtx]
@@ -2028,8 +2004,7 @@ class Network:
 
         # raise exception is the specified point pattern does not exist
         if sourcepattern not in self.pointpatterns.keys():
-            err_msg = "Available point patterns are {}"
-            raise KeyError(err_msg.format(self.pointpatterns.keys()))
+            raise KeyError(f"Available point patterns are {self.pointpatterns.keys()}")
 
         # calculate the network vertex to vertex distance matrix
         # if it is not already an attribute
@@ -2072,7 +2047,7 @@ class Network:
         nearest = {}
 
         # iterate over each source point
-        for source_index in sourcepattern.points.keys():
+        for source_index in sourcepattern.points:
             # this considers all zero-distance neighbors
             if keep_zero_dist and symmetric:
                 val = numpy.nanmin(all_dists[source_index, :])
@@ -2094,7 +2069,7 @@ class Network:
 
         return nearest
 
-    def shortest_paths(self, tree, pp_orig, pp_dest=None, n_processes=1):
+    def shortest_paths(self, tree, pp_orig, pp_dest=None):
         """Return the shortest paths between observation points as
         ``libpysal.cg.Chain`` objects.
 
@@ -2110,8 +2085,6 @@ class Network:
             Destination point pattern for shortest paths.
             See ``name`` in ``spaghetti.Network.snapobservations()``.
             Defaults ``pp_orig`` if not declared.
-        n_processes : int
-            See ``n_processes`` in ``spaghetti.Network.full_distance_matrix()``.
 
         Returns
         -------
@@ -2167,17 +2140,16 @@ class Network:
 
         # build the network trees object if it is not already an attribute
         if not hasattr(self, "network_trees"):
-            msg = "The 'network_trees' attribute has not been created. "
-            msg += "Rerun 'spaghetti.Network.allneighbordistances()' "
-            msg += "with the 'gen_tree' parameter set to 'True'."
+            msg = (
+                "The 'network_trees' attribute has not been created. "
+                "Rerun 'spaghetti.Network.allneighbordistances()' "
+                "with the 'gen_tree' parameter set to 'True'."
+            )
             raise AttributeError(msg)
 
         # isolate network attributes
         pp_orig = self.pointpatterns[pp_orig]
-        if pp_dest:
-            pp_dest = self.pointpatterns[pp_dest]
-        else:
-            pp_dest = pp_orig
+        pp_dest = self.pointpatterns[pp_dest] if pp_dest else pp_orig
         vtx_coords = self.vertex_coords
         net_trees = self.network_trees
 
@@ -2316,20 +2288,26 @@ class Network:
         _split_by = split_by.lower()
         valid_split_types = ["distance", "count"]
         if _split_by not in valid_split_types:
-            msg = f"'{split_by}' is not a valid value for 'split_by'. "
-            msg += f"Valid arguments include: {valid_split_types}."
+            msg = (
+                f"'{split_by}' is not a valid value for 'split_by'. "
+                f"Valid arguments include: {valid_split_types}."
+            )
             raise ValueError(msg)
 
         # catch invalid count params
         if _split_by == "count":
             if split_param <= 1:
-                msg = "Splitting arcs by 1 or less is not possible. "
-                msg += f"Currently 'split_param' is set to {split_param}."
+                msg = (
+                    "Splitting arcs by 1 or less is not possible. "
+                    f"Currently 'split_param' is set to {split_param}."
+                )
                 raise ValueError(msg)
             split_integer = int(split_param)
             if split_param != split_integer:
-                msg = "Network arcs must split by an integer. "
-                msg += f"Currently 'split_param' is set to {split_param}."
+                msg = (
+                    "Network arcs must split by an integer. "
+                    f"Currently 'split_param' is set to {split_param}."
+                )
                 raise TypeError(msg)
 
         # create new shell network instance
@@ -2445,7 +2423,7 @@ class Network:
         split_network.arcs = set(split_network.arcs)
         split_network.arcs.update(new_arcs)
         split_network.arcs.difference_update(remove_arcs)
-        split_network.arcs = sorted(list(split_network.arcs))
+        split_network.arcs = sorted(split_network.arcs)
 
         # extract connected components
         if w_components:
@@ -2462,7 +2440,7 @@ class Network:
 
         return split_network
 
-    def GlobalAutoK(
+    def GlobalAutoK(  # noqa N802
         self,
         pointpattern,
         nsteps=10,
@@ -2579,7 +2557,7 @@ class Network:
             upperbound=upperbound,
         )
 
-    def Moran(self, pp_name, permutations=999, graph=False):
+    def Moran(self, pp_name, permutations=999, graph=False):  # noqa N802
         """Calculate a Moran's *I* statistic on a set of observations
         based on network arcs. The Moran’s *I* test statistic allows
         for the inference of how clustered (or dispersed) a dataset is
@@ -2637,10 +2615,7 @@ class Network:
         """
 
         # set proper weights attribute
-        if graph:
-            w = self.w_graph
-        else:
-            w = self.w_network
+        w = self.w_graph if graph else self.w_network
 
         # Compute the counts
         pointpat = self.pointpatterns[pp_name]
@@ -2678,7 +2653,7 @@ class Network:
 
         """
 
-        with open(filename, "wb") as networkout:
+        with _open(filename, "wb") as networkout:
             pickle.dump(self, networkout, protocol=2)
 
     @staticmethod
@@ -2697,7 +2672,7 @@ class Network:
 
         """
 
-        with open(filename, "rb") as networkin:
+        with _open(filename, "rb") as networkin:
             self = pickle.load(networkin)
 
         return self
@@ -2851,18 +2826,22 @@ def extract_component(net, component_id, weightings=None):
 
     # provide warning (for now) if the network contains a point pattern
     if getattr(net, "pointpatterns"):
-        msg = "There is a least one point pattern associated with the network."
-        msg += " Component extraction should be performed prior to snapping"
-        msg += " point patterns to the network object; failing to do so may"
-        msg += " lead to unexpected results."
-        warnings.warn(msg)
+        msg = (
+            "There is a least one point pattern associated with the network."
+            " Component extraction should be performed prior to snapping"
+            " point patterns to the network object; failing to do so may"
+            " lead to unexpected results."
+        )
+        warnings.warn(msg, stacklevel=2)
     # provide warning (for now) if the network contains a point pattern
     dm, nt = "distance_matrix", "network_trees"
     if hasattr(net, dm) or hasattr(net, nt):
-        msg = "Either one or both (%s, %s) attributes" % (dm, nt)
-        msg += " are present and will be deleted. These must be"
-        msg += " recalculated following component extraction."
-        warnings.warn(msg)
+        msg = (
+            f"Either one or both ({dm}, {nt}) attributes"
+            " are present and will be deleted. These must be"
+            " recalculated following component extraction."
+        )
+        warnings.warn(msg, stacklevel=2)
         for attr in [dm, nt]:
             if hasattr(net, attr):
                 delattr(net, attr)
@@ -2992,8 +2971,8 @@ def spanning_tree(net, method="sort", maximum=False, silence_warnings=True):
         if method.lower() == "sort":
             spanning_tree = mst_weighted_sort(net, maximum, net_kws)
         else:
-            msg = "'%s' not a valid method for minimum spanning tree creation."
-            raise ValueError(msg % method)
+            msg = f"'{method}' not a valid method for minimum spanning tree creation."
+            raise ValueError(msg)
 
         # instantiate the spanning tree as a network object
         net = Network(in_data=spanning_tree, weights_kws=weights_kws)
@@ -3165,7 +3144,7 @@ def element_as_gdf(
 
     # shortest path routes between observations
     if routes:
-        paths = util._routes_as_gdf(routes, id_col, geom_col)
+        paths = util._routes_as_gdf(routes, id_col)
         return paths
 
     # need vertices place holder to create network segment LineStrings
@@ -3258,21 +3237,23 @@ def regular_lattice(bounds, nh, nv=None, exterior=False):
 
     # check for bounds validity
     if len(bounds) != 4:
-        bounds_len = len(bounds)
-        msg = "The 'bounds' parameter is %s elements " % bounds_len
-        msg += "but should be exactly 4 - <minx,miny,maxx,maxy>."
-        raise RuntimeError(msg)
+        err_msg = (
+            f"The 'bounds' parameter is {len(bounds)} elements "
+            "but should be exactly 4 - <minx,miny,maxx,maxy>."
+        )
+        raise RuntimeError(err_msg)
 
     # check for bounds validity
     if not nv:
         nv = nh
     try:
         nh, nv = int(nh), int(nv)
-    except TypeError:
-        nlines_types = type(nh), type(nv)
-        msg = "The 'nh' and 'nv' parameters (%s, %s) " % nlines_types
-        msg += "could not be converted to integers."
-        raise TypeError(msg)
+    except TypeError as err:
+        err_msg = (
+            f"The 'nh' and 'nv' parameters ({type(nh)}, {type(nv)}) "
+            "could not be converted to integers."
+        )
+        raise TypeError(err_msg) from err
 
     # bounding box line lengths
     len_h, len_v = bounds[2] - bounds[0], bounds[3] - bounds[1]
@@ -3362,7 +3343,7 @@ class PointPattern:
         is_libpysal_points = False
         supported_iterables = ["list", "tuple"]
         # type error message
-        msg = "'%s' not supported for point pattern instantiation."
+        msg = "'{}' not supported for point pattern instantiation."
 
         # set appropriate geometries
         if in_dtype == "str":
@@ -3372,14 +3353,14 @@ class PointPattern:
             if dtype == "libpysal.cg.shapes.Point":
                 is_libpysal_points = True
             else:
-                raise TypeError(msg % dtype)
+                raise TypeError(msg.format(dtype))
         elif in_dtype == "libpysal.cg.shapes.Point":
             in_data = [in_data]
             is_libpysal_points = True
         elif in_dtype == "geopandas.geodataframe.GeoDataFrame":
             from_shp = False
         else:
-            raise TypeError(msg % in_dtype)
+            raise TypeError(msg.format(str(in_dtype)))
 
         # either set native point ID from dataset or create new IDs
         if idvariable and not is_libpysal_points:
@@ -3390,7 +3371,7 @@ class PointPattern:
         # extract the point geometries
         if not is_libpysal_points:
             if from_shp:
-                pts = open(in_data)
+                pts = _open(in_data)
             else:
                 pts_objs = list(in_data.geometry)
                 pts = [cg.shapes.Point((p.x, p.y)) for p in pts_objs]
@@ -3402,7 +3383,7 @@ class PointPattern:
             # open the database file if data is from shapefile
             if from_shp:
                 dbname = os.path.splitext(in_data)[0] + ".dbf"
-                db = open(dbname)
+                db = _open(dbname)
 
             # if data is from a GeoDataFrame, drop the geometry column
             # and declare attribute values as a list of lists
