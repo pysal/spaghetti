@@ -41,7 +41,8 @@
 
        - name: make docs
          run: |
-           cd docs; make html
+           cd docs
+           make html
        
        - name: commit docs
          run: |
