@@ -35,8 +35,14 @@
            environment-file: ${{ matrix.environment-file }}
            micromamba-version: 'latest'
        
+       - name: reinstall for version
+         run: |
+           pip install -e . --no-deps --force-reinstall
+
        - name: make docs
-         run: cd docs; make html
+         run: |
+           cd docs
+           make html
        
        - name: commit docs
          run: |
