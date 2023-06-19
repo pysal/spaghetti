@@ -13,7 +13,7 @@ Network feature instantiation
 
 .. autosummary::
    :toctree: generated/
-    
+
     spaghetti.Network
     spaghetti.PointPattern
 
@@ -23,7 +23,7 @@ Network feature extraction and creation
 
 .. autosummary::
    :toctree: generated/
-    
+
     spaghetti.extract_component
     spaghetti.spanning_tree
     spaghetti.element_as_gdf
@@ -35,6 +35,6 @@ Save and load a network
 
 .. autosummary::
    :toctree: generated/
-    
-    spaghetti.Network.savenetwork
-    spaghetti.Network.loadnetwork
+
+    spaghetti.network.Network.savenetwork
+    spaghetti.network.Network.loadnetwork
