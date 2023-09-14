@@ -81,7 +81,7 @@
            pytest spaghetti -v -r a -n auto --cov spaghetti --doctest-modules --cov-report xml --color yes --cov-append --cov-report term-missing --timeout 60
        
        - name: codecov
-         uses: codecov/codecov-action@v3
+         uses: codecov/codecov-action@v4
          with:
            token: ${{ secrets.CODECOV_TOKEN }}
            file: ./coverage.xml
