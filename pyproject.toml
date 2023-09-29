@@ -13,15 +13,7 @@ maintainers = [
 license = {text = "BSD 3-Clause"}
 description = "Analysis of Network-constrained Spatial Data"
 keywords = ["spatial statistics", "networks", "graphs"]
-readme = {text = """\
-Spaghetti is an open-source Python library for the analysis of network-based
-spatial data. Originating from the `network` module in `PySAL`_
-(Python Spatial Analysis Library), it is under active development
-for the inclusion of newly proposed methods for building
-graph-theoretic networks and the analysis of network events.
-
-.. _PySAL: http://pysal.org
-""", content-type = "text/x-rst"}
+readme = "README.md"
 classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.8",
