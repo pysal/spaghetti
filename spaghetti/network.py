@@ -1742,7 +1742,7 @@ class Network:
             self.full_distance_matrix(n_processes, gen_tree=gen_tree)
 
         # set the source and destination observation point patterns
-        if type(sourcepattern) is str:
+        if isinstance(sourcepattern, str):
             sourcepattern = self.pointpatterns[sourcepattern]
             if destpattern:
                 destpattern = self.pointpatterns[destpattern]
@@ -1768,7 +1768,7 @@ class Network:
             symmetric = True
             destpattern = sourcepattern
         # set local copy of destination pattern index
-        dest_indices = list(destpattern.points.keys())
+        dest_indices = list(destpattern.points)
         # set local copy of destination distance to vertex lookup
         dst_d2v = copy.deepcopy(destpattern.dist_to_vertex)
         # destination point count
@@ -2003,7 +2003,7 @@ class Network:
         """
 
         # raise exception is the specified point pattern does not exist
-        if sourcepattern not in self.pointpatterns.keys():
+        if sourcepattern not in self.pointpatterns:
             raise KeyError(f"Available point patterns are {self.pointpatterns.keys()}")
 
         # calculate the network vertex to vertex distance matrix
@@ -2282,7 +2282,7 @@ class Network:
             """convert coordinates for integers if possible
             e.g., (1.0, 0.5) --> (1, 0.5)
             """
-            return int(c) if (type(c) == float and c.is_integer()) else c
+            return int(c) if (isinstance(c, float) and c.is_integer()) else c
 
         # catch invalid split types
         _split_by = split_by.lower()
@@ -2395,7 +2395,7 @@ class Network:
                     new_vertex = (int_coord(newx), int_coord(newy))
 
                     # update the vertex and coordinate info if needed
-                    if new_vertex not in split_network.vertices.keys():
+                    if new_vertex not in split_network.vertices:
                         split_network.vertices[new_vertex] = currentstop
                         split_network.vertex_coords[currentstop] = new_vertex
                         split_network.vertex_list.append(currentstop)
