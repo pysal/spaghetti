@@ -17,15 +17,7 @@
          required: false
 
  jobs:
-   linting:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v4
-        - uses: actions/setup-python@v4
-        - uses: pre-commit/action@v3.0.0
-
    testing:
-     needs: linting
      name: ${{ matrix.os }}, ${{ matrix.environment-file }}
      runs-on: ${{ matrix.os }}
      timeout-minutes: 30
@@ -33,16 +25,16 @@
        matrix:
          os: [ubuntu-latest]
          environment-file:
-           - ci/38-BASE.yaml
-           - ci/39-BASE.yaml
-           - ci/310-BASE.yaml
-           - ci/311-BARE.yaml
-           - ci/311-BASE.yaml
-           - ci/311-DEV.yaml
+           - ci/310-oldest.yaml
+           - ci/310-no-optional.yaml
+           - ci/310-stable.yaml
+           - ci/311-stable.yaml
+           - ci/312-stable.yaml
+           - ci/312-dev.yaml
          include:
-           - environment-file: ci/311-BASE.yaml
+           - environment-file: ci/312-stable.yaml
              os: macos-latest
-           - environment-file: ci/311-BASE.yaml
+           - environment-file: ci/312-stable.yaml
              os: windows-latest
        fail-fast: false
 
@@ -53,19 +45,14 @@
      steps:
        - name: checkout repo
          uses: actions/checkout@v4
+         with:
+          fetch-depth: 0 # Fetch all history for all branches and tags.
        
        - name: setup micromamba
          uses: mamba-org/setup-micromamba@v1
          with:
            environment-file: ${{ matrix.environment-file }}
            micromamba-version: 'latest'
-           channel-priority: 'flexible'
-      
-       - name: install bleeding edge libpysal & esda (Ubuntu / Python 3.11)
-         run: |
-           pip install git+https://github.com/pysal/libpysal.git@main
-           pip install git+https://github.com/pysal/esda.git@main
-         if: matrix.os == 'ubuntu-latest' && contains(matrix.environment-file, 'DEV')
        
        - name: environment info
          run: |
@@ -74,7 +61,8 @@
        
        - name: spatial versions (if geopandas is installed)
          run: 'python -c "import geopandas; geopandas.show_versions();"'
-         if: contains(matrix.environment-file, 'DEV') || contains(matrix.environment-file, 'BASE')
+         if: contains(matrix.environment-file, 'dev') || contains(matrix.environment-file, 'stable') ||
+             contains(matrix.environment-file, 'oldest')
        
        - name: run tests
          run: |

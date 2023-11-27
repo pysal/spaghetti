@@ -2,19 +2,19 @@ name: notebooks-environment
 channels:
   - conda-forge
 dependencies:
-  - python=3.11
+  - python=3.12
   - esda
-  - geopandas>=0.12.0
+  - geopandas
   - libspatialindex
   - matplotlib
   - matplotlib-scalebar
   - numpy
-  - pandas>=1.0
+  - pandas
   - pulp
   - rtree
-  - scipy>=1.0
+  - scipy
   - seaborn
-  - shapely>=2
+  - shapely
   - splot
   - watermark
   - pip
