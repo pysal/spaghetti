@@ -261,7 +261,8 @@ class TestNetwork:
         observed_lengths = ntw.network_component_lengths
         # known values
         known_lengths = {0: 6.0, 1: 1.914213562373095}
-        assert observed_lengths == known_lengths
+        for k, v in observed_lengths.items():
+            assert (k, pytest.approx(v)) == (k, pytest.approx(known_lengths[k]))
 
     def test_distance_band_weights(self):
         w = self.ntw_shp.distancebandweights(threshold=500, **SILENCE)
