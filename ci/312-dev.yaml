@@ -1,0 +1,25 @@
+name: test
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  # required
+  - numpy
+  - pip
+  - rtree
+  - watermark
+  # testing
+  - codecov
+  - pytest
+  - pytest-cov
+  - pytest-timeout
+  - pytest-xdist
+    - pip:
+      # dev versions of packages
+      - --pre --index-url https://pypi.anaconda.org/scientific-python-nightly-wheels/simple --extra-index-url https://pypi.org/simple
+      - pandas
+      - scipy
+      - git+https://github.com/pysal/esda.git@main
+      - git+https://github.com/geopandas/geopandas.git@main
+      - git+https://github.com/pysal/libpysal.git@main
+      - git+https://github.com/shapely/shapely.git@main
