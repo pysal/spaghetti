@@ -8,13 +8,8 @@
 # directories to sys.path here. If the directory is relative to the documentation root,
 # use os.path.abspath to make it absolute, like shown here.
 
-import os
-import sys
 
 import sphinx_bootstrap_theme
-
-# import your package to obtain the version info to display on the docs website
-sys.path.insert(0, os.path.abspath("../"))
 import spaghetti
 
 # -- General configuration ------------------------------------------------
@@ -258,7 +253,7 @@ intersphinx_mapping = {
     "numpy": ("https://numpy.org/doc/stable/", None),
     "pandas": ("https://pandas.pydata.org/pandas-docs/stable/", None),
     "pointpats": ("https://pysal.org/pointpats/", None),
-    "python": ("https://docs.python.org/3.11/", None),
+    "python": ("https://docs.python.org/3.12/", None),
     "scipy": ("https://docs.scipy.org/doc/scipy/", None),
 }
 

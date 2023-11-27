@@ -16,23 +16,19 @@ keywords = ["spatial statistics", "networks", "graphs"]
 readme = "README.md"
 classifiers = [
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
     "License :: OSI Approved :: BSD License",
     "Operating System :: OS Independent",
     "Intended Audience :: Science/Research",
     "Topic :: Scientific/Engineering :: GIS",
 ]
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 dependencies = [
-    "esda",
-    "libpysal",
-    "numpy",
-    "pandas>=1.0",
-    "rtree",
-    "scipy>=1.0",
+    "esda>=2.1.1",
+    "libpysal>=4.6.0",
+    "numpy>=1.22",
+    "pandas>=1.4,!=1.5.0",
+    "rtree>=1.0",
+    "scipy>=1.8",
 ]
 
 [project.urls]
