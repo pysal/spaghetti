@@ -4,8 +4,8 @@ channels:
 dependencies:
   - python=3.10
   # required
-  - esda=2.1.1
-  - libpysal=4.6.0
+  - esda=2.1
+  - libpysal=4.6
   - numpy=1.22
   - pandas=1.4
   - pip
@@ -18,5 +18,5 @@ dependencies:
   - pytest-timeout
   - pytest-xdist
   # optional
-  - geopandas=0.12.0
-  - shapely=2
+  - geopandas=0.12
+  - shapely=2.0
