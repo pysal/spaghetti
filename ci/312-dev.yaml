@@ -4,9 +4,9 @@ channels:
 dependencies:
   - python=3.12
   # required
+  - geos
   - numpy
   - pip
-  - shapely>=2 # to install shapely with git below
   - rtree
   - watermark
   # testing
