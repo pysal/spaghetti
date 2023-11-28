@@ -61,7 +61,7 @@
        
        - name: spatial versions (if geopandas is installed)
          run: 'python -c "import geopandas; geopandas.show_versions();"'
-         if: !contains(matrix.environment-file, 'no-optional')
+         if: !(contains(matrix.environment-file, 'no-optional'))
        
        - name: run tests
          run: |
