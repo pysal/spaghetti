@@ -146,13 +146,6 @@ If you use PySAL-spaghetti in a scientific publication, we would appreciate usin
 }
 ```
 
-## Citing Work
-
-* **Lovelace, R**. *Open source tools for geographic analysis in transport planning*. Journal of Geographical Systems (2021): 1-32. https://doi.org/10.1007/s10109-020-00342-2.
-* **Rey, Sergio J., et al**. *The **PySAL** Ecosystem: Philosophy and Implementation*. Geographical Analysis (2022): 467-487. https://doi.org/10.1111/gean.12276.
-* **Barboza-Salerno, Gia E., and Jacquelyn CA Meshelemiah**. *Gun Violence on Walkable Routes to and from School: Recommendations for Policy and Practice*. Journal of Urban Health (2023): 1-16. https://doi.org/10.1007/s11524-023-00802-2
-* **Barboza, Gia, and Jacquelyn Meshelemiah**. *Danger, Students Beware, School Ahead! Gun Violence Exposure Near Schools in Compton, California*. (2023). https://doi.org/10.21203/rs.3.rs-2976516/v1
-
 ## Funding
 This project is/was partially funded through:
 
