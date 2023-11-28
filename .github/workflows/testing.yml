@@ -19,6 +19,8 @@
  jobs:
    testing:
      name: ${{ matrix.os }}, ${{ matrix.environment-file }}
+     env:
+       HAS_GEOPANDAS: ${{ [[ matrix.environment-file != *'no-optional'* ]] }}
      runs-on: ${{ matrix.os }}
      timeout-minutes: 30
      strategy:
@@ -61,11 +63,22 @@
        
        - name: spatial versions (if geopandas is installed)
          run: 'python -c "import geopandas; geopandas.show_versions();"'
-         if: not(contains(matrix.environment-file, 'no-optional'))
+         if: ${{ env.HAS_GEOPANDAS }}
        
        - name: run tests
          run: |
-           pytest spaghetti -v -r a -n auto --cov spaghetti --doctest-modules --cov-report xml --color yes --cov-append --cov-report term-missing --timeout 60
+           pytest \
+           spaghetti \
+           -v \
+           -r a \
+           -n auto \
+           --color yes \
+           --cov spaghetti \
+           --cov-append \
+           --cov-report term-missing \
+           --cov-report xml \
+           --doctest-modules \
+           --timeout 60
        
        - name: codecov
          uses: codecov/codecov-action@v3
