@@ -20,7 +20,7 @@
    testing:
      name: ${{ matrix.os }}, ${{ matrix.environment-file }}
      env:
-       HAS_GEOPANDAS: ${{ [[ matrix.environment-file != *'no-optional'* ]] }}
+       HAS_GEOPANDAS: ${{ matrix.environment-file != *'no-optional'* }}
      runs-on: ${{ matrix.os }}
      timeout-minutes: 30
      strategy:
