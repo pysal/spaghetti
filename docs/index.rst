@@ -1,6 +1,5 @@
 .. documentation master file
 
-
 .. raw:: html
 
     <img 
@@ -10,7 +9,6 @@
         width="470" 
         height="200"
     >
-
 
 `spaghetti`
 ===========
@@ -24,7 +22,6 @@ Analysis Library) <http://pysal.org>`_, it is under active development for the
 inclusion of newly proposed methods for building graph-theoretic networks and 
 the analysis of network events. An installation guide, API reference, 
 and usage tutorials are provided here through the links above.
-
 
 .. raw:: html
 
@@ -66,7 +63,6 @@ and usage tutorials are provided here through the links above.
       </div>
     </div>
 
-
 History
 -------
 
@@ -90,12 +86,10 @@ such as spatial statistical tools with `esda` and integration with core componen
 `libpysal.cg` (computational geometry and data structures), 
 `libpysal.io` (input-output), and `libpysal.examples` (built-in example data).
 
-
 Development
 -----------
 
 Development of `spaghetti` is hosted on GitHub_.
-
 
 Support
 -------
@@ -104,7 +98,6 @@ All questions, comments, & discussions should happen in a public forum, where po
 Please start a [discussion](https://github.com/pysal/spaghetti/discussions) for questions 
 or open an [issue](https://github.com/pysal/spaghetti/issues) if there appears to be a 
 bug. Private messages and emails will not be answered in a substantive manner.
-
 
 Citing `spaghetti`
 ------------------
@@ -136,13 +129,13 @@ If you use PySAL-spaghetti in a scientific publication, we would appreciate usin
     keywords    = {graph-theory,network-analysis,python,spatial-networks,topology}
   }
 
-
 Citing Work
 -----------
 
-* **Lovelace, R**. `Open source tools for geographic analysis in transport planning`. Journal of Geographical Systems (2021). https://doi.org/10.1007/s10109-020-00342-2.
-* **Rey, SJ et al**. `The PySAL Ecosystem: Philosophy and Implementation`. Geographical Analysis (2021). https://doi.org/10.1111/gean.12276.
-
+* **Lovelace, R**. `Open source tools for geographic analysis in transport planning`. Journal of Geographical Systems (2021): 1-32. https://doi.org/10.1007/s10109-020-00342-2.
+* **Rey, Sergio J., et al**. `The PySAL Ecosystem: Philosophy and Implementation`. Geographical Analysis (2022): 467-487. https://doi.org/10.1111/gean.12276.
+* **Barboza-Salerno, Gia E., and Jacquelyn CA Meshelemiah**. `Gun Violence on Walkable Routes to and from School: Recommendations for Policy and Practice`. Journal of Urban Health (2023): 1-16. https://doi.org/10.1007/s11524-023-00802-2
+* **Barboza, Gia, and Jacquelyn Meshelemiah**. `Danger, Students Beware, School Ahead! Gun Violence Exposure Near Schools in Compton, California`. (2023). https://doi.org/10.21203/rs.3.rs-2976516/v1
 
 Funding
 -------
@@ -163,7 +156,6 @@ This project is/was partially funded through:
 
     National Science Foundation Award #1825768: `National Historical Geographic Information System <https://www.nsf.gov/awardsearch/showAward?AWD_ID=1825768&HistoricalAwards=false>`_
 
-
 .. raw:: html
 
     <img 
@@ -174,7 +166,6 @@ This project is/was partially funded through:
         height="400"
     >
 
-
 .. toctree::
    :hidden:
    :maxdepth: 3
@@ -184,7 +175,6 @@ This project is/was partially funded through:
    Tutorials <tutorials>
    API <api>
    References <references>
-
 
 .. _PySAL: https://github.com/pysal/pysal
 .. _GitHub: https://github.com/pysal/spaghetti

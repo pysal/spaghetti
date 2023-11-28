@@ -2,21 +2,21 @@ name: test
 channels:
   - conda-forge
 dependencies:
-  - python=3.11
+  - python=3.10
   # required
-  - numpy
-  - pandas>=1.0
+  - esda=2.1
+  - libpysal=4.6
+  - numpy=1.22
+  - pandas=1.4
   - pip
-  - rtree
-  - scipy>=1.0
-  - watermark
-  # testing/formatting
-  - black
+  - rtree=1.0
+  - scipy=1.8
+  # testing
   - codecov
   - pytest
   - pytest-cov
   - pytest-timeout
   - pytest-xdist
   # optional
-  - geopandas>=0.12.0
-  - shapely>=2
+  - geopandas=0.12
+  - shapely=2.0
