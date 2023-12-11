@@ -1,0 +1,20 @@
+name: test
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  # required
+  - esda
+  - libpysal
+  - numpy
+  - pandas
+  - pip
+  - rtree
+  - scipy
+  - watermark
+  # testing
+  - codecov
+  - pytest
+  - pytest-cov
+  - pytest-timeout
+  - pytest-xdist

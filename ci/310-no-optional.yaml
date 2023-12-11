@@ -1,0 +1,19 @@
+name: test
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  # required
+  - esda
+  - libpysal=4.7.0 # no geopandas/shapely
+  - numpy
+  - pandas
+  - pip
+  - rtree
+  - scipy
+  # testing
+  - codecov
+  - pytest
+  - pytest-cov
+  - pytest-timeout
+  - pytest-xdist

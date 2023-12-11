@@ -1,0 +1,26 @@
+name: test
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  # required
+  - esda
+  - libpysal
+  - numpy
+  - pandas
+  - pip
+  - rtree
+  - scipy
+  - watermark
+  # testing
+  - codecov
+  - pytest
+  - pytest-cov
+  - pytest-timeout
+  - pytest-xdist
+  # for docs build action (this env only)
+  - nbsphinx
+  - numpydoc
+  - sphinx
+  - sphinxcontrib-bibtex
+  - sphinx_bootstrap_theme

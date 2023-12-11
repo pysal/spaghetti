@@ -1,6 +1,6 @@
 .. Installation
 
-As of version 1.6.0, `spaghetti` supports Python 3.7_, 3.8_, and 3.9_. Please make sure that you are operating in a Python >= 3.7 environment.
+Python 3.10_ is tested for support by `spaghetti`. Please make sure that you are operating in a Python >= 3.10 environment.
 
 Installation
 ============
@@ -17,13 +17,11 @@ Using ``conda``, `spaghetti` can be installed as follows::
 
 Also, ``geopandas`` provides `a nice example`_ to create a fresh environment for working with spatial data.
 
-
 Installing with `Python Package Index`_
 ---------------------------------------
 ::
 
   $ pip install spaghetti
-
 
 *or* download the source distribution (``.tar.gz``) and decompress it to your selected destination. Open a command shell and navigate to the decompressed folder. ::
 
@@ -34,7 +32,6 @@ Installing with `Python Package Index`_
 **Warning**
 
 When installing via ``pip``, you have to ensure that the required dependencies for `spaghetti` are installed on your operating system. Details on how to install these packages are linked here_. Using ``conda`` (above) avoids having to install the dependencies separately.
-
 
 Development Version
 -------------------
@@ -47,9 +44,7 @@ You can  also fork_ the `pysal/spaghetti`_ repo and create a local clone of your
 
 |
 
-.. _3.7: https://docs.python.org/3.7/
-.. _3.8: https://docs.python.org/3.8/
-.. _3.9: https://docs.python.org/3.9/
+.. _3.10: https://docs.python.org/3.10/
 .. _spaghetti-feedstock: https://github.com/conda-forge/spaghetti-feedstock
 .. _a nice example: https://geopandas.readthedocs.io/en/latest/getting_started/install.html#creating-a-new-environment
 .. _conda: https://docs.conda.io/en/latest/

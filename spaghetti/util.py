@@ -1,17 +1,21 @@
 from warnings import warn
 
+import numpy
 from libpysal import cg
 from libpysal.common import requires
-import numpy
 from rtree import Rtree
-
 
 try:
     import geopandas
-    from shapely.geometry import Point, LineString
+    import pandas
+    import shapely
+    from shapely.geometry import LineString
 except ImportError:
-    msg = "geopandas/shapely not available. Some functionality will be disabled."
-    warn(msg)
+    warn(
+        "geopandas/shapely not available. Some functionality will be disabled.",
+        UserWarning,
+        stacklevel=1,
+    )
 
 
 def compute_length(v0, v1):
@@ -44,7 +48,7 @@ def compute_length(v0, v1):
     return euc_dist
 
 
-def get_neighbor_distances(ntw, v0, l):
+def get_neighbor_distances(ntw, v0, link):
     """Get distances to the nearest vertex neighbors along
     connecting arcs.
 
@@ -54,7 +58,7 @@ def get_neighbor_distances(ntw, v0, l):
         A spaghetti network object.
     v0 : int
         The vertex ID.
-    l : dict
+    link : dict
         The key is a tuple (start vertex, end vertex); value is ``float``.
         Cost per arc to travel, e.g. distance.
 
@@ -83,12 +87,11 @@ def get_neighbor_distances(ntw, v0, l):
 
     # iterate over each associated link
     for arc in arcs:
-
         # set distance from vertex1 to vertex2 (link length)
         if arc[0] != v0:
-            neighbors[arc[0]] = l[arc]
+            neighbors[arc[0]] = link[arc]
         else:
-            neighbors[arc[1]] = l[arc]
+            neighbors[arc[1]] = link[arc]
 
     return neighbors
 
@@ -99,7 +102,7 @@ def generatetree(pred):
     Parameters
     ----------
     pred : list
-        List of preceding vertices for traversal route.
+        List of preceding vertices for route traversal.
 
     Returns
     -------
@@ -124,11 +127,9 @@ def generatetree(pred):
 
     # iterate over the list of predecessor vertices
     for i, p in enumerate(pred):
-
         # if the route begins/ends with itself set the
         # root vertex and continue to next iteration
         if p == -1:
-
             # tree keyed by root vertex with root vertex as path
             tree[i] = [i]
             continue
@@ -205,14 +206,13 @@ def dijkstra(ntw, v0, initial_dist=numpy.inf):
     distance[ntw.vertex_list.index(v0)] = 0
 
     # instantiate set of unvisited vertices
-    unvisited = set([v0])
+    unvisited = {v0}
 
     # initially label as predecessor vertices with -1 as path
     pred = [-1 for x in ntw.vertex_list]
 
     # iterate over `unvisited` until all vertices have been visited
     while len(unvisited) > 0:
-
         # get vertex with the lowest value from distance
         dist = initial_dist
 
@@ -229,11 +229,9 @@ def dijkstra(ntw, v0, initial_dist=numpy.inf):
 
         # iterate over neighbors to find least cost along path
         for v1, indiv_cost in neighbors.items():
-
             # if the labeled cost is greater than
             # the currently calculated cost
             if distance[v1] > distance[current] + indiv_cost:
-
                 # relabel to the currently calculated cost
                 distance[v1] = distance[current] + indiv_cost
 
@@ -244,7 +242,7 @@ def dijkstra(ntw, v0, initial_dist=numpy.inf):
                 unvisited.add(v1)
 
     # cast preceding vertices list as an array of integers
-    pred = numpy.array(pred, dtype=numpy.int)
+    pred = numpy.array(pred, dtype=int)
 
     return distance, pred
 
@@ -323,7 +321,7 @@ def squared_distance_point_link(point, link):
     """
 
     # cast vertices comprising the network link as an array
-    p0, p1 = [numpy.array(p) for p in link]
+    p0, p1 = (numpy.array(p) for p in link)
 
     # cast the observation point as an array
     p = numpy.array(point)
@@ -395,14 +393,13 @@ def snap_points_to_links(points, links):
     # instantiate an rtree
     rtree = Rtree()
     # set the smallest possible float epsilon on machine
-    SMALL = numpy.finfo(float).eps
+    small = numpy.finfo(float).eps
 
     # initialize network vertex to link lookup
     vertex_2_link = {}
 
     # iterate over network links
     for i, link in enumerate(links):
-
         # extract network link (x,y) vertex coordinates
         head, tail = link.vertices
         x0, y0 = head
@@ -419,10 +416,10 @@ def snap_points_to_links(points, links):
 
         # minimally increase the bounding box exterior
         bx0, by0, bx1, by1 = link.bounding_box
-        bx0 -= SMALL
-        by0 -= SMALL
-        bx1 += SMALL
-        by1 += SMALL
+        bx0 -= small
+        by0 -= small
+        bx1 += small
+        by1 += small
 
         # insert the network link and its associated
         # rectangle into the rtree
@@ -434,7 +431,6 @@ def snap_points_to_links(points, links):
     point2link = {}
 
     for pt_idx, point in points.items():
-
         # first, find nearest neighbor link vertices for the point
         dmin, vertex = kdtree.query(point, k=1)
         vertex = tuple(kdtree.data[vertex])
@@ -460,7 +456,7 @@ def snap_points_to_links(points, links):
         #   https://github.com/pysal/spaghetti/issues/598
         #   https://github.com/pysal/spaghetti/pull/599
         candidates.sort(reverse=True)
-        dmin += SMALL
+        dmin += small
         dmin2 = dmin * dmin
 
         # of the candidate arcs, find the nearest to the query point
@@ -515,7 +511,6 @@ def network_has_cycle(adjacency):
 
         # Perform recursion for all adjacent network/graph vertices
         for rv in adjacency[_v]:
-
             # If vertex already seen, skip it
             if not seen[rv]:
                 # Perform recursion down the depth-first search tree
@@ -539,13 +534,11 @@ def network_has_cycle(adjacency):
     seen = {vid: False for vid in vids}
 
     # Perform depth-first search recursion to isolate cycles
-    for idx, v in enumerate(vids):
-        # If vertex already seen, skip it
-        if not seen[v]:
-            # Perform recursion down the depth-first search tree
-            if tree_has_cycle(-1, v):
-                network_cycle_found = True
-                break
+    for v in vids:
+        # If vertex already seen, skip it; or recurse down the depth-first search tree
+        if not seen[v] and tree_has_cycle(-1, v):
+            network_cycle_found = True
+            break
 
     return network_cycle_found
 
@@ -582,18 +575,12 @@ def _chain_constr(_vcoords, _vs):
 
     Returns
     -------
-    chain : libpysal.cg.Chain
+    libpysal.cg.Chain
         Spatial representation of the arc.
 
     """
 
-    if _vcoords:
-        chain_vtx_points = [cg.Point((_vcoords[v])) for v in _vs]
-    else:
-        chain_vtx_points = _vs
-    chain = cg.Chain(chain_vtx_points)
-
-    return chain
+    return cg.Chain([cg.Point(_vcoords[v]) for v in _vs] if _vcoords else _vs)
 
 
 def build_chains(space_h, space_v, exterior, bounds, h=True):
@@ -643,10 +630,8 @@ def build_chains(space_h, space_v, exterior, bounds, h=True):
 
     # for element in the horizontal index
     for plus_h in range(start_h, end_h):
-
         # for element in the vertical index
         for plus_v in range(start_v, end_v):
-
             # ignore if a -1 index
             if plus_h - minus_x == -1 or plus_v - minus_y == -1:
                 continue
@@ -670,9 +655,7 @@ def build_chains(space_h, space_v, exterior, bounds, h=True):
 
 
 @requires("geopandas", "shapely")
-def _points_as_gdf(
-    net, vertices, vertices_for_arcs, pp_name, snapped, id_col=None, geom_col=None
-):
+def _points_as_gdf(net, vertices, vertices_for_arcs, pp_name, snapped, id_col=None):
     """Internal function for returning a point ``geopandas.GeoDataFrame``
     called from within ``spaghetti.element_as_gdf()``.
 
@@ -715,9 +698,9 @@ def _points_as_gdf(
     if pp_name:
         try:
             pp = net.pointpatterns[pp_name]
-        except KeyError:
-            err_msg = "Available point patterns are {}"
-            raise KeyError(err_msg.format(list(net.pointpatterns.keys())))
+        except KeyError as err:
+            err_msg = f"Available point patterns are {net.pointpatterns.keys()}"
+            raise KeyError(err_msg) from err
 
         # raw point pattern
         if not snapped:
@@ -730,9 +713,11 @@ def _points_as_gdf(
             pts_dict = pp.snapped_coordinates
 
     # instantiate geopandas.GeoDataFrame
-    pts_list = list(pts_dict.items())
-    points = geopandas.GeoDataFrame(pts_list, columns=[id_col, geom_col])
-    points.geometry = points.geometry.apply(lambda p: Point(p))
+    points = geopandas.GeoDataFrame(
+        pts_dict.keys(),
+        columns=[id_col],
+        geometry=shapely.points(numpy.asarray(list(pts_dict.values()))),
+    )
 
     # additional columns
     if not pp_name:
@@ -752,7 +737,7 @@ def _points_as_gdf(
 
 
 @requires("geopandas", "shapely")
-def _arcs_as_gdf(net, points, id_col=None, geom_col=None):
+def _arcs_as_gdf(net, points, id_col=None):
     """Internal function for returning an arc ``geopandas.GeoDataFrame``
     called from within ``spaghetti.element_as_gdf()``.
 
@@ -771,21 +756,16 @@ def _arcs_as_gdf(net, points, id_col=None, geom_col=None):
 
     """
 
-    # arcs
-    arcs = {}
-
-    # iterate over network arcs
-    for (vtx1_id, vtx2_id) in net.arcs:
-
-        # extract vertices comprising the network arc
-        vtx1 = points.loc[(points[id_col] == vtx1_id), geom_col].squeeze()
-        vtx2 = points.loc[(points[id_col] == vtx2_id), geom_col].squeeze()
-        # create a LineString for the network arc
-        arcs[(vtx1_id, vtx2_id)] = LineString((vtx1, vtx2))
+    def _line_coords(loc):
+        return (
+            (points.loc[loc[0]].geometry.x, points.loc[loc[0]].geometry.y),
+            (points.loc[loc[1]].geometry.x, points.loc[loc[1]].geometry.y),
+        )
 
     # instantiate GeoDataFrame
-    arcs = geopandas.GeoDataFrame(
-        sorted(list(arcs.items())), columns=[id_col, geom_col]
+    arcs = pandas.DataFrame(zip(sorted(net.arcs), strict=True), columns=[id_col])
+    arcs = arcs.set_geometry(
+        shapely.linestrings(arcs[id_col].map(_line_coords).values.tolist())
     )
 
     # additional columns
@@ -796,7 +776,7 @@ def _arcs_as_gdf(net, points, id_col=None, geom_col=None):
 
 
 @requires("geopandas", "shapely")
-def _routes_as_gdf(paths, id_col, geom_col):
+def _routes_as_gdf(paths, id_col):
     """Internal function for returning a shortest paths
     ``geopandas.GeoDataFrame`` called from within
     ``spaghetti.element_as_gdf()``.
@@ -817,17 +797,12 @@ def _routes_as_gdf(paths, id_col, geom_col):
 
     """
 
-    # isolate the origins, destinations, and geometries
-    origs = [o for (o, d), g in paths]
-    dests = [d for (o, d), g in paths]
-    geoms = [LineString(g.vertices) for (o, d), g in paths]
-
     # instantiate as a geodataframe
-    paths = geopandas.GeoDataFrame(geometry=geoms)
-    paths["O"] = origs
-    paths["D"] = dests
-
-    if id_col:
-        paths[id_col] = paths.apply(lambda x: (x["O"], x["D"]), axis=1)
+    paths = dict(paths)
+    ids, geoms = (
+        zip(paths.keys(), strict=True),
+        [LineString(g.vertices) for g in paths.values()],
+    )
+    paths = geopandas.GeoDataFrame(ids, columns=[id_col], geometry=geoms)
 
     return paths

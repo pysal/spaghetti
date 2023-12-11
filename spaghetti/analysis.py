@@ -1,7 +1,7 @@
 import numpy
 
 
-class FuncBase(object):
+class FuncBase:
     """Base object for performing network analysis on a
     ``spaghetti.Network`` object.
 
@@ -49,7 +49,6 @@ class FuncBase(object):
         distribution="uniform",
         upperbound=None,
     ):
-
         # set initial class attributes
         self.ntw = ntw
         self.pointpattern = pointpattern
@@ -80,7 +79,7 @@ class FuncBase(object):
         """Ensure the statistical distribution is supported."""
 
         valid_distributions = ["uniform"]
-        if not self.distribution in valid_distributions:
+        if self.distribution not in valid_distributions:
             msg = "%s distribution not currently supported." % self.distribution
             raise RuntimeError(msg)
 
@@ -135,7 +134,6 @@ class GlobalAutoK(FuncBase):
 
         # for each round of permutations
         for p in range(self.permutations):
-
             # simulate a point pattern
             sim = self.ntw.simulate_observations(
                 self.npts, distribution=self.distribution

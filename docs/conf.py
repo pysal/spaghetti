@@ -8,11 +8,8 @@
 # directories to sys.path here. If the directory is relative to the documentation root,
 # use os.path.abspath to make it absolute, like shown here.
 
-import sys, os
-import sphinx_bootstrap_theme
 
-# import your package to obtain the version info to display on the docs website
-sys.path.insert(0, os.path.abspath("../"))
+import sphinx_bootstrap_theme
 import spaghetti
 
 # -- General configuration ------------------------------------------------
@@ -66,7 +63,7 @@ release = spaghetti.__version__
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = "en"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -189,8 +186,8 @@ latex_documents = [
     (
         master_doc,
         "%s.tex" % project,
-        u"%s Documentation" % project,
-        u"pysal developers",
+        "%s Documentation" % project,
+        "pysal developers",
         "manual",
     )
 ]
@@ -200,7 +197,7 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [(master_doc, "%s" % project, u"%s Documentation" % project, [author], 1)]
+man_pages = [(master_doc, "%s" % project, "%s Documentation" % project, [author], 1)]
 
 
 # -- Options for Texinfo output -------------------------------------------
@@ -212,7 +209,7 @@ texinfo_documents = [
     (
         master_doc,
         "%s" % project,
-        u"%s Documentation" % project,
+        "%s Documentation" % project,
         author,
         "%s" % project,
         "SPAtial GrapHs: nETworks, Topology, & Inference",
@@ -249,15 +246,15 @@ def setup(app):
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
     "esda": ("https://pysal.org/esda/", None),
-    "geopandas": ("https://geopandas.readthedocs.io/en/latest/", None),
+    "geopandas": ("https://geopandas.org/en/latest/", None),
     "libpysal": ("https://pysal.org/libpysal/", None),
-    "matplotlib": ("https://matplotlib.org/", None),
-    "networkx": ("https://networkx.github.io/documentation/stable/", None),
+    "matplotlib": ("https://matplotlib.org/stable/", None),
+    "networkx": ("https://networkx.org/documentation/stable/", None),
     "numpy": ("https://numpy.org/doc/stable/", None),
     "pandas": ("https://pandas.pydata.org/pandas-docs/stable/", None),
-    "pointpats": ("https://pointpats.readthedocs.io/en/latest/", None),
-    "python": ("https://docs.python.org/3.9/", None),
-    "scipy": ("https://docs.scipy.org/doc/scipy/reference/", None),
+    "pointpats": ("https://pysal.org/pointpats/", None),
+    "python": ("https://docs.python.org/3.12/", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy/", None),
 }
 
 # This is processed by Jinja2 and inserted before each notebook
@@ -299,6 +296,7 @@ nbsphinx_execute_arguments = [
     "--InlineBackend.rc={'figure.dpi': 96}",
 ]
 
-mathjax_config = {
+
+mathjax3_config = {
     "TeX": {"equationNumbers": {"autoNumber": "AMS", "useLabelIds": True}},
 }

@@ -1,0 +1,105 @@
+[build-system]
+requires = ["setuptools>=61.0", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+
+[project]
+name = "spaghetti"
+dynamic = ["version"]
+maintainers = [
+    {name = "James D. Gaboardi", email = "jgaboardi@gmail.com"},
+]
+license = {text = "BSD 3-Clause"}
+description = "Analysis of Network-constrained Spatial Data"
+keywords = ["spatial statistics", "networks", "graphs"]
+readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: GIS",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "esda>=2.1",
+    "libpysal>=4.6",
+    "numpy>=1.22",
+    "pandas>=1.4,!=1.5.0",
+    "rtree>=1.0",
+    "scipy>=1.8",
+]
+
+[project.urls]
+Home = "https://pysal.org/spaghetti/"
+Repository = "https://github.com/pysal/spaghetti"
+
+[project.optional-dependencies]
+dev = [
+    "ruff",
+    "pre-commit",
+]
+docs = [
+    "nbsphinx",
+    "numpydoc",
+    "sphinx",
+    "sphinxcontrib-bibtex",
+    "sphinx_bootstrap_theme",
+]
+plus = [
+    "geopandas>=0.12",
+    "shapely>=2.0",
+]
+tests = [
+    "pytest",
+    "pytest-cov",
+    "pytest-timeout",
+    "pytest-xdist",
+    "codecov",
+    "coverage",
+    "twine",
+    "wheel",
+]
+nb_pypi = [
+    "mip",
+    "ortools",
+]
+nb_conda = [
+    "matplotlib",
+    "matplotlib-scalebar",
+    "pulp",
+    "seaborn",
+    "splot",
+    "watermark",
+]
+
+[tool.setuptools.packages.find]
+include = [
+    "spaghetti",
+    "spaghetti.*",
+]
+
+[tool.ruff]
+line-length = 88
+select = ["E", "F", "W", "I", "UP", "N", "B", "A", "C4", "SIM", "ARG"]
+exclude = ["spaghetti/tests/*", "docs/*"]
+[tool.ruff.per-file-ignores]
+"*__init__.py" = [
+    "F401",  # imported but unused
+    "F403",  # star import; unable to detect undefined names
+]
+
+[tool.coverage.run]
+source = ["./spaghetti"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "if self.debug:",
+    "pragma: no cover",
+    "raise NotImplementedError",
+    "except ModuleNotFoundError:",
+    "except ImportError",
+]
+ignore_errors = true
+omit = ["spaghetti/tests/*", "docs/conf.py"]

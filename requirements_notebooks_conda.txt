@@ -1,5 +1,0 @@
-matplotlib
-pulp
-seaborn
-splot
-watermark
