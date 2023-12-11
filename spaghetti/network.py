@@ -1,3 +1,5 @@
+# ruff: noqa: B009
+
 import contextlib
 import copy
 import os
@@ -283,7 +285,7 @@ class Network:
         extractgraph=True,
         w_components=True,
         weightings=False,
-        weights_kws=dict(),
+        weights_kws=dict(),  # noqa: B006, C408
         vertex_atol=None,
     ):
         # do this when creating a clean network instance from a
@@ -422,7 +424,7 @@ class Network:
         fully_connected = bool(n_components == 1)
 
         # link to component lookup
-        link2component = dict(zip(links, component_labels))
+        link2component = dict(zip(links, component_labels, strict=True))
 
         # component ID lookups: links, lengths, vertices, vertex counts
         component2link = {}
@@ -818,7 +820,11 @@ class Network:
         return nodes
 
     def contiguityweights(
-        self, graph=True, weightings=None, from_split=False, weights_kws=dict()
+        self,
+        graph=True,
+        weightings=None,
+        from_split=False,
+        weights_kws=dict(),  # noqa: B006, C408
     ):
         """Create a contiguity-based ``libpysal.weights.W`` object.
 
@@ -943,7 +949,11 @@ class Network:
         return w
 
     def distancebandweights(
-        self, threshold, n_processes=1, gen_tree=False, weights_kws=dict()
+        self,
+        threshold,
+        n_processes=1,
+        gen_tree=False,
+        weights_kws=dict(),  # noqa: B006, C408
     ):
         """Create distance-based weights.
 
@@ -2217,7 +2227,11 @@ class Network:
         return paths
 
     def split_arcs(
-        self, split_param, split_by="distance", w_components=True, weights_kws=dict()
+        self,
+        split_param,
+        split_by="distance",
+        w_components=True,
+        weights_kws=dict(),  # noqa: B006, C408
     ):
         """Split all network arcs at either a fixed distance or fixed count.
 
@@ -2816,12 +2830,12 @@ def extract_component(net, component_id, weightings=None):
             supp_name = [o + attr for o in obj]
             supp_lens = [getattr(cnet, s) for s in supp_name]
             supp_link = [getattr(cnet, o + "s") for o in obj]
-            supp_ll = list(zip(supp_lens, supp_link))
+            supp_ll = list(zip(supp_lens, supp_link, strict=True))
             _val = [{k: v for k, v in l1.items() if k in l2} for l1, l2 in supp_ll]
             attr = supp_name
 
         # reassign attributes
-        for a, av in zip(attr, _val):
+        for a, av in zip(attr, _val, strict=True):
             setattr(cnet, a, av)
 
     # provide warning (for now) if the network contains a point pattern

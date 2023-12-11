@@ -393,7 +393,7 @@ def snap_points_to_links(points, links):
     # instantiate an rtree
     rtree = Rtree()
     # set the smallest possible float epsilon on machine
-    SMALL = numpy.finfo(float).eps
+    small = numpy.finfo(float).eps
 
     # initialize network vertex to link lookup
     vertex_2_link = {}
@@ -416,10 +416,10 @@ def snap_points_to_links(points, links):
 
         # minimally increase the bounding box exterior
         bx0, by0, bx1, by1 = link.bounding_box
-        bx0 -= SMALL
-        by0 -= SMALL
-        bx1 += SMALL
-        by1 += SMALL
+        bx0 -= small
+        by0 -= small
+        bx1 += small
+        by1 += small
 
         # insert the network link and its associated
         # rectangle into the rtree
@@ -456,7 +456,7 @@ def snap_points_to_links(points, links):
         #   https://github.com/pysal/spaghetti/issues/598
         #   https://github.com/pysal/spaghetti/pull/599
         candidates.sort(reverse=True)
-        dmin += SMALL
+        dmin += small
         dmin2 = dmin * dmin
 
         # of the candidate arcs, find the nearest to the query point
@@ -763,7 +763,7 @@ def _arcs_as_gdf(net, points, id_col=None):
         )
 
     # instantiate GeoDataFrame
-    arcs = pandas.DataFrame(zip(sorted(net.arcs)), columns=[id_col])
+    arcs = pandas.DataFrame(zip(sorted(net.arcs), strict=True), columns=[id_col])
     arcs = arcs.set_geometry(
         shapely.linestrings(arcs[id_col].map(_line_coords).values.tolist())
     )
@@ -799,7 +799,10 @@ def _routes_as_gdf(paths, id_col):
 
     # instantiate as a geodataframe
     paths = dict(paths)
-    ids, geoms = zip(paths.keys()), [LineString(g.vertices) for g in paths.values()]
+    ids, geoms = (
+        zip(paths.keys(), strict=True),
+        [LineString(g.vertices) for g in paths.values()],
+    )
     paths = geopandas.GeoDataFrame(ids, columns=[id_col], geometry=geoms)
 
     return paths
