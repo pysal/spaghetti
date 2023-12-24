@@ -757,9 +757,10 @@ def _arcs_as_gdf(net, points, id_col=None):
     """
 
     def _line_coords(loc):
+        indpoints = points.set_index(id_col, inplace=False)
         return (
-            (points.loc[loc[0]].geometry.x, points.loc[loc[0]].geometry.y),
-            (points.loc[loc[1]].geometry.x, points.loc[loc[1]].geometry.y),
+            (indpoints.loc[loc[0]].geometry.x, indpoints.loc[loc[0]].geometry.y),
+            (indpoints.loc[loc[1]].geometry.x, indpoints.loc[loc[1]].geometry.y),
         )
 
     # instantiate GeoDataFrame
