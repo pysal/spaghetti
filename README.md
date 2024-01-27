@@ -15,7 +15,7 @@ Spaghetti is an open-source Python library for the analysis of network-based spa
 
 |[![PyPI version](https://badge.fury.io/py/spaghetti.svg)](https://badge.fury.io/py/spaghetti)| [![Conda Version](https://img.shields.io/conda/vn/conda-forge/spaghetti.svg)](https://anaconda.org/conda-forge/spaghetti) | ![tag](https://img.shields.io/github/v/release/pysal/spaghetti?include_prereleases&sort=semver) | [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/pysal/spaghetti/main)
 |:---:|:---:|:---:|:---:|
-|[![Downloads](https://pepy.tech/badge/spaghetti)](https://pepy.tech/project/spaghetti) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/spaghetti.svg)](https://anaconda.org/conda-forge/spaghetti) | [![Documentation](https://img.shields.io/static/v1.svg?label=docs&message=current&color=9cf)](http://pysal.org/spaghetti/) | [![Gitter](https://badges.gitter.im/pysal/Spaghetti.svg)](https://gitter.im/pysal/Spaghetti?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+|[![Downloads](https://pepy.tech/badge/spaghetti)](https://pepy.tech/project/spaghetti) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/spaghetti.svg)](https://anaconda.org/conda-forge/spaghetti) | [![Documentation](https://img.shields.io/static/v1.svg?label=docs&message=current&color=9cf)](http://pysal.org/spaghetti/) | [![Discord](https://img.shields.io/badge/Discord-join%20chat-7289da?style=flat&logo=discord&logoColor=cccccc&link=https://discord.gg/BxFTEPFFZn)](https://discord.gg/BxFTEPFFZn)
 | ![Pypi python versions](https://img.shields.io/pypi/pyversions/spaghetti.svg) | [![Conda Recipe](https://img.shields.io/badge/recipe-spaghetti-red.svg)](https://github.com/conda-forge/spaghetti-feedstock) | [![codecov](https://codecov.io/gh/pysal/spaghetti/branch/main/graph/badge.svg)](https://codecov.io/gh/pysal/spaghetti) | [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 | [![Continuous Integration](https://github.com/pysal/spaghetti/actions/workflows/testing.yml/badge.svg)](https://github.com/pysal/spaghetti/actions/workflows/testing.yml) | [![status](https://joss.theoj.org/papers/52b8d0c81bbf311465b45bfc26379e74/status.svg)](https://joss.theoj.org/papers/52b8d0c81bbf311465b45bfc26379e74) | [![DOI](https://zenodo.org/badge/88305306.svg)](https://zenodo.org/badge/latestdoi/88305306) | [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
@@ -105,7 +105,7 @@ If you have any suggestions, feature requests, or bug reports, please open new [
 
 ## Support
 
-If you are having issues, please [create an issue](https://github.com/pysal/spaghetti/issues), start a [discussion](https://github.com/pysal/spaghetti/discussions), or talk to us in the [gitter room](https://gitter.im/pysal/spaghetti). All questions, comments, & discussions should happen in a public forum, where possible. Private messages and emails will not be answered in a substantive manner.
+If you are having issues, please [create an issue](https://github.com/pysal/spaghetti/issues), start a [discussion](https://github.com/pysal/spaghetti/discussions), or talk to us in [PySAL's Discord channel](https://discord.gg/BxFTEPFFZn). All questions, comments, & discussions should happen in a public forum, where possible. Private messages and emails will not be answered in a substantive manner.
 
 ## Code of Conduct
 
