@@ -12,7 +12,7 @@ dependencies:
   - pip
   - rtree=1.0
   - scipy=1.8
-  - shapely=2.0
+  - shapely=2.0.1
   # testing
   - codecov
   - pytest
