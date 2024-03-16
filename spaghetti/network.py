@@ -2636,7 +2636,7 @@ class Network:
         counts = self.count_per_link(pointpat.obs_to_arc, graph=graph)
 
         # Build the y vector
-        y = [counts[i] if i in counts else 0.0 for i in w.neighbors]
+        y = [counts.get(i, 0.0) for i in w.neighbors]
 
         # Moran's I
         moran = esda.moran.Moran(y, w, permutations=permutations)
