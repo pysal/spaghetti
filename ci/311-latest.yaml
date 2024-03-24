@@ -5,12 +5,14 @@ dependencies:
   - python=3.11
   # required
   - esda
+  - geopandas
   - libpysal
   - numpy
   - pandas
   - pip
   - rtree
   - scipy
+  - shapely
   - watermark
   # testing
   - codecov

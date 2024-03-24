@@ -64,15 +64,12 @@ $ pip install git+https://github.com/pysal/spaghetti
 ## Requirements
 
 - [`esda`](https://pysal.org/esda/)
+- [`geopandas`](https://geopandas.org/en/stable/)
 - [`libpysal`](https://pysal.org/libpysal/)
 - [`libspatialindex`](https://libspatialindex.org/en/stable/)
 - [`numpy`](https://numpy.org/devdocs/)
 - [`rtree`](https://rtree.readthedocs.io/en/stable/)
 - [`scipy`](http://scipy.github.io/devdocs/)
-
-## Soft Dependencies
-
-- [`geopandas`](https://geopandas.org/en/stable/)
 - [`shapely`](https://shapely.readthedocs.io/en/stable/)
 
 ## History
