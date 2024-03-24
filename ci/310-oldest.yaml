@@ -5,18 +5,17 @@ dependencies:
   - python=3.10
   # required
   - esda=2.1
+  - geopandas=0.12
   - libpysal=4.6
   - numpy=1.22
   - pandas=1.4
   - pip
   - rtree=1.0
   - scipy=1.8
+  - shapely=2.0
   # testing
   - codecov
   - pytest
   - pytest-cov
   - pytest-timeout
   - pytest-xdist
-  # optional
-  - geopandas=0.12
-  - shapely=2.0
