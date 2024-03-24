@@ -1,21 +1,10 @@
-from warnings import warn
-
+import geopandas
 import numpy
+import pandas
+import shapely
 from libpysal import cg
-from libpysal.common import requires
 from rtree import Rtree
-
-try:
-    import geopandas
-    import pandas
-    import shapely
-    from shapely.geometry import LineString
-except ImportError:
-    warn(
-        "geopandas/shapely not available. Some functionality will be disabled.",
-        UserWarning,
-        stacklevel=1,
-    )
+from shapely.geometry import LineString
 
 
 def compute_length(v0, v1):
@@ -654,7 +643,6 @@ def build_chains(space_h, space_v, exterior, bounds, h=True):
     return chains
 
 
-@requires("geopandas", "shapely")
 def _points_as_gdf(net, vertices, vertices_for_arcs, pp_name, snapped, id_col=None):
     """Internal function for returning a point ``geopandas.GeoDataFrame``
     called from within ``spaghetti.element_as_gdf()``.
@@ -686,8 +674,7 @@ def _points_as_gdf(net, vertices, vertices_for_arcs, pp_name, snapped, id_col=No
     Notes
     -----
 
-    1. See ``spaghetti.element_as_gdf()`` for description of arguments.
-    2. This function requires ``geopandas``.
+    See ``spaghetti.element_as_gdf()`` for description of arguments.
 
     """
 
@@ -736,7 +723,6 @@ def _points_as_gdf(net, vertices, vertices_for_arcs, pp_name, snapped, id_col=No
     return points
 
 
-@requires("geopandas", "shapely")
 def _arcs_as_gdf(net, points, id_col=None):
     """Internal function for returning an arc ``geopandas.GeoDataFrame``
     called from within ``spaghetti.element_as_gdf()``.
@@ -751,8 +737,7 @@ def _arcs_as_gdf(net, points, id_col=None):
     Notes
     -----
 
-    1. See ``spaghetti.element_as_gdf()`` for description of arguments.
-    2. This function requires ``geopandas``.
+    See ``spaghetti.element_as_gdf()`` for description of arguments.
 
     """
 
@@ -776,7 +761,6 @@ def _arcs_as_gdf(net, points, id_col=None):
     return arcs
 
 
-@requires("geopandas", "shapely")
 def _routes_as_gdf(paths, id_col):
     """Internal function for returning a shortest paths
     ``geopandas.GeoDataFrame`` called from within
@@ -793,8 +777,7 @@ def _routes_as_gdf(paths, id_col):
     Notes
     -----
 
-    1. See ``spaghetti.element_as_gdf()`` for description of arguments.
-    2. This function requires ``geopandas``.
+    See ``spaghetti.element_as_gdf()`` for description of arguments.
 
     """
 

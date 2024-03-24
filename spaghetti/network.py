@@ -11,7 +11,6 @@ from itertools import islice
 import esda
 import numpy
 from libpysal import cg, weights
-from libpysal.common import requires
 
 from . import util
 from .analysis import GlobalAutoK
@@ -3044,7 +3043,6 @@ def mst_weighted_sort(net, maximum, net_kws):
     return spanning_tree
 
 
-@requires("geopandas", "shapely")
 def element_as_gdf(
     net,
     vertices=False,
@@ -3119,7 +3117,6 @@ def element_as_gdf(
 
     When both network vertices and arcs are desired, the variable
     declaration must be in the order: <vertices>, <arcs>.
-    This function requires ``geopandas``.
 
     See also
     --------
