@@ -80,8 +80,6 @@
          run: |
            pytest \
            -v \
-           -r a \
-           -n auto \
            --color yes \
            --doctest-only spaghetti
        
