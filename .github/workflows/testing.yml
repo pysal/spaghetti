@@ -82,7 +82,7 @@
            --cov-report term-missing \
            --cov-report xml \
            --timeout 60 \
-           env.DOCTEST
+           ${{ env.DOCTEST }}
        
        - name: codecov
          uses: codecov/codecov-action@v4
