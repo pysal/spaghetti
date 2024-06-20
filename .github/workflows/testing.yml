@@ -76,7 +76,7 @@
            --timeout 60
 
        - name: run docstring tests
-         if: contains(matrix.environment-file, 'ci/310-oldest.yaml')
+         if: contains(matrix.environment-file, 'latest') || contains(matrix.environment-file, 'dev')
          run: |
            pytest \
            -v \

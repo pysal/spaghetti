@@ -19,4 +19,3 @@ dependencies:
   - pytest-cov
   - pytest-timeout
   - pytest-xdist
-  - pytest-doctestplus
