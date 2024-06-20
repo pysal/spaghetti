@@ -73,7 +73,6 @@
            --cov-append \
            --cov-report term-missing \
            --cov-report xml \
-           --doctest-modules \
            --timeout 60
        
        - name: codecov
