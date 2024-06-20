@@ -82,7 +82,7 @@
            -v \
            -r a \
            -n auto \
-           --color yes
+           --color yes \
            --doctest-only spaghetti
        
        - name: codecov
