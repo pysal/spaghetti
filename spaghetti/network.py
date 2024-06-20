@@ -227,12 +227,12 @@ class Network:
 
     >>> import numpy
     >>> list(numpy.unique(ntw.network_component_labels))
-    [0]
+    [np.int32(0)]
 
     Show whether each component of the network is an isolated ring (or not).
 
     >>> ntw.network_component_is_ring
-    {0: False}
+    {np.int32(0): False}
 
     Show how many network arcs are associated with the component.
 
@@ -246,9 +246,9 @@ class Network:
     >>> ntw.graph_n_components
     1
     >>> list(numpy.unique(ntw.graph_component_labels))
-    [0]
+    [np.int32(0)]
     >>> ntw.graph_component_is_ring
-    {0: False}
+    {np.int32(0): False}
     >>> edges = len(ntw.graph_component2edge[ntw.graph_component_labels[0]])
     >>> edges
     179
@@ -1018,7 +1018,7 @@ class Network:
         There are ``8`` units with ``3`` neighbors in the ``W`` object.
 
         >>> w.histogram[-1]
-        (8, 3)
+        (np.int64(8), np.int64(3))
 
         """
 
@@ -1718,7 +1718,7 @@ class Network:
         the distance between one observation and another will be positive value.
 
         >>> s2s_dist[0,0], s2s_dist[1,0]
-        (nan, 3105.189475447081)
+        (np.float64(nan), np.float64(3105.189475447081))
 
         If calculating a ``type-a`` to ``type-b`` distance matrix
         the distance between all observations will likely be positive
@@ -1993,7 +1993,8 @@ class Network:
 
         >>> nn = ntw.nearestneighbordistances("crimes", keep_zero_dist=True)
         >>> nn[11], nn[18]
-        (([18, 19], 165.33982412719126), ([19], 0.0))
+        (([18, 19], np.float64(165.33982412719126)), ([19], np.float64(0.0)))
+
 
         This may be remedied by setting the ``keep_zero_dist`` keyword
         argument to ``False``. With this parameter set, observation ``11``
@@ -2003,13 +2004,13 @@ class Network:
 
         >>> nn = ntw.nearestneighbordistances("crimes", keep_zero_dist=False)
         >>> nn[11], nn[18]
-        (([18, 19], 165.33982412719126), ([11], 165.33982412719126))
+        (([18, 19], np.float64(165.33982412719126)), ([11], np.float64(165.33982412719126)))
 
         There are valid reasons for both retaining or masking zero distance
         neighbors. When conducting analysis, thought must be given as to
         which model more accurately represents the specific scenario.
 
-        """
+        """  # noqa: E501
 
         # raise exception is the specified point pattern does not exist
         if sourcepattern not in self.pointpatterns:
@@ -2618,7 +2619,7 @@ class Network:
 
         >>> moran_res, _ = ntw.Moran(crimes)
         >>> round(moran_res.I, 6)
-        0.005193
+        np.float64(0.005193)
 
         Notes
         -----
@@ -2748,7 +2749,7 @@ def extract_component(net, component_id, weightings=None):
     >>> longest.network_n_components
     1
     >>> longest.network_component_lengths
-    {0: 13508.169276875526}
+    {np.int32(0): 13508.169276875526}
 
     """
 
@@ -3150,7 +3151,7 @@ def element_as_gdf(
     Calculate the total length of the network.
 
     >>> arcs_df.geometry.length.sum()
-    104414.09200823458
+    np.float64(104414.09200823458)
 
     """
 
