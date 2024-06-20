@@ -63,7 +63,7 @@
 
        - name: declare doctest run
          run: |
-           if [[ $matrix.environment-file == 'ci/310-oldest.yaml'; then
+           if [[ $matrix.environment-file == 'ci/310-oldest.yaml' ]]; then
                echo "DOCTEST='--doctest-modules'" >> "$GITHUB_ENV"
            else
                echo "DOCTEST=''" >> "$GITHUB_ENV"
