@@ -64,7 +64,7 @@ def get_neighbor_distances(ntw, v0, link):
     >>> ntw = spaghetti.Network(examples.get_path("streets.shp"))
     >>> neighs = spaghetti.util.get_neighbor_distances(ntw, 0, ntw.arc_lengths)
     >>> numpy.round(neighs[1], 10)
-    102.6235345344
+    np.float64(102.6235345344)
 
     """
 
@@ -107,9 +107,9 @@ def generatetree(pred):
     >>> distance, pred = spaghetti.util.dijkstra(ntw, 0)
     >>> tree = spaghetti.util.generatetree(pred)
     >>> tree[3]
-    [23, 22, 20, 19, 170, 2, 0]
+    [np.int64(23), np.int64(22), np.int64(20), np.int64(19), np.int64(170), np.int64(2), np.int64(0)]
 
-    """
+    """  # noqa: E501
 
     # instantiate tree lookup
     tree = {}
@@ -181,7 +181,7 @@ def dijkstra(ntw, v0, initial_dist=numpy.inf):
     >>> round(distance[196], 4)
     5505.6682
     >>> pred[196]
-    133
+    np.int64(133)
 
     """
 
@@ -269,7 +269,7 @@ def dijkstra_mp(ntw_vertex):
     >>> round(distance[196], 4)
     5505.6682
     >>> pred[196]
-    133
+    np.int64(133)
 
     """
 
@@ -305,7 +305,7 @@ def squared_distance_point_link(point, link):
     >>> import spaghetti
     >>> point, link = (1,1), ((0,0), (2,0))
     >>> spaghetti.util.squared_distance_point_link(point, link)
-    (1.0, array([1., 0.]))
+    (np.float64(1.0), array([1., 0.]))
 
     """
 

@@ -80,7 +80,7 @@ class FuncBase:
 
         valid_distributions = ["uniform"]
         if self.distribution not in valid_distributions:
-            msg = "%s distribution not currently supported." % self.distribution
+            msg = f"{self.distribution} distribution not currently supported."
             raise RuntimeError(msg)
 
     def computeenvelope(self):

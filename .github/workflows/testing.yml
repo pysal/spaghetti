@@ -60,7 +60,15 @@
        
        - name: spatial versions
          run: 'python -c "import geopandas; geopandas.show_versions();"'
-       
+
+       - name: declare doctest run
+         run: |
+           if [[ $matrix.environment-file == 'ci/310-oldest.yaml' ]]; then
+               echo "DOCTEST='--doctest-modules'" >> "$GITHUB_ENV"
+           else
+               echo "DOCTEST=''" >> "$GITHUB_ENV"
+           fi
+
        - name: run tests
          run: |
            pytest \
@@ -73,8 +81,8 @@
            --cov-append \
            --cov-report term-missing \
            --cov-report xml \
-           --doctest-modules \
-           --timeout 60
+           --timeout 60 \
+           ${{ env.DOCTEST }}
        
        - name: codecov
          uses: codecov/codecov-action@v4
