@@ -75,7 +75,7 @@
            --cov-report xml \
            --timeout 60
 
-      - name: run docstring tests
+       - name: run docstring tests
          if: contains(matrix.environment-file, 'ci/310-oldest.yaml')
          run: |
            pytest \
