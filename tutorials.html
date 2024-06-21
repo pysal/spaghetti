@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Tutorials &#8212; spaghetti v1.7.6 Manual</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/bootstrap-sphinx.css?v=9afac83c" />
+    <link rel="stylesheet" type="text/css" href="_static/pysal-styles.css?v=4849bb1c" />
+    <script src="_static/documentation_options.js?v=6cfcd222"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"TeX": {"equationNumbers": {"autoNumber": "AMS", "useLabelIds": true}}, "tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="icon" href="_static/pysal_favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Quickstart" href="notebooks/quickstart.html" />
+    <link rel="prev" title="Installation" href="installation.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          spaghetti</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.7.6</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="installation.html">Installation</a></li>
+                <li><a href="#">Tutorials</a></li>
+                <li><a href="api.html">API</a></li>
+                <li><a href="references.html">References</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#installing-with-conda-via-spaghetti-feedstock-highly-recommended">Installing with <code class="docutils literal notranslate"><span class="pre">conda</span></code> via spaghetti-feedstock (highly recommended)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#installing-with-python-package-index">Installing with Python Package Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#development-version">Development Version</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/quickstart.html">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/pointpattern-attributes.html">Network point pattern attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/connected-components.html">Connected components in a spatial network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/shortest-path-visualization.html">Generating regular lattices and visualizing shortest paths</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/network-segmentation.html">Spatial network segmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/network-spatial-dependence.html">Network-constrained spatial dependence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/network-spatial-weights.html">Network spatial weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/spanning-trees.html">Network spanning trees</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/caveats.html">Caveats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/network-spatial-autocorrelation.html">Network-constrained spatial autocorrelation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/facility-location.html">Demostrating network-based optimal facility location modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/transportation-problem.html">The Transportation Problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/tsp.html">The Traveling Sales(man)(person) Problem — TSP</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#network-feature-instantiation">Network feature instantiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#network-feature-extraction-and-creation">Network feature extraction and creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#save-and-load-a-network">Save and load a network</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Tutorials</a><ul>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <section id="tutorials">
+<h1>Tutorials<a class="headerlink" href="#tutorials" title="Link to this heading">¶</a></h1>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Basic functionality:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/pointpattern-attributes.html">Network point pattern attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/connected-components.html">Connected components in a spatial network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/shortest-path-visualization.html">Generating regular lattices and visualizing shortest paths</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Advanced functionality and known limitations:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/network-segmentation.html">Spatial network segmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/network-spatial-dependence.html">Network-constrained spatial dependence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/network-spatial-weights.html">Network spatial weights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/spanning-trees.html">Network spanning trees</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/caveats.html">Caveats</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Integrations &amp; applications:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/network-spatial-autocorrelation.html">Network-constrained spatial autocorrelation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/facility-location.html">Demostrating network-based optimal facility location modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/transportation-problem.html">The Transportation Problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/tsp.html">The Traveling Sales(man)(person) Problem — TSP</a></li>
+</ul>
+</div>
+<dl class="simple">
+<dt>Citations:</dt><dd><ul class="simple">
+<li><p>Advanced functionality:</p>
+<ul>
+<li><p>Spatial Dependence:
+<span id="id1">[<a class="reference internal" href="references.html#id9" title="Brian David Ripley. The Second-Order Analysis of Stationary Point Processes. Journal of Applied Probability, 13(2):255–266, 1976. doi:10.2307/3212829.">Rip76</a>]</span>, <span id="id2">[<a class="reference internal" href="references.html#id10" title="Brian David Ripley. Modelling Spatial Patterns. Journal of the Royal Statistical Society, 39(2):172–212, 1977. doi:10.1111/j.2517-6161.1977.tb01615.x.">Rip77</a>]</span>, <span id="id3">[<a class="reference internal" href="references.html#id8" title="D. ÓSullivan and D. J. Unwin. Point Pattern Analysis, chapter 5, pages 121-156. John Wiley &amp; Sons, Ltd, 2010. doi:10.1002/9780470549094.ch5.">OU10</a>]</span>, <span id="id4">[<a class="reference internal" href="references.html#id4" title="Atsuyuki Okabe and Ikuho Yamada. The K-Function Method on a Network and Its Computational Implementation. Geographical Analysis, 33(3):271-290, 2001. doi:10.1111/j.1538-4632.2001.tb00448.x.">OY01</a>]</span>, <span id="id5">[<a class="reference internal" href="references.html#id7" title="Atsuyki Okabe and Kokichi Sugihara. Network K Function Methods, chapter 6, pages 119-136. John Wiley &amp; Sons, Ltd, 2012. doi:10.1002/9781119967101.ch6.">OS12b</a>]</span></p></li>
+<li><p>Spatial Weights:
+<span id="id6">[<a class="reference internal" href="references.html#id11" title="Sergio J. Rey and Luc Anselin. PySAL: A Python Library of Spatial Analytical Methods. The Review of Regional Studies, 37(1):5-27, 2007. URL: https://rrs.scholasticahq.com/article/8285.pdf.">RA07</a>]</span>, <span id="id7">[<a class="reference internal" href="references.html#id12" title="Luc Anselin and Sergio J. Rey. Modern Spatial Econometrics in Practice: A Guide to GeoDa, GeoDaSpace and PySAL. GeoDa Press, Chicago, 2014.">AR14</a>]</span>, <span id="id8">[<a class="reference internal" href="references.html#id13" title="Sergio J. Rey, Luc Anselin, Xun Li, Robert Pahle, Jason Laura, Wenwen Li, and Julia Koschinsky. Open Geospatial Analytics with PySAL. ISPRS International Journal of Geo-Information, 4(2):815–836, 2015. doi:doi:10.3390/ijgi4020815.">RAL+15</a>]</span></p></li>
+<li><p>Spanning Trees:
+<span id="id9">[<a class="reference internal" href="references.html#id48" title="R. L. Graham and Pavol Hell. On the history of the minimum spanning tree problem. IEEE Annals of the History of Computing, 7(1):43-57, 1985. doi:10.1109/MAHC.1985.10011.">GH85</a>]</span>, <span id="id10">[<a class="reference internal" href="references.html#id18" title="Ravindra K. Ahuja, Thomas L. Magnanti, and James B. Orlin. Network Flows: Theory, Algorithms, and Applications. Prentice Hall, Englewood Cliffs, N.J., 1993. ISBN 013617549X.">AMO93</a>]</span>, <span id="id11">[<a class="reference internal" href="references.html#id5" title="Atsuyki Okabe and Kokichi Sugihara. Basic Computational Methods for Network Spatial Analysis, chapter 3, pages 45-80. John Wiley &amp; Sons, Ltd, 2012. doi:10.1002/9781119967101.ch3.">OS12a</a>]</span></p></li>
+</ul>
+</li>
+<li><p>Integrations &amp; applications:</p>
+<ul>
+<li><p>Spatial Autocorrelation:
+<span id="id12">[<a class="reference internal" href="references.html#id49" title="P. A. P. Moran. Notes on Continuous Stochastic Phenomena. Biometrika, 37(1/2):17-23, 1950. doi:10.2307/2332142.">Mor50</a>]</span>, <span id="id13">[<a class="reference internal" href="references.html#id54" title="A.D. Cliff and J.K. Ord. Spatial Processes: Models and Applications. Pion, London, 1981.">CO81</a>]</span>, <span id="id14">[<a class="reference internal" href="references.html#id53" title="Luc Anselin. Local indicators of spatial association — LISA. Geographical Analysis, 27(2):93–115, 1995. doi:10.1111/j.1538-4632.1995.tb00338.x.">Ans95</a>]</span>, <span id="id15">[<a class="reference internal" href="references.html#id50" title="Arthur Getis and J. K. Ord. The Analysis of Spatial Association by Use of Distance Statistics. Geographical Analysis, 24(3):189–206, 1992. doi:10.1111/j.1538-4632.1992.tb00261.x.">GO92</a>]</span>, <span id="id16">[<a class="reference internal" href="references.html#id14" title="S.J. Rey, L.J. Wolf, W. Kang, P. Stephens, J. Laura, C. Schmidt, D. Arribas-Bel, S. Lumnitz, J.C. Duque, D.C. Folch, L. Anselin, N. Malizia, J.D. Gaboardi, F. Fernandes, M. Seth, mhwang4, and mlyons-tcc. pysal/esda. July 2019. doi:10.5281/zenodo.3265190.">RWK+19</a>]</span>, <span id="id17">[<a class="reference internal" href="references.html#id52" title="Stefanie Lumnitz, Dani Arribas-Bel, Renan Xavier Cortes, James Gaboardi, Verena Griess, Wei Kang, Taylor Oshan, Levi John Wolf, and Sergio Rey. Splot - visual analytics for spatial statistics. March 2020. doi:10.5281/zenodo.3724199.">LABC+20a</a>]</span>, <span id="id18">[<a class="reference internal" href="references.html#id51" title="Stefanie Lumnitz, Dani Arribas-Bell, Renan X. Cortes, James D. Gaboardi, Verena Griess, Wei Kang, Taylor M. Oshan, Levi Wolf, and Sergio Rey. Splot - visual analytics for spatial statistics. Journal of Open Source Software, 5(47):1–4, 2020. doi:10.21105/joss.01882.">LABC+20b</a>]</span></p></li>
+<li><p>Facility Location:
+<span id="id19">[<a class="reference internal" href="references.html#id30" title="S. L. Hakimi. Optimum Locations of Switching Centers and the Absolute Centers and Medians of a Graph. Operations Research, 12(3):450–459, 1964. doi:10.1287/opre.12.3.450.">Hak64</a>]</span>, <span id="id20">[<a class="reference internal" href="references.html#id31" title="C. S. ReVelle and R.W. Swain. Central Facilities Location. Geographical Analysis, 2(1):30–42, 1970.">RS70</a>]</span>, <span id="id21">[<a class="reference internal" href="references.html#id32" title="Constantine Toregas, R. Swain, C. S. ReVelle, and L. Bergman. The Location of Emergency Service Facilities. Operations Research, 19(6):1363–1373, 1971. doi:10.1287/opre.19.6.1363.">TSRB71</a>]</span>, <span id="id22">[<a class="reference internal" href="references.html#id33" title="Constantine Toregas and Charles S. ReVelle. Optimal Location Under Time or Distance Constraints. Papers of the Regional Science Association, 28(1):133 – 144, 1972. doi:10.1017/CBO9781107415324.004.">TR72</a>]</span>, <span id="id23">[<a class="reference internal" href="references.html#id34" title="Richard L. Church and C.S. ReVelle. The Maximal Covering Location Problem. Papers in Regional Science Association, 32:101–118, 1974. doi:doi.org/10.1111/j.1435-5597.1974.tb00902.x.">CR74</a>]</span>, <span id="id24">[<a class="reference internal" href="references.html#id35" title="C. S. ReVelle and H. A. Eiselt. Location analysis: A synthesis and survey. European Journal of Operational Research, 165:1–19, 2005. doi:10.1016/j.ejor.2003.11.032.">RE05</a>]</span></p></li>
+<li><p>The Transportation Problem:
+<span id="id25">[<a class="reference internal" href="references.html#id47" title="Frank L. Hitchcock. The Distribution of a Product from Several Sources to Numerous Localities. Journal of Math and Physics, 20(1):224–230, 1941. doi:10.1017/CBO9781107415324.004.">Hit41</a>]</span>, <span id="id26">[<a class="reference internal" href="references.html#id45" title="Tjalling Koopmans. Optimum Utilization of the Transportation System. Econometrica, 17:136–146, 1949.">Koo49</a>]</span>, <span id="id27">[<a class="reference internal" href="references.html#id46" title="Don T. Phillips and Alberto Garcia-Diaz. Fundamentals of Network Analysis. Prentice Hall, Englewood Cliffs, NJ, 1981.">PGD81</a>]</span>, <span id="id28">[<a class="reference internal" href="references.html#id42" title="Saul I. Gass and Arjang A. Assad. An Annotated Timeline of Operations Research: An Informal History. Springer, New York, 2005.">GA05</a>]</span>, <span id="id29">[<a class="reference internal" href="references.html#id44" title="Richard L. Church and Alan T. Murray. Business Site Selection, Locational Analysis, and GIS. John Wiley &amp; Sons, Inc., Hoboken, 2009.">CM09</a>]</span>, <span id="id30">[<a class="reference internal" href="references.html#id23" title="Mark S. Daskin. Network and Discrete Location: Models, Algorithms, and Applications, Second Edition. John Wiley &amp; Sons, Ltd, 2013. ISBN 9781118537015. doi:10.1002/9781118537015.">Das13</a>]</span></p></li>
+<li><p>The Traveling Salesperson Problem:
+<span id="id31">[<a class="reference internal" href="references.html#id40" title="G. Dantzig, R. Fulkerson, and S. Johnson. Solution of a Large-Scale Traveling-Salesman Problem. Journal of the Operational Research Society of America, 2(4):393–410, 1954.">DFJ54</a>]</span>, <span id="id32">[<a class="reference internal" href="references.html#id39" title="Merrill M. Flood. The Traveling-Salesman Problem. Operations Research, 4(1):61–75, 1956.">Flo56</a>]</span>, <span id="id33">[<a class="reference internal" href="references.html#id38" title="C. E. Miller, A. W. Tucker, and R. A. Zemlin. Integer Programming Formulation of Traveling Salesman Problems. Journal of the ACM (JACM), 7(4):326–329, 1960. doi:10.1145/321043.321046.">MTZ60</a>]</span>, <span id="id34">[<a class="reference internal" href="references.html#id43" title="Nigel Cummings. A brief history of the travelling salesman problem. jun 2000. Accessed: January, 2020. URL: https://www.theorsociety.com/about-or/or-methods/heuristics/a-brief-history-of-the-travelling-salesman-problem/.">Cum00</a>]</span>, <span id="id35">[<a class="reference internal" href="references.html#id41" title="Harvey J. Miller and Shih-Lung Shaw. Geographic Information Systems for Transportation. Oxford University Press, New York, 2001.">MS01</a>]</span>, <span id="id36">[<a class="reference internal" href="references.html#id37" title="Tolga Bektaş and Luis Gouveia. Requiem for the Miller-Tucker-Zemlin subtour elimination constraints? European Journal of Operational Research, 236(3):820–832, 2014. doi:10.1016/j.ejor.2013.07.038.">BG14</a>]</span></p></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+<div id="sourcelink">
+  <a href="_sources/tutorials.rst.txt"
+     rel="nofollow">Source</a>
+</div>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017-, pysal developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

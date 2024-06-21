@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>References &#8212; spaghetti v1.7.6 Manual</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/bootstrap-sphinx.css?v=9afac83c" />
+    <link rel="stylesheet" type="text/css" href="_static/pysal-styles.css?v=4849bb1c" />
+    <script src="_static/documentation_options.js?v=6cfcd222"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="icon" href="_static/pysal_favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="spaghetti.network.Network.loadnetwork" href="generated/spaghetti.network.Network.loadnetwork.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          spaghetti</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.7.6</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="installation.html">Installation</a></li>
+                <li><a href="tutorials.html">Tutorials</a></li>
+                <li><a href="api.html">API</a></li>
+                <li><a href="#">References</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#installing-with-conda-via-spaghetti-feedstock-highly-recommended">Installing with <code class="docutils literal notranslate"><span class="pre">conda</span></code> via spaghetti-feedstock (highly recommended)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#installing-with-python-package-index">Installing with Python Package Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#development-version">Development Version</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/quickstart.html">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/pointpattern-attributes.html">Network point pattern attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/connected-components.html">Connected components in a spatial network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/shortest-path-visualization.html">Generating regular lattices and visualizing shortest paths</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/network-segmentation.html">Spatial network segmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/network-spatial-dependence.html">Network-constrained spatial dependence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/network-spatial-weights.html">Network spatial weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/spanning-trees.html">Network spanning trees</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/caveats.html">Caveats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/network-spatial-autocorrelation.html">Network-constrained spatial autocorrelation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/facility-location.html">Demostrating network-based optimal facility location modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/transportation-problem.html">The Transportation Problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/tsp.html">The Traveling Sales(man)(person) Problem — TSP</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#network-feature-instantiation">Network feature instantiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#network-feature-extraction-and-creation">Network feature extraction and creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#save-and-load-a-network">Save and load a network</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">References</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">References</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <section id="references">
+<h1>References<a class="headerlink" href="#references" title="Link to this heading">¶</a></h1>
+<div class="docutils container" id="id1">
+<div role="list" class="citation-list">
+<div class="citation" id="id18" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>AMO93<span class="fn-bracket">]</span></span>
+<p>Ravindra K. Ahuja, Thomas L. Magnanti, and James B. Orlin. <em>Network Flows: Theory, Algorithms, and Applications</em>. Prentice Hall, Englewood Cliffs, N.J., 1993. ISBN 013617549X.</p>
+</div>
+<div class="citation" id="id53" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Ans95<span class="fn-bracket">]</span></span>
+<p>Luc Anselin. Local indicators of spatial association — LISA. <em>Geographical Analysis</em>, 27(2):93–115, 1995. <a class="reference external" href="https://doi.org/10.1111/j.1538-4632.1995.tb00338.x">doi:10.1111/j.1538-4632.1995.tb00338.x</a>.</p>
+</div>
+<div class="citation" id="id12" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>AR14<span class="fn-bracket">]</span></span>
+<p>Luc Anselin and Sergio J. Rey. <em>Modern Spatial Econometrics in Practice: A Guide to GeoDa, GeoDaSpace and PySAL</em>. GeoDa Press, Chicago, 2014.</p>
+</div>
+<div class="citation" id="id3" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>BNR+20<span class="fn-bracket">]</span></span>
+<p>Adrian Baddeley, Gopalan Nair, Suman Rakshit, Greg McSwiggan, and Tilman M. Davies. Analysing point patterns on networks - A review. <em>Spatial Statistics</em>, pages 100435, 2020. <a class="reference external" href="https://doi.org/10.1016/j.spasta.2020.100435">doi:10.1016/j.spasta.2020.100435</a>.</p>
+</div>
+<div class="citation" id="id21" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Bar11<span class="fn-bracket">]</span></span>
+<p>Marc Barthélemy. Spatial networks. <em>Physics Reports</em>, 499(1–3):1–101, 2011. <a class="reference external" href="https://doi.org/https://doi.org/10.1016/j.physrep.2010.11.002">doi:https://doi.org/10.1016/j.physrep.2010.11.002</a>.</p>
+</div>
+<div class="citation" id="id37" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>BG14<span class="fn-bracket">]</span></span>
+<p>Tolga Bektaş and Luis Gouveia. Requiem for the Miller-Tucker-Zemlin subtour elimination constraints? <em>European Journal of Operational Research</em>, 236(3):820–832, 2014. <a class="reference external" href="https://doi.org/10.1016/j.ejor.2013.07.038">doi:10.1016/j.ejor.2013.07.038</a>.</p>
+</div>
+<div class="citation" id="id29" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Boe17<span class="fn-bracket">]</span></span>
+<p>Geoff Boeing. OSMnx: New Methods for Acquiring, Constructing, Analyzing, and Visualizing Complex Street Networks. <em>Computers, Environment and Urban Systems</em>, 65:126–139, 2017. <a class="reference external" href="https://doi.org/10.1016/j.compenvurbsys.2017.05.004">doi:10.1016/j.compenvurbsys.2017.05.004</a>.</p>
+</div>
+<div class="citation" id="id44" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>CM09<span class="fn-bracket">]</span></span>
+<p>Richard L. Church and Alan T. Murray. <em>Business Site Selection, Locational Analysis, and GIS</em>. John Wiley &amp; Sons, Inc., Hoboken, 2009.</p>
+</div>
+<div class="citation" id="id34" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>CR74<span class="fn-bracket">]</span></span>
+<p>Richard L. Church and C.S. ReVelle. The Maximal Covering Location Problem. <em>Papers in Regional Science Association</em>, 32:101–118, 1974. <a class="reference external" href="https://doi.org/doi.org/10.1111/j.1435-5597.1974.tb00902.x">doi:doi.org/10.1111/j.1435-5597.1974.tb00902.x</a>.</p>
+</div>
+<div class="citation" id="id16" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>CH81<span class="fn-bracket">]</span></span>
+<p>A.D. Cliff and P. Haggett. Graph Theory. In N. Wrigley and R.J. Bennett, editors, <em>Quantitative Geography: A British View</em>, chapter 22, pages 225–234. Routledge &amp; Kegan Paul, London, 1981.</p>
+</div>
+<div class="citation" id="id54" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>CO81<span class="fn-bracket">]</span></span>
+<p>A.D. Cliff and J.K. Ord. <em>Spatial Processes: Models and Applications</em>. Pion, London, 1981.</p>
+</div>
+<div class="citation" id="id43" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Cum00<span class="fn-bracket">]</span></span>
+<p>Nigel Cummings. A brief history of the travelling salesman problem. jun 2000. Accessed: January, 2020. URL: <a class="reference external" href="https://www.theorsociety.com/about-or/or-methods/heuristics/a-brief-history-of-the-travelling-salesman-problem/">https://www.theorsociety.com/about-or/or-methods/heuristics/a-brief-history-of-the-travelling-salesman-problem/</a>.</p>
+</div>
+<div class="citation" id="id40" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>DFJ54<span class="fn-bracket">]</span></span>
+<p>G. Dantzig, R. Fulkerson, and S. Johnson. Solution of a Large-Scale Traveling-Salesman Problem. <em>Journal of the Operational Research Society of America</em>, 2(4):393–410, 1954.</p>
+</div>
+<div class="citation" id="id23" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Das13<span class="fn-bracket">]</span></span>
+<p>Mark S. Daskin. <em>Network and Discrete Location: Models, Algorithms, and Applications, Second Edition</em>. John Wiley &amp; Sons, Ltd, 2013. ISBN 9781118537015. <a class="reference external" href="https://doi.org/10.1002/9781118537015">doi:10.1002/9781118537015</a>.</p>
+</div>
+<div class="citation" id="id2" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Dij59<span class="fn-bracket">]</span></span>
+<p>E. W. Dijkstra. A Note on Two Problems in Connexion with Graphs. <em>Numerische Mathematik</em>, 1(1):269–271, 1959. <a class="reference external" href="https://doi.org/10.1007/BF01386390">doi:10.1007/BF01386390</a>.</p>
+</div>
+<div class="citation" id="id24" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>DB14<span class="fn-bracket">]</span></span>
+<p>César Ducruet and Laurent Beauguitte. Spatial Science and Network Science: Review and Outcomes of a Complex Relationship. <em>Networks and Spatial Economics</em>, 14(3–4):297–316, 2014. <a class="reference external" href="https://doi.org/10.1007/s11067-013-9222-6">doi:10.1007/s11067-013-9222-6</a>.</p>
+</div>
+<div class="citation" id="id39" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Flo56<span class="fn-bracket">]</span></span>
+<p>Merrill M. Flood. The Traveling-Salesman Problem. <em>Operations Research</em>, 4(1):61–75, 1956.</p>
+</div>
+<div class="citation" id="id28" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>FWL12<span class="fn-bracket">]</span></span>
+<p>Fletcher Foti, Paul Waddell, and Dennis Luxen. A Generalized Computational Framework for Accessibility: From the Pedestrian to the Metropolitan Scale. <em>4th Transportation Research Board Conference on Innovations in Travel Modeling (ITM)</em>, pages 1–14, 2012.</p>
+</div>
+<div class="citation" id="id15" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>GFH20<span class="fn-bracket">]</span></span>
+<p>James D. Gaboardi, David C. Folch, and Mark W. Horner. Connecting Points to Spatial Networks: Effects on Discrete Optimization Models. <em>Geographical Analysis</em>, 52:299–322, 2020. <a class="reference external" href="https://doi.org/10.1111/gean.12211">doi:10.1111/gean.12211</a>.</p>
+</div>
+<div class="citation" id="id55" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>GRL21<span class="fn-bracket">]</span></span>
+<p>James D. Gaboardi, Sergio Rey, and Stefanie Lumnitz. spaghetti: spatial network analysis in PySAL. <em>Journal of Open Source Software</em>, 6(62):2826, 2021. <a class="reference external" href="https://doi.org/10.21105/joss.02826">doi:10.21105/joss.02826</a>.</p>
+</div>
+<div class="citation" id="id42" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>GA05<span class="fn-bracket">]</span></span>
+<p>Saul I. Gass and Arjang A. Assad. <em>An Annotated Timeline of Operations Research: An Informal History</em>. Springer, New York, 2005.</p>
+</div>
+<div class="citation" id="id50" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>GO92<span class="fn-bracket">]</span></span>
+<p>Arthur Getis and J. K. Ord. The Analysis of Spatial Association by Use of Distance Statistics. <em>Geographical Analysis</em>, 24(3):189–206, 1992. <a class="reference external" href="https://doi.org/10.1111/j.1538-4632.1992.tb00261.x">doi:10.1111/j.1538-4632.1992.tb00261.x</a>.</p>
+</div>
+<div class="citation" id="id48" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>GH85<span class="fn-bracket">]</span></span>
+<p>R. L. Graham and Pavol Hell. On the history of the minimum spanning tree problem. <em>IEEE Annals of the History of Computing</em>, 7(1):43–57, 1985. <a class="reference external" href="https://doi.org/10.1109/MAHC.1985.10011">doi:10.1109/MAHC.1985.10011</a>.</p>
+</div>
+<div class="citation" id="id27" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>HSS08<span class="fn-bracket">]</span></span>
+<p>A.A. Hagberg, D.A. Schult, and P.J. Swart. Exploring Network Structure, Dynamics, and Function using NetworkX. In G. Varoquaux, T. Vaught, and J. Millman, editors, <em>Proceedings of the 7th Python in Science Conference (SciPy 2008)</em>, 11–15. Pasadena, CA USA, 2008.</p>
+</div>
+<div class="citation" id="id30" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Hak64<span class="fn-bracket">]</span></span>
+<p>S. L. Hakimi. Optimum Locations of Switching Centers and the Absolute Centers and Medians of a Graph. <em>Operations Research</em>, 12(3):450–459, 1964. <a class="reference external" href="https://doi.org/10.1287/opre.12.3.450">doi:10.1287/opre.12.3.450</a>.</p>
+</div>
+<div class="citation" id="id47" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Hit41<span class="fn-bracket">]</span></span>
+<p>Frank L. Hitchcock. The Distribution of a Product from Several Sources to Numerous Localities. <em>Journal of Math and Physics</em>, 20(1):224–230, 1941. <a class="reference external" href="https://doi.org/10.1017/CBO9781107415324.004">doi:10.1017/CBO9781107415324.004</a>.</p>
+</div>
+<div class="citation" id="id45" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Koo49<span class="fn-bracket">]</span></span>
+<p>Tjalling Koopmans. Optimum Utilization of the Transportation System. <em>Econometrica</em>, 17:136–146, 1949.</p>
+</div>
+<div class="citation" id="id20" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>KRUT09<span class="fn-bracket">]</span></span>
+<p>M.J. Kuby, T.D. Roberts, C.D. Upchurch, and S. Tierney. Network Analysis. In Rob Kitchin and Nigel Thrift, editors, <em>International Encyclopedia of Human Geography</em>, pages 391–398. Elsevier, Oxford, 2009. <a class="reference external" href="https://doi.org/https://doi.org/10.1016/B978-008044910-4.00481-8">doi:https://doi.org/10.1016/B978-008044910-4.00481-8</a>.</p>
+</div>
+<div class="citation" id="id19" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>LPT95<span class="fn-bracket">]</span></span>
+<p>Martine Labbé, Dominique Peeters, and Jacques-François Thisse. Location on Networks. In <em>Network Routing</em>, volume 8 of Handbooks in Operations Research and Management Science, chapter 7, pages 551–624. Elsevier, 1995. <a class="reference external" href="https://doi.org/10.1016/S0927-0507(05)80111-2">doi:10.1016/S0927-0507(05)80111-2</a>.</p>
+</div>
+<div class="citation" id="id52" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>LABC+20a<span class="fn-bracket">]</span></span>
+<p>Stefanie Lumnitz, Dani Arribas-Bel, Renan Xavier Cortes, James Gaboardi, Verena Griess, Wei Kang, Taylor Oshan, Levi John Wolf, and Sergio Rey. Splot - visual analytics for spatial statistics. March 2020. <a class="reference external" href="https://doi.org/10.5281/zenodo.3724199">doi:10.5281/zenodo.3724199</a>.</p>
+</div>
+<div class="citation" id="id51" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>LABC+20b<span class="fn-bracket">]</span></span>
+<p>Stefanie Lumnitz, Dani Arribas-Bell, Renan X. Cortes, James D. Gaboardi, Verena Griess, Wei Kang, Taylor M. Oshan, Levi Wolf, and Sergio Rey. Splot - visual analytics for spatial statistics. <em>Journal of Open Source Software</em>, 5(47):1–4, 2020. <a class="reference external" href="https://doi.org/10.21105/joss.01882">doi:10.21105/joss.01882</a>.</p>
+</div>
+<div class="citation" id="id38" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>MTZ60<span class="fn-bracket">]</span></span>
+<p>C. E. Miller, A. W. Tucker, and R. A. Zemlin. Integer Programming Formulation of Traveling Salesman Problems. <em>Journal of the ACM (JACM)</em>, 7(4):326–329, 1960. <a class="reference external" href="https://doi.org/10.1145/321043.321046">doi:10.1145/321043.321046</a>.</p>
+</div>
+<div class="citation" id="id41" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>MS01<span class="fn-bracket">]</span></span>
+<p>Harvey J. Miller and Shih-Lung Shaw. <em>Geographic Information Systems for Transportation</em>. Oxford University Press, New York, 2001.</p>
+</div>
+<div class="citation" id="id49" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Mor50<span class="fn-bracket">]</span></span>
+<p>P. A. P. Moran. Notes on Continuous Stochastic Phenomena. <em>Biometrika</em>, 37(1/2):17–23, 1950. <a class="reference external" href="https://doi.org/10.2307/2332142">doi:10.2307/2332142</a>.</p>
+</div>
+<div class="citation" id="id5" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>OS12a<span class="fn-bracket">]</span></span>
+<p>Atsuyki Okabe and Kokichi Sugihara. <em>Basic Computational Methods for Network Spatial Analysis</em>, chapter 3, pages 45–80. John Wiley &amp; Sons, Ltd, 2012. <a class="reference external" href="https://doi.org/10.1002/9781119967101.ch3">doi:10.1002/9781119967101.ch3</a>.</p>
+</div>
+<div class="citation" id="id7" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>OS12b<span class="fn-bracket">]</span></span>
+<p>Atsuyki Okabe and Kokichi Sugihara. <em>Network K Function Methods</em>, chapter 6, pages 119–136. John Wiley &amp; Sons, Ltd, 2012. <a class="reference external" href="https://doi.org/10.1002/9781119967101.ch6">doi:10.1002/9781119967101.ch6</a>.</p>
+</div>
+<div class="citation" id="id6" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>OS12c<span class="fn-bracket">]</span></span>
+<p>Atsuyki Okabe and Kokichi Sugihara. <em>Network Nearest-Neighbor Distance Methods</em>, chapter 5, pages 101–118. John Wiley &amp; Sons, Ltd, 2012. <a class="reference external" href="https://doi.org/10.1002/9781119967101.ch5">doi:10.1002/9781119967101.ch5</a>.</p>
+</div>
+<div class="citation" id="id22" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>OS12d<span class="fn-bracket">]</span></span>
+<p>Atsuyki Okabe and Kokichi Sugihara. <em>Spatial Analysis Along Networks</em>. John Wiley &amp; Sons, Inc., West Sussex, UK, 2012. <a class="reference external" href="https://doi.org/10.1002/9781119967101">doi:10.1002/9781119967101</a>.</p>
+</div>
+<div class="citation" id="id26" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>OOS06<span class="fn-bracket">]</span></span>
+<p>Atsuyuki Okabe, Keiichi Okunuki, and Shino Shiode. SANET: A Toolbox for Spatial Analysis on a Network. <em>Geographical Analysis</em>, 38:57–66, 2006. <a class="reference external" href="https://doi.org/10.1111/j.0016-7363.2005.00674.x">doi:10.1111/j.0016-7363.2005.00674.x</a>.</p>
+</div>
+<div class="citation" id="id4" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>OY01<span class="fn-bracket">]</span></span>
+<p>Atsuyuki Okabe and Ikuho Yamada. The K-Function Method on a Network and Its Computational Implementation. <em>Geographical Analysis</em>, 33(3):271–290, 2001. <a class="reference external" href="https://doi.org/10.1111/j.1538-4632.2001.tb00448.x">doi:10.1111/j.1538-4632.2001.tb00448.x</a>.</p>
+</div>
+<div class="citation" id="id46" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>PGD81<span class="fn-bracket">]</span></span>
+<p>Don T. Phillips and Alberto Garcia-Diaz. <em>Fundamentals of Network Analysis</em>. Prentice Hall, Englewood Cliffs, NJ, 1981.</p>
+</div>
+<div class="citation" id="id35" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>RE05<span class="fn-bracket">]</span></span>
+<p>C. S. ReVelle and H. A. Eiselt. Location analysis: A synthesis and survey. <em>European Journal of Operational Research</em>, 165:1–19, 2005. <a class="reference external" href="https://doi.org/10.1016/j.ejor.2003.11.032">doi:10.1016/j.ejor.2003.11.032</a>.</p>
+</div>
+<div class="citation" id="id31" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>RS70<span class="fn-bracket">]</span></span>
+<p>C. S. ReVelle and R.W. Swain. Central Facilities Location. <em>Geographical Analysis</em>, 2(1):30–42, 1970.</p>
+</div>
+<div class="citation" id="id56" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>RAA+21<span class="fn-bracket">]</span></span>
+<p>S.J. Rey, L. Anselin, P. Amaral, D. Arribas-Bel, R.X. Cortes, J.D. Gaboardi, W. Kang, E. Knaap, Z. Li, S. Lumnitz, T.M. Oshan, H. Shao, and L.J. Wolf. The PySAL Ecosystem: Philosophy and Implementation. <em>Geographical Analysis</em>, 2021. <a class="reference external" href="https://doi.org/10.1111/gean.12276">doi:10.1111/gean.12276</a>.</p>
+</div>
+<div class="citation" id="id14" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>RWK+19<span class="fn-bracket">]</span></span>
+<p>S.J. Rey, L.J. Wolf, W. Kang, P. Stephens, J. Laura, C. Schmidt, D. Arribas-Bel, S. Lumnitz, J.C. Duque, D.C. Folch, L. Anselin, N. Malizia, J.D. Gaboardi, F. Fernandes, M. Seth, mhwang4, and mlyons-tcc. pysal/esda. July 2019. <a class="reference external" href="https://doi.org/10.5281/zenodo.3265190">doi:10.5281/zenodo.3265190</a>.</p>
+</div>
+<div class="citation" id="id11" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>RA07<span class="fn-bracket">]</span></span>
+<p>Sergio J. Rey and Luc Anselin. PySAL: A Python Library of Spatial Analytical Methods. <em>The Review of Regional Studies</em>, 37(1):5–27, 2007. URL: <a class="reference external" href="https://rrs.scholasticahq.com/article/8285.pdf">https://rrs.scholasticahq.com/article/8285.pdf</a>.</p>
+</div>
+<div class="citation" id="id13" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>RAL+15<span class="fn-bracket">]</span></span>
+<p>Sergio J. Rey, Luc Anselin, Xun Li, Robert Pahle, Jason Laura, Wenwen Li, and Julia Koschinsky. Open Geospatial Analytics with PySAL. <em>ISPRS International Journal of Geo-Information</em>, 4(2):815–836, 2015. <a class="reference external" href="https://doi.org/doi:10.3390/ijgi4020815">doi:doi:10.3390/ijgi4020815</a>.</p>
+</div>
+<div class="citation" id="id9" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Rip76<span class="fn-bracket">]</span></span>
+<p>Brian David Ripley. The Second-Order Analysis of Stationary Point Processes. <em>Journal of Applied Probability</em>, 13(2):255–266, 1976. <a class="reference external" href="https://doi.org/10.2307/3212829">doi:10.2307/3212829</a>.</p>
+</div>
+<div class="citation" id="id10" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Rip77<span class="fn-bracket">]</span></span>
+<p>Brian David Ripley. Modelling Spatial Patterns. <em>Journal of the Royal Statistical Society</em>, 39(2):172–212, 1977. <a class="reference external" href="https://doi.org/10.1111/j.2517-6161.1977.tb01615.x">doi:10.1111/j.2517-6161.1977.tb01615.x</a>.</p>
+</div>
+<div class="citation" id="id36" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>RK19<span class="fn-bracket">]</span></span>
+<p>Tom Russell and Elco Koks. tomalrussell/snkit: v1.6.0. August 2019. <a class="reference external" href="https://doi.org/10.5281/zenodo.3379659">doi:10.5281/zenodo.3379659</a>.</p>
+</div>
+<div class="citation" id="id17" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>TF83<span class="fn-bracket">]</span></span>
+<p>Barbaros C. Tansel and Timothy J. Francis, Richard L .and Lowe. State of the Art—Location on Networks: A survey. Part I: The p-center and p-median Problems. <em>Management Science</em>, 29(4):482–497, 1983. <a class="reference external" href="https://doi.org/https://doi.org/10.1287/mnsc.29.4.482">doi:https://doi.org/10.1287/mnsc.29.4.482</a>.</p>
+</div>
+<div class="citation" id="id33" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>TR72<span class="fn-bracket">]</span></span>
+<p>Constantine Toregas and Charles S. ReVelle. Optimal Location Under Time or Distance Constraints. <em>Papers of the Regional Science Association</em>, 28(1):133 – 144, 1972. <a class="reference external" href="https://doi.org/10.1017/CBO9781107415324.004">doi:10.1017/CBO9781107415324.004</a>.</p>
+</div>
+<div class="citation" id="id32" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>TSRB71<span class="fn-bracket">]</span></span>
+<p>Constantine Toregas, R. Swain, C. S. ReVelle, and L. Bergman. The Location of Emergency Service Facilities. <em>Operations Research</em>, 19(6):1363–1373, 1971. <a class="reference external" href="https://doi.org/10.1287/opre.19.6.1363">doi:10.1287/opre.19.6.1363</a>.</p>
+</div>
+<div class="citation" id="id25" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Web16<span class="fn-bracket">]</span></span>
+<p>Joe Weber. The Properties of Topological Network Connectivity Measures and Their Application to U.S. Urban Freeway Networks. <em>The Professional Geographer</em>, 0124(January):1–11, 2016. <a class="reference external" href="https://doi.org/10.1080/00330124.2015.1106324">doi:10.1080/00330124.2015.1106324</a>.</p>
+</div>
+<div class="citation" id="id8" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>OU10<span class="fn-bracket">]</span></span>
+<p>D. ÓSullivan and D. J. Unwin. <em>Point Pattern Analysis</em>, chapter 5, pages 121–156. John Wiley &amp; Sons, Ltd, 2010. <a class="reference external" href="https://doi.org/10.1002/9780470549094.ch5">doi:10.1002/9780470549094.ch5</a>.</p>
+</div>
+</div>
+</div>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+<div id="sourcelink">
+  <a href="_sources/references.rst.txt"
+     rel="nofollow">Source</a>
+</div>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017-, pysal developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

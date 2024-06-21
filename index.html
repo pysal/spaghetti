@@ -1,110 +1,324 @@
-
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <title>Welcome to No Errors Test Project’s documentation! &#8212; No Errors Test Project  documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>spaghetti &#8212; spaghetti v1.7.6 Manual</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/bootstrap-sphinx.css?v=9afac83c" />
+    <link rel="stylesheet" type="text/css" href="_static/pysal-styles.css?v=4849bb1c" />
+    <script src="_static/documentation_options.js?v=6cfcd222"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"TeX": {"equationNumbers": {"autoNumber": "AMS", "useLabelIds": true}}, "tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="icon" href="_static/pysal_favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-   
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+    <link rel="next" title="Installation" href="installation.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
 
   </head><body>
-  
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">
+          spaghetti</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.7.6</b></span>
+      </div>
 
-          <div class="body" role="main">
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
             
-  <div class="section" id="welcome-to-no-errors-test-project-s-documentation">
-<h1>Welcome to No Errors Test Project’s documentation!<a class="headerlink" href="#welcome-to-no-errors-test-project-s-documentation" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-</div>
-</div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+                <li><a href="installation.html">Installation</a></li>
+                <li><a href="tutorials.html">Tutorials</a></li>
+                <li><a href="api.html">API</a></li>
+                <li><a href="references.html">References</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#installing-with-conda-via-spaghetti-feedstock-highly-recommended">Installing with <code class="docutils literal notranslate"><span class="pre">conda</span></code> via spaghetti-feedstock (highly recommended)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#installing-with-python-package-index">Installing with Python Package Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#development-version">Development Version</a></li>
 </ul>
-</div>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/quickstart.html">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/pointpattern-attributes.html">Network point pattern attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/connected-components.html">Connected components in a spatial network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/shortest-path-visualization.html">Generating regular lattices and visualizing shortest paths</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/network-segmentation.html">Spatial network segmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/network-spatial-dependence.html">Network-constrained spatial dependence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/network-spatial-weights.html">Network spatial weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/spanning-trees.html">Network spanning trees</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/caveats.html">Caveats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/network-spatial-autocorrelation.html">Network-constrained spatial autocorrelation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/facility-location.html">Demostrating network-based optimal facility location modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/transportation-problem.html">The Transportation Problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/tsp.html">The Traveling Sales(man)(person) Problem — TSP</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#network-feature-instantiation">Network feature instantiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#network-feature-extraction-and-creation">Network feature extraction and creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#save-and-load-a-network">Save and load a network</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#"><cite>spaghetti</cite></a><ul>
+<li><a class="reference internal" href="#spatial-graphs-networks-topology-inference"><strong>SPA</strong>tial <strong>G</strong>rap<strong>H</strong>s: n<strong>ET</strong>works, <strong>T</strong>opology, &amp; <strong>I</strong>nference</a></li>
+<li><a class="reference internal" href="#history">History</a></li>
+<li><a class="reference internal" href="#development">Development</a></li>
+<li><a class="reference internal" href="#support">Support</a></li>
+<li><a class="reference internal" href="#citing-spaghetti">Citing <cite>spaghetti</cite></a></li>
+<li><a class="reference internal" href="#citing-work">Citing Work</a></li>
+<li><a class="reference internal" href="#funding">Funding</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
 
-
-          </div>
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
           
         </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="#">No Errors Test Project</a></h1>
+    </div>
+  </div>
 
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <img
+    src="_static/images/spaghetti_nav_logo.svg"
+    class="img-responsive center-block"
+    alt="spaghetti logo"
+    width="470"
+    height="200"
+><section id="spaghetti">
+<h1><cite>spaghetti</cite><a class="headerlink" href="#spaghetti" title="Link to this heading">¶</a></h1>
+<section id="spatial-graphs-networks-topology-inference">
+<h2><strong>SPA</strong>tial <strong>G</strong>rap<strong>H</strong>s: n<strong>ET</strong>works, <strong>T</strong>opology, &amp; <strong>I</strong>nference<a class="headerlink" href="#spatial-graphs-networks-topology-inference" title="Link to this heading">¶</a></h2>
+<p><cite>Spaghetti</cite> is an open-source Python library for the analysis of network-based
+spatial data. Originating from the <cite>network</cite> module in <a class="reference external" href="http://pysal.org">PySAL (Python Spatial
+Analysis Library)</a>, it is under active development for the
+inclusion of newly proposed methods for building graph-theoretic networks and
+the analysis of network events. An installation guide, API reference,
+and usage tutorials are provided here through the links above.</p>
+<div class="container-fluid">
+  <div class="row equal-width">
+    <div class="col-sm-.5 col-xs-hidden">
+    </div>
+    <div class="col-md-6 col-xs-15">
+        <a
+            href="https://pysal.org/spaghetti/notebooks/network-segmentation.html"
+            class="thumbnail"
+        >
+            <img
+                src="_static/images/crime_counts.png"
+                class="img-responsive center-block"
+            >
+            <div class="caption text-center">
+            <h6>Network Representations</h6>
+            </div>
+        </a>
+    </div>
+    <div class="col-sm-6 col-xs-15">
+        <a
+            href="https://pysal.org/spaghetti/notebooks/network-spatial-dependence.html"
+            class="thumbnail"
+        >
+            <img
+                src="_static/images/network_k.png"
+                class="img-responsive center-block"
+            >
+            <div class="caption text-center">
+            <h6>Network Spatial Dependence</h6>
+            </div>
+        </a>
+    </div>
+    </div>
+    <div class="col-sm-.5 col-xs-hidden">
+    </div>
+  </div>
+</div></section>
+<section id="history">
+<h2>History<a class="headerlink" href="#history" title="Link to this heading">¶</a></h2>
+<p><cite>Spaghetti</cite> was
+created and has evolved in line with the Python Spatial Analysis Library ecosystem for
+the specific purpose of utilizing the functionality of spatial weights in
+<a class="reference external" href="https://pysal.org/libpysal/">libpysal</a> for generating network segment contiguity objects.
+The PySAL project was started in the mid-2000s when installation was difficult to maintain.
+Due to the non-triviality of relying on dependencies to secondary packages, a conscious
+decision was made to limit dependencies and build native PySAL data structures in cases
+where at all possible. Therefore, the original <cite>pysal.network</cite> submodule was developed to
+address the need for integrating support for network data structures with PySAL weights
+data structures, with the target audience being spatial data scientists and anyone
+interested in investigating network-centric phenomena within PySAL. Owing to the
+co-development of network functionality found within <cite>spaghetti</cite> and the evolution of
+the wider PySAL ecosystem, today, the package provides specialized network functionality
+that easily integrates with the rest of PySAL. This allows users of <cite>spaghetti</cite>’s network
+functionality to access spatial analysis functionality that complements network analysis,
+such as spatial statistical tools with <cite>esda</cite> and integration with core components of
+<cite>libpysal</cite>: <cite>libpysal.weights</cite> (mentioned above),
+<cite>libpysal.cg</cite> (computational geometry and data structures),
+<cite>libpysal.io</cite> (input-output), and <cite>libpysal.examples</cite> (built-in example data).</p>
+</section>
+<section id="development">
+<h2>Development<a class="headerlink" href="#development" title="Link to this heading">¶</a></h2>
+<p>Development of <cite>spaghetti</cite> is hosted on <a class="reference external" href="https://github.com/pysal/spaghetti">GitHub</a>.</p>
+</section>
+<section id="support">
+<h2>Support<a class="headerlink" href="#support" title="Link to this heading">¶</a></h2>
+<p>All questions, comments, &amp; discussions should happen in a public forum, where possible.
+Please start a <a class="reference external" href="https://github.com/pysal/spaghetti/discussions">discussion</a> for questions, talk to us in <a class="reference external" href="https://discord.gg/BxFTEPFFZn">PySAL’s Discord channel</a>, or open an <a class="reference external" href="https://github.com/pysal/spaghetti/issues">issue</a> if there appears to be a
+bug. Private messages and emails will not be answered in a substantive manner.</p>
+</section>
+<section id="citing-spaghetti">
+<h2>Citing <cite>spaghetti</cite><a class="headerlink" href="#citing-spaghetti" title="Link to this heading">¶</a></h2>
+<p>If you use PySAL-spaghetti in a scientific publication, we would appreciate using the following BibTeX citations:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@article</span><span class="p">{</span><span class="n">Gaboardi2021</span><span class="p">,</span>
+  <span class="n">doi</span>         <span class="o">=</span> <span class="p">{</span><span class="mf">10.21105</span><span class="o">/</span><span class="n">joss</span><span class="mf">.02826</span><span class="p">},</span>
+  <span class="n">url</span>         <span class="o">=</span> <span class="p">{</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">doi</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="mf">10.21105</span><span class="o">/</span><span class="n">joss</span><span class="mf">.02826</span><span class="p">},</span>
+  <span class="n">year</span>        <span class="o">=</span> <span class="p">{</span><span class="mi">2021</span><span class="p">},</span>
+  <span class="n">publisher</span>   <span class="o">=</span> <span class="p">{</span><span class="n">The</span> <span class="n">Open</span> <span class="n">Journal</span><span class="p">},</span>
+  <span class="n">volume</span>      <span class="o">=</span> <span class="p">{</span><span class="mi">6</span><span class="p">},</span>
+  <span class="n">number</span>      <span class="o">=</span> <span class="p">{</span><span class="mi">62</span><span class="p">},</span>
+  <span class="n">pages</span>       <span class="o">=</span> <span class="p">{</span><span class="mi">2826</span><span class="p">},</span>
+  <span class="n">author</span>      <span class="o">=</span> <span class="p">{</span><span class="n">James</span> <span class="n">D</span><span class="o">.</span> <span class="n">Gaboardi</span> <span class="ow">and</span> <span class="n">Sergio</span> <span class="n">Rey</span> <span class="ow">and</span> <span class="n">Stefanie</span> <span class="n">Lumnitz</span><span class="p">},</span>
+  <span class="n">title</span>       <span class="o">=</span> <span class="p">{</span><span class="n">spaghetti</span><span class="p">:</span> <span class="n">spatial</span> <span class="n">network</span> <span class="n">analysis</span> <span class="ow">in</span> <span class="n">PySAL</span><span class="p">},</span>
+  <span class="n">journal</span>     <span class="o">=</span> <span class="p">{</span><span class="n">Journal</span> <span class="n">of</span> <span class="n">Open</span> <span class="n">Source</span> <span class="n">Software</span><span class="p">}</span>
+<span class="p">}</span>
 
-
-
-
-
-
-
-<h3>Navigation</h3>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="#">Documentation overview</a><ul>
-  </ul></li>
+<span class="nd">@misc</span><span class="p">{</span><span class="n">Gaboardi2018</span><span class="p">,</span>
+  <span class="n">author</span>      <span class="o">=</span> <span class="p">{</span><span class="n">Gaboardi</span><span class="p">,</span> <span class="n">James</span> <span class="n">D</span><span class="o">.</span> <span class="ow">and</span> <span class="n">Laura</span><span class="p">,</span> <span class="n">Jay</span> <span class="ow">and</span> <span class="n">Rey</span><span class="p">,</span> <span class="n">Sergio</span> <span class="ow">and</span>
+                 <span class="n">Wolf</span><span class="p">,</span> <span class="n">Levi</span> <span class="n">John</span> <span class="ow">and</span> <span class="n">Folch</span><span class="p">,</span> <span class="n">David</span> <span class="n">C</span><span class="o">.</span> <span class="ow">and</span> <span class="n">Kang</span><span class="p">,</span> <span class="n">Wei</span> <span class="ow">and</span>
+                 <span class="n">Stephens</span><span class="p">,</span> <span class="n">Philip</span> <span class="ow">and</span> <span class="n">Schmidt</span><span class="p">,</span> <span class="n">Charles</span><span class="p">},</span>
+  <span class="n">month</span>       <span class="o">=</span> <span class="p">{</span><span class="nb">oct</span><span class="p">},</span>
+  <span class="n">year</span>        <span class="o">=</span> <span class="p">{</span><span class="mi">2018</span><span class="p">},</span>
+  <span class="n">title</span>       <span class="o">=</span> <span class="p">{</span><span class="n">pysal</span><span class="o">/</span><span class="n">spaghetti</span><span class="p">},</span>
+  <span class="n">url</span>         <span class="o">=</span> <span class="p">{</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">pysal</span><span class="o">/</span><span class="n">spaghetti</span><span class="p">},</span>
+  <span class="n">doi</span>         <span class="o">=</span> <span class="p">{</span><span class="mf">10.5281</span><span class="o">/</span><span class="n">zenodo</span><span class="mf">.1343650</span><span class="p">},</span>
+  <span class="n">keywords</span>    <span class="o">=</span> <span class="p">{</span><span class="n">graph</span><span class="o">-</span><span class="n">theory</span><span class="p">,</span><span class="n">network</span><span class="o">-</span><span class="n">analysis</span><span class="p">,</span><span class="n">python</span><span class="p">,</span><span class="n">spatial</span><span class="o">-</span><span class="n">networks</span><span class="p">,</span><span class="n">topology</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="citing-work">
+<h2>Citing Work<a class="headerlink" href="#citing-work" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Lovelace, R</strong>. <cite>Open source tools for geographic analysis in transport planning</cite>. Journal of Geographical Systems (2021): 1-32. <a class="reference external" href="https://doi.org/10.1007/s10109-020-00342-2">https://doi.org/10.1007/s10109-020-00342-2</a>.</p></li>
+<li><p><strong>Rey, Sergio J., et al</strong>. <cite>The PySAL Ecosystem: Philosophy and Implementation</cite>. Geographical Analysis (2022): 467-487. <a class="reference external" href="https://doi.org/10.1111/gean.12276">https://doi.org/10.1111/gean.12276</a>.</p></li>
+<li><p><strong>Barboza-Salerno, Gia E., and Jacquelyn CA Meshelemiah</strong>. <cite>Gun Violence on Walkable Routes to and from School: Recommendations for Policy and Practice</cite>. Journal of Urban Health (2023): 1-16. <a class="reference external" href="https://doi.org/10.1007/s11524-023-00802-2">https://doi.org/10.1007/s11524-023-00802-2</a></p></li>
+<li><p><strong>Barboza, Gia, and Jacquelyn Meshelemiah</strong>. <cite>Danger, Students Beware, School Ahead! Gun Violence Exposure Near Schools in Compton, California</cite>. (2023). <a class="reference external" href="https://doi.org/10.21203/rs.3.rs-2976516/v1">https://doi.org/10.21203/rs.3.rs-2976516/v1</a></p></li>
 </ul>
+</section>
+<section id="funding">
+<h2>Funding<a class="headerlink" href="#funding" title="Link to this heading">¶</a></h2>
+<p>This project is/was partially funded through:</p>
+<figure class="align-left" id="id1">
+<a class="reference external image-reference" href="https://atlantardc.wordpress.com"><img alt="_images/ardc_logo.png" src="_images/ardc_logo.png" style="width: 150px;" />
+</a>
+<figcaption>
+<p><span class="caption-text">The Atlanta Research Data Center: <a class="reference external" href="https://atlantardc.files.wordpress.com/2018/05/ardc-newsletter_2018_2.pdf">A Polygon-Based Approach to Spatial Network Allocation</a></span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<figure class="align-left" id="id2">
+<a class="reference external image-reference" href="https://www.nsf.gov/index.jsp"><img alt="_images/nsf_logo.png" src="_images/nsf_logo.png" style="width: 100px;" />
+</a>
+<figcaption>
+<p><span class="caption-text">National Science Foundation Award #1825768: <a class="reference external" href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=1825768&amp;HistoricalAwards=false">National Historical Geographic Information System</a></span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<img
+    src="_static/images/pysal_logo.svg"
+    class="img-responsive center-block"
+    alt="PySAL Logo"
+    width="400"
+    height="400"
+><div class="toctree-wrapper compound">
 </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
+</section>
+</section>
+
+
     </div>
+      
+  </div>
 </div>
-<script>$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &copy;2019, sphinx-action Test Suite.
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
       
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+        <br/>
+        
+<div id="sourcelink">
+  <a href="_sources/index.rst.txt"
+     rel="nofollow">Source</a>
+</div>
       
-      |
-      <a href="_sources/index.rst.txt"
-          rel="nofollow">Page source</a>
-    </div>
-
-    
-
-    
+    </p>
+    <p>
+        &copy; Copyright 2017-, pysal developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7.<br/>
+    </p>
+  </div>
+</footer>
   </body>
 </html>

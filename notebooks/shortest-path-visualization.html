@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Generating regular lattices and visualizing shortest paths &#8212; spaghetti v1.7.6 Manual</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=9afac83c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pysal-styles.css?v=4849bb1c" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+    <script src="../_static/documentation_options.js?v=6cfcd222"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"TeX": {"equationNumbers": {"autoNumber": "AMS", "useLabelIds": true}}, "tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="icon" href="../_static/pysal_favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Spatial network segmentation" href="network-segmentation.html" />
+    <link rel="prev" title="Connected components in a spatial network" href="connected-components.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          spaghetti</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.7.6</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../installation.html">Installation</a></li>
+                <li><a href="../tutorials.html">Tutorials</a></li>
+                <li><a href="../api.html">API</a></li>
+                <li><a href="../references.html">References</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#installing-with-conda-via-spaghetti-feedstock-highly-recommended">Installing with <code class="docutils literal notranslate"><span class="pre">conda</span></code> via spaghetti-feedstock (highly recommended)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#installing-with-python-package-index">Installing with Python Package Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#development-version">Development Version</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pointpattern-attributes.html">Network point pattern attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="connected-components.html">Connected components in a spatial network</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Generating regular lattices and visualizing shortest paths</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network-segmentation.html">Spatial network segmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network-spatial-dependence.html">Network-constrained spatial dependence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network-spatial-weights.html">Network spatial weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spanning-trees.html">Network spanning trees</a></li>
+<li class="toctree-l2"><a class="reference internal" href="caveats.html">Caveats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network-spatial-autocorrelation.html">Network-constrained spatial autocorrelation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="facility-location.html">Demostrating network-based optimal facility location modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transportation-problem.html">The Transportation Problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tsp.html">The Traveling Sales(man)(person) Problem — TSP</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#network-feature-instantiation">Network feature instantiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#network-feature-extraction-and-creation">Network feature extraction and creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#save-and-load-a-network">Save and load a network</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Generating regular lattices and visualizing shortest paths</a><ul>
+<li><a class="reference internal" href="#Creating-data-for-testing-and-demonstrating-routes">Creating data for testing and demonstrating routes</a></li>
+<li><a class="reference internal" href="#1.-Demonstration-with-a-synthetic-network">1. Demonstration with a synthetic network</a><ul>
+<li><a class="reference internal" href="#1.1-Instantiate-a-network-from-a-4x4-regular-lattice">1.1 Instantiate a network from a 4x4 regular lattice</a></li>
+<li><a class="reference internal" href="#1.2.-Extract-network-elements-and-visualize-them">1.2. Extract network elements and visualize them</a></li>
+<li><a class="reference internal" href="#1.3.-Instantiate-several-synthetic-observations-and-snap-them-to-the-network">1.3. Instantiate several synthetic observations and snap them to the network</a></li>
+<li><a class="reference internal" href="#1.4.-Extract-point-patterns-and-visualize-plot">1.4. Extract point patterns and visualize plot</a><ul>
+<li><a class="reference internal" href="#Note-the-labeling-for-network-elements-and-observations">Note the labeling for network elements and observations</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#1.4.1.-Defined-helper-functions-for-labeling">1.4.1. Defined helper functions for labeling</a></li>
+<li><a class="reference internal" href="#1.5.-Generate-observation-shortest-path-trees">1.5. Generate observation shortest path trees</a><ul>
+<li><a class="reference internal" href="#Note-that-a-tag-of-(-0.1,--0.1)-labels-the-points-as-being-snapped-to-the-same-network-arc">Note that a tag of <code class="docutils literal notranslate"><span class="pre">(-0.1,</span> <span class="pre">-0.1)</span></code> labels the points as being snapped to the same network arc</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#1.6.-Generate-shortest-paths-as-libpysal.cg.Chain-objects">1.6. Generate shortest paths as <code class="docutils literal notranslate"><span class="pre">libpysal.cg.Chain</span></code> objects</a></li>
+<li><a class="reference internal" href="#1.7.-Extract-the-shortest-paths-within-geopandas.GeoDataFrame-and-plot">1.7. Extract the shortest paths within <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> and plot</a></li>
+<li><a class="reference internal" href="#1.8.-Plot-the-routes-within-the-context-of-the-network">1.8. Plot the routes within the context of the network</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#2.-Demostration-with-emprical-datasets">2. Demostration with emprical datasets</a><ul>
+<li><a class="reference internal" href="#2.1-Instantiate-an-emprical-network,-extract-elements,-and-visualize">2.1 Instantiate an emprical network, extract elements, and visualize</a></li>
+<li><a class="reference internal" href="#2.2-Snap-emprical-observations-and-extract-the-point-patterns-as-geopandas.GeoDataFrames">2.2 Snap emprical observations and extract the point patterns as <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrames</span></code></a></li>
+<li><a class="reference internal" href="#2.3-Plot-empirical-data">2.3 Plot empirical data</a></li>
+<li><a class="reference internal" href="#2.4-Generate-shortest-path-routes-and-extract-them">2.4 Generate shortest path routes and extract them</a></li>
+<li><a class="reference internal" href="#2.5-Plot-the-shortest-path-routes">2.5 Plot the shortest path routes</a></li>
+<li><a class="reference internal" href="#2.6.-Plot-all-shortest-path-routes-within-the-context-of-the-network">2.6. Plot all shortest path routes within the context of the network</a></li>
+<li><a class="reference internal" href="#2.7.-Plot-the-shortest-path-routes-originating-from-observation-0">2.7. Plot the shortest path routes originating from observation <code class="docutils literal notranslate"><span class="pre">0</span></code></a></li>
+<li><a class="reference internal" href="#2.8.-Plot-the-shortest-path-routes-arriving-at-observation-4">2.8. Plot the shortest path routes arriving at observation <code class="docutils literal notranslate"><span class="pre">4</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="admonition note">
+<p>This page was generated from <a class="reference external" href="https://github.com/pysal/spaghetti/blob/main/notebooks/shortest-path-visualization.ipynb">notebooks/shortest-path-visualization.ipynb</a>.
+Interactive online version:
+<span class="raw-html"><a href="https://mybinder.org/v2/gh/pysal/spaghetti/main?filepath=notebooks/shortest-path-visualization.ipynb"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a></span></p>
+</div>
+<hr class="docutils" />
+<p><strong>If any part of this notebook is used in your research, please cite with the reference found in</strong> <a class="reference external" href="https://github.com/pysal/spaghetti#bibtex-citation">README.md</a><strong>.</strong></p>
+<hr class="docutils" />
+<section id="Generating-regular-lattices-and-visualizing-shortest-paths">
+<h1>Generating regular lattices and visualizing shortest paths<a class="headerlink" href="#Generating-regular-lattices-and-visualizing-shortest-paths" title="Link to this heading">¶</a></h1>
+<section id="Creating-data-for-testing-and-demonstrating-routes">
+<h2>Creating data for testing and demonstrating routes<a class="headerlink" href="#Creating-data-for-testing-and-demonstrating-routes" title="Link to this heading">¶</a></h2>
+<p><strong>Author: James D. Gaboardi</strong> <a class="reference external" href="mailto:jgaboardi&#37;&#52;&#48;gmail&#46;com">jgaboardi<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
+<p><strong>This notebook is a walk-through for:</strong></p>
+<ol class="arabic simple">
+<li><p>Instantiating a simple network through a generated regular lattice</p></li>
+<li><p>Generating shortest path geometric objects</p></li>
+<li><p>Visualizing shortest paths</p></li>
+</ol>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &quot;retina&quot;
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
+<span class="o">%</span><span class="k">watermark</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+The watermark extension is already loaded. To reload it, use:
+  %reload_ext watermark
+Last updated: 2023-12-22T12:56:49.697367-06:00
+
+Python implementation: CPython
+Python version       : 3.12.0
+IPython version      : 8.18.1
+
+Compiler    : Clang 15.0.7
+OS          : Darwin
+Release     : 23.1.0
+Machine     : arm64
+Processor   : arm
+CPU cores   : 10
+Architecture: 64bit
+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">libpysal</span>
+<span class="kn">from</span> <span class="nn">libpysal.cg</span> <span class="kn">import</span> <span class="n">Point</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">spaghetti</span>
+
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="o">%</span><span class="k">watermark</span> -w
+<span class="o">%</span><span class="k">watermark</span> -iv
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Watermark: 2.4.3
+
+spaghetti : 1.7.5.dev16+gb14c9e7
+libpysal  : 4.9.2
+matplotlib: 3.8.2
+
+</pre></div></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="1.-Demonstration-with-a-synthetic-network">
+<h2>1. Demonstration with a synthetic network<a class="headerlink" href="#1.-Demonstration-with-a-synthetic-network" title="Link to this heading">¶</a></h2>
+<section id="1.1-Instantiate-a-network-from-a-4x4-regular-lattice">
+<h3>1.1 Instantiate a network from a 4x4 regular lattice<a class="headerlink" href="#1.1-Instantiate-a-network-from-a-4x4-regular-lattice" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lattice</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">regular_lattice</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="n">exterior</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">in_data</span><span class="o">=</span><span class="n">lattice</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/g/anaconda3/envs/nkde/lib/python3.12/site-packages/libpysal/cg/shapes.py:100: FutureWarning: Objects based on the `Geometry` class will deprecated and removed in a future version of libpysal.
+  warnings.warn(dep_msg, FutureWarning)
+/Users/g/anaconda3/envs/nkde/lib/python3.12/site-packages/libpysal/cg/shapes.py:932: FutureWarning: Objects based on the `Geometry` class will deprecated and removed in a future version of libpysal.
+  warnings.warn(dep_msg, FutureWarning)
+</pre></div></div>
+</div>
+</section>
+<section id="1.2.-Extract-network-elements-and-visualize-them">
+<h3>1.2. Extract network elements and visualize them<a class="headerlink" href="#1.2.-Extract-network-elements-and-visualize-them" title="Link to this heading">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vertices</span><span class="p">,</span> <span class="n">arcs</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">arcs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">base</span> <span class="o">=</span> <span class="n">arcs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">vertices</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_shortest-path-visualization_8_0.png" class="no-scaled-link" src="../_images/notebooks_shortest-path-visualization_8_0.png" style="width: 821px; height: 813px;" />
+</div>
+</div>
+</section>
+<section id="1.3.-Instantiate-several-synthetic-observations-and-snap-them-to-the-network">
+<h3>1.3. Instantiate several synthetic observations and snap them to the network<a class="headerlink" href="#1.3.-Instantiate-several-synthetic-observations-and-snap-them-to-the-network" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">synth_obs</span> <span class="o">=</span> <span class="p">[</span><span class="n">Point</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">]),</span> <span class="n">Point</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">1.7</span><span class="p">]),</span> <span class="n">Point</span><span class="p">([</span><span class="mf">2.8</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">])]</span>
+<span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span><span class="n">synth_obs</span><span class="p">,</span> <span class="s2">&quot;synth_obs&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/g/anaconda3/envs/nkde/lib/python3.12/site-packages/libpysal/cg/shapes.py:100: FutureWarning: Objects based on the `Geometry` class will deprecated and removed in a future version of libpysal.
+  warnings.warn(dep_msg, FutureWarning)
+/Users/g/anaconda3/envs/nkde/lib/python3.12/site-packages/libpysal/cg/shapes.py:932: FutureWarning: Objects based on the `Geometry` class will deprecated and removed in a future version of libpysal.
+  warnings.warn(dep_msg, FutureWarning)
+/Users/g/anaconda3/envs/nkde/lib/python3.12/site-packages/libpysal/cg/shapes.py:1797: FutureWarning: Objects based on the `Geometry` class will deprecated and removed in a future version of libpysal.
+  warnings.warn(dep_msg, FutureWarning)
+</pre></div></div>
+</div>
+</section>
+<section id="1.4.-Extract-point-patterns-and-visualize-plot">
+<h3>1.4. Extract point patterns and visualize plot<a class="headerlink" href="#1.4.-Extract-point-patterns-and-visualize-plot" title="Link to this heading">¶</a></h3>
+<section id="Note-the-labeling-for-network-elements-and-observations">
+<h4>Note the labeling for network elements and observations<a class="headerlink" href="#Note-the-labeling-for-network-elements-and-observations" title="Link to this heading">¶</a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># true locations of synthetic observations</span>
+<span class="n">pp_obs</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="o">=</span><span class="s2">&quot;synth_obs&quot;</span><span class="p">)</span>
+<span class="c1"># snapped locations of synthetic observations</span>
+<span class="n">pp_obs_snapped</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="o">=</span><span class="s2">&quot;synth_obs&quot;</span><span class="p">,</span> <span class="n">snapped</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="1.4.1.-Defined-helper-functions-for-labeling">
+<h3>1.4.1. Defined helper functions for labeling<a class="headerlink" href="#1.4.1.-Defined-helper-functions-for-labeling" title="Link to this heading">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">arc_labels</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Label each leg of the tour.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">_lab_loc</span><span class="p">(</span><span class="n">_x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Helper for labeling location.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">_x</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">normalized</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">kws</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="n">s</span><span class="p">,</span> <span class="s2">&quot;ha&quot;</span><span class="p">:</span> <span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="s2">&quot;va&quot;</span><span class="p">:</span> <span class="s2">&quot;bottom&quot;</span><span class="p">}</span>
+    <span class="n">a</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">_lab_loc</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">**</span><span class="n">kws</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">vert_labels</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Label each network vertex.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">_lab_loc</span><span class="p">(</span><span class="n">_x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Helper for labeling vertices.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">_x</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">kws</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="n">s</span><span class="p">,</span> <span class="s2">&quot;ha&quot;</span><span class="p">:</span> <span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;va&quot;</span><span class="p">:</span> <span class="s2">&quot;bottom&quot;</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="s2">&quot;bold&quot;</span><span class="p">}</span>
+    <span class="n">v</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">_lab_loc</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">**</span><span class="n">kws</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">obs_labels</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Label each point pattern observation.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">_lab_loc</span><span class="p">(</span><span class="n">_x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Helper for labeling observations.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">_x</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">kws</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="n">s</span><span class="p">,</span> <span class="s2">&quot;ha&quot;</span><span class="p">:</span> <span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;va&quot;</span><span class="p">:</span> <span class="s2">&quot;bottom&quot;</span><span class="p">,</span> <span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="s2">&quot;oblique&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">:</span><span class="n">c</span><span class="p">}</span>
+    <span class="n">o</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">_lab_loc</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">**</span><span class="n">kws</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">base</span> <span class="o">=</span> <span class="n">arcs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">vertices</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pp_obs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">pp_obs_snapped</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="c1"># arc labels</span>
+<span class="n">arc_labels</span><span class="p">(</span><span class="n">arcs</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
+<span class="c1"># vertex labels</span>
+<span class="n">vert_labels</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">14</span><span class="p">)</span>
+<span class="c1"># synthetic observation labels</span>
+<span class="n">obs_labels</span><span class="p">(</span><span class="n">pp_obs</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">14</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_shortest-path-visualization_15_0.png" class="no-scaled-link" src="../_images/notebooks_shortest-path-visualization_15_0.png" style="width: 821px; height: 813px;" />
+</div>
+</div>
+</section>
+<section id="1.5.-Generate-observation-shortest-path-trees">
+<h3>1.5. Generate observation shortest path trees<a class="headerlink" href="#1.5.-Generate-observation-shortest-path-trees" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">d2d_dist</span><span class="p">,</span> <span class="n">tree</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">allneighbordistances</span><span class="p">(</span><span class="s2">&quot;synth_obs&quot;</span><span class="p">,</span> <span class="n">gen_tree</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">d2d_dist</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([[nan, 0.4, 3.8],
+       [0.4, nan, 3.8],
+       [3.8, 3.8, nan]])
+</pre></div></div>
+</div>
+<section id="Note-that-a-tag-of-(-0.1,--0.1)-labels-the-points-as-being-snapped-to-the-same-network-arc">
+<h4>Note that a tag of <code class="docutils literal notranslate"><span class="pre">(-0.1,</span> <span class="pre">-0.1)</span></code> labels the points as being snapped to the same network arc<a class="headerlink" href="#Note-that-a-tag-of-(-0.1,--0.1)-labels-the-points-as-being-snapped-to-the-same-network-arc" title="Link to this heading">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tree</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{(0, 1): (-0.1, -0.1), (0, 2): (2, 13), (1, 2): (4, 14)}
+</pre></div></div>
+</div>
+</section>
+</section>
+<section id="1.6.-Generate-shortest-paths-as-libpysal.cg.Chain-objects">
+<h3>1.6. Generate shortest paths as <code class="docutils literal notranslate"><span class="pre">libpysal.cg.Chain</span></code> objects<a class="headerlink" href="#1.6.-Generate-shortest-paths-as-libpysal.cg.Chain-objects" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">paths</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">shortest_paths</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="s2">&quot;synth_obs&quot;</span><span class="p">)</span>
+<span class="n">paths</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/g/anaconda3/envs/nkde/lib/python3.12/site-packages/libpysal/cg/shapes.py:100: FutureWarning: Objects based on the `Geometry` class will deprecated and removed in a future version of libpysal.
+  warnings.warn(dep_msg, FutureWarning)
+/Users/g/anaconda3/envs/nkde/lib/python3.12/site-packages/libpysal/cg/shapes.py:932: FutureWarning: Objects based on the `Geometry` class will deprecated and removed in a future version of libpysal.
+  warnings.warn(dep_msg, FutureWarning)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[(0, 1), &lt;libpysal.cg.shapes.Chain at 0x28c61c6b0&gt;],
+ [(0, 2), &lt;libpysal.cg.shapes.Chain at 0x17de94d40&gt;],
+ [(1, 2), &lt;libpysal.cg.shapes.Chain at 0x17dfd04a0&gt;]]
+</pre></div></div>
+</div>
+</section>
+<section id="1.7.-Extract-the-shortest-paths-within-geopandas.GeoDataFrame-and-plot">
+<h3>1.7. Extract the shortest paths within <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> and plot<a class="headerlink" href="#1.7.-Extract-the-shortest-paths-within-geopandas.GeoDataFrame-and-plot" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">paths_gdf</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">routes</span><span class="o">=</span><span class="n">paths</span><span class="p">)</span>
+<span class="n">paths_gdf</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>geometry</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>(0, 1)</td>
+      <td>LINESTRING (0.00000 1.30000, 0.00000 1.70000)</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>(0, 2)</td>
+      <td>LINESTRING (0.00000 1.30000, 0.00000 1.00000, ...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>(1, 2)</td>
+      <td>LINESTRING (0.00000 1.70000, 0.00000 2.00000, ...</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">paths_gdf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="n">column</span><span class="o">=</span><span class="n">paths_gdf</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Paired&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_shortest-path-visualization_24_0.png" class="no-scaled-link" src="../_images/notebooks_shortest-path-visualization_24_0.png" style="width: 594px; height: 224px;" />
+</div>
+</div>
+</section>
+<section id="1.8.-Plot-the-routes-within-the-context-of-the-network">
+<h3>1.8. Plot the routes within the context of the network<a class="headerlink" href="#1.8.-Plot-the-routes-within-the-context-of-the-network" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">base</span> <span class="o">=</span> <span class="n">arcs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">paths_gdf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Paired&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">vertices</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">pp_obs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">pp_obs_snapped</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="c1"># arc labels</span>
+<span class="n">arc_labels</span><span class="p">(</span><span class="n">arcs</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
+<span class="c1"># vertex labels</span>
+<span class="n">vert_labels</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">14</span><span class="p">)</span>
+<span class="c1"># synthetic observation labels</span>
+<span class="n">obs_labels</span><span class="p">(</span><span class="n">pp_obs</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">14</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_shortest-path-visualization_26_0.png" class="no-scaled-link" src="../_images/notebooks_shortest-path-visualization_26_0.png" style="width: 821px; height: 813px;" />
+</div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="2.-Demostration-with-emprical-datasets">
+<h2>2. Demostration with emprical datasets<a class="headerlink" href="#2.-Demostration-with-emprical-datasets" title="Link to this heading">¶</a></h2>
+<section id="2.1-Instantiate-an-emprical-network,-extract-elements,-and-visualize">
+<h3>2.1 Instantiate an emprical network, extract elements, and visualize<a class="headerlink" href="#2.1-Instantiate-an-emprical-network,-extract-elements,-and-visualize" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">in_data</span><span class="o">=</span><span class="n">libpysal</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;streets.shp&quot;</span><span class="p">))</span>
+<span class="n">vertices</span><span class="p">,</span> <span class="n">arcs</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">arcs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/g/anaconda3/envs/nkde/lib/python3.12/site-packages/libpysal/cg/shapes.py:932: FutureWarning: Objects based on the `Geometry` class will deprecated and removed in a future version of libpysal.
+  warnings.warn(dep_msg, FutureWarning)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">base</span> <span class="o">=</span> <span class="n">arcs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">vertices</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_shortest-path-visualization_29_0.png" class="no-scaled-link" src="../_images/notebooks_shortest-path-visualization_29_0.png" style="width: 835px; height: 813px;" />
+</div>
+</div>
+</section>
+<section id="2.2-Snap-emprical-observations-and-extract-the-point-patterns-as-geopandas.GeoDataFrames">
+<h3>2.2 Snap emprical observations and extract the point patterns as <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrames</span></code><a class="headerlink" href="#2.2-Snap-emprical-observations-and-extract-the-point-patterns-as-geopandas.GeoDataFrames" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span><span class="n">libpysal</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;schools.shp&quot;</span><span class="p">),</span> <span class="s2">&quot;schools&quot;</span><span class="p">)</span>
+<span class="n">pp_obs</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="o">=</span><span class="s2">&quot;schools&quot;</span><span class="p">)</span>
+<span class="n">pp_obs_snapped</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="o">=</span><span class="s2">&quot;schools&quot;</span><span class="p">,</span> <span class="n">snapped</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/g/anaconda3/envs/nkde/lib/python3.12/site-packages/libpysal/cg/shapes.py:100: FutureWarning: Objects based on the `Geometry` class will deprecated and removed in a future version of libpysal.
+  warnings.warn(dep_msg, FutureWarning)
+/Users/g/anaconda3/envs/nkde/lib/python3.12/site-packages/libpysal/cg/shapes.py:932: FutureWarning: Objects based on the `Geometry` class will deprecated and removed in a future version of libpysal.
+  warnings.warn(dep_msg, FutureWarning)
+/Users/g/anaconda3/envs/nkde/lib/python3.12/site-packages/libpysal/cg/shapes.py:1797: FutureWarning: Objects based on the `Geometry` class will deprecated and removed in a future version of libpysal.
+  warnings.warn(dep_msg, FutureWarning)
+</pre></div></div>
+</div>
+</section>
+<section id="2.3-Plot-empirical-data">
+<h3>2.3 Plot empirical data<a class="headerlink" href="#2.3-Plot-empirical-data" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">base</span> <span class="o">=</span> <span class="n">arcs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">),</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">vertices</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pp_obs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">pp_obs_snapped</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="c1"># arc labels</span>
+<span class="n">arc_labels</span><span class="p">(</span><span class="n">arcs</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="c1"># vertex labels</span>
+<span class="n">vert_labels</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
+<span class="c1"># synthetic observation labels</span>
+<span class="n">obs_labels</span><span class="p">(</span><span class="n">pp_obs</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_shortest-path-visualization_33_0.png" class="no-scaled-link" src="../_images/notebooks_shortest-path-visualization_33_0.png" style="width: 1243px; height: 1198px;" />
+</div>
+</div>
+</section>
+<section id="2.4-Generate-shortest-path-routes-and-extract-them">
+<h3>2.4 Generate shortest path routes and extract them<a class="headerlink" href="#2.4-Generate-shortest-path-routes-and-extract-them" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">d2d_dist</span><span class="p">,</span> <span class="n">tree</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">allneighbordistances</span><span class="p">(</span><span class="s2">&quot;schools&quot;</span><span class="p">,</span> <span class="n">gen_tree</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">paths</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">shortest_paths</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="s2">&quot;schools&quot;</span><span class="p">)</span>
+<span class="n">paths_gdf</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">routes</span><span class="o">=</span><span class="n">paths</span><span class="p">)</span>
+<span class="n">paths_gdf</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/g/anaconda3/envs/nkde/lib/python3.12/site-packages/libpysal/cg/shapes.py:100: FutureWarning: Objects based on the `Geometry` class will deprecated and removed in a future version of libpysal.
+  warnings.warn(dep_msg, FutureWarning)
+/Users/g/anaconda3/envs/nkde/lib/python3.12/site-packages/libpysal/cg/shapes.py:932: FutureWarning: Objects based on the `Geometry` class will deprecated and removed in a future version of libpysal.
+  warnings.warn(dep_msg, FutureWarning)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>geometry</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>(0, 1)</td>
+      <td>LINESTRING (727287.664 879867.386, 727294.797 ...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>(0, 2)</td>
+      <td>LINESTRING (727287.664 879867.386, 727294.797 ...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>(0, 3)</td>
+      <td>LINESTRING (727287.664 879867.386, 727294.797 ...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>(0, 4)</td>
+      <td>LINESTRING (727287.664 879867.386, 727294.797 ...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>(0, 5)</td>
+      <td>LINESTRING (727287.664 879867.386, 727281.557 ...</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+<section id="2.5-Plot-the-shortest-path-routes">
+<h3>2.5 Plot the shortest path routes<a class="headerlink" href="#2.5-Plot-the-shortest-path-routes" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">paths_gdf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="n">column</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Paired&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_shortest-path-visualization_37_0.png" class="no-scaled-link" src="../_images/notebooks_shortest-path-visualization_37_0.png" style="width: 644px; height: 484px;" />
+</div>
+</div>
+</section>
+<section id="2.6.-Plot-all-shortest-path-routes-within-the-context-of-the-network">
+<h3>2.6. Plot all shortest path routes within the context of the network<a class="headerlink" href="#2.6.-Plot-all-shortest-path-routes-within-the-context-of-the-network" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">base</span> <span class="o">=</span> <span class="n">arcs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">pp_obs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">pp_obs_snapped</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">paths_gdf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Paired&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+<span class="c1"># synthetic observation labels</span>
+<span class="n">obs_labels</span><span class="p">(</span><span class="n">pp_obs</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">12</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_shortest-path-visualization_39_0.png" class="no-scaled-link" src="../_images/notebooks_shortest-path-visualization_39_0.png" style="width: 856px; height: 813px;" />
+</div>
+</div>
+</section>
+<section id="2.7.-Plot-the-shortest-path-routes-originating-from-observation-0">
+<h3>2.7. Plot the shortest path routes originating from observation <code class="docutils literal notranslate"><span class="pre">0</span></code><a class="headerlink" href="#2.7.-Plot-the-shortest-path-routes-originating-from-observation-0" title="Link to this heading">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">obs0</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">pp_ob0</span> <span class="o">=</span> <span class="n">pp_obs</span><span class="p">[</span><span class="n">pp_obs</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span><span class="o">==</span><span class="n">obs0</span><span class="p">]</span>
+<span class="n">pp_obX0</span> <span class="o">=</span> <span class="n">pp_obs</span><span class="p">[</span><span class="n">pp_obs</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span><span class="o">!=</span><span class="n">obs0</span><span class="p">]</span>
+<span class="n">orig_ob0</span> <span class="o">=</span> <span class="n">paths_gdf</span><span class="p">[</span><span class="n">paths_gdf</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="n">obs0</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">base</span> <span class="o">=</span> <span class="n">arcs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">pp_obX0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">pp_obs_snapped</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">pp_ob0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="c1"># routes originating from observation 0</span>
+<span class="n">orig_ob0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">);</span>
+<span class="c1"># synthetic observation labels</span>
+<span class="n">obs_labels</span><span class="p">(</span><span class="n">pp_obX0</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">);</span>
+<span class="c1"># synthetic observation labels</span>
+<span class="n">obs_labels</span><span class="p">(</span><span class="n">pp_ob0</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_shortest-path-visualization_42_0.png" class="no-scaled-link" src="../_images/notebooks_shortest-path-visualization_42_0.png" style="width: 856px; height: 813px;" />
+</div>
+</div>
+</section>
+<section id="2.8.-Plot-the-shortest-path-routes-arriving-at-observation-4">
+<h3>2.8. Plot the shortest path routes arriving at observation <code class="docutils literal notranslate"><span class="pre">4</span></code><a class="headerlink" href="#2.8.-Plot-the-shortest-path-routes-arriving-at-observation-4" title="Link to this heading">¶</a></h3>
+<p>Since the point pattern is symmetric, origins equal destinations and the shortest paths IDs are sorted and pruned out. Therefore, we have to stipluate <strong>either</strong> <code class="docutils literal notranslate"><span class="pre">O</span></code> or <code class="docutils literal notranslate"><span class="pre">D</span></code> of <code class="docutils literal notranslate"><span class="pre">4</span></code> in this case.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">obs4</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">pp_ob4</span> <span class="o">=</span> <span class="n">pp_obs</span><span class="p">[</span><span class="n">pp_obs</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span><span class="o">==</span><span class="n">obs4</span><span class="p">]</span>
+<span class="n">pp_obX4</span> <span class="o">=</span> <span class="n">pp_obs</span><span class="p">[</span><span class="n">pp_obs</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span><span class="o">!=</span><span class="n">obs4</span><span class="p">]</span>
+<span class="n">orig_ob4</span> <span class="o">=</span> <span class="n">paths_gdf</span><span class="p">[</span><span class="n">paths_gdf</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="n">obs4</span> <span class="ow">or</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="n">obs4</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">base</span> <span class="o">=</span> <span class="n">arcs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">pp_obX4</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">pp_obs_snapped</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">pp_ob4</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="c1"># routes originating from observation 4</span>
+<span class="n">orig_ob4</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">);</span>
+<span class="c1"># synthetic observation labels</span>
+<span class="n">obs_labels</span><span class="p">(</span><span class="n">pp_obX4</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">);</span>
+<span class="c1"># synthetic observation labels</span>
+<span class="n">obs_labels</span><span class="p">(</span><span class="n">pp_ob4</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_shortest-path-visualization_45_0.png" class="no-scaled-link" src="../_images/notebooks_shortest-path-visualization_45_0.png" style="width: 856px; height: 813px;" />
+</div>
+</div>
+<hr class="docutils" />
+</section>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+<div id="sourcelink">
+  <a href="../_sources/notebooks/shortest-path-visualization.ipynb.txt"
+     rel="nofollow">Source</a>
+</div>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017-, pysal developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

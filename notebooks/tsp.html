@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>The Traveling Sales(man)(person) Problem — TSP &#8212; spaghetti v1.7.6 Manual</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=9afac83c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pysal-styles.css?v=4849bb1c" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+    <script src="../_static/documentation_options.js?v=6cfcd222"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"TeX": {"equationNumbers": {"autoNumber": "AMS", "useLabelIds": true}}, "tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="icon" href="../_static/pysal_favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API reference" href="../api.html" />
+    <link rel="prev" title="The Transportation Problem" href="transportation-problem.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          spaghetti</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.7.6</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../installation.html">Installation</a></li>
+                <li><a href="../tutorials.html">Tutorials</a></li>
+                <li><a href="../api.html">API</a></li>
+                <li><a href="../references.html">References</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#installing-with-conda-via-spaghetti-feedstock-highly-recommended">Installing with <code class="docutils literal notranslate"><span class="pre">conda</span></code> via spaghetti-feedstock (highly recommended)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#installing-with-python-package-index">Installing with Python Package Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#development-version">Development Version</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pointpattern-attributes.html">Network point pattern attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="connected-components.html">Connected components in a spatial network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shortest-path-visualization.html">Generating regular lattices and visualizing shortest paths</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network-segmentation.html">Spatial network segmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network-spatial-dependence.html">Network-constrained spatial dependence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network-spatial-weights.html">Network spatial weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spanning-trees.html">Network spanning trees</a></li>
+<li class="toctree-l2"><a class="reference internal" href="caveats.html">Caveats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network-spatial-autocorrelation.html">Network-constrained spatial autocorrelation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="facility-location.html">Demostrating network-based optimal facility location modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transportation-problem.html">The Transportation Problem</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">The Traveling Sales(man)(person) Problem — TSP</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#network-feature-instantiation">Network feature instantiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#network-feature-extraction-and-creation">Network feature extraction and creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#save-and-load-a-network">Save and load a network</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">The Traveling Sales(man)(person) Problem — TSP</a><ul>
+<li><a class="reference internal" href="#Integrating-pysal/spaghetti-and-pulp-for-optimal-routing">Integrating <code class="docutils literal notranslate"><span class="pre">pysal/spaghetti</span></code> and pulp for optimal routing</a></li>
+<li><a class="reference internal" href="#1-Introduction">1 Introduction</a><ul>
+<li><a class="reference internal" href="#Scenario">Scenario</a></li>
+<li><a class="reference internal" href="#Integer-Linear-Programming-Formulation-based-on-Miller,-Tucker,-and-Zemlin-(1960).">Integer Linear Programming Formulation based on Miller, Tucker, and Zemlin (1960).</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#2.-A-model,-data-and-parameters">2. A model, data and parameters</a><ul>
+<li><a class="reference internal" href="#Solution-class">Solution class</a></li>
+<li><a class="reference internal" href="#Streets">Streets</a></li>
+<li><a class="reference internal" href="#Crimes">Crimes</a></li>
+<li><a class="reference internal" href="#Detective-Königsberg's-cases">Detective Königsberg’s cases</a></li>
+<li><a class="reference internal" href="#Instantiate-a-network-object">Instantiate a network object</a></li>
+<li><a class="reference internal" href="#Plot">Plot</a></li>
+<li><a class="reference internal" href="#Associate-Detective-Königsberg's-cases-with-the-network-and-plot">Associate Detective Königsberg’s cases with the network and plot</a></li>
+<li><a class="reference internal" href="#Calculate-distance-matrix-while-generating-shortest-path-trees">Calculate distance matrix while generating shortest path trees</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#3.-The-Travling-Salesperson-Problem">3. The Travling Salesperson Problem</a><ul>
+<li><a class="reference internal" href="#Create-decision-variables-for-the-crime-scene-locations">Create decision variables for the crime scene locations</a></li>
+<li><a class="reference internal" href="#Solve-the-TSP">Solve the TSP</a></li>
+<li><a class="reference internal" href="#Extract-all-network-shortest-paths">Extract all network shortest paths</a></li>
+<li><a class="reference internal" href="#Extract-the-tour">Extract the tour</a></li>
+<li><a class="reference internal" href="#Define-label-helper-functions-and-plot-Det.-Königsberg's-optimal-tour">Define label helper functions and plot Det. Königsberg’s optimal tour</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="admonition note">
+<p>This page was generated from <a class="reference external" href="https://github.com/pysal/spaghetti/blob/main/notebooks/tsp.ipynb">notebooks/tsp.ipynb</a>.
+Interactive online version:
+<span class="raw-html"><a href="https://mybinder.org/v2/gh/pysal/spaghetti/main?filepath=notebooks/tsp.ipynb"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a></span></p>
+</div>
+<hr class="docutils" />
+<p><strong>If any part of this notebook is used in your research, please cite with the reference found in</strong> <a class="reference external" href="https://github.com/pysal/spaghetti#bibtex-citation">README.md</a><strong>.</strong></p>
+<hr class="docutils" />
+<section id="The-Traveling-Sales(man)(person)-Problem-—-TSP">
+<h1>The Traveling Sales(man)(person) Problem — TSP<a class="headerlink" href="#The-Traveling-Sales(man)(person)-Problem-—-TSP" title="Link to this heading">¶</a></h1>
+<section id="Integrating-pysal/spaghetti-and-pulp-for-optimal-routing">
+<h2>Integrating <code class="docutils literal notranslate"><span class="pre">pysal/spaghetti</span></code> and <a class="reference external" href="https://github.com/coin-or/pulp">pulp</a> for optimal routing<a class="headerlink" href="#Integrating-pysal/spaghetti-and-pulp-for-optimal-routing" title="Link to this heading">¶</a></h2>
+<p><strong>Author: James D. Gaboardi</strong> <a class="reference external" href="mailto:jgaboardi&#37;&#52;&#48;gmail&#46;com">jgaboardi<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
+<p><strong>This notebook provides a use case for:</strong></p>
+<ol class="arabic simple">
+<li><p>Introducing the TSP</p></li>
+<li><p>Declaration of a solution class and model parameters</p></li>
+<li><p>Solving the TSP for an optimal tour</p></li>
+</ol>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &quot;retina&quot;
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
+<span class="o">%</span><span class="k">watermark</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Last updated: 2022-11-01T23:09:28.066937-04:00
+
+Python implementation: CPython
+Python version       : 3.10.6
+IPython version      : 8.6.0
+
+Compiler    : Clang 13.0.1
+OS          : Darwin
+Release     : 22.1.0
+Machine     : x86_64
+Processor   : i386
+CPU cores   : 8
+Architecture: 64bit
+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span>
+<span class="kn">from</span> <span class="nn">libpysal</span> <span class="kn">import</span> <span class="n">examples</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="kn">import</span> <span class="nn">matplotlib_scalebar</span>
+<span class="kn">from</span> <span class="nn">matplotlib_scalebar.scalebar</span> <span class="kn">import</span> <span class="n">ScaleBar</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">pulp</span>
+<span class="kn">import</span> <span class="nn">spaghetti</span>
+
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="o">%</span><span class="k">watermark</span> -w
+<span class="o">%</span><span class="k">watermark</span> -iv
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Watermark: 2.3.1
+
+json               : 2.0.9
+matplotlib         : 3.6.1
+matplotlib_scalebar: 0.8.0
+numpy              : 1.23.4
+pulp               : 2.6.0
+libpysal           : 4.6.2
+spaghetti          : 1.6.8
+geopandas          : 0.12.1
+
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/the-gaboardi/miniconda3/envs/py310_spgh_dev/lib/python3.10/site-packages/spaghetti/network.py:39: FutureWarning: The next major release of pysal/spaghetti (2.0.0) will drop support for all ``libpysal.cg`` geometries. This change is a first step in refactoring ``spaghetti`` that is expected to result in dramatically reduced runtimes for network instantiation and operations. Users currently requiring network and point pattern input as ``libpysal.cg`` geometries should prepare for this simply by converting to ``shapely`` geometries.
+  warnings.warn(f&#34;{dep_msg}&#34;, FutureWarning)
+</pre></div></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="1-Introduction">
+<h2>1 Introduction<a class="headerlink" href="#1-Introduction" title="Link to this heading">¶</a></h2>
+<section id="Scenario">
+<h3>Scenario<a class="headerlink" href="#Scenario" title="Link to this heading">¶</a></h3>
+<p>Detective George B. Königsberg thought he needed to visit <strong>7</strong> crimes scenes in one area of City X this afternoon in order to collect evidence. However, his lieutenant, Anna Nagurney just told him he needs to double that to <strong>14</strong>. He really wants to wrap up early so he can get home to watch the 2012 mathematical thriller, <a class="reference external" href="https://en.wikipedia.org/wiki/Travelling_Salesman_(2012_film)">Travelling Salesman by Timothy Lanzone</a>, with his cat and dog, Euler and Hamilton. Therefore, he decides on
+calculating an optimal route so that he can visit all <strong>14</strong> crime scenes in one tour while covering the shortest distance. Det. Königsberg utilizes an integer linear programming formulation of the traveling salesperson problem (TSP) to find his best route.</p>
+</section>
+<hr class="docutils" />
+<section id="Integer-Linear-Programming-Formulation-based-on-Miller,-Tucker,-and-Zemlin-(1960).">
+<h3>Integer Linear Programming Formulation based on Miller, Tucker, and Zemlin (1960).<a class="headerlink" href="#Integer-Linear-Programming-Formulation-based-on-Miller,-Tucker,-and-Zemlin-(1960)." title="Link to this heading">¶</a></h3>
+<p><span class="math notranslate nohighlight">\(\begin{array}
+\displaystyle \normalsize \textrm{Minimize} &amp; \displaystyle \normalsize \sum_{0 \leq i \\ i \neq j}^n \sum_{j \leq n \\ j \neq i}^n c_{ij}x_{ij}  &amp; &amp; &amp; &amp;  \normalsize (1) \\
+\normalsize \textrm{Subject To} &amp; \displaystyle \normalsize \sum_{i=0}^n x_{ij}=1 &amp; \normalsize j=1,...,n, &amp; \normalsize j\neq i;  &amp; &amp;\normalsize (2)\\
+&amp; \displaystyle \normalsize \sum_{j=0}^n x_{ij}=1 &amp; \normalsize i=1,...,n, &amp; \normalsize i\neq j; &amp; &amp;\normalsize (3) \\
+&amp; \displaystyle \normalsize u_i - u_j + p x_{ij} \leq p - 1 &amp; \normalsize i=1,...,n, &amp; \normalsize 1 \leq i \neq j \leq n; &amp; &amp;\normalsize (4) \\
+&amp; \normalsize x_{ij} \in \{0,1\} &amp; \normalsize i=1,...,n, &amp; \normalsize j=1,...,n; &amp; &amp;\normalsize (5)\\
+&amp; \normalsize u_{i} \in \mathbb{Z} &amp; \normalsize i=1,...,n. &amp; &amp; &amp;\normalsize (6)\\
+\end{array}\)</span></p>
+<p>:math:<a href="#id2"><span class="problematic" id="id3">`</span></a>begin{array}
+displaystyle normalsize textrm{Where} &amp; small x_{ij} &amp; small = &amp; small begin{cases}</p>
+<blockquote>
+<div><blockquote>
+<div><p>1, &amp; textrm{if node } i textrm{ immediately precedes node } j textrm{ in the tour}\
+0, &amp; textrm{otherwise}</p>
+</div></blockquote>
+<p>end{cases} &amp;&amp;&amp;&amp;\</p>
+</div></blockquote>
+<p>&amp; small c_{ij} &amp; small = &amp; small textrm{distance matrix between all } i,j textrm{ pairs} &amp;&amp;&amp;&amp; \
+&amp; small n &amp; small = &amp; small textrm{the total number of nodes in the tour} &amp;&amp;&amp;&amp;\
+&amp; small i &amp; small = &amp; small textrm{each potential origin node} &amp;&amp;&amp;&amp;\
+&amp; small j &amp; small = &amp; small textrm{each potential destination node} &amp;&amp;&amp;&amp;\
+&amp; small u_i &amp; small = &amp; small textrm{continuous, non-negative real numbers} &amp;&amp;&amp;&amp;\
+&amp; small p &amp; small = &amp; small textrm{allowed visits prior to return (}n = p textrm{ in this formulation)}  &amp;&amp;&amp;&amp;\
+end{array}`</p>
+<hr class="docutils" />
+<p><strong>References</strong></p>
+<ul class="simple">
+<li><p><strong>Cummings, N.</strong> (2000) <a class="reference external" href="https://www.theorsociety.com/about-or/or-methods/heuristics/a-brief-history-of-the-travelling-salesman-problem/">A brief History of the Travelling Salesman Problem</a>. The Operational Research Society. Accessed: 01/2020.</p></li>
+<li><p><strong>Dantzig, G., Fulkerson, R., and Johnson, S.</strong> (1954) <em>Solution of a Large-Scale Traveling-Salesman Problem</em>. Journal of the Operational Research Society of America. 2(4)393-410.</p></li>
+<li><p><strong>Flood, Merrill M.</strong> (1956) <em>The Traveling-Salesman Problem</em>. 4(1)61-75.</p></li>
+<li><p><strong>Gass, S. I. and Assad, A. A.</strong> (2005) <em>An Annotated Timeline of Operations Research: An Informal History</em>. Springer US.</p></li>
+<li><p><strong>Miller, C. E., Tucker, A. W., and Zemlin, R. A.</strong> (1960) <em>Integer Programming Formulation of Traveling Salesman Problems</em>. Journal of Association for Computing Machinery. 7(4)326-329.</p></li>
+<li><p><strong>Miller, H. J. and Shaw, S.-L.</strong> (2001) <em>Geographic Information Systems for Transportation: Principles and Applications</em>. New York. Oxford University Press.</p></li>
+<li><p><strong>Nemhauser, G. L. and Wolsey, L. A.</strong> (1988) <em>Integer and Combinatorial Optimization</em>. John Wiley &amp; Sons, Inc.</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="2.-A-model,-data-and-parameters">
+<h2>2. A model, data and parameters<a class="headerlink" href="#2.-A-model,-data-and-parameters" title="Link to this heading">¶</a></h2>
+<section id="Solution-class">
+<h3>Solution class<a class="headerlink" href="#Solution-class" title="Link to this heading">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MTZ_TSP</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">cij</span><span class="p">,</span> <span class="n">xij_tag</span><span class="o">=</span><span class="s2">&quot;x_</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">ui_tag</span><span class="o">=</span><span class="s2">&quot;u_</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Instantiate and solve the Traveling Salesperson Problem (TSP)</span>
+<span class="sd">        based the formulation from Miller, Tucker, and Zemlin (1960).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nodes : geopandas.GeoSeries</span>
+<span class="sd">            All nodes to be visited in the tour.</span>
+<span class="sd">        cij : numpy.array</span>
+<span class="sd">            All-to-all distance matrix for nodes.</span>
+<span class="sd">        xij_tag : str</span>
+<span class="sd">            Tour decision variable names within the model. Default is</span>
+<span class="sd">            &#39;x_%s,%s&#39; where %s indicates string formatting.</span>
+<span class="sd">        ui_tag : str</span>
+<span class="sd">            Arbitrary real number decision variable names within the model.</span>
+<span class="sd">            Default is &#39;u_%s&#39; where %s indicates string formatting.</span>
+<span class="sd">        display : bool</span>
+<span class="sd">            Print out solution results.</span>
+
+<span class="sd">        Attributes</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nodes : geopandas.GeoSeries</span>
+<span class="sd">            See description in above.</span>
+<span class="sd">        p : int</span>
+<span class="sd">            The number of nodes in the set.</span>
+<span class="sd">        rp_0n : range</span>
+<span class="sd">            Range of node IDs in ``nodes`` from 0,...,``p``.</span>
+<span class="sd">        rp_1n : range</span>
+<span class="sd">            Range of node IDs in ``nodes`` from 1,...,``p``.</span>
+<span class="sd">        id : str</span>
+<span class="sd">            Column name for ``nodes``.</span>
+<span class="sd">        cij : numpy.array</span>
+<span class="sd">            See description in above.</span>
+<span class="sd">        xij_tag : str</span>
+<span class="sd">            See description in above.</span>
+<span class="sd">        ui_tag : str</span>
+<span class="sd">            See description in above.</span>
+<span class="sd">        tsp : pulp.LpProblem</span>
+<span class="sd">            Integer Linear Programming problem instance.</span>
+<span class="sd">        xij : numpy.array</span>
+<span class="sd">            Binary tour decision variables (``pulp.LpVariable``).</span>
+<span class="sd">        ui : numpy.array</span>
+<span class="sd">            Continuous arbitrary real number decision variables</span>
+<span class="sd">            (``pulp.LpVariable``).</span>
+<span class="sd">        cycle_ods : dict</span>
+<span class="sd">            Cycle origin-destination lookup keyed by origin with</span>
+<span class="sd">            destination as the value.</span>
+<span class="sd">        tour_pairs : list</span>
+<span class="sd">            OD pairs comprising each abstract tour arc.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># all nodes to be visited and the distance matrix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cij</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">cij</span>
+        <span class="c1"># number of nodes in the set</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># full and truncated range of nodes (p) in the set</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rp_0n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp_1n</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">)</span>
+        <span class="c1"># column name for node IDs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">name</span>
+        <span class="c1"># alpha tag for decision and dummy variable prefixes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xij_tag</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui_tag</span> <span class="o">=</span> <span class="n">xij_tag</span><span class="p">,</span> <span class="n">ui_tag</span>
+
+        <span class="c1"># instantiate a model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tsp</span> <span class="o">=</span> <span class="n">pulp</span><span class="o">.</span><span class="n">LpProblem</span><span class="p">(</span><span class="s2">&quot;MTZ_TSP&quot;</span><span class="p">,</span> <span class="n">pulp</span><span class="o">.</span><span class="n">LpMinimize</span><span class="p">)</span>
+        <span class="c1"># create and set the tour decision variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tour_dvs</span><span class="p">()</span>
+        <span class="c1"># create and set the arbitraty real number decision variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">arn_dvs</span><span class="p">()</span>
+        <span class="c1"># set the objective function</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">objective_func</span><span class="p">()</span>
+        <span class="c1"># node entry constraints</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entry_exit_constrs</span><span class="p">(</span><span class="n">entry</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># node exit constraints</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entry_exit_constrs</span><span class="p">(</span><span class="n">entry</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="c1"># subtour prevention constraints</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prevent_subtours</span><span class="p">()</span>
+        <span class="c1"># solve</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tsp</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">pulp</span><span class="o">.</span><span class="n">PULP_CBC_CMD</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+        <span class="c1"># origin-destination lookup</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_decisions</span><span class="p">(</span><span class="n">display</span><span class="o">=</span><span class="n">display</span><span class="p">)</span>
+        <span class="c1"># extract the sequence of nodes to construct the optimal tour</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">construct_tour</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">tour_dvs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create the tour decision variables - eq (5).&quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">_name</span><span class="p">(</span><span class="n">_x</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Helper for naming variables&quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">_x</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">xij</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="p">[</span>
+                    <span class="n">pulp</span><span class="o">.</span><span class="n">LpVariable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xij_tag</span> <span class="o">%</span> <span class="p">(</span><span class="n">_name</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">_name</span><span class="p">(</span><span class="n">j</span><span class="p">)),</span> <span class="n">cat</span><span class="o">=</span><span class="s2">&quot;Binary&quot;</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp_0n</span>
+                <span class="p">]</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp_0n</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">xij</span> <span class="o">=</span> <span class="n">xij</span>
+
+    <span class="k">def</span> <span class="nf">arn_dvs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create arbitrary real number decision variables - eq (6).&quot;&quot;&quot;</span>
+        <span class="n">ui</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">pulp</span><span class="o">.</span><span class="n">LpVariable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ui_tag</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">lowBound</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp_0n</span><span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span> <span class="o">=</span> <span class="n">ui</span>
+
+    <span class="k">def</span> <span class="nf">objective_func</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add the objective function - eq (1).&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tsp</span> <span class="o">+=</span> <span class="n">pulp</span><span class="o">.</span><span class="n">lpSum</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cij</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">xij</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp_0n</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp_0n</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">entry_exit_constrs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add entry and exit constraints - eq (2) and (3).&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">entry</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp_0n</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tsp</span> <span class="o">+=</span> <span class="p">(</span>
+                    <span class="n">pulp</span><span class="o">.</span><span class="n">lpSum</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">xij</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp_0n</span> <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span>
+                <span class="p">)</span>
+        <span class="c1"># exit constraints</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp_0n</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tsp</span> <span class="o">+=</span> <span class="p">(</span>
+                    <span class="n">pulp</span><span class="o">.</span><span class="n">lpSum</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">xij</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp_0n</span> <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span>
+                <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">prevent_subtours</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add subtour prevention constraints - eq (4).&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp_1n</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp_1n</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">tsp</span> <span class="o">+=</span> <span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">xij</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">-</span> <span class="mi">1</span>
+                    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_decisions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetch the selected decision variables.&quot;&quot;&quot;</span>
+        <span class="n">cycle_ods</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tsp</span><span class="o">.</span><span class="n">variables</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">var</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ui_tag</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">var</span><span class="o">.</span><span class="n">varValue</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">var</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">var</span><span class="o">.</span><span class="n">varValue</span><span class="p">))</span>
+                <span class="n">od</span> <span class="o">=</span> <span class="n">var</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">o</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">tf</span><span class="p">)</span> <span class="k">for</span> <span class="n">tf</span> <span class="ow">in</span> <span class="n">od</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)]</span>
+                <span class="n">cycle_ods</span><span class="p">[</span><span class="n">o</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span>
+        <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Status: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">pulp</span><span class="o">.</span><span class="n">LpStatus</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">tsp</span><span class="o">.</span><span class="n">status</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cycle_ods</span> <span class="o">=</span> <span class="n">cycle_ods</span>
+
+    <span class="k">def</span> <span class="nf">construct_tour</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Construct the tour.&quot;&quot;&quot;</span>
+        <span class="n">tour_pairs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">origin</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rp_0n</span><span class="p">:</span>
+            <span class="n">tour_pairs</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">tour_pairs</span><span class="p">[</span><span class="n">origin</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">next_origin</span><span class="p">)</span>
+                <span class="n">next_origin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cycle_ods</span><span class="p">[</span><span class="n">next_origin</span><span class="p">]</span>
+                <span class="n">tour_pairs</span><span class="p">[</span><span class="n">origin</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">next_origin</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>
+                <span class="n">next_origin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cycle_ods</span><span class="p">[</span><span class="n">origin</span><span class="p">]</span>
+                <span class="n">tour_pairs</span><span class="p">[</span><span class="n">origin</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">origin</span><span class="p">)</span>
+                <span class="n">tour_pairs</span><span class="p">[</span><span class="n">origin</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">next_origin</span><span class="p">)</span>
+
+        <span class="n">tour_pairs</span> <span class="o">=</span> <span class="p">{</span><span class="n">idx</span><span class="p">:</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">tp</span><span class="p">)</span> <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">tp</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tour_pairs</span><span class="p">)}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tour_pairs</span> <span class="o">=</span> <span class="n">tour_pairs</span>
+
+    <span class="k">def</span> <span class="nf">extract_tour</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">paths</span><span class="p">,</span> <span class="n">id_col</span><span class="p">,</span> <span class="n">leg_label</span><span class="o">=</span><span class="s2">&quot;leg&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract the tour (the legs in the journey) as a</span>
+<span class="sd">        ``geopandas.GeoDataFrame`` of ``shapely.geometry.LineString`` objects.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        paths : geopandas.GeoDataFrame</span>
+<span class="sd">            Shortest-path routes between all observations.</span>
+<span class="sd">        id_col : str</span>
+<span class="sd">            ID column name.</span>
+<span class="sd">        leg_label : str</span>
+<span class="sd">            Column name for the tour sequence. Default is &#39;leg&#39;.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tour : geopandas.GeoDataFrame</span>
+<span class="sd">            Optimal tour of ``self.nodes`` sequenced by ``leg_label`` that</span>
+<span class="sd">            retains the original index of ``paths``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">paths</span><span class="p">[</span><span class="n">leg_label</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span>
+        <span class="c1"># set label of journey leg for each OD pair.</span>
+        <span class="k">for</span> <span class="n">leg</span><span class="p">,</span> <span class="n">tp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tour_pairs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">paths</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">paths</span><span class="p">[</span><span class="n">id_col</span><span class="p">]</span> <span class="o">==</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">tp</span><span class="p">),</span> <span class="n">leg_label</span><span class="p">]</span> <span class="o">=</span> <span class="n">leg</span>
+
+        <span class="c1"># extract only paths in the tour</span>
+        <span class="n">tour</span> <span class="o">=</span> <span class="n">paths</span><span class="p">[</span><span class="n">paths</span><span class="p">[</span><span class="n">leg_label</span><span class="p">]</span> <span class="o">!=</span> <span class="nb">int</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">tour</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="n">leg_label</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">tour</span><span class="p">[</span><span class="n">leg_label</span><span class="p">]</span> <span class="o">=</span> <span class="n">tour</span><span class="p">[</span><span class="n">leg_label</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">tour</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Streets">
+<h3>Streets<a class="headerlink" href="#Streets" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">streets</span> <span class="o">=</span> <span class="n">geopandas</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;streets.shp&quot;</span><span class="p">))</span>
+<span class="n">streets</span><span class="o">.</span><span class="n">crs</span> <span class="o">=</span> <span class="s2">&quot;esri:102649&quot;</span>
+<span class="n">streets</span> <span class="o">=</span> <span class="n">streets</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s2">&quot;epsg:2762&quot;</span><span class="p">)</span>
+<span class="n">streets</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ID</th>
+      <th>Length</th>
+      <th>geometry</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1.0</td>
+      <td>244.116229</td>
+      <td>LINESTRING (222007.131 267348.711, 222007.159 ...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2.0</td>
+      <td>375.974828</td>
+      <td>LINESTRING (222006.951 267549.880, 222007.131 ...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3.0</td>
+      <td>400.353405</td>
+      <td>LINESTRING (221420.428 267804.889, 221411.402 ...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4.0</td>
+      <td>660.000000</td>
+      <td>LINESTRING (220875.116 268353.388, 220803.948 ...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5.0</td>
+      <td>660.000000</td>
+      <td>LINESTRING (220802.426 268398.824, 220917.000 ...</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+<section id="Crimes">
+<h3>Crimes<a class="headerlink" href="#Crimes" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">all_crimes</span> <span class="o">=</span> <span class="n">geopandas</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;crimes.shp&quot;</span><span class="p">))</span>
+<span class="n">all_crimes</span><span class="o">.</span><span class="n">crs</span> <span class="o">=</span> <span class="s2">&quot;esri:102649&quot;</span>
+<span class="n">all_crimes</span> <span class="o">=</span> <span class="n">all_crimes</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s2">&quot;epsg:2762&quot;</span><span class="p">)</span>
+<span class="n">all_crimes</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>POLYID2</th>
+      <th>POLYID</th>
+      <th>geometry</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>1</td>
+      <td>POINT (221868.432 266920.497)</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>2</td>
+      <td>POINT (220923.246 266933.298)</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>3</td>
+      <td>POINT (221709.326 266960.731)</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>4</td>
+      <td>POINT (221900.131 266962.255)</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>5</td>
+      <td>POINT (221750.169 266962.864)</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+<section id="Detective-Königsberg's-cases">
+<h3>Detective Königsberg’s cases<a class="headerlink" href="#Detective-Königsberg's-cases" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1960</span><span class="p">)</span>
+<span class="n">koenigsberg_cases</span> <span class="o">=</span> <span class="mi">7</span> <span class="o">*</span> <span class="mi">2</span>
+<span class="n">subset_idx</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">all_crimes</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">koenigsberg_cases</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">crimes_scenes</span> <span class="o">=</span> <span class="n">all_crimes</span><span class="p">[</span><span class="n">all_crimes</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">subset_idx</span><span class="p">)]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">crimes_scenes</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>POLYID2</th>
+      <th>POLYID</th>
+      <th>geometry</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>5</th>
+      <td>6</td>
+      <td>6</td>
+      <td>POINT (221652.328 266963.169)</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>12</td>
+      <td>12</td>
+      <td>POINT (220775.113 266968.350)</td>
+    </tr>
+    <tr>
+      <th>48</th>
+      <td>49</td>
+      <td>49</td>
+      <td>POINT (220962.565 267281.381)</td>
+    </tr>
+    <tr>
+      <th>62</th>
+      <td>63</td>
+      <td>63</td>
+      <td>POINT (220772.979 267387.147)</td>
+    </tr>
+    <tr>
+      <th>88</th>
+      <td>89</td>
+      <td>89</td>
+      <td>POINT (220797.363 267546.558)</td>
+    </tr>
+    <tr>
+      <th>114</th>
+      <td>115</td>
+      <td>115</td>
+      <td>POINT (221501.452 267698.654)</td>
+    </tr>
+    <tr>
+      <th>120</th>
+      <td>121</td>
+      <td>121</td>
+      <td>POINT (220474.580 267731.267)</td>
+    </tr>
+    <tr>
+      <th>132</th>
+      <td>133</td>
+      <td>133</td>
+      <td>POINT (221677.932 267762.053)</td>
+    </tr>
+    <tr>
+      <th>169</th>
+      <td>170</td>
+      <td>170</td>
+      <td>POINT (221154.590 267920.549)</td>
+    </tr>
+    <tr>
+      <th>184</th>
+      <td>185</td>
+      <td>185</td>
+      <td>POINT (221853.497 268049.786)</td>
+    </tr>
+    <tr>
+      <th>211</th>
+      <td>212</td>
+      <td>212</td>
+      <td>POINT (220775.723 268150.369)</td>
+    </tr>
+    <tr>
+      <th>234</th>
+      <td>235</td>
+      <td>235</td>
+      <td>POINT (220473.361 268198.223)</td>
+    </tr>
+    <tr>
+      <th>269</th>
+      <td>270</td>
+      <td>270</td>
+      <td>POINT (220515.423 268478.944)</td>
+    </tr>
+    <tr>
+      <th>279</th>
+      <td>280</td>
+      <td>280</td>
+      <td>POINT (222084.231 268591.723)</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+<section id="Instantiate-a-network-object">
+<h3>Instantiate a network object<a class="headerlink" href="#Instantiate-a-network-object" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">in_data</span><span class="o">=</span><span class="n">streets</span><span class="p">)</span>
+<span class="n">vertices</span><span class="p">,</span> <span class="n">arcs</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">arcs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">vertices</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>geometry</th>
+      <th>comp_label</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>POINT (222007.131 267348.711)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>POINT (222007.159 267317.431)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>POINT (222006.951 267549.880)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>POINT (221420.428 267804.889)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>POINT (221411.402 267921.993)</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">arcs</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>geometry</th>
+      <th>comp_label</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>(0, 1)</td>
+      <td>LINESTRING (222007.131 267348.711, 222007.159 ...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>(0, 2)</td>
+      <td>LINESTRING (222007.131 267348.711, 222006.951 ...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>(1, 110)</td>
+      <td>LINESTRING (222007.159 267317.431, 222081.565 ...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>(1, 127)</td>
+      <td>LINESTRING (222007.159 267317.431, 221805.991 ...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>(1, 213)</td>
+      <td>LINESTRING (222007.159 267317.431, 222007.338 ...</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+<section id="Plot">
+<h3>Plot<a class="headerlink" href="#Plot" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">base</span> <span class="o">=</span> <span class="n">arcs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">vertices</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">all_crimes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">crimes_scenes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="c1"># add scale bar</span>
+<span class="n">scalebar</span> <span class="o">=</span> <span class="n">ScaleBar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
+<span class="n">base</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">scalebar</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_tsp_16_0.png" class="no-scaled-link" src="../_images/notebooks_tsp_16_0.png" style="width: 850px; height: 813px;" />
+</div>
+</div>
+</section>
+<section id="Associate-Detective-Königsberg's-cases-with-the-network-and-plot">
+<h3>Associate Detective Königsberg’s cases with the network and plot<a class="headerlink" href="#Associate-Detective-Königsberg's-cases-with-the-network-and-plot" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span><span class="n">crimes_scenes</span><span class="p">,</span> <span class="s2">&quot;crime_scenes&quot;</span><span class="p">)</span>
+<span class="n">pp_obs</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="o">=</span><span class="s2">&quot;crime_scenes&quot;</span><span class="p">)</span>
+<span class="n">pp_obs_snapped</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="o">=</span><span class="s2">&quot;crime_scenes&quot;</span><span class="p">,</span> <span class="n">snapped</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">pp_obs_snapped</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>geometry</th>
+      <th>comp_label</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>POINT (221652.937 266993.226)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>POINT (220775.569 267001.039)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>POINT (220962.537 267316.554)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>POINT (220807.668 267387.173)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>POINT (220797.239 267554.033)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5</td>
+      <td>POINT (221500.788 267683.891)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>6</td>
+      <td>POINT (220508.813 267730.837)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>7</td>
+      <td>POINT (221677.895 267805.108)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>8</td>
+      <td>POINT (221154.800 267930.187)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>9</td>
+      <td>POINT (221853.503 268043.032)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>10</td>
+      <td>POINT (220807.081 268150.393)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>11</td>
+      <td>POINT (220503.712 268198.499)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>12</td>
+      <td>POINT (220499.864 268478.580)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>13</td>
+      <td>POINT (222089.345 268591.727)</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">base</span> <span class="o">=</span> <span class="n">arcs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">vertices</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pp_obs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">pp_obs_snapped</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="c1"># add scale bar</span>
+<span class="n">scalebar</span> <span class="o">=</span> <span class="n">ScaleBar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
+<span class="n">base</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">scalebar</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_tsp_19_0.png" class="no-scaled-link" src="../_images/notebooks_tsp_19_0.png" style="width: 837px; height: 813px;" />
+</div>
+</div>
+</section>
+<section id="Calculate-distance-matrix-while-generating-shortest-path-trees">
+<h3>Calculate distance matrix while generating shortest path trees<a class="headerlink" href="#Calculate-distance-matrix-while-generating-shortest-path-trees" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">d2d_dist</span><span class="p">,</span> <span class="n">tree</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">allneighbordistances</span><span class="p">(</span><span class="s2">&quot;crime_scenes&quot;</span><span class="p">,</span> <span class="n">gen_tree</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">d2d_dist</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([[          nan,  877.47303775, 1012.61325634],
+       [ 877.47303775,           nan,  688.11683524],
+       [1012.61325634,  688.11683524,           nan]])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">list</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">items</span><span class="p">())[:</span><span class="mi">4</span><span class="p">],</span> <span class="nb">list</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">items</span><span class="p">())[</span><span class="o">-</span><span class="mi">4</span><span class="p">:]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+([((0, 1), (164, 158)),
+  ((0, 2), (164, 142)),
+  ((0, 3), (164, 197)),
+  ((0, 4), (164, 147))],
+ [((10, 13), (72, 98)),
+  ((11, 12), (26, 29)),
+  ((11, 13), (26, 85)),
+  ((12, 13), (30, 85))])
+</pre></div></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="3.-The-Travling-Salesperson-Problem">
+<h2>3. The Travling Salesperson Problem<a class="headerlink" href="#3.-The-Travling-Salesperson-Problem" title="Link to this heading">¶</a></h2>
+<section id="Create-decision-variables-for-the-crime-scene-locations">
+<h3>Create decision variables for the crime scene locations<a class="headerlink" href="#Create-decision-variables-for-the-crime-scene-locations" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pp_obs</span><span class="p">[</span><span class="s2">&quot;dv&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pp_obs</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">_id</span><span class="p">:</span> <span class="s2">&quot;x_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">_id</span><span class="p">)</span>
+<span class="n">pp_obs</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>geometry</th>
+      <th>comp_label</th>
+      <th>dv</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>POINT (221652.328 266963.169)</td>
+      <td>0</td>
+      <td>x_0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>POINT (220775.113 266968.350)</td>
+      <td>0</td>
+      <td>x_1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>POINT (220962.565 267281.381)</td>
+      <td>0</td>
+      <td>x_2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>POINT (220772.979 267387.147)</td>
+      <td>0</td>
+      <td>x_3</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>POINT (220797.363 267546.558)</td>
+      <td>0</td>
+      <td>x_4</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5</td>
+      <td>POINT (221501.452 267698.654)</td>
+      <td>0</td>
+      <td>x_5</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>6</td>
+      <td>POINT (220474.580 267731.267)</td>
+      <td>0</td>
+      <td>x_6</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>7</td>
+      <td>POINT (221677.932 267762.053)</td>
+      <td>0</td>
+      <td>x_7</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>8</td>
+      <td>POINT (221154.590 267920.549)</td>
+      <td>0</td>
+      <td>x_8</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>9</td>
+      <td>POINT (221853.497 268049.786)</td>
+      <td>0</td>
+      <td>x_9</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>10</td>
+      <td>POINT (220775.723 268150.369)</td>
+      <td>0</td>
+      <td>x_10</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>11</td>
+      <td>POINT (220473.361 268198.223)</td>
+      <td>0</td>
+      <td>x_11</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>12</td>
+      <td>POINT (220515.423 268478.944)</td>
+      <td>0</td>
+      <td>x_12</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>13</td>
+      <td>POINT (222084.231 268591.723)</td>
+      <td>0</td>
+      <td>x_13</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+<section id="Solve-the-TSP">
+<h3>Solve the TSP<a class="headerlink" href="#Solve-the-TSP" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mtz_tsp</span> <span class="o">=</span> <span class="n">MTZ_TSP</span><span class="p">(</span><span class="n">pp_obs</span><span class="p">[</span><span class="s2">&quot;dv&quot;</span><span class="p">],</span> <span class="n">d2d_dist</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+x_0,1: 1.0
+x_1,2: 1.0
+x_10,8: 1.0
+x_11,12: 1.0
+x_12,10: 1.0
+x_13,7: 1.0
+x_2,3: 1.0
+x_3,4: 1.0
+x_4,6: 1.0
+x_5,0: 1.0
+x_6,11: 1.0
+x_7,5: 1.0
+x_8,9: 1.0
+x_9,13: 1.0
+Status: Optimal
+</pre></div></div>
+</div>
+</section>
+<section id="Extract-all-network-shortest-paths">
+<h3>Extract all network shortest paths<a class="headerlink" href="#Extract-all-network-shortest-paths" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">paths</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">shortest_paths</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="s2">&quot;crime_scenes&quot;</span><span class="p">)</span>
+<span class="n">paths_gdf</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">routes</span><span class="o">=</span><span class="n">paths</span><span class="p">)</span>
+<span class="n">paths_gdf</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>geometry</th>
+      <th>O</th>
+      <th>D</th>
+      <th>id</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>LINESTRING (221652.937 266993.226, 221523.786 ...</td>
+      <td>0</td>
+      <td>1</td>
+      <td>(0, 1)</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>LINESTRING (221652.937 266993.226, 221523.786 ...</td>
+      <td>0</td>
+      <td>2</td>
+      <td>(0, 2)</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>LINESTRING (221652.937 266993.226, 221523.786 ...</td>
+      <td>0</td>
+      <td>3</td>
+      <td>(0, 3)</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>LINESTRING (221652.937 266993.226, 221523.786 ...</td>
+      <td>0</td>
+      <td>4</td>
+      <td>(0, 4)</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>LINESTRING (221652.937 266993.226, 221523.786 ...</td>
+      <td>0</td>
+      <td>5</td>
+      <td>(0, 5)</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+<section id="Extract-the-tour">
+<h3>Extract the tour<a class="headerlink" href="#Extract-the-tour" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tour</span> <span class="o">=</span> <span class="n">mtz_tsp</span><span class="o">.</span><span class="n">extract_tour</span><span class="p">(</span><span class="n">paths_gdf</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="s2">&quot;id&quot;</span><span class="p">)</span>
+<span class="n">tour</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>geometry</th>
+      <th>O</th>
+      <th>D</th>
+      <th>id</th>
+      <th>leg</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>LINESTRING (221652.937 266993.226, 221523.786 ...</td>
+      <td>0</td>
+      <td>1</td>
+      <td>(0, 1)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>LINESTRING (220775.569 267001.039, 220807.966 ...</td>
+      <td>1</td>
+      <td>2</td>
+      <td>(1, 2)</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>LINESTRING (220962.537 267316.554, 220853.585 ...</td>
+      <td>2</td>
+      <td>3</td>
+      <td>(2, 3)</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>36</th>
+      <td>LINESTRING (220807.668 267387.173, 220807.540 ...</td>
+      <td>3</td>
+      <td>4</td>
+      <td>(3, 4)</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>47</th>
+      <td>LINESTRING (220797.239 267554.033, 220695.934 ...</td>
+      <td>4</td>
+      <td>6</td>
+      <td>(4, 6)</td>
+      <td>4</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+<section id="Define-label-helper-functions-and-plot-Det.-Königsberg's-optimal-tour">
+<h3>Define label helper functions and plot Det. Königsberg’s optimal tour<a class="headerlink" href="#Define-label-helper-functions-and-plot-Det.-Königsberg's-optimal-tour" title="Link to this heading">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">tour_labels</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Label each leg of the tour.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_lab_loc</span><span class="p">(</span><span class="n">_x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Helper for labeling location.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">_x</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">normalized</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">kws</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="s2">&quot;ha&quot;</span><span class="p">:</span> <span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="s2">&quot;va&quot;</span><span class="p">:</span> <span class="s2">&quot;bottom&quot;</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="s2">&quot;bold&quot;</span><span class="p">}</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">leg</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">_lab_loc</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">**</span><span class="n">kws</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">obs_labels</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Label each point pattern observation.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_lab_loc</span><span class="p">(</span><span class="n">_x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Helper for labeling observations.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">_x</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">kws</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="s2">&quot;ha&quot;</span><span class="p">:</span> <span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;va&quot;</span><span class="p">:</span> <span class="s2">&quot;bottom&quot;</span><span class="p">,</span> <span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="s2">&quot;oblique&quot;</span><span class="p">,</span> <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;k&quot;</span><span class="p">}</span>
+    <span class="n">o</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="n">_lab_loc</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">**</span><span class="n">kws</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">base</span> <span class="o">=</span> <span class="n">arcs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">tour</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s2">&quot;leg&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;tab20&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.50</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">vertices</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">pp_obs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">pp_obs_snapped</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># tour leg labels</span>
+<span class="n">tour_labels</span><span class="p">(</span><span class="n">tour</span><span class="p">,</span> <span class="n">base</span><span class="p">)</span>
+<span class="c1"># crime scene labels</span>
+<span class="n">obs_labels</span><span class="p">(</span><span class="n">pp_obs</span><span class="p">,</span> <span class="n">base</span><span class="p">)</span>
+<span class="c1"># add scale bar</span>
+<span class="n">scalebar</span> <span class="o">=</span> <span class="n">ScaleBar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
+<span class="n">base</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">scalebar</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_tsp_33_0.png" class="no-scaled-link" src="../_images/notebooks_tsp_33_0.png" style="width: 837px; height: 813px;" />
+</div>
+</div>
+<hr class="docutils" />
+</section>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+<div id="sourcelink">
+  <a href="../_sources/notebooks/tsp.ipynb.txt"
+     rel="nofollow">Source</a>
+</div>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017-, pysal developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

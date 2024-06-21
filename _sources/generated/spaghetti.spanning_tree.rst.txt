@@ -1,0 +1,6 @@
+﻿spaghetti.spanning\_tree
+========================
+
+.. currentmodule:: spaghetti
+
+.. autofunction:: spanning_tree

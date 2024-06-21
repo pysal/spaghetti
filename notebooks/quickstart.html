@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Quickstart &#8212; spaghetti v1.7.6 Manual</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=9afac83c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pysal-styles.css?v=4849bb1c" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+    <script src="../_static/documentation_options.js?v=6cfcd222"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"TeX": {"equationNumbers": {"autoNumber": "AMS", "useLabelIds": true}}, "tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="icon" href="../_static/pysal_favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Network point pattern attributes" href="pointpattern-attributes.html" />
+    <link rel="prev" title="Tutorials" href="../tutorials.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          spaghetti</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.7.6</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../installation.html">Installation</a></li>
+                <li><a href="../tutorials.html">Tutorials</a></li>
+                <li><a href="../api.html">API</a></li>
+                <li><a href="../references.html">References</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#installing-with-conda-via-spaghetti-feedstock-highly-recommended">Installing with <code class="docutils literal notranslate"><span class="pre">conda</span></code> via spaghetti-feedstock (highly recommended)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#installing-with-python-package-index">Installing with Python Package Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#development-version">Development Version</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pointpattern-attributes.html">Network point pattern attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="connected-components.html">Connected components in a spatial network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shortest-path-visualization.html">Generating regular lattices and visualizing shortest paths</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network-segmentation.html">Spatial network segmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network-spatial-dependence.html">Network-constrained spatial dependence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network-spatial-weights.html">Network spatial weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spanning-trees.html">Network spanning trees</a></li>
+<li class="toctree-l2"><a class="reference internal" href="caveats.html">Caveats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network-spatial-autocorrelation.html">Network-constrained spatial autocorrelation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="facility-location.html">Demostrating network-based optimal facility location modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transportation-problem.html">The Transportation Problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tsp.html">The Traveling Sales(man)(person) Problem — TSP</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#network-feature-instantiation">Network feature instantiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#network-feature-extraction-and-creation">Network feature extraction and creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#save-and-load-a-network">Save and load a network</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Quickstart</a><ul>
+<li><a class="reference internal" href="#Creating-and-visualizing-a-spaghetti.Network-object">Creating and visualizing a <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object</a></li>
+<li><a class="reference internal" href="#The-basics-of-spaghetti">The basics of <code class="docutils literal notranslate"><span class="pre">spaghetti</span></code></a><ul>
+<li><a class="reference internal" href="#1.-Creating-a-network-instance">1. Creating a network instance</a></li>
+<li><a class="reference internal" href="#2.-Snapping-events-(points)-to-a-network">2. Snapping events (points) to a network</a></li>
+<li><a class="reference internal" href="#3.-Visualizating-the-data">3. Visualizating the data</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#Empirical-Example">Empirical Example</a><ul>
+<li><a class="reference internal" href="#1.-Instantiating-a-spaghetti.Network-object">1. Instantiating a <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object</a><ul>
+<li><a class="reference internal" href="#Instantiate-the-network-from-a-.shp-file">Instantiate the network from a <code class="docutils literal notranslate"><span class="pre">.shp</span></code> file</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#2.-Allocating-observations-to-a-network:">2. Allocating observations to a network:</a><ul>
+<li><a class="reference internal" href="#Schools-without-attributes">Schools without attributes</a></li>
+<li><a class="reference internal" href="#True-vs.-snapped-school-coordinates-comparison:-spaghetti.Network-attributes">True vs. snapped school coordinates comparison: <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> attributes</a></li>
+<li><a class="reference internal" href="#Crimes-with-attributes">Crimes with attributes</a></li>
+<li><a class="reference internal" href="#True-vs.-snapped-crime-coordinates-comparison:-spaghetti.Network-attributes">True vs. snapped crime coordinates comparison: <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> attributes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#3.-Visualizing-original-and-snapped-locations">3. Visualizing original and snapped locations</a><ul>
+<li><a class="reference internal" href="#True-and-snapped-school-locations">True and snapped school locations</a></li>
+<li><a class="reference internal" href="#True-vs.-snapped-school-coordinates-comparison:-geopandas.GeoDataFrame">True vs. snapped school coordinates comparison: <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a></li>
+<li><a class="reference internal" href="#True-and-snapped-crime-locations">True and snapped crime locations</a></li>
+<li><a class="reference internal" href="#True-vs.-snapped-crime-coordinates-comparison:-geopandas.GeoDataFrame">True vs. snapped crime coordinates comparison: <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code></a></li>
+<li><a class="reference internal" href="#Create-geopandas.GeoDataFrame-objects-of-the-vertices-and-arcs">Create <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> objects of the vertices and arcs</a></li>
+<li><a class="reference internal" href="#Create-legend-patches-for-the-matplotlib-plot">Create legend patches for the <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> plot</a></li>
+<li><a class="reference internal" href="#Plotting-geopandas.GeoDataFrame-objects">Plotting <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> objects</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="admonition note">
+<p>This page was generated from <a class="reference external" href="https://github.com/pysal/spaghetti/blob/main/notebooks/quickstart.ipynb">notebooks/quickstart.ipynb</a>.
+Interactive online version:
+<span class="raw-html"><a href="https://mybinder.org/v2/gh/pysal/spaghetti/main?filepath=notebooks/quickstart.ipynb"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a></span></p>
+</div>
+<hr class="docutils" />
+<p><strong>If any part of this notebook is used in your research, please cite with the reference found in</strong> <a class="reference external" href="https://github.com/pysal/spaghetti#bibtex-citation">README.md</a><strong>.</strong></p>
+<hr class="docutils" />
+<section id="Quickstart">
+<h1>Quickstart<a class="headerlink" href="#Quickstart" title="Link to this heading">¶</a></h1>
+<section id="Creating-and-visualizing-a-spaghetti.Network-object">
+<h2>Creating and visualizing a <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object<a class="headerlink" href="#Creating-and-visualizing-a-spaghetti.Network-object" title="Link to this heading">¶</a></h2>
+<p><strong>Author: James D. Gaboardi</strong> <a class="reference external" href="mailto:jgaboardi&#37;&#52;&#48;gmail&#46;com">jgaboardi<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
+<p><strong>This notebook provides an explanation of network creation followed by an emprical example for:</strong></p>
+<ol class="arabic simple">
+<li><p>Instantiating a network</p></li>
+<li><p>Allocating observations to a network (snapping points)</p></li>
+<li><p>Visualizing the original and network-snapped locations with <code class="docutils literal notranslate"><span class="pre">geopandas</span></code> and <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code></p></li>
+</ol>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &quot;retina&quot;
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
+<span class="o">%</span><span class="k">watermark</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Last updated: 2022-11-01T23:13:58.108936-04:00
+
+Python implementation: CPython
+Python version       : 3.10.6
+IPython version      : 8.6.0
+
+Compiler    : Clang 13.0.1
+OS          : Darwin
+Release     : 22.1.0
+Machine     : x86_64
+Processor   : i386
+CPU cores   : 8
+Architecture: 64bit
+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span>
+<span class="kn">import</span> <span class="nn">libpysal</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.lines</span> <span class="k">as</span> <span class="nn">mlines</span>
+<span class="kn">import</span> <span class="nn">matplotlib_scalebar</span>
+<span class="kn">from</span> <span class="nn">matplotlib_scalebar.scalebar</span> <span class="kn">import</span> <span class="n">ScaleBar</span>
+<span class="kn">import</span> <span class="nn">shapely</span>
+<span class="kn">import</span> <span class="nn">spaghetti</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="o">%</span><span class="k">watermark</span> -w
+<span class="o">%</span><span class="k">watermark</span> -iv
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Watermark: 2.3.1
+
+libpysal           : 4.6.2
+geopandas          : 0.12.1
+matplotlib_scalebar: 0.8.0
+json               : 2.0.9
+shapely            : 1.8.5.post1
+matplotlib         : 3.6.1
+spaghetti          : 1.6.8
+
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/the-gaboardi/miniconda3/envs/py310_spgh_dev/lib/python3.10/site-packages/spaghetti/network.py:39: FutureWarning: The next major release of pysal/spaghetti (2.0.0) will drop support for all ``libpysal.cg`` geometries. This change is a first step in refactoring ``spaghetti`` that is expected to result in dramatically reduced runtimes for network instantiation and operations. Users currently requiring network and point pattern input as ``libpysal.cg`` geometries should prepare for this simply by converting to ``shapely`` geometries.
+  warnings.warn(f&#34;{dep_msg}&#34;, FutureWarning)
+</pre></div></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="The-basics-of-spaghetti">
+<h2>The basics of <code class="docutils literal notranslate"><span class="pre">spaghetti</span></code><a class="headerlink" href="#The-basics-of-spaghetti" title="Link to this heading">¶</a></h2>
+<section id="1.-Creating-a-network-instance">
+<h3>1. Creating a network instance<a class="headerlink" href="#1.-Creating-a-network-instance" title="Link to this heading">¶</a></h3>
+<p>Spatial data science techniques can support many types of statistical analyses of spatial networks themselves, and of events that happen along spatial networks in our daily lives, i.e. locations of trees along foot paths, biking accidents along street networks or locations of coffeeshops along streets. <code class="docutils literal notranslate"><span class="pre">spaghetti</span></code> provides computational tools to support statistical analysis of such events along many different types of networks. Within <code class="docutils literal notranslate"><span class="pre">spaghetti</span></code> network objects can be created from <a class="reference external" href="https://pysal.org/spaghetti/generated/spaghetti.Network.html#spaghetti-network">a
+variety of objects</a>, the most common being shapefiles (read in as file paths) and <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> objects. However, a network could also be created from <code class="docutils literal notranslate"><span class="pre">libpysal</span></code> geometries, as demonstrated in the <a class="reference external" href="https://pysal.org/spaghetti/notebooks/connected-components.html#1.-Instantiate-a-network-from-two-collections-of-libpysal.cg.Chain-objects">connected components tutorial</a> or a simply as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">libpysal.cg</span> <span class="kn">import</span> <span class="n">Point</span><span class="p">,</span> <span class="n">Chain</span>
+<span class="kn">import</span> <span class="nn">spaghetti</span>
+<span class="c1"># create the network</span>
+<span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">in_data</span><span class="o">=</span><span class="n">Chain</span><span class="p">([</span><span class="n">Point</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">Point</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])]))</span>
+</pre></div>
+</div>
+<p>This will create a single-segment network, which is simply one single line. Although the chances of a single-segment network existing in reality are rare, it is useful for demonstration purposes.</p>
+<p>The stucture and characterstics of the networks, can be quantitatively described with <code class="docutils literal notranslate"><span class="pre">spaghetti</span></code> and are topics of research in many areas. However, networks are also utilized as the study space, containing observations or events of interest, in many applications. In these cases the actual objects of interest that will be analysed in the geographic space a network provides, are “network-based events.”</p>
+</section>
+<section id="2.-Snapping-events-(points)-to-a-network">
+<h3>2. Snapping events (points) to a network<a class="headerlink" href="#2.-Snapping-events-(points)-to-a-network" title="Link to this heading">¶</a></h3>
+<p>First, point objects, representing our network-based events, must be snapped to the network for meaningful spatial analysis to be done or models to be constructed. As with <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> objects, <code class="docutils literal notranslate"><span class="pre">spaghetti.PointPattern</span></code> objects can be <a class="reference external" href="https://pysal.org/spaghetti/generated/spaghetti.PointPattern.html#spaghetti.PointPattern">created from</a> shapefiles and <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> objects. Furthermore, <code class="docutils literal notranslate"><span class="pre">spaghetti</span></code> can also simply handle a single <code class="docutils literal notranslate"><span class="pre">libpysal.cg.Point</span></code>object.
+Considering the single-segment network above:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># create the point and snap it to the network</span>
+<span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span><span class="n">Point</span><span class="p">([</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">]),</span> <span class="s2">&quot;point&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>At this point the point is associated with the network and, as such, is defined in network space.</p>
+</section>
+<section id="3.-Visualizating-the-data">
+<h3>3. Visualizating the data<a class="headerlink" href="#3.-Visualizating-the-data" title="Link to this heading">¶</a></h3>
+<p>Visualization is a cornerstone in communicating scientific data. Within the context of <code class="docutils literal notranslate"><span class="pre">spaghetti</span></code> elements of the network must be <a class="reference external" href="https://pysal.org/spaghetti/generated/spaghetti.element_as_gdf.html#spaghetti.element_as_gdf">extracted</a> as <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> objects prior to being visualized with <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code>. This is shown in the following block of code, along with network creation and point snapping.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">libpysal.cg</span> <span class="kn">import</span> <span class="n">Point</span><span class="p">,</span> <span class="n">Chain</span>
+<span class="kn">import</span> <span class="nn">spaghetti</span>
+
+<span class="c1"># create the network</span>
+<span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">in_data</span><span class="o">=</span><span class="n">Chain</span><span class="p">([</span><span class="n">Point</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">Point</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])]))</span>
+
+<span class="c1"># create the point and snap it to the network</span>
+<span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span><span class="n">Point</span><span class="p">([</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">]),</span> <span class="s2">&quot;point&quot;</span><span class="p">)</span>
+
+<span class="c1"># network nodes and edges</span>
+<span class="n">vertices_df</span><span class="p">,</span> <span class="n">arcs_df</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">arcs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># true and snapped location of points</span>
+<span class="n">point_df</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="o">=</span><span class="s2">&quot;point&quot;</span><span class="p">,</span> <span class="n">snapped</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">snapped_point_df</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="o">=</span><span class="s2">&quot;point&quot;</span><span class="p">,</span> <span class="n">snapped</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># plot the network and point</span>
+<span class="n">base</span> <span class="o">=</span> <span class="n">arcs_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">vertices_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ax&quot;</span><span class="p">:</span><span class="n">base</span><span class="p">,</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span><span class="mf">0.5</span><span class="p">,</span> <span class="s2">&quot;zorder&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">}</span>
+<span class="n">point_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="n">snapped_point_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mf">.9</span><span class="p">,</span><span class="mf">2.1</span><span class="p">);</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mf">.8</span><span class="p">,</span><span class="mf">1.2</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_quickstart_5_0.png" class="no-scaled-link" src="../_images/notebooks_quickstart_5_0.png" style="width: 835px; height: 307px;" />
+</div>
+</div>
+<p>Network creation, observation snapping, and visualization are further reviewed below for an example with empirical datasets available <code class="docutils literal notranslate"><span class="pre">libpysal</span></code>.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="Empirical-Example">
+<h2>Empirical Example<a class="headerlink" href="#Empirical-Example" title="Link to this heading">¶</a></h2>
+<p>In the following we will walk through an empirical example, visually comparing school locations with a network to crimes committed within the same network.</p>
+<section id="1.-Instantiating-a-spaghetti.Network-object">
+<h3>1. Instantiating a <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> object<a class="headerlink" href="#1.-Instantiating-a-spaghetti.Network-object" title="Link to this heading">¶</a></h3>
+<section id="Instantiate-the-network-from-a-.shp-file">
+<h4>Instantiate the network from a <code class="docutils literal notranslate"><span class="pre">.shp</span></code> file<a class="headerlink" href="#Instantiate-the-network-from-a-.shp-file" title="Link to this heading">¶</a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">in_data</span><span class="o">=</span><span class="n">libpysal</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;streets.shp&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="2.-Allocating-observations-to-a-network:">
+<h3>2. Allocating observations to a network:<a class="headerlink" href="#2.-Allocating-observations-to-a-network:" title="Link to this heading">¶</a></h3>
+<section id="Schools-without-attributes">
+<h4>Schools without attributes<a class="headerlink" href="#Schools-without-attributes" title="Link to this heading">¶</a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span>
+    <span class="n">libpysal</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;schools.shp&quot;</span><span class="p">),</span> <span class="s2">&quot;schools&quot;</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="True-vs.-snapped-school-coordinates-comparison:-spaghetti.Network-attributes">
+<h4>True vs. snapped school coordinates comparison: <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> attributes<a class="headerlink" href="#True-vs.-snapped-school-coordinates-comparison:-spaghetti.Network-attributes" title="Link to this heading">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;observation 1</span><span class="se">\n</span><span class="s2">true coords:</span><span class="se">\t</span><span class="si">%s</span><span class="se">\n</span><span class="s2">snapped coords:</span><span class="se">\t</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+    <span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;schools&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;coordinates&quot;</span><span class="p">],</span>
+    <span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;schools&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">snapped_coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+observation 1
+true coords:    (727082.0462136, 879863.260705768)
+snapped coords: (727287.6644417326, 879867.3863186113)
+</pre></div></div>
+</div>
+</section>
+<section id="Crimes-with-attributes">
+<h4>Crimes with attributes<a class="headerlink" href="#Crimes-with-attributes" title="Link to this heading">¶</a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span>
+    <span class="n">libpysal</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;crimes.shp&quot;</span><span class="p">),</span> <span class="s2">&quot;crimes&quot;</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="True-vs.-snapped-crime-coordinates-comparison:-spaghetti.Network-attributes">
+<h4>True vs. snapped crime coordinates comparison: <code class="docutils literal notranslate"><span class="pre">spaghetti.Network</span></code> attributes<a class="headerlink" href="#True-vs.-snapped-crime-coordinates-comparison:-spaghetti.Network-attributes" title="Link to this heading">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;observation 1</span><span class="se">\n</span><span class="s2">true coords:</span><span class="se">\t</span><span class="si">%s</span><span class="se">\n</span><span class="s2">snapped coords:</span><span class="se">\t</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+    <span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;crimes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;coordinates&quot;</span><span class="p">],</span>
+    <span class="n">ntw</span><span class="o">.</span><span class="n">pointpatterns</span><span class="p">[</span><span class="s2">&quot;crimes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">snapped_coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+observation 1
+true coords:    (727913.0000000029, 875720.9999999977)
+snapped coords: (727919.2473619275, 875942.4986759046)
+</pre></div></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="3.-Visualizing-original-and-snapped-locations">
+<h3>3. Visualizing original and snapped locations<a class="headerlink" href="#3.-Visualizing-original-and-snapped-locations" title="Link to this heading">¶</a></h3>
+<section id="True-and-snapped-school-locations">
+<h4>True and snapped school locations<a class="headerlink" href="#True-and-snapped-school-locations" title="Link to this heading">¶</a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">true_schools_df</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span>
+    <span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="o">=</span><span class="s2">&quot;schools&quot;</span><span class="p">,</span> <span class="n">snapped</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+<span class="n">snapped_schools_df</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span>
+    <span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="o">=</span><span class="s2">&quot;schools&quot;</span><span class="p">,</span> <span class="n">snapped</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="True-vs.-snapped-school-coordinates-comparison:-geopandas.GeoDataFrame">
+<h4>True vs. snapped school coordinates comparison: <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code><a class="headerlink" href="#True-vs.-snapped-school-coordinates-comparison:-geopandas.GeoDataFrame" title="Link to this heading">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compare true point coordinates &amp; snapped point coordinates</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;observation 1</span><span class="se">\n</span><span class="s2">true coords:</span><span class="se">\t</span><span class="si">%s</span><span class="se">\n</span><span class="s2">snapped coords:</span><span class="se">\t</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+    <span class="n">true_schools_df</span><span class="o">.</span><span class="n">geometry</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">coords</span><span class="p">[:][</span><span class="mi">0</span><span class="p">],</span>
+    <span class="n">snapped_schools_df</span><span class="o">.</span><span class="n">geometry</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">coords</span><span class="p">[:][</span><span class="mi">0</span><span class="p">]</span>
+<span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+observation 1
+true coords:    (727082.0462136, 879863.260705768)
+snapped coords: (727287.6644417326, 879867.3863186113)
+</pre></div></div>
+</div>
+</section>
+<section id="True-and-snapped-crime-locations">
+<h4>True and snapped crime locations<a class="headerlink" href="#True-and-snapped-crime-locations" title="Link to this heading">¶</a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">true_crimes_df</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span>
+    <span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="o">=</span><span class="s2">&quot;crimes&quot;</span><span class="p">,</span> <span class="n">snapped</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+<span class="n">snapped_crimes_df</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span>
+    <span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="o">=</span><span class="s2">&quot;crimes&quot;</span><span class="p">,</span> <span class="n">snapped</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="True-vs.-snapped-crime-coordinates-comparison:-geopandas.GeoDataFrame">
+<h4>True vs. snapped crime coordinates comparison: <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code><a class="headerlink" href="#True-vs.-snapped-crime-coordinates-comparison:-geopandas.GeoDataFrame" title="Link to this heading">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;observation 1</span><span class="se">\n</span><span class="s2">true coords:</span><span class="se">\t</span><span class="si">%s</span><span class="se">\n</span><span class="s2">snapped coords:</span><span class="se">\t</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+    <span class="n">true_crimes_df</span><span class="o">.</span><span class="n">geometry</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">coords</span><span class="p">[:][</span><span class="mi">0</span><span class="p">],</span>
+    <span class="n">snapped_crimes_df</span><span class="o">.</span><span class="n">geometry</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">coords</span><span class="p">[:][</span><span class="mi">0</span><span class="p">]</span>
+<span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+observation 1
+true coords:    (727913.0000000029, 875720.9999999977)
+snapped coords: (727919.2473619275, 875942.4986759046)
+</pre></div></div>
+</div>
+</section>
+<section id="Create-geopandas.GeoDataFrame-objects-of-the-vertices-and-arcs">
+<h4>Create <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> objects of the vertices and arcs<a class="headerlink" href="#Create-geopandas.GeoDataFrame-objects-of-the-vertices-and-arcs" title="Link to this heading">¶</a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># network nodes and edges</span>
+<span class="n">vertices_df</span><span class="p">,</span> <span class="n">arcs_df</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">arcs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Create-legend-patches-for-the-matplotlib-plot">
+<h4>Create legend patches for the <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> plot<a class="headerlink" href="#Create-legend-patches-for-the-matplotlib-plot" title="Link to this heading">¶</a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create legend arguments and keyword arguments for matplotlib</span>
+<span class="n">args</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+<span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;c&quot;</span><span class="p">:</span><span class="s2">&quot;k&quot;</span><span class="p">}</span>
+
+<span class="c1"># set arcs legend entry</span>
+<span class="n">arcs</span> <span class="o">=</span> <span class="n">mlines</span><span class="o">.</span><span class="n">Line2D</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Network Arcs&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="c1"># update keyword arguments for matplotlib</span>
+<span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;lw&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">})</span>
+
+<span class="c1"># set vertices legend entry</span>
+<span class="n">vertices</span> <span class="o">=</span> <span class="n">mlines</span><span class="o">.</span><span class="n">Line2D</span><span class="p">(</span>
+    <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Network Vertices&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set true school locations legend entry</span>
+<span class="n">tschools</span> <span class="o">=</span> <span class="n">mlines</span><span class="o">.</span><span class="n">Line2D</span><span class="p">(</span>
+    <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;School Locations&quot;</span>
+<span class="p">)</span>
+<span class="c1"># set network-snapped school locations legend entry</span>
+<span class="n">sschools</span> <span class="o">=</span> <span class="n">mlines</span><span class="o">.</span><span class="n">Line2D</span><span class="p">(</span>
+    <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Snapped Schools&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># update keyword arguments for matplotlib</span>
+<span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;c&quot;</span><span class="p">:</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span><span class="mf">0.75</span><span class="p">})</span>
+
+<span class="c1"># set true crimes locations legend entry</span>
+<span class="n">tcrimes</span> <span class="o">=</span> <span class="n">mlines</span><span class="o">.</span><span class="n">Line2D</span><span class="p">(</span>
+    <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Crime Locations&quot;</span>
+<span class="p">)</span>
+<span class="c1"># set network-snapped crimes locations legend entry</span>
+<span class="n">scrimes</span> <span class="o">=</span> <span class="n">mlines</span><span class="o">.</span><span class="n">Line2D</span><span class="p">(</span>
+    <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Snapped Crimes&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># combine all legend patches</span>
+<span class="n">patches</span> <span class="o">=</span> <span class="p">[</span><span class="n">arcs</span><span class="p">,</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">tschools</span><span class="p">,</span> <span class="n">sschools</span><span class="p">,</span> <span class="n">tcrimes</span><span class="p">,</span> <span class="n">scrimes</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Plotting-geopandas.GeoDataFrame-objects">
+<h4>Plotting <code class="docutils literal notranslate"><span class="pre">geopandas.GeoDataFrame</span></code> objects<a class="headerlink" href="#Plotting-geopandas.GeoDataFrame-objects" title="Link to this heading">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set the streets as the plot base</span>
+<span class="n">base</span> <span class="o">=</span> <span class="n">arcs_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">),</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># create vertices keyword arguments for matplotlib</span>
+<span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ax&quot;</span><span class="p">:</span><span class="n">base</span><span class="p">}</span>
+<span class="n">vertices_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="c1"># update crime keyword arguments for matplotlib</span>
+<span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;alpha&quot;</span><span class="p">:</span><span class="mf">0.5</span><span class="p">,</span> <span class="s2">&quot;zorder&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">})</span>
+<span class="n">true_crimes_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="n">snapped_crimes_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="c1"># update schools keyword arguments for matplotlib</span>
+<span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;cmap&quot;</span><span class="p">:</span><span class="s2">&quot;tab20&quot;</span><span class="p">,</span> <span class="s2">&quot;column&quot;</span><span class="p">:</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;zorder&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">})</span>
+<span class="n">true_schools_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">marker</span><span class="o">=</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="n">snapped_schools_df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">markersize</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="c1"># add scale bar</span>
+<span class="n">kw</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;units&quot;</span><span class="p">:</span><span class="s2">&quot;ft&quot;</span><span class="p">,</span> <span class="s2">&quot;dimension&quot;</span><span class="p">:</span><span class="s2">&quot;imperial-length&quot;</span><span class="p">,</span> <span class="s2">&quot;fixed_value&quot;</span><span class="p">:</span><span class="mi">1000</span><span class="p">}</span>
+<span class="n">base</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">ScaleBar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">,</span> <span class="n">box_alpha</span><span class="o">=</span><span class="mf">.75</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">))</span>
+
+<span class="c1"># add legend</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span>
+    <span class="n">handles</span><span class="o">=</span><span class="n">patches</span><span class="p">,</span>
+    <span class="n">fancybox</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">framealpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+    <span class="n">scatterpoints</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;xx-large&quot;</span><span class="p">,</span>
+    <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.04</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">),</span>
+    <span class="n">borderpad</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span>
+    <span class="n">labelspacing</span><span class="o">=</span><span class="mf">2.</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_quickstart_32_0.png" class="no-scaled-link" src="../_images/notebooks_quickstart_32_0.png" style="width: 1421px; height: 967px;" />
+</div>
+</div>
+<hr class="docutils" />
+</section>
+</section>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+<div id="sourcelink">
+  <a href="../_sources/notebooks/quickstart.ipynb.txt"
+     rel="nofollow">Source</a>
+</div>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017-, pysal developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

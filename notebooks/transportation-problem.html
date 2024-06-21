@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>The Transportation Problem &#8212; spaghetti v1.7.6 Manual</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=9afac83c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pysal-styles.css?v=4849bb1c" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+    <script src="../_static/documentation_options.js?v=6cfcd222"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"TeX": {"equationNumbers": {"autoNumber": "AMS", "useLabelIds": true}}, "tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="icon" href="../_static/pysal_favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="The Traveling Sales(man)(person) Problem — TSP" href="tsp.html" />
+    <link rel="prev" title="Demostrating network-based optimal facility location modeling" href="facility-location.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          spaghetti</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.7.6</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../installation.html">Installation</a></li>
+                <li><a href="../tutorials.html">Tutorials</a></li>
+                <li><a href="../api.html">API</a></li>
+                <li><a href="../references.html">References</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#installing-with-conda-via-spaghetti-feedstock-highly-recommended">Installing with <code class="docutils literal notranslate"><span class="pre">conda</span></code> via spaghetti-feedstock (highly recommended)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#installing-with-python-package-index">Installing with Python Package Index</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#development-version">Development Version</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pointpattern-attributes.html">Network point pattern attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="connected-components.html">Connected components in a spatial network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shortest-path-visualization.html">Generating regular lattices and visualizing shortest paths</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network-segmentation.html">Spatial network segmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network-spatial-dependence.html">Network-constrained spatial dependence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network-spatial-weights.html">Network spatial weights</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spanning-trees.html">Network spanning trees</a></li>
+<li class="toctree-l2"><a class="reference internal" href="caveats.html">Caveats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network-spatial-autocorrelation.html">Network-constrained spatial autocorrelation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="facility-location.html">Demostrating network-based optimal facility location modeling</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">The Transportation Problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tsp.html">The Traveling Sales(man)(person) Problem — TSP</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#network-feature-instantiation">Network feature instantiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#network-feature-extraction-and-creation">Network feature extraction and creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#save-and-load-a-network">Save and load a network</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">The Transportation Problem</a><ul>
+<li><a class="reference internal" href="#Integrating-pysal/spaghetti-and-python-mip-for-optimal-shipping">Integrating <code class="docutils literal notranslate"><span class="pre">pysal/spaghetti</span></code> and python-mip for optimal shipping</a></li>
+<li><a class="reference internal" href="#1-Introduction">1 Introduction</a><ul>
+<li><a class="reference internal" href="#Scenario">Scenario</a></li>
+<li><a class="reference internal" href="#Integer-Linear-Programming-Formulation-based-on-Daskin-(2013,-Ch.-2).">Integer Linear Programming Formulation based on Daskin (2013, Ch. 2).</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#2.-A-model,-data,-and-parameters">2. A model, data, and parameters</a><ul>
+<li><a class="reference internal" href="#Schools-labeled-as-either-'supply'-or-'demand'-locations">Schools labeled as either ‘supply’ or ‘demand’ locations</a></li>
+<li><a class="reference internal" href="#Amount-of-supply-and-demand-at-each-location-(indexed-by-supply_schools-and-demand_schools)">Amount of supply and demand at each location (indexed by <code class="docutils literal notranslate"><span class="pre">supply_schools</span></code> and <code class="docutils literal notranslate"><span class="pre">demand_schools</span></code>)</a></li>
+<li><a class="reference internal" href="#Solution-class">Solution class</a></li>
+<li><a class="reference internal" href="#Plotting-helper-functions-and-constants">Plotting helper functions and constants</a></li>
+<li><a class="reference internal" href="#Streets">Streets</a></li>
+<li><a class="reference internal" href="#Schools">Schools</a></li>
+<li><a class="reference internal" href="#Schools---supply-nodes">Schools - supply nodes</a></li>
+<li><a class="reference internal" href="#Schools---demand-nodes">Schools - demand nodes</a></li>
+<li><a class="reference internal" href="#Instantiate-a-network-object">Instantiate a network object</a></li>
+<li><a class="reference internal" href="#Plot">Plot</a></li>
+<li><a class="reference internal" href="#Associate-both-the-supply-and-demand-schools-with-the-network-and-plot">Associate both the supply and demand schools with the network and plot</a></li>
+<li><a class="reference internal" href="#Calculate-distance-matrix-while-generating-shortest-path-trees">Calculate distance matrix while generating shortest path trees</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#3.-The-Transportation-Problem">3. The Transportation Problem</a><ul>
+<li><a class="reference internal" href="#Create-decision-variables-for-the-supply-locations-and-amount-to-be-supplied">Create decision variables for the supply locations and amount to be supplied</a></li>
+<li><a class="reference internal" href="#Create-decision-variables-for-the-demand-locations-and-amount-to-be-received">Create decision variables for the demand locations and amount to be received</a></li>
+<li><a class="reference internal" href="#Solve-the-Transportation-Problem">Solve the Transportation Problem</a></li>
+<li><a class="reference internal" href="#Linear-program-(compare-to-its-formulation-in-the-Introduction)">Linear program (compare to its formulation in the Introduction)</a></li>
+<li><a class="reference internal" href="#Extract-all-network-shortest-paths">Extract all network shortest paths</a></li>
+<li><a class="reference internal" href="#Extract-the-shipping-paths">Extract the shipping paths</a></li>
+<li><a class="reference internal" href="#Plot-optimal-shipping-schedule">Plot optimal shipping schedule</a></li>
+<li><a class="reference internal" href="#By-utilizing-the-Transportation-Problem,-Dr.-Carson-has-been-able-to-minimize-shipping-costs-and-redistribute-the-microscopes-to-the-schools-in-need!">By utilizing the Transportation Problem, Dr. Carson has been able to minimize shipping costs and redistribute the microscopes to the schools in need!</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="admonition note">
+<p>This page was generated from <a class="reference external" href="https://github.com/pysal/spaghetti/blob/main/notebooks/transportation-problem.ipynb">notebooks/transportation-problem.ipynb</a>.
+Interactive online version:
+<span class="raw-html"><a href="https://mybinder.org/v2/gh/pysal/spaghetti/main?filepath=notebooks/transportation-problem.ipynb"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a></span></p>
+</div>
+<hr class="docutils" />
+<p><strong>If any part of this notebook is used in your research, please cite with the reference found in</strong> <a class="reference external" href="https://github.com/pysal/spaghetti#bibtex-citation">README.md</a><strong>.</strong></p>
+<hr class="docutils" />
+<section id="The-Transportation-Problem">
+<h1>The Transportation Problem<a class="headerlink" href="#The-Transportation-Problem" title="Link to this heading">¶</a></h1>
+<section id="Integrating-pysal/spaghetti-and-python-mip-for-optimal-shipping">
+<h2>Integrating <code class="docutils literal notranslate"><span class="pre">pysal/spaghetti</span></code> and <a class="reference external" href="https://github.com/coin-or/python-mip">python-mip</a> for optimal shipping<a class="headerlink" href="#Integrating-pysal/spaghetti-and-python-mip-for-optimal-shipping" title="Link to this heading">¶</a></h2>
+<p><strong>Author: James D. Gaboardi</strong> <a class="reference external" href="mailto:jgaboardi&#37;&#52;&#48;gmail&#46;com">jgaboardi<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
+<p><strong>This notebook provides a use case for:</strong></p>
+<ol class="arabic simple">
+<li><p>Introducing the Transportation Problem</p></li>
+<li><p>Declaration of a solution class and model parameters</p></li>
+<li><p>Solving the Transportation Problem for an optimal shipment plan</p></li>
+</ol>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &quot;retina&quot;
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
+<span class="o">%</span><span class="k">watermark</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Last updated: 2022-11-01T23:22:10.592678-04:00
+
+Python implementation: CPython
+Python version       : 3.10.6
+IPython version      : 8.6.0
+
+Compiler    : Clang 13.0.1
+OS          : Darwin
+Release     : 22.1.0
+Machine     : x86_64
+Processor   : i386
+CPU cores   : 8
+Architecture: 64bit
+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span>
+<span class="kn">from</span> <span class="nn">libpysal</span> <span class="kn">import</span> <span class="n">examples</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="kn">import</span> <span class="nn">mip</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">spaghetti</span>
+<span class="kn">import</span> <span class="nn">matplotlib_scalebar</span>
+<span class="kn">from</span> <span class="nn">matplotlib_scalebar.scalebar</span> <span class="kn">import</span> <span class="n">ScaleBar</span>
+
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="o">%</span><span class="k">watermark</span> -w
+<span class="o">%</span><span class="k">watermark</span> -iv
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Watermark: 2.3.1
+
+numpy              : 1.23.4
+mip                : 1.14.1
+libpysal           : 4.6.2
+matplotlib         : 3.6.1
+spaghetti          : 1.6.8
+geopandas          : 0.12.1
+json               : 2.0.9
+matplotlib_scalebar: 0.8.0
+
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/the-gaboardi/miniconda3/envs/py310_spgh_dev/lib/python3.10/site-packages/spaghetti/network.py:39: FutureWarning: The next major release of pysal/spaghetti (2.0.0) will drop support for all ``libpysal.cg`` geometries. This change is a first step in refactoring ``spaghetti`` that is expected to result in dramatically reduced runtimes for network instantiation and operations. Users currently requiring network and point pattern input as ``libpysal.cg`` geometries should prepare for this simply by converting to ``shapely`` geometries.
+  warnings.warn(f&#34;{dep_msg}&#34;, FutureWarning)
+</pre></div></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="1-Introduction">
+<h2>1 Introduction<a class="headerlink" href="#1-Introduction" title="Link to this heading">¶</a></h2>
+<section id="Scenario">
+<h3>Scenario<a class="headerlink" href="#Scenario" title="Link to this heading">¶</a></h3>
+<p>There are <strong>8</strong> schools in Neighborhood Y of City X and a total of <strong>100</strong> microscopes for the biology classes at the <strong>8</strong> schools, though the microscopes are not evenly distributed across the locations. Since last academic year there has been a significant enrollment shift in the neighborhood, and at <strong>4</strong> of the schools there is a surplus whereas the remaining <strong>4</strong> schools require additional microscopes. Dr. Rachel Carson, the head of the biology department at City X’s School Board decides
+to utilize a mathematical programming model to solve the microscope discrepency. After consideration, she selects the Transportation Problem.</p>
+<p>The Transportation Problem seeks to allocate supply to demand while minimizing transportation costs and was formally described by Hitchcock (1941). Supply (<span class="math notranslate nohighlight">\(\textit{n}\)</span>) and demand (<span class="math notranslate nohighlight">\(\textit{m}\)</span>) are generally represented as unit weights of decision variables at facilities along a network with the time or distance between nodes representing the cost of transporting one unit from a supply node to a demand node. These costs are stored in an <span class="math notranslate nohighlight">\(\textit{n x m}\)</span> cost matrix.</p>
+</section>
+<hr class="docutils" />
+<section id="Integer-Linear-Programming-Formulation-based-on-Daskin-(2013,-Ch.-2).">
+<h3>Integer Linear Programming Formulation based on Daskin (2013, Ch. 2).<a class="headerlink" href="#Integer-Linear-Programming-Formulation-based-on-Daskin-(2013,-Ch.-2)." title="Link to this heading">¶</a></h3>
+<p>:math:<a href="#id2"><span class="problematic" id="id3">`</span></a>begin{array}
+displaystyle normalsize textrm{Minimize} &amp; displaystyle normalsize sum_{i in I} sum_{j in J} c_{ij}x_{ij}  &amp; &amp; &amp; &amp;  normalsize (1) \
+normalsize textrm{Subject To} &amp; displaystyle normalsize sum_{j in J} x_{ij} leq S_i &amp; normalsize forall i in I; &amp;  &amp; &amp;normalsize (2)\</p>
+<blockquote>
+<div><p>&amp; displaystyle normalsize sum_{i in I} x_{ij} geq D_j &amp; normalsize forall j in J; &amp;  &amp; &amp;normalsize (3)\</p>
+</div></blockquote>
+<p>&amp; displaystyle normalsize x_{ij} geq 0 &amp; displaystyle normalsize forall i in I &amp; displaystyle normalsize normalsize forall j in j. &amp; &amp;normalsize (4)\
+end{array}`</p>
+<p><span class="math notranslate nohighlight">\(\begin{array}
+\displaystyle \normalsize \textrm{Where} &amp; \small i &amp; \small = &amp; \small \textrm{each potential origin node} &amp;&amp;&amp;&amp;\\
+&amp; \small I &amp; \small = &amp; \small \textrm{the complete set of potential origin nodes} &amp;&amp;&amp;&amp;\\
+&amp; \small j &amp; \small = &amp; \small \textrm{each potential destination node} &amp;&amp;&amp;&amp;\\
+&amp; \small J &amp; \small = &amp; \small \textrm{the complete set of potential destination nodes} &amp;&amp;&amp;&amp;\\
+&amp; \small x_{ij} &amp; \small = &amp; \small \textrm{amount to be shipped from } i \in I \textrm{ to } j \in J  &amp;&amp;&amp;&amp;\\
+&amp; \small c_{ij} &amp; \small = &amp; \small \textrm{per unit shipping costs between all } i,j \textrm{ pairs} &amp;&amp;&amp;&amp; \\
+&amp; \small S_i &amp; \small = &amp; \small \textrm{node } i \textrm{ supply for } i \in I &amp;&amp;&amp;&amp;\\
+&amp; \small D_j &amp; \small = &amp; \small \textrm{node } j \textrm{ demand for } j \in J &amp;&amp;&amp;&amp;\\
+\end{array}\)</span></p>
+<hr class="docutils" />
+<p><strong>References</strong></p>
+<ul class="simple">
+<li><p><strong>Church, Richard L. and Murray, Alan T.</strong> (2009) <em>Business Site Selection, Locational Analysis, and GIS</em>. Hoboken. John Wiley &amp; Sons, Inc.</p></li>
+<li><p><strong>Daskin, M.</strong> (2013) <em>Network and Discrete Location: Models, Algorithms, and Applications</em>. New York: John Wiley &amp; Sons, Inc.</p></li>
+<li><p><strong>Gass, S. I. and Assad, A. A.</strong> (2005) <em>An Annotated Timeline of Operations Research: An Informal History</em>. Springer US.</p></li>
+<li><p><strong>Hitchcock, Frank L.</strong> (1941) <em>The Distribution of a Product from Several Sources to Numerous Localities</em>. Journal of Mathematics and Physics. 20(1):224-230.</p></li>
+<li><p><strong>Koopmans, Tjalling C.</strong> (1949) <em>Optimum Utilization of the Transportation System</em>. Econometrica. 17:136-146.</p></li>
+<li><p><strong>Miller, H. J. and Shaw, S.-L.</strong> (2001) <em>Geographic Information Systems for Transportation: Principles and Applications</em>. New York. Oxford University Press.</p></li>
+<li><p><strong>Phillips, Don T. and Garcia‐Diaz, Alberto.</strong> (1981) <em>Fundamentals of Network Analysis</em>. Englewood Cliffs. Prentice Hall.</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="2.-A-model,-data,-and-parameters">
+<h2>2. A model, data, and parameters<a class="headerlink" href="#2.-A-model,-data,-and-parameters" title="Link to this heading">¶</a></h2>
+<section id="Schools-labeled-as-either-'supply'-or-'demand'-locations">
+<h3>Schools labeled as either ‘supply’ or ‘demand’ locations<a class="headerlink" href="#Schools-labeled-as-either-'supply'-or-'demand'-locations" title="Link to this heading">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">supply_schools</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">]</span>
+<span class="n">demand_schools</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Amount-of-supply-and-demand-at-each-location-(indexed-by-supply_schools-and-demand_schools)">
+<h3>Amount of supply and demand at each location (indexed by <code class="docutils literal notranslate"><span class="pre">supply_schools</span></code> and <code class="docutils literal notranslate"><span class="pre">demand_schools</span></code>)<a class="headerlink" href="#Amount-of-supply-and-demand-at-each-location-(indexed-by-supply_schools-and-demand_schools)" title="Link to this heading">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">amount_supply</span> <span class="o">=</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">35</span><span class="p">]</span>
+<span class="n">amount_demand</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">40</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Solution-class">
+<h3>Solution class<a class="headerlink" href="#Solution-class" title="Link to this heading">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">TransportationProblem</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">supply_nodes</span><span class="p">,</span>
+        <span class="n">demand_nodes</span><span class="p">,</span>
+        <span class="n">cij</span><span class="p">,</span>
+        <span class="n">si</span><span class="p">,</span>
+        <span class="n">dj</span><span class="p">,</span>
+        <span class="n">xij_tag</span><span class="o">=</span><span class="s2">&quot;x_</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">supply_constr_tag</span><span class="o">=</span><span class="s2">&quot;supply(</span><span class="si">%s</span><span class="s2">)&quot;</span><span class="p">,</span>
+        <span class="n">demand_constr_tag</span><span class="o">=</span><span class="s2">&quot;demand(</span><span class="si">%s</span><span class="s2">)&quot;</span><span class="p">,</span>
+        <span class="n">solver</span><span class="o">=</span><span class="s2">&quot;cbc&quot;</span><span class="p">,</span>
+        <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Instantiate and solve the Primal Transportation Problem</span>
+<span class="sd">        based the formulation from Daskin (2013, Ch. 2).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        supply_nodes : geopandas.GeoSeries</span>
+<span class="sd">            Supply node decision variables.</span>
+<span class="sd">        demand_nodes : geopandas.GeoSeries</span>
+<span class="sd">            Demand node decision variables.</span>
+<span class="sd">        cij : numpy.array</span>
+<span class="sd">            Supply-to-demand distance matrix for nodes.</span>
+<span class="sd">        si : geopandas.GeoSeries</span>
+<span class="sd">            Amount that can be supplied by each supply node.</span>
+<span class="sd">        dj : geopandas.GeoSeries</span>
+<span class="sd">            Amount that can be received by each demand node.</span>
+<span class="sd">        xij_tag : str</span>
+<span class="sd">            Shipping decision variable names within the model. Default is</span>
+<span class="sd">            &#39;x_%s,%s&#39; where %s indicates string formatting.</span>
+<span class="sd">        supply_constr_tag : str</span>
+<span class="sd">            Supply constraint labels. Default is &#39;supply(%s)&#39;.</span>
+<span class="sd">        demand_constr_tag : str</span>
+<span class="sd">            Demand constraint labels. Default is &#39;demand(%s)&#39;.</span>
+<span class="sd">        solver : str</span>
+<span class="sd">            Default is &#39;cbc&#39; (coin-branch-cut). Can be set</span>
+<span class="sd">            to &#39;gurobi&#39; (if Gurobi is installed).</span>
+<span class="sd">        display : bool</span>
+<span class="sd">            Print out solution results.</span>
+
+<span class="sd">        Attributes</span>
+<span class="sd">        ----------</span>
+<span class="sd">        supply_nodes : See description in above.</span>
+<span class="sd">        demand_nodes : See description in above.</span>
+<span class="sd">        cij : See description in above.</span>
+<span class="sd">        si : See description in above.</span>
+<span class="sd">        dj : See description in above.</span>
+<span class="sd">        xij_tag : See description in above.</span>
+<span class="sd">        supply_constr_tag : See description in above.</span>
+<span class="sd">        demand_constr_tag : See description in above.</span>
+<span class="sd">        rows : int</span>
+<span class="sd">            The number of supply nodes.</span>
+<span class="sd">        rrows : range</span>
+<span class="sd">            The index of supply nodes.</span>
+<span class="sd">        cols : int</span>
+<span class="sd">            The number of demand nodes.</span>
+<span class="sd">        rcols : range</span>
+<span class="sd">            The index of demand nodes.</span>
+<span class="sd">        model : mip.model.Model</span>
+<span class="sd">            Integer Linear Programming problem instance.</span>
+<span class="sd">        xij : numpy.array</span>
+<span class="sd">            Shipping decision variables (``mip.entities.Var``).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># all nodes to be visited</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">supply_nodes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">demand_nodes</span> <span class="o">=</span> <span class="n">supply_nodes</span><span class="p">,</span> <span class="n">demand_nodes</span>
+        <span class="c1"># shipping costs (distance matrix) and amounts</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cij</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">si</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dj</span> <span class="o">=</span> <span class="n">cij</span><span class="p">,</span> <span class="n">si</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">dj</span><span class="o">.</span><span class="n">values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ensure_float</span><span class="p">()</span>
+        <span class="c1"># alpha tag for decision variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xij_tag</span> <span class="o">=</span> <span class="n">xij_tag</span>
+        <span class="c1"># alpha tag for supply and demand constraints</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">supply_constr_tag</span> <span class="o">=</span> <span class="n">supply_constr_tag</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">demand_constr_tag</span> <span class="o">=</span> <span class="n">demand_constr_tag</span>
+
+        <span class="c1"># instantiate a model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">mip</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="s2">&quot; TransportationProblem&quot;</span><span class="p">,</span> <span class="n">solver_name</span><span class="o">=</span><span class="n">solver</span><span class="p">)</span>
+        <span class="c1"># define row and column indices</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rows</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">si</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">dj</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rrows</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rcols</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rows</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cols</span><span class="p">)</span>
+        <span class="c1"># create and set the decision variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shipping_dvs</span><span class="p">()</span>
+        <span class="c1"># set the objective function</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">objective_func</span><span class="p">()</span>
+        <span class="c1"># add supply constraints</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_supply_constrs</span><span class="p">()</span>
+        <span class="c1"># add demand constraints</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_demand_constrs</span><span class="p">()</span>
+        <span class="c1"># solve</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">display</span><span class="o">=</span><span class="n">display</span><span class="p">)</span>
+        <span class="c1"># shipping decisions lookup</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_decisions</span><span class="p">(</span><span class="n">display</span><span class="o">=</span><span class="n">display</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">ensure_float</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert integers to floats (rough edge in mip.LinExpr)&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cij</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cij</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">si</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">si</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dj</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">shipping_dvs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create the shipping decision variables - eq (4).&quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">_s</span><span class="p">(</span><span class="n">_x</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Helper for naming variables&quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">supply_nodes</span><span class="p">[</span><span class="n">_x</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">def</span> <span class="nf">_d</span><span class="p">(</span><span class="n">_x</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Helper for naming variables&quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">demand_nodes</span><span class="p">[</span><span class="n">_x</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">xij</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add_var</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xij_tag</span> <span class="o">%</span> <span class="p">(</span><span class="n">_s</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">_d</span><span class="p">(</span><span class="n">j</span><span class="p">)))</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rcols</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rrows</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xij</span> <span class="o">=</span> <span class="n">xij</span>
+
+    <span class="k">def</span> <span class="nf">objective_func</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add the objective function - eq (1).&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">objective</span> <span class="o">=</span> <span class="n">mip</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span>
+            <span class="n">mip</span><span class="o">.</span><span class="n">xsum</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cij</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">xij</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rrows</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rcols</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">add_supply_constrs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add supply contraints to the model - eq (2).&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rrows</span><span class="p">:</span>
+            <span class="n">rhs</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">si</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">supply_constr_tag</span> <span class="o">%</span> <span class="n">i</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">+=</span> <span class="n">mip</span><span class="o">.</span><span class="n">xsum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xij</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rcols</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">rhs</span><span class="p">,</span> <span class="n">label</span>
+
+    <span class="k">def</span> <span class="nf">add_demand_constrs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add demand contraints to the model - eq (3).&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rcols</span><span class="p">:</span>
+            <span class="n">rhs</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dj</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">demand_constr_tag</span> <span class="o">%</span> <span class="n">j</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">+=</span> <span class="n">mip</span><span class="o">.</span><span class="n">xsum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xij</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rrows</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">rhs</span><span class="p">,</span> <span class="n">label</span>
+
+    <span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Solve the model&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">optimize</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">objective_value</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Minimized shipping costs: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">obj</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_decisions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetch the selected decision variables.&quot;&quot;&quot;</span>
+        <span class="n">shipping_decisions</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Shipping decisions:&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rrows</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rcols</span><span class="p">:</span>
+                <span class="n">v</span><span class="p">,</span> <span class="n">vx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xij</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">xij</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">x</span>
+                <span class="k">if</span> <span class="n">vx</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">vx</span><span class="p">)</span>
+                    <span class="n">shipping_decisions</span><span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">vx</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shipping_decisions</span> <span class="o">=</span> <span class="n">shipping_decisions</span>
+
+    <span class="k">def</span> <span class="nf">print_lp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Save LP file in order to read in and print.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">lp_file_name</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.lp&quot;</span> <span class="o">%</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">lp_file_name</span><span class="p">)</span>
+        <span class="n">lp_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">lp_file_name</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+        <span class="n">lp</span> <span class="o">=</span> <span class="n">lp_file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">lp</span><span class="p">)</span>
+        <span class="n">lp_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">lp_file_name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">extract_shipments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">paths</span><span class="p">,</span> <span class="n">id_col</span><span class="p">,</span> <span class="n">ship</span><span class="o">=</span><span class="s2">&quot;ship&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract the supply to demand shipments as a</span>
+<span class="sd">        ``geopandas.GeoDataFrame`` of ``shapely.geometry.LineString`` objects.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        paths : geopandas.GeoDataFrame</span>
+<span class="sd">            Shortest-path routes between all ``self.supply_nodes``</span>
+<span class="sd">            and ``self.demand_nodes``.</span>
+<span class="sd">        id_col : str</span>
+<span class="sd">            ID column name.</span>
+<span class="sd">        ship : str</span>
+<span class="sd">            Column name for the amount of good shipped.</span>
+<span class="sd">            Default is &#39;ship&#39;.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        shipments : geopandas.GeoDataFrame</span>
+<span class="sd">            Optimal shipments from ``self.supply_nodes`` to</span>
+<span class="sd">            ``self.demand_nodes``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">_id</span><span class="p">(</span><span class="n">sp</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;ID label helper&quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="nb">tuple</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sp</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)])</span>
+
+        <span class="n">paths</span><span class="p">[</span><span class="n">ship</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span>
+        <span class="c1"># set label of the shipping path for each OD pair.</span>
+        <span class="k">for</span> <span class="n">ship_path</span><span class="p">,</span> <span class="n">shipment</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">shipping_decisions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">paths</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">paths</span><span class="p">[</span><span class="n">id_col</span><span class="p">]</span> <span class="o">==</span> <span class="n">_id</span><span class="p">(</span><span class="n">ship_path</span><span class="p">)),</span> <span class="n">ship</span><span class="p">]</span> <span class="o">=</span> <span class="n">shipment</span>
+        <span class="c1"># extract only shiiping paths</span>
+        <span class="n">shipments</span> <span class="o">=</span> <span class="n">paths</span><span class="p">[</span><span class="n">paths</span><span class="p">[</span><span class="n">ship</span><span class="p">]</span> <span class="o">!=</span> <span class="nb">int</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">shipments</span><span class="p">[</span><span class="n">ship</span><span class="p">]</span> <span class="o">=</span> <span class="n">shipments</span><span class="p">[</span><span class="n">ship</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">shipments</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Plotting-helper-functions-and-constants">
+<h3>Plotting helper functions and constants<a class="headerlink" href="#Plotting-helper-functions-and-constants" title="Link to this heading">¶</a></h3>
+<p><strong>Note: originating shipments</strong></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">shipping_colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;maroon&quot;</span><span class="p">,</span> <span class="s2">&quot;cyan&quot;</span><span class="p">,</span> <span class="s2">&quot;magenta&quot;</span><span class="p">,</span> <span class="s2">&quot;orange&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">obs_labels</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Label each point pattern observation.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_lab_loc</span><span class="p">(</span><span class="n">_x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Helper for labeling observations.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">_x</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">o</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s2">&quot;schools&quot;</span><span class="p">:</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">o</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">kws</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="n">s</span><span class="p">,</span> <span class="s2">&quot;ha&quot;</span><span class="p">:</span> <span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;va&quot;</span><span class="p">:</span> <span class="s2">&quot;bottom&quot;</span><span class="p">,</span> <span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="s2">&quot;oblique&quot;</span><span class="p">}</span>
+    <span class="n">kws</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">o</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">X</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">col</span><span class="p">]),</span> <span class="n">xy</span><span class="o">=</span><span class="n">_lab_loc</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">**</span><span class="n">kws</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">make_patches</span><span class="p">(</span><span class="n">objects</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create patches for legend&quot;&quot;&quot;</span>
+    <span class="n">patches</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">_object</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">oname</span> <span class="o">=</span> <span class="n">_object</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">oname</span> <span class="o">=</span> <span class="s2">&quot;shipping&quot;</span>
+        <span class="k">if</span> <span class="n">oname</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;schools&quot;</span><span class="p">,</span> <span class="s2">&quot;supply&quot;</span><span class="p">,</span> <span class="s2">&quot;demand&quot;</span><span class="p">]:</span>
+            <span class="n">ovalue</span> <span class="o">=</span> <span class="n">_object</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">oname</span> <span class="o">==</span> <span class="s2">&quot;schools&quot;</span><span class="p">:</span>
+                <span class="n">ms</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">oname</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;supply&quot;</span><span class="p">):</span>
+                <span class="n">ms</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="mf">0.25</span>
+            <span class="k">elif</span> <span class="n">oname</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;demand&quot;</span><span class="p">):</span>
+                <span class="n">ms</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="mf">0.25</span>
+            <span class="k">if</span> <span class="n">oname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;snapped&quot;</span><span class="p">):</span>
+                <span class="n">ms</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ms</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="mi">1</span>
+            <span class="n">_kws</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;lw&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="n">c</span><span class="p">,</span> <span class="s2">&quot;marker&quot;</span><span class="p">:</span> <span class="n">m</span><span class="p">,</span> <span class="s2">&quot;ms&quot;</span><span class="p">:</span> <span class="n">ms</span><span class="p">,</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="n">a</span><span class="p">}</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> — </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">oname</span><span class="o">.</span><span class="n">capitalize</span><span class="p">(),</span> <span class="nb">int</span><span class="p">(</span><span class="n">ovalue</span><span class="p">))</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">Line2D</span><span class="p">([],</span> <span class="p">[],</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">_kws</span><span class="p">)</span>
+            <span class="n">patches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">patch_info</span> <span class="o">=</span> <span class="n">plot_shipments</span><span class="p">(</span><span class="n">_object</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">for_legend</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">lw</span><span class="p">,</span> <span class="n">lwsc</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="ow">in</span> <span class="n">patch_info</span><span class="p">:</span>
+                <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;s</span><span class="si">%s</span><span class="s2">$</span><span class="se">\\</span><span class="s2">rightarrow$d</span><span class="si">%s</span><span class="s2"> — </span><span class="si">%s</span><span class="s2"> microscopes&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">lw</span><span class="p">)</span>
+                <span class="n">_kws</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mf">0.75</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="n">c</span><span class="p">,</span> <span class="s2">&quot;lw&quot;</span><span class="p">:</span> <span class="n">lwsc</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="n">label</span><span class="p">}</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">Line2D</span><span class="p">([],</span> <span class="p">[],</span> <span class="n">solid_capstyle</span><span class="o">=</span><span class="s2">&quot;round&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">_kws</span><span class="p">)</span>
+                <span class="n">patches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">patches</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">legend</span><span class="p">(</span><span class="n">objects</span><span class="p">,</span> <span class="n">anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.005</span><span class="p">,</span> <span class="mf">1.016</span><span class="p">)):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add a legend to a plot&quot;&quot;&quot;</span>
+    <span class="n">patches</span> <span class="o">=</span> <span class="n">make_patches</span><span class="p">(</span><span class="n">objects</span><span class="p">)</span>
+    <span class="n">kws</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;fancybox&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;framealpha&quot;</span><span class="p">:</span> <span class="mf">0.85</span><span class="p">,</span> <span class="s2">&quot;fontsize&quot;</span><span class="p">:</span> <span class="s2">&quot;x-large&quot;</span><span class="p">}</span>
+    <span class="n">kws</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;bbox_to_anchor&quot;</span><span class="p">:</span><span class="n">anchor</span><span class="p">,</span> <span class="s2">&quot;labelspacing&quot;</span><span class="p">:</span><span class="mf">2.</span><span class="p">,</span> <span class="s2">&quot;borderpad&quot;</span><span class="p">:</span><span class="mf">2.</span><span class="p">})</span>
+    <span class="n">legend</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="o">=</span><span class="n">patches</span><span class="p">,</span> <span class="o">**</span><span class="n">kws</span><span class="p">)</span>
+    <span class="n">legend</span><span class="o">.</span><span class="n">get_frame</span><span class="p">()</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_shipments</span><span class="p">(</span><span class="n">sd</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">scaled</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">for_legend</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Helper for plotting shipments based on OD and magnitude&quot;&quot;&quot;</span>
+    <span class="n">_patches</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">_plot_kws</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;alpha&quot;</span><span class="p">:</span><span class="mf">0.75</span><span class="p">,</span> <span class="s2">&quot;zorder&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;capstyle&quot;</span><span class="p">:</span><span class="s2">&quot;round&quot;</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">gdf</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">shipping_colors</span><span class="p">,</span> <span class="n">sd</span><span class="p">):</span>
+        <span class="n">lw</span><span class="p">,</span> <span class="n">lw_scaled</span><span class="p">,</span> <span class="n">ids</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="s2">&quot;ship&quot;</span><span class="p">],</span> <span class="n">gdf</span><span class="p">[</span><span class="s2">&quot;ship&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">scaled</span><span class="p">,</span> <span class="n">gdf</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">for_legend</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">_lw</span><span class="p">,</span> <span class="n">_lwsc</span><span class="p">,</span> <span class="n">_id</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">lw</span><span class="p">,</span> <span class="n">lw_scaled</span><span class="p">,</span> <span class="n">ids</span><span class="p">):</span>
+                <span class="n">_patches</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">c</span><span class="p">,</span> <span class="n">_lw</span><span class="p">,</span> <span class="n">_lwsc</span><span class="p">,</span> <span class="n">_id</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">gdf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="n">lw_scaled</span><span class="p">,</span> <span class="o">**</span><span class="n">_plot_kws</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">for_legend</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_patches</span>
+</pre></div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="Streets">
+<h3>Streets<a class="headerlink" href="#Streets" title="Link to this heading">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">streets</span> <span class="o">=</span> <span class="n">geopandas</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;streets.shp&quot;</span><span class="p">))</span>
+<span class="n">streets</span><span class="o">.</span><span class="n">crs</span> <span class="o">=</span> <span class="s2">&quot;esri:102649&quot;</span>
+<span class="n">streets</span> <span class="o">=</span> <span class="n">streets</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s2">&quot;epsg:2762&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Schools">
+<h3>Schools<a class="headerlink" href="#Schools" title="Link to this heading">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">schools</span> <span class="o">=</span> <span class="n">geopandas</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">examples</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;schools.shp&quot;</span><span class="p">))</span>
+<span class="n">schools</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;schools&quot;</span>
+<span class="n">schools</span><span class="o">.</span><span class="n">crs</span> <span class="o">=</span> <span class="s2">&quot;esri:102649&quot;</span>
+<span class="n">schools</span> <span class="o">=</span> <span class="n">schools</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s2">&quot;epsg:2762&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Schools---supply-nodes">
+<h3>Schools - supply nodes<a class="headerlink" href="#Schools---supply-nodes" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">schools_supply</span> <span class="o">=</span> <span class="n">schools</span><span class="p">[</span><span class="n">schools</span><span class="p">[</span><span class="s2">&quot;POLYID&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">supply_schools</span><span class="p">)]</span>
+<span class="n">schools_supply</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;supply&quot;</span>
+<span class="n">schools_supply</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>POLYID</th>
+      <th>geometry</th>
+    </tr>
+    <tr>
+      <th>supply</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>POINT (221615.157 268183.063)</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>6</td>
+      <td>POINT (221542.706 268185.028)</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>7</td>
+      <td>POINT (221847.882 267983.231)</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>8</td>
+      <td>POINT (221406.839 267990.801)</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+<section id="Schools---demand-nodes">
+<h3>Schools - demand nodes<a class="headerlink" href="#Schools---demand-nodes" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">schools_demand</span> <span class="o">=</span> <span class="n">schools</span><span class="p">[</span><span class="n">schools</span><span class="p">[</span><span class="s2">&quot;POLYID&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">demand_schools</span><span class="p">)]</span>
+<span class="n">schools_demand</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;demand&quot;</span>
+<span class="n">schools_demand</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>POLYID</th>
+      <th>geometry</th>
+    </tr>
+    <tr>
+      <th>demand</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>POINT (221122.271 268131.466)</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>POINT (221474.669 267188.462)</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>POINT (220453.142 268087.516)</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>POINT (221235.835 267685.028)</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+<section id="Instantiate-a-network-object">
+<h3>Instantiate a network object<a class="headerlink" href="#Instantiate-a-network-object" title="Link to this heading">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ntw</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">in_data</span><span class="o">=</span><span class="n">streets</span><span class="p">)</span>
+<span class="n">vertices</span><span class="p">,</span> <span class="n">arcs</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">arcs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Plot">
+<h3>Plot<a class="headerlink" href="#Plot" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot network</span>
+<span class="n">base</span> <span class="o">=</span> <span class="n">arcs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">vertices</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># plot observations</span>
+<span class="n">schools</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">schools_supply</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">schools_demand</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="c1"># add labels</span>
+<span class="n">obs_labels</span><span class="p">(</span><span class="n">schools</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s2">&quot;POLYID&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">)</span>
+<span class="c1"># add legend</span>
+<span class="n">elements</span> <span class="o">=</span> <span class="p">[</span><span class="n">schools</span><span class="p">,</span> <span class="n">schools_supply</span><span class="p">,</span> <span class="n">schools_demand</span><span class="p">]</span>
+<span class="n">legend</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span>
+<span class="c1"># add scale bar</span>
+<span class="n">scalebar</span> <span class="o">=</span> <span class="n">ScaleBar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
+<span class="n">base</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">scalebar</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_transportation-problem_27_0.png" class="no-scaled-link" src="../_images/notebooks_transportation-problem_27_0.png" style="width: 1136px; height: 816px;" />
+</div>
+</div>
+</section>
+<section id="Associate-both-the-supply-and-demand-schools-with-the-network-and-plot">
+<h3>Associate both the supply and demand schools with the network and plot<a class="headerlink" href="#Associate-both-the-supply-and-demand-schools-with-the-network-and-plot" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span><span class="n">schools_supply</span><span class="p">,</span> <span class="s2">&quot;supply&quot;</span><span class="p">)</span>
+<span class="n">supply</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="o">=</span><span class="s2">&quot;supply&quot;</span><span class="p">)</span>
+<span class="n">supply</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;supply&quot;</span>
+<span class="n">supply_snapped</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="o">=</span><span class="s2">&quot;supply&quot;</span><span class="p">,</span> <span class="n">snapped</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">supply_snapped</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;supply snapped&quot;</span>
+<span class="n">supply_snapped</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>geometry</th>
+      <th>comp_label</th>
+    </tr>
+    <tr>
+      <th>supply snapped</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>POINT (221677.830 268184.321)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>POINT (221539.440 268185.067)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>POINT (221847.931 267927.691)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>POINT (221407.196 268047.138)</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ntw</span><span class="o">.</span><span class="n">snapobservations</span><span class="p">(</span><span class="n">schools_demand</span><span class="p">,</span> <span class="s2">&quot;demand&quot;</span><span class="p">)</span>
+<span class="n">demand</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="o">=</span><span class="s2">&quot;demand&quot;</span><span class="p">)</span>
+<span class="n">demand</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;demand&quot;</span>
+<span class="n">demand_snapped</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">pp_name</span><span class="o">=</span><span class="s2">&quot;demand&quot;</span><span class="p">,</span> <span class="n">snapped</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">demand_snapped</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;demand snapped&quot;</span>
+<span class="n">demand_snapped</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>geometry</th>
+      <th>comp_label</th>
+    </tr>
+    <tr>
+      <th>demand snapped</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>POINT (221053.069 268130.545)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>POINT (221526.519 267187.875)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>POINT (220504.720 268087.986)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>POINT (221292.553 267685.075)</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot network</span>
+<span class="n">base</span> <span class="o">=</span> <span class="n">arcs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">vertices</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># plot observations</span>
+<span class="n">schools</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">supply</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">supply_snapped</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">demand</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">demand_snapped</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="c1"># add labels</span>
+<span class="n">obs_labels</span><span class="p">(</span><span class="n">supply</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">)</span>
+<span class="n">obs_labels</span><span class="p">(</span><span class="n">demand</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">)</span>
+<span class="c1"># add legend</span>
+<span class="n">elements</span> <span class="o">+=</span> <span class="p">[</span><span class="n">supply_snapped</span><span class="p">,</span> <span class="n">demand_snapped</span><span class="p">]</span>
+<span class="n">legend</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span>
+<span class="c1"># add scale bar</span>
+<span class="n">scalebar</span> <span class="o">=</span> <span class="n">ScaleBar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
+<span class="n">base</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">scalebar</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_transportation-problem_31_0.png" class="no-scaled-link" src="../_images/notebooks_transportation-problem_31_0.png" style="width: 1228px; height: 816px;" />
+</div>
+</div>
+</section>
+<section id="Calculate-distance-matrix-while-generating-shortest-path-trees">
+<h3>Calculate distance matrix while generating shortest path trees<a class="headerlink" href="#Calculate-distance-matrix-while-generating-shortest-path-trees" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">s2d</span><span class="p">,</span> <span class="n">tree</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">allneighbordistances</span><span class="p">(</span><span class="s2">&quot;supply&quot;</span><span class="p">,</span> <span class="s2">&quot;demand&quot;</span><span class="p">,</span> <span class="n">gen_tree</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">s2d</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([[ 849.03401966, 1141.08317288, 1355.97131088],
+       [ 705.24862712,  997.29778034, 1212.18591834],
+       [ 993.39148999, 1052.63537513, 1500.3287812 ]])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">list</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">items</span><span class="p">())[:</span><span class="mi">4</span><span class="p">],</span> <span class="nb">list</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">items</span><span class="p">())[</span><span class="o">-</span><span class="mi">4</span><span class="p">:]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+([((0, 0), (216, 218)),
+  ((0, 1), (216, 130)),
+  ((0, 2), (216, 24)),
+  ((0, 3), (216, 55))],
+ [((3, 0), (65, 218)),
+  ((3, 1), (64, 130)),
+  ((3, 2), (65, 24)),
+  ((3, 3), (65, 55))])
+</pre></div></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="3.-The-Transportation-Problem">
+<h2>3. The Transportation Problem<a class="headerlink" href="#3.-The-Transportation-Problem" title="Link to this heading">¶</a></h2>
+<section id="Create-decision-variables-for-the-supply-locations-and-amount-to-be-supplied">
+<h3>Create decision variables for the supply locations and amount to be supplied<a class="headerlink" href="#Create-decision-variables-for-the-supply-locations-and-amount-to-be-supplied" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">supply</span><span class="p">[</span><span class="s2">&quot;dv&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">supply</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">_id</span><span class="p">:</span> <span class="s2">&quot;s_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">_id</span><span class="p">)</span>
+<span class="n">supply</span><span class="p">[</span><span class="s2">&quot;s_i&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">amount_supply</span>
+<span class="n">supply</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>geometry</th>
+      <th>comp_label</th>
+      <th>dv</th>
+      <th>s_i</th>
+    </tr>
+    <tr>
+      <th>supply</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>POINT (221615.157 268183.063)</td>
+      <td>0</td>
+      <td>s_0</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>POINT (221542.706 268185.028)</td>
+      <td>0</td>
+      <td>s_1</td>
+      <td>30</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>POINT (221847.882 267983.231)</td>
+      <td>0</td>
+      <td>s_2</td>
+      <td>15</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>POINT (221406.839 267990.801)</td>
+      <td>0</td>
+      <td>s_3</td>
+      <td>35</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+<section id="Create-decision-variables-for-the-demand-locations-and-amount-to-be-received">
+<h3>Create decision variables for the demand locations and amount to be received<a class="headerlink" href="#Create-decision-variables-for-the-demand-locations-and-amount-to-be-received" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">demand</span><span class="p">[</span><span class="s2">&quot;dv&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">demand</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">_id</span><span class="p">:</span> <span class="s2">&quot;d_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">_id</span><span class="p">)</span>
+<span class="n">demand</span><span class="p">[</span><span class="s2">&quot;d_j&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">amount_demand</span>
+<span class="n">demand</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>geometry</th>
+      <th>comp_label</th>
+      <th>dv</th>
+      <th>d_j</th>
+    </tr>
+    <tr>
+      <th>demand</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>POINT (221122.271 268131.466)</td>
+      <td>0</td>
+      <td>d_0</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>POINT (221474.669 267188.462)</td>
+      <td>0</td>
+      <td>d_1</td>
+      <td>45</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>POINT (220453.142 268087.516)</td>
+      <td>0</td>
+      <td>d_2</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>POINT (221235.835 267685.028)</td>
+      <td>0</td>
+      <td>d_3</td>
+      <td>40</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+<section id="Solve-the-Transportation-Problem">
+<h3>Solve the Transportation Problem<a class="headerlink" href="#Solve-the-Transportation-Problem" title="Link to this heading">¶</a></h3>
+<p><strong>Note: shipping costs are in meters per microscope</strong></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">s_i</span><span class="p">,</span> <span class="n">d_j</span> <span class="o">=</span> <span class="n">supply</span><span class="p">[</span><span class="s2">&quot;dv&quot;</span><span class="p">],</span> <span class="n">demand</span><span class="p">[</span><span class="s2">&quot;dv&quot;</span><span class="p">],</span> <span class="n">supply</span><span class="p">[</span><span class="s2">&quot;s_i&quot;</span><span class="p">],</span> <span class="n">demand</span><span class="p">[</span><span class="s2">&quot;d_j&quot;</span><span class="p">]</span>
+<span class="n">trans_prob</span> <span class="o">=</span> <span class="n">TransportationProblem</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">s2d</span><span class="p">,</span> <span class="n">s_i</span><span class="p">,</span> <span class="n">d_j</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Welcome to the CBC MILP Solver
+Version: Trunk
+Build Date: Oct 28 2021
+
+Starting solution of the Linear programming problem using Primal Simplex
+
+Minimized shipping costs: 84595.7958
+
+Shipping decisions:
+         x_0,3 20.0
+         x_1,1 30.0
+         x_2,1 15.0
+         x_3,0 5.0
+         x_3,2 10.0
+         x_3,3 20.0
+</pre></div></div>
+</div>
+</section>
+<section id="Linear-program-(compare-to-its-formulation-in-the-Introduction)">
+<h3>Linear program (compare to its formulation in the Introduction)<a class="headerlink" href="#Linear-program-(compare-to-its-formulation-in-the-Introduction)" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trans_prob</span><span class="o">.</span><span class="n">print_lp</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+ \Problem name:  TransportationProblem
+
+Minimize
+OBJROW: 849.03402 x_0,0 + 1141.08317 x_0,1 + 1355.97131 x_0,2 + 884.73265 x_0,3 + 705.24863 x_1,0 + 997.29778 x_1,1 + 1212.18592 x_1,2 + 740.94726 x_1,3 + 993.39149 x_2,0 + 1052.63538 x_2,1
+ + 1500.32878 x_2,2 + 796.28486 x_2,3 + 435.89351 x_3,0 + 989.11627 x_3,1 + 942.83080 x_3,2 + 479.24516 x_3,3
+Subject To
+supply(0):  x_0,0 + x_0,1 + x_0,2 + x_0,3 &lt;= 20
+supply(1):  x_1,0 + x_1,1 + x_1,2 + x_1,3 &lt;= 30
+supply(2):  x_2,0 + x_2,1 + x_2,2 + x_2,3 &lt;= 15
+supply(3):  x_3,0 + x_3,1 + x_3,2 + x_3,3 &lt;= 35
+demand(0):  x_0,0 + x_1,0 + x_2,0 + x_3,0 &gt;= 5
+demand(1):  x_0,1 + x_1,1 + x_2,1 + x_3,1 &gt;= 45
+demand(2):  x_0,2 + x_1,2 + x_2,2 + x_3,2 &gt;= 10
+demand(3):  x_0,3 + x_1,3 + x_2,3 + x_3,3 &gt;= 40
+Bounds
+End
+
+</pre></div></div>
+</div>
+</section>
+<section id="Extract-all-network-shortest-paths">
+<h3>Extract all network shortest paths<a class="headerlink" href="#Extract-all-network-shortest-paths" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">paths</span> <span class="o">=</span> <span class="n">ntw</span><span class="o">.</span><span class="n">shortest_paths</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="s2">&quot;supply&quot;</span><span class="p">,</span> <span class="s2">&quot;demand&quot;</span><span class="p">)</span>
+<span class="n">paths_gdf</span> <span class="o">=</span> <span class="n">spaghetti</span><span class="o">.</span><span class="n">element_as_gdf</span><span class="p">(</span><span class="n">ntw</span><span class="p">,</span> <span class="n">routes</span><span class="o">=</span><span class="n">paths</span><span class="p">)</span>
+<span class="n">paths_gdf</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>geometry</th>
+      <th>O</th>
+      <th>D</th>
+      <th>id</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>LINESTRING (221677.830 268184.321, 221680.004 ...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>(0, 0)</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>LINESTRING (221677.830 268184.321, 221680.004 ...</td>
+      <td>0</td>
+      <td>1</td>
+      <td>(0, 1)</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>LINESTRING (221677.830 268184.321, 221680.004 ...</td>
+      <td>0</td>
+      <td>2</td>
+      <td>(0, 2)</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>LINESTRING (221677.830 268184.321, 221680.004 ...</td>
+      <td>0</td>
+      <td>3</td>
+      <td>(0, 3)</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>LINESTRING (221539.440 268185.067, 221538.155 ...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>(1, 0)</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+<section id="Extract-the-shipping-paths">
+<h3>Extract the shipping paths<a class="headerlink" href="#Extract-the-shipping-paths" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">shipments</span> <span class="o">=</span> <span class="n">trans_prob</span><span class="o">.</span><span class="n">extract_shipments</span><span class="p">(</span><span class="n">paths_gdf</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">)</span>
+<span class="n">shipments</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>geometry</th>
+      <th>O</th>
+      <th>D</th>
+      <th>id</th>
+      <th>ship</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>3</th>
+      <td>LINESTRING (221677.830 268184.321, 221680.004 ...</td>
+      <td>0</td>
+      <td>3</td>
+      <td>(0, 3)</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>LINESTRING (221539.440 268185.067, 221538.155 ...</td>
+      <td>1</td>
+      <td>1</td>
+      <td>(1, 1)</td>
+      <td>30</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>LINESTRING (221847.931 267927.691, 221815.862 ...</td>
+      <td>2</td>
+      <td>1</td>
+      <td>(2, 1)</td>
+      <td>15</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>LINESTRING (221407.196 268047.138, 221336.616 ...</td>
+      <td>3</td>
+      <td>0</td>
+      <td>(3, 0)</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>LINESTRING (221407.196 268047.138, 221336.616 ...</td>
+      <td>3</td>
+      <td>2</td>
+      <td>(3, 2)</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>LINESTRING (221407.196 268047.138, 221336.616 ...</td>
+      <td>3</td>
+      <td>3</td>
+      <td>(3, 3)</td>
+      <td>20</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+<section id="Plot-optimal-shipping-schedule">
+<h3>Plot optimal shipping schedule<a class="headerlink" href="#Plot-optimal-shipping-schedule" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot network</span>
+<span class="n">base</span> <span class="o">=</span> <span class="n">arcs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">vertices</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="c1"># plot observations</span>
+<span class="n">schools</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">supply</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">supply_snapped</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">demand</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">demand_snapped</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="c1"># plot shipments</span>
+<span class="n">plot_shipments</span><span class="p">(</span><span class="n">shipments</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;O&quot;</span><span class="p">),</span> <span class="n">base</span><span class="p">)</span>
+<span class="c1"># add labels</span>
+<span class="n">obs_labels</span><span class="p">(</span><span class="n">supply</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">)</span>
+<span class="n">obs_labels</span><span class="p">(</span><span class="n">demand</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">)</span>
+<span class="c1"># add legend</span>
+<span class="n">elements</span> <span class="o">+=</span> <span class="p">[</span><span class="n">shipments</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;O&quot;</span><span class="p">)]</span>
+<span class="n">legend</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span>
+<span class="c1"># add scale bar</span>
+<span class="n">scalebar</span> <span class="o">=</span> <span class="n">ScaleBar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
+<span class="n">base</span><span class="o">.</span><span class="n">add_artist</span><span class="p">(</span><span class="n">scalebar</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_transportation-problem_48_0.png" class="no-scaled-link" src="../_images/notebooks_transportation-problem_48_0.png" style="width: 1269px; height: 816px;" />
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="By-utilizing-the-Transportation-Problem,-Dr.-Carson-has-been-able-to-minimize-shipping-costs-and-redistribute-the-microscopes-to-the-schools-in-need!">
+<h3>By utilizing the Transportation Problem, Dr. Carson has been able to minimize shipping costs and redistribute the microscopes to the schools in need!<a class="headerlink" href="#By-utilizing-the-Transportation-Problem,-Dr.-Carson-has-been-able-to-minimize-shipping-costs-and-redistribute-the-microscopes-to-the-schools-in-need!" title="Link to this heading">¶</a></h3>
+<hr class="docutils" />
+</section>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+<div id="sourcelink">
+  <a href="../_sources/notebooks/transportation-problem.ipynb.txt"
+     rel="nofollow">Source</a>
+</div>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017-, pysal developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.3.7.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
