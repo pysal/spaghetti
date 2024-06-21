@@ -14,6 +14,7 @@ dependencies:
   - codecov
   - pytest
   - pytest-cov
+  - pytest-doctestplus
   - pytest-timeout
   - pytest-xdist
   - pip:
