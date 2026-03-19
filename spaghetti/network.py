@@ -48,6 +48,23 @@ class Network:
     the simplified graph-theoretic object. The term 'link' is used to
     refer to a network arc or a graph edge.
 
+    Quick Start
+    -----------
+    For most users, only ``in_data`` is required to create a network object.
+    Example 
+    -------
+    >>> import spaghetti
+    >>> ntw = spaghetti.Network(in_data="network.shp")
+    This creates a network representation from the given geographic data.
+
+    Notes for Beginners
+    -------------------
+    - ``in_data`` : Input geographic data such as a shapefile or GeoDataFrame.
+    - ``vertex_sig`` : Controls coordinate precision by rounding values. This helps merge very close points and avoid floating point precision issues.
+    - ``unique_arcs`` : Removes duplicate arcs from the network
+    - ``extractgraph`` : Simplifies the network, removing unnecessary intermediate(degree-2) vertices, and creating a graph-theoretic representation of network.
+    - ``w_components`` : Identifies and stores the disconnected components of the network.
+
     Parameters
     ----------
     in_data : {str, iterable, libpysal.cg.Chain, geopandas.GeoDataFrame}
